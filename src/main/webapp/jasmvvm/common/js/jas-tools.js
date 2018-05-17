@@ -1,0 +1,403 @@
+(function (window) {
+
+	/**
+	 * @description 基础操作库
+	 *
+	 */
+	var tools = (function () {
+
+		/**
+		 * @description 继承对象
+		 * @param target  要被继承的对象
+		 */
+		var extend = function (target) {
+			for (let i = 1, j = arguments.length; i < j; i++) {
+				let source = arguments[i] || {};
+				for (let prop in source) {
+					if (source.hasOwnProperty(prop)) {
+						let value = source[prop];
+						if (value !== undefined) {
+							target[prop] = value;
+						}
+					}
+				}
+			}
+			return target;
+		};
+		/**
+		 * @description   获取url的
+		 * @param target  要被继承的对象
+		 */
+		var getParamsInUrl = function (url) {
+			var obj = null;
+			if (url) {
+				var arr = url.split('?');
+				if (arr.length > 1) {
+					var str = arr[1];
+					var arr2 = str.split('&');
+					arr2.forEach(function (item) {
+						var _arr = item.split('=');
+						if (_arr.length > 1) {
+							obj = obj ? obj : {};
+							obj[_arr[0]] = _arr[1];
+						}
+					})
+				}
+			}
+			return obj || {};
+		};
+		/**
+		 * @description  	向url上添加 key:value
+		 * @param url  locoation.href
+		 * @param obj  键值对
+		 */
+		var setParamsToUrl = function (url, obj) {
+			if (!obj || typeof obj !== 'object') {
+				return url
+			}
+			for (let prop in obj) {
+				if (obj.hasOwnProperty(prop)) {
+					let value = obj[prop];
+					if (value !== undefined) {
+						var str_connenct = url.indexOf('?') === -1 ? '?' : '&';
+						url += str_connenct + prop + '=' + value;
+					}
+				}
+			}
+			return url;
+		};
+
+		/**
+		 * 功能描述：获取系统根路径
+		 */
+		var getRootPath = function () {
+			// 获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp
+			var curWwwPath = window.document.location.href;
+			// 获取主机地址之后的目录，如： uimcardprj/share/meun.jsp
+			var pathName = window.document.location.pathname;
+			var pos = curWwwPath.indexOf(pathName);
+			// 获取主机地址，如： http://localhost:8083
+			var localhostPaht = curWwwPath.substring(0, pos);
+			// 获取带"/"的项目名，如：/uimcardprj
+			var projectName = pathName.substring(0, pathName.substring(1).indexOf('/') + 1);
+			if(!projectName || projectName === '/pages'){
+				return '/haha'
+			}
+			return projectName;
+			// return (localhostPaht + projectName + "/");
+		};
+
+
+		/**
+		 * @description 某一dom节点上的事件，一段时间内只执行一次
+		 * @param btnDom  dom节点
+		 * @param ms  毫秒数
+		 * @param cb  执行的函数
+		 */
+		var timeLimit = function (btnDom, ms, cb, cbFail) {
+			if (btnDom && btnDom.jasLastTime && ms) {
+				if ((new Date().getTime() - btnDom.jasLastTime) < ms) {
+					cbFail && cbFail();
+					return;
+				}
+			}
+			if (btnDom) {
+				btnDom.jasLastTime = new Date().getTime();
+			}
+			cb && cb();
+		};
+
+		var loadingMask = null;
+		var showLoading = function (vueInst) {
+			if (vueInst && vueInst.$loading) {
+				console.log(vueInst.$loading)
+			}
+		};
+		var closeLoading = function () {
+			if (!loadingMask) return;
+		};
+		return {
+			rootPath: getRootPath(),
+			extend: extend,
+			getParamsInUrl: getParamsInUrl,
+			setParamsToUrl: setParamsToUrl,
+			timeLimit: timeLimit,
+			showLoading: showLoading,
+			closeLoading: closeLoading
+
+		};
+	})();
+
+
+	/**
+	 * 模态框相关操作
+	 */
+	var jasDialog = (function (tools) {
+
+		var dialogs = [];
+		/**
+		 * @description 弹出弹出层
+		 * @param params             参数对象
+		 * @param params.id          参数对象
+		 * @param params.title       参数对象
+		 * @param params.src         参数对象
+		 * @param params.height      参数对象
+		 * @param params.width       参数对象
+		 * @param params.cbForClose    模态框关闭的回调
+		 */
+		var show = function (params) {
+			var argument = params.argument;
+			var obj = tools.extend({
+				title: '模态框',
+				src: 'https://www.awesomes.cn/',
+				height: (80 - dialogs.length * 15) + '%',
+				width: (80 - dialogs.length * 15) + '%',
+				visible: true
+			}, params);
+			var html = [
+				'<jas-iframe-dialog',
+				'  :title="title" ',
+				'  :iframeUrl="iframeUrl" ',
+				'  :height="height" ',
+				'  :width="width" ',
+				'  :visible.sync="visible" ',
+				'  @close="close">',
+				'</jas-iframe-dialog>'
+
+			].join('');
+			var res = Vue.compile(html);
+			var inst = new Vue({
+				el: document.createElement('div'),
+				data: {
+					title: obj.title,
+					iframeUrl: obj.src,
+					height: obj.height,
+					width: obj.width,
+					visible: obj.visible,
+
+				},
+
+				methods: {
+					close: function () {
+						if (obj.cbForClose) {
+							obj.cbForClose(this.paramForCallback);
+						}
+						var dom = this.$el;
+						dom.parentNode.removeChild(dom); //删除
+						dialogs.length = dialogs.length - 1;
+						console.log('关闭了一个dialogs')
+						// this.$destroy();
+						return;
+					}
+				},
+				render: res.render,
+				//staticRenderFns: res.staticRenderFns
+			});
+			document.body.appendChild(inst.$el);
+			dialogs.push(inst);
+		};
+		/**
+		 * @description 关闭最顶上的弹出层
+		 * @param params             参数对象
+		 */
+		var close = function (param) {
+			var index = dialogs.length - 1;
+			if (index < 0) {
+				alert('没有可以关闭的dialogs')
+				return;
+			}
+			var inst = dialogs[index];
+			inst.paramForCallback = param;
+			inst.visible = false;
+		};
+		return {
+			// dialogs: dialogs,
+			show: show,
+			close: close
+		};
+	})(tools);
+
+
+	var jasMask = (function (tools) {
+		var aMaskInst = [];
+
+		function Mask(obj) {
+			var that = this;
+			this.init(obj);
+			setTimeout(function () {
+				that.show();
+			}, 10);
+		}
+		Mask.prototype = {
+			constructor: Mask,
+			init: function (obj) {
+				var that = this;
+				// obj={
+				// 	window : window,
+				// 	src:"",
+				// 	params:{},
+				// 	cbForClose : null
+				// }
+				this.title = obj.title || '';
+				this.src = obj.src || '';
+				this.window = obj.window || window;
+				this.params = obj.params || '';
+				this.cbForClose = obj.cbForClose || function () {};
+				this.insertDom();
+				var returnBtn = this.node.querySelector('.mask_return');
+				returnBtn.onclick = function () {
+					that.close();
+				}
+
+			},
+			insertDom: function () {
+				var html = [
+					'<div style="height:34px;width:100%;box-sizing:border-box;background:#cee6ff;overflow: hidden;line-height:34px;padding:0 15px;position: absolute;">',
+					'	<span>', this.title, '</span>',
+					'	<span style="float:right;cursor: pointer;color: #409EFF;" class="mask_return">返回</span>',
+					'</div>',
+					'<div style="height:100%;box-sizing: border-box;padding-top:34px;">',
+					'	<iframe src="" frameborder="0" style="height:100%;width:100%;"></iframe>',
+					'</div>',
+				].join('');
+				var node = document.createElement('div');
+				node.style['height'] = 0;
+				node.style['width'] = 0;
+				node.style['background'] = '#fff';
+				node.style['position'] = 'fixed';
+				node.style['top'] = '50%';
+				node.style['left'] = '50%';
+				node.style['transform'] = 'translate(-50%,-50%)';
+				node.style['z-index'] = '10';
+				node.style['transition'] = 'all 0.3s';
+				node.style['opacity'] = 0;
+
+				node.innerHTML = html;
+
+				this.window.document.body.appendChild(node);
+				this.node = node;
+			},
+			getTrueSrc: function () {
+				if (!this.src || !this.params) {
+					return this.src
+				}
+				return tools.setParamsToUrl(this.src, this.params);
+			},
+			show: function () {
+				var that = this;
+				this.node.style.height = '100%';
+				this.node.style.width = '100%';
+				this.node.style.opacity = '1';
+				aMaskInst.push(this);
+				setTimeout(function () {
+					var src = that.getTrueSrc();
+					that.node.querySelector('iframe').src = src;
+				}, 300)
+			},
+			close: function (param) {
+				var that = this;
+				this.node.style.height = '0';
+				this.node.style.width = '0';
+				this.node.style.opacity = '0';
+				this.cbForClose && this.cbForClose(param);
+				setTimeout(function () {
+					that.node.remove();
+					aMaskInst.length = aMaskInst.length - 1;
+				}, 300)
+			}
+		}
+
+
+		var showMask = function (obj) {
+			var mask = new Mask(obj);
+
+		}
+		var closeMask = function (param) {
+			var index = aMaskInst.length - 1;
+			if (index < 0) {
+				alert('没有可以关闭的dialogs')
+				return;
+			}
+			var inst = aMaskInst[index];
+			inst.close(param);
+		}
+
+		return {
+			show: showMask,
+			close: closeMask
+		}
+	})(tools);
+
+	var ajax = (function () {
+		var ajax = function (type, url, params, cb_success, cb_fail) {
+			var data = type === 'GET' ? params : JSON.stringify(params)
+			$.ajax({
+				type: type || "GET",
+				url: url + "?token=" + localStorage.getItem('token'),
+				contentType: "application/json",
+				data: data,
+				// dataType: "json",
+				success: function (data, status) {
+					if (data.success == -1) { // token失效或者过期，会返回-1
+						window.top.Vue.prototype.$confirm('登录信息失效，请重新登录', '提示', {
+							type: 'warning',
+							callback: function (action) {
+								if (action === 'confirm') {
+									window.top.location.href = '/login.html';
+								}
+							}
+						});
+						return;
+					}
+					if (data.status == 1) {
+						cb_success && cb_success(data);
+					} else {
+						cb_fail && cb_fail(data);
+						window.top.Vue.prototype.$message({
+							message: data.msg || '服务器连接失败，请稍后再试',
+							type: 'error'
+						});
+					}
+				},
+				error: function () {
+					window.top.Vue.prototype.$message({
+						message: '服务器连接失败，请稍后再试',
+						type: 'error'
+					});
+				}
+			});
+		};
+		var downLoadFile = function (type, url, data) {
+			if (!url) return;
+			var config = {
+				url: url + "?token=" + localStorage.getItem('token'), //下载地址
+				data: data || {},
+				method: type || data,
+			}
+			var $iframe = $('<iframe id="down-file-iframe" />');
+			var $form = $('<form target="down-file-iframe" method="' + config.method + '" />');
+			$form.attr('action', config.url);
+			for (var key in config.data) {
+				$form.append('<input type="hidden" name="' + key + '" value="' + config.data[key] + '" />');
+			}
+			$iframe.append($form);
+			$(document.body).append($iframe);
+			$form[0].submit();
+			$iframe.remove();
+		};
+		return {
+			ajax: ajax,
+			get: ajax.bind(null, 'GET'),
+			post: ajax.bind(null, 'POST'),
+			download: downLoadFile
+		};
+	})();
+
+
+	window.jasTools = {
+		dialog: jasDialog,
+		mask: jasMask,
+		base: tools,
+		ajax: ajax
+	};
+})(window);

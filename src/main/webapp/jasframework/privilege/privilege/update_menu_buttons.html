@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="pragma" content="no-cache" />
+<meta name="keywords" content="gis,web">
+<meta name="description" content="">
+<title></title>
+<link rel="stylesheet" type="text/css" href="../../common/lib/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../common/lib/easyui/themes/icon.css">
+
+<link rel="stylesheet" type="text/css" href="../../common/css/common.css"></link>
+<link rel="stylesheet" type="text/css" href="../../common/css/add.css">
+
+
+<script type="text/javascript" src="../../common/lib/jquery.min.js"></script>
+<script type="text/javascript" src="../../common/lib/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../common/lib/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../common/js/validate_class.js"></script>
+<script type="text/javascript" src="../../common/js/common.js"></script>
+<script type="text/javascript" src="js/update_menu_buttons.js"></script>
+<script type="text/javascript" src="../../common/i18n/i18n.js"></script>
+</head>
+<body>
+	<div id="contentArea" class="content-area">
+		<input type="hidden" id="menuid" value="100604"/>
+		<div id="dlg">
+			<form id="editgroups" method="post">
+				<input type="hidden" name="eventid" id="eventid"/>
+				<!-- 父权限编号 -->
+				<input type="hidden" name="parenteventid" id="parenteventid"/>
+				<!-- <input type="hidden" id="appNumber" name="appNumber" /> -->
+				<table align="center" class="edit-table" >
+					<tr>
+						<td width="20%"><span key="pri.name" class="paltform-i18n">权限名称：</span></td>
+						<td width="30%"><input id="name" name="name" class="easyui-validatebox input_bg" missingMessage="不能为空" required="true" validType="general" maxlength="25"></td>
+						<td width="20%"><span key="pri.privilegenumber" class="paltform-i18n">权限编号：</span></td>
+						<td width="30%"><input id="privilegenumber" name="privilegeNumber" class="easyui-validatebox input_bg" missingMessage="不能为空" required="true" validType="integer" ></td>
+					</tr>
+					<tr>
+						<td width="20%"><span key="pri.privilegetype" class="paltform-i18n">权限类型：</span></td>
+						<td width="30%">
+							<select name="privilegeType" id="privilegetype" class="easyui-combobox" onchange="onchangmenu()" editable="false" panelHeight="auto"  style="width: 230px" required="true" missingMessage="不能为空" required="true">
+								<option value="1">菜单</option>
+								<option value="2">功能点</option>
+								<option value="3">表单</option>
+								<option value="4">表单字段</option>
+							</select>
+						</td>
+						<td width="20%"><span key="pri.ordernumber" class="paltform-i18n">顺序编号：</span></td>
+						<td width="30%"><input id="ordernumber" name="orderNumber" class="easyui-validatebox input_bg" missingMessage="不能为空" required="true" validType="integer"></td>
+					</tr>
+					<tr>
+						<td width="20%"><span>菜单打开方式</span></td>
+						<td width="30%">
+							<select id="openType" name="openType" class="easyui-combobox">
+								<option value="1">Tab方式</option>
+								<option value="2">html方式</option>
+								<option value="3">弹窗方式</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td width="20%"><span key="pri.url" class="paltform-i18n">URL：</span></td>
+						<td width="30%" colspan="3"><input id="url" name="url" class="easyui-validatebox input_bg" validType="priUrl" maxlength="300"></td>
+						<!-- <td width="20%"><span key="pri.appnumber" class="paltform-i18n">应用系统：</span></td>
+						<td width="30%">
+							<select id="appnumber" name="appNumber" class="easyui-combobox" editable="false" panelHeight="auto"  style="width: 230px" required="true" >
+							</select>
+						</td> -->
+					</tr>
+					<tr>
+						<td width="20%"><span key="pri.url" class="paltform-i18n">Query类全路径：</span></td>
+						<td width="30%" colspan="3"><input id="queryName" name="queryName" class="easyui-validatebox input_bg"  maxlength="200"></td>
+					</tr>
+					<tr>
+					    <td><span key="descriptioninfo" class="paltform-i18n">权限描述：</span></td>
+						<td colspan="3"><textarea id="description" class="easyui-validatebox" validType="maxLength[300]"  name="description" style="height: 60px;"></textarea></td>
+			  	   	</tr>
+			  	   	 <tr>
+			  	   <td align="center" colspan="4"><span key="pri.shuoming" style="color: red" class="paltform-i18n">说明：权限编号一般为父权限编号+两位数字，不可重复</span></td>
+			  	   </tr>
+			    </table>	
+			    	
+			</form>
+		</div>
+	</div>
+	<div class="button-area">
+          <table width="100%">
+ 				<tr>
+  					 <td >
+  					    <a id="savebutton" href="#" class="easyui-linkbutton submit" onclick="updatePrivilege()"><span key="save" class="paltform-i18n">保存</span></a>
+					<a href="#" class="easyui-linkbutton cancel"  onclick="closePrivilege()"><span key="cancel" class="paltform-i18n">取消</span></a>
+  					 </td>
+  				</tr>
+  			</table>	 
+  		</div>
+</body>
+</html>
+	

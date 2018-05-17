@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="pragma" content="no-cache" />
+<meta name="keywords" content="gis,web">
+<meta name="description" content="">
+<title></title>
+<link rel="stylesheet" type="text/css" href="../../common/lib/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../common/lib/easyui/themes/icon.css">
+
+<link rel="stylesheet" type="text/css" href="../../common/css/common.css"></link>
+<link rel="stylesheet" type="text/css" href="../../common/css/add.css">
+
+<script type="text/javascript" src="../../common/lib/jquery.min.js"></script>
+<script type="text/javascript" src="../../common/lib/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../common/js/validate_class.js"></script>
+<script type="text/javascript" src="../../common/js/common.js"></script>
+<script type="text/javascript" src="js/add_project_role.js"></script>
+<script type="text/javascript" src="" id="i18nEasyui"></script>
+<script type="text/javascript" src="../../common/i18n/i18n.js"></script>
+</head>
+<body>
+<!-- 权限编号 -->
+	<input type="hidden" id="menuid" value="101002" />
+		
+<!-- 主体内容展示区域 -->
+	<div id="contentArea" class="content-area">
+		<form id="roleForm" class="content-area-main" method="post">
+			<!-- 数据eventid -->
+			<input type="hidden" id="eventid" name="eventid">
+			<input type="hidden" id="projectOid" name="projectOid">
+			<table align="center" class="edit-table">
+				<tr>
+					<td width="15%">
+						<span>角色名称：</span>
+					</td>
+					<td width="35%"><input 
+						class="easyui-validatebox input_bg" id='name'  name="name" missingmessage="不能为空"
+						required="true"  validType="general" maxLength=25>
+					</td>
+				</tr>
+				<!-- <tr>
+					<td width="15%">
+						<span>角色业务类型：</span>
+					</td>
+					<td width="35%">
+						<input id="businessTypeCode" name="businessTypeCode"  class="easyui-validatebox easyui-combobox" style="width:100%;">
+					</td>
+				</tr> -->
+				<tr>
+					<td width="15%">
+						<span>数据权限规律规则：</span>
+					</td>
+					<td width="35%">
+						<input id="dataFilterRegulationCode" name="dataFilterRegulationCode"  class="easyui-validatebox easyui-combobox" style="width:100%;">
+					</td>
+				</tr>
+				<tr>
+					<td colspan="1"><span>描述：</span></td>
+					<td colspan="3">
+					<textarea name="description" cols="25" rows="5"id="description" class="easyui-validatebox" validType="maxLength[300]">
+					</textarea>
+					</td>
+				</tr>
+				<tr>
+					<td width="15%">
+						<span>角色顺序号：</span>
+					</td>
+					<td width="35%"><input 
+						class="easyui-validatebox input_bg" id='roleSerialNo'  name="roleSerialNo" missingmessage="不能为空"
+						validType="number" maxLength=10>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+
+<!-- 按钮区域 -->
+	<div class="button-area">
+		<table width="100%">
+			<tr>
+				<td  align="center">
+					<a href="#" id="saveButton" class="easyui-linkbutton save-btn" onclick="save()"> <span>保存</span></a>
+					<a href="#" class="easyui-linkbutton cancel-btn"  onclick="closePanel()"> <span>取消</span></a>
+				</td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>

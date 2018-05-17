@@ -1,0 +1,95 @@
+ /**模态框样式**/
+ 
+ .slide-enter-active {
+     transition: all 0.5s linear;
+     transform: translate3d(0, 0, 0);
+ }
+ 
+ .slide-leave-active {
+     transition: all 0.5s linear;
+     transform: translate3d(100%, 0, 0);
+ }
+ 
+ .slide-leave {
+     transform: translate3d(0, 0, 0);
+ }
+ 
+ .slide-enter {
+     transform: translate3d(100%, 0, 0);
+ }
+ 
+ .el-card>div:first-child {
+     padding: 0px !important;
+ }
+ 
+ .dialog {
+     position: fixed;
+     top: 0;
+     right: 0;
+     bottom: 0;
+     /*left: 0;*/
+     /*overflow: auto;*/
+     margin: 0;
+     z-index: 2000;
+     width: 0px;
+ }
+ 
+ .dialog-content {
+     width: 0px;
+     position: relative;
+     float: right;
+     border: 1px solid #ebeef5;
+     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+     background: #fff;
+     /*border-radius: 5px;*/
+ }
+ 
+ .dialog-content .header {
+     position: absolute;
+     top: 0px;
+     text-align: center;
+     color: #fff;
+     font-size: 14px;
+     border-radius: 2px;
+     height: 40px;
+     line-height: 40px;
+     background: #409EFF;
+ }
+ 
+ .el-card>div:first-child {
+     height: 100%;
+ }
+ 
+ .dialog-body {
+     height: 100%;
+     padding: 50px 0px 10px 10px;
+     /*height: calc(100% - 50px);
+     -webkit-height: calc(100% - 50px);
+     -moz-height: calc(100% - 50px);*/
+     box-sizing: border-box;
+ }
+ 
+ .dialog-content .bottom {
+     position: absolute;
+     bottom: 0px;
+     padding-top: 5px;
+     text-align: center;
+     color: #fff;
+     font-size: 14px;
+     border-radius: 2px;
+     height: 40px;
+     line-height: 40px;
+     border: 1px solid #ebeef5;
+     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+     background: #fff;
+ }
+ 
+ .changeWidth {
+     transition: width 2s;
+     -moz-transition: width 2s;
+     /* Firefox 4 */
+     -webkit-transition: width 2s;
+     /* Safari 和 Chrome */
+     -o-transition: width 2s;
+     /* Opera */
+ }

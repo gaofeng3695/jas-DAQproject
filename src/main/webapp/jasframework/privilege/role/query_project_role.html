@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="pragma" content="no-cache" />
+<meta name="keywords" content="gis,web">
+<meta name="description" content="">
+
+<title>项目角色管理</title>
+<link rel="stylesheet" type="text/css" href="../../common/lib/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../common/lib/easyui/themes/icon.css">
+<link rel="stylesheet"  type="text/css" href="../../common/css/easyui_icon.css">
+
+<link rel="stylesheet"  type="text/css" href="../../common/css/font-awesome.css" >
+<link rel="stylesheet"  type="text/css" href="../../common/css/common.css">
+<link rel="stylesheet"  type="text/css" href="../../common/css/query.css">
+<link rel="stylesheet"  type="text/css" href="css/query_project_role.css">
+
+<script type="text/javascript" src="../../common/lib/jquery.min.js"></script>
+<script type="text/javascript" src="../../common/lib/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../common/js/validate_class.js"></script>
+<script type="text/javascript" src="../../common/js/common.js"></script>
+<!-- <script type="text/javascript" src="../../privilege/js/privilege.js"></script> -->
+
+<script type="text/javascript" src="js/query_project_role.js"></script>
+<script type="text/javascript" src="../../common/i18n/i18n.js"></script>
+
+</head>
+<body>
+	<input type="hidden" id="menuid" value="101002"/>
+		
+<!-- 	查询区域 -->
+	<div class="query-conditions" id="queryDiv">
+		<form method="post" id="approvalQueryForm">
+		<!-- 简单查询区域 -->
+			<table align="center" class="query-table">
+				<tr>
+				 	<td width="8%" class="hide"><span>工程：</span></td>
+					<td width="20%" class="hide">
+						<input id="engineering" name="engineering"  class="easyui-validatebox easyui-combobox">
+					</td>	
+					
+					<td width="8%" class="hide"><span>项目：</span></td>
+					<td width="20%" class="hide">
+						<input id="project" name="project"  class="easyui-validatebox easyui-combobox">
+					</td>
+					
+					<td width="8%"><span>角色名称：</span></td>
+					<td width="20%"><input type="text" id="roleName" class="easyui-validatebox input_bg" /></td>
+					<td align="right" colspan="2">
+						<a href="#" id='query' class="easyui-linkbutton query-btn"  onclick="queryRole()"><span>查询</span></a>
+						<a href="#" id='clear' class="easyui-linkbutton clear-btn"  onclick="clearQueryForm('approvalQueryForm',true,true,true,true)"><span>清空</span></a>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	
+<!-- 	datagrid列表  -->
+	<table id="dg"></table>
+	
+<!-- 	datagrid工具栏 -->
+	<div id="toolbar">
+		<!-- <a href="#" class="easyui-linkbutton fa fa-eye"   onclick="showInfo()">查看</a> -->
+		<a href="#" class="easyui-linkbutton fa fa-plus"  onclick="newRole()">新增</a>
+		<!-- <a href="#" class="easyui-linkbutton fa fa-edit"  onclick="editRole()">修改</a> -->
+		<a href="#" class="easyui-linkbutton fa fa-minus" onclick="removeRole()">删除</a>
+		<a href="#" class="easyui-linkbutton fa fa-cog" onclick="setPrivilege()">角色权限分配</a>
+	</div>
+</body>
+</html>

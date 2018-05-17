@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- <link rel="stylesheet" href="./libelement-ui/element-#0E2B4A/src/index.css"> -->
+    <link rel="stylesheet" href="./../../lib/element-ui/v2.2.1/theme-chalk/index.min.css">
+    <link rel="stylesheet" href="../form-awesome/form-component/form-vue.css ">
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div id="app">
+
+        <!--工具区域开始-->
+        <div class="tool">
+            <btns-tool :btns="btns"></btns-tool>
+        </div>
+        <!--工具区域完成-->
+        <el-table :data="tableData" border style="width: 100%">
+            <el-table-column fixed prop="fieldName" label="字段名称" width="100" align="center">
+                <template slot-scope="scope">
+					<div v-if="scope.row.editing==1">
+						<el-input size="small" v-model="scope.row.fieldName"   placeholder="选择字段名称">
+						</el-input>
+					</div>
+					<div v-else>
+						<span>{{scope.row.fieldName}}</span>
+					</div>
+				</template>
+            </el-table-column>
+            <el-table-column prop="fieldNameAlias" label="字段别名">
+                <template slot-scope="scope">
+					<div v-if="scope.row.editing">
+						<el-input size="small" v-model="scope.row.fieldNameAlias"  placeholder="选择输入表中文名称">
+						</el-input>
+					</div>
+					<div v-else>
+						<span>{{scope.row.fieldNameAlias}}</span>
+					</div>
+				</template>
+            </el-table-column>
+            <el-table-column prop="fieldNameCn" label="字段中文名称">
+                <template slot-scope="scope">
+					<div v-if="scope.row.editing">
+						<el-input size="small" v-model="scope.row.fieldNameCn"  placeholder="选择输入表中文名称">
+						</el-input>
+					</div>
+					<div v-else>
+						<span>{{scope.row.fieldNameCn}}</span>
+					</div>
+				</template>
+            </el-table-column>
+            <el-table-column prop="fieldType" label="字段类型">
+                <template slot-scope="scope">
+					<div v-if="scope.row.editing">
+						<el-select size="small" v-model="scope.row.fieldType" placeholder="请选择数据库类型">
+							<el-option label="varchar" value="varchar"></el-option>
+							<el-option label="Number" value="Number"></el-option>
+						</el-select>
+					</div>
+					<div v-else>
+						<span>{{scope.row.fieldType}}</span>
+					</div>
+				</template>
+            </el-table-column>
+            <el-table-column prop="fieldLength" label="字段精度">
+                <template slot-scope="scope">
+					<div v-if="scope.row.editing">
+						<el-input size="small" v-model="scope.row.fieldLength"  placeholder="选择输入表中文名称">
+						</el-input>
+					</div>
+					<div v-else>
+						<span>{{scope.row.fieldLength}}</span>
+					</div>
+				</template>
+            </el-table-column>
+            <el-table-column prop="ifPk" label="主键">
+                <template slot-scope="scope">
+					<div v-if="scope.row.editing">
+						<el-switch v-model="scope.row.ifPk" :active-value="1" :inactive-value="0"></el-switch>
+					</div>
+					<div v-else>
+						<span v-text="scope.row.ifPk?'是':'否'"></span>
+					</div>
+				</template>
+            </el-table-column>
+            <el-table-column prop="ifFk" label="外键">
+                <template slot-scope="scope">
+					<div v-if="scope.row.editing">
+						<el-switch v-model="scope.row.ifFk" :active-value="1" :inactive-value="0"></el-switch>
+					</div>
+					<div v-else>
+						<span v-text="scope.row.ifPk?'是':'否'"></span>
+					</div>
+				</template>
+            </el-table-column>
+            <el-table-column prop="ifEmpty" label="为空">
+                <template slot-scope="scope">
+					<div v-if="scope.row.editing">
+						<el-switch v-model="scope.row.ifEmpty" :active-value="1" :inactive-value="0"></el-switch>
+					</div>
+					<div v-else>
+						<span v-text="scope.row.ifPk?'是':'否'"></span>
+					</div>
+				</template>
+            </el-table-column>
+            <el-table-column prop="ifIndex" label="索引">
+                <template slot-scope="scope">
+					<div v-if="scope.row.editing">
+						<el-switch v-model="scope.row.ifIndex" :active-value="1" :inactive-value="0"></el-switch>
+					</div>
+					<div v-else>
+						<span v-text="scope.row.ifPk?'是':'否'"></span>
+					</div>
+				</template>
+            </el-table-column>
+            <el-table-column prop="fieldDesc" label="表字段描述">
+                <template slot-scope="scope">
+					<div v-if="scope.row.editing">
+						<el-input size="small" v-model="scope.row.fieldDesc"  placeholder="选择输入表描述">
+						</el-input>
+					</div>
+					<div v-else>
+						<span>{{scope.row.fieldDesc}}</span>
+					</div>
+				</template>
+            </el-table-column>
+            <el-table-column prop="rowIndex" label="排序字段">
+                <template slot-scope="scope">
+					<div v-if="scope.row.editing">
+						<el-input size="small" v-model="scope.row.rowIndex"  placeholder="选择输入表描述">
+						</el-input>
+					</div>
+					<div v-else>
+						<span>{{scope.row.rowIndex}}</span>
+					</div>
+				</template>
+            </el-table-column>
+            <el-table-column prop="ifPublish" label="发布">
+                <template slot-scope="scope">
+					<div v-if="scope.row.editing">
+						<el-switch v-model="scope.row.ifPublish" :active-value="1" :inactive-value="0"></el-switch>
+					</div>
+					<div v-else>
+						<span v-text="scope.row.ifPublish?'是':'否'"></span>
+					</div>
+				</template>
+            </el-table-column>
+            <el-table-column fixed="right" label="操作" width="200px">
+                <template slot-scope="scope">
+					<div v-if="!scope.row.editing">
+						<el-button @click="seeRow(scope.row)" type="text" size="small">删除</el-button>
+						<el-button @click="editRow(scope.row)" type="text" size="small">编辑</el-button>
+					  <el-button @click="isSetField" type="text" size="small">字段配置</el-button>
+                    </div>
+					<div v-else>
+						<el-button @click="saveEdit(scope.row)" type="text" size="small">保存</el-button>
+						<el-button @click="cancelEdit(scope.row)" type="text" size="small">取消</el-button>
+                    </div>
+				</template>
+            </el-table-column>
+        </el-table>
+    </div>
+</body>
+<!-- import Vue before Element -->
+<script src="./../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../lib/vue/vue.js"></script>
+<!-- import JavaScript -->
+<script src="./../../lib/element-ui/v2.2.1/index.min.js"></script>
+<script src="./../../common/js/jas-tools.js"></script>
+<script src="../form-awesome/form-component/form-vue.js "></script>
+<script>
+    var searchdata = [{
+        id: "tableName",
+        name: "表名称",
+        type: "input",
+        placeholder: "请输入表名称",
+        options: [],
+        col: "",
+        size: "small"
+    }, {
+        id: "dataStructure",
+        name: "数据结构",
+        type: "select",
+        placeholder: "请选择所属数据类型",
+        isQuery: true,
+        size: "small",
+        options: [{
+            value: "01",
+            label: "业务数据"
+        }, {
+            value: "02",
+            label: "点空间数据"
+        }, {
+            value: "03",
+            label: "线空间数据"
+        }, {
+            value: "04",
+            label: "面空间数据"
+        }],
+        col: ""
+    }, {
+        type: "opertion",
+        options: [{
+            type: 'primary',
+            size: "small",
+            name: '查询',
+            id: "query",
+            click: function() { //此时通过参数的形式，进行方法的传递
+                alert("查询");
+            }
+        }, {
+            type: '',
+            name: '重置',
+            size: "small",
+            click: function() {
+                vm.searchform = {};
+            }
+        }]
+    }];
+    //父按钮组
+    var btns = [{
+        title: "增加",
+        size: "small", //配置按钮大小medium / small / mini
+        functionName: function() {
+            vm.addChild();
+        }, //需要实现的方法
+    }, {
+        title: "删除",
+        size: "small",
+        functionName: function() {
+            vm.delChild();
+        }, //需要实现的方法
+    }, {
+        title: "编辑",
+        size: "small",
+        functionName: function(data) {
+            vm.editChild(data);
+        }, //需要实现的方法
+    }, {
+        title: "查看",
+        size: "small",
+        functionName: function() {
+            vm.viewChild();
+        }, //需要实现的方法
+    }];
+    var vm = new Vue({
+        el: '#app',
+        data: function() {
+            return {
+                token: localStorage.getItem("token"),
+                dataSourceOption: [], //数据源选项
+                dataTypeOption: [], //数据类型
+                parent: true,
+                searchform: {},
+                searchData: searchdata,
+                tableData: [],
+                btns: btns,
+            }
+        },
+        mounted: function() {
+            this.renderParentTable();
+
+        },
+        methods: {
+            renderParentTable: function() {
+                var that = this;
+                $.ajax({
+                    type: "GET",
+                    url: "/xixi/dbInfo/getDataSourceNames.do?token=" + that.token,
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function(data, status) {
+                        if (data.status == 1) {
+                            that.dataSourceOption = data.data;
+                            that.requestParentTableList();
+                        }
+                    },
+
+                });
+            },
+            requestParentTableList: function() {
+                var that = this;
+                that.searchform = {
+                    "page": 1,
+                    "rows": 10
+                };
+                $.ajax({
+                    type: "post",
+                    url: "/xixi/tableInfo/getPage.do?token=" + that.token,
+                    contentType: "application/json",
+                    data: JSON.stringify(that.searchform),
+                    dataType: "json",
+                    success: function(data, status) {
+                        if (data.status == 1) {
+                            data.rows.forEach(function(item) {
+                                item.editing = 0;
+                            });
+                            that.tableData = data.rows;
+
+                        }
+                    },
+
+                });
+            },
+            isSetField: function() {
+
+            },
+            editRow: function(row) {
+                delete row.history;
+                row.history = JSON.parse(JSON.stringify(row));
+                row.editing = 1;
+            },
+            saveEdit: function(row) {
+                var that = this;
+                $.ajax({
+                    type: "post",
+                    url: "/xixi/tableInfo/update.do?token=" + that.token,
+                    contentType: "application/json",
+                    data: JSON.stringify(row),
+                    dataType: "json",
+                    success: function(data, status) {
+                        if (data.status == 1) {
+                            row.editing = 0;
+                            window.top.Vue.prototype.$message({
+                                message: '保存成功',
+                                type: 'success'
+                            });
+                        }
+                    }
+                });
+            },
+            cancelEdit: function(row) {
+                window.top.jasTools.base.extend(row, row.history);
+            },
+        },
+
+    });
+</script>

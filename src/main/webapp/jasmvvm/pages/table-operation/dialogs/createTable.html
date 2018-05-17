@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>form表单配置</title>
+    <link rel="stylesheet" href="./../../../lib/element-ui/v2.2.1/theme-chalk/index.min.css">
+    <link rel="stylesheet" href="../../form-awesome/form-component/form-vue.css ">
+    <link rel="stylesheet" href="./../../../src/css/main.css">
+    <style>
+        html,
+        body {
+            width: 100%;
+        }
+
+        #page {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content {
+            height: calc(100% - 40px);
+            overflow: auto;
+        }
+
+        .dialog-footer {
+            background: #fff;
+            width: 100%;
+            position: absolute;
+            bottom: 0px;
+            z-index: 3000;
+            height: 40px;
+            line-height: 40px;
+        }
+
+        .title-content {
+            padding: 0px 0px 10px 10px;
+            border-bottom: 1px solid rgb(228, 231, 237);
+            color: #000;
+            margin-bottom: 10px;
+        }
+
+        .title {
+            padding: 0px 0px 10px 0px;
+            border-bottom: 2px solid rgb(64, 158, 255);
+        }
+
+        /*.tableBase {
+            padding: 8px 5px 5px 5px;
+            margin: 7px 5px 5px 5px;
+            border-top: 1px dashed #409EFF;
+        }
+
+        .groupName {
+            display: block;
+            width: 100px;
+            margin-left: -5px;
+            position: relative;
+            top: -20px;
+            text-align: center;
+            background: #fff;
+        }*/
+
+        .hide {
+            overflow: hidden;
+        }
+
+        .el-form-item {
+            margin-bottom: 10px;
+        }
+
+        .el-dialog__header {
+            text-align: center;
+        }
+
+        .mar {
+            margin-top: 10px;
+        }
+
+        .tip-wrapper {
+            float: right;
+            line-height: 32px;
+        }
+
+        .tip-class {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .el-table th.req>div::before {
+            display: inline-block;
+            content: "*";
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            color: #ff4d51;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="page">
+        <div class="content">
+            <div class="tableBase">
+                <!--<el-input v-model="tableFormData.tableName" v-on:input="updateValue(tableFormData.tableName)"></el-input>-->
+                <div class="title-content">
+                    <span class="title">表的基本信息</span>
+                </div>
+                <form-add :datasource="tableDataSource" :form="tableFormData" labelwidth="100px"></form-add>
+            </div>
+            <div class="tableBase mar">
+                <div class="title-content">
+                    <span class="title">表字段的基本信息</span>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <el-button @click="addField" icon="el-icon-plus" plain="plain" type="primary" size="small">增加</el-button>
+                    <el-button @click="saveBatchField" icon="el-icon-news" plain="plain" type="primary" size="small">批量保存</el-button>
+                    <!-- <span style="font-size:12px;padding:0px  5px;color:red">是否增加下面默认字段</span> -->
+                    <div class="tip-wrapper">
+                        <el-tooltip placement="top">
+                            <div slot="content" class="tip-class">
+                                create_user_id
+                                <br/>create_user_name
+                                <br/>create_datetime
+                                <br/>modify_user_id
+                                <br/>modify_user_name
+                                <br/>modify_datetime
+                                <br/>active
+                                <br/>
+                            </div>
+                            <el-checkbox v-model="tableFormData.needSystemFields">
+                                增加默认字段
+                            </el-checkbox>
+                        </el-tooltip>
+                    </div>
+                </div>
+                <el-table :header-cell-style='headerCellStyle ' :data="tableFormData.tableFieldFormList" border style="width: 100%">
+                    <el-table-column fixed prop="fieldName" label="字段名称" width="150" align="center" label-class-name="req">
+                        <template slot-scope="scope">
+                            <div v-if="scope.row.editing==1">
+                                <el-input size="small" v-model="scope.row.fieldName" placeholder="请输入字段名称" @input="updateValue(scope.row.fieldName,scope.$index)">
+                                </el-input>
+                            </div>
+                            <div v-else>
+                                <span>{{scope.row.fieldName}}</span>
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="fieldNameAlias" label="字段别名" align="center" width="120">
+                        <template slot-scope="scope">
+                            <div v-if="scope.row.editing">
+                                <el-input size="small" v-model="scope.row.fieldNameAlias" placeholder="选择输入字段别名">
+                                </el-input>
+                            </div>
+                            <div v-else>
+                                <span>{{scope.row.fieldNameAlias}}</span>
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="fieldNameCn" label="字段中文名称" width="150" align="center">
+                        <template slot-scope="scope">
+                            <div v-if="scope.row.editing">
+                                <el-input size="small" v-model="scope.row.fieldNameCn" placeholder="选择输入字段中文名称">
+                                </el-input>
+                            </div>
+                            <div v-else>
+                                <span>{{scope.row.fieldNameCn}}</span>
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="fieldType" label="字段类型" align="center" width="150" label-class-name="req">
+                        <template slot-scope="scope">
+                            <div v-if="scope.row.editing">
+                                <el-select size="small" v-model="scope.row.fieldType" placeholder="请选择字段类型">
+                                    <!--<el-option v-for="item in fieldTypeOptions" :label="item.value" :value="item.value"></el-option>-->
+
+                                    <el-option-group v-for="group in fieldTypeOptions" :key="group.dictValueDesc" :label="group.dictValueDesc">
+                                        <el-option v-for="item in group.data" :key="item.value" :label="item.label" :value="item.value">
+                                        </el-option>
+                                    </el-option-group>
+                                </el-select>
+                            </div>
+                            <div v-else>
+                                <span>{{scope.row.fieldType}}</span>
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="fieldLength" label="字段精度/长度" align="center" width="150" label-class-name="req">
+                        <template slot-scope="scope">
+                            <div v-if="scope.row.editing">
+                                <el-input size="small" v-model="scope.row.fieldLength" placeholder="选择输入字段精度/长度">
+                                </el-input>
+                            </div>
+                            <div v-else>
+                                <span>{{scope.row.fieldLength}}</span>
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="ifPk" label="主键" align="center" width="60px">
+                        <template slot-scope="scope">
+                            <div v-if="scope.row.editing">
+                                <el-switch v-model="scope.row.ifPk" :active-value="1" :inactive-value="0"></el-switch>
+                            </div>
+                            <div v-else>
+                                <span v-text="scope.row.ifPk=='1'?'是':'否'"></span>
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="ifFk" label="外键" align="center" width="60px">
+                        <template slot-scope="scope">
+                            <div v-if="scope.row.editing">
+                                <el-switch v-model="scope.row.ifFk" :active-value="1" :inactive-value="0"></el-switch>
+                            </div>
+                            <div v-else>
+                                <span v-text="scope.row.ifFk=='1'?'是':'否'"></span>
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="fkTable" label="外键表名/字段" width="200px" align="center">
+                        <template slot-scope="scope">
+                            <div v-if="scope.row.editing">
+                                <table-cascader :currentfields="scope.row" :index="scope.$index" @change="changeSelect"></table-cascader>
+                            </div>
+                            <div v-else-if="scope.row.fkTable">
+                                <span v-text="scope.row.fkTable"></span>
+                                <span>-</span>
+                                <span v-text="scope.row.fkTableField"></span>
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="ifEmpty" label="为空" align="center" width="60px">
+                        <template slot-scope="scope">
+                            <div v-if="scope.row.editing">
+                                <el-switch v-model="scope.row.ifEmpty" :active-value="1" :inactive-value="0"></el-switch>
+                            </div>
+                            <div v-else>
+                                <span v-text="scope.row.ifEmpty=='1'?'是':'否'"></span>
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="ifIndex" label="索引" align="center" width="60px">
+                        <template slot-scope="scope">
+                            <div v-if="scope.row.editing">
+                                <el-switch v-model="scope.row.ifIndex" :active-value="1" :inactive-value="0"></el-switch>
+                            </div>
+                            <div v-else>
+                                <span v-text="scope.row.ifIndex=='1'?'是':'否'"></span>
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="fieldDefaultValue " label="字段默认值" width="150" align="center">
+                        <template slot-scope="scope">
+                            <div v-if="scope.row.editing">
+                                <el-input size="small" v-model="scope.row.fieldDefaultValue" placeholder="选择输入字段默认值">
+                                </el-input>
+                            </div>
+                            <div v-else>
+                                <span>{{scope.row.fieldDefaultValue}}</span>
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="fieldDesc" label="表字段描述" align="center" width="150">
+                        <template slot-scope="scope">
+                            <div v-if="scope.row.editing">
+                                <el-input size="small" v-model="scope.row.fieldDesc" placeholder="选择输入表字段描述">
+                                </el-input>
+                            </div>
+                            <div v-else>
+                                <span>{{scope.row.fieldDesc}}</span>
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column fixed="right" label="操作" width="200px" align="center">
+                        <template slot-scope="scope">
+                            <div v-if="!scope.row.editing">
+                                <el-button @click="delFieldRow(scope.$index)" type="text" size="small">删除</el-button>
+                                <el-button @click="editFieldRow(scope.row)" type="text" size="small">编辑</el-button>
+                            </div>
+                            <div v-else>
+                                <el-button @click="cancelFieldEdit(scope.row,scope.$index)" type="text" size="small">取消</el-button>
+                                <el-button @click="saveFieldEdit(scope.row,scope.$index)" type="text" size="small">保存</el-button>
+                            </div>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </div>
+        <div slot="footer" class="dialog-footer" style="text-align: center">
+            <el-button size="small" @click="cancel()">取 消</el-button>
+            <el-button size="small" type="primary" @click="submit()">确 定</el-button>
+        </div>
+    </div>
+    <script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
+    <script src="./../../../lib/vue/vue.js "></script>
+    <script src="./../../../lib/element-ui/v2.2.1/index.min.js"></script>
+    <script src="../../form-awesome/form-component/form-vue.js "></script>
+    <script src="./../../../common/js/jas-tools.js"></script>
+    <script src="../js/tableCascade.js"></script>
+    <script src="../js/domain.js"></script>
+    <script src="../js/rule.js"></script>
+    <script>
+        //父表单的创建表
+        var tableFormData = {
+            tableName: "",
+            tableNameCn: "",
+            dbType: "",
+            tableType: "TT_10",
+            dbSourceName: "",
+            tableDesc: "",
+            selectDbType: 0, //用于表示选中的是第几个数据结构
+            needSystemFields: false,
+            tableFieldFormList: []
+        };
+        var vm = new Vue({
+            el: "#page",
+            data: function () {
+                return {
+                    token: localStorage.getItem("token"),
+                    tableFormData: {},
+                    tableDataSource: {},
+                    dataSourceAndDbType: [],
+                    fieldTypeOptions: [],
+                    // currentrow: "",
+                    headerCellStyle: {
+                        background: "#f5f7fa !important"
+                    }
+                }
+            },
+            mounted: function () {
+                domain.init();
+                this.tableFormData = tableFormData;
+                this.renderParentTable();
+            },
+            methods: {
+                renderParentTable: function () {
+                    var that = this;
+                    $.ajax({
+                        type: "GET",
+                        url: jasTools.base.rootPath + "/dbInfo/getDatabaseMetaData.do?token=" + that.token,
+                        contentType: "application/json",
+                        dataType: "json",
+                        success: function (data, status) {
+                            if (data.status == 1) {
+                                data.data.forEach(function (item, index) {
+                                    var value = "";
+                                    if (item.databaseProductName.toLowerCase() ==
+                                        "oracle") {
+                                        value = "DT_01";
+                                    }
+                                    if (item.databaseProductName.toLowerCase() ==
+                                        "mysql") {
+                                        value = "DT_02";
+                                    }
+                                    if (item.databaseProductName.toLowerCase() ==
+                                        "postgresql") {
+                                        value = "DT_03";
+                                    }
+                                    that.dataSourceAndDbType.push({
+                                        index: index,
+                                        label: item.databaseProductName,
+                                        value: value,
+                                        rightLabel: item.dataSourceName
+                                    });
+                                });
+                                that.tableFormData.selectDbType = 0; //默认值的增加
+                                that.creteTableDta();
+                            }
+                        },
+
+                    });
+                },
+                delFieldRow: function (index) {
+                    var that = this;
+                    window.top.Vue.prototype.$confirm('是否永久删除该字段', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning',
+                    }).then(() => {
+                        that.tableFormData.tableFieldFormList.splice(index, 1);
+                    }).catch(() => {
+                        that.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });
+                    });
+
+                },
+                editFieldRow: function (row) {
+                    delete row.history;
+                    row.history = JSON.parse(JSON.stringify(row));
+                    row.editing = 1;
+                    // this.currentrow = row;
+                },
+                saveFieldEdit: function (row, index) {
+                    // alert(JSON.stringify(row))
+                    var that = this;
+                    rule.verifyObj(row, that.tableFormData.dbType, function () {
+                        row.editing = 0;
+                        row.rowIndex = index;
+                    });
+                },
+                cancelFieldEdit: function (row, index) {
+                    if (row.history) {
+                        window.top.jasTools.base.extend(row, row.history);
+                    } else {
+                        this.tableFormData.tableFieldFormList.splice(index, 1);
+                    }
+                },
+                cancel: function () {
+                    this.closeForm()
+                },
+                submit: function () {
+                    var that = this;
+                    var isrequireVerify = {};
+                    var fieldList = this.tableFormData.tableFieldFormList;
+                    var dbType = that.dataSourceAndDbType[that.tableFormData.selectDbType].value;
+                    var dbSourceName = that.dataSourceAndDbType[that.tableFormData.selectDbType].rightLabel;
+                    that.tableFormData.dbType = dbType;
+                    that.tableFormData.dbSourceName = dbSourceName;
+                    var isExitEdit = false;
+                    if (fieldList.length > 0) {
+                        fieldList.forEach(function (item) {
+                            if (item.editing == 1) {
+                                isExitEdit = true;
+                                return;
+                            }
+                        });
+                        if (isExitEdit) {
+                            window.top.Vue.prototype.$message({
+                                message: '请保存正在编辑的字段',
+                                type: 'warning'
+                            });
+                            return;
+                        }
+                    }
+                    for (key in that.tableFormData) {
+                        isrequireVerify[key] = that.tableFormData[key];
+                    }
+                    delete isrequireVerify.tableFieldFormList;
+
+                    rule.verifyObj(isrequireVerify, that.tableFormData.dbType, function () {
+                        $.ajax({
+                            type: "post",
+                            url: jasTools.base.rootPath + "/tableInfo/save.do?token=" + that.token,
+                            contentType: "application/json",
+                            data: JSON.stringify(that.tableFormData),
+                            dataType: "json",
+                            success: function (data, status) {
+                                console.log(data);
+                                if (data.status == 1) {
+                                    that.closeForm();
+                                    window.top.Vue.prototype.$message({
+                                        message: '保存成功',
+                                        type: 'success'
+                                    });
+                                } else {
+                                    if (data.code == "4005") {
+                                        window.top.Vue.prototype.$message({
+                                            message: "表里面存在字段名称重复",
+                                            type: 'error'
+                                        });
+                                        return;
+                                    }
+                                    window.top.Vue.prototype.$message({
+                                        message: data.msg,
+                                        type: 'error'
+                                    });
+                                }
+                            }
+                        });
+                    });
+                },
+                addField: function () {
+                    /*增加之前先去获取表的基本信息是不是填写*/
+                    var that = this;
+                    var dbType = that.dataSourceAndDbType[that.tableFormData.selectDbType].value;
+                    that.tableFormData.dbType = dbType;
+                    if (dbType == "DT_01") {
+                        that.fieldTypeOptions = that.group(domain.oracleFieldsType);
+                    }
+                    if (dbType == "DT_02") {
+                        that.fieldTypeOptions = that.group(domain.mysqlFieldsType);
+                    }
+                    if (dbType == "DT_03") {
+                        that.fieldTypeOptions = that.group(domain.pgFieldsType);
+                    }
+
+                    that.addFieldByTable();
+                },
+                addFieldByTable: function () {
+                    var fieldList = this.tableFormData.tableFieldFormList;
+                    var rowObj = {};
+                    if (fieldList.length > 0) {
+                        rowObj = {
+                            fieldName: fieldList[fieldList.length-1].fieldName,
+                            fieldNameCn: fieldList[fieldList.length-1].fieldNameCn,
+                            editing: 1,
+                            fieldType:fieldList[fieldList.length-1].fieldType,
+                            fieldLength:fieldList[fieldList.length-1].fieldLength
+                        };
+                    } else {
+                        rowObj = {
+                            fieldName: "",
+                            fieldNameCn: "",
+                            editing: 1,
+                            fieldType: this.fieldTypeOptions[0].data[0].value,
+                            fieldLength: "255"
+                        };
+                    }
+                    // this.currentrow = rowObj;
+                    this.tableFormData.tableFieldFormList.push(rowObj);
+                },
+                creteTableDta: function () {
+                    var that = this;
+                    that.tableDataSource = {
+                        tabCol: 4,
+                        rows: [{
+                            "title": "",
+                            data: [{
+                                id: "tableName",
+                                name: "数据库表名",
+                                placeholder: "请输入数据表名称",
+                                type: "input",
+                                options: [],
+                                col: "",
+                                size: "small",
+                                inputRule: 'noTtext', //设置输入框设置规则
+                                verify: [{
+                                    required: true,
+                                    message: ' ',
+                                    trigger: 'blur'
+                                }]
+                            }, {
+                                id: "tableNameCn",
+                                name: "表中文名称",
+                                type: "input",
+                                placeholder: "请输入表中文名称",
+                                options: [],
+                                col: "",
+                                size: "small",
+                                verify: [{
+                                    required: true,
+                                    message: ' ',
+                                    trigger: 'blur'
+                                }]
+                            }, {
+                                id: "selectDbType",
+                                name: "数据库类型",
+                                type: "select-custom",
+                                placeholder: "请选择数据库类型",
+                                options: that.dataSourceAndDbType,
+                                col: "",
+                                size: "small",
+                                verify: [{
+                                    required: true,
+                                    message: ' ',
+                                    trigger: 'blur'
+                                }]
+                            }, {
+                                id: "tableType",
+                                name: "数据库结构",
+                                type: "select",
+                                placeholder: "数据库结构",
+                                options: domain.tableType,
+                                col: "",
+                                size: "small",
+                                verify: [{
+                                    required: true,
+                                    message: ' ',
+                                    trigger: 'blur'
+                                }]
+                            }, {
+                                id: "tableDesc",
+                                name: "表描述",
+                                type: "textarea",
+                                col: 12,
+                                size: "small"
+                            }]
+                        }]
+                    };
+                },
+                closeForm: function () {
+                    window.top.jasTools.dialog.close({
+                        title: '增加',
+                        src: '/pages/table-opertion/dialog/createTable.html',
+                    });
+                },
+                changeSelect: function (index, tablename, val) {
+                    if (val.length == 0) {
+                        this.tableFormData.tableFieldFormList[index].fkTable = "";
+                        this.tableFormData.tableFieldFormList[index].fkTableId = "";
+                        this.tableFormData.tableFieldFormList[index].fkTableField = "";
+                    } else {
+                        this.tableFormData.tableFieldFormList[index].fkTable = tablename;
+                        this.tableFormData.tableFieldFormList[index].fkTableId = val[0];
+                        this.tableFormData.tableFieldFormList[index].fkTableField = val[1];
+                    }
+                },
+                saveBatchField: function () {
+                    var that = this;
+                    if (that.tableFormData.tableFieldFormList.length == 0) {
+                        window.top.Vue.prototype.$message({
+                            message: '请先增加表字段信息',
+                            type: 'warning'
+                        });
+                    }
+                    that.tableFormData.tableFieldFormList.forEach(function (item, index) {
+                        rule.verifyObj(item, that.tableFormData.dbType, function () {
+                            item.editing = 0;
+                            item.rowIndex = index;
+                        });
+                    });
+                },
+                updateValue: function (val, index) { //不能输入汉字/[\W]/g
+                    var that = this;
+                    Vue.nextTick(function () {
+                        that.tableFormData.tableFieldFormList[index].fieldName = val.replace(
+                            /[^\w]/g, '');
+                    });
+                },
+                group: function (data) {
+                    var map = {};
+                    var dest = [];
+                    for (var i = 0; i < data.length; i++) {
+                        var ai = data[i];
+                        if (!map[ai.dictValueDesc]) {
+                            dest.push({
+                                dictValueDesc: ai.dictValueDesc,
+                                data: [ai]
+                            });
+                            map[ai.dictValueDesc] = ai;
+                        } else {
+                            for (var j = 0; j < dest.length; j++) {
+                                var dj = dest[j];
+                                if (dj.dictValueDesc == ai.dictValueDesc) {
+                                    dj.data.push(ai);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    return dest;
+                },
+            }
+        });
+    </script>
+
+</body>
+
+</html>

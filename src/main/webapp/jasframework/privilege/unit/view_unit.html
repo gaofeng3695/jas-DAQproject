@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="pragma" content="no-cache" />
+<meta name="keywords" content="gis,web">
+<meta name="description" content="">
+<title></title>
+<link rel="stylesheet" type="text/css" href="../../common/lib/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../common/lib/easyui/themes/icon.css">
+
+
+<link rel="stylesheet" href="../../common/css/common.css" type="text/css"></link>
+<link rel="stylesheet" href="../../common/css/query.css" type="text/css" ></link>
+<link rel="stylesheet" href="../../common/css/add.css" type="text/css"></link>
+<link rel="stylesheet" href="../../common/css/detail.css" type="text/css"></link>
+<style>
+	.content-area{
+		height:100% !important;
+	}
+	.content-area .content-area-main{
+		height:100%;
+	} 
+</style>
+<script type="text/javascript" src="../../common/lib/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../common/lib/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../common/lib/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../common/js/validate_class.js"></script>
+<script type="text/javascript" src="../../common/js/common.js"></script>
+<script type="text/javascript" src="js/view_unit.js"></script>
+<script type="text/javascript" src="../../common/i18n/i18n.js"></script>
+</head>
+<body>
+	<div id="contentArea" class="content-area">
+		<form class="content-area-main">
+			<table class="detail-table">
+				<tr>
+					<th><span >上级部门</span></th>
+					<td><span id="parentName"></span></td>
+					<th><span >部门名称</span></th>
+					<td><span id="name"></span></td>
+				</tr>
+				<tr>
+				    <th><span >部门编码</span></th>
+					<td><span id="unitNum"></span></td>
+					<th><span >部门编号</span></th>
+					<td><span id="orderCode"></span></td>
+				</tr>
+				<tr>
+				    <th><span >部门类型</span></th>
+					<td><span id="unitType"></span></td>
+					<th><span >部门组织机构类型</span></th>
+					<td><span id="unitOrgType"></span></td>
+				</tr>
+				<tr>
+				    <th><span >顺序编号</span></th>
+					<td><span id="orderNum"></span></td>
+					<th><span >联系电话</span></th>
+					<td ><span id="phone"></span></td>
+				</tr>
+				<tr>
+				    <th><span >地址</span></th>
+					<td colspan = "3"><span id="address"></span></td>
+				</tr>
+				<tr>
+					<th><span >部门描述</span></th>
+					<td colspan = "3"><span id="description"></span></td>
+				</tr>
+			</table>
+		</form>	
+	</div>
+	
+	<!-- <form id="viewSiteForm" method="post">
+		<input type="hidden" id="menuid" value="101003" />
+		<div id="cc" class="easyui-layout" style="width: 100%; height: 700px;">
+			<div id="right" region="center"
+				style="padding: 1px; margin-right: 1px; background: #ffffff; overflow: auto;">
+				<div buttons="#dlg-buttons_add" style="height: 100%;background:#fff">
+					<table border="1" class="detail-table" align="center">
+						<tr>
+							<input type="hidden" id="eventid" name="eventid" />
+							<th style="width: 20%;"><label id="unit.parentid"> <span
+									key="unit.parentid" class="paltform-i18n">上级部门：</span>
+							</label></th>
+							<td style="width: 80%;"><input id="parentName"
+								name="parentName" class="easyui-validatebox input_bg"
+								maxlength="25"></td>
+						</tr>
+						<tr>
+							<th><label id="unit.name"> <span key="unit.name"
+									class="paltform-i18n">部门名称：</span>
+							</label></th>
+							<td><input id="name" name="name"
+								class="easyui-validatebox input_bg" maxlength="25"></td>
+						</tr>
+						<tr>
+							<th><label id="unit.unitid"> <span key="unit.unitid"
+									class="paltform-i18n">部门编号：</span>
+							</label></th>
+							<td><input id="unitnum" name="unitNum"
+								class="easyui-validatebox input_bg" maxlength="25"></td>
+						</tr>
+						<tr>
+							<th><label id="unit.unitid"> <span
+									key="unit.ordernum" class="paltform-i18n">顺序编号：</span>
+							</label></th>
+							<td><input id="orderNum" name="orderNum"
+								class="easyui-validatebox input_bg" maxlength="25"></td>
+						</tr>
+						<tr>
+							<th><label id="unit.unitid"> <span
+									key="unit.unittype" class="paltform-i18n">部门类型：</span>
+							</label></th>
+							<td><select name="unitType" id="unitType"
+								class="easyui-validatebox input_bg">
+									<option value="1">机关</option>
+									<option value="2">单位</option>
+							</select></td>
+						</tr>
+						<tr>
+							<th><label id="unit.phone"> <span key="unit.phone"
+									class="paltform-i18n">联系电话：</span>
+							</label></th>
+							<td><input id="phone" name="phone"
+								class="easyui-validatebox input_bg" maxlength="25"></td>
+						</tr>
+						<tr>
+							<th><label id="unit.address"> <span
+									key="unit.address" class="paltform-i18n">地址：</span>
+							</label></th>
+							<td><input id="address" name="address"
+								class="easyui-validatebox input_bg" maxlength="25"></td>
+						</tr>
+
+						<tr>
+							<th><label id="unit.description"> <span
+									key="unit.description" class="paltform-i18n">部门描述：</span>
+							</label></th>
+							<td><input id="description" name="description"
+								class="easyui-validatebox input_bg" maxlength="25"></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</form> -->
+</body>
+<script type="text/javascript">
+	/* $("#parentName").attr("disabled", "disabled");
+	$("#unitnum").attr("disabled", "disabled");
+	$("#name").attr("disabled", "disabled");
+	$("#unitType").attr("disabled", "disabled");
+	$("#phone").attr("disabled", "disabled");
+	$("#address").attr("disabled", "disabled");
+	$("#description").attr("disabled", "disabled");
+	$("#orderNum").attr("disabled", "disabled"); */
+</script>
+
+</html>

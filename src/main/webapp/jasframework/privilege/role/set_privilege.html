@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="pragma" content="no-cache" />
+<meta name="keywords" content="gis,web">
+<meta name="description" content="">
+<title></title>
+<link rel="stylesheet" type="text/css" href="../../common/lib/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../common/lib/easyui/themes/icon.css">
+
+<link rel="stylesheet" type="text/css" href="../../common/css/common.css"></link>
+<link rel="stylesheet" type="text/css" href="../../common/css/add.css">
+
+<script type="text/javascript" src="../../common/lib/jquery.min.js"></script>
+<script type="text/javascript" src="../../common/lib/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../common/js/validate_class.js"></script>
+<script type="text/javascript" src="../../common/js/common.js"></script>
+<script type="text/javascript" src="js/set_privilege.js"></script>
+<script type="text/javascript" src="" id="i18nEasyui"></script>
+<script type="text/javascript" src="../../common/i18n/i18n.js"></script>
+</head>
+<body>
+<!-- 权限编号 -->
+	<input type="hidden" id="menuid" value="101002" />
+		
+<!-- 主体内容展示区域 -->
+	<div id="contentArea" class="content-area">
+		<form id="roleForm" class="content-area-main" method="post">
+			<!-- 数据eventid -->
+			<input type="hidden" id="eventid" name="eventid">
+			<input type="hidden" id="projectOid" name="projectOid">
+			<div id = "beforeShow" style = "background:#fff;">
+				<span style = "display: block;margin: 20px 0px;">正在加载数据，请稍后。。。</span>
+				<div class="easyui-progressbar  progressbar-yellow" data-options="text:''" style="width:350px;"></div>
+			</div>
+			<table cellpadding="0" cellspacing="0" class="mainForm">
+					<!--显示数据列表-->
+					<tbody id="TableData">
+						<tr class="TableDetail1">
+							<!-- 显示权限树 -->
+							<td>
+								<div class="zTreeDemoBackground left">
+									<ul id="privilegeEventId" class="ztree">
+									
+									</ul>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+		</form>
+	</div>
+
+<!-- 按钮区域 -->
+	<div class="button-area">
+			<table width="100%">
+				<tr>
+					<td  align="center">
+						<a href="#" id="savebutton" class="easyui-linkbutton save-btn" onclick="saveConfig()"> <span>保存</span></a>
+						<a href="#" class="easyui-linkbutton cancel-btn"  onclick="closePanel()"> <span>取消</span></a>
+					</td>
+				</tr>
+			</table>
+	</div>
+</body>
+</html>
