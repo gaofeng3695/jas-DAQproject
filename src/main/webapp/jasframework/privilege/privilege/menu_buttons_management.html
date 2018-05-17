@@ -1,0 +1,231 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="pragma" content="no-cache" />
+<meta name="keywords" content="gis,web">
+<meta name="description" content="">
+<title></title>
+<link rel="stylesheet" type="text/css" href="../../common/lib/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../common/lib/easyui/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="../../common/lib/ztree/css/zTreeStyle/zTreeStyle.css">
+
+
+<!-- <link rel="stylesheet" href="../../common/css/common.css" type="text/css"></link>
+<link rel="stylesheet" href="../../common/css/query.css" type="text/css" ></link> -->
+<link rel="stylesheet" href="../../common/css/detail.css" type="text/css"/>
+<link rel="stylesheet" href="../../common/css/add.css" type="text/css"/>
+<style>
+.textbox.combo{
+	width:200px !important;
+}
+</style>
+<script type="text/javascript" src="../../common/lib/jquery.min.js"></script>
+<script type="text/javascript" src="../../common/lib/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../common/js/common.js"></script>
+<script type="text/javascript" src="" id="i18nEasyui"></script>
+<!-- ztree begin -->
+<script type="text/javascript" src="../../common/lib/ztree/js/jquery.ztree.core-3.5.js"></script>
+<script type="text/javascript" src="../../common/lib/ztree/js/jquery.ztree.excheck-3.5.js"></script>
+<script type="text/javascript" src="../../common/lib/ztree/js/jquery.ztree.exedit-3.5.js"></script>
+<!-- ztree end -->
+<script type="text/javascript" src="js/menu_buttons_management.js"></script>
+<script type="text/javascript" src="../../common/i18n/i18n.js"></script>
+</head>
+<body>
+	<input type="hidden" id="menuid" value="101004"/>
+	<!-- 整个布局 -->
+	<div id="cc" class="easyui-layout" style="width: 100%; height: 700px;overflow:hidden;">
+		<!-- 左侧布局	 -->
+		<div id="left" region="west"  class="easyui-panel"  key="pri.quanxianjiegou" split="false"  title="权限结构"
+				style="width: 200px; height: 90%; overflow:auto;" >
+			<!--  <select id="appnumber1" name="appNumber1" style="width: 100px;">
+			
+			</select>  -->
+			<!-- 左侧权限树	 -->
+			<ul id="tt" class="ztree" animate="false" collapsible="true" closable="false" style="width: 200px;"></ul>
+		</div>
+		<!-- 右侧布局 -->
+		<div id="right" region="center" style="padding: 1px; margin-right: 1px; background: #ffffff; overflow: auto;">
+			<div style="height: 100%; background:#fff">
+				<form id="viewSiteForm" method="post">
+					<table border="1" class="detail-table">
+						<tr>
+							<th style="width: 25%;">
+								<label id="pri.parentid">
+									<span key="pri.parentid" class="paltform-i18n">父权限id：</span>
+								</label>
+							</th>
+							<td style="width: 75%;">
+								<input id="parentEventid" name="parentEventid" class="easyui-validatebox input_bg" maxlength="25">
+							</td>
+						</tr>
+						<tr>
+							<th style="width: 25%;">
+								<label id="pri.parenteventName">
+									<span key="pri.parenteventName" class="paltform-i18n">父权限名称：</span>
+								</label>
+							</th>
+							<td style="width: 75%;">
+								<input id="parentName" name="parentName" class="easyui-validatebox input_bg" maxlength="25">
+							</td>
+						</tr>
+						<tr>
+							<th>
+								<label id="pri.parentprivilegenumber">
+									<span key="pri.parentprivilegenumber" class="paltform-i18n">父权限编号：</span>
+								</label>
+							</th>
+							<td>
+								<input id="parentPrivilegeNumber" name="parentPrivilegeNumber" class="easyui-validatebox input_bg" maxlength="25">
+							</td>
+						</tr>
+						<tr>
+							<th>
+								<label id="unit.name">
+									<span key="pri.eventid" class="paltform-i18n">权限id：</span>
+								</label>
+							</th>
+							<td>
+								<input id="eventid" name="eventid" class="easyui-validatebox input_bg" maxlength="25">
+							</td>
+						</tr>
+						<tr>
+							<th>
+								<label id="key.name">
+									<span key="pri.name" class="paltform-i18n">权限名称：</span>
+								</label>
+							</th>
+							<td>
+								<input id="name" name="name" class="easyui-validatebox input_bg" maxlength="25">
+							</td>
+						</tr>
+						<tr>
+							<th>
+								<label id="pri.privilegenumber">
+									<span key="pri.privilegenumber" class="paltform-i18n">权限编号：</span>
+								</label>
+							</th>
+							<td>
+								<input id="privilegeNumber" name="privilegeNumber" class="easyui-validatebox input_bg" maxlength="25">
+							</td>
+						</tr>
+						<tr>
+							<th>
+								<label id="pri.privilegetype">
+									<span key="pri.privilegetype" class="paltform-i18n">权限类型：</span>
+								</label>
+							</th>
+							<td>
+								<select name="privilegeType" id="privilegeType" class="easyui-validatebox input_bg" >
+									<option value="1">菜单</option>
+									<option value="2">功能点</option>
+									<option value="3">表单</option>
+									<option value="4">表单字段</option>
+								</select>
+							</td>
+						</tr>
+						<!-- <tr>
+							<th>
+								<label id="pri.appnumber">
+									<span key="pri.appnumber" class="paltform-i18n">应用系统：</span>
+								</label>
+							</th>
+							<td>
+								<select id="appnumber" name="appNumber"  class="easyui-validatebox input_bg">
+								</select>
+							</td>
+						</tr> -->
+						<tr>
+							<th>
+								<label id="pri.url">
+									<span key="pri.url" class="paltform-i18n">权限URL：</span>
+								</label>
+							</th>
+							<td>
+								<input id="url" name="url" class="easyui-validatebox input_bg" maxlength="25">
+							</td>
+						</tr>
+						<tr>
+							<th>
+								<label id="pri.queryName">
+									<span key="pri.queryName" class="paltform-i18n">Query类全路径：</span>
+								</label>
+							</th>
+							<td>
+								<input id="queryName" name="queryName" class="easyui-validatebox input_bg">
+							</td>
+						</tr>
+						<tr>
+							<th>
+								<label id="pri.ordernumber">
+									<span key="pri.ordernumber" class="paltform-i18n">权限顺序号：</span>
+								</label>
+							</th>
+							<td>
+								<input id="orderNumber" name="orderNumber" class="easyui-validatebox input_bg" maxlength="25">
+							</td>
+						</tr>
+						<tr>
+							<th>
+								<label id="pri.description">
+									<span key="descriptioninfo" class="paltform-i18n">
+									权限描述：
+									</span>
+								</label>
+							</th>
+							<td>
+								<textarea id="description" class="easyui-validatebox  input_bg" validType="maxLength[300]"  name="description" style="height: 60px;">
+								</textarea>
+							</td>
+						</tr>
+							<tr>
+							</tr>
+						</table>
+						<table>
+							<tr>
+								<td width="250px"></td>
+								<td>
+									<a href="#" id="addbtn" class="easyui-linkbutton"
+										iconCls="icon-add" onclick="savePrivilege()"><span
+										key="add" class="paltform-i18n">新增</span>
+									</a>
+								</td>
+								<td style="padding: 0 15px;">
+									<a href="#" id="editbtn" class="easyui-linkbutton"
+										iconCls="icon-edit" onclick="updatePrivilege()"><span
+										key="edit" class="paltform-i18n">修改</span>
+									</a>
+								</td>
+								<td>
+									<a href="#" id="delbtn" class="easyui-linkbutton"
+										iconCls="icon-remove" onclick="checkPrivilege()"><span
+										key="delete" class="paltform-i18n">删除</span>
+									</a>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+
+			</div>
+		</div>
+	<iframe id="exprotExcelIframe" style="display: none;"></iframe>
+</body>
+<script type="text/javascript">
+	$("#parentEventid").attr("disabled", "disabled");
+	$("#parentName").attr("disabled", "disabled");
+	$("#parentPrivilegeNumber").attr("disabled", "disabled");
+	$("#eventid").attr("disabled", "disabled");
+	$("#unitid").attr("disabled", "disabled");
+	$("#name").attr("disabled", "disabled");
+	$("#businessrange").attr("disabled", "disabled");
+	$("#description").attr("disabled", "disabled");
+	$("#privilegeNumber").attr("disabled", "disabled");
+	$("#privilegeType").attr("disabled", "disabled");
+	//$("#appnumber").attr("disabled", "disabled");
+	$("#url").attr("disabled", "disabled");
+	$("#orderNumber").attr("disabled", "disabled");
+</script>
+
+</html>

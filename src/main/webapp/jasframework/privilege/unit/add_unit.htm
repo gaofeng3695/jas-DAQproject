@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="pragma" content="no-cache" />
+<meta name="keywords" content="gis,web">
+<meta name="description" content="">
+<title></title>
+<link rel="stylesheet" type="text/css" href="../../common/lib/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../common/lib/easyui/themes/icon.css">
+
+<link rel="stylesheet" type="text/css" href="../../common/css/common.css"></link>
+<link rel="stylesheet" href="../../common/css/add.css" type="text/css"></link>
+
+<script type="text/javascript" src="../../common/lib/jquery.min.js"></script>
+<script type="text/javascript" src="../../common/lib/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../common/lib/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../common/js/validate_class.js"></script>
+<script type="text/javascript" src="../../common/js/common.js"></script>
+<script type="text/javascript" src="js/add_unit.js"></script>
+<script type="text/javascript" src="" id="i18nEasyui"></script>
+<script type="text/javascript" src="../../common/i18n/i18n.js"></script>
+</head>
+<body>
+<div id="contentArea" class="content-area">
+<!-- 权限编号 -->
+	<input type="hidden" id="menuid" value="100603"/>
+	<!-- <div id="dlg"> -->
+		<form id="addunit" class="content-area-main">
+			<input type="hidden" name="eventid" id="eventid"/>
+			<input type="hidden" name="businessrange" id="businessrange" value="1"/>
+			<table align="center" class="edit-table" >	
+				<tr>
+					<td width="20%"><span>上级组织：</span></td>
+					<td width="30%"><input id="parentEventid" name="parentEventid" class="easyui-combotree" style="width:100%"></td>
+					<td width="20%"><span>组织机构名称：</span></td>
+					<td width="30%"><input id="name" name="name" class="easyui-validatebox input_bg" required="true" validType="general" maxlength="25"></td>
+				</tr>
+				<tr>
+					<td width="20%"><span>组织机构编码：</span></td>
+					<td width="30%"><input id="unitNum" name="unitNum" class="easyui-validatebox input_bg" required="true" validType="general" maxlength="25" ></td>
+					<td width="20%"><span>组织机构编号：</span></td>
+					<td width="30%"><input id="unitCode" name="unitCode" class="easyui-validatebox input_bg" required="true" validType="general" maxlength="25" ></td>
+				</tr>
+				<tr>
+				   <td width="20%"><span>组织机构类型：</span></td>
+					<td width="30%">
+						<select name="unitType" id="unitType" class="easyui-combobox" required="true" style="width:100%">
+							<option value="1">部门</option>
+							<option value="2">单位</option>
+						</select>
+					</td>
+					<td width="20%"><span>组织机构类型：</span></td>
+					<td width="30%">
+						<input id="unitOrgType" name="unitOrgType" style="width:100%">
+						<!-- <select name="unitOrgType" id="unitOrgType" class="easyui-combobox" required="true" style="width:100%">
+							<option value="1">机关</option>
+							<option value="2">单位</option>
+						</select> -->
+					</td>
+				</tr>
+				<tr>
+				    <td width="20%"><span>顺序编号：</span></td>
+					<td width="30%"><input id="ordernum" name="orderNum" Maxlength="4" class="easyui-validatebox input_bg" required="true" validType="maxNumber[9999]"></td>
+					<td width="20%"><span>联系电话：</span></td>
+					<td width="30%"><input id="phone" name="phone" class="easyui-validatebox input_bg" validType="maxLength[25]"></td>
+				</tr>
+				<tr>
+					<td><span>地址：</span></td>
+					<td colspan="3"><input id="address" name="address" class="easyui-validatebox input_bg"  validType="maxLength[100]" ></td>
+				</tr>
+				<tr>
+				    <td width="20%"><span>组织机构描述：</span></td>
+					<td colspan="3"><textarea id="description" class="easyui-validatebox" validType="maxLength[300]"  name="description" style="height: 60px;"></textarea></td>
+			</table>
+			
+		</form>
+</div>
+
+<div class="button-area">
+ 	  <table width="100%">
+		<tr>
+			 <td >
+				 <a href="#" id="savebutton" class="easyui-linkbutton submit" onclick="saveUnit()"><span key="save" class="paltform-i18n">保存</span></a>
+				 <a href="#" class="easyui-linkbutton cancel" onclick="closeUnit()"><span key="cancel" class="paltform-i18n">取消</span></a>
+			 </td>
+		</tr>
+	</table>	
+</div> 
+</body>	
+</html>
+	

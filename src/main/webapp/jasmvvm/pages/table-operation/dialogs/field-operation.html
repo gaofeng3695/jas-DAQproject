@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./../../../lib/element-ui/v2.2.1/theme-chalk/index.min.css">
+    <link rel="stylesheet" href="./../../../src/css/main.css">
+    <style>
+        .all-wrapper {
+            padding: 15px;
+            overflow: hidden;
+        }
+
+        .tool {
+            padding-bottom: 10px;
+        }
+
+        .pagination {
+            float: right;
+            margin-top: 10px;
+        }
+
+        .el-table th.req>div::before {
+            display: inline-block;
+            content: "*";
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            color: #ff4d51;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <div class="all-wrapper">
+            <!--工具区域开始-->
+            <div class="tool">
+                <el-button size="small" type="primary" plain="plain" icon="el-icon-plus" @click="addField">增加</el-button>
+                <el-button size="small" type="primary" plain="plain" icon="el-icon-sort" @click="sortField">排序</el-button>
+                <el-button size="small" type="primary" plain="plain" icon="save" @click="saveBatchRow">批量保存</el-button>
+                <div style="display:inline-block;float:right">
+                    <el-button size="small" icon="el-icon-refresh" @click="refresh"></el-button>
+                    <!--<el-button size="small" type="primary" plain="plain" @click="refresh">刷新</el-button>-->
+                </div>
+            </div>
+            <!--工具区域完成-->
+
+            <!--表格区域开始-->
+            <el-table :header-cell-style='headerCellStyle' :data="fieldData" border style="width: 100%" v-loading="loadingChild">
+                <el-table-column fixed prop="fieldName" label="字段名称" align="center" label-class-name="req">
+                    <template slot-scope="scope">
+                        <div v-if="scope.row.editing==1">
+                            <el-input size="small" v-model="scope.row.fieldName" placeholder="输入字段名称" @input="updateValue(scope.row.fieldName,scope.$index)">
+                            </el-input>
+                        </div>
+                        <div v-else>
+                            <span>{{scope.row.fieldName}}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="fieldNameAlias" label="字段别名" align="center">
+                    <template slot-scope="scope">
+                        <div v-if="scope.row.editing">
+                            <el-input size="small" v-model="scope.row.fieldNameAlias" placeholder="选择输入字段别名">
+                            </el-input>
+                        </div>
+                        <div v-else>
+                            <span>{{scope.row.fieldNameAlias}}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="fieldNameCn" label="字段中文名称" align="center">
+                    <template slot-scope="scope">
+                        <div v-if="scope.row.editing">
+                            <el-input size="small" v-model="scope.row.fieldNameCn" placeholder="选择输入字段中文名称">
+                            </el-input>
+                        </div>
+                        <div v-else>
+                            <span>{{scope.row.fieldNameCn}}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="fieldType" label="字段类型" align="center" label-class-name="req">
+                    <template slot-scope="scope">
+                        <div v-if="scope.row.editing">
+                            <el-select size="small" v-model="scope.row.fieldType" placeholder="请选择字段类型">
+                                <el-option-group v-for="groups in fieldTypeOption" :key="groups.dictValueDesc" :label="groups.dictValueDesc">
+                                    <el-option v-for="item in groups.data" :key="item.value" :label="item.label" :value="item.value">
+                                    </el-option>
+                                </el-option-group>
+                                <!--<el-option v-for="item in fieldTypeOption" :label="item.value" :value="item.value"></el-option>-->
+                            </el-select>
+                        </div>
+                        <div v-else>
+                            <span>{{scope.row.fieldType}}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="fieldLength" label="字段精度/长度" align="center" label-class-name="req">
+                    <template slot-scope="scope">
+                        <div v-if="scope.row.editing">
+                            <el-input size="small" v-model="scope.row.fieldLength" placeholder="选择输入字段精度/长度">
+                            </el-input>
+                        </div>
+                        <div v-else>
+                            <span>{{scope.row.fieldLength}}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="ifPk" label="主键" align="center" width="80">
+                    <template slot-scope="scope">
+                        <div v-if="scope.row.editing">
+                            <el-switch size="small" v-model="scope.row.ifPk" :active-value="'1'" :inactive-value="'0'"></el-switch>
+                        </div>
+                        <div v-else>
+                            <span v-text="scope.row.ifPk=='1'?'是':'否'"></span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="ifFk" label="外键" align="center" width="80">
+                    <template slot-scope="scope">
+                        <div v-if="scope.row.editing">
+                            <el-switch size="small" v-model="scope.row.ifFk" :active-value="'1'" :inactive-value="'0'"></el-switch>
+                        </div>
+                        <div v-else>
+                            <span v-text="scope.row.ifFk=='1'?'是':'否'"></span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="fkTable" label="外键表名/字段" width="200px" align="center">
+                    <template slot-scope="scope">
+                        <div v-if="scope.row.editing">
+                            <table-cascader :currentfields="scope.row" :index="scope.$index" @change="changeSelect"></table-cascader>
+                        </div>
+                        <div v-else-if="scope.row.fkTable">
+                            <span v-text="scope.row.fkTable"></span>
+                            <span>-</span>
+                            <span v-text="scope.row.fkTableField"></span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="ifEmpty" label="为空" align="center" width="80">
+                    <template slot-scope="scope">
+                        <div v-if="scope.row.editing">
+                            <el-switch size="small" v-model="scope.row.ifEmpty" :active-value="'1'" :inactive-value="'0'"></el-switch>
+                        </div>
+                        <div v-else>
+                            <span v-text="scope.row.ifEmpty=='1'?'是':'否'"></span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="ifIndex" label="索引" align="center" width="80">
+                    <template slot-scope="scope">
+                        <div v-if="scope.row.editing">
+                            <el-switch v-model="scope.row.ifIndex" :active-value="'1'" :inactive-value="'0'"></el-switch>
+                        </div>
+                        <div v-else>
+                            <span v-text="scope.row.ifIndex=='1'?'是':'否'"></span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="fieldDefaultValue" label="字段默认值" align="center">
+                    <template slot-scope="scope">
+                        <div v-if="scope.row.editing">
+                            <el-input size="small" v-model="scope.row.fieldDefaultValue" placeholder="请输入字段默认值">
+                            </el-input>
+                        </div>
+                        <div v-else>
+                            <span>{{scope.row.fieldDefaultValue}}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+
+                <el-table-column prop="fieldDesc" label="表字段描述" align="center">
+                    <template slot-scope="scope">
+                        <div v-if="scope.row.editing">
+                            <el-input size="small" v-model="scope.row.fieldDesc" placeholder="选择输入表字段描述">
+                            </el-input>
+                        </div>
+                        <div v-else>
+                            <span>{{scope.row.fieldDesc}}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column fixed="right" label="操作" width="100px" align="center">
+                    <template slot-scope="scope">
+                        <div v-if="!scope.row.editing">
+                            <el-button @click="delChildRow(scope.row,scope.$index)" type="text" size="small">删除</el-button>
+                            <el-button @click="editChildRow(scope.row,scope.$index)" type="text" size="small">编辑</el-button>
+                        </div>
+                        <div v-else>
+                            <el-button @click="cancelChildRow(scope.row,scope.$index)" type="text" size="small">取消</el-button>
+                            <el-button @click="saveChildRow(scope.row,scope.$index)" type="text" size="small">保存</el-button>
+                        </div>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <!--<el-pagination class="pagination" @size-change="handleSizeChangeField" @current-change="handleCurrentChangeField" :current-page="currentpageField" :page-sizes="pageSizesField" :page-size="pageSizeField" layout="total, sizes, prev, pager, next, jumper"
+                :total="totalField">
+            </el-pagination>-->
+        </div>
+
+
+    </div>
+</body>
+<!-- import Vue before Element -->
+<script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../lib/vue/vue.js"></script>
+<!-- import JavaScript -->
+<script src="./../../../lib/element-ui/v2.2.1/index.min.js"></script>
+
+<script src="./../../../common/js/jas-tools.js"></script>
+<script src="../../form-awesome/form-component/form-vue.js "></script>
+<script src="./../js/domain.js"></script>
+<script src="./../js/rule.js"></script>
+<script src="./../js/tableCascade.js"></script>
+
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                token: localStorage.getItem("token"),
+                // currentfields: '', //表示当前正在编辑的字段
+                fieldData: [], //列表数据
+                totalField: 0,
+                currentpageField: 1,
+                pageSizeField: 100,
+                pageSizesField: [100, 200],
+                loadingChild: true,
+                fieldTypeOption: [], //字段类型
+                headerCellStyle: {
+                    background: "#f5f7fa !important"
+                }
+            }
+        },
+        mounted: function () {
+            domain.init(); // 初始化阈值对象
+            var param = window.top.jasTools.base.getParamsInUrl(location.href);
+            this.tableId = param.tableId;
+            this.dbType = param.dbType;
+            this.requestFieldList(); // 请求数据
+        },
+        methods: {
+            _initFieldTypeOption: function (dbType) {
+                var that = this;
+                if (that.fieldTypeOption.length > 0) {
+                    return;
+                }
+                if (dbType == "DT_01") {
+                    that.fieldTypeOption = that.groupByFileds(domain.oracleFieldsType);
+                }
+                if (dbType == "DT_02") {
+                    that.fieldTypeOption = that.groupByFileds(domain.mysqlFieldsType);
+                }
+                if (dbType == "DT_03") {
+                    that.fieldTypeOption = that.groupByFileds(domain.pgFieldsType);
+                    console.log(that.fieldTypeOption);
+                }
+            },
+            addField: function () {
+                var rowObj = {};
+                if (this.fieldData.length > 0) {
+                    rowObj = {
+                        editing: 1,
+                        fieldName: this.fieldData[0]["fieldName"],
+                        fieldType: this.fieldData[0]["fieldType"],
+                        fieldLength: this.fieldData[0]["fieldLength"]
+                    };
+                } else {
+                    rowObj = {
+                        editing: 1,
+                        fieldName: "",
+                        fieldType: this.fieldTypeOption[0].data[0].value,
+                        fieldLength: "255"
+                    };
+                }
+                // this.currentfields = rowObj;
+                this.fieldData.unshift(rowObj);
+            },
+            sortField: function () {
+                var that = this;
+                window.top.jasTools.dialog.show({
+                    title: '字段排序',
+                    width: '40%',
+                    height: '80%',
+                    src: '/pages/table-operation/dialogs/sort.html?tableId=' + this.tableId,
+                    cbForClose: function (param) {
+                        if (param === 1) {
+                            that.requestFieldList();
+                        }
+                    }
+                });
+            },
+            changeSelect: function (index, tablename, val) { //选择外键字段
+                if (val.length == 0) {
+                    this.fieldData[index].fkTable = "";
+                    this.fieldData[index].fkTableId = "";
+                    this.fieldData[index].fkTableField = "";
+                } else {
+                    this.fieldData[index].fkTable = tablename;
+                    this.fieldData[index].fkTableId = val[0];
+                    this.fieldData[index].fkTableField = val[1];
+                }
+            },
+            requestFieldList: function () {
+                var that = this;
+                // that.currentfields = '';
+                that.loadingChild = true;
+                $.ajax({
+                    type: "post",
+                    url: jasTools.base.rootPath + "/tableField/getPage.do?token=" + that.token,
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        page: this.currentpageField,
+                        rows: this.pageSizeField,
+                        tableId: this.tableId,
+                    }),
+                    dataType: "json",
+                    success: function (data, status) {
+                        if (data.status == 1) {
+                            data.rows.forEach(function (item) {
+                                item.editing = 0;
+                            });
+                            that._initFieldTypeOption(that.dbType); //渲染下拉列表的阈值
+                            that.loadingChild = false;
+                            that.totalField = data.total;
+                            that.fieldData = data.rows;
+                        } else {
+                            window.top.Vue.prototype.$message({
+                                message: '服务器连接失败，请稍后再试',
+                                type: 'error'
+                            });
+                        }
+                    }
+                });
+            },
+            delChildRow: function (row) { //删除
+                var that = this;
+                window.top.Vue.prototype.$confirm('是否永久删除该字段', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                }).then(() => {
+                    that.delChildRowToService(row.oid);
+                }).catch(() => {
+                    window.top.Vue.prototype.$message({
+                        type: 'info',
+                        message: '取消删除字段'
+                    });
+                });
+            },
+            delChildRowToService: function (oid) {
+                var that = this;
+                $.ajax({
+                    type: "get",
+                    url: jasTools.base.rootPath + "/tableField/delete.do?token=" + that.token,
+                    contentType: "application/json",
+                    data: {
+                        id: oid
+                    },
+                    dataType: "json",
+                    success: function (data, status) {
+                        if (data.status == 1) {
+                            that.requestFieldList();
+                            window.top.Vue.prototype.$message({
+                                message: '删除成功',
+                                type: 'success'
+                            });
+                        } else {
+                            window.top.Vue.prototype.$message({
+                                message: '删除失败',
+                                type: 'error'
+                            });
+                        }
+                    }
+                });
+            },
+            editChildRow: function (row) { //编辑
+                var that = this;
+                // var isExist = false; //是否正在编辑
+                // that.fieldData.forEach(function (item) { // 判断是否正在编辑
+                //     if (item.editing == 1) {
+                //         isExist = true;
+                //         return;
+                //     }
+                // });
+                // if (isExist) {
+                //     window.top.Vue.prototype.$message({
+                //         message: '存在正在编辑的数据，请先进行保存',
+                //         type: 'success'
+                //     });
+                //     return;
+                // }
+                //切换到编辑状态
+                delete row.history;
+                row.history = JSON.parse(JSON.stringify(row));
+                row.editing = 1;
+                // that.currentfields = row;
+            },
+            cancelChildRow: function (row, index) {
+                if (row.history) {
+                    window.top.jasTools.base.extend(row, row.history);
+                } else {
+                    this.fieldData.splice(index, 1);
+                }
+            },
+            saveChildRow: function (row) { //保存
+                var that = this;
+                var data = [];
+                var url = "";
+                if (row.ifFk == '0') {
+                    row.fkTable = "";
+                    row.fkTableField = "";
+                    row.fkTableId = "";
+                }
+                rule.verifyObj(row, that.dbType, function () {
+                    row.tableId = that.tableId;
+                    var msg = "";
+                    if (row.oid) {
+                        url = jasTools.base.rootPath + "/tableField/update.do?token=" + that.token;
+                        msg = "修改";
+                        data.push(row);
+                    } else {
+                        if (that.fieldData.length > 1) {
+                            row.rowIndex = that.fieldData[that.fieldData.length - 1].rowIndex++;
+                        } else {
+                            row.rowIndex = 0;
+                        }
+                        data = {
+                            tableFieldFormList: [row]
+                        };
+                        msg = "保存";
+                        url = jasTools.base.rootPath + "/tableField/save.do?token=" + that.token;
+                    }
+                    $.ajax({
+                        type: "post",
+                        url: url,
+                        contentType: "application/json",
+                        data: JSON.stringify(data),
+                        dataType: "json",
+                        success: function (data, status) {
+                            if (data.status == 1) {
+                                row.editing = 0;
+                                that.requestFieldList();
+                                window.top.Vue.prototype.$message({
+                                    message: msg + '成功',
+                                    type: 'success'
+                                });
+                            } else {
+                                window.top.Vue.prototype.$message({
+                                    message: data.msg,
+                                    type: 'error'
+                                });
+                            }
+                        }
+                    });
+                });
+            },
+            saveBatchRow: function () {
+                var that = this;
+                var update = [];
+                var save = [];
+                that.fieldData.forEach(function (item, index) {
+                    item.rowIndex = that.fieldData.length - index;
+                    if (item.editing == 1) {
+                        rule.verifyObj(item, that.dbType, function () {
+                            item.tableId = that.tableId;
+                        });
+                        if (item.oid) {
+                            update.push(item);
+                        } else {
+                            save.push(item);
+                        }
+                    }
+                });
+                if (update.length == 0 && save.length == 0) {
+                    window.top.Vue.prototype.$message({
+                        message: '没有可以进行保存的字段',
+                        type: 'success'
+                    });
+                    return;
+                }
+                that.saveToServerBatch(save, update);
+            },
+            saveToServerBatch: function (save, update) {
+                var that = this;
+                if (save.length > 0) {
+                    $.ajax({
+                        type: "post",
+                        url: jasTools.base.rootPath + "/tableField/save.do?token=" + that.token,
+                        contentType: "application/json",
+                        data: JSON.stringify({
+                            tableFieldFormList: save
+                        }),
+                        dataType: "json",
+                        success: function (data, status) {
+                            if (data.status == 1) {
+                                that.fieldData.forEach(function (item) {
+                                    if (item.editing == 1 && !item.oid) {
+                                        item.editing = 0;
+                                    }
+                                });
+                                that.updateToServerBatch(update);
+                            } else {
+                                window.top.Vue.prototype.$message({
+                                    message: data.msg,
+                                    type: 'error'
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    that.updateToServerBatch(update);
+                }
+            },
+            updateToServerBatch: function (update) {
+                var that = this;
+                if (update.length > 0) {
+                    $.ajax({
+                        type: "post",
+                        url: jasTools.base.rootPath + "/tableField/update.do?token=" + that.token,
+                        contentType: "application/json",
+                        data: JSON.stringify(update),
+                        dataType: "json",
+                        success: function (data, status) {
+                            if (data.status == 1) {
+                                that.fieldData.forEach(function (item) {
+                                    if (item.editing == 1 && item.oid) {
+                                        item.editing = 0;
+                                    }
+                                });
+                                that.requestFieldList();
+                                window.top.Vue.prototype.$message({
+                                    message: '保存成功',
+                                    type: 'success'
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    window.top.Vue.prototype.$message({
+                        message: '保存成功',
+                        type: 'success'
+                    });
+                }
+            },
+            handleSizeChangeField: function (val) {
+                this.pageSizeField = val;
+                this.requestFieldList();
+            },
+            handleCurrentChangeField: function (val) {
+                this.currentpageField = val;
+                this.requestFieldList();
+            },
+            updateValue: function (val, index) { //不能输入汉字/[\W]/g
+                var that = this;
+                Vue.nextTick(function () {
+                    that.fieldData[index].fieldName = val.replace(/[^\w]/g, '');
+                });
+            },
+            groupByFileds: function (data) {
+                var map1 = {};
+                var dest1 = [];
+                for (var i = 0; i < data.length; i++) {
+                    var ai = data[i];
+                    if (!map1[ai.dictValueDesc]) {
+                        dest1.push({
+                            dictValueDesc: ai.dictValueDesc,
+                            data: [ai]
+                        });
+                        map1[ai.dictValueDesc] = ai;
+                    } else {
+                        for (var j = 0; j < dest1.length; j++) {
+                            var dj = dest1[j];
+                            if (dj.dictValueDesc == ai.dictValueDesc) {
+                                dj.data.push(ai);
+                                break;
+                            }
+                        }
+                    }
+                }
+                return dest1;
+            },
+            refresh: function () {
+                this.requestFieldList();
+            }
+        },
+    });
+</script>
+
+</html>

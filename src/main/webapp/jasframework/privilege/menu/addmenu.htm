@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="pragma" content="no-cache" />
+<meta name="keywords" content="gis,web">
+<meta name="description" content="">
+<title></title>
+<link rel="stylesheet" type="text/css" href="../../common/lib/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../common/lib/easyui/themes/icon.css">
+
+<link rel="stylesheet" type="text/css" href="../../common/css/common.css"></link>
+<link rel="stylesheet" type="text/css" href="../../common/css/add.css">
+
+<script type="text/javascript" src="../../common/lib/jquery.min.js"></script>
+<script type="text/javascript" src="../../common/lib/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../common/lib/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../common/js/validate_class.js"></script>
+<script type="text/javascript" src="../../common/js/common.js"></script>
+<script type="text/javascript" src="../../common/i18n/i18n.js"></script>
+<script type="text/javascript" src="js/addmenu.js"></script>
+</head>
+<body>
+	<div id="contentArea" class="content-area">
+		<input type="hidden" id="appsystemnumber" value="" />
+<!-- 权限编号 -->
+	<input type="hidden" id="menuid" value="101012"/>
+	<!-- 	<div id="dlg"> -->
+			<form id="addmenu" method="post">
+				<input type="hidden" name="eventid" id="eventid"/>
+				<table align="center" class="edit-table" >	
+					<tr>
+						<td width="20%"><span key="primenu_menuname"  class="paltform-i18n">菜单名称：</span></td>
+						<td width="30%"><input id="name" name="name" class="easyui-validatebox input_bg" missingMessage="不能为空" required="true" validType="general" maxlength="25"></td>
+						<td width="20%"><span key="primenu_parentmenu"   class="paltform-i18n">父菜单：</span></td>
+						<td width="30%"><input id="parenteventid"  name="parenteventid" class="input_bg" missingMessage="不能为空"  validType="general" ></td>
+					</tr>
+					<tr>
+						<td width="20%"><span key="primenu_privilegeapp" class="paltform-i18n">权限所属系统：</span></td>
+						<td width="30%">
+							<select id="appnumber1" name="priappNumber" class="easyui-combobox" editable="false" panelHeight="auto"  required="true" >
+							</select>
+						</td>
+						<td width="20%"><span key="primenu_correprivilege" class="paltform-i18n">对应权限：</span></td>
+						<td width="30%">
+							<input id="privilegeid" name="privilegeid" class="input_bg" missingMessage="不能为空" required="true" validType="general">
+						</td>
+						
+					</tr>
+					<tr>
+						<td width="20%"><span key="primenu_ordernum" class="paltform-i18n">顺序编号：</span></td>
+						<td width="30%"><input id="ordernumber" name="ordernumber" class="easyui-validatebox input_bg" missingMessage="不能为空"  required="true"  validType="integer">
+										<input id="privilegenumber" name="privilegenumber" type="hidden"></td>
+										<td width="20%"><span key="primenu_icon" class="paltform-i18n">菜单图标：</span></td>
+						<td width="80%" align="left">
+							<input id="icon" name="icon" class="easyui-validatebox input_bg"   maxlength="300" />
+						</td>
+						
+					</tr>
+						<tr>
+						 <td width="20%"><span key="primenu_background" class="paltform-i18n">菜单背景色：</span></td>
+						<td width="80%"  align="left">
+							<input id="background" name="background" class="easyui-validatebox input_bg"  maxlength="300" />
+						</td>
+						<td width="20%"  style="display: none;"><span key="primenu_appsystem" class="paltform-i18n">应用系统：</span></td>
+						<td width="30%"  style="display: none;">
+							<select id="appnumber" name="appNumber" class="easyui-combobox" editable="false" panelHeight="auto"  required="true" >
+							</select>
+						</td>
+						<td width="20%"><span key="primenu_otherattribute" class="paltform-i18n">菜单其他属性：</span></td>
+						<td width="80%" colspan="1" align="left">
+							<input id="attributes" name="attributes" class="easyui-validatebox input_bg"  maxlength="300" />
+						</td>
+					</tr>
+						<tr>
+<!-- 						<td width="20%"><span key="primenu_otherattribute" class="paltform-i18n">菜单其他属性：</span></td> -->
+<!-- 						<td width="80%" colspan="1" align="left"> -->
+<!-- 							<input id="attributes" name="attributes" class="easyui-validatebox input_bg"  maxlength="300" /> -->
+<!-- 						</td> -->
+					</tr>
+					<tr>
+					<td width="20%"><span key="primenu_url" class="paltform-i18n">URL：</span></td>
+						<td width="30%"  colspan="3"><input id="url" style="color: #A0A0A0;" readonly="readonly" name="url" class="easyui-validatebox input_bg" validType="priUrl"  maxlength="300"></td>
+					</tr>
+					<tr>
+					    <td width="20%"><span key="primenu_description" class="paltform-i18n">菜单描述：</span></td>
+						<td width="80%" colspan="3"><textarea id="description" class="easyui-validatebox" validType="maxLength[300]"  name="description" style="height: 60px;"></textarea></td>
+			  	   </tr>
+				 <tr>
+			  	  	 <td align="center" colspan="4"><span key="primenu_explain" style="color: red" class="paltform-i18n">说明：菜单编号为父权限编号+两位数字，不可重复</span></td>
+			  	   </tr>
+			</table>
+			
+		</form>
+		<!-- </div> -->
+		</div>
+<div class="button-area">
+      <table width="100%">
+			<tr>
+				 <td >
+					<a href="#" id="savebutton" class="easyui-linkbutton submit"  onclick="savemenu()"><span key="save" class="paltform-i18n">保存</span></a>
+					<a href="#" class="easyui-linkbutton cancel"  onclick="closePrivilege()"><span key="cancel" class="paltform-i18n">取消</span></a>
+				 </td>
+  			</tr>
+   	</table>	 
+</div>
+	</body>	
+</html>
+	
