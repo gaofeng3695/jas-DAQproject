@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- <link rel="stylesheet" href="./libelement-ui/element-#0E2B4A/src/index.css"> -->
+    <link rel="stylesheet" href="./../../lib/element-ui/v2.2.1/theme-chalk/index.min.css">
+    <link rel="stylesheet" href="../form-awesome/form-component/form-vue.css ">
+    <link rel="stylesheet" href="./../../src/css/main.css">
+    <style>
+        .table-wrapper {
+            padding: 15px;
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        .parent>.tool {
+            margin: 5px 0px;
+        }
+
+        .parent {
+            font-size: 14px;
+        }
+
+        .parent,
+        .child {
+            overflow: hidden;
+        }
+
+        .child>.header {
+            height: 40px;
+            line-height: 40px;
+            background-color: #F8F8F8;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .child>.header>span:first-child {
+            margin-left: 10px;
+        }
+
+        .child>.tool {
+            margin: 10px 0px;
+        }
+
+        .backinco {
+            cursor: pointer;
+            color: #409EFF;
+        }
+
+        .back {
+            display: inline-block;
+            float: right;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .fade-enter-active {
+            animation: fade-in .3s;
+        }
+
+        .fade-leave-active {
+            animation: fade-in .3s reverse;
+        }
+
+        @keyframes fade-in {
+            0% {
+                transform: scale(0);
+            }
+            /*50% {
+                transform: scale(1.5);
+            }*/
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .el-pagination {
+            float: right;
+            margin-top: 10px;
+        }
+
+        .el-date-editor {
+            width: 100% !important;
+        }
+
+        .bg {
+            background: red;
+        }
+
+        .el-table th.req>div::before {
+            display: inline-block;
+            content: "*";
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            color: #ff4d51;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <div class="table-wrapper jas-flex-box is-vertical">
+            <search-tool :searchform="searchform" :searchdata="searchData"></search-tool>
+            <!--工具区域开始-->
+            <div class="tool" style="padding: 10px 0px; border-top: 1px solid #e4e7ed">
+
+                <el-button size="small" type="primary" plain="plain" icon="el-icon-plus" @click="createTable">创建表</el-button>
+                <div style="display:inline-block;float:right">
+                    <el-button size="small" icon="el-icon-refresh" @click="refresh"></el-button>
+                    <!--<el-button size="small" type="primary" plain="plain" @click="refresh">刷新</el-button>-->
+                </div>
+            </div>
+            <!--工具区域完成-->
+            <el-table class="is-grown" :header-cell-style='headerCellStyle' :data="tableData" border style="width: 100%;" height='100'
+                v-loading="loadingParent">
+                <el-table-column fixed prop="ifPublish" width="100px" label="发布状态" align="center">
+                    <template slot-scope="scope">
+                        <div v-if="scope.row.ifPublish==1" @click="isReNewPublish(scope.row)">
+                            <el-tag type="success" style="cursor: pointer" size="small">已发布</el-tag>
+                        </div>
+                        <div v-else @click="isPublish(scope.row)">
+                            <el-tag type="warning" style="cursor: pointer" size="small">未发布</el-tag>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column fixed prop="tableName" label="数据库表名" label-class-name="req" align="center">
+                    <template slot-scope="scope">
+                        <div v-if="scope.row.editing==1">
+                            <el-input size="small" v-model="scope.row.tableName" placeholder="选择输入数据库表名" @input.native="updateValue(scope.row.tableName)">
+                            </el-input>
+                        </div>
+                        <div v-else>
+                            <span>{{scope.row.tableName}}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="tableNameCn" label="表中文名称" label-class-name="req" align="center">
+                    <template slot-scope="scope">
+                        <div v-if="scope.row.editing">
+                            <el-input size="small" v-model="scope.row.tableNameCn" placeholder="选择输入表中文名称">
+                            </el-input>
+                        </div>
+                        <div v-else>
+                            <span>{{scope.row.tableNameCn}}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="dbType" label="数据库类型" align="center" label-class-name="req">
+                    <template slot-scope="scope">
+                        <div v-if="scope.row.editing">
+                            <el-select size="small" v-model="scope.row.dbTypeAndDbSource" placeholder="请选择数据库类型">
+                                <el-option v-for="option in dataSourceAndDbType" :key="option.index" :label="option.label" :value="option.index">
+                                    <span style="float: left">{{ option.label }}</span>
+                                    <span style="float: right; color: #8492a6; font-size: 13px">{{option.rightLabel }}</span>
+                                </el-option>
+                            </el-select>
+                        </div>
+                        <div v-else>
+                            <span>{{scope.row.dbTypeValue}}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="dbSourceName" label="数据结构" label-class-name="req" align="center">
+                    <template slot-scope="scope">
+                        <div v-if="scope.row.editing">
+                            <el-select size="small" v-model="scope.row.tableType" placeholder="请选择数据结构">
+                                <el-option v-for="item in  tableTypeOption" :label="item.label" :value="item.value"></el-option>
+                            </el-select>
+                        </div>
+                        <div v-else>
+                            <span>{{scope.row.tableTypeValue}}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="tableDesc" label="表描述" align="center">
+                    <template slot-scope="scope">
+                        <div v-if="scope.row.editing">
+                            <el-input size="small" v-model="scope.row.tableDesc" placeholder="选择输入表描述">
+                            </el-input>
+                        </div>
+                        <div v-else>
+                            <span>{{scope.row.tableDesc}}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column fixed="right" label="操作" width="200" align="center">
+                    <template slot-scope="scope">
+                        <div v-if="!scope.row.editing">
+                            <el-button @click="delRow(scope.row)" type="text" size="small">删除</el-button>
+                            <el-button @click="editRow(scope.row)" type="text" size="small">编辑</el-button>
+                            <el-button @click="isSetField(scope.row)" type="text" size="small">字段配置</el-button>
+                        </div>
+                        <div v-else>
+                            <el-button @click="cancelEdit(scope.row)" type="text" size="small">取消</el-button>
+                            <el-button @click="saveEdit(scope.row)" type="text" size="small">保存</el-button>
+                        </div>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <el-pagination style="text-align: right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentpage"
+                :page-sizes="pageSizes" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+            </el-pagination>
+        </div>
+    </div>
+</body>
+<!-- import Vue before Element -->
+<script src="./../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../lib/vue/vue.js"></script>
+<!-- import JavaScript -->
+<script src="./../../lib/element-ui/v2.2.1/index.min.js"></script>
+<script src="./../../common/js/jas-tools.js"></script>
+<script src="js/domain.js"></script>
+<script src="js/rule.js"></script>
+<script src="js/tableCascade.js"></script>
+<script src="../form-awesome/form-component/form-vue.js "></script>
+<script>
+    var searchdata = [{
+        type: "changeStatus",
+        item: "",
+        id: "ifPublish",
+        size: "small",
+        options: [{
+            "label": "全部",
+            "value": null,
+
+        }, {
+            "label": "未发布",
+            "value": 0,
+
+        }, {
+            "label": "已发布",
+            "value": 1,
+
+        }],
+        change: function () {
+            vm.loadingParent = false;
+            vm.requestParentTableList();
+        }
+    }, {
+        id: "tableName",
+        name: "数据库表名",
+        type: "input",
+        placeholder: "请输入表名称",
+        options: [],
+        inputRule: 'noTtext', //设置输入框设置规则
+        size: "small"
+    }, {
+        id: "tableType",
+        name: "数据结构",
+        type: "select",
+        placeholder: "请选择所属数据结构",
+        isQuery: true,
+        size: "small",
+        options: domain.tableType,
+
+    }, {
+        type: "opertion",
+        options: [{
+            type: 'primary',
+            size: "small",
+            name: '查询',
+            id: "query",
+            click: function () { //此时通过参数的形式，进行方法的传递
+                vm.loadingParent = false;
+                vm.requestParentTableList();
+            }
+        }, {
+            type: '',
+            name: '重置',
+            size: "small",
+            click: function () {
+                vm.refreshParentTable();
+            }
+        }]
+    }];
+
+
+    var vm = new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                token: localStorage.getItem("token"),
+                headerCellStyle: {
+                    background: "#f5f7fa !important"
+                },
+
+                tableTypeOption: [], //数据类型
+                dataSourceAndDbType: [], //用于请求数据源与数据库类型
+                searchform: {
+                    ifPublish: null,
+                    tableName: "",
+                    tableType: ""
+                }, //表的查询
+                currentpage: 1,
+                pageSizes: [10, 20, 50, 100],
+                pageSize: 10,
+                total: 0,
+                tableData: [],
+                searchData: searchdata, //查询区域块
+                loadingParent: true,
+                currentEditRow: {} //表示当前正在编辑的行
+            }
+        },
+        mounted: function () {
+            this.getdataSoucreAndType();
+
+            domain.init();
+            this.tableTypeOption = domain.tableType;
+        },
+        methods: {
+            getdataSoucreAndType: function () {
+                var that = this;
+                $.ajax({
+                    type: "GET",
+                    url: jasTools.base.rootPath + "/dbInfo/getDatabaseMetaData.do?token=" + that.token,
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (data, status) {
+                        if (data.status == 1) {
+                            data.data.forEach(function (item, index) {
+                                var value = "";
+                                if (item.databaseProductName.toLowerCase() == "oracle") {
+                                    value = "DT_01";
+                                }
+                                if (item.databaseProductName.toLowerCase() == "mysql") {
+                                    value = "DT_02";
+                                }
+                                if (item.databaseProductName.toLowerCase() ==
+                                    "postgresql") {
+                                    value = "DT_03";
+                                }
+                                that.dataSourceAndDbType.push({
+                                    index: index,
+                                    label: item.databaseProductName.toLowerCase(),
+                                    value: value,
+                                    rightLabel: item.dataSourceName
+                                });
+                            });
+                            that.requestParentTableList();
+                        }
+                    },
+                });
+            },
+            requestParentTableList: function () {
+                var that = this;
+                that.searchform.page = that.currentpage;
+                that.searchform.rows = that.pageSize;
+                $.ajax({
+                    type: "post",
+                    url: jasTools.base.rootPath + "/tableInfo/getPage.do?token=" + that.token,
+                    contentType: "application/json",
+                    data: JSON.stringify(that.searchform),
+                    dataType: "json",
+                    success: function (data, status) {
+                        if (data.status == 1) {
+                            data.rows.forEach(function (item) {
+                                item.editing = 0;
+                                that.dataSourceAndDbType.forEach(function (items, index) {
+                                    if (item.dbType == items.value && item.dbSourceName ==
+                                        items.rightLabel) {
+                                        item.dbTypeAndDbSource = index;
+                                    }
+                                });
+
+                            });
+                            that.loadingParent = false;
+                            that.tableData = data.rows;
+                            that.total = data.total;
+                        } else {
+                            window.top.Vue.prototype.$message({
+                                message: '服务器连接失败，请稍后再试',
+                                type: 'error'
+                            });
+                        }
+                    },
+
+                });
+            },
+            isSetField: function (row) {
+                var that = this;
+                window.top.jasTools.mask.show({
+                    window: window, // 要在哪个window对象里面插入dom
+                    params: {
+                        dbType: row.dbType,
+                        tableId: row.oid
+                    },
+                    src: './dialogs/field-operation.html',
+                    title: row.tableName + '>字段配置',
+                    cbForClose: function (a) {}
+                });
+            },
+            isPublish: function (row) {
+                var that = this;
+                that.$confirm('是否发布该数据表', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                }).then(() => {
+                    that.isPublishToServer(row);
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消发布'
+                    });
+                });
+            },
+            isPublishToServer: function (row) {
+                var that = this;
+                $.ajax({
+                    type: "GET",
+                    url: jasTools.base.rootPath + "/tableInfo/deploy.do?token=" + that.token,
+                    contentType: "application/json",
+                    data: {
+                        tableId: row.oid
+                    },
+                    dataType: "json",
+                    success: function (data, status) {
+                        if (data.status == 1) {
+                            window.top.Vue.prototype.$message({
+                                message: '发布成功',
+                                type: 'success'
+                            });
+                            that.requestParentTableList();
+                        } else {
+                            window.top.Vue.prototype.$message({
+                                message: data.msg,
+                                type: 'warning'
+                            });
+                        }
+                    }
+                });
+            },
+            editRow: function (row) {
+                var that = this;
+                var isExist = false;
+                that.tableData.forEach(function (item) {
+                    if (item.editing == 1) {
+                        isExist = true;
+                        return;
+                    }
+                });
+                if (isExist) {
+                    window.top.Vue.prototype.$message({
+                        message: '存在正在编辑的数据，请先进行保存',
+                        type: 'success'
+                    });
+                    return;
+                }
+                delete row.history;
+                row.history = JSON.parse(JSON.stringify(row));
+                row.editing = 1;
+                this.currentEditRow = row;
+            },
+            saveEdit: function (row) {
+                var that = this;
+                var dbTypeObj = that.dataSourceAndDbType[row.dbTypeAndDbSource];
+                row.dbSourceName = dbTypeObj.rightLabel;
+                row.dbType = dbTypeObj.value;
+                rule.verifyObj(row,dbTypeObj.value, function () {
+                    $.ajax({
+                        type: "post",
+                        url: jasTools.base.rootPath + "/tableInfo/update.do?token=" + that.token,
+                        contentType: "application/json",
+                        data: JSON.stringify(row),
+                        dataType: "json",
+                        success: function (data, status) {
+                            if (data.status == 1) {
+                                row.editing = 0;
+                                window.top.Vue.prototype.$message({
+                                    message: '保存成功',
+                                    type: 'success'
+                                });
+                                that.refreshParentTable();
+                            } else {
+                                window.top.Vue.prototype.$message({
+                                    message: data.msg,
+                                    type: 'error'
+                                });
+                            }
+                        }
+                    });
+                });
+            },
+            delRow: function (row) {
+                var that = this;
+                that.$confirm('是否永久删除该数据表', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                }).then(() => {
+                    that.delRowToService(row.oid);
+                }).catch(() => {
+                    that.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            },
+            delRowToService: function (oid) {
+                var that = this;
+                $.ajax({
+                    type: "get",
+                    url: jasTools.base.rootPath + "/tableInfo/delete.do?token=" + that.token,
+                    contentType: "application/json",
+                    data: {
+                        id: oid
+                    },
+                    dataType: "json",
+                    success: function (data, status) {
+                        if (data.status == 1) {
+                            that.refreshParentTable();
+                            window.top.Vue.prototype.$message({
+                                message: '删除成功',
+                                type: 'success'
+                            });
+                        } else {
+                            window.top.Vue.prototype.$message({
+                                message: '删除失败',
+                                type: 'error'
+                            });
+                        }
+                    }
+                });
+            },
+            cancelEdit: function (row) {
+                window.top.jasTools.base.extend(row, row.history);
+            },
+
+            handleSizeChange: function (val) {
+                this.pageSize = val;
+                this.loadingParent = false;
+                this.requestParentTableList();
+            },
+            handleCurrentChange: function (val) {
+                this.currentpage = val;
+                this.loadingParent = false;
+                this.requestParentTableList();
+            },
+            refreshParentTable: function () {
+                var that = this;
+                that.searchform.tableName = "";
+                that.searchform.currentRow = 10;
+                that.searchform.currentpage = 1;
+                that.searchform.tableType = "";
+                that.searchform.ifPublish = null;
+                that.loadingParent = false;
+                that.requestParentTableList();
+            },
+            isReNewPublish: function (row) {
+                var that = this;
+                that.$confirm('是否重新发布', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                }).then(() => {
+                    that.isReNewPublishToServer(row);
+                }).catch(() => {
+                    that.$message({
+                        type: 'info',
+                        message: '已取消发布'
+                    });
+                });
+            },
+            isReNewPublishToServer: function (row) {
+                var that = this;
+                $.ajax({
+                    type: "get",
+                    url: jasTools.base.rootPath + "/tableInfo/hasData.do?token=" + that.token,
+                    contentType: "application/json",
+                    data: {
+                        tableId: row.oid
+                    },
+                    dataType: "json",
+                    success: function (data, status) {
+                        if (data.status == 1) {
+                            if (data.data) {
+                                that.$confirm('目前编辑的表存在历史数据，是否数据迁移', '提示', {
+                                    confirmButtonText: '确定',
+                                    cancelButtonText: '取消',
+                                    type: 'warning',
+                                }).then(() => {
+                                    that.rePublish(row.oid, true);
+                                }).catch(() => {
+                                    that.rePublish(row.oid, false);
+                                });
+                            } else {
+                                that.rePublish(row.oid, false);
+                            }
+                        }
+                    }
+                });
+            },
+            rePublish: function (tableId, status) {
+                var that = this;
+                $.ajax({
+                    type: "get",
+                    url: jasTools.base.rootPath + "/tableInfo/republish.do?token=" + that.token,
+                    contentType: "application/json",
+                    data: {
+                        tableId: tableId,
+                        needMigration: status
+                    },
+                    dataType: "json",
+                    success: function (data, status) {
+                        if (data.status == 1) {
+                            that.refreshParentTable();
+                            window.top.Vue.prototype.$message({
+                                message: '发布成功',
+                                type: 'success'
+                            });
+                        } else {
+                            window.top.Vue.prototype.$message({
+                                message: '发布失败',
+                                type: 'error'
+                            });
+                        }
+                    }
+                });
+            },
+            updateValue: function (val) { //不能输入汉字/[\W]/g
+                var that = this;
+                Vue.nextTick(function () {
+                    that.currentEditRow.tableName = val.replace(/[^\w]/g, '');
+                });
+            },
+            createTable: function () {
+                var that = this;
+                window.top.jasTools.dialog.show({
+                    title: '增加',
+                    src: './pages/table-operation/dialogs/createTable.html',
+                    cbForClose: function () {
+                        that.refreshParentTable();
+                    }
+                });
+            },
+            refresh: function () {
+                this.loadingParent = false;
+                this.requestParentTableList();
+            }
+        },
+
+    });
+</script>
+
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta http-equiv="pragma" content="no-cache" />
+	<meta name="keywords" content="gis,web">
+	<meta name="description" content="">
+	<title>用户管理</title>
+	
+	<link rel="stylesheet" type="text/css" href="../../common/lib/easyui/themes/default/easyui.css"></link>
+	<link rel="stylesheet" type="text/css" href="../../common/lib/easyui/themes/icon.css"></link>
+	
+	<link rel="stylesheet" type="text/css" href="../../common/css/font-awesome.css"  ></link>
+	<link rel="stylesheet" type="text/css" href="../../common/css/common.css" ></link>
+	<link rel="stylesheet" type="text/css" href="../../common/css/query.css" ></link>
+	
+	<script type="text/javascript" src="../../common/lib/jquery.min.js"></script>
+	<script type="text/javascript" src="../../common/lib/easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../../common/js/common.js"></script>
+	
+	<script type="text/javascript" src="js/queryUser.js" ></script>
+	<script type="text/javascript" src="../../common/i18n/i18n.js"></script>
+	
+</head>
+<body>
+
+<!-- 权限编号 -->
+	<input type="hidden" id="menuid" value="101001"/>
+	
+<!-- 页面主体布局 -->
+	<div id="cc" class="easyui-layout" fit="true">
+		<!-- 左侧树 -->
+		<div  id="left" class="left"  data-options="region:'west',title:'组织机构',split:true" scroll="no"
+			style="width: 200px; height:100%;">
+			<!-- 部门树 -->
+			<ul id="tt"  animate="false">
+			</ul>
+		</div>
+		
+		<!-- 右侧数据展示区域 -->
+		<div id="right" class="right" scroll="no" data-options="region:'center',onResize:function(){resizeLayout()}">
+			<!-- 查询条件区域 -->
+			<div class="query-conditions"  id="userQuery"  > 
+				<form method="post" id="approvalQueryForm" >
+					<!-- 简单查询区域 -->
+					<table class="query-table" id="queryDiv">
+						<tr>
+							<td width="7%"> 用户名：</td>
+							<td width="26%"><input type="text" id="loginName" name="loginName" class="easyui-validatebox input_bg"/></td>
+							<td width="7%">姓     名：</td>
+						    <td width="26%"><input type="text" id="name" class="easyui-validatebox input_bg"/></td>
+						    <td align="right" width="34%">
+								<a href="#" class="easyui-linkbutton query-btn" onclick="queryUser()"><span>查询</span></a>
+								<a href="#" class="easyui-linkbutton clear-btn" onclick="clearselectform()"><span>清空</span></a>
+								<a href="#" id='moreQuery' class="easyui-linkbutton more-query-btn" iconCls="accordion-expand" iconAlign="right"><span>高级搜索</span></a>
+							</td>
+						</tr>
+						<!-- <tr>
+							<td width="15%">显示用户范围：</td>
+							<td width="35%"><input id="userrange" editable=false name="userrange" />
+							</td>
+							<td colspan="4">
+								<a href="#" class="easyui-linkbutton query-btn" onclick="queryUser()"><label>查询</label></a>
+								<a href="#" class="easyui-linkbutton clear-btn" onclick="clearselectform()"><label>清空</label></a>
+							</td>
+						</tr> -->
+					</table>
+					
+					<!-- 高级查询区域 -->
+					<table class="more-query-table" id="moreTable">
+						<tr class="table-arrow"><td><img src="../../common/image/triangle.png" /></td></tr>
+						<tr>
+							<td >显示用户范围：</td>
+							<td colspan="3"><input id="userrange" editable=false name="userrange" /></td>
+						</tr>
+					</table>	
+				</form>
+			</div>
+			
+			<!-- datagrid数据列表-->
+			<table id="10060201" width="98%" idField="eventid" key="user_userlist"></table>
+			
+			<!-- 	datagrid工具栏 -->
+			<div id="toolbar">
+				<a href="#" class="easyui-linkbutton fa fa-eye" plain="true" onclick="viewUser()"><label><span key="view" class="paltform-i18n">查看</span></label></a>
+				<a href="#" class="easyui-linkbutton fa fa-plus" plain="true" onclick="addUser()"><span key="add" class="paltform-i18n">新增</span></a>
+				<a href="#" class="easyui-linkbutton fa fa-edit" plain="true" onclick="editUser()"><span key="edit" class="paltform-i18n">修改</span></a>
+				<a href="#" class="easyui-linkbutton fa fa-minus" plain="true" onclick="removeUser()"><span key="delete" class="paltform-i18n">删除</span></a>
+				<a href="#" class="easyui-linkbutton fa fa-cog" plain="true" onclick="roleAdd()"><span key="user.jiaoseshezhi" class="paltform-i18n">角色设置</span></a>
+				<a href="#" class="easyui-linkbutton fa fa-eraser" plain="true" onclick="resetUserPwd()"><span key="user.mimachongzhi" class="paltform-i18n">密码重置</span></a>
+			</div>
+
+		</div>
+	</div>
+</body>
+
+</html>
