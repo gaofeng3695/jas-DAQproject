@@ -133,7 +133,6 @@
 			cache:true,
 			dataType:"json",
 			success:function(data){
-				console.log(data);
 				if(data.msg=="undefined" || data.msg==undefined){
 					callBack(data);
 				}else{
@@ -307,7 +306,6 @@
 			cache:false,
 			dataType:"json",
 			success:function(data){
-				console.log(data);
 				callBack(menuId,node_number,data);
 			}
 		});
