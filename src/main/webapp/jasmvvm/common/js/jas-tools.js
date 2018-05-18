@@ -80,12 +80,15 @@
 			var localhostPaht = curWwwPath.substring(0, pos);
 			// 获取带"/"的项目名，如：/uimcardprj
 			var projectName = pathName.substring(0, pathName.substring(1).indexOf('/') + 1);
-			if(!projectName || projectName === '/pages'){
+			if (!projectName || projectName === '/pages') {
 				return '/haha'
 			}
 			return projectName;
 			// return (localhostPaht + projectName + "/");
 		};
+
+
+
 
 
 		/**
@@ -123,11 +126,9 @@
 			setParamsToUrl: setParamsToUrl,
 			timeLimit: timeLimit,
 			showLoading: showLoading,
-			closeLoading: closeLoading
-
+			closeLoading: closeLoading,
 		};
 	})();
-
 
 	/**
 	 * 模态框相关操作
@@ -367,7 +368,7 @@
 				}
 			});
 		};
-		var downLoadFile = function (type, url, data) {
+		var downloadByIframe = function (type, url, data) {
 			if (!url) return;
 			var config = {
 				url: url + "?token=" + localStorage.getItem('token'), //下载地址
@@ -375,7 +376,7 @@
 				method: type || data,
 			}
 			var $iframe = $('<iframe id="down-file-iframe" />');
-			var $form = $('<form target="down-file-iframe" method="' + config.method + '" />');
+			var $form = $('<form  method="' + config.method + '" />');
 			$form.attr('action', config.url);
 			for (var key in config.data) {
 				$form.append('<input type="hidden" name="' + key + '" value="' + config.data[key] + '" />');
@@ -385,11 +386,71 @@
 			$form[0].submit();
 			$iframe.remove();
 		};
+
+		/**
+		 * @description  xhr_post方式下载文件
+		 * @param url  请求路径
+		 * @param obj  请求参数
+		 * @param cbsuccess  成功回调
+		 * @param cbfail  失败回调
+		 */
+		var downloadByPost = function (url, obj, cbsuccess, cbfail) {
+			if (!url) return;
+			url += '?token=' + localStorage.getItem('token'); //下载地址
+			var xhr = new XMLHttpRequest();
+			xhr.open('POST', url, true); // 也可以使用POST方式，根据接口
+			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			xhr.responseType = "blob"; // 返回类型blob
+			// 定义请求完成的处理函数，请求前也可以增加加载框/禁用下载按钮逻辑
+			xhr.onload = function () {
+				// 请求完成
+				// content-disposition: attachment;filename=custom_desktop.java
+				if (this.status === 200) {
+					// 获取文件名
+					var filename = 'download.txt';
+					var sName = xhr.getResponseHeader('content-disposition');
+					sName.split(';').forEach(function (item) {
+						var arr = item.split('=');
+						if (arr[0] === 'filename') {
+							filename = arr[1];
+						}
+					});
+					// 返回200
+					var blob = this.response;
+					var reader = new FileReader();
+					reader.readAsDataURL(blob); // 转换为base64，可以直接放入a表情href
+					reader.onload = function (e) {
+						// 转换完成，创建一个a标签用于下载
+						var a = document.createElement('a');
+						a.download = filename;
+						a.href = e.target.result;
+						document.getElementsByTagName('body')[0].append(a); // 修复firefox中无法触发click
+						a.click();
+						a.remove();
+						cbsuccess && cbsuccess(xhr);
+					}
+				} else {
+					cbfail && cbfail();
+				}
+			};
+			// 发送ajax请求
+			if (obj) {
+				var sdata = '';
+				for (var key in obj) {
+					if (obj.hasOwnProperty(key)) {
+						var item = key + '=' + obj[key];
+						sdata += sdata ? '&' + item : item;
+					}
+				}
+			}
+			xhr.send(sdata);
+		};
 		return {
 			ajax: ajax,
 			get: ajax.bind(null, 'GET'),
 			post: ajax.bind(null, 'POST'),
-			download: downLoadFile
+			downloadByIframe: downloadByIframe,
+			downloadByPost: downloadByPost,
 		};
 	})();
 

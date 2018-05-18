@@ -115,14 +115,14 @@
 					</div>
 					<el-row :gutter="10">
 						<template v-for="item in group.data">
-							<el-col v-if="item.type==`UT_13`" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+							<el-col v-if="item.type=='UT_13'" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 								<el-form-item :prop="item.id" :label="item.name" :rules="item.verify">
-									<el-input v-if="item.type==`UT_13`" type="文本域" :rows="2" :size="item.size" v-model="formData[item.id]" :disabled="item.disabled"></el-input>
+									<el-input v-if="item.type=='UT_13'" type="文本域" :rows="2" :size="item.size" v-model="formData[item.id]" :disabled="item.disabled"></el-input>
 								</el-form-item>
 							</el-col>
-							<el-col v-else :xs="formConfig.xs" :sm="formConfig.sm" :md="formConfig.md" :lg="formConfig.lg" :xl="formConfig.xl" :class="{'height' : item.type==`UT_14`||item.type==`UT_05`||item.type==`UT_06`||item.type==`UT_07`||item.type==`UT_08` }">
+							<el-col v-else :xs="formConfig.xs" :sm="formConfig.sm" :md="formConfig.md" :lg="formConfig.lg" :xl="formConfig.xl" :class="{'height' : item.type=='UT_14'||item.type=='UT_05'||item.type=='UT_06'||item.type=='UT_07'||item.type=='UT_08' }">
 								<el-form-item :prop="item.id" :label="item.name" :rules="item.verify" initial="off">
-									<el-input v-if="item.type==`UT_01`" :placeholder="item.placeholder" v-model="formData[item.id]" :size="item.size" :disabled="item.disabled"
+									<el-input v-if="item.type=='UT_01'" :placeholder="item.placeholder" v-model="formData[item.id]" :size="item.size" :disabled="item.disabled"
 									  clearable>
 									</el-input>
 									<el-select v-model="formData[item.id]" multiple v-if="isMultiSelect(item)" style="width:100%" :size="item.size" :disabled="item.disabled"
@@ -139,13 +139,13 @@
 											</el-option>
 										</template>
 									</el-select>
-									<el-time-picker v-if="item.type==`UT_02`" value-format="HH:mm:ss" :disabled="item.disabled" v-model="formData[item.id]" placeholder="任意时间点"
+									<el-time-picker v-if="item.type=='UT_02'" value-format="HH:mm:ss" :disabled="item.disabled" v-model="formData[item.id]" placeholder="任意时间点"
 									  :size="item.size">
 									</el-time-picker>
-									<el-date-picker v-if="item.type==`UT_04`" value-format="yyyy-MM-dd HH:mm:ss" v-model="formData[item.id]" type="datetime"
+									<el-date-picker v-if="item.type=='UT_04'" value-format="yyyy-MM-dd HH:mm:ss" v-model="formData[item.id]" type="datetime"
 									  placeholder="选择日期时间" :size="item.size" :disabled="item.disabled">
 									</el-date-picker>
-									<el-date-picker v-if="item.type==`UT_03`" value-format="yyyy-MM-dd" type="date" :placeholder="item.placeholder" v-model="formData[item.id]"
+									<el-date-picker v-if="item.type=='UT_03'" value-format="yyyy-MM-dd" type="date" :placeholder="item.placeholder" v-model="formData[item.id]"
 									  :size="item.size" :disabled="item.disabled" style="width: 100%;">
 									</el-date-picker>
 									<el-radio-group v-if="isRadio(item)" border v-model="formData[item.id]" size="small" :disabled="item.disabled">
@@ -158,7 +158,7 @@
 											<el-checkbox :label="checkboxItem.key">{{checkboxItem.value}}</el-checkbox>
 										</template>
 									</el-checkbox-group>
-									<el-input-number v-if="item.type==`UT_14`" :size="item.size" v-model="formData[item.id]" controls-position="right" :min="item.min"
+									<el-input-number v-if="item.type=='UT_14'" :size="item.size" v-model="formData[item.id]" controls-position="right" :min="item.min"
 									  :max="item.max"></el-input-number>
 								</el-form-item>
 							</el-col>
@@ -239,13 +239,13 @@
 			}
 		},
 		computed: {
-			proStatus() { //上传状态
+			proStatus:function() { //上传状态
 				if (this.pass) {
-					return 'success'
+					return 'success';
 				} else if (this.pass == false) {
-					return 'exception'
+					return 'exception';
 				} else {
-					return ''
+					return '';
 				}
 			}
 		},
@@ -584,9 +584,9 @@
 					src: '/pages/template/dialogs/addTemplate.html',
 				});
 			},
-			submit(formName) {
+			submit:function(formName) {
 				var that = this;
-				this.$refs[formName].validate((valid) => {
+				this.$refs[formName].validate(function(valid) {
 					if (valid) {
 						that.submitToServer();
 					} else {
@@ -674,7 +674,7 @@
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
 					type: 'warning'
-				}).then(() => {
+				}).then(function() {
 					that.fileList.splice(i, 1);
 					that.fileListStatus.splice(i, 1);
 					that.fileListlength = that.fileList.length;
@@ -686,7 +686,7 @@
 							type: 'success'
 						});
 					}
-				}).catch(() => {
+				}).catch(function() {
 					that.$message({
 						type: 'info',
 						message: '已取消删除'

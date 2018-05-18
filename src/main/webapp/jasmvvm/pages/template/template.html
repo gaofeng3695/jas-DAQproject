@@ -58,9 +58,9 @@
 				<el-row :gutter="10">
 					<el-form ref="searchTable" :model="searchTable" label-width="120px">
 						<template v-for="item in searchData">
-							<el-col v-if="item.type!=`opertion`" :xs="24" :sm="12" :md="12" :lg="6" :xl="6" :class="{'height' : item.type==`UT_03`||item.type==`UT_04`||item.type==`UT_02`||item.type==`UT_14`||item.type==`UT_05`||item.type==`UT_06`||item.type==`UT_07`||item.type==`UT_08` }">
+							<el-col v-if="item.type!='opertion'" :xs="24" :sm="12" :md="12" :lg="6" :xl="6" :class="{'height' : item.type=='UT_03'||item.type=='UT_04'||item.type=='UT_02'||item.type=='UT_14'||item.type=='UT_05'||item.type=='UT_06'||item.type=='UT_07'||item.type=='UT_08' }">
 								<el-form-item :label="item.name">
-									<el-input v-if="item.type==`UT_01`" :placeholder="item.placeholder" v-model="searchTable[item.id]" size="small" clearable>
+									<el-input v-if="item.type=='UT_01'" :placeholder="item.placeholder" v-model="searchTable[item.id]" size="small" clearable>
 									</el-input>
 									<el-select v-model="searchTable[item.id]" v-if="isSelect(item)" style="width:100%" size="small" @change="selectChange()"
 									  clearable>
@@ -76,14 +76,14 @@
 											</el-option>
 										</template>
 									</el-select>
-									<el-date-picker v-if="item.type==`UT_03`" v-model="searchTable[item.id]" size="small" type="daterange" range-separator="至"
+									<el-date-picker v-if="item.type=='UT_03'" v-model="searchTable[item.id]" size="small" type="daterange" range-separator="至"
 									  start-placeholder="开始日期" end-placeholder="结束日期" placeholder="item.placeholder" value-format="yyyy-MM-dd" clearable
 									  @change="selectChange()">
 									</el-date-picker>
-									<el-time-picker v-if="item.type==`UT_02`" is-range range-separator="至" size="small" start-placeholder="开始时间" value-format="HH:mm:ss"
+									<el-time-picker v-if="item.type=='UT_02'" is-range range-separator="至" size="small" start-placeholder="开始时间" value-format="HH:mm:ss"
 									  end-placeholder="结束时间" placeholder="选择时间范围" v-model="searchTable[item.id]" placeholder="任意时间点" @change="selectChange()">
 									</el-time-picker>
-									<el-date-picker v-if="item.type==`UT_04`" v-model="searchTable[item.id]" size="small" type="datetimerange" range-separator="至"
+									<el-date-picker v-if="item.type=='UT_04'" v-model="searchTable[item.id]" size="small" type="datetimerange" range-separator="至"
 									  start-placeholder="开始日期" end-placeholder="结束日期" placeholder="item.placeholder" value-format="yyyy-MM-dd HH:mm:ss"
 									  clearable @change="selectChange()">
 									</el-date-picker>
@@ -98,7 +98,7 @@
 										</template>
 									</el-radio-group>
 
-									<div v-if="item.type==`UT_14`" style="height:41px;">
+									<div v-if="item.type=='UT_14'" style="height:41px;">
 										<div class="el-date-editor el-range-editor el-input__inner el-date-editor--datetimerange el-range-editor--small">
 											</i><input placeholder="最小值" v-model="searchTable[item.id].min" class="el-range-input" type="number">
 											<span class="el-range-separator">至</span><input v-model="searchTable[item.id].max" placeholder="最大值" class="el-range-input"
@@ -108,7 +108,7 @@
 									</div>
 								</el-form-item>
 							</el-col>
-							<el-col v-if="item.type==`opertion`" :xs="24" :sm="btnxs" :md="btnxs" :lg="btnlg" :xl="btnlg" style="text-align: right;height:41px;line-height:41px">
+							<el-col v-if="item.type=='opertion'" :xs="24" :sm="btnxs" :md="btnxs" :lg="btnlg" :xl="btnlg" style="text-align: right;height:41px;line-height:41px">
 								<template v-for="child in item.options">
 									<el-button :type="child.type" size="small" @click="child.click">{{child.name}}</el-button>
 								</template>
@@ -235,7 +235,8 @@
 				var that = this;
 				$.ajax({
 					type: "get",
-					url: jasTools.base.rootPath + "/functionConfiguration/getDetailByCode.do?token=" + localStorage.getItem("token"),
+					url: jasTools.base.rootPath + "/functionConfiguration/getDetailByCode.do?token=" + localStorage.getItem(
+						"token"),
 					dataType: "json",
 					data: {
 						functionCode: that.menuCode
@@ -363,7 +364,8 @@
 				var that = this;
 				$.ajax({
 					type: "POST",
-					url: jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/getPage.do?token=" + localStorage.getItem("token"),
+					url: jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/getPage.do?token=" + localStorage.getItem(
+						"token"),
 					dataType: "json",
 					contentType: "application/json",
 					data: JSON.stringify(that.searchform),
@@ -433,24 +435,38 @@
 			},
 			delRow: function (row) {
 				var that = this;
-				that.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-					type: 'warning'
-				}).then(() => {
-					that.delRowToServer(row);
-				}).catch(() => {
-					that.$message({
-						type: 'info',
-						message: '已取消删除'
-					});
+				window.top.Vue.prototype.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
+					type: 'warning',
+					callback: function (action) {
+						if (action === 'confirm') {
+								that.delRowToServer(row);
+						} else {
+							that.$message({
+								type: 'info',
+								message: '已取消删除'
+							});
+						}
+					}
 				});
+				// that.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
+				// 	confirmButtonText: '确定',
+				// 	cancelButtonText: '取消',
+				// 	type: 'warning'
+				// }).then(function() {
+				// 	that.delRowToServer(row);
+				// }).catch(function() {
+				// 	that.$message({
+				// 		type: 'info',
+				// 		message: '已取消删除'
+				// 	});
+				// });
 			},
 			delRowToServer: function (row) {
 				var that = this;
 				$.ajax({
 					type: "POST",
-					url: jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/delete.do?token=" + localStorage.getItem("token"),
+					url: jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/delete.do?token=" + localStorage.getItem(
+						"token"),
 					dataType: "json",
 					contentType: "application/json",
 					data: JSON.stringify(row),

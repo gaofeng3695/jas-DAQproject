@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<link rel="stylesheet" href="./../../../lib/font-awesome-4.7.0/css/font-awesome.css">
+	<link rel="stylesheet" href="./../../../lib/element-ui/v2.2.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../src/css/main.css">
+	<style>
+		html,
+		body {
+			width: 100%;
+		}
+
+		#app {
+			width: 100%;
+			height: 100%;
+			position: relative;
+			overflow: hidden;
+		}
+
+		.content {
+			height: calc(100% - 40px);
+			overflow-y: auto;
+			overflow-x: hidden;
+		}
+
+		.el-form-item {
+			margin-bottom: 15px !important;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="app">
+		<div class="content">
+			<el-form ref="tableFormData" :rules="rules" :model="tableFormData" label-width="100px">
+				<el-row :gutter="10">
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="域名" prop="domainName">
+							<el-input v-model="tableFormData.domainName" placeholder="请输入域名" size="small"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="域值id" prop="codeId">
+							<el-input v-model="tableFormData.codeId" placeholder="请输入域值id" size="small"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="域值名称" prop="codeName">
+							<el-input v-model="tableFormData.codeName" placeholder="请输入域值名称" size="small"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="父域值Id" prop="parentCodeId">
+							<el-input v-model="tableFormData.parentCodeId" placeholder="请输入父域值Id" size="small"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="排序号" prop="ordinal">
+							<el-input v-model="tableFormData.ordinal" placeholder="请输入排序号" size="small"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row>
+					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+						<el-form-item label="描述" prop="description">
+							<el-input type="textarea" :rows="2" size="small" v-model="tableFormData.description"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+			</el-form>
+			<!--<form-add :datasource="tableDataSource" :form="tableFormData" labelwidth="100px"></form-add>-->
+		</div>
+		<div slot="footer" class="dialog-footer" style="text-align: center">
+			<el-button size="small" @click="cancel()">取 消</el-button>
+			<el-button size="small" type="primary" @click="submit('tableFormData')">确 定</el-button>
+		</div>
+	</div>
+</body>
+<script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../lib/vue/vue.js"></script>
+<script src="./../../../lib/element-ui/v2.2.1/index.min.js"></script>
+<script src="./../../../common/components/jas-components.js "></script>
+<script src="../../form-awesome/form-component/form-vue.js "></script>
+<script src="./../../../common/js/jas-tools.js"></script>
+<!--<script src="js/ajaxFileUpload.js"></script>-->
+<script>
+	var app = new Vue({
+		el: "#app",
+		data: function () {
+			return {
+				rules: {
+					domainName: [{
+						required: true,
+						message: '请输入域名',
+						trigger: 'blur'
+					}],
+					codeId: [{
+						required: true,
+						message: '请输入域值id',
+						trigger: 'blur'
+					}],
+					codeName: [{
+						required: true,
+						message: '请输入域值名称',
+						trigger: 'blur'
+					}, {
+						pattern: new RegExp('^[\u4e00-\u9fa5]{0,}$'),
+						message: "请输入中文"
+					}],
+					parentCodeId: [],
+					ordinal: [{
+						pattern: new RegExp('^[0-9]*$'),
+						message: "请输入数字"
+					}]
+				},
+				tableFormData: {},
+				isEdit: {}
+			}
+		},
+
+		mounted: function () {
+			var param = window.jasTools.base.getParamsInUrl(location.href);
+			if (param.menuCode) {
+				this.menuCode = param.menuCode;
+			}
+			delete param.menuCode;
+			this.isEdit = param;
+			if (!(JSON.stringify(this.isEdit) == '{}')) {
+				this.getDetailByObjectId(param.oid);
+			}
+		},
+		methods: {
+			submit: function (formName) {
+				var that = this;
+				this.$refs[formName].validate(function (valid) {
+					if (valid) {
+						that.save();
+					}
+				});
+
+			},
+			validForm: function () {
+				var that = this;
+				that.tableDataSource.rows.data.forEach(function (item) {
+
+				});
+			},
+			save: function () {
+				var that = this;
+				var msg = "";
+				if (JSON.stringify(that.isEdit) == '{}') {
+					msg = "增加成功";
+					url = jasTools.base.rootPath + "/hibernate/commonData/domain/save.do?token=" + localStorage.getItem(
+						"token");
+				} else {
+					msg = "修改成功";
+					url = jasTools.base.rootPath + "/hibernate/commonData/domain/update.do?token=" + localStorage.getItem(
+						"token");
+				}
+				$.ajax({
+					type: "POST",
+					url: url,
+					dataType: "json",
+					contentType: "application/json",
+					data: JSON.stringify(that.tableFormData),
+					async: true,
+					success: function (data) {
+						if (data.status == 1) {
+							window.top.Vue.prototype.$message({
+								message: msg,
+								type: 'success'
+							});
+							that.cancel();
+						} else {
+							window.top.Vue.prototype.$message({
+								message: '服务异常，请稍候尝试',
+								type: 'error'
+							});
+						}
+					}
+				});
+			},
+			getDetailByObjectId: function (oid) {
+				var that = this;
+				$.ajax({
+					type: "get",
+					dataType: "json",
+					contentType: "application/json",
+					url: jasTools.base.rootPath + "/hibernate/commonData/domain/get.do?token=" + localStorage.getItem(
+						"token") + "&oid=" + oid,
+					success: function (data) {
+						if (data.status == 1) {
+							that.tableFormData = data.data;
+						} else {
+							that.$message({
+								type: 'error',
+								message: '服务异常，请稍候尝试'
+							});
+						}
+					}
+				});
+			},
+			cancel: function () {
+				window.parent.jasTools.dialog.close(1);
+			}
+		},
+	});
+</script>
+
+</html>

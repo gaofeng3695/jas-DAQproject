@@ -407,7 +407,7 @@
           title: '增加',
           width: that.config.form.width,
           height: that.config.form.height,
-          src: '/pages/template/dialogs/masterAddTemplate.html?menuCode=' + that.menuCode,
+          src: './dialogs/masterAddTemplate.html?menuCode=' + that.menuCode,
           cbForClose: function () {
             that.refresh();
           }
@@ -418,7 +418,7 @@
       },
       viewRow: function (row) {
         var that = this;
-        var src = '/pages/template/dialogs/viewTemplate.html?menuCode=' + that.menuCode;
+        var src = './dialogs/viewTemplate.html?menuCode=' + that.menuCode;
         for (var key in row) {
           src += "&" + key + '=' + row[key];
         }
@@ -473,7 +473,7 @@
       },
       editRow: function (row) {
         var that = this;
-        var src = '/pages/template/dialogs/addTemplate.html?menuCode=' + that.menuCode;
+        var src = './dialogs/addTemplate.html?menuCode=' + that.menuCode;
         for (var key in row) {
           src += "&" + key + '=' + row[key];
         }

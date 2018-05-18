@@ -215,10 +215,11 @@
 <!-- import JavaScript -->
 <script src="./../../lib/element-ui/v2.2.1/index.min.js"></script>
 <script src="./../../common/js/jas-tools.js"></script>
+<script src="../form-awesome/form-component/form-vue.js "></script>
 <script src="js/domain.js"></script>
 <script src="js/rule.js"></script>
 <script src="js/tableCascade.js"></script>
-<script src="../form-awesome/form-component/form-vue.js "></script>
+
 <script>
     var searchdata = [{
         type: "changeStatus",
@@ -228,7 +229,6 @@
         options: [{
             "label": "全部",
             "value": null,
-
         }, {
             "label": "未发布",
             "value": 0,
@@ -397,18 +397,31 @@
             },
             isPublish: function (row) {
                 var that = this;
-                that.$confirm('是否发布该数据表', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                window.top.Vue.prototype.$confirm('是否发布该数据表', '提示', {
                     type: 'warning',
-                }).then(() => {
-                    that.isPublishToServer(row);
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消发布'
-                    });
+                    callback: function (action) {
+                        if (action === 'confirm') {
+                            that.isPublishToServer(row);
+                        } else {
+                            that.$message({
+                                type: 'info',
+                                message: '已取消发布'
+                            });
+                        }
+                    }
                 });
+                // that.$confirm('是否发布该数据表', '提示', {
+                //     confirmButtonText: '确定',
+                //     cancelButtonText: '取消',
+                //     type: 'warning',
+                // }).then(function() {
+                //     that.isPublishToServer(row);
+                // }).catch(function() {
+                //     that.$message({
+                //         type: 'info',
+                //         message: '已取消发布'
+                //     });
+                // });
             },
             isPublishToServer: function (row) {
                 var that = this;
@@ -462,7 +475,7 @@
                 var dbTypeObj = that.dataSourceAndDbType[row.dbTypeAndDbSource];
                 row.dbSourceName = dbTypeObj.rightLabel;
                 row.dbType = dbTypeObj.value;
-                rule.verifyObj(row,dbTypeObj.value, function () {
+                rule.verifyObj(row, dbTypeObj.value, function () {
                     $.ajax({
                         type: "post",
                         url: jasTools.base.rootPath + "/tableInfo/update.do?token=" + that.token,
@@ -489,18 +502,31 @@
             },
             delRow: function (row) {
                 var that = this;
-                that.$confirm('是否永久删除该数据表', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                window.top.Vue.prototype.$confirm('是否永久删除该数据表', '提示', {
                     type: 'warning',
-                }).then(() => {
-                    that.delRowToService(row.oid);
-                }).catch(() => {
-                    that.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });
+                    callback: function (action) {
+                        if (action === 'confirm') {
+                            that.delRowToService(row.oid);
+                        } else {
+                            that.$message({
+                                type: 'info',
+                                message: '已取消删除'
+                            });
+                        }
+                    }
                 });
+                // that.$confirm('是否永久删除该数据表', '提示', {
+                //     confirmButtonText: '确定',
+                //     cancelButtonText: '取消',
+                //     type: 'warning',
+                // }).then(function () {
+                //     that.delRowToService(row.oid);
+                // }).catch(function () {
+                //     that.$message({
+                //         type: 'info',
+                //         message: '已取消删除'
+                //     });
+                // });
             },
             delRowToService: function (oid) {
                 var that = this;
@@ -554,18 +580,31 @@
             },
             isReNewPublish: function (row) {
                 var that = this;
-                that.$confirm('是否重新发布', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                window.top.Vue.prototype.$confirm('是否重新发布', '提示', {
                     type: 'warning',
-                }).then(() => {
-                    that.isReNewPublishToServer(row);
-                }).catch(() => {
-                    that.$message({
-                        type: 'info',
-                        message: '已取消发布'
-                    });
+                    callback: function (action) {
+                        if (action === 'confirm') {
+                            that.isReNewPublishToServer(row);
+                        } else {
+                            that.$message({
+                                type: 'info',
+                                message: '已取消发布'
+                            });
+                        }
+                    }
                 });
+                // that.$confirm('是否重新发布', '提示', {
+                //     confirmButtonText: '确定',
+                //     cancelButtonText: '取消',
+                //     type: 'warning',
+                // }).then(function () {
+                //     that.isReNewPublishToServer(row);
+                // }).catch(function () {
+                //     that.$message({
+                //         type: 'info',
+                //         message: '已取消发布'
+                //     });
+                // });
             },
             isReNewPublishToServer: function (row) {
                 var that = this;
@@ -580,15 +619,25 @@
                     success: function (data, status) {
                         if (data.status == 1) {
                             if (data.data) {
-                                that.$confirm('目前编辑的表存在历史数据，是否数据迁移', '提示', {
-                                    confirmButtonText: '确定',
-                                    cancelButtonText: '取消',
+                                window.top.Vue.prototype.$confirm('目前编辑的表存在历史数据，是否数据迁移', '提示', {
                                     type: 'warning',
-                                }).then(() => {
-                                    that.rePublish(row.oid, true);
-                                }).catch(() => {
-                                    that.rePublish(row.oid, false);
+                                    callback: function (action) {
+                                        if (action === 'confirm') {
+                                            that.rePublish(row.oid, true);
+                                        } else {
+                                            that.rePublish(row.oid, false);
+                                        }
+                                    }
                                 });
+                                // that.$confirm('目前编辑的表存在历史数据，是否数据迁移', '提示', {
+                                //     confirmButtonText: '确定',
+                                //     cancelButtonText: '取消',
+                                //     type: 'warning',
+                                // }).then(function () {
+                                //     that.rePublish(row.oid, true);
+                                // }).catch(function () {
+                                //     that.rePublish(row.oid, false);
+                                // });
                             } else {
                                 that.rePublish(row.oid, false);
                             }

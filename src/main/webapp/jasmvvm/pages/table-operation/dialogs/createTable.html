@@ -341,7 +341,8 @@
                     var that = this;
                     $.ajax({
                         type: "GET",
-                        url: jasTools.base.rootPath + "/dbInfo/getDatabaseMetaData.do?token=" + that.token,
+                        url: jasTools.base.rootPath + "/dbInfo/getDatabaseMetaData.do?token=" +
+                            that.token,
                         contentType: "application/json",
                         dataType: "json",
                         success: function (data, status) {
@@ -377,18 +378,18 @@
                 delFieldRow: function (index) {
                     var that = this;
                     window.top.Vue.prototype.$confirm('是否永久删除该字段', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
                         type: 'warning',
-                    }).then(() => {
-                        that.tableFormData.tableFieldFormList.splice(index, 1);
-                    }).catch(() => {
-                        that.$message({
-                            type: 'info',
-                            message: '已取消删除'
-                        });
+                        callback: function (action) {
+                            if (action === 'confirm') {
+                                that.tableFormData.tableFieldFormList.splice(index, 1);
+                            } else {
+                                that.$message({
+                                    type: 'info',
+                                    message: '已取消删除'
+                                });
+                            }
+                        }
                     });
-
                 },
                 editFieldRow: function (row) {
                     delete row.history;
@@ -446,7 +447,8 @@
                     rule.verifyObj(isrequireVerify, that.tableFormData.dbType, function () {
                         $.ajax({
                             type: "post",
-                            url: jasTools.base.rootPath + "/tableInfo/save.do?token=" + that.token,
+                            url: jasTools.base.rootPath + "/tableInfo/save.do?token=" +
+                                that.token,
                             contentType: "application/json",
                             data: JSON.stringify(that.tableFormData),
                             dataType: "json",
@@ -497,11 +499,11 @@
                     var rowObj = {};
                     if (fieldList.length > 0) {
                         rowObj = {
-                            fieldName: fieldList[fieldList.length-1].fieldName,
-                            fieldNameCn: fieldList[fieldList.length-1].fieldNameCn,
+                            fieldName: fieldList[fieldList.length - 1].fieldName,
+                            fieldNameCn: fieldList[fieldList.length - 1].fieldNameCn,
                             editing: 1,
-                            fieldType:fieldList[fieldList.length-1].fieldType,
-                            fieldLength:fieldList[fieldList.length-1].fieldLength
+                            fieldType: fieldList[fieldList.length - 1].fieldType,
+                            fieldLength: fieldList[fieldList.length - 1].fieldLength
                         };
                     } else {
                         rowObj = {

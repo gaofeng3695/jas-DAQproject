@@ -65,14 +65,14 @@ Vue.component('el-expend-table', {
         '@expand-change="expandChange"',
         '>',
         '<template v-for="(item,key) in tabledes.parent">',
-        '<template  v-if="item.type==`expand`">',
+        '<template  v-if="item.type==\'expand\'">',
         '<el-table-column :fixed="item.fixed" type="expand" :align="item.align" v-if="tabledes.child&&tabledes.child.parent&&tabledes.child.parent.length>0">',
         '<template slot-scope="props">',
         '<eltable :tabledata="props.row.childdata" :tabledes="tabledes.child" :tableattr="tableattr"></eltable>',
         '</template>',
         '</el-table-column>',
         '</template>',
-        '<template v-else-if="item.type==`operation`">',
+        '<template v-else-if="item.type==\'operation\'">',
         '<el-table-column :width="item.width" :fixed="item.fixed" :label="item.name" :align="item.align">',
         '<template slot-scope="scope">',
         '<el-button v-for="btn in item.btns" @click="btn.click(scope.row)" type="text" size="small">{{btn.btnName}}</el-button>',
@@ -86,56 +86,56 @@ Vue.component('el-expend-table', {
         '</template>',
         '</el-table>',
     ].join(''),
-    mounted: function() {
+    mounted: function () {
 
     },
     methods: {
-        select: function(selection, row) {
+        select: function (selection, row) {
             this.$emit('select', selection, row);
         },
-        selectAll: function(selection) {
+        selectAll: function (selection) {
             this.$emit('selectall', selection);
         },
-        selectionChange: function(selection) {
+        selectionChange: function (selection) {
             this.$emit('selectionchange', selection);
         },
-        cellMouseEnter: function(row, column, cell, event) {
+        cellMouseEnter: function (row, column, cell, event) {
             this.$emit('cellmouseenter', row, column, cell, event);
         },
-        cellMouseLeave: function(row, column, cell, event) {
+        cellMouseLeave: function (row, column, cell, event) {
             this.$emit('cellmouseenter', row, column, cell, event);
         },
-        cellClick: function(row, column, cell, event) {
+        cellClick: function (row, column, cell, event) {
             this.$emit('cellmouseenter', row, column, cell, event);
         },
-        cellDblclick: function(row, column, cell, event) {
+        cellDblclick: function (row, column, cell, event) {
             this.$emit('cellmouseenter', row, column, cell, event);
         },
-        rowClick: function(row, event) {
+        rowClick: function (row, event) {
             this.$emit('rowclick', row, event);
         },
-        rowContentMenu: function(row, event) {
+        rowContentMenu: function (row, event) {
             this.$emit('rowcontentmenu', row, event);
         },
-        rowDblclick: function(row, event) {
+        rowDblclick: function (row, event) {
             this.$emit('rowdblclick', row, event);
         },
-        headerClick: function(column, event) {
+        headerClick: function (column, event) {
             this.$emit('headerclick', column, event);
         },
-        headerContextMenu: function(column, event) {
+        headerContextMenu: function (column, event) {
             this.$emit('headercontextmenu', column, event);
         },
-        sortChange: function(obj) {
+        sortChange: function (obj) {
             this.$emit('sortchange', obj);
         },
-        currentChange: function(currentRow, oldCurrentRow) {
+        currentChange: function (currentRow, oldCurrentRow) {
             this.$emit('currentchange', currentRow, oldCurrentRow);
         },
-        headerDragend: function(newWidth, oldWidth, column, event) {
+        headerDragend: function (newWidth, oldWidth, column, event) {
             this.$emit('headerdragend', newWidth, oldWidth, column, event);
         },
-        expandChange: function(row, expandedRows) {
+        expandChange: function (row, expandedRows) {
             this.$emit('expandchange', row, expandedRows);
         },
     }
@@ -207,7 +207,7 @@ Vue.component('el-common-table', {
         '@expand-change="expandChange"',
         '>',
         '<template  v-for="item in tabledes">',
-        '<template v-if="item.type==`operation`">',
+        '<template v-if="item.type==\'operation\'">',
         '<el-table-column :width="item.width" :fixed="item.fixed" :label="item.name" :align="item.align">',
         '<template slot-scope="scope">',
         '<el-button v-for="(btn,index) in item.btns" @click="btn.click(scope.row)" type="text" size="small">{{btn.btnName}}</el-button>',
@@ -265,58 +265,58 @@ Vue.component('el-common-table', {
         // }
     },
     methods: {
-        sizeChange: function(val) {
+        sizeChange: function (val) {
             this.tablepage.sizeChange(val);
         },
-        currentPageChange: function(val) {
+        currentPageChange: function (val) {
             this.tablepage.currentChange(val);
         },
-        select: function(selection, row) {
+        select: function (selection, row) {
             this.$emit('select', selection, row);
         },
-        selectAll: function(selection) {
+        selectAll: function (selection) {
             this.$emit('selectall', selection);
         },
-        selectionChange: function(selection) {
+        selectionChange: function (selection) {
             this.$emit('selectionchange', selection);
         },
-        cellMouseEnter: function(row, column, cell, event) {
+        cellMouseEnter: function (row, column, cell, event) {
             this.$emit('cellmouseenter', row, column, cell, event);
         },
-        cellMouseLeave: function(row, column, cell, event) {
+        cellMouseLeave: function (row, column, cell, event) {
             this.$emit('cellmouseenter', row, column, cell, event);
         },
-        cellClick: function(row, column, cell, event) {
+        cellClick: function (row, column, cell, event) {
             this.$emit('cellmouseenter', row, column, cell, event);
         },
-        cellDblclick: function(row, column, cell, event) {
+        cellDblclick: function (row, column, cell, event) {
             this.$emit('cellmouseenter', row, column, cell, event);
         },
-        rowClick: function(row, event) {
+        rowClick: function (row, event) {
             this.$emit('rowclick', row, event);
         },
-        rowContentMenu: function(row, event) {
+        rowContentMenu: function (row, event) {
             this.$emit('rowcontentmenu', row, event);
         },
-        rowDblclick: function(row, event) {
+        rowDblclick: function (row, event) {
             this.$emit('rowdblclick', row, event);
         },
-        headerClick: function(column, event) {
+        headerClick: function (column, event) {
             this.$emit('headerclick', column, event);
         },
-        headerContextMenu: function(column, event) {
+        headerContextMenu: function (column, event) {
             this.$emit('headercontextmenu', column, event);
         },
-        sortChange: function(obj) {
+        sortChange: function (obj) {
             this.$emit('sortchange', obj);
         },
-        currentChange: function(currentRow, oldCurrentRow) {
+        currentChange: function (currentRow, oldCurrentRow) {
             this.$emit('currentchange', currentRow, oldCurrentRow);
         },
-        headerDragend: function(newWidth, oldWidth, column, event) {
+        headerDragend: function (newWidth, oldWidth, column, event) {
             this.$emit('headerdragend', newWidth, oldWidth, column, event);
         },
-        expandChange: function(row, expandedRows) {
+        expandChange: function (row, expandedRows) {
             this.$emit('expandchange', row, expandedRows);
         },
     }
@@ -374,7 +374,7 @@ Vue.component('form-add', {
         '</div>',
     ].join(''),
     watch: {
-        datasource: function() {
+        datasource: function () {
 
         },
     },
@@ -399,7 +399,7 @@ Vue.component('form-group', {
             default: '80px'
         },
     },
-    data: function() {
+    data: function () {
         return {
             // checkAll: false,
             // isIndeterminate: true
@@ -413,23 +413,23 @@ Vue.component('form-group', {
         '<template v-for="(child,index) in dataform.data" >',
         '<el-col :xs="child.col||xs" :sm="child.col||sm" :md="child.col||md" :lg="child.col||lg" :xl="child.col||xl">',
         '<el-form-item :label="child.name" :prop="child.id" :rules="child.verify" >',
-        '<el-input clearable v-model="form[child.id]" v-if="child.type==`input`" :placeholder="child.placeholder" :size="child.size" @input="updateValue(child.id,child.inputRule)" ></el-input>',
-        '<el-select  v-model="form[child.id]" v-if="child.type==`select`" :placeholder="child.placeholder" :size="child.size" style="width:100%">',
+        '<el-input clearable v-model="form[child.id]" v-if="child.type==\'input\'" :placeholder="child.placeholder" :size="child.size" @input="updateValue(child.id,child.inputRule)" ></el-input>',
+        '<el-select  v-model="form[child.id]" v-if="child.type==\'select\'" :placeholder="child.placeholder" :size="child.size" style="width:100%">',
         '<el-option v-for="option in child.options" :key="option.value" :label="option.label" :value="option.value">',
         '</el-option>',
         '</el-select>',
-        '<el-select  v-model="form[child.id]" v-if="child.type==`select-custom`" :placeholder="child.placeholder" :size="child.size" style="width:100%">',
+        '<el-select  v-model="form[child.id]" v-if="child.type==\'select-custom\'" :placeholder="child.placeholder" :size="child.size" style="width:100%">',
         '<el-option v-for="option in child.options" :key="option.index" :label="option.label" :value="option.index">',
         '<span style="float: left">{{ option.label }}</span>',
         '<span style="float: right; color: #8492a6; font-size: 13px">{{option.rightLabel }}</span>',
         '</el-option>',
         '</el-select>',
-        '<template  v-if="child.type==`checkbox`">',
+        '<template  v-if="child.type==\'checkbox\'">',
         '<form-checkbox :index=index  :checkvalue="form[child.id]" :checkoption="child.checklist" @changeoption="changeOption"></form-checkbox>',
         '</template>',
-        '<el-date-picker v-if="child.type==`date`" type="date" :placeholder="child.placeholder" v-model="form[child.id]" :size="child.size"  style="width: 100%;"></el-date-picker>',
-        '<el-input v-if="child.type==`textarea`" type="textarea" :rows="2"  :size="child.size"  v-model="form[child.id]" :rules="child.rules"></el-input>',
-        '<el-upload v-if="child.type==`file`" class="upload-demo" ref="upload" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">',
+        '<el-date-picker v-if="child.type==\'date\'" type="date" :placeholder="child.placeholder" v-model="form[child.id]" :size="child.size"  style="width: 100%;"></el-date-picker>',
+        '<el-input v-if="child.type==\'textarea\'" type="textarea" :rows="2"  :size="child.size"  v-model="form[child.id]" :rules="child.rules"></el-input>',
+        '<el-upload v-if="child.type==\'file\'" class="upload-demo" ref="upload" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">',
         '<el-button slot="trigger" size="small" type="primary">选取文件</el-button>',
         '</el-upload>',
         '</el-form-item>',
@@ -441,7 +441,7 @@ Vue.component('form-group', {
     ].join(''),
 
     computed: {
-        borStyle: function() {
+        borStyle: function () {
             if (this.dataform.title != "") {
                 return {
                     'border-style': 'dashed',
@@ -451,7 +451,7 @@ Vue.component('form-group', {
             }
             return {};
         },
-        pad: function() {
+        pad: function () {
             if (this.dataform.title != "") {
                 return {
                     'padding': '0px 5px',
@@ -461,7 +461,7 @@ Vue.component('form-group', {
             return {};
         }
     },
-    data: function() {
+    data: function () {
         return {
             xs: 24,
             sm: 12,
@@ -471,24 +471,24 @@ Vue.component('form-group', {
             fileList: []
         };
     },
-    mounted: function() {
+    mounted: function () {
         this.calculate();
         this.checkboxList();
 
     },
     methods: {
-        updateValue: function(id, type) { //不能输入汉字
+        updateValue: function (id, type) { //不能输入汉字
             if (type && type == "noTtext") {
                 var that = this;
-                Vue.nextTick(function() {
+                Vue.nextTick(function () {
                     that.form[id] = that.form[id].replace(/[\W]/g, '');
                 })
             }
         },
-        checkboxList: function() {
+        checkboxList: function () {
 
         }, //获取多选框的选项
-        calculate: function() {
+        calculate: function () {
             if (this.tabcol == 3) {
                 this.lg = 8;
                 this.xl = 8;
@@ -502,16 +502,16 @@ Vue.component('form-group', {
                 this.xl = 24;
             }
         },
-        submitUpload: function() {
+        submitUpload: function () {
             this.$refs.upload.submit();
         },
-        handleRemove: function(file, fileList) {
+        handleRemove: function (file, fileList) {
             console.log(file, fileList);
         },
-        handlePreview: function(file) {
+        handlePreview: function (file) {
             console.log(file);
         },
-        changeOption: function(index, value) {
+        changeOption: function (index, value) {
             var that = this;
             that.form[that.dataform.data[index].id] = value;
         }
@@ -533,16 +533,16 @@ Vue.component('form-checkbox', {
             default: 0,
         }
     },
-    data: function() {
+    data: function () {
         return {
             isIndeterminate: true,
             checkall: false,
             defaultCheck: []
         }
     },
-    mounted: function() {
+    mounted: function () {
         var that = this;
-        that.checkvalue.forEach(function(item) {
+        that.checkvalue.forEach(function (item) {
             that.defaultCheck.push(item);
         });
     },
@@ -554,11 +554,11 @@ Vue.component('form-checkbox', {
     ].join(' '),
     methods: {
         /**根据id 进行设置全选还是单选的处理 */
-        handleCheckAllChange: function(val) {
+        handleCheckAllChange: function (val) {
             var that = this;
             var check = [];
             if (val) {
-                that.checkoption.forEach(function(item) {
+                that.checkoption.forEach(function (item) {
                     check.push(item.id);
                 });
             } else {
@@ -568,7 +568,7 @@ Vue.component('form-checkbox', {
             that.defaultCheck = check;
             that.$emit("changeoption", that.index, check)
         },
-        handleCheckedChange: function(val) {
+        handleCheckedChange: function (val) {
             var that = this;
             var checkCount = val.length;
             that.checkall = checkCount == that.checkoption.length;
@@ -597,7 +597,7 @@ Vue.component('form-detail', {
         '</div>',
     ].join(''),
     watch: {
-        datasource: function() {
+        datasource: function () {
 
         },
     },
@@ -627,14 +627,14 @@ Vue.component('form-detail-group', {
         '<div v-for="(child,index) in dataform.data" :key="index">',
         '<el-col  :xs="child.col||xs" :sm="child.col||sm" :md="child.col||md" :lg="child.col||lg" :xl="child.col||xl">',
         '<el-form-item :label="child.name" :prop="child.id" :rules="child.verify">',
-        '<el-input clearable v-model="form[child.id]" v-if="child.type==`input`" ></el-input>',
-        '<el-select v-model="form[child.id]" v-if="child.type==`select`">',
+        '<el-input clearable v-model="form[child.id]" v-if="child.type==\'input\'" ></el-input>',
+        '<el-select v-model="form[child.id]" v-if="child.type==\'select\'">',
         '<el-option v-for="option in child.options" :key="option.value" :label="option.label" :value="option.value">',
         '</el-option>',
         '</el-select>',
-        '<el-date-picker v-if="child.type==`date`" type="date"  v-model="form[child.id]" style="width: 100%;"></el-date-picker>',
-        '<el-input v-if="child.type==`textarea`" type="textarea" :rows="2"  v-model="form[child.id]"></el-input>',
-        '<el-upload v-if="child.type==`file`" class="upload-demo" ref="upload" action="https://jsonplaceholder.typicode.com/posts/"  :file-list="fileList" >',
+        '<el-date-picker v-if="child.type==\'date\'" type="date"  v-model="form[child.id]" style="width: 100%;"></el-date-picker>',
+        '<el-input v-if="child.type==\'textarea\'" type="textarea" :rows="2"  v-model="form[child.id]"></el-input>',
+        '<el-upload v-if="child.type==\'file\'" class="upload-demo" ref="upload" action="https://jsonplaceholder.typicode.com/posts/"  :file-list="fileList" >',
         '</el-upload>',
         '</el-form-item>',
         '</el-col>',
@@ -644,7 +644,7 @@ Vue.component('form-detail-group', {
         '</div>'
     ].join(''),
     computed: {
-        borStyle: function() {
+        borStyle: function () {
             if (this.dataform.title != "") {
                 return {
                     'border-style': 'dashed',
@@ -656,22 +656,28 @@ Vue.component('form-detail-group', {
         }
     },
     watch: {},
-    data: function() {
+    data: function () {
         return {
             xs: 24,
             sm: 12,
             md: 12,
             lg: 12,
             xl: 12,
-            fileList: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }, { name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }]
+            fileList: [{
+                name: 'food.jpeg',
+                url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+            }, {
+                name: 'food2.jpeg',
+                url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+            }]
 
         };
     },
-    mounted: function() {
+    mounted: function () {
         this.calculate();
     },
     methods: {
-        calculate: function() {
+        calculate: function () {
             if (this.tabcol == 3) {
                 this.lg = 8;
                 this.xl = 8;
@@ -729,7 +735,7 @@ Vue.component('dialog-form', {
             default: ""
         }
     },
-    data: function() {
+    data: function () {
         return {
             add: false,
             whStyle: {},
@@ -755,7 +761,7 @@ Vue.component('dialog-form', {
         '</div>'
     ].join(''),
     computed: {
-        maskstyle: function() {
+        maskstyle: function () {
             if (this.ismask == 'true') {
                 return {
                     'left': 0,
@@ -765,7 +771,7 @@ Vue.component('dialog-form', {
             }
             return {}
         },
-        wStyle: function() {
+        wStyle: function () {
             if (this.width.indexOf("%") > -1) {
                 return {
                     'width': this.width,
@@ -777,7 +783,7 @@ Vue.component('dialog-form', {
         },
     },
     watch: {
-        isshow: function() {
+        isshow: function () {
             var that = this;
             if (that.isshow) {
                 var obj = {};
@@ -791,16 +797,16 @@ Vue.component('dialog-form', {
                 } else {
                     obj.width = this.width + "px";
                 }
-                setTimeout(function() {
+                setTimeout(function () {
                     that.whStyle = obj;
                 }, 20);
             }
         },
-        width: function() {
+        width: function () {
             var that = this;
             if (that.width == "0px") {
                 that.whStyle.width = "0px";
-                setTimeout(function() {
+                setTimeout(function () {
                     that.$emit("cancel");
                 }, 2000);
             }
@@ -830,32 +836,31 @@ Vue.component('search-tool', {
 
     template: ['<el-row :gutter="10">',
         '<el-form ref="searchform" :model="searchform" label-width="100px">',
-        '<template v-for="item in searchdata">',
+        '<template v-for="(item) in searchdata">',
         '<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">',
-        '<el-form-item :label="item.name" v-if="item.type!=`opertion`">',
-        '<el-input v-if="item.type==`input`" :placeholder="item.placeholder" v-model="searchform[item.id]" :size="item.size" clearable @input="updateValue(item.id,item.inputRule)">',
+        '<el-form-item :label="item.name" v-if="item.type!=\'opertion\'">',
+        '<el-input v-if="item.type==\'input\'" :placeholder="item.placeholder" v-model="searchform[item.id]" :size="item.size" clearable @input="updateValue(item.id,item.inputRule)">',
         '</el-input>',
-        '<el-select v-model="searchform[item.id]" v-if="item.type==`select`" style="width:100%" :size="item.size" @change="selectChange(item.isQuery)" clearable>',
-        '<template v-for="option in item.options"><el-option  :key="option.value" :label="option.label" :value="option.value">',
+        '<el-select v-model="searchform[item.id]" v-if="item.type==\'select\'" style="width:100%" :size="item.size" @change="selectChange(item.isQuery)" clearable>',
+        '<template  v-for="option in item.options"><el-option  :key="option.value" :label="option.label" :value="option.value">',
         '</el-option></template>',
         '</el-select>',
-        '<el-date-picker v-if="item.type==`date`" v-model="searchform[item.id]" :size="item.size" type="date" placeholder="选择日期" clearable @change="selectChange(item.isQuery)">',
+        '<el-date-picker v-if="item.type==\'date\'" v-model="searchform[item.id]" :size="item.size" type="date" placeholder="选择日期" clearable @change="selectChange(item.isQuery)">',
         '</el-date-picker>',
-        '<el-date-picker  v-if="item.type==`datetimerange`"  v-model="searchform[item.id]" type="datetimerange"  range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="right">',
+        '<el-date-picker  v-if="item.type==\'datetimerange\'"  v-model="searchform[item.id]" type="datetimerange"  range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="right">',
         '</el-date-picker>',
-        '<el-checkbox-group v-if="item.type==`chekcbox`" v-model="searchform[item.id]" clearable>',
+        '<el-checkbox-group v-if="item.type==\'chekcbox\'" v-model="searchform[item.id]" clearable>',
         '<template v-for="child in item.options" ><el-checkbox :label="child.value" >{{child.value}}</el-checkbox></template>',
         '</el-checkbox-group>',
-        '<el-radio-group v-if="item.type==`radio`" v-model="searchform[item.id]">',
+        '<el-radio-group v-if="item.type==\'radio\'" v-model="searchform[item.id]">',
         '<template v-for="child in item.options"><el-radio  :label="child.id" >{{child.value}}</el-radio></template>',
         '</el-radio-group>',
-        '<el-radio-group  v-if="item.type==`changeStatus`" v-model="searchform[item.id]" size="small" @change="item.change">',
+        '<el-radio-group  v-if="item.type==\'changeStatus\'" v-model="searchform[item.id]" size="small" @change="item.change">',
         '<template v-for="child in item.options"><el-radio-button  :label="child.value">{{child.label}}</el-radio-button></template>',
         '</el-radio-group>',
-
         '</el-form-item>',
         '</el-col>',
-        '<el-col v-if="item.type==`opertion`" :xs="24" :sm="12" :md="12" :lg="6" :xl="6" style="text-align:right">',
+        '<el-col v-if="item.type==\'opertion\'" :xs="24" :sm="12" :md="12" :lg="6" :xl="6" style="text-align:right">',
         '<template   v-for="child in item.options" ><el-button ',
         ':type="child.type" ',
         ':size="child.size" @click="child.click">{{child.name}}</el-button></template>',
@@ -864,28 +869,34 @@ Vue.component('search-tool', {
         '</el-form>',
         '</el-row>',
     ].join(''),
-    mounted: function() {
+    data: function () {
+        return {
+            isOperation: false,
+            isInput: false,
+        }
+    },
+    mounted: function () {
         //进行初始化的时候，调用此方法
         // this.calculate();
         console.log(this.searchdata);
     },
     methods: {
-        updateValue: function(id, type) { //不能输入汉字
+        updateValue: function (id, type) { //不能输入汉字
             if (type && type == "noTtext") {
                 this.searchform[id] = this.searchform[id].replace(/[\W]/g, '');
             }
         },
-        selectChange: function(falg) { //val 选中的id
+        selectChange: function (falg) { //val 选中的id
             var that = this;
             if (falg) {
                 that.query();
             }
         },
-        query: function() {
+        query: function () {
             var that = this;
-            that.searchdata.forEach(function(item) {
+            that.searchdata.forEach(function (item) {
                 if (item.type == "opertion") {
-                    item.options.forEach(function(child) {
+                    item.options.forEach(function (child) {
                         if (child.id == 'query') {
                             child.click();
                             return;
@@ -912,7 +923,7 @@ Vue.component('search-tool-self', {
             default: ""
         }
     },
-    data: function() {
+    data: function () {
         return {
             setCol: {
                 xs: 12,
@@ -933,27 +944,27 @@ Vue.component('search-tool-self', {
     template: ['<el-row :gutter="10">',
         '<el-form ref="searchform" :model="searchform" label-width="100px">',
         '<template v-for="item in searchdata">',
-        '<el-col v-if="item.type!=`opertion`" :xs="item.col||setCol.xs" :sm="item.col||setCol.sm" :md="item.col||setCol.md" :lg="item.col||setCol.lg" :xl="item.col||setCol.xl">',
+        '<el-col v-if="item.type!=\'opertion\'" :xs="item.col||setCol.xs" :sm="item.col||setCol.sm" :md="item.col||setCol.md" :lg="item.col||setCol.lg" :xl="item.col||setCol.xl">',
         '<el-form-item :label="item.name">',
-        '<el-input v-if="item.type==`input`" :placeholder="item.placeholder" v-model="searchform[item.id]" :size="item.size" clearable>',
+        '<el-input v-if="item.type==\'input\'" :placeholder="item.placeholder" v-model="searchform[item.id]" :size="item.size" clearable>',
         '</el-input>',
-        '<el-select v-model="searchform[item.id]" v-if="item.type==`select`" style="width:100%" :size="item.size" @change="selectChange(item.isQuery)" clearable>',
+        '<el-select v-model="searchform[item.id]" v-if="item.type==\'select\'" style="width:100%" :size="item.size" @change="selectChange(item.isQuery)" clearable>',
         '<template v-for="option in item.options"><el-option  :key="option.value" :label="option.label" :value="option.value">',
         '</el-option></template>',
         '</el-select>',
-        '<el-date-picker v-if="item.type==`date`" v-model="searchform[item.id]" :size="item.size" type="date" placeholder="选择日期" clearable @change="selectChange(item.isQuery)">',
+        '<el-date-picker v-if="item.type==\'date\'" v-model="searchform[item.id]" :size="item.size" type="date" placeholder="选择日期" clearable @change="selectChange(item.isQuery)">',
         '</el-date-picker>',
-        '<el-date-picker  v-if="item.type==`datetimerange`"  v-model="searchform[item.id]" type="datetimerange"  range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="right">',
+        '<el-date-picker  v-if="item.type==\'datetimerange\'"  v-model="searchform[item.id]" type="datetimerange"  range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="right">',
         '</el-date-picker>',
-        '<el-checkbox-group v-if="item.type==`chekcbox`" v-model="searchform[item.id]" clearable>',
+        '<el-checkbox-group v-if="item.type==\'chekcbox\'" v-model="searchform[item.id]" clearable>',
         '<template v-for="child in item.options" ><el-checkbox :label="child.value" >{{child.value}}</el-checkbox></template>',
         '</el-checkbox-group>',
-        '<el-radio-group v-if="item.type==`radio`" v-model="searchform[item.id]">',
+        '<el-radio-group v-if="item.type==\'radio\'" v-model="searchform[item.id]">',
         '<template v-for="child in item.options"><el-radio  :label="child.id" >{{child.value}}</el-radio></template>',
         '</el-radio-group>',
         '</el-form-item>',
         '</el-col>',
-        '<el-col v-if="item.type==`opertion`" :xs="item.col||btnCol.xs" :sm="item.col||btnCol.sm" :md="item.col||btnCol.md" :lg="item.col||btnCol.lg" :xl="item.col||btnCol.xl" style="text-align: right">',
+        '<el-col v-if="item.type==\'opertion\'" :xs="item.col||btnCol.xs" :sm="item.col||btnCol.sm" :md="item.col||btnCol.md" :lg="item.col||btnCol.lg" :xl="item.col||btnCol.xl" style="text-align: right">',
         '<template  v-for="child in item.options"><el-button ',
         ':type="child.type" ',
         ':size="child.size" @click="child.click">{{child.name}}</el-button></template>',
@@ -962,12 +973,12 @@ Vue.component('search-tool-self', {
         '</el-form>',
         '</el-row>',
     ].join(''),
-    mounted: function() {
+    mounted: function () {
         //进行初始化的时候，调用此方法
         this.calculate();
     },
     methods: {
-        calculate: function() {
+        calculate: function () {
             if (this.searchdata.length % 2 == 0) {
                 this.setCol.md = 12;
                 this.setCol.lg = 12;
@@ -987,17 +998,17 @@ Vue.component('search-tool-self', {
                 this.btnCol.xl = 24;
             }
         },
-        selectChange: function(falg) { //val 选中的id
+        selectChange: function (falg) { //val 选中的id
             var that = this;
             if (falg) {
                 that.query();
             }
         },
-        query: function() {
+        query: function () {
             var that = this;
-            that.searchdata.forEach(function(item) {
+            that.searchdata.forEach(function (item) {
                 if (item.type == "opertion") {
-                    item.options.forEach(function(child) {
+                    item.options.forEach(function (child) {
                         if (child.id == 'query') {
                             child.click();
                             return;

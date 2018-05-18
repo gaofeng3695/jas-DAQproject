@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="./../../../lib/font-awesome-4.7.0/css/font-awesome.css">
+  <link rel="stylesheet" href="./../../../lib/element-ui/v2.2.1/theme-chalk/index.min.css">
+  <link rel="stylesheet" href="./../../../src/css/main.css">
+  <style>
+    html,
+    body {
+      width: 100%;
+    }
+
+    #app {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .content {
+      height: calc(100% - 40px);
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .dialog-footer {
+      background: #fff;
+      width: 100%;
+      position: absolute;
+      bottom: 0px;
+      z-index: 3000;
+      height: 40px;
+      line-height: 40px;
+    }
+
+    .outer-wrap {
+      /*border-bottom: 1px solid #ebeef5;*/
+      margin-bottom: -1px;
+      overflow: hidden;
+    }
+
+    .box {
+      /*box-sizing: border-box;*/
+      border-left: 1px solid #ebeef5;
+      border-top: 1px solid #ebeef5;
+    }
+
+    .detail-item {
+      margin-top: -1px;
+      margin-left: -1px;
+      overflow: hidden;
+      /*min-height: 40px;*/
+      line-height: 30px;
+      border: 1px solid #ebeef5;
+    }
+
+    .item-content {
+      position: relative;
+      height: 100%;
+      padding-left: 140px;
+    }
+
+    .left {
+      position: absolute;
+      left: 0px;
+      padding-left: 10px;
+      display: inline;
+      width: 130px;
+      border-right: 1px solid #ebeef5;
+      color: #333;
+      background: #FAFAFA;
+      height: 100%;
+    }
+
+    .right {
+      /*float: left;*/
+      padding-left: 10px;
+      color: #666;
+      display: inline-block;
+    }
+
+    .bulk {
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+      border-bottom: 1px solid rgb(228, 231, 237);
+    }
+
+    .title {
+      padding: 0px 0px 10px 0px;
+      height: 100%;
+      border-bottom: 2px solid rgb(64, 158, 255);
+    }
+
+    .el-upload {
+      width: 100% !important
+    }
+
+    .height {
+      height: 56px;
+    }
+
+    .file-item {
+      height: 30px;
+      line-height: 30px;
+      width: 100%;
+      /*padding: 0px 10px*/
+    }
+
+    .file-item:hover {
+      background: #dcdfe6
+    }
+
+    .btn {
+      padding-left: 10px;
+      cursor: pointer;
+      font-size: 1.2em
+    }
+
+    .btn:hover {
+      color: #66b1ff;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <div class="content">
+      <div class="outer-wrap">
+        <template>
+          <el-row class="box" style="margin-bottom: 15px">
+            <template v-for="item in formAttr">
+              <el-col class="detail-item" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                <div class="item-content">
+                  <div class="left">
+                    {{item.name}}
+                  </div>
+                  <div class="right">
+                    {{formData[item.id]}}
+                  </div>
+                </div>
+              </el-col>
+            </template>
+          </el-row>
+        </template>
+      </div>
+
+    </div>
+    <div slot="footer" class="dialog-footer" style="text-align: center">
+      <el-button size="small" @click="cancel()">取 消</el-button>
+    </div>
+  </div>
+</body>
+<script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../lib/vue/vue.js"></script>
+<script src="./../../../lib/element-ui/v2.2.1/index.min.js"></script>
+<script src="./../../../common/components/jas-components.js "></script>
+<script src="./../../../common/js/jas-tools.js"></script>
+<script>
+  var app = new Vue({
+    el: "#app",
+    data: function () {
+      return {
+        formData: {
+          id: "1",
+          name: "22",
+        },
+        formAttr: [{
+          id: "domainName",
+          name: "域名"
+        }, {
+          id: "codeId",
+          name: "域值id"
+        }, {
+          id: "codeName",
+          name: "域值名称"
+        }, {
+          id: "parentCodeId",
+          name: "父域值id"
+        }, {
+          id: "ordinal",
+          name: "排序号"
+        }, {
+          id: "description",
+          name: "描述"
+        }],
+        isQuery: {}
+      }
+    },
+    mounted: function () {
+      var that = this;
+      var param = window.jasTools.base.getParamsInUrl(location.href);
+      this.menuCode = param.menuCode;
+      delete param.menuCode;
+      this.isQuery = param;
+      this.getDetailById();
+    },
+    methods: {
+      getDetailById: function () {
+        var that = this;
+        $.ajax({
+          type: "get",
+          dataType: "json",
+          contentType: "application/json",
+          url: jasTools.base.rootPath + "/hibernate/commonData/domain/get.do?token=" + localStorage.getItem(
+            "token")+"&oid="+that.isQuery.oid,
+          success: function (data) {
+            if (data.status == 1) {
+
+                that.formData = data.data;
+
+            } else {
+              that.$message({
+                type: 'error',
+                message: '服务异常，请稍候尝试'
+              });
+            }
+          }
+        });
+      },
+      cancel: function () {
+        this.closeForm();
+      },
+      closeForm: function () {
+        window.parent.jasTools.dialog.close(1);
+      },
+    },
+  });
+</script>
+
+</html>

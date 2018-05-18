@@ -21,6 +21,11 @@ window.IndexConfig = {
 				title: '表实体生成',
 				closable: true,
 				link: './pages/entity-operation/entity.html'
+			}, {
+				index: 'dash_board23',
+				title: '域值维护',
+				closable: true,
+				link: './pages/domain-operation/domainList.html'
 			}]
 		},
 		{
@@ -33,7 +38,7 @@ window.IndexConfig = {
 			icon: 'fa fa-suitcase',
 			index: 'dash-board2',
 			title: '深圳采集系统',
-			link:  './pages/template/attachment.html'
+			link: './pages/template/attachment.html'
 		},
 		{
 			icon: 'fa fa-users',
