@@ -71,7 +71,11 @@
 	        	</exclusion>
 	      	</exclusions>
 		</dependency>
-		
+		<dependency>
+	        <groupId>com.google.guava</groupId>
+	        <artifactId>guava</artifactId>
+	        <version>19.0</version>
+	    </dependency>
 		<!-- postgresql jdbc驱动jar 可选包，如果项目中使用postgresql，请参考该部分依赖代码在项目中显示添加依赖 -->
 		<!-- <dependency>
 		    <groupId>postgresql</groupId>
