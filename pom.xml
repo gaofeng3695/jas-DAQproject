@@ -46,6 +46,12 @@
 			<groupId>cn.jasgroup.jasframework</groupId>
 			<artifactId>jasframework-dataflow</artifactId>
 			<version>${jasframework-version}</version>
+			<!-- <exclusions>
+				<exclusion>
+					<groupId>org.apache.tika</groupId>
+					<artifactId>tika-parsers</artifactId>
+				</exclusion>
+			</exclusions> -->
 		</dependency>
 		<!--  基础权限 -->
 		<dependency>

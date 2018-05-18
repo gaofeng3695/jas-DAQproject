@@ -198,12 +198,13 @@
           this.getEntityCode(val);
           // console.log(this.$refs['selectDom'].$el.querySelector)
           this.$nextTick(function () {
-            var tags = $(that.$refs['selectDom'].$el).find('.el-tag').css('border','none').each(function (index, item) {
+            var tags = $(that.$refs['selectDom'].$el).find('.el-tag').css('border', 'none').each(function (
+              index, item) {
 
               var txt = $(item).find('span').html();
 
-              if(txt === that.currentTable){
-                $(item).css('border','1px solid #409EFF');
+              if (txt === that.currentTable) {
+                $(item).css('border', '1px solid #409EFF');
               }
             });
           })
@@ -275,24 +276,15 @@
 
       },
       download: function () {
-        console.log([this.currentTable])
-        jasTools.ajax.download('POST', jasTools.base.rootPath + '/dbInfo/downloadEntityCode.do', {
-          // tableNames: JSON.stringify([this.currentTable])
+        jasTools.ajax.downloadByIframe('POST', jasTools.base.rootPath + '/dbInfo/downloadEntityCode.do', {
           tableNames: this.currentTable
-        }, function (data) {
-          console.log(data)
         });
       },
       batchDownload: function () {
-        var that = this;
-        jasTools.ajax.download('POST', jasTools.base.rootPath + '/dbInfo/downloadEntityCode.do', {
-          // tableNames: JSON.stringify([this.currentTable])
+        jasTools.ajax.downloadByPost(jasTools.base.rootPath + '/dbInfo/downloadEntityCode.do', {
           tableNames: this.value9
-        }, function (data) {
-          console.log(data)
         });
       },
-
     },
   });
 </script>

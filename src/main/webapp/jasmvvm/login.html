@@ -81,19 +81,25 @@
             },
             submitForm: function (formName) {
                 var that = this;
-                this.$refs[formName].validate(valid => {
+                this.$refs[formName].validate(function (valid) {
                     if (!valid) {
                         return false;
                     }
                     $.ajax({
-                        type: "GET",
+                        type: "POST",
                         url: jasTools.base.rootPath +
-                            "/jasframework/login/login.do?userid=admin&pass=111111&logintype=0",
+                            "/jasframework/login/login.do",
                         contentType: "application/json",
-                        // data: that.formName,
+                        data: JSON.stringify({
+                            "logintype": "0",
+                            "loginNum": "admin",
+                            "pass": "111111",
+                            "i18n": "zh_CN",
+                            "appId": "402894a152681ba30152681e8b320003"
+                        }),
                         dataType: "json",
                         success: function (data, status) {
-                            if (data.success == 1) {
+                            if (data.status == 1) {
                                 localStorage.setItem("token", data.token);
                                 if (that.ruleForm.radio == '1') {
                                     location.href = "./index.html";

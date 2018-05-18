@@ -343,16 +343,17 @@
             delChildRow: function (row) { //删除
                 var that = this;
                 window.top.Vue.prototype.$confirm('是否永久删除该字段', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
                     type: 'warning',
-                }).then(() => {
-                    that.delChildRowToService(row.oid);
-                }).catch(() => {
-                    window.top.Vue.prototype.$message({
-                        type: 'info',
-                        message: '取消删除字段'
-                    });
+                    callback: function (action) {
+                        if (action === 'confirm') {
+                            that.delChildRowToService(row.oid);
+                        } else {
+                            that.$message({
+                                type: 'info',
+                                message: '取消删除字段'
+                            });
+                        }
+                    }
                 });
             },
             delChildRowToService: function (oid) {

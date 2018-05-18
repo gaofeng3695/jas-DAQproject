@@ -281,17 +281,15 @@
         this.$prompt("请输入新文件名：", "提示：", {
           confirmButtonText: '确定',
           cancelButtonText: '取消'
-        }).then(({
-          value
-        }) => {
+        }).then(function(value){
           console.log(value)
           if (!value) {
             return false;
           }
           //可添加ajax
-          this.$message.success("操作成功")
+          that.$message.success("操作成功")
           that.imagelist[i].name = value
-        }).catch(() => {})
+        }).catch(function() {})
       },
       handleFileRemove: function (file, i) { //删除图片
         console.log(file, i)
@@ -303,17 +301,17 @@
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(() => {
+        }).then(function() {
           //可添加ajax
           this.$message.success("删除成功")
           this.$message({
             type: 'success',
             message: '删除成功',
-            onClose: () => {
+            onClose:function() {
               that.imagelist.splice(i, 1)
             }
           })
-        }).catch((meg) => console.log(meg))
+        }).catch(function(meg){console.log(meg)})
       },
       handleDownload: function (file) {
         console.log("下载文件");
