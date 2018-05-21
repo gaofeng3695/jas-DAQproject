@@ -5,10 +5,54 @@
 			return {
 				isExpend: true,
 				menuWith: config.menuWith,
+				menusOpened: config.menusOpened,
 				currentTap: config.activeMenu,
-				tabs: [],
-				items: config.menus
+				tabs: [], // 打开的标签页
+				items: config.menus //菜单数组
 			}
+		},
+		created: function () {
+			var that = this;
+			var url = jasTools.base.rootPath + '/jasframework/privilege/privilege/getAllUserFuntion.do';
+
+			$.ajax({
+				url: url + "?token=" + localStorage.getItem('token'),
+				type: "POST",
+				data: {
+					"menutype": "0",
+					"appId": "402894a152681ba30152681e8b320003",
+					"language": "zh_CN"
+				},
+				// dataType: "json",
+				success: function (data) {
+					console.log(data);
+					that.items = that._formatMenus(data);
+					return;
+
+					// "children": [{
+					// 		"attributes": {
+					// 			"functionid": "51cfd72f-46c2-4803-8ee1-70d0bbf7be5e",
+					// 			"URL": "jasframework/workflow/myundotask.htm"
+					// 		},
+					// 		"id": "P-WF-0020",
+					// 		"text": "待办工作"
+					// 	},
+					// 	{
+					// 		"attributes": {
+					// 			"functionid": "3fbe1787-7653-4ed3-94b5-79de80c68e49",
+					// 			"URL": "jasframework/workflow/mytask.htm"
+					// 		},
+					// 		"id": "P-WF-0040",
+					// 		"text": "已办工作"
+					// 	}
+					// ],
+					// "id": "7efdfc31-afed-4d49-91df-e153d6f60300",
+					// "text": "日常办公",
+					// "state": "closed"
+				}
+			});
+
+
 		},
 		computed: {
 			menuStyle: function () {
@@ -21,11 +65,30 @@
 			}
 		},
 		methods: {
+			_formatMenus: function (aMenu) {
+				var _aMenu = JSON.parse(JSON.stringify(aMenu));
+				var switcher = function (arr) {
+					arr.forEach(function (item) {
+						item.index = item.id;
+						item.icon = item.icon || 'el-icon-setting';
+						item.title = item.text;
+						if (item.attributes && item.attributes.URL) {
+							item.link = jasTools.base.rootPath + '/' + item.attributes.URL;
+						}
+						item.subs = item.children;
+						if (item.subs) {
+							switcher(item.subs);
+						}
+					})
+				};
+				switcher(_aMenu);
+				return _aMenu;
 
+			},
 			selectMenu: function (index, indexPath) {
 				var that = this;
 				var newTap = '';
-				this.tabs.forEach(function (item) {
+				this.tabs.forEach(function (item) { //循环打开的标签页，判断选中的菜单是否带开过
 					if (item.name === index) {
 						newTap = index;
 					}
@@ -125,7 +188,7 @@
 		},
 		mounted: function () {
 			this._setWindowResizeEventToCloseMenu();
-			this.tabs = this._createTabsArr(config.menusOpened, this.items);
+			this.tabs = this._createTabsArr(this.menusOpened, this.items);
 
 			// Vue.compile('<div><span>{{ msg }}</span></div>')
 			// setTimeout(function(){
