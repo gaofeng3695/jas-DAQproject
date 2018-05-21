@@ -80,8 +80,8 @@
 			var localhostPaht = curWwwPath.substring(0, pos);
 			// 获取带"/"的项目名，如：/uimcardprj
 			var projectName = pathName.substring(0, pathName.substring(1).indexOf('/') + 1);
-			if (!projectName || projectName === '/pages') {
-				return '/haha'
+			if (!projectName || projectName === '/jasmvvm' || projectName === '/jasframework') {
+				return '/DAQProject'
 			}
 			return projectName;
 			// return (localhostPaht + projectName + "/");
@@ -113,7 +113,7 @@
 		var loadingMask = null;
 		var showLoading = function (vueInst) {
 			if (vueInst && vueInst.$loading) {
-				console.log(vueInst.$loading)
+				// console.log(vueInst.$loading)
 			}
 		};
 		var closeLoading = function () {
@@ -332,6 +332,7 @@
 	var ajax = (function () {
 		var ajax = function (type, url, params, cb_success, cb_fail) {
 			var data = type === 'GET' ? params : JSON.stringify(params)
+			console.log(data)
 			$.ajax({
 				type: type || "GET",
 				url: url + "?token=" + localStorage.getItem('token'),
