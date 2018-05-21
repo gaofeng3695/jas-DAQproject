@@ -1,23 +1,23 @@
-(function (window, Vue, config) {
+(function (window, Vue) {
 	window.VueInstIndex = new Vue({
 		el: '#app',
 		data: function () {
 			return {
 				isExpend: true,
-				menuWith: config.menuWith,
-				menusOpened: config.menusOpened,
-				currentTap: config.activeMenu,
+				menuWith: 200,
+				menusOpened: ['P-PRI-0020'],
+				currentTap: 'P-PRI-0020',
 				tabs: [], // 打开的标签页
-				items: config.menus //菜单数组
+				items: [] //菜单数组
 			}
 		},
 		created: function () {
 			var that = this;
 			var url = jasTools.base.rootPath + '/jasframework/privilege/privilege/getAllUserFuntion.do';
-
 			$.ajax({
 				url: url + "?token=" + localStorage.getItem('token'),
 				type: "POST",
+				async: false,
 				data: {
 					"menutype": "0",
 					"appId": "402894a152681ba30152681e8b320003",
@@ -25,7 +25,7 @@
 				},
 				// dataType: "json",
 				success: function (data) {
-					console.log(data);
+
 					that.items = that._formatMenus(data);
 					return;
 
@@ -68,7 +68,7 @@
 			_formatMenus: function (aMenu) {
 				var _aMenu = JSON.parse(JSON.stringify(aMenu));
 				var switcher = function (arr) {
-					arr.forEach(function (item) {
+					arr.length && arr.forEach(function (item) {
 						item.index = item.id;
 						item.icon = item.icon || 'el-icon-setting';
 						item.title = item.text;
@@ -197,4 +197,4 @@
 
 		}
 	})
-})(window, Vue, IndexConfig);
+})(window, Vue);

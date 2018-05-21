@@ -7,14 +7,6 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>中盈安信研发平台</title>
 
-
-
-	<link rel="stylesheet" href="./lib/element-ui/v2.2.1/theme-chalk/index.min.css">
-	<link rel="stylesheet" href="./lib/font-awesome-4.7.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="./src/css/main.css">
-	<link rel="stylesheet" href="./src/css/index.css">
-
-
 	<!-- 老框架的样式依赖 -->
 	<link rel="stylesheet" href="../jasframework/common/css/jasframework-layout.css" />
 	<link rel="stylesheet" href="../jasframework/common/lib/easyui/themes/default/easyui.css" />
@@ -22,6 +14,14 @@
 	<link rel="stylesheet" href="../jasframework/common/css/common.css" />
 	<!-- <link rel="stylesheet" href="../jasframework/common/css/main.css" type="text/css" /> -->
 	<!-- 老框架的样式依赖END -->
+
+	<link rel="stylesheet" href="./lib/element-ui/v2.2.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./lib/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="./src/css/main.css">
+	<link rel="stylesheet" href="./src/css/index.css">
+
+
+
 
 </head>
 
@@ -170,7 +170,7 @@
 							</span>
 							<div class="iframewrapper">
 								<div class="iframesubwrapper">
-									<iframe class="iframe" :src="item.link || './pages/index/index.html' " frameborder="0" height="100%"></iframe>
+									<iframe class="iframe" :src="item.link" frameborder="0" height="100%"></iframe>
 								</div>
 							</div>
 						</el-tab-pane>
@@ -205,7 +205,7 @@
 <!-- 先引入index的配置文件，再引入index文件 -->
 <script src="./common/components/jas-components.js"></script>
 <script src="./common/js/jas-tools.js"></script>
-<script src="./src/js/index-config.js"></script>
+<!-- <script src="./src/js/index-config.js"></script> -->
 <script src="./src/js/index.js"></script>
 
 </html>

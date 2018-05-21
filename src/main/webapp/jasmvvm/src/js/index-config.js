@@ -1,7 +1,7 @@
 window.IndexConfig = {
 	menuWith: 200,
-	activeMenu: 'dash_board22211223123',
-	menusOpened: ['dash_board22211223123'],
+	activeMenu: 'P-PRI-0020',
+	menusOpened: ['P-PRI-0020'],
 	menus: [{
 			icon: 'el-icon-setting',
 			index: 'dash-board', //id
