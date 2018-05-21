@@ -22,7 +22,7 @@ function internationalize() {
 	if (functionnumber == null || functionnumber.length < 0 || functionnumber == "") {
 		functionnumber = getParamter("functionnumber");
 	}
-	var postUrl = rootPath + "jasframework/I18N/i18n.do?functionnumber=" + functionnumber;
+	var postUrl = rootPath + "jasframework/I18N/i18n.do?functionnumber=" + functionnumber+"&token="+localStorage.getItem("token");
 	$.ajax({
 		url : postUrl,
 		async:false,
@@ -94,7 +94,10 @@ function getLanguageValue(key,defaultval) {
  */
 function easyUI_i18n() {
 	var language = top.currentLanguage;
-	var path = rootPath + "common/lib/easyui/locale/easyui-lang-" + language + ".js";
+	if(undefined==language){
+		language = "zh_CN"
+	}
+	var path = rootPath + "jasframework/common/lib/easyui/locale/easyui-lang-" + language + ".js";
 	$.ajax({
 		url : path,
 		dataType : "script",
