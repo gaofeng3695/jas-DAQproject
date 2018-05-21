@@ -42,7 +42,7 @@ $(document).ready(function() {
 
 	setMain_areaHeight();// 设置页面contentArea区域高度
 
-	radiusCompatible();//圆角效果ie兼容性问题
+//	radiusCompatible();//圆角效果ie兼容性问题
 
 	addFocusCssToHtmlElement();// 给html元素添加获取焦点时的样式
 
