@@ -37,7 +37,6 @@ $(window).bind("resize", function() {
  * @desc 页面初始化处理
  */
 $(document).ready(function() {
-	console.log(1111111111111);
 	createSpan();// 给增加了required属性的地方增加必填提示
 
 	setMain_areaHeight();// 设置页面contentArea区域高度
@@ -65,7 +64,6 @@ $(document).ready(function() {
 				} else {
 					params.url = params.url + "&loginUserName=" + JSON.parse(localStorage.getItem("user")).loginName +"&token="+ localStorage.getItem("token");// +"&roleId="+roleId+"&dataFilterRegulationCode="+dataFilterRegulationCode;
 				}
-				console.log(params.url);
 				var data = params.data ;
 				//设置排序字段
 				var sort = getParamter("sort",data)||"";
