@@ -38,15 +38,15 @@ $(function(){
 		fitColumns:true,
 		nowrap:true,
 		columns:[[{field:'ck',checkbox:true},   
-			  {field:'loginName',title:'用户名',align:"center",width:100},   
-			  {field:'userName',title:'姓名',align:"center",width:100}, 
-			  {field:'roleNames',title:'拥有角色',align:"center",width:200}, 
-			  {field:'unitName',title:'部门',align:"center",width:100}, 
-			  {field:'phone',title:'电话',align:"center",width:100},
-			  {field:'email',title:'邮箱',align:"center",width:150},
-			  {field:'passwordExpiredDate',title:'密码到期时间',align:"center",width:150,hidden:true},
-			  {field:'description',title:'描述',align:"left",width:200},
-			  {field:'operate',title:'操作',width:150,align:"center",formatter: function(value,row,index){
+			  {field:'loginName',title:'用户名',align:"center",width:'8%'},   
+			  {field:'userName',title:'姓名',align:"center",width:'8%'}, 
+			  {field:'roleNames',title:'拥有角色',align:"center",width:'16%'}, 
+			  {field:'unitName',title:'部门',align:"center",width:'8%'}, 
+			  {field:'phone',title:'电话',align:"center",width:'8%'},
+			  {field:'email',title:'邮箱',align:"center",width:'12%'},
+			  {field:'passwordExpiredDate',title:'密码到期时间',align:"center",width:'12%'},
+			  {field:'description',title:'描述',align:"left",width:'15%'},
+			  {field:'operate',title:'操作',width:'12%',align:"center",formatter: function(value,row,index){
 					if (row.oid){
 						var opt = '<p class="table-operate"><a href="#" title = "查看" onclick="viewUser(\'' + row.oid+'\')">\
 										<span class="fa fa-eye"></span>\
@@ -342,7 +342,6 @@ function getChildren(){
  * @desc 查询用户
  */
 function queryUser(){
-	alert();
 	$("#"+userDatagridID).datagrid('clearSelections'); // clear
 	var loginName = ($("#loginName").val()||"")!=""?"%"+$("#loginName").val()+"%":"";
 	var userName = ($("#userName").val()||"")!=""?"%"+$("#userName").val()+"%":"";

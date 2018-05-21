@@ -55,7 +55,6 @@ $(document).ready(function() {
 			if(typeof this.ajaxBeforeSendCallback != 'undefined'){
 				this.ajaxBeforeSendCallback();
 			}
-			console.log(localStorage);
 			if(localStorage.length > 0 && localStorage.getItem("user")){
 				var roleId = getParamter("roleId");
 				var dataFilterRegulationCode = getParamter("dataFilterRegulationCode");
