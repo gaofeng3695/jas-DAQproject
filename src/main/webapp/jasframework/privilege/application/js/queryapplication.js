@@ -110,27 +110,27 @@ $(document).ready(function(){
 		    {
 				field : 'oid',
 				title : getLanguageValue('appId-i18n'),
-				width : 300
+				width : '23%'
 		    },
 		    {
 				field : 'appName',
 				title : getLanguageValue('appName-i18n'), 
-				width : 200
+				width : '15%'
 		   }, 
 		   {
 				field : 'roleName',
 				title : getLanguageValue('roleName-i18n'),
-				width : 200
+				width : '15%'
 		   }, 
 		   {
 				field : 'appUrl',
 				title : getLanguageValue('appUrl-i18n'),
-				width : 300
+				width : '23%'
 			}, 
 			{
 				field : 'description',
 				title : getLanguageValue('description-i18n'),
-				width : 300
+				width : '23%'
 			}
 		] ],
 		rownumbers:true,
@@ -138,8 +138,6 @@ $(document).ready(function(){
 			showInfo();
 		},
 		onLoadSuccess:function(data){
-			
-			console.log(data);
 	    	$('#dg').datagrid('clearSelections'); //clear selected options
 	    },
 		onHeaderContextMenu: function(e, field){
