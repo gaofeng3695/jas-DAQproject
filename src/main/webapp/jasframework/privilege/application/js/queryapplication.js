@@ -138,6 +138,8 @@ $(document).ready(function(){
 			showInfo();
 		},
 		onLoadSuccess:function(data){
+			
+			console.log(data);
 	    	$('#dg').datagrid('clearSelections'); //clear selected options
 	    },
 		onHeaderContextMenu: function(e, field){
@@ -158,7 +160,8 @@ function reloadDataTree(shortUrl, elementId){
 	for ( var i = 0; i < fra.length; i++) {
 		if (fra[i].src.indexOf(shortUrl) != -1) {
 			var iframe=fra[i].contentWindow;
-			iframe.$(elementId).combobox("reload",rootPath+"/jasframework/appsystem/getUserAppsystem.do?random=" + new Date().getTime());
+			console.log(localStorage.getItem('token'));
+			iframe.$(elementId).combobox("reload",rootPath+"/jasframework/appsystem/getUserAppsystem.do?random=" + new Date().getTime()+"&token="+localStorage.getItem('token'));
 		}
 	}
 }
