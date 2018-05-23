@@ -28,7 +28,7 @@ function removeRole(){
 			if (r){
 				$.getJSON(rootPath+"jasframework/privilege/application/IsInUse.do?oid="+row.oid,function(check) {
 					if (check){
-						top.showAlert(getLanguageValue("tip"),getLanguageValue("hasprivilege"));
+						top.showAlert(getLanguageValue("tip"),getLanguageValue("app.hasPrivilege"));
 					} else{
 					 	var postUrl = rootPath+"jasframework/privilege/application/delete.do?oid="+row.oid;
 						$.post(postUrl,function(result){
@@ -59,7 +59,7 @@ function viewUsersOfRole(){
 		var postUrl = "./viewUsersOfRole.do?id="+id+"&rd="+Math.random();
 		$.post(postUrl,function(result){
 			if (result.success){
-				$('#dlg_user').dialog('open').dialog('setTitle',getLanguageValue("rolr.viewuser"));
+				$('#dlg_user').dialog('open').dialog('setTitle',getLanguageValue("role.viewUser"));
 				$("#viewUserSel").html("");
 				var hasUserHtml= "";
 				for(var i=0;i<result.hasUser.length;i++){
@@ -82,11 +82,12 @@ function viewUsersOfRole(){
 function showInfo(){
 	var rows = $("#dg").datagrid("getSelections");
 	if(rows.length == 1) {
-		top.getDlg("viewapplication.htm?oid="+rows[0].oid+"&r="+new Date().getTime(),'view', getLanguageValue("view"),700,260);
+		top.getDlg("viewapplication.htm?oid="+rows[0].oid+"&r="+new Date().getTime(),'view', getLanguageValue("view"),800,260);
 	} else {
 		top.showAlert(getLanguageValue("tip"),getLanguageValue("chooserecord"),'info');
 	}
 }
+
 /**
  * 页面初始化
  */
@@ -109,28 +110,28 @@ $(document).ready(function(){
  		    },
 		    {
 				field : 'oid',
-				title : getLanguageValue('appId-i18n'),
-				width : '23%'
+				title : getLanguageValue('app.appId'),
+				width : 300
 		    },
 		    {
 				field : 'appName',
-				title : getLanguageValue('appName-i18n'), 
-				width : '15%'
+				title : getLanguageValue('app.appName'), 
+				width : 200
 		   }, 
 		   {
 				field : 'roleName',
-				title : getLanguageValue('roleName-i18n'),
-				width : '15%'
+				title : getLanguageValue('app.roleName'),
+				width : 200
 		   }, 
 		   {
 				field : 'appUrl',
-				title : getLanguageValue('appUrl-i18n'),
-				width : '23%'
+				title : getLanguageValue('app.appUrl'),
+				width : 300
 			}, 
 			{
 				field : 'description',
-				title : getLanguageValue('description-i18n'),
-				width : '23%'
+				title : getLanguageValue('app.description'),
+				width : 300
 			}
 		] ],
 		rownumbers:true,
@@ -158,8 +159,7 @@ function reloadDataTree(shortUrl, elementId){
 	for ( var i = 0; i < fra.length; i++) {
 		if (fra[i].src.indexOf(shortUrl) != -1) {
 			var iframe=fra[i].contentWindow;
-			console.log(localStorage.getItem('token'));
-			iframe.$(elementId).combobox("reload",rootPath+"/jasframework/appsystem/getUserAppsystem.do?random=" + new Date().getTime()+"&token="+localStorage.getItem('token'));
+			iframe.$(elementId).combobox("reload",rootPath+"/jasframework/appsystem/getUserAppsystem.do?random=" + new Date().getTime());
 		}
 	}
 }

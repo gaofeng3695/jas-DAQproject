@@ -15,7 +15,7 @@ var url;
  * @desc 新增按钮事件
  */
 function newRole(){
-	top.getDlg(rootPath+"jasframework/privilege/role/addRole.htm?r="+new Date().getTime(),"saveiframe",getLanguageValue("role.addRole"),700,300,false,true,true);
+	top.getDlg(rootPath+"jasframework/privilege/role/addRole.htm?r="+new Date().getTime(),"saveiframe",getLanguageValue("add"),700,300,false,true,true);
 }
 
 /**
@@ -33,7 +33,7 @@ function editRole(oid){
 		return;
 	}
 	if(!isNull(eventID)){
-		top.getDlg(rootPath+"jasframework/privilege/role/addRole.htm?oid="+eventID+"&r="+new Date().getTime(),"saveiframe",getLanguageValue("role.updateRole"),700,300,false,true,true);
+		top.getDlg(rootPath+"jasframework/privilege/role/addRole.htm?oid="+eventID+"&r="+new Date().getTime(),"saveiframe",getLanguageValue("edit"),700,300,false,true,true);
 	}
 }
 
@@ -51,10 +51,10 @@ function removeRole(oids){
 			}
 			oids.substring(0,oids.length-1);
 		}else{
-			top.showAlert("cuowu","请选中一条数据","info");
+			top.showAlert( getLanguageValue("tip"),getLanguageValue("chooserecord"),"info");
 		}
 	}
-	$.messager.confirm("删除","确认删除",function(r){
+	$.messager.confirm(getLanguageValue("delete"),getLanguageValue("deleteconfirm"),function(r){
 		if(r){
 			$.ajax({
 				url : rootPath+"jasframework/privilege/role/deleteRole.do",
@@ -63,14 +63,14 @@ function removeRole(oids){
 				dataType:"json",
 				success : function(data) {
 					if(data.status == 1){
-						top.showAlert("成功","删除成功",'ok',function(){
+						top.showAlert(getLanguageValue("tip"),getLanguageValue("deletesuccess"),'ok',function(){
 							$('#dg').datagrid('reload');	// reload the user data
 							$('#dg').datagrid('clearSelections'); //clear selected options
 						});
 					}else if(data.status == 2){
-						top.showAlert('提示', '该角色已经在使用不能删除', 'info');
+						top.showAlert(getLanguageValue("tip"),getLanguageValue("role.inUse"), 'info');
 					}else{
-						top.showAlert('错误', '删除出错', 'info');
+						top.showAlert(getLanguageValue("tip"), getLanguageValue("deleteFailed"), 'info');
 					}
 				}
 			});
@@ -84,7 +84,7 @@ function removeRole(oids){
  */
 function queryRole(){
 	var roleName = $("#roleName").val();
-	var query={"roleName":roleName,"unitId":$("#roleUnitid").combotree("getValue"),"roleType":$("#roleType").combobox("getValue")}; //把查询条件拼接成JSON
+	var query={"roleName":"%"+roleName+"%","unitId":$("#roleUnitid").combotree("getValue"),"roleType":$("#roleType").combobox("getValue")}; //把查询条件拼接成JSON
 	$("#dg").datagrid('options').queryParams=query; //把查询条件赋值给datagrid内部变量
 	$("#dg").datagrid('load'); //重新加载
 }
@@ -185,7 +185,7 @@ $(document).ready(function(){
 				}}
 			]],
 		onDblClickRow:function(index,indexData){
-			top.getDlg("viewRole.htm?hidden=&oid="+indexData.oid+"&r="+new Date().getTime(),'view',getLanguageValue("role.viewRole"),700,240,false,true,true);			
+			top.getDlg("viewRole.htm?hidden=&oid="+indexData.oid+"&r="+new Date().getTime(),'view',getLanguageValue("view"),700,240,false,true,true);			
 		},
 		onCheck:function(rowIndex,rowData){
 		},

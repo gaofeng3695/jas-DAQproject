@@ -227,7 +227,7 @@ function getappsystem(){
 		if(moveType=="null"){
 			return false;
 		}
-		var appNumber = $("#appnumber1").combobox("getValue");
+		var appNumber = $("#appId1").combobox("getValue");
 		$.ajax({
 			url:rootPath+"/jasframework/privilege/privilege/updateHierarchy.do",
 			data:{"targetId":targetNode.id,"sourceId":treeNodes[0].id,"moveType":moveType,"appNumber":appNumber},
@@ -249,8 +249,8 @@ function getappsystem(){
 			closable:false,
 			onLoadSuccess:function(node,data) {
 				//clearQueryForm('right',true,true,true,true);
-				var appnumber=$("#appnumber1").combobox("getValue");
-				$("#appnumber").val(appnumber);
+				var appnumber=$("#appId1").combobox("getValue");
+				$("#appId").val(appnumber);
 				//加载成功后选中第一个节点
 				var rootTarget=$('#tt').tree('getRoot');
 				if(rootTarget!=null){
@@ -287,7 +287,7 @@ function getappsystem(){
 				if(parent!=null&&parent.id==targetId&&point=="append"){
 					return false;
 				}
-				var appNumber = $("#appnumber1").combobox("getValue");
+				var appNumber = $("#appId1").combobox("getValue");
 				//菜单允许拖拽，其他不允许拖拽
 				var privilegeType = source.attributes.privilegeType;
 				var isUpdate = false;
@@ -302,7 +302,7 @@ function getappsystem(){
 					success:function(result){
 						isUpdate = result;
 						if(!result){
-							top.showAlert("提示","权限层级结构大于9层或子权限个数超过99个，不允许移动！","info");
+							top.showAlert(getLanguageValue("tip"),getLanguageValue("pri.isHierarchyAllowedMove"),"info");
 						}
 					},
 					async:false,
@@ -315,7 +315,7 @@ function getappsystem(){
 				var target = $(this).tree('getNode', targetNode);
 				var targetId = target.id;
 				var sourceId = sourceNode.id;
-				var appNumber = $("#appnumber1").combobox("getValue");
+				var appNumber = $("#appId1").combobox("getValue");
 				//alert(JSON.stringify(target));
 				//var source = $(this).tree("getNode",sourceNode);
 				var url=rootPath+"jasframework/privilege/privilege/updatePrivilegeHierarchy.do";
@@ -352,9 +352,9 @@ function getappsystem(){
 		if (nodes != "") {
 			parentId = nodes[0].id;
 			url = "addPrivilege.htm?appId="+appId+"&parentId=" + parentId;
-			top.getDlg(url, "saveiframe", getLanguageValue("pri.xinzengquanxian"), 700, 370);
+			top.getDlg(url, "saveiframe", getLanguageValue("add"), 750, 400);
 		} else {
-			top.getDlg("addPrivilege.htm?appId="+appId, "saveiframe", getLanguageValue("pri.xinzengquanxian"), 700, 370);
+			top.getDlg("addPrivilege.htm?appId="+appId, "saveiframe", getLanguageValue("add"), 750, 400);
 		}
 	
 	}
@@ -370,7 +370,7 @@ function getappsystem(){
 		if (nodes != "") {
 			oid = nodes[0].id;
 			url = "updatePrivilege.htm?oid=" + oid;
-			top.getDlg(url, "saveiframe",getLanguageValue("pri.xiugaiquanxian"), 700, 370);
+			top.getDlg(url, "saveiframe",getLanguageValue("edit"), 750, 400);
 		} else {
 			top.showAlert(getLanguageValue("tip"),getLanguageValue("chooserecord"), 'info');
 			return;
@@ -389,7 +389,7 @@ function getappsystem(){
 		var oid=nodes[0].id;
 	  	$.getJSON(rootPath+"jasframework/privilege/privilege/checkPrivilegeByeventId.do?oid="+oid+"&random=" + new Date().getTime(),function(check) {
 			if (check.success=='-1' ){
-				$.messager.confirm(getLanguageValue("tip"), check.msg+"，确定继续吗？", function(r){
+				$.messager.confirm(getLanguageValue("tip"), check.msg+getLanguageValue("pri.continueConfirm"), function(r){
 					if(r){
 						removeUnit();
 					}
@@ -419,7 +419,7 @@ function getappsystem(){
 				if (r) {
 					var url = rootPath+'jasframework/privilege/privilege/deletePrivilegeById.do?oid=' + nodes[0].id;
 					$.post(url, function(result) {
-						if (result.success) {
+						if (result.status == 1) {
 							top.showAlert(getLanguageValue("pri.deletepri"), getLanguageValue("deletesuccess"), 'ok', function() {
 							
 //								var parent11=$('#tt').tree('getParent',$('#tt').tree('getSelected').target);
@@ -485,7 +485,7 @@ function getappsystem(){
 	function resizeLayout(){
 		try{
 			clientWidth = document.documentElement.clientWidth;
-			$('#appnumber1').combobox('resize', $('#left').width());
+			$('#appId1').combobox('resize', $('#left').width());
 		}catch(e){
 			
 		}

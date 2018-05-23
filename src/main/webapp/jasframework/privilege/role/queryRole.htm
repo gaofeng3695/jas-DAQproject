@@ -6,7 +6,7 @@
 <meta name="keywords" content="gis,web">
 <meta name="description" content="">
 
-<title>角色管理</title>
+<title></title>
 <link rel="stylesheet" type="text/css" href="../../common/lib/easyui/themes/default/easyui.css">
 <link rel="stylesheet" type="text/css" href="../../common/lib/easyui/themes/icon.css">
 <link rel="stylesheet"  type="text/css" href="../../common/css/easyui_icon.css"></link>
@@ -15,10 +15,10 @@
 <link rel="stylesheet"  type="text/css" href="../../common/css/common.css"></link>
 <link rel="stylesheet"  type="text/css" href="../../common/css/query.css"></link>
 
-<script type="text/javascript" src="../../common/lib/jquery.min.js"></script>
-<script type="text/javascript" src="../../common/lib/easyui/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="../../common/lib/easyui/locale/easyui-lang-zh_CN.js"></script>
 <script type="text/javascript" src="../../common/lib/other/jquery.inputDefault.js"></script>
+<script type="text/javascript" src="../../common/lib/jquery.min.js"></script>
+<script type="text/javascript" src="../../common/lib/easyui/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="../../common/js/validate_class.js"></script>
 <script type="text/javascript" src="../../common/js/common.js"></script>
 <!-- <script type="text/javascript" src="../../privilege/js/privilege.js"></script> -->
@@ -28,7 +28,6 @@
 
 </head>
 <body>
-
 	<input type="hidden" id="menuid" value="P-PRI-0220"/>
 		
 <!-- 	查询区域 -->
@@ -37,12 +36,12 @@
 		<!-- 简单查询区域 -->
 			<table align="center" class="query-table">
 				<tr>
-					<td width="8%"><span>角色名称：</span></td>
+					<td width="8%"><span key="role.roleName" class="paltform-i18n">角色名称：</span></td>
 					<td width="20%"><input type="text" id="roleName" class="easyui-validatebox input_bg" /></td>
 					<td align="right" colspan="2">
-						<a href="#" id='query' class="easyui-linkbutton query-btn"  onclick="queryRole()"><span>查询</span></a>
-						<a href="#" id='clear' class="easyui-linkbutton clear-btn"  onclick="clearQueryForm('approvalQueryForm',true,true,true,true)"><span>清空</span></a>
-						<a href="#" id='moreQuery' class="easyui-linkbutton more-query-btn" iconCls="accordion-expand" iconAlign="right"><span>高级搜索</span></a>
+						<a href="#" id='query' class="easyui-linkbutton query-btn" onclick="queryRole()"><span key="query" class="paltform-i18n">查询</span></a>
+						<a href="#" id='clear' class="easyui-linkbutton clear-btn"  onclick="clearQueryForm('approvalQueryForm',true,true,true,true)"><span key="clear" class="paltform-i18n">清空</span></a>
+						<a href="#" id='moreQuery' class="easyui-linkbutton more-query-btn" iconCls="accordion-expand" iconAlign="right"><span key="moreQuery" class="paltform-i18n">高级搜索</span></a>
 					</td>
 				</tr>
 			</table>
@@ -67,11 +66,11 @@
 					</td>
 				</tr> -->
 				<tr>
-					<td >角色类型：</td>
-					<td colspan="3"><select class="select easyui-combobox" id="roleType" name="roleType" ><option value="">请选择</option><option value="1">私有</option><option value="2">保护</option></select></td>
+					<td ><span key="role.roleType" class="paltform-i18n">角色类型：</span></td>
+					<td colspan="3"><select class="select easyui-combobox" id="roleType" name="roleType" ><option value="">select</option><option value="1">private</option><option value="2">protect</option></select></td>
 			   </tr>
 				<tr>
-					<td >所属部门：</td>
+					<td ><span key="role.unitId" class="paltform-i18n">所属部门：</span></td>
 					<td colspan="3"><input type="text" editable="false"  class="easyui-combotree select" id="roleUnitid" name="roleId"  /></td>
 				</tr>
 			</table>	
@@ -83,10 +82,10 @@
 	
 <!-- 	datagrid工具栏 -->
 	<div id="toolbar">
-		<a href="#" class="easyui-linkbutton fa fa-eye"   onclick="showInfo()">查看</a>
-		<a href="#" class="easyui-linkbutton fa fa-plus"  onclick="newRole()">新增</a>
-		<a href="#" class="easyui-linkbutton fa fa-edit"  onclick="editRole()">修改</a>
-		<a href="#" class="easyui-linkbutton fa fa-minus" onclick="removeRole()">删除</a>
+		<a href="#" class="easyui-linkbutton fa fa-eye"   onclick="showInfo()"><span key="view" class="paltform-i18n">查看</span></a>
+		<a href="#" class="easyui-linkbutton fa fa-plus"  onclick="newRole()"><span key="add" class="paltform-i18n">新增</span></a>
+		<a href="#" class="easyui-linkbutton fa fa-edit"  onclick="editRole()"><span key="edit" class="paltform-i18n">修改</span></a>
+		<a href="#" class="easyui-linkbutton fa fa-minus" onclick="removeRole()"><span key="delete" class="paltform-i18n">删除</span></a>
 	</div>
 
 	<!-- <div id="dlg_user" class="easyui-dialog" style="width:440px;height:400px;padding:10px"

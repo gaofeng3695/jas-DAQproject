@@ -46,10 +46,12 @@ function reloadtree(shortUrl,parentEventid){
 					}); 
 				$('#appId').combobox("setValue",getParamter("appId"));
 				$('#appsystemnumber').val(getParamter("appId"));
-				setComboObjWidth('privilegeType',0.3,'combobox');
-				setComboObjWidth('appId',0.3,'combobox');
-				setComboObjWidth('childrenPrivilege',0.3,'combobox');
-				setComboObjWidth('openType',0.3,'combobox');
+				setComboObjWidth('privilegeType',0.295,'combobox');
+				setComboObjWidth('appId',0.295,'combobox');
+				setComboObjWidth('childrenPrivilege',0.295,'combobox');
+				setComboObjWidth('functionType',0.295,'combobox');
+				$("#functionType").combobox("setValue","bt_add");
+				setComboObjWidth('openType',0.295,'combobox');
 				$('#appId').combobox("disable");
 			},
 			dataType:"json",
@@ -74,8 +76,8 @@ function reloadtree(shortUrl,parentEventid){
 	   		data: {"privilegeCode":privilegeCode,"appId":appId},
 		   	success: function(check){
 	     		if (check.error=='-1'){
-					top.showAlert('错误',check.msg,'error');
-					enableButtion("savebutton");
+					top.showAlert(getLanguageValue("error"),check.msg,'error');
+					enableButtion("saveButton");
 				}else{
 					flag = true;
 				}
@@ -98,15 +100,17 @@ function reloadtree(shortUrl,parentEventid){
 			    data: formStringData,
 			    success: function(result){
 					if(result.status==1){
-						if(parentId){
-							reloadchildren('queryPrivilege.htm',parentId,appId,"#tt");
-						}else{
-							reloadZtree('queryPrivilege.htm');
-						}
-						//关闭弹出框
-					    closePanel();
+						top.showAlert(getLanguageValue("tip"),getLanguageValue("savesuccess"),'info',function(){
+							if(parentId){
+								reloadchildren('queryPrivilege.htm',parentId,appId,"#tt");
+							}else{
+								reloadZtree('queryPrivilege.htm');
+							}						
+							//关闭弹出框
+							closePrivilege();
+						});
 					}else{
-						top.showAlert('提示',result.msg,'info');
+						top.showAlert(getLanguageValue("tip"),result.msg,'info');
 						enableButtion("saveButton");
 					}
 			    }
@@ -167,13 +171,13 @@ function reloadtree(shortUrl,parentEventid){
 		}).responseText;
 		var b = $.parseJSON(response);
 		if(b.space== 9){
-			 this.message = '名称不可输入空格！';
+			 this.message = getLanguageValue("pri.nameCannotInertSpace");
 			 return false;
 		}
 		if(b.success==5){
 			 return true;
 		} else{
-			 this.message = '名称已被使用！';
+			 this.message = getLanguageValue("pri.nameIsUsed");
 			 return false;
 		}
 		//return b.success;
@@ -190,11 +194,19 @@ function reloadtree(shortUrl,parentEventid){
 			$("#openType").combobox("enable");
 			$("#openType").parent().parent().show();
 			$("#openType").combobox("setValue","1");
+			$("#iconName").show();
+			$("#iconValue").show();
+			$("#functionTypeName").hide();
+			$("#functionTypeValue").hide();
 		}else{
 			$("#childrenPrivilege").combobox("disable");
 			$("#childrenPrivilege").parent().parent().hide();
 			$("#openType").combobox("setText","");
 			$("#openType").combobox("setValue","");
+			$("#iconName").hide();
+			$("#iconValue").hide();
+			$("#functionTypeName").show();
+			$("#functionTypeValue").show();
 		}
 	}
 	
