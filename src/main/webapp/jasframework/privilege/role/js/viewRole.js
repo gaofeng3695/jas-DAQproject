@@ -44,7 +44,7 @@ function getRoleById() {
 function loadData(obj) {
 	obj.roleType = obj.roleType||"";
 	if(obj.roleType){
-		obj.roleType = obj.roleType == "2"?"保护":"私有";
+		obj.roleType = obj.roleType == "2"?"protect":"private";
 	}
 	$("#name").html(obj.roleName);
 	$("#unitName").html(obj.unitName);

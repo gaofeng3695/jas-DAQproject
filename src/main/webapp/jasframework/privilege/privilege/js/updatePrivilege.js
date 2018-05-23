@@ -16,9 +16,18 @@
 		getappsystem();
 		$.getJSON(rootPath+'jasframework/privilege/privilege/findPrivilegeById.do', {'oid':oid},function(item, i){			
 			jso=item;
+			var functionType = jso.functionType;
+			if(functionType==null || functionType=='null'){
+				jso.functionType = "";
+			}
 			$('#updatePrivilege').form('load',jso);
 			$("#appId").combobox("setValue",jso.appId);
+			$("#privilegeType").combobox("setValue",jso.privilegeType);
 			$("#appId").combobox("disable");
+			setComboObjWidth('privilegeType',0.295,'combobox');
+			setComboObjWidth('appId',0.295,'combobox');
+			setComboObjWidth('openType',0.295,'combobox');
+			setComboObjWidth('functionType',0.295,'combobox');
 		});
 		$("#privilegeType").combobox({
 			onChange:function(newValue, oldValue){
@@ -36,6 +45,7 @@
 			async:false,
 			dataType:"json",
 			success:function(data){
+				console.log(data);
 				$("#appId").combobox({
 					data:data,
 					valueField:'oid',
@@ -101,10 +111,15 @@
 			    dataType: "json",
 			    data: formStringData,
 			    success: function(result){
-			    	top.showAlert(getLanguageValue("tip"),getLanguageValue("savesuccess"),'info',function(){
-						reloadZtreeNode('queryPrivilege.htm',oid);
-						closePrivilege();
-					});
+			    	if(result.status == 1){
+				    	top.showAlert(getLanguageValue("tip"),getLanguageValue("savesuccess"),'info',function(){
+							reloadZtreeNode('queryPrivilege.htm',oid);
+							closePrivilege();
+						});
+			    	}else{
+			    		top.showAlert('提示',result.msg,'info');
+						enableButtion("saveButton");
+			    	}
 			    }
 			 });
 		}
@@ -166,11 +181,19 @@
 			$("#openType").combobox("enable");
 			$("#openType").parent().parent().show();
 			$("#openType").combobox("setValue","1");
+			$("#iconName").show();
+			$("#iconValue").show();
+			$("#functionTypeName").hide();
+			$("#functionTypeValue").hide();
 		}else{
 			$("#openType").combobox("disable");
 			$("#openType").parent().parent().hide();
 			$("#openType").combobox("setText","");
 			$("#openType").combobox("setValue","");
+			$("#iconName").hide();
+			$("#iconValue").hide();
+			$("#functionTypeName").show();
+			$("#functionTypeValue").show();
 		}
 	}
 	function reloadZtreeNode(shortUrl,nodeId){

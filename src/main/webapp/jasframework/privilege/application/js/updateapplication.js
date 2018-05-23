@@ -53,7 +53,7 @@
 		var validateResault = $('#updateappForm').form("validate");
 		var fromData = JSON.stringify($("#updateappForm").serializeToJson());//获取表单中的json,
 		if(validateResault == false){
-			top.showAlert("提示", "表单验证失败", 'info');
+			top.showAlert(getLanguageValue("tip"), getLanguageValue("formVailidateFailed"), 'info');
 			enableButtion("savebutton");
 			return validateResault;
 		}else{
@@ -65,14 +65,14 @@
 			    data:fromData,
 			    success: function(data){
 					if(data.success==1){
-						top.showAlert("提示", "保存成功", 'info', function() {
+						top.showAlert(getLanguageValue("tip"), getLanguageValue("updatesuccess"), 'info', function() {
 							//重新加载表格数据
 							reloadData('queryapplication.htm', '#dg');
 							//关闭弹出框
 						    closePanel();
 						});
 					} else {
-						top.showAlert("提示", "保存失败", 'error');
+						top.showAlert(getLanguageValue("tip"), getLanguageValue("updateFailed"), 'error');
 						enableButtion("saveButton");
 					}
 			    }

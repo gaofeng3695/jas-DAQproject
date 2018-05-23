@@ -49,35 +49,13 @@
 	 * 描述：添加系统
 	 */
 	function save() {
-//		$('#roleForm').form('submit', {
-//			url : rootPath+"jasframework/privilege/application/save.do",//"",
-//			onSubmit : function() {
-//				var bool=$(this).form('validate');
-//				if(bool==false){
-//					enableButtion("savebutton");
-//				}
-//				return bool;
-//			},
-//			success : function(result) {
-//				if (result) {
-//					top.showAlert(getLanguageValue("tip"), getLanguageValue("savesuccess"), 'info', function() {
-//						reloadData('queryapplication.htm', '#dg');
-//						reloadDataTree('queryPrivilege.htm','#appnumber1');
-//						closePanel();
-//					});
-//				} else {
-//					top.showAlert(getLanguageValue("tip"), getLanguageValue("applicationnameexists"), 'error');
-//				}
-//			}
-//		});
-		disableButtion("savebutton");
-		var url = "";
-		url = rootPath+"jasframework/privilege/application/save.do";
-		var validateResault = $('#roleForm').form("validate");
-		var fromData = JSON.stringify($("#roleForm").serializeToJson());//获取表单中的json,
+		disableButtion("saveButton");
+		 var url = rootPath+"jasframework/privilege/application/saveApp.do";
+		var validateResault = $('#saveappForm').form("validate");
+		var fromData = JSON.stringify($("#saveappForm").serializeToJson());//获取表单中的json,
 		if(validateResault == false){
-			top.showAlert("提示", "表单验证失败", 'info');
-			enableButtion("savebutton");
+			top.showAlert(getLanguageValue("tip"), getLanguageValue("formVailidateFailed"), 'info');
+			enableButtion("saveButton");
 			return validateResault;
 		}else{
 			$.ajax({
@@ -88,14 +66,14 @@
 			    data:fromData,
 			    success: function(data){
 					if(data != null){
-						top.showAlert("提示", "保存成功", 'info', function() {
+						top.showAlert(getLanguageValue("tip"), getLanguageValue("savesuccess"), 'info', function() {
 							//重新加载表格数据
 							reloadData('queryapplication.htm', '#dg');
 							//关闭弹出框
 						    closePanel();
 						});
 					} else {
-						top.showAlert("提示", "保存失败", 'error');
+						top.showAlert(getLanguageValue("tip"), getLanguageValue("saveFailed"), 'error');
 						enableButtion("saveButton");
 					}
 			    }
@@ -103,13 +81,13 @@
 		}
 	}
 	function savecheck(){
-		var bool= $('#roleForm').form('validate');
+		var bool= $('#saveappForm').form('validate');
 		if(bool){
 			jQuery.getJSON(rootPath+"/jasframework/privilege/application/checkAppName.do?r="+new Date().getTime(),{"oid":$("#oid").val(),"appName":$("#appName").val()},function (data){
 				if(data){
 					save();
 				}else{
-					top.showAlert(getLanguageValue("error"), getLanguageValue("applicationnameexists"), 'error');
+					top.showAlert(getLanguageValue("error"), getLanguageValue("app.appNameExists"), 'error');
 				}
 			});
 		}else{

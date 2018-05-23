@@ -59,7 +59,7 @@ $(function() {
 				}); 
 			$('#roleId').combobox("setValue",d.rows[0].oid);
 			setComboObjWidth('roleId',0.25,'combobox','MainArea');
-			 var APP_NUMBER=$("#roleId").combobox("getValue");
+			 var APP_NUMBER=$("#appId").combobox("getValue");
 			 var url = rootPath+"jasframework/privilege/privilege/getAllConfig.do?roleId="+$("#roleId").combobox("getValue")+"&appId="+APP_NUMBER+"&r="+new Date().getTime();
 			$('#privilegeId').tree( {
 				url : url,
