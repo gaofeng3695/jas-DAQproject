@@ -12,7 +12,7 @@
   </context-param>
   <context-param>
     <param-name>sessiontimeout</param-name>
-    <param-value>30</param-value>
+    <param-value>60</param-value>
   </context-param>
   <listener>
     <listener-class>cn.jasgroup.jasframework.security.base.ApplictionContextListener</listener-class>
@@ -86,7 +86,7 @@
     <load-on-startup>1</load-on-startup>
   </servlet>
   <session-config>
-    <session-timeout>30</session-timeout>
+    <session-timeout>60</session-timeout>
   </session-config>
   <resource-ref>
     <description>描述(可不要)</description>

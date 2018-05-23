@@ -63,3 +63,64 @@
     }
 ]
 ```
+### 一、权限
+
+#### 1. 获取菜单下的功能按钮
+
+> 获取单菜单列表 
+
+``` POST jasframework/privilege/privilege/getFunctionConfig.do ```
+
+参数
+
+[^注:目前三个参数的值是固定的,如下：]
+``` json
+{
+	privilegeCode: "P-SJ-0001", //菜单权限编号
+	appId: "402894a152681ba30152681e8b320003"//应用id，值默认
+}
+```
+
+返回
+
+``` json
+{
+    "status": 1,
+    "code": "200",
+    "msg": "",
+    "rows": [
+        {
+            "privilegeCode": "P-SJ-000101", //权限编号
+            "hierarchy": "func.0001.0010.0001,0001",//层级编码
+            "name": "新增",//功能点名称
+            "oid": "b2d3273f-7779-487b-bd9b-3e1f61148620",//UUID
+            "functionType": "bt_add",//功能类型
+            "privilegeType": "2" //菜单类型
+        },
+        {
+            "privilegeCode": "P-SJ-000102",
+            "hierarchy": "func.0001.0010.0001,0002",
+            "name": "修改",
+            "oid": "e13c4018-1cc8-4932-ab7e-672aaba8ce46",
+            "functionType": "bt_update",
+            "privilegeType": "2"
+        },
+        {
+            "privilegeCode": "P-SJ-000103",
+            "hierarchy": "func.0001.0010.0001,0003",
+            "name": "删除",
+            "oid": "cd4470e6-370d-4579-9c41-781cbe66b514",
+            "functionType": "bt_delete",
+            "privilegeType": "2"
+        },
+        {
+            "privilegeCode": "P-SJ-000104",
+            "hierarchy": "func.0001.0010.0001,0004",
+            "name": "查看",
+            "oid": "bce31bd6-cb33-4981-925a-1499e762618e",
+            "functionType": "bt_select",
+            "privilegeType": "2"
+        }
+    ]
+}
+```
