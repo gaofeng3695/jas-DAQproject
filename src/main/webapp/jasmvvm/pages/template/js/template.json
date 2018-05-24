@@ -8,7 +8,7 @@
         "type": "primary"
     }, {
         "id": "import",
-        "belongMenuCode": "fun1",
+        "belongMenuCode": "F000001",
         "title": "批量导入",
         "plain": "plain",
         "icon": "el-icon-plus",
