@@ -332,7 +332,6 @@
 	var ajax = (function () {
 		var ajax = function (type, url, params, cb_success, cb_fail) {
 			var data = type === 'GET' ? params : JSON.stringify(params)
-			console.log(data)
 			$.ajax({
 				type: type || "GET",
 				url: url + "?token=" + localStorage.getItem('token'),
