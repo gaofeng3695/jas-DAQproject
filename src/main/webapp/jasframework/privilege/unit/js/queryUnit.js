@@ -22,6 +22,7 @@ $(function() {
 			onClick : function(node) {
 	 			url = rootPath+'jasframework/privilege/unit/findUnitById.do?eventID=' + node.id;
 				$.post(url, function(bo) {
+					console.log(bo);
 					$('#right').form('load', bo);
 				}, 'json');
 				if (node.attributes.type==0) {
@@ -50,8 +51,8 @@ $(function() {
 		var eventID;
 		if (row != null) {
 			eventID = row.id;
-			url = "addUnit.htm?parentid=" + eventID;
-			top.getDlg(url, "saveiframe", getLanguageValue("unit.xinzengbumen"), 800, 400);
+			url = rootPath+"jasframework/privilege/unit/addUnit.htm?parentid=" + eventID;
+			top.getDlg(url, "saveiframe", getLanguageValue("unit.xinzengbumen"), 750, 350);
 		} else {
 			top.showAlert(getLanguageValue("tip"),getLanguageValue("chooserecord"), 'info');
 			return;
@@ -71,8 +72,8 @@ $(function() {
 		}
 		if (row != null) {
 			eventID = row.id;
-			url = "updateUnit.htm?isroot="+isroot+"&eventID=" + eventID;
-			top.getDlg(url, "saveiframe",getLanguageValue("unit.xiugaibumen"), 710, 310);
+			url = rootPath+"jasframework/privilege/unit/updateUnit.htm?isroot="+isroot+"&eventID=" + eventID;
+			top.getDlg(url, "saveiframe",getLanguageValue("unit.xiugaibumen"), 750, 350);
 		} else {
 			top.showAlert(getLanguageValue("tip"),getLanguageValue("chooserecord"), 'info');
 			return;
