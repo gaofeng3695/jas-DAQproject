@@ -19,14 +19,12 @@ function reloadData(shortUrl, elementId){
 	 * 描述：修改部门
 	 */
 	function updateUnit(){
- 		url = rootPath+'jasframework/privilege/unit/updateUnit.do';
+ 		url = rootPath+'jasframework/privilege/unit/updateUnit.do?token='+localStorage.getItem("token");
  		var name = $("#unitName").val();
- 		var unitNum = $("#unitNum").val();
+ 		var unitCode = $("#unitCode").val();
  		var parentEventid = $("#parentId").combotree("getValue");
  		var unittree=$("#parentId").combotree("tree");
- 		console.log(unittree);
  		var unitobj=unittree.tree("find",eventID);
- 		console.log(unitobj);
  		var childrenunit=unittree.tree("getChildren",unitobj.target);
  		var bool=false;
  		$.each(childrenunit,function(i,n){
@@ -43,7 +41,7 @@ function reloadData(shortUrl, elementId){
  		$.ajax({
  			type: "get",
 	        url: rootPath + "jasframework/privilege/unit/checkUnitExist.do",
-	        data:{ "parentId": $("#parentId").combotree("getValue"), "unitName": name, "unitNum": unitNum },
+	        data:{ "parentId": $("#parentId").combotree("getValue"), "unitName": name, "unitNum": unitCode ,"eventId": eventID},
 	        dataType: "json",
 		   	success: function(check){
 		   		console.log(12121);
@@ -52,21 +50,36 @@ function reloadData(shortUrl, elementId){
 				} else{
 					//不存在则提交修改
 					disableButtion("savebutton");
-					$('#editgroups').form('submit',{
-						url: url,
-						onSubmit: function(){
-							var bool=$(this).form('validate');
-							if(bool==false){
-								enableButtion("savebutton");
-							}
-							return bool;
-						},success: function(result){
-							top.showAlert("提示","保存成功",'info',function(){
-							reloadData('queryUnit.htm','#tt');
-							});
-						}
-					});
-				
+//					$('#editgroups').form('submit',{
+//						url: url,
+//						onSubmit: function(){
+//							var bool=$(this).form('validate');
+//							if(bool==false){
+//								enableButtion("savebutton");
+//							}
+//							return bool;
+//						},success: function(result){
+//							top.showAlert("提示","保存成功",'info',function(){
+//							reloadData('queryUnit.htm','#tt');
+//							});
+//						}
+//					});
+					$.ajax({
+	                    type: "POST",
+	                    url: url,
+	                    contentType: "application/json;charset=utf-8",
+	                    data: JSON.stringify($('#editgroups').serializeToJson()),
+	                    success: function (result) {
+	                    	enableButtion("savebutton");
+	                        if (result.success == "1") {
+	                        	top.showAlert("提示","保存成功",'info',function(){
+	    							reloadData('queryUnit.htm','#tt');
+    							});
+	                        } else {
+	                            top.showAlert("提示", result.success, 'error');
+	                        }
+	                    }
+	                });
 				}
 			},
 		   	dataType:"json"
@@ -97,13 +110,13 @@ function reloadData(shortUrl, elementId){
 						url: addTokenForUrl(rootPath+'jasframework/privilege/unit/getLeftTree.do?isroot='+isroot),
 						panelHeight:235,
 						onSelect:function(node){
-								var uniteventid=$("#eventid").val();
+								var uniteventid=$("#oid").val();
 								if(node.id==uniteventid){
 									alert("上级部门不能为本部门");
-								var unittree=$('#parentId').combotree("tree");
+									var unittree=$('#parentId').combotree("tree");
 									var parentnone=unittree.tree("getParent",unittree.tree("getSelected").target);
 									console.log(parentnone)
-								$('#parentId').combotree("setValue",parentnone.id);
+									$('#parentId').combotree("setValue",parentnone.id);
 								}
 						}
 					});
@@ -115,7 +128,7 @@ function reloadData(shortUrl, elementId){
 				} 
 			}
 			$('#editgroups').form('load',jso);
-			setComboObjWidth('parentEventid',0.3,'combotree');
+			setComboObjWidth('parentId',0.3,'combotree');
 			setComboObjWidth('unitType',0.3,'combobox');
 		});
 	});
