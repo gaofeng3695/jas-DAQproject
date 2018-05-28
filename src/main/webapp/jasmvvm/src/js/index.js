@@ -6,16 +6,18 @@
 		el: '#app',
 		data: function () {
 			return {
-				username: JSON.parse(localStorage.getItem('user')).userName,
-
+				username: localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')).userName,
+				isMapOpen: false,
+				panelMoving: false,
+				mapSrc : '',
 				progress: 0,
 				error: false,
 				direction: 'right',
 
 				isExpend: true,
 				menuWith: 200,
-				menusOpened: ['P-PRI-0020'],
-				currentTap: 'P-PRI-0020',
+				menusOpened: ['P-PC-0001'],
+				currentTap: 'P-PC-0001',
 				tabs: [], // 打开的标签页
 				items: [] //菜单数组
 			}
@@ -28,11 +30,11 @@
 			},
 			isCollapse: function () {
 				return !this.isExpend;
-			}
+			},
 		},
-		watch : {
-			tabs : function(newval,oldval){
-				if(newval.length - oldval.length >= 0){
+		watch: {
+			tabs: function (newval, oldval) {
+				if (newval.length - oldval.length >= 0) {
 					this.goProgess();
 				}
 			}
@@ -43,16 +45,18 @@
 				var url = jasTools.base.rootPath + '/jasframework/privilege/privilege/getAllUserFuntion.do';
 				$.ajax({
 					url: url + "?token=" + localStorage.getItem('token'),
-					type: "POST",
+					type: 'get',
 					async: true,
 					data: {
 						"menutype": "0",
 						"appId": "402894a152681ba30152681e8b320003",
 						"language": "zh_CN"
 					},
-					success: function (data) {
-						that.items = that._formatMenus(data);
-						that.tabs = that._createTabsArr(that.menusOpened, that.items);
+					success: function (data,xhr,param) {
+						if(typeof data  === 'object' && data.length > 0){
+							that.items = that._formatMenus(data);
+							that.tabs = that._createTabsArr(that.menusOpened, that.items);
+						}
 
 					}
 				});
@@ -60,18 +64,21 @@
 			_formatMenus: function (aMenu) {
 				var _aMenu = JSON.parse(JSON.stringify(aMenu));
 				var switcher = function (arr) {
-					arr.length && arr.forEach(function (item) {
-						item.index = item.id;
-						item.icon = item.icon || 'fa fa-bookmark';
-						item.title = item.text;
-						if (item.attributes && item.attributes.URL) {
-							item.link = jasTools.base.rootPath + '/' + item.attributes.URL;
-						}
-						item.subs = item.children;
-						if (item.subs) {
-							switcher(item.subs);
-						}
-					})
+					if (typeof arr === "object") {
+						arr.forEach(function (item) {
+							item.index = item.id || '';
+							item.icon = item.icon || 'fa fa-bookmark';
+							item.title = item.text;
+							if (item.attributes && item.attributes.URL) {
+								item.link = jasTools.base.rootPath + '/' + item.attributes.URL;
+							}
+							item.subs = item.children;
+							if (item.subs) {
+								switcher(item.subs);
+							}
+						})
+					}
+
 				};
 				switcher(_aMenu);
 				return _aMenu;
@@ -159,13 +166,21 @@
 				});
 			},
 			_listenWindowClose: function () {
-				$(window).bind("beforeunload", function () {
+				$(window).bind("beforeunload", function (e) {
+					var e = window.event || e;　　
+					console.log(e)
+					// e.returnValue = ("确定离开当前页面吗？");
 					_loginOut();
 				});
 			},
 			_loginOut: function () {
 				var url = jasTools.base.rootPath + '/jasframework/login/logout.do';
+
 				jasTools.ajax.get(url, {}, function (data) {
+					localStorage.removeItem('token');
+					localStorage.removeItem('user');
+					location.href = './login.html';
+				}, function () {
 					localStorage.removeItem('token');
 					localStorage.removeItem('user');
 					location.href = './login.html';
@@ -192,6 +207,11 @@
 					this._goFullscreen();
 				} else if (command === 'resetPassword') {
 					this._resetPassword();
+				}else if (command === 'map') { //
+					this.isMapOpen = !this.isMapOpen;
+					if(!this.mapSrc){
+						this.mapSrc = 'https://map.baidu.com/';
+					}
 				}
 			},
 			_goFullscreen: function () {
@@ -210,12 +230,12 @@
 				var that = this;
 				that.progress = 10;
 				clearInterval(that.timer);
-				this.timer = setInterval(function(){
+				this.timer = setInterval(function () {
 					that.progress += 5;
-					if(that.progress >= 100){
+					if (that.progress >= 100) {
 						clearInterval(that.timer);
 					}
-				},10);
+				}, 10);
 
 
 			},
@@ -233,12 +253,41 @@
 					height: '60',
 					src: 'resetword.html',
 					cbForClose: function (param) {
-						if(param === 1){
+						if (param === 1) {
 							that._loginOut();
 						}
 					}
 				});
-			}
+			},
+			_requestLoginInfo: function () {
+				var that = this;
+				var url = jasTools.base.rootPath + '/jasframework/log/login/getUserStatisticsInfo.do';
+
+				jasTools.ajax.get(url, {}, function (data) {
+					var obj = data.data;
+					that.$notify({
+						type: 'success',
+						title: '登录成功',
+						position: 'bottom-right',
+						dangerouslyUseHTMLString: true,
+						message: [
+							'<div style="font-size:12px;">',
+							'	<div><span style="color:#409EFF;font-weight: 700;">' + obj.userName + '</span>,您好！</div>',
+							'	<div>登录次数：<span style="color:#409EFF;">' + obj.loginCount + '</span></div>',
+							'	<div>累计在线时长：<span style="color:#409EFF;">' + obj.totalLoginDate + '</span></div>',
+							'	<div>上次登录IP：<span style="color:#409EFF;">' + obj.clientIp + '</span></div>',
+							'	<div>上次登录时间：<span style="color:#409EFF;">' + obj.lastLoginDate + '</span></div>',
+							'</div>'
+						].join('')
+					});
+
+				}, function () {
+
+				});
+
+
+			},
+
 		},
 		created: function () {
 
@@ -246,7 +295,9 @@
 		mounted: function () {
 			this.goProgess();
 			this._queryMenuData();
+			this._listenWindowClose();
 			this._setWindowResizeEventToCloseMenu();
+			this._requestLoginInfo();
 		}
 	})
 })(window, Vue, screenfull);
