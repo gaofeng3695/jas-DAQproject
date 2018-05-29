@@ -354,7 +354,7 @@
 								that.getEditField(that.isArrySort(dest));
 							}
 						} else {
-							that.$message({
+							top.Vue.prototype.$message({
 								type: 'error',
 								message: '服务异常，请稍候尝试'
 							});
@@ -564,7 +564,7 @@
 								that.fileListlength = that.fileList.length;
 							}
 						} else {
-							that.$message({
+							top.Vue.prototype.$message({
 								type: 'error',
 								message: '服务异常，请稍候尝试'
 							});
@@ -641,7 +641,7 @@
 			onsuccess: function (e, file) {
 				var that = this;
 				that.pass = true;
-				that.$message.success("上传成功");
+				top.Vue.prototype.$message.success("上传成功");
 				that.fileList.push({
 					name: file.name,
 					size: file.size,
@@ -687,7 +687,7 @@
 			},
 			handleFileRemove: function (file, i) {
 				var that = this;
-				that.$confirm('删除附件, 是否继续?', '提示', {
+				top.Vue.prototype.$confirm('删除附件, 是否继续?', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
 					type: 'warning'
@@ -699,13 +699,13 @@
 					if (file.oid) {
 						that.handleToServer(file);
 					} else {
-						that.$message({
+						top.Vue.prototype.$message({
 							message: '删除成功',
 							type: 'success'
 						});
 					}
 				}).catch(function () {
-					that.$message({
+					top.Vue.prototype.$message({
 						type: 'info',
 						message: '已取消删除'
 					});
@@ -721,12 +721,12 @@
 					dataType: "json",
 					success: function (data, status) {
 						if (data.status == 1) {
-							that.$message({
+							top.Vue.prototype.$message({
 								message: '删除成功',
 								type: 'success'
 							});
 						} else {
-							that.$message({
+							top.Vue.prototype.$message({
 								message: '删除失败',
 								type: 'info'
 							});
@@ -788,7 +788,7 @@
 			},
 			onExceed: function (files, fileList) {
 				var that = this;
-				that.$message({
+				top.Vue.prototype.$message({
 					message: '文件最多上传' + that.limitNum,
 					type: 'info'
 				});
@@ -842,7 +842,7 @@
 						parent.data.forEach(function (child) {
 							if (child.childField == item.id) {
 								if (!that.formData[child.id]) {
-									that.$message({
+									top.Vue.prototype.$message({
 										message: '请先选择' + child.name,
 										type: 'warning'
 									});
