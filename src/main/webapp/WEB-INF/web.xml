@@ -44,7 +44,7 @@
     <filter-class>cn.jasgroup.jasframework.security.base.LoginFilter</filter-class>
     <init-param>
       <param-name>exceptPaths</param-name>
-      <param-value>login.htm,login.do,forgotPassword.do,findPassword.do,savePassword.do,editPassword.htm,sessiontimeout.html</param-value>
+      <param-value>login.htm,login.do,forgotPassword.do,findPassword.do,savePassword.do,editPassword.htm,sessiontimeout.html,timeout.html</param-value>
     </init-param>
   </filter>
   <filter-mapping>

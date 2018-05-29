@@ -109,15 +109,14 @@
 			<el-form ref="formData" :model="formData" :label-width="labelwidth">
 				<template v-for="group in formAttr">
 					<div class="bulk" v-if="group.groupName">
-						<span class="title">
-						{{group.groupName}}
-					</span>
+						<span class="title" v-text="group.groupName">
+						</span>
 					</div>
 					<el-row :gutter="10">
 						<template v-for="item in group.data">
 							<el-col v-if="item.type=='UT_13'" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 								<el-form-item :prop="item.id" :label="item.name" :rules="item.verify">
-									<el-input v-if="item.type=='UT_13'" type="文本域" :rows="2" :size="item.size" v-model="formData[item.id]" :disabled="item.disabled"></el-input>
+									<el-input v-if="item.type=='UT_13'" autosize type="textarea" :rows="2" :size="item.size" v-model="formData[item.id]" :disabled="item.disabled"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col v-else :xs="formConfig.xs" :sm="formConfig.sm" :md="formConfig.md" :lg="formConfig.lg" :xl="formConfig.xl" :class="{'height' : item.type=='UT_14'||item.type=='UT_05'||item.type=='UT_06'||item.type=='UT_07'||item.type=='UT_08' }">
@@ -130,6 +129,8 @@
 										<template v-for="option in item.options">
 											<el-option :label="option.value" :value="option.key">
 											</el-option>
+
+
 										</template>
 									</el-select>
 									<el-select v-model="formData[item.id]" :disabled="item.disabled" v-if="isSelect(item)" style="width:100%" :size="item.size"
@@ -166,33 +167,41 @@
 					</el-row>
 				</template>
 				<el-row>
-					<el-upload multiple :limit="limitNum" :show-file-list="false" class="upload-demo" name="files" ref="upload" :action="actionURL"
-					  :on-exceed="onExceed" :on-change="uploadOnChange" :on-success="onsuccess" :file-list="fileList" :auto-upload="autoUpload"
-					  :on-progress="uploadOnProgress">
-						<div class="bulk" style="text-align: left">
-							<span class="title">上传附件<span style="padding-left:10px">{{fileListlength}}<span><span style="padding-left:5px">—<span><span style="padding-left:5px">{{limitNum}}<span></span>
-							<div style="float:right;font-size:18px;color:rgb(64, 158, 255)" slot="trigger" class="fa fa-upload" style="font-size:20px">
-							</div>
-						</div>
-					</el-upload>
-					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-						<div class="file-list">
-							<div v-for="(item,key) in fileListStatus" :key="key" class="file-item">
-								<div style="float:left">
-									<i class="el-icon-document"> </i>
-									<span style="padding-left:10px">{{item.name}}</span>
-								</div>
-								<div style="float:right">
-									<i v-if="item.oid" class="el-icon-view btn" @click="handlePreview(item)"> </i>
-									<i v-if="item.oid" class="el-icon-download btn" @click="handleDownload(item)"> </i>
-									<i class="el-icon-delete btn" @click="handleFileRemove(item,key)"> </i>
+					<template v-if="ifAttachment">
+						<el-upload multiple :limit="limitNum" :show-file-list="false" class="upload-demo" name="files" ref="upload" :action="actionURL"
+						  :on-exceed="onExceed" :on-change="uploadOnChange" :on-success="onsuccess" :file-list="fileList" :auto-upload="autoUpload"
+						  :on-progress="uploadOnProgress">
+							<div class="bulk" style="text-align: left">
+								<span class="title">
+									<span>上传附件</span>
+									<span style="padding-left:10px">{{fileListlength}}</span>
+									<span style="padding-left:5px">—</span>
+									<span style="padding-left:5px">{{limitNum}}</span>
+								</span>
+								<div style="float:right;font-size:18px;color:rgb(64, 158, 255)" slot="trigger" class="fa fa-upload" style="font-size:20px">
 								</div>
 							</div>
-							<div v-if="!pass && progress !== 0" class="file-item img-progress">
-								<el-progress :percentage="progress" :status="proStatus"></el-progress>
+						</el-upload>
+						<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+							<div class="file-list">
+								<div v-for="(item,key) in fileListStatus" :key="key" class="file-item">
+									<div style="float:left">
+										<i class="el-icon-document"> </i>
+										<span style="padding-left:10px">{{item.name}}</span>
+									</div>
+									<div style="float:right">
+										<i v-if="item.oid" class="el-icon-view btn" @click="handlePreview(item)"> </i>
+										<i v-if="item.oid" class="el-icon-download btn" @click="handleDownload(item)"> </i>
+										<i class="el-icon-delete btn" @click="handleFileRemove(item,key)"> </i>
+									</div>
+								</div>
+								<div v-if="!pass && progress !== 0" class="file-item img-progress">
+									<el-progress :percentage="progress" :status="proStatus"></el-progress>
+								</div>
 							</div>
-						</div>
-					</el-col>
+						</el-col>
+					</template>
+
 				</el-row>
 			</el-form>
 		</div>
@@ -239,7 +248,7 @@
 			}
 		},
 		computed: {
-			proStatus:function() { //上传状态
+			proStatus: function () { //上传状态
 				if (this.pass) {
 					return 'success';
 				} else if (this.pass == false) {
@@ -300,7 +309,8 @@
 				var that = this;
 				$.ajax({
 					type: "get",
-					url: jasTools.base.rootPath + "/functionConfiguration/getDetailByCode.do?token=" + localStorage.getItem("token"),
+					url: jasTools.base.rootPath + "/functionConfiguration/getDetailByCode.do?token=" + localStorage.getItem(
+						"token"),
 					dataType: "json",
 					data: {
 						functionCode: that.menuCode
@@ -434,7 +444,8 @@
 						data: that.isArrySort(groupAttr)
 					});
 				});
-				that.actionURL = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") + "&businessId=" +
+				that.actionURL = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") +
+					"&businessId=" +
 					that.formData[that.pkArray[0]] + "&businessType=file";
 			},
 			getEditField: function (data) {
@@ -522,15 +533,17 @@
 					});
 				});
 				that.requestFiles();
-				that.actionURL = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") + "&businessId=" +
+				that.actionURL = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") +
+					"&businessId=" +
 					that.formData[that.pkArray[0]] + "&businessType=file";
 			},
 			requestFiles: function () {
 				var that = this;
 				$.ajax({
 					type: "get",
-					url: jasTools.base.rootPath + "/attachment/getInfo.do?token=" + localStorage.getItem("token") + "&businessId=" + that.formData[
-						that.pkArray[0]] + "&businessType=file",
+					url: jasTools.base.rootPath + "/attachment/getInfo.do?token=" + localStorage.getItem("token") +
+						"&businessId=" + that.formData[
+							that.pkArray[0]] + "&businessType=file",
 					dataType: "json",
 					contentType: "application/json",
 					success: function (data) {
@@ -563,7 +576,8 @@
 				var that = this;
 				$.ajax({
 					type: "POST",
-					url: jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/get.do?token=" + localStorage.getItem("token"),
+					url: jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/get.do?token=" + localStorage.getItem(
+						"token"),
 					dataType: "json",
 					contentType: "application/json",
 					data: JSON.stringify(that.isEdit),
@@ -584,9 +598,9 @@
 					src: '/pages/template/dialogs/addTemplate.html',
 				});
 			},
-			submit:function(formName) {
+			submit: function (formName) {
 				var that = this;
-				this.$refs[formName].validate(function(valid) {
+				this.$refs[formName].validate(function (valid) {
 					if (valid) {
 						that.submitToServer();
 					} else {
@@ -617,7 +631,8 @@
 					if (isNotFile) {
 						that.saveInfo();
 					} else {
-						that.actionURL = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") + "&businessId=" +
+						that.actionURL = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") +
+							"&businessId=" +
 							that.formData[that.pkArray[0]];
 						that.$refs.upload.submit();
 					}
@@ -640,10 +655,12 @@
 				var msg = "";
 				if (JSON.stringify(that.isEdit) == '{}') {
 					msg = "增加成功";
-					url = jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/save.do?token=" + localStorage.getItem("token");
+					url = jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/save.do?token=" + localStorage.getItem(
+						"token");
 				} else {
 					msg = "修改成功";
-					url = jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/update.do?token=" + localStorage.getItem("token");
+					url = jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/update.do?token=" + localStorage.getItem(
+						"token");
 				}
 				$.ajax({
 					type: "POST",
@@ -674,10 +691,11 @@
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
 					type: 'warning'
-				}).then(function() {
+				}).then(function () {
 					that.fileList.splice(i, 1);
+
 					that.fileListStatus.splice(i, 1);
-					that.fileListlength = that.fileList.length;
+					that.fileListlength = that.fileListStatus.length;
 					if (file.oid) {
 						that.handleToServer(file);
 					} else {
@@ -686,7 +704,7 @@
 							type: 'success'
 						});
 					}
-				}).catch(function() {
+				}).catch(function () {
 					that.$message({
 						type: 'info',
 						message: '已取消删除'
@@ -697,7 +715,8 @@
 				var that = this;
 				$.ajax({
 					type: "get",
-					url: jasTools.base.rootPath + "/attachment/delete.do?token=" + localStorage.getItem("token") + "&eventids=" + file.oid,
+					url: jasTools.base.rootPath + "/attachment/delete.do?token=" + localStorage.getItem("token") + "&eventids=" +
+						file.oid,
 					contentType: "application/json",
 					dataType: "json",
 					success: function (data, status) {
@@ -730,6 +749,8 @@
 			uploadOnChange: function (file, fileList) {
 				console.log("——————————change——————————")
 				console.log(file);
+				var that = this;
+				that.fileListlength = fileList.length;
 				if (file.status == 'ready') {
 					this.pass = null;
 					this.progress = 0;
@@ -747,7 +768,8 @@
 			handleDownload: function (file) {
 				var that = this;
 				var options = {
-					"url": jasTools.base.rootPath + "/attachment/download.do?oid=" + file.oid + "&token=" + localStorage.getItem("token"),
+					"url": jasTools.base.rootPath + "/attachment/download.do?oid=" + file.oid + "&token=" + localStorage.getItem(
+						"token"),
 					"method": 'post'
 				}
 				var config = $.extend(true, {
