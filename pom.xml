@@ -64,6 +64,11 @@
 			<artifactId>jasframework-attachment</artifactId>
 			<version>3.0.0-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>cn.jasgroup.jasframework</groupId>
+			<artifactId>jasframework-domain</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+		</dependency>
 		<!-- 自定义表单 -->
 		<dependency> 
 			<groupId>cn.jasgroup.jasframework</groupId>
