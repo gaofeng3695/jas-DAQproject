@@ -45,7 +45,6 @@
 			async:false,
 			dataType:"json",
 			success:function(data){
-				console.log(data);
 				$("#appId").combobox({
 					data:data,
 					valueField:'oid',
