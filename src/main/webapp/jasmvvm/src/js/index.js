@@ -16,8 +16,8 @@
 
 				isExpend: true,
 				menuWith: 200,
-				menusOpened: ['P-PC-0001'],
-				currentTap: 'P-PC-0001',
+				menusOpened: ['P-BD-0001'],
+				currentTap: 'P-BD-0001',
 				tabs: [], // 打开的标签页
 				items: [] //菜单数组
 			}

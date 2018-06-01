@@ -10,14 +10,21 @@
         "id": "bt_import",
         "title": "导入",
         "plain": "plain",
-        "icon": "el-icon-plus",
+        "icon": "fa fa-mail-forward",
         "size": "small",
         "type": "primary"
     },{
         "id": "bt_export",
-        "title": "导出",
+        "title": "导出已选",
         "plain": "plain",
-        "icon": "el-icon-plus",
+        "icon": "fa fa-mail-reply",
+        "size": "small",
+        "type": "primary"
+    },{
+        "id": "bt_expor",
+        "title": "导出全部",
+        "plain": "plain",
+        "icon": "fa fa-mail-reply-all",
         "size": "small",
         "type": "primary"
     }, {

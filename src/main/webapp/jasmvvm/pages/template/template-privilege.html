@@ -122,7 +122,7 @@
 			<!--按钮区域-->
 			<el-row style="padding:15px 0px">
 				<template v-for="item in btns">
-					<el-button :size="item.size" v-if="privilege.indexOf(item.id)>-1" :type="item.type" :plain="item.plain" :icon="item.icon" @click="item.functionName">{{item.title}}</el-button>
+					<el-button :size="item.size" v-if="privilege.join('').indexOf(item.id)>-1" :type="item.type" :plain="item.plain" :icon="item.icon" @click="item.functionName">{{item.title}}</el-button>
 				</template>
 				<div style="display:inline-block;float:right">
 					<el-button size="small" icon="el-icon-refresh" @click="refresh"></el-button>
@@ -140,8 +140,8 @@
 					<template slot-scope="scope">
 						<el-button @click="locateRow(scope.row)" v-if="privilege.indexOf('bt_position')>-1" type="text" size="small">定位</el-button>
 						<el-button @click="viewRow(scope.row)" v-if="privilege.indexOf('bt_select')>-1" type="text" size="small">查看</el-button>
-						<el-button @click="delRow(scope.row)" v-if="privilege.indexOf('bt_delete')>-1" type="text" size="small">删除</el-button>
 						<el-button @click="editRow(scope.row)" v-if="privilege.indexOf('bt_update')>-1" type="text" size="small">编辑</el-button>
+						<el-button @click="delRow(scope.row)" v-if="privilege.indexOf('bt_delete')>-1" type="text" size="small">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -375,6 +375,7 @@
 			},
 			requestTableList: function () {
 				var that = this;
+				that.loading = true;
 				$.ajax({
 					type: "POST",
 					url: jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/getPage.do?token=" + localStorage.getItem(
@@ -384,6 +385,9 @@
 					data: JSON.stringify(that.searchform),
 					async: true,
 					success: function (data) {
+						setTimeout(function(){
+							that.loading = false;
+						},300)
 						if (data.status == 1) {
 							that.tableData = data.rows;
 							that.total = data.total;
@@ -395,7 +399,6 @@
 						}
 					}
 				});
-				that.loading = false
 			},
 			repeatComplate: function (data) {
 				var that = this;
@@ -427,13 +430,17 @@
 					}
 				});
 			},
-			bt_import: function () {
+			bt_import: function () {// 导入
 				var that = this;
-				alert('daoru')
+				alert('导入')
 			},
 			bt_export: function () {
 				var that = this;
 				alert('daochu')
+			},
+			bt_expor: function () { // 导出全部
+				var that = this;
+				alert('导出全部')
 			},
 			clickFunction: function (row, name) {
 				definedFunction[name](row);
@@ -515,7 +522,6 @@
 			},
 
 			refresh: function () {
-				this.loading = true;
 				this.requestTableList();
 			},
 			handleSizeChange: function (val) {
