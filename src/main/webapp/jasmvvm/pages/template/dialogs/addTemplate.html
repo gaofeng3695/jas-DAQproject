@@ -33,7 +33,7 @@
 			width: 100%;
 			position: absolute;
 			bottom: 0px;
-			z-index: 3000;
+			z-index: 190;
 			height: 40px;
 			line-height: 40px;
 		}
@@ -104,7 +104,7 @@
 </head>
 
 <body>
-	<div id="app">
+	<div id="app" v-cloak v-loading="isLoading">
 		<div class="content">
 			<el-form ref="formData" :model="formData" :label-width="labelwidth">
 				<template v-for="group in formAttr">
@@ -129,8 +129,6 @@
 										<template v-for="option in item.options">
 											<el-option :label="option.value" :value="option.key">
 											</el-option>
-
-
 										</template>
 									</el-select>
 									<el-select v-model="formData[item.id]" :disabled="item.disabled" v-if="isSelect(item)" style="width:100%" :size="item.size"
@@ -222,10 +220,15 @@
 		el: "#app",
 		data: function () {
 			return {
+				isLoading: true,
 				rules: [],
-				formData: {},
-				formAttr: [],
-				labelwidth: "",
+				formData: {}, // 表单字段详情对象
+				formAttr: [], // 表单字段，分组排序，配置数组
+				// [{
+				// 	groupName: '分组名',
+				// 	data: that._sortArray(groupAttr)
+				// }]
+				labelwidth: "100",
 				formConfig: {
 					xs: 24,
 					sm: 12,
@@ -235,7 +238,7 @@
 				},
 				fileListlength: 0,
 				menuCode: "",
-				isEdit: {},
+				formDetail: {},
 				fileList: [],
 				fileListStatus: [],
 				pkArray: [],
@@ -264,11 +267,13 @@
 				this.menuCode = param.menuCode;
 			}
 			delete param.menuCode;
-			this.isEdit = param;
-			if (JSON.stringify(this.isEdit) == '{}') {
-				this.requestConfig();
-			} else {
-				this.requestDetailByObj();
+			this.formDetail = param;
+			this.isAddPage = JSON.stringify(this.formDetail) == '{}'; // 根据URL中传入的数据判断该页面是否处于编辑页面
+			this.requestConfig();
+			this.requestRule();
+			this.requestFieldConfigByOid();
+			if (!this.isAddPage) {
+				this.requestDetailByObj(); //请求表单详情
 			}
 		},
 		methods: {
@@ -286,12 +291,12 @@
 						}
 						that.autoUpload = data.file.autoUpload;
 						that.limitNum = data.file.limitNum;
-						that.requestRule();
 					}
 				});
 			},
 			requestRule: function () { //显示请求规则，成功之后再去请求所有的
 				var that = this;
+
 				$.ajax({
 					type: "get",
 					url: "../../form-operation/js/regexp.json",
@@ -303,64 +308,47 @@
 						}
 					}
 				});
-				that.requestByOid();
 			},
-			requestByOid: function () {
+			requestFieldConfigByOid: function () { // 获取各个字段的配置信息
 				var that = this;
-				$.ajax({
-					type: "get",
-					url: jasTools.base.rootPath + "/functionConfiguration/getDetailByCode.do?token=" + localStorage.getItem(
-						"token"),
-					dataType: "json",
-					data: {
-						functionCode: that.menuCode
-					},
-					async: true,
-					success: function (data) {
-						if (data.status == 1) {
-							/*是否存在附件*/
-							if (data.data.ifAttachment == '1') {
-								that.ifAttachment = true;
-							} else {
-								that.ifAttachment = false;
+				var url = jasTools.base.rootPath + "/functionConfiguration/getDetailByCode.do";
+				jasTools.ajax.get(url, {
+					functionCode: that.menuCode
+				}, function (data) {
+					that.isLoading = false;
+					that.ifAttachment = !!(data.data.ifAttachment == 1); //是否存在附件
+					var fieldsGrouped = that._formatFieldsByGroup(data.data.functionFieldsBoList);
+					if (that.isAddPage) {
+						that.getAddField(fieldsGrouped);
+					} else {
+						that.getEditField(fieldsGrouped);
+					}
+				})
+			},
+			_formatFieldsByGroup: function (aFields) { // 将字段进行分组格式化
+				var map = {};
+				var dest = [];
+				for (var i = 0; i < aFields.length; i++) {
+					var ai = aFields[i];
+					if (!map[ai.groupIndex || ai.groupName]) {
+						dest.push({
+							groupName: ai.groupName,
+							index: ai.groupIndex || '',
+							data: [ai]
+						});
+						map[ai.groupIndex || ai.groupName] = ai;
+					} else {
+						for (var j = 0; j < dest.length; j++) {
+							var dj = dest[j];
+							if ((dj.index == ai.groupIndex) || (dj.groupName == ai.groupName)) {
+								dj.data.push(ai);
+								break;
 							}
-							/*是否存在附件*/
-							var arr = data.data.functionFieldsBoList;
-							var map = {};
-							var dest = [];
-							for (var i = 0; i < arr.length; i++) {
-								var ai = arr[i];
-								if (!map[ai.groupIndex || ai.groupName]) {
-									dest.push({
-										groupName: ai.groupName,
-										index: ai.groupIndex || '',
-										data: [ai]
-									});
-									map[ai.groupIndex || ai.groupName] = ai;
-								} else {
-									for (var j = 0; j < dest.length; j++) {
-										var dj = dest[j];
-										if ((dj.index == ai.groupIndex) || (dj.groupName == ai.groupName)) {
-											dj.data.push(ai);
-											break;
-										}
-									}
-								}
-							}
-
-							if (JSON.stringify(that.isEdit) == '{}') {
-								that.getAddField(that.isArrySort(dest));
-							} else {
-								that.getEditField(that.isArrySort(dest));
-							}
-						} else {
-							top.Vue.prototype.$message({
-								type: 'error',
-								message: '服务异常，请稍候尝试'
-							});
 						}
 					}
-				});
+
+				}
+				return this._sortArray(dest);
 			},
 			getAddField: function (data) {
 				var that = this;
@@ -371,7 +359,7 @@
 						var options = [];
 						if (item.ifPrimaryKey) {
 							that.pkArray.push(item.fieldName);
-							that.formData[item.fieldName] = that.createuuid();
+							that.formData[item.fieldName] = jasTools.base.createuuid();
 						}
 						if (item.domainList) {
 							item.domainList.forEach(function (child) {
@@ -441,7 +429,7 @@
 					});
 					that.formAttr.push({
 						groupName: group.groupName,
-						data: that.isArrySort(groupAttr)
+						data: that._sortArray(groupAttr)
 					});
 				});
 				that.actionURL = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") +
@@ -529,74 +517,46 @@
 					});
 					that.formAttr.push({
 						groupName: group.groupName,
-						data: that.isArrySort(groupAttr)
+						data: that._sortArray(groupAttr)
 					});
 				});
+
 				that.requestFiles();
 				that.actionURL = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") +
-					"&businessId=" +
-					that.formData[that.pkArray[0]] + "&businessType=file";
+					"&businessId=" + that.formData[that.pkArray[0]] + "&businessType=file";
 			},
 			requestFiles: function () {
 				var that = this;
-				$.ajax({
-					type: "get",
-					url: jasTools.base.rootPath + "/attachment/getInfo.do?token=" + localStorage.getItem("token") +
-						"&businessId=" + that.formData[
-							that.pkArray[0]] + "&businessType=file",
-					dataType: "json",
-					contentType: "application/json",
-					success: function (data) {
-						if (data.status == 1) {
-							if (data.rows.length > 0) {
-								data.rows.forEach(function (item) {
-									that.fileList.push({
-										name: item.fileName,
-										size: item.size,
-										oid: item.oid
-									});
-									that.fileListStatus.push({
-										name: item.fileName,
-										size: item.size,
-										oid: item.oid
-									})
-								});
-								that.fileListlength = that.fileList.length;
-							}
-						} else {
-							top.Vue.prototype.$message({
-								type: 'error',
-								message: '服务异常，请稍候尝试'
-							});
-						}
-					}
+				var url = jasTools.base.rootPath + "/attachment/getInfo.do";
+				jasTools.ajax.get(url, {
+					businessType: 'file',
+					businessId: that.formData[that.pkArray[0]]
+				}, function (data) {
+					data.rows.forEach(function (item) {
+						var file = {
+							name: item.fileName,
+							size: item.size,
+							oid: item.oid
+						};
+						that.fileList.push(file);
+						that.fileListStatus.push(file);
+					});
+					that.fileListlength = that.fileList.length;
 				});
 			},
-			requestDetailByObj: function () {
+			requestDetailByObj: function () { //请求表单详情
 				var that = this;
-				$.ajax({
-					type: "POST",
-					url: jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/get.do?token=" + localStorage.getItem(
-						"token"),
-					dataType: "json",
-					contentType: "application/json",
-					data: JSON.stringify(that.isEdit),
-					success: function (data) {
-						if (data.status = 1) {
-							that.formData = data.data;
-							that.requestConfig();
-						}
-					}
+				var url = jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/get.do";
+				//该接口需要入参主键，因为主键不确定，所以全部传入表单对象
+				jasTools.ajax.post(url, this.formDetail, function (data) {
+					that.formData = data.data;
 				});
 			},
 			cancel: function () {
 				this.closeForm();
 			},
 			closeForm: function () {
-				window.parent.jasTools.dialog.close({
-					title: '增加',
-					src: '/pages/template/dialogs/addTemplate.html',
-				});
+				top.jasTools.dialog.close();
 			},
 			submit: function (formName) {
 				var that = this;
@@ -622,14 +582,16 @@
 					that.saveInfo();
 				} else {
 					var isNotFile = true;
-					that.fileListStatus.forEach(function (item) {
+					that.fileListStatus.forEach(function (item) { // 文件有oid代表已经在服务器上了，无需上传
 						if (!item.oid) {
 							isNotFile = false;
 							return;
 						}
 					});
 					if (isNotFile) {
-						that.saveInfo();
+						that.requestDeleteFiles(function () {
+							that.saveInfo();
+						});
 					} else {
 						that.actionURL = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") +
 							"&businessId=" +
@@ -647,42 +609,21 @@
 					size: file.size,
 				});
 				if (!that.autoUpload) {
-					that.saveInfo();
+					that.requestDeleteFiles(function () {
+						that.saveInfo();
+					});
 				}
 			},
 			saveInfo: function () {
 				var that = this;
-				var msg = "";
-				if (JSON.stringify(that.isEdit) == '{}') {
-					msg = "增加成功";
-					url = jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/save.do?token=" + localStorage.getItem(
-						"token");
-				} else {
-					msg = "修改成功";
-					url = jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/update.do?token=" + localStorage.getItem(
-						"token");
-				}
-				$.ajax({
-					type: "POST",
-					url: url,
-					dataType: "json",
-					contentType: "application/json",
-					data: JSON.stringify(that.formData),
-					async: true,
-					success: function (data) {
-						if (data.status == 1) {
-							window.top.Vue.prototype.$message({
-								message: msg,
-								type: 'success'
-							});
-							that.closeForm();
-						} else {
-							window.top.Vue.prototype.$message({
-								message: '服务异常，请稍候尝试',
-								type: 'error'
-							});
-						}
-					}
+				var str = that.isAddPage ? "save" : "update";
+				var url = jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/" + str + ".do"
+				jasTools.ajax.post(url, that.formData, function () {
+					top.Vue.prototype.$message({
+						message: that.isAddPage ? "增加成功" : "修改成功",
+						type: 'success'
+					});
+					that.closeForm();
 				});
 			},
 			handleFileRemove: function (file, i) {
@@ -690,65 +631,60 @@
 				top.Vue.prototype.$confirm('删除附件, 是否继续?', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
-					type: 'warning'
-				}).then(function () {
-					that.fileList.splice(i, 1);
+					type: 'warning',
+					callback: function (status) {
 
-					that.fileListStatus.splice(i, 1);
-					that.fileListlength = that.fileListStatus.length;
-					if (file.oid) {
-						that.handleToServer(file);
-					} else {
-						top.Vue.prototype.$message({
-							message: '删除成功',
-							type: 'success'
-						});
-					}
-				}).catch(function () {
-					top.Vue.prototype.$message({
-						type: 'info',
-						message: '已取消删除'
-					});
-				});
-			},
-			handleToServer: function (file) {
-				var that = this;
-				$.ajax({
-					type: "get",
-					url: jasTools.base.rootPath + "/attachment/delete.do?token=" + localStorage.getItem("token") + "&eventids=" +
-						file.oid,
-					contentType: "application/json",
-					dataType: "json",
-					success: function (data, status) {
-						if (data.status == 1) {
-							top.Vue.prototype.$message({
-								message: '删除成功',
-								type: 'success'
-							});
-						} else {
-							top.Vue.prototype.$message({
-								message: '删除失败',
-								type: 'info'
-							});
+						if (status === 'confirm') {
+
+							that.fileList.splice(i, 1);
+							that.fileListStatus.splice(i, 1);
+							that.fileListlength = that.fileListStatus.length;
+
+							if (file.oid) {
+								// that.requestDeleteFiles(file);
+								if (that.filesToBeDelete) {
+									that.filesToBeDelete.push(file.oid)
+								} else {
+									that.filesToBeDelete = [file.oid]
+								}
+							} else {
+								top.Vue.prototype.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+							}
+
 						}
 					}
 				});
 			},
+			requestDeleteFiles: function (cb) {
+				var that = this;
+				if (!that.filesToBeDelete) {
+					cb && cb();
+					return;
+				}
+				jasTools.ajax.get(jasTools.base.rootPath + "/attachment/delete.do", {
+					oids: that.filesToBeDelete.join(',')
+				}, function (data) {
+					cb && cb();
+					// top.Vue.prototype.$message({
+					// 	message: '删除成功',
+					// 	type: 'success'
+					// });
+				});
+			},
 			handlePreview: function (file) {
-				// window.open("../pdfjs_1.10.88/web/viewer.html");
 				window.top.jasTools.dialog.show({
 					title: '预览',
 					width: '90%',
-					height: '100%',
-					src: "/pages/template/pdfjs_1.10.88/web/viewer.html?oid=" + file.oid,
-					cbForClose: function () {
-
-					}
+					height: '90%',
+					src: "./pages/template/pdfjs_1.10.88/web/viewer.html?oid=" + file.oid,
 				});
 			},
-			uploadOnChange: function (file, fileList) {
-				console.log("——————————change——————————")
-				console.log(file);
+			uploadOnChange: function (file, fileList) { //文件状态改变时的钩子，添加文件、上传成功和上传失败时都会被调用
+				// console.log("——————————change——————————")
+				// console.log(file);
 				var that = this;
 				that.fileListlength = fileList.length;
 				if (file.status == 'ready') {
@@ -767,24 +703,9 @@
 			},
 			handleDownload: function (file) {
 				var that = this;
-				var options = {
-					"url": jasTools.base.rootPath + "/attachment/download.do?oid=" + file.oid + "&token=" + localStorage.getItem(
-						"token"),
-					"method": 'post'
-				}
-				var config = $.extend(true, {
-					method: 'get'
-				}, options);
-				var $iframe = $('<iframe id="down-file-iframe" />');
-				var $form = $('<form target="down-file-iframe" method="' + config.method + '" />');
-				$form.attr('action', config.url);
-				for (var key in config.data) {
-					$form.append('<input type="hidden" name="' + key + '" value="' + config.data[key] + '" />');
-				}
-				$iframe.append($form);
-				$(document.body).append($iframe);
-				$form[0].submit();
-				$iframe.remove();
+				jasTools.ajax.downloadByPost(jasTools.base.rootPath + "/attachment/download.do", {
+					oid: file.oid
+				});
 			},
 			onExceed: function (files, fileList) {
 				var that = this;
@@ -797,28 +718,21 @@
 				var that = this;
 				var options = [];
 				if (item.requestUrl) { //进行子级的查找 后台请求
-					$.ajax({
-						type: "post",
-						url: jasTools.base.rootPath + "/" + item.requestUrl + "?token=" + localStorage.getItem("token"),
-						contentType: "application/json",
-						data: JSON.stringify({
-							"rows": 100,
-							"page": 1,
-							"tableId": value
-						}),
-						dataType: "json",
-						success: function (data, status) {
-							if (data.status == 1) {
-								data.rows.forEach(function (item) {
-									var obj = {
-										"key": item.fieldName,
-										"value": item.fieldName,
-									};
-									options.push(obj);
-								});
-							}
-						}
+
+					jasTools.ajax.post(jasTools.base.rootPath + "/" + item.requestUrl, {
+						"rows": 100,
+						"page": 1,
+						"tableId": value
+					}, function (data) {
+						data.rows.forEach(function (item) {
+							var obj = {
+								"key": item.fieldName,
+								"value": item.fieldName,
+							};
+							options.push(obj);
+						});
 					});
+
 					that.formAttr.forEach(function (parent, index) {
 						parent.data.forEach(function (child) {
 							if (child.id == item.childField) {
@@ -907,20 +821,8 @@
 				}
 				return false
 			},
-			createuuid: function () {
-				var s = [];
-				var hexDigits = "0123456789abcdef";
-				for (var i = 0; i < 36; i++) {
-					s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
-				}
-				s[14] = "4";
-				s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);
-				s[8] = s[13] = s[18] = s[23] = "-";
-				var uuid = s.join("");
-				return uuid;
-			},
 
-			isArrySort: function (arry) {
+			_sortArray: function (arry) { // 数组冒泡排序
 				for (var unfix = arry.length - 1; unfix > 0; unfix--) {
 					for (var i = 0; i < unfix; i++) {
 						if (arry[i].index > arry[i + 1].index) {
