@@ -122,7 +122,8 @@
 			<!--按钮区域-->
 			<el-row style="padding:15px 0px">
 				<template v-for="item in btns">
-					<el-button :size="item.size" v-if="privilege.join('').indexOf(item.id)>-1" :type="item.type" :plain="item.plain" :icon="item.icon" @click="item.functionName">{{item.title}}</el-button>
+					<el-button :size="item.size" v-if="privilege.join('').indexOf(item.id)>-1" :type="item.type" :plain="item.plain" :icon="item.icon"
+					  @click="item.functionName">{{item.title}}</el-button>
 				</template>
 				<div style="display:inline-block;float:right">
 					<el-button size="small" icon="el-icon-refresh" @click="refresh"></el-button>
@@ -168,7 +169,7 @@
 				headStyle: {
 					'background-color': '#f5f7fa ',
 				},
-				privilege :[], //权限数组 bt_add,bt_update,bt_delete,bt_select,bt_export,bt_import,bt_position
+				privilege: [], //权限数组 bt_add,bt_update,bt_delete,bt_select,bt_export,bt_import,bt_position
 				btnxs: 12,
 				btnlg: 6,
 				searchTable: {},
@@ -200,7 +201,7 @@
 			var param = window.jasTools.base.getParamsInUrl(location.href);
 			this.menuCode = param.menuCode;
 			//进行后台数据的请求
-			this._requestPrivilege(param.privilegeCode);//请求权限
+			this._requestPrivilege(param.privilegeCode); //请求权限
 		},
 		methods: { //方法的写法
 			_requestPrivilege: function (privilegeCode) {
@@ -210,7 +211,7 @@
 					privilegeCode: privilegeCode, //菜单权限编号
 					appId: "402894a152681ba30152681e8b320003" //应用id，值默认
 				}, function (data) {
-					that.privilege = data.rows.map(function(item){
+					that.privilege = data.rows.map(function (item) {
 						return item.functionType;
 					});
 					that.requestConfig(); //请求模板的配置文件
@@ -385,9 +386,9 @@
 					data: JSON.stringify(that.searchform),
 					async: true,
 					success: function (data) {
-						setTimeout(function(){
+						setTimeout(function () {
 							that.loading = false;
-						},300)
+						}, 300)
 						if (data.status == 1) {
 							that.tableData = data.rows;
 							that.total = data.total;
@@ -430,9 +431,19 @@
 					}
 				});
 			},
-			bt_import: function () {// 导入
+			bt_import: function () { // 导入
 				var that = this;
-				alert('导入')
+				var src = './pages/template/dialogs/upload.html?menuCode=' + that.menuCode;
+
+				top.jasTools.dialog.show({
+					title: '导入',
+					width: '600px',
+					height: '600px',
+					src: src,
+					cbForClose: function () {
+
+					}
+				});
 			},
 			bt_export: function () {
 				var that = this;
@@ -445,7 +456,7 @@
 			clickFunction: function (row, name) {
 				definedFunction[name](row);
 			},
-			locateRow:function(row){
+			locateRow: function (row) {
 				var that = this;
 				alert('定位');
 			},

@@ -172,6 +172,7 @@
 				width: (80 - dialogs.length * 15) + '%',
 				visible: true
 			}, params);
+
 			var html = [
 				'<jas-iframe-dialog',
 				'  :title="title" ',
