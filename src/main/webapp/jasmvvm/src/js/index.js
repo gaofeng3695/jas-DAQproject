@@ -210,7 +210,7 @@
 				}else if (command === 'map') { //
 					this.isMapOpen = !this.isMapOpen;
 					if(!this.mapSrc){
-						this.mapSrc = 'https://map.baidu.com/';
+						this.mapSrc = './pages/map/index.html';
 					}
 				}
 			},
