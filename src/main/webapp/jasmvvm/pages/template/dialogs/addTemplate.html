@@ -106,6 +106,7 @@
 <body>
 	<div id="app" v-cloak v-loading="isLoading">
 		<div class="content">
+
 			<el-form ref="formData" :model="formData" :label-width="labelwidth">
 				<template v-for="group in formAttr">
 					<div class="bulk" v-if="group.groupName">
@@ -114,6 +115,7 @@
 					</div>
 					<el-row :gutter="10">
 						<template v-for="item in group.data">
+
 							<el-col v-if="item.type=='UT_13'" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 								<el-form-item :prop="item.id" :label="item.name" :rules="item.verify">
 									<el-input v-if="item.type=='UT_13'" autosize type="textarea" :rows="2" :size="item.size" v-model="formData[item.id]" :disabled="item.disabled"></el-input>
@@ -216,6 +218,9 @@
 <script src="./../../../common/js/jas-tools.js"></script>
 <!--<script src="js/ajaxFileUpload.js"></script>-->
 <script>
+
+
+
 	var app = new Vue({
 		el: "#app",
 		data: function () {
@@ -352,16 +357,16 @@
 			},
 			getAddField: function (data) {
 				var that = this;
-				data.forEach(function (group, index) {
+				data.forEach(function (group, index) { // 针对组数进行循环
 					var groupAttr = [];
-					group.data.forEach(function (item) {
+					group.data.forEach(function (item) { // 针对组内的每一项进行循环
 						var obj = {};
 						var options = [];
-						if (item.ifPrimaryKey) {
+						if (item.ifPrimaryKey) { // 找出oid的字段，创建uuid
 							that.pkArray.push(item.fieldName);
 							that.formData[item.fieldName] = jasTools.base.createuuid();
 						}
-						if (item.domainList) {
+						if (item.domainList) { // 字段是阈值下拉选的
 							item.domainList.forEach(function (child) {
 								var obj = {};
 								for (var key in child) {
@@ -370,7 +375,7 @@
 								options.push(obj);
 							});
 						}
-						if (item.ifSave == '1') {
+						if (item.ifSave == '1') { //
 							obj = {
 								id: item.fieldName,
 								name: item.fieldNameCn,
@@ -381,19 +386,19 @@
 								verify: [],
 								requestUrl: item.requestPath,
 								childField: item.childField,
-								min: item.min || 1,
-								max: item.max || 10,
+								min: item.min || -Infinity,
+								max: item.max || Infinity,
 								index: item.rowIndex,
 							};
 							if (item.ifRequired == '1') {
 								obj.verify.push({
 									required: true,
-									message: item.placeholder,
+									message: item.placeholder || '该字段为必填项',
 									// trigger: 'blur'
 								});
 
 							}
-							if (item.uiType == 'UT_01') {
+							if (item.uiType == 'UT_01') { // 文本域
 								that.rules.forEach(function (ruleItem) {
 									if (ruleItem.id == item.regularExpression) {
 										obj.verify.push({
@@ -403,7 +408,7 @@
 									}
 								});
 							}
-							if (item.fieldLength && item.uiType == 'UT_01') {
+							if (item.fieldLength && item.uiType == 'UT_01') { // 添加长度限制
 								obj.verify.push({
 									min: "0",
 									max: item.fieldLength,
@@ -467,8 +472,8 @@
 								requestUrl: item.requestPath,
 								childField: item.childField,
 								index: item.rowIndex,
-								min: item.min,
-								max: item.max,
+								min: item.min || -Infinity,
+								max: item.max || Infinity,
 								disabled: false
 							};
 							if (item.updateable == '1') {
@@ -494,7 +499,7 @@
 								obj.verify.push({
 									min: "0",
 									max: item.fieldLength,
-									message: "输入过长"
+									message: "不能超过" + item.fieldLength + "字"
 								});
 							}
 							if (item.uiType == 'UT_04' || item.uiType == 'UT_03' || item.uiType == 'UT_02') {

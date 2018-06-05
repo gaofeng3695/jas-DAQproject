@@ -105,13 +105,15 @@
 						trigger: 'blur'
 					}],
 					codeName: [{
-						required: true,
-						message: '请输入域值名称',
-						trigger: 'blur'
-					}, {
-						pattern: new RegExp('^[\u4e00-\u9fa5]{0,}$'),
-						message: "请输入中文"
-					}],
+							required: true,
+							message: '请输入域值名称',
+							trigger: 'blur'
+						}
+						// , {
+						// 	pattern: new RegExp('^[\u4e00-\u9fa5]{0,}$'),
+						// 	message: "请输入中文"
+						// }
+					],
 					parentCodeId: [],
 					ordinal: [{
 						pattern: new RegExp('^[0-9]*$'),
