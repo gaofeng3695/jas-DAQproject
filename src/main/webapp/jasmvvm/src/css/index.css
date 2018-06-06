@@ -308,6 +308,9 @@ body,
 	box-shadow: -3px 0 15px 1px rgba(244, 67, 54, .4);
 }
 
+
+/* 分栏样式 */
+
 .multipane.foo.layout-v .multipane-resizer {
 	margin: 0;
 	left: 0;
@@ -315,8 +318,6 @@ body,
 	width: 15px;
 	background: blue;
 }
-
-/* 分栏样式 */
 
 .multipane.foo.layout-h .multipane-resizer {
 	margin: 0;
@@ -348,9 +349,4 @@ body,
 
 .multipane-resizer:hover:before {
 	border-color: #999;
-}
-
-/* 地图wrapper */
-.mapWrap{
-
 }

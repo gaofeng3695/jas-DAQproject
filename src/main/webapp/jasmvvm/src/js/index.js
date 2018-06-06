@@ -16,8 +16,8 @@
 
 				isExpend: true,
 				menuWith: 200,
-				menusOpened: ['P-PC-0001'],
-				currentTap: 'P-PC-0001',
+				menusOpened: ['P-BD-0001'],
+				currentTap: 'P-BD-0001',
 				tabs: [], // 打开的标签页
 				items: [] //菜单数组
 			}
@@ -210,7 +210,7 @@
 				}else if (command === 'map') { //
 					this.isMapOpen = !this.isMapOpen;
 					if(!this.mapSrc){
-						this.mapSrc = 'https://map.baidu.com/';
+						this.mapSrc = './pages/map/index.html';
 					}
 				}
 			},
@@ -249,8 +249,8 @@
 				var that = this;
 				jasTools.dialog.show({
 					title: '修改密码',
-					width: '40',
-					height: '60',
+					width: '530px',
+					height: '530px',
 					src: 'resetword.html',
 					cbForClose: function (param) {
 						if (param === 1) {

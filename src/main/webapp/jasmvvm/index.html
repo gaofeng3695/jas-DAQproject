@@ -53,10 +53,6 @@
 							</el-dropdown-menu>
 						</el-dropdown>
 					</div>
-
-
-
-
 				</div>
 				<!-- header 结束 -->
 
@@ -69,7 +65,7 @@
 					<!-- sider 结束 -->
 					<div class="is-grown menusubwrap" :style="menuStyle" ref="menubar" v-bar>
 						<div>
-							<el-menu :default-active="currentTap" class="el-menu-vertical-demo" @select="selectMenu" :collapse="isCollapse">
+							<el-menu unique-opened :default-active="currentTap" class="el-menu-vertical-demo" @select="selectMenu" :collapse="isCollapse">
 								<!-- 第一层菜单开始 -->
 								<!-- tip:为什么不用递归渲染？因为vue组件递归的方式跟elementui提供的可收缩菜单插件相冲突，若要使用递归，就必须取消菜单可收缩的功能 -->
 								<template v-for="item in items">
@@ -161,7 +157,7 @@
 					<!-- sider 结束 -->
 				</el-aside>
 				<el-main>
-					<!-- <div v-tabclose></div> -->
+					<div v-tabclose></div>
 
 					<multipane @paneresizestart="panelMoving = true" @paneresizestop="panelMoving = false" class="foo" layout="horizontal" style="height: 100%;">
 						<div v-loading="panelMoving" class="mapWrap" v-show="isMapOpen" :style="{ height: '40%', minHeight: '20%',maxHeight: '80%' }"
