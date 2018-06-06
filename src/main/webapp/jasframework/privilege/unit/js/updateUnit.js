@@ -41,7 +41,7 @@ function reloadData(shortUrl, elementId){
  		$.ajax({
  			type: "get",
 	        url: rootPath + "jasframework/privilege/unit/checkUnitExist.do",
-	        data:{ "parentId": $("#parentId").combotree("getValue"), "unitName": name, "unitNum": unitCode ,"eventId": eventID},
+	        data:{ "parentId": $("#parentId").combotree("getValue"), "unitName": name, "unitCode": unitCode ,"eventId": eventID},
 	        dataType: "json",
 		   	success: function(check){
 		   		console.log(12121);

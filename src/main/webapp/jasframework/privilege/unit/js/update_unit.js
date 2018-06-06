@@ -136,7 +136,7 @@ function updateUnit(){
 	disableButtion("savebutton");
 	url = rootPath+'jasframework/privilege/unit/updateUnit.do';
 	var name = $("#name").val();
-	var unitNum = $("#unitNum").val();
+	var unitCode = $("#unitCode").val();
 	var parentEventid = $("#parentId").combotree("getValue");
 	var unittree=$("#parentId").combotree("tree");
 	var unitobj=unittree.tree("find",eventID);
@@ -161,7 +161,7 @@ function updateUnit(){
 	$.ajax({
 		type: "POST",
 	    url: rootPath + "jasframework/privilege/unit/checkUnitExist.do",
-	    data:JSON.stringify( { "parentId": $("#parentId").combotree("getValue"), "unitName": name, "unitNum": unitNum }),
+	    data:JSON.stringify( { "parentId": $("#parentId").combotree("getValue"), "unitName": name, "unitCode": unitCode }),
 	    dataType: "json",
 	   	success: function(check){
      		if (check.error=='-1'){

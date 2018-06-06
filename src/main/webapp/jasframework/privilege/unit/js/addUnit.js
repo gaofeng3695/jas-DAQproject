@@ -38,7 +38,7 @@ var eventID =getParamter("parentid");;
 	    $.ajax({
 	        type: "get",
 	        url: rootPath + "jasframework/privilege/unit/checkUnitExist.do",
-	        data:{ "parentId": $("#parentId").combotree("getValue"), "unitName": name, "unitNum": unitCode },
+	        data:{ "parentId": $("#parentId").combotree("getValue"), "unitName": name, "unitCode": unitCode },
 	        dataType: "json",
 	        success: function (check) {
 	            if (check.error == '-1') {

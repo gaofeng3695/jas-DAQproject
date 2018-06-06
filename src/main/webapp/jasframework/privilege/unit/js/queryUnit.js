@@ -9,7 +9,7 @@ $(function() {
 			onLoadSuccess:function(node,data) {
 				//加载成功后选中根节点
 		 		$('#tt').tree('select',$('#tt').tree('getRoot').target);
-	 			url = rootPath+'jasframework/privilege/unit/findUnitById.do?eventID='+data[0].id;
+	 			url = rootPath+'jasframework/privilege/unit/findUnitById.do?oid='+data[0].id;
 				$.post(url, function(bo) {
 					$('#right').form('load', bo);
 				}, 'json');
