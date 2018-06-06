@@ -20,7 +20,7 @@ $(function() {
 			onBeforeExpand : function(node,param){
 			},
 			onClick : function(node) {
-	 			url = rootPath+'jasframework/privilege/unit/findUnitById.do?eventID=' + node.id;
+	 			url = rootPath+'jasframework/privilege/unit/findUnitById.do?oid=' + node.id;
 				$.post(url, function(bo) {
 					console.log(bo);
 					$('#right').form('load', bo);
