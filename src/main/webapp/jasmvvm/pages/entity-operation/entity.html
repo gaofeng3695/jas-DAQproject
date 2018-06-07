@@ -281,7 +281,7 @@
         });
       },
       batchDownload: function () {
-        jasTools.ajax.downloadByPost(jasTools.base.rootPath + '/dbInfo/downloadEntityCode.do', {
+        jasTools.ajax.downloadByIframe('post',jasTools.base.rootPath + '/dbInfo/downloadEntityCode.do', {
           tableNames: this.value9
         });
       },

@@ -172,6 +172,7 @@
 				width: (80 - dialogs.length * 15) + '%',
 				visible: true
 			}, params);
+
 			var html = [
 				'<jas-iframe-dialog',
 				'  :title="title" ',
@@ -430,6 +431,7 @@
 						var arr = item.split('=');
 						if (arr[0] === 'filename') {
 							filename = arr[1];
+							filename = decodeURIComponent(filename);
 						}
 					});
 					// 返回200
@@ -441,9 +443,11 @@
 						var a = document.createElement('a');
 						a.download = filename;
 						a.href = e.target.result;
-						document.getElementsByTagName('body')[0].append(a); // 修复firefox中无法触发click
+						document.getElementsByTagName('body')[0].appendChild(a); // 修复firefox中无法触发click
+						// $(a).trigger('click');
 						a.click();
-						a.remove();
+						// a.remove();
+						a.parentNode.removeChild(a);
 						cbsuccess && cbsuccess(xhr);
 					}
 				} else {

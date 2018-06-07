@@ -194,8 +194,8 @@
 <script src="./../../../common/js/jas-tools.js"></script>
 <script>
   /*
-      先请求要展示的字段，再请求字段的详情，最后请求附件
-    */
+        先请求要展示的字段，再请求字段的详情，最后请求附件
+      */
   var app = new Vue({
     el: "#app",
     data: function () {
@@ -398,7 +398,7 @@
       },
       handleDownload: function (file) {
         var that = this;
-        jasTools.ajax.downloadByPost(jasTools.base.rootPath + "/attachment/download.do", {
+        jasTools.ajax.downloadByIframe('post', jasTools.base.rootPath + "/attachment/download.do", {
           oid: file.oid
         });
       },

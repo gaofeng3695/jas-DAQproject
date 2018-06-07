@@ -157,7 +157,7 @@
 					<!-- sider 结束 -->
 				</el-aside>
 				<el-main>
-					<!-- <div v-tabclose></div> -->
+					<div v-tabclose></div>
 
 					<multipane @paneresizestart="panelMoving = true" @paneresizestop="panelMoving = false" class="foo" layout="horizontal" style="height: 100%;">
 						<div v-loading="panelMoving" class="mapWrap" v-show="isMapOpen" :style="{ height: '40%', minHeight: '20%',maxHeight: '80%' }"
