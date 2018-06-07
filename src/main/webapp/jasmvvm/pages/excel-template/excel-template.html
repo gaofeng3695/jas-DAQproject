@@ -179,7 +179,7 @@
 			download: function (row) {
 				var that = this;
 				that.requestFiles(row.oid, function (oid) {
-					jasTools.ajax.downloadByPost(jasTools.base.rootPath + "/attachment/download.do", {
+					jasTools.ajax.downloadByIframe('post',jasTools.base.rootPath + "/attachment/download.do", {
 						oid: oid
 					});
 				});
