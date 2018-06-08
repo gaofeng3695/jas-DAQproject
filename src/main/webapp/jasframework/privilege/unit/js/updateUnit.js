@@ -39,13 +39,13 @@ function reloadData(shortUrl, elementId){
  		//检验部门是否存在
  		console.log(name)
  		$.ajax({
- 			type: "get",
+ 			type: "POST",
+ 			contentType: "application/json;charset=utf-8",
 	        url: rootPath + "jasframework/privilege/unit/checkUnitExist.do",
-	        data:{ "parentId": $("#parentId").combotree("getValue"), "unitName": name, "unitCode": unitCode ,"eventId": eventID},
+	        data:JSON.stringify({ "parentId": $("#parentId").combotree("getValue"), "unitName": name, "unitCode": unitCode ,"oid": eventID}),
 	        dataType: "json",
 		   	success: function(check){
-		   		console.log(12121);
-	     		if (check.error=='-1'){
+	     		if (check.status=='-1'){
 					top.showAlert("提示",check.msg,'error');
 				} else{
 					//不存在则提交修改
@@ -71,7 +71,7 @@ function reloadData(shortUrl, elementId){
 	                    data: JSON.stringify($('#editgroups').serializeToJson()),
 	                    success: function (result) {
 	                    	enableButtion("savebutton");
-	                        if (result.success == "1") {
+	                        if (result.status == "1") {
 	                        	top.showAlert("提示","保存成功",'info',function(){
 	    							reloadData('queryUnit.htm','#tt');
     							});
@@ -99,7 +99,7 @@ function reloadData(shortUrl, elementId){
 	$(function(){
 		//加载初始数据
 //		console.log(eventID)
-		$.getJSON(rootPath+'jasframework/privilege/unit/findUnitById.do', {'eventID':eventID},function(item, i){			
+		$.getJSON(rootPath+'jasframework/privilege/unit/findUnitById.do', {'oid':eventID},function(item, i){			
 			jso=item;
 //			console.log(jso);
 			if(item.parentId){
@@ -139,7 +139,7 @@ function reloadData(shortUrl, elementId){
 		});
 		function reload(){
 		$.getJSON(rootPath+'jasframework/privilege/unit/findUnitById.do' ,
-			{'eventID':eventID
+			{'oid':eventID
 			},function(item, i){				
 				jso=item;	
 			

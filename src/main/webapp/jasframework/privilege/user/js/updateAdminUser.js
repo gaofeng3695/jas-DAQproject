@@ -26,7 +26,7 @@
 				$("#id").val(loginName);
 				url = rootPath+"jasframework/privilege/user/updateUser.do";
 			$.getJSON(rootPath+"jasframework/privilege/unit/findUnitById.do?random=" + new Date().getTime(), {
-				"eventID" : jso.unitEventid
+				"oid" : jso.unitEventid
 			}, function(data) {
 		        $('#unit').val(data.name);
 		         $('#unitEventid').val(jso.unitEventid);

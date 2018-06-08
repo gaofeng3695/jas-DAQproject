@@ -5,7 +5,7 @@ var parentEventid = "";
 var eventID = getParamter("eventID");	
 $(function(){
 	//加载初始数据
-	$.getJSON(rootPath+'jasframework/privilege/unit/findUnitById.do', {'eventID':eventID},function(item, i){			
+	$.getJSON(rootPath+'jasframework/privilege/unit/findUnitById.do', {'oid':eventID},function(item, i){			
 		if(item.parentEventid){
 			parenteventid = item.parenteventid
 		 	if( parenteventid != ""){
@@ -108,7 +108,7 @@ function loadSelect(){
 }
 
 function reload(){
-	$.getJSON(rootPath+'jasframework/privilege/unit/findUnitById.do' ,{'eventID':eventID},function(item, i){	
+	$.getJSON(rootPath+'jasframework/privilege/unit/findUnitById.do' ,{'oid':eventID},function(item, i){	
 		$('#editgroups').form('load',item);				
 	});		
 }
