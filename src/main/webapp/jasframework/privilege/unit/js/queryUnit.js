@@ -20,7 +20,7 @@ $(function() {
 			onBeforeExpand : function(node,param){
 			},
 			onClick : function(node) {
-	 			url = rootPath+'jasframework/privilege/unit/findUnitById.do?eventID=' + node.id;
+	 			url = rootPath+'jasframework/privilege/unit/findUnitById.do?oid=' + node.id;
 				$.post(url, function(bo) {
 					console.log(bo);
 					$('#right').form('load', bo);
@@ -108,17 +108,17 @@ $(function() {
 			//确认删除
 			$.messager.confirm(getLanguageValue("unit.deleteunit"), getLanguageValue("unit.deletecomfirm"), function(r) {
 				if (r) {
-					var url = rootPath+'jasframework/privilege/unit/removeUnitById.do?eventId=' + row.id;
+					var url = rootPath+'jasframework/privilege/unit/removeUnitById.do?oid=' + row.id;
 					//执行删除
 					$.post(url, function(result) {
-						if (result.success) {
-							top.showAlert(getLanguageValue("unit.deleteunit"), result.ok, 'ok', function() {
+						if (result.status) {
+							top.showAlert(getLanguageValue("unit.deleteunit"), result.msg, 'msg', function() {
 							
 								var parent11=$('#tt').tree('getParent',$('#tt').tree('getSelected').target);
 							
 								$('#tt').tree('remove',$('#tt').tree('getSelected').target);
 								
-					 			url = rootPath+'jasframework/privilege/unit/findUnitById.do?eventID='+parent11.id;
+					 			url = rootPath+'jasframework/privilege/unit/findUnitById.do?oid='+parent11.id;
 								$.post(url, function(bo) {
 									$('#right').form('load', bo);
 								}, 'json');
