@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>组织机构管理</title>
+	<!-- <link rel="stylesheet" href="./libelement-ui/element-#0E2B4A/src/index.css"> -->
+	<link rel="stylesheet" href="./../../../lib/element-ui/v2.2.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../lib/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="./../../../src/css/main.css">
+	<style>
+		/* 分栏样式 */
+
+		.multipane:not(.is-resizing) .resizepanel {
+			transition: width 0.3s;
+		}
+
+		.resizepanel {
+			overflow-x: hidden;
+			overflow-y: auto;
+		}
+
+		.multipane.foo.layout-v .multipane-resizer {
+			margin: 0;
+			left: 0;
+			/* reset default styling */
+			width: 10px;
+			background: #f1f1f1;
+		}
+
+		.multipane.foo.layout-h .multipane-resizer {
+			margin: 0;
+			top: 0;
+			/* reset default styling */
+			height: 10px;
+			background: #f1f1f1;
+		}
+
+		.multipane-resizer {
+			margin: 0;
+			left: 0;
+			position: relative;
+		}
+
+		.multipane.foo.layout-v .multipane-resizer .resizertap {
+			width: 100%;
+			height: 40px;
+			background: #409EFF;
+			opacity: 0.5;
+			color: #fff;
+			top: 50%;
+			left: 0;
+			position: absolute;
+			margin-top: -20px;
+			cursor: pointer;
+			line-height: 40px;
+			text-align: center;
+		}
+
+		.multipane.foo.layout-v .multipane-resizer .resizertap:hover {
+			opacity: 0.7;
+		}
+
+		/* .multipane.foo.layout-v .multipane-resizer:before {
+			display: block;
+			content: "";
+			width: 3px;
+			height: 40px;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			margin-top: -20px;
+			margin-left: -2.5px;
+			border-right: 1px solid #ccc;
+			border-left: 1px solid #ccc;
+		}
+
+		.multipane.foo.layout-v .multipane-resizer:hover:before {
+			border-color: #999;
+		} */
+
+		.orgtitle {
+			height: 40px;
+			color: #fff;
+			background: #409EFF;
+			line-height: 40px;
+			/* padding: 0 0 0 15px; */
+			text-align: center;
+		}
+
+		.orgtool {
+			height: 40px;
+			/* border-bottom:1px solid #e4e7ed; */
+			text-align: right;
+			padding: 0 10px;
+			overflow: hidden;
+		}
+
+		.filterwrap {
+			padding: 10px 10px 0px 10px;
+		}
+
+		.content {
+			height: 100%;
+			padding: 0 10px;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="app" v-cloak>
+
+		<multipane @paneresizestart="panelMoving = true" @paneresizestop="panelMoving = false" class="foo" layout="vertical" style="height: 100%;">
+			<div class="resizepanel" v-loading="panelMoving" :style="[{ width: panelShowed ?'200px' : '0px',maxWidth: '50%' }]" element-loading-spinner="11"
+			  element-loading-background="rgba(0, 0, 0, 0)">
+				<!-- <div class="orgtitle">组织机构管理</div> -->
+				<div class="filterwrap">
+					<el-input prefix-icon="el-icon-search" size="small" placeholder="输入关键字进行过滤" v-model="filterText">
+					</el-input>
+				</div>
+				<div class="orgtool">
+					<el-button type="text" @click="addNode">新增</el-button>
+					<el-button type="text" @click="editNode" :disabled="!currentNodeId">修改</el-button>
+					<el-button type="text" @click="deleteNode" :disabled="!currentNodeId">删除</el-button>
+				</div>
+				<el-tree ref="orgtree" :data="orgnData" :props="defaultProps" highlight-current @node-click="clicknode" :filter-node-method="filterNode"></el-tree>
+			</div>
+			<multipane-resizer>
+				<div class="resizertap" @click="panelShowed=!panelShowed">
+					<i v-show="panelShowed" class="fa fa-angle-left"></i>
+					<i v-show="!panelShowed" class="fa fa-angle-right"></i>
+				</div>
+			</multipane-resizer>
+			<div v-loading="panelMoving" :style="{ flexGrow: 1 }" style="width:0%;" element-loading-spinner="11" element-loading-background="rgba(0, 0, 0, 0)">
+
+				<div class="content">
+					<el-tabs v-model="activeName">
+						<el-tab-pane label="部门详情" name="details">
+							<div v-loading="loading.orgDetail">
+								<jas-detail-table :titles="detailTitle" :column-num="1" :detail="detail" />
+							</div>
+						</el-tab-pane>
+						<el-tab-pane label="实施范围" name="scale">
+							<div>实施范围</div>
+						</el-tab-pane>
+					</el-tabs>
+				</div>
+
+			</div>
+		</multipane>
+
+
+	</div>
+</body>
+
+<script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../lib/vue/vue.js"></script>
+<script src="./../../../lib/vue-multipane/vue-multipane.js"></script>
+
+<script src="./../../../lib/element-ui/v2.2.1/index.min.js"></script>
+<script src="./../../../common/components/jas-components.js"></script>
+<script src="./../../../common/js/jas-tools.js"></script>
+<script>
+	var vm = new Vue({
+		el: '#app',
+		data: function () {
+			return {
+				detail: null,
+				detailTitle: [ //
+					{
+						name: '上级组织机构',
+						field: 'parentName',
+					}, {
+						name: '组织机构名称',
+						field: 'unitName',
+					}, {
+						name: '组织机构编号',
+						field: 'unitCode',
+					}, {
+						name: '顺序编号',
+						field: 'orderNum',
+					}, {
+						name: '组织机构类型',
+						field: 'unitType',
+					}, {
+						name: '联系电话',
+						field: 'phone',
+					}, {
+						name: '地址',
+						field: 'address',
+					}, {
+						name: '组织机构描述',
+						field: 'description',
+					},
+				],
+				loading: {
+					orgDetail: false,
+				},
+				panelMoving: false,
+				panelShowed: true,
+				activeName: 'details',
+				filterText: '',
+				currentNode: '',
+				currentNodeId: '',
+
+				orgnData: [],
+				defaultProps: {
+					label: 'text',
+					orgnData: 'orgnData'
+				},
+
+			}
+		},
+		watch: {
+			filterText: function (val) {
+				this.$refs.orgtree.filter(val);
+			}
+		},
+		mounted: function () {
+
+			this._requestTable();
+		},
+		methods: {
+			filterNode: function (value, data) {
+				if (!value) return true;
+				return data.text.indexOf(value) !== -1;
+			},
+			_requestTable: function () {
+				var that = this;
+				var url = jasTools.base.rootPath + "/jasframework/privilege/unit/getLeftTree.do";
+				jasTools.ajax.get(url, {}, function (data) {
+					that.orgnData = data[0].children;
+				});
+			},
+			_requestOrgDetail: function (oid) {
+				var that = this;
+				that.loading.orgDetail = true;
+				var url = jasTools.base.rootPath + "/jasframework/privilege/unit/findUnitById.do";
+				jasTools.ajax.get(url, {
+					oid: oid
+				}, function (data) {
+					setTimeout(function () {
+						that.loading.orgDetail = false;
+					}, 300)
+					that.detail = data;
+				});
+			},
+			clicknode: function (node, b, c) {
+				// console.log(a, b, c)
+				this.currentNode = node;
+				this.currentNodeId = node.id;
+				this._requestOrgDetail(node.id);
+			},
+
+
+
+
+
+
+
+
+			addNode: function (row) {
+				var that = this;
+				top.jasTools.dialog.show({
+					width: '60%',
+					height: '80%',
+					title: '新增组织机构',
+					src: './pages/row-privilege/page-organization/dialogs/add.html?pid=' + this.currentNodeId,
+					cbForClose: function () {
+						that._requestTable()
+					}
+				});
+			},
+			editNode: function (row) {
+				var that = this;
+				top.jasTools.dialog.show({
+					width: '60%',
+					height: '80%',
+					title: '修改组织机构',
+					src: './pages/row-privilege/page-organization/dialogs/add.html?oid=' + this.currentNodeId,
+					cbForClose: function () {
+						that._requestTable()
+					}
+				});
+			},
+			_requestDeleteNode: function (oid) {
+				var that = this;
+				var url = jasTools.base.rootPath + "/jasframework/privilege/unit/removeUnitById.do";
+				jasTools.ajax.get(url, {
+					oid: oid
+				}, function (data) {
+					top.Vue.prototype.$message({
+						type: 'success',
+						message: '删除成功！'
+					});
+					that._requestTable()
+				});
+			},
+
+			deleteNode: function () {
+				var that = this;
+				window.top.Vue.prototype.$confirm('您确定要删除本条数据吗？', '提示', {
+					type: 'warning',
+					callback: function (action) {
+						if (action === 'confirm') {
+							that._requestDeleteNode(that.currentNodeId);
+						}
+					}
+				});
+			},
+
+		},
+	});
+</script>
+
+</html>

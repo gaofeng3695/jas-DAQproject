@@ -72,3 +72,57 @@ Vue.component('jas-iframe-dialog', {
         '</el-dialog>'
     ].join(''),
 });
+
+
+Vue.component('jas-detail-table', {
+    props: {
+        titles: {
+            type: Array,
+            required: true
+        },
+        columnNum: {
+            default: 2,
+            type: Number
+        },
+        detail: {
+
+        }
+    },
+    data: function () {
+        return {}
+    },
+    computed: {
+        formatTitle: function () {
+            var that = this;
+            var newTitle = [];
+            if(!this.detail) return [];
+            this.titles.forEach(function (item, index, arr) {
+                if (index % that.columnNum === 0) {
+                    var _arr = [];
+                    for (var i = 0; i < that.columnNum; i++) {
+                        if(arr[index + i] !== undefined){
+                            _arr.push(arr[index + i]);
+                        }
+                    }
+                    newTitle.push(_arr)
+                }
+            });
+            console.log()
+            return newTitle;
+        }
+    },
+    template: [
+        '<div v-show="detail" class="jas-detail-table">',
+        '<table class="table_wrap">',
+        '    <template v-for="item in formatTitle">',
+        '        <tr>',
+        '            <template v-for="subitem in item">',
+        '                <th>{{subitem.name}}</th>',
+        '                <td>{{detail[subitem.field]}}</td>',
+        '            </template>',
+        '        </tr>',
+        '    </template>',
+        '</table>',
+        '</div>'
+    ].join(''),
+});
