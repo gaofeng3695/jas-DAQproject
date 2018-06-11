@@ -370,6 +370,8 @@
 					}
 					if (data.status == 1) {
 						cb_success && cb_success(data);
+					} else if (!data.status && data) {
+						cb_success && cb_success(data);
 					} else {
 						cb_fail && cb_fail(data);
 						window.top.Vue.prototype.$message({
