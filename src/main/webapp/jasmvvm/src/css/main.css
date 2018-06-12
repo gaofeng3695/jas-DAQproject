@@ -59,6 +59,14 @@ button {
     display: none;
 }
 
+
+/* element样式修正--开始 */
+.el-cascader-menu__item--extensible:after {
+    right: 6px;
+}
+/* element样式修正--结束 */
+
+
 /* 弹性盒子相关--开始 */
 
 .jas-flex-box {
@@ -211,8 +219,6 @@ button {
 
 /* 弹出框样式--结束 */
 
-
-
 /* 详情表格--开始 */
 
 .jas-detail-table .table_wrap {
@@ -240,8 +246,7 @@ button {
     width: 15%;
     text-align: right
 }
+
 .jas-detail-table .table_wrap td {}
+
 /* 详情表格--结束 */
-
-
-

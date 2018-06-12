@@ -113,7 +113,7 @@
 	<div id="app" v-cloak>
 
 		<multipane @paneresizestart="panelMoving = true" @paneresizestop="panelMoving = false" class="foo" layout="vertical" style="height: 100%;">
-			<div class="resizepanel" v-loading="panelMoving" :style="[{ width: panelShowed ?'200px' : '0px',maxWidth: '50%' }]" element-loading-spinner="11"
+			<div class="resizepanel" v-loading="panelMoving" :style="[{ width: panelShowed ?'300px' : '0px',maxWidth: '50%' }]" element-loading-spinner="11"
 			  element-loading-background="rgba(0, 0, 0, 0)">
 				<!-- <div class="orgtitle">组织机构管理</div> -->
 				<div class="filterwrap">
@@ -125,7 +125,8 @@
 					<el-button type="text" @click="editNode" :disabled="!currentNodeId">修改</el-button>
 					<el-button type="text" @click="deleteNode" :disabled="!currentNodeId">删除</el-button>
 				</div>
-				<el-tree ref="orgtree" :data="orgnData" :props="defaultProps" highlight-current @node-click="clicknode" :filter-node-method="filterNode"></el-tree>
+				<el-tree ref="orgtree" :data="orgnData" node-key="id" :props="defaultProps" :default-expanded-keys="[currentNodeId]" highlight-current
+				  @node-click="clicknode" :expand-on-click-node="false" :filter-node-method="filterNode"></el-tree>
 			</div>
 			<multipane-resizer>
 				<div class="resizertap" @click="panelShowed=!panelShowed">
@@ -232,6 +233,9 @@
 				var url = jasTools.base.rootPath + "/jasframework/privilege/unit/getLeftTree.do";
 				jasTools.ajax.get(url, {}, function (data) {
 					that.orgnData = data[0].children;
+					that.$nextTick(function () {
+						that.$refs.orgtree.setCurrentKey(that.currentNodeId);
+					})
 				});
 			},
 			_requestOrgDetail: function (oid) {
@@ -268,8 +272,10 @@
 					height: '80%',
 					title: '新增组织机构',
 					src: './pages/row-privilege/page-organization/dialogs/add.html?pid=' + this.currentNodeId,
-					cbForClose: function () {
-						that._requestTable()
+					cbForClose: function (param) {
+						if (param == 1) {
+							that._requestTable();
+						}
 					}
 				});
 			},
@@ -280,8 +286,10 @@
 					height: '80%',
 					title: '修改组织机构',
 					src: './pages/row-privilege/page-organization/dialogs/add.html?oid=' + this.currentNodeId,
-					cbForClose: function () {
-						that._requestTable()
+					cbForClose: function (param) {
+						if (param == 1) {
+							that._requestTable();
+						}
 					}
 				});
 			},
