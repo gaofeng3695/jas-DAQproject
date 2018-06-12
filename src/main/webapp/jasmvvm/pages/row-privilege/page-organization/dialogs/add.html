@@ -33,7 +33,8 @@
 		.el-select {
 			width: 100%;
 		}
-		.dialog-footer{
+
+		.dialog-footer {
 			padding-top: 8px;
 		}
 	</style>
@@ -122,25 +123,15 @@
 				},
 				treeData: [],
 				rules: {
-					excelTemplateName: [{
+					unitName: [{
 						required: true,
-						message: '请输入模板名称',
+						message: '请输入组织机构名称',
 						trigger: 'blur'
 					}],
-					excelTemplateCode: [{
+					unitCode: [{
 						required: true,
-						message: '请输入模板编号',
+						message: '请输入组织机构编号',
 						trigger: 'blur'
-					}],
-					file: [{
-						required: true,
-						validator: function (rule, value, callback) {
-							if (that.$refs.upload.uploadFiles.length === 0) {
-								callback(new Error('请上传模板'));
-							} else {
-								callback();
-							}
-						}
 					}]
 				},
 				tableFormData: {
@@ -152,41 +143,16 @@
 					"unitCode": "", //组织机构编号
 					"unitName": "", //组织机构名称
 					"unitType": "1", //组织机构类型 1部门 2单位
-					"hierarchy":""
+					"hierarchy": ""
 				},
 			}
 		},
 		computed: {
 			parentIdArr: {
 				get: function () {
-					var pidArr = [this.tableFormData.parentId];
-					var pid = '';
-
-					var getPId = function (dataArr, id) {
-						for (var i = 0; i < dataArr.length; i++) {
-							var item = dataArr[i];
-							if (item.id === id) {
-								if (pid === '') {
-									return pidArr;
-								} else {
-									pidArr.push(pid);
-									getPId(dataArr, pid)
-								}
-							} else {
-								if (item.children && item.children.length > 0) {
-									pid = item.id;
-									getPId(item.children, id)
-								}
-								pid = '';
-							}
-						}
-					};
-					console.log(this.tableFormData);
-					getPId(this.treeData, this.tableFormData.parentId);
-
-					return pidArr.reverse();
+					if (!this.treeData || !this.tableFormData.parentId || !this.treeData.length) return [];
+					return jasTools.base.getIdArrFromTree(this.treeData, this.tableFormData.parentId);
 				},
-				// setter
 				set: function (newValue) {
 					this.tableFormData.parentId = newValue[newValue.length - 1];
 				}
@@ -201,7 +167,7 @@
 				this.tableFormData.oid = this.oid;
 				this._requestNodeDetail(param.oid);
 			}
-			if(param.pid){
+			if (param.pid) {
 				this.tableFormData.parentId = param.pid;
 			}
 
@@ -222,7 +188,7 @@
 				jasTools.ajax.get(url, {
 					oid: oid
 				}, function (data) {
-					console.log(data);
+					// console.log(data);
 					setTimeout(function () {
 						that.loading = false;
 					}, 300)
@@ -254,7 +220,7 @@
 						type: 'success',
 						message: msg
 					});
-					that.cancel();
+					that.cancel(1);
 				});
 			},
 			checkNameOrCodeExist: function (cb) {
@@ -263,12 +229,12 @@
 					this.tableFormData.oid = this.oid;
 				}
 				var url = jasTools.base.rootPath + '/jasframework/privilege/unit/checkUnitExist.do';
-				jasTools.ajax.get(url, that.tableFormData, function (data) {
+				jasTools.ajax.post(url, that.tableFormData, function (data) {
 					cb && cb();
 				});
 			},
-			cancel: function () {
-				window.parent.jasTools.dialog.close();
+			cancel: function (param) {
+				window.parent.jasTools.dialog.close(param);
 			}
 		},
 	});

@@ -113,37 +113,53 @@
 		 * @param ms  毫秒数
 		 * @param cb  执行的函数
 		 */
-		var timeLimit = function (btnDom, ms, cb, cbFail) {
-			if (btnDom && btnDom.jasLastTime && ms) {
-				if ((new Date().getTime() - btnDom.jasLastTime) < ms) {
-					cbFail && cbFail();
-					return;
+
+		var getIdArrFromTree = function (treeData, nodeId, config) {
+
+			var pidArr = [nodeId];
+			var getPId = function (dataArr, id, pid) {
+				for (var i = 0; i < dataArr.length; i++) {
+					var item = dataArr[i];
+					if (item.id === id) {
+						return pid;
+					} else {
+						if (item.children && item.children.length > 0) {
+							var result = getPId(item.children, id, item.id);
+							if (result) return result;
+						}
+					}
 				}
-			}
-			if (btnDom) {
-				btnDom.jasLastTime = new Date().getTime();
-			}
-			cb && cb();
+			};
+			var getPPId = function (dataArr, id) {
+				var pid = getPId(dataArr, id, '');
+				if (pid) {
+					pidArr.push(pid);
+					getPPId(dataArr, pid);
+				} else {
+					return pidArr;
+				}
+			};
+
+			getPPId(treeData, nodeId);
+			return pidArr.reverse();
 		};
 
-		var loadingMask = null;
-		var showLoading = function (vueInst) {
-			if (vueInst && vueInst.$loading) {
-				// console.log(vueInst.$loading)
-			}
-		};
-		var closeLoading = function () {
-			if (!loadingMask) return;
-		};
+		//字符串下划线转为驼峰
+		var switchToCamelCase = function (string) {
+			// Support: IE9-11+
+			return string.replace(/_([a-z])/g, function (all, letter) {
+				return letter.toUpperCase();
+			});
+		}
+
 		return {
 			rootPath: getRootPath(),
 			createuuid: createuuid,
 			extend: extend,
 			getParamsInUrl: getParamsInUrl,
 			setParamsToUrl: setParamsToUrl,
-			timeLimit: timeLimit,
-			showLoading: showLoading,
-			closeLoading: closeLoading,
+			getIdArrFromTree: getIdArrFromTree,
+			switchToCamelCase: switchToCamelCase,
 		};
 	})();
 
