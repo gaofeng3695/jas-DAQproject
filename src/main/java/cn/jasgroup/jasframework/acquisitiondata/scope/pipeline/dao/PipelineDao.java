@@ -1,4 +1,4 @@
-package cn.jasgroup.jasframework.acquisitiondata.pipeline.dao;
+package cn.jasgroup.jasframework.acquisitiondata.scope.pipeline.dao;
 
 import java.util.List;
 import java.util.Map;
