@@ -73,6 +73,7 @@ var vm = new Vue({
       });
     }
   },
+
   created: function () {
     var that = this;
 
@@ -98,7 +99,6 @@ var vm = new Vue({
   mounted: function () {
     var that = this;
 
-    jasTools.base.showLoading();
   },
   methods: {
     isUi: function (type) {
@@ -381,6 +381,7 @@ var vm = new Vue({
             groupName: obj.groupName || null,
             placeholder: obj.placeholder || "",
             childField: obj.childField || null,
+            childFieldArr: obj.childField ? obj.childField.split(',') : [],
             requestPath: obj.requestPath || null,
             ifRequired: obj.ifRequired || "0",
             ifPrimaryKey: obj.ifPrimaryKey,
@@ -636,8 +637,12 @@ var vm = new Vue({
     saveFieldConfig: function () { // 保存字段配置信息
       var isSort = this._formatSortInfo();
       if (isSort) {
+        var funFunctionFieldsForms = this.privateTable.map(function(item){
+          item.childField = item.childFieldArr.join(',');
+          return item;
+        });
         jasTools.ajax.post(jasTools.base.rootPath + '/functionFields/save.do', {
-          funFunctionFieldsForms: this.privateTable,
+          funFunctionFieldsForms: funFunctionFieldsForms,
         }, function (data) {
           parent.window.jasTools.dialog.close(1);
           window.top.Vue.prototype.$message({

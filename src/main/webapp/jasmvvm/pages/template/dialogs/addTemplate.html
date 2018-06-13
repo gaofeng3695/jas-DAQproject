@@ -722,7 +722,8 @@
 				var formatFormAttr = function (options) {
 					that.formAttr.forEach(function (parent, index) {
 						parent.data.forEach(function (child) {
-							if (child.id == item.childField) {
+							console.log("_________",item.childField)
+							if (item.childField.indexOf(child.id) !== -1) {
 								if (value) {
 									child.options = options;
 								} else {
