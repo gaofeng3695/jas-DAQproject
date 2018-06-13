@@ -1,4 +1,4 @@
-package cn.jasgroup.jasframework.acquisitiondata.pipeline.controller;
+package cn.jasgroup.jasframework.acquisitiondata.scope.pipeline.controller;
 
 import java.util.List;
 import java.util.Map;
@@ -10,13 +10,12 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import cn.jasgroup.framework.data.exception.BusinessException;
 import cn.jasgroup.framework.data.result.ListResult;
-import cn.jasgroup.jasframework.acquisitiondata.pipeline.service.PipelineService;
+import cn.jasgroup.jasframework.acquisitiondata.scope.pipeline.service.PipelineService;
 import cn.jasgroup.jasframework.base.controller.BaseController;
 
 /***

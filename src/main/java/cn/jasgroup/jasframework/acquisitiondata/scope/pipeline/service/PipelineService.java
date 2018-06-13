@@ -1,4 +1,4 @@
-package cn.jasgroup.jasframework.acquisitiondata.pipeline.service;
+package cn.jasgroup.jasframework.acquisitiondata.scope.pipeline.service;
 
 import java.util.List;
 import java.util.Map;
@@ -8,7 +8,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
-import cn.jasgroup.jasframework.acquisitiondata.pipeline.dao.PipelineDao;
+import cn.jasgroup.jasframework.acquisitiondata.scope.pipeline.dao.PipelineDao;
 import cn.jasgroup.jasframework.engine.hibernate.service.CommonDataHibernateService;
 
 @Service
