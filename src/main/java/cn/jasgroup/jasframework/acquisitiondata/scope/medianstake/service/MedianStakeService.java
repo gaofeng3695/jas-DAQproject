@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.dao.MedianStakeDao;
 import cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.dao.entity.MedianStake;
+import cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.service.bo.MedianStakeQueryBo;
 import cn.jasgroup.jasframework.engine.hibernate.service.CommonDataHibernateService;
 
 @Service
@@ -63,8 +64,8 @@ public class MedianStakeService extends CommonDataHibernateService{
 	  * <p>创建日期:2018年6月13日 下午6:38:37。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public MedianStake get(String oid){
-		return (MedianStake) super.get(MedianStake.class, oid);
+	public MedianStakeQueryBo get(String oid){
+		return medianStakeDao.get(oid);
 	}
 	/**
 	 * <p>功能描述：获取中线桩列表，用于下拉选选。</p>
