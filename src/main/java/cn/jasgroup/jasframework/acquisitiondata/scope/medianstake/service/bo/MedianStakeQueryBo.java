@@ -20,7 +20,7 @@ public class MedianStakeQueryBo extends CommonBaseBo{
 	private String pipelineName;
 	
 	/** 里程(km) */
-	private String mileage; 
+	private Double mileage; 
 
 	/** 标石类型 */
 	private String markStoneType; 
@@ -32,13 +32,13 @@ public class MedianStakeQueryBo extends CommonBaseBo{
 	private String markStoneLocation; 
 
 	/** X坐标 */
-	private String pointx; 
+	private Double pointx; 
 
 	/** X坐标 */
-	private String pointy; 
+	private Double pointy; 
 
 	/** 高程 */
-	private String pointz; 
+	private Double pointz; 
 
 	/** 备注 */
 	private String remarks;
@@ -83,14 +83,6 @@ public class MedianStakeQueryBo extends CommonBaseBo{
 		this.pipelineName = pipelineName;
 	}
 
-	public String getMileage() {
-		return mileage;
-	}
-
-	public void setMileage(String mileage) {
-		this.mileage = mileage;
-	}
-
 	public String getMarkStoneType() {
 		return markStoneType;
 	}
@@ -115,27 +107,35 @@ public class MedianStakeQueryBo extends CommonBaseBo{
 		this.markStoneLocation = markStoneLocation;
 	}
 
-	public String getPointx() {
+	public Double getMileage() {
+		return mileage;
+	}
+
+	public void setMileage(Double mileage) {
+		this.mileage = mileage;
+	}
+
+	public Double getPointx() {
 		return pointx;
 	}
 
-	public void setPointx(String pointx) {
+	public void setPointx(Double pointx) {
 		this.pointx = pointx;
 	}
 
-	public String getPointy() {
+	public Double getPointy() {
 		return pointy;
 	}
 
-	public void setPointy(String pointy) {
+	public void setPointy(Double pointy) {
 		this.pointy = pointy;
 	}
 
-	public String getPointz() {
+	public Double getPointz() {
 		return pointz;
 	}
 
-	public void setPointz(String pointz) {
+	public void setPointz(Double pointz) {
 		this.pointz = pointz;
 	}
 
