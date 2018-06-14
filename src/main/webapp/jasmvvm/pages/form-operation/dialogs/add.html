@@ -294,9 +294,9 @@
 
 								<el-table-column label="级联子级" align="center" min-width="120px">
 									<template slot-scope="scope">
-										<el-select size="small" v-model="scope.row.childField" placeholder="请选择活动区域" v-show="isSqlSelect(scope.row.uiType)">
-											<el-option label="无" value=""></el-option>
-											<el-option v-for="option in selectNames" :label="option.fieldNameCn" :value="option.fieldName"></el-option>
+										<el-select size="small" v-model="scope.row.childFieldArr" multiple placeholder="" v-show="isSqlSelect(scope.row.uiType)">
+											<!-- <el-option label="无" value=""></el-option> -->
+											<el-option v-for="option in filterTable"v-show="isSqlSelect(option.uiType)" :label="option.fieldNameCn" :value="option.fieldName"></el-option>
 										</el-select>
 									</template>
 								</el-table-column>

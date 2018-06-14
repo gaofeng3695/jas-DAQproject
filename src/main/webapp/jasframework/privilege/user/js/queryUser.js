@@ -342,7 +342,6 @@ function getChildren(){
  * @desc 查询用户
  */
 function queryUser(){
-	alert();
 	$("#"+userDatagridID).datagrid('clearSelections'); // clear
 	var loginName = ($("#loginName").val()||"")!=""?"%"+$("#loginName").val()+"%":"";
 	var userName = ($("#userName").val()||"")!=""?"%"+$("#userName").val()+"%":"";

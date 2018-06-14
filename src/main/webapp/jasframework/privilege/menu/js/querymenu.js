@@ -3,26 +3,25 @@
  */
 function getappsystem(){
 	$.ajax({
-		url:rootPath+"/jasframework/appsystem/getUserAppsystem.do?random=" + new Date().getTime(),
+		url:rootPath+"jasframework/privilege/application/getUserAppsystem.do?",
 		type:"post",
 		success:function(result){
 			var selecthtm="";
 			for(var i=0;i<result.length;i++){
-				selecthtm+="<option value=\""+result[i].appnumber+"\">"+result[i].name+"</option>";
+				selecthtm+="<option value=\""+result[i].oid+"\">"+result[i].appName+"</option>";
 			}
-			$("#appnumber").html(selecthtm);
-			$('#appnumber1').combobox({   
+			$("#appId").html(selecthtm);
+			$('#appId1').combobox({   
 				 data:result,
-				 valueField:'appnumber',   
-				 textField:'name'  ,
+				 valueField:'oid',   
+				 textField:'appName'  ,
 				 onSelect:function(record){
-					 selectappsystem(record.appnumber);
+					 selectappsystem(record.oid);	//选择应用，携带应用的oid
 				 },onLoadSuccess:function(){
 					 var data=$(this).combobox("getData");
 					 if(data.length>0){
-//						 $(this).combobox('setValue',data[0].appnumber);
-						 $(this).combobox('select',data[0].appnumber);
-						 setComboObjWidth('appnumber1',1,'combobox','left');
+						 $(this).combobox('select',data[0].oid);
+						 setComboObjWidth('appId1',1,'combobox','left');
 					 }
 				 }
 				}); 
@@ -30,7 +29,7 @@ function getappsystem(){
 //			setComboObjWidth('appnumber1',1,'combobox','left');
 			
 			if(result[0]){
-				inittree(result[0].appnumber);
+				inittree(result[0].oid);
 			}
 		},
 		dataType:"json",
@@ -81,17 +80,17 @@ function getappsystem(){
 		});
 	});
 	
-	function clickmenu(menuid){
-		url =  rootPath+"/jasframework/privilege/menu/getMenuById.do?eventid="+menuid+"&random=" + new Date().getTime();
+	function clickmenu(oid){
+		url =  rootPath+"/jasframework/privilege/menu/getById.do?oid="+oid;
 		 jQuery.post(url, function(data){
 			 $('#viewSiteForm').form('load', data);
 		 },"json");
 	}
 	
-	function inittree(appnumber){
+	function inittree(appId){
 		
 		$.ajax({
-			   url : rootPath+"jasframework/privilege/menu/getAllMenuByAppnumber.do?appnumber="+appnumber+"&random=" + new Date().getTime(),
+			   url : rootPath+"jasframework/privilege/menu/getListByAppId.do?appId="+appId,
 			   success: function(msg){
 			     $('#tt').tree( {
 			    	 checked:true,
@@ -108,7 +107,7 @@ function getappsystem(){
 			    	 }
 			     });
 			     
-			     $('#parenteventid').combotree( {
+			     $('#parentId').combotree( {
 			    	 	data:msg,
 						checked:true,
 						disabled:true,
@@ -121,7 +120,7 @@ function getappsystem(){
 						onClick : function(node) {
 						}
 					});
-			     setComboObjWidth('parenteventid',0.615,'combotree');
+			     setComboObjWidth('parentId',0.615,'combotree');
 			     
 			   },
 			   dataType:"JSON"
@@ -144,15 +143,15 @@ function getappsystem(){
 	 * 描述：新增按钮事件
 	 */
 	function addmenu() {
-		var appnumber=$("#appnumber1").combobox("getValue");
+		var appId=$("#appId1").combobox("getValue");
 		var row = $('#tt').tree('getSelected');
-		var eventId;
+		var oid;
 		if (row != null) {
-			eventId  = row.id;
-			url = "addmenu.htm?appnumber="+appnumber+"&parentid=" + eventId;
+			oid  = row.id;
+			url = "addmenu.htm?appId="+appId+"&parentId=" + oid;
 			top.getDlg(url, "saveiframe",getLanguageValue("add"), 700, 430);
 		} else {
-			top.getDlg("addmenu.htm?appnumber="+appnumber, "saveiframe",getLanguageValue("add"), 700, 430);
+			top.getDlg("addmenu.htm?appId="+appId, "saveiframe",getLanguageValue("add"), 700, 430);
 		}
 	
 	}
@@ -160,18 +159,21 @@ function getappsystem(){
 	 * 描述：修改按钮事件
 	 */
 	function updatemenu() {
-		var eventId;
+		var oid;
 		var parentId;
 		var row = $('#tt').tree('getSelected');
 		if (row != null) {
-			var appnumber=$("#appnumber1").combobox("getValue");
-			eventId = row.id;
-			var node = $('#tt').tree('find',eventId);
+			var appId=$("#appId1").combobox("getValue");
+			oid = row.id;
+			var node = $('#tt').tree('find',oid);
 			var parentNode=$('#tt').tree('getParent',node.target);
-//			alert(JSON.stringify(parentNode));
+			if( parentNode == null){
+				alert("顶级菜单不能修改");
+				return;
+			}
 			parentId=parentNode.id;
-			url = "updatemenu.htm?menuid=" + eventId+"&appnumber="+appnumber+"&parentid="+parentId;
-			top.getDlg(url, "saveiframe",getLanguageValue("edit"), 700, 500);
+			url = "updatemenu.htm?oid=" + oid+"&appId="+appId+"&parentId="+parentId;
+			top.getDlg(url, "saveiframe",getLanguageValue("edit"), 700, 400);
 		} else {
 			top.showAlert(getLanguageValue("tip"),getLanguageValue("chooserecord"), 'info');
 			return;
@@ -185,12 +187,11 @@ function getappsystem(){
 			});
 	}
 
-	function selectappsystem(appnumber){
-//		var appnumber=$("#appnumber1").combobox("getValue");
-		  var url = rootPath+"/jasframework/privilege/menu/getAllMenuByAppnumber.do?appnumber="+appnumber+"&random=" + new Date().getTime();
-		  $.getJSON(url, function(data){
+	function selectappsystem(appId){
+		var url = rootPath+"/jasframework/privilege/menu/getListByAppId.do?appId="+appId;
+		$.getJSON(url, function(data){
 			$('#tt').tree('loadData',data);
-			});
+		});
 	}
 	/**
 	 * 
@@ -199,7 +200,7 @@ function getappsystem(){
 	function resizeLayout(){
 		try{
 			clientWidth = document.documentElement.clientWidth;
-			$('#appnumber1').combobox('resize', $('#left').width());
+			$('#appId1').combobox('resize', $('#left').width());
 		}catch(e){
 			
 		}
@@ -207,7 +208,7 @@ function getappsystem(){
 	
 	function reloadchildren(parentid){
 		if(parentid=="null" || parentid==""){
-			$("#tt").tree("options").url= rootPath+"/jasframework/privilege/menu/getAllMenuByAppnumber.do?appnumber="+$("#appnumber1").combobox("getValue")+"&eventid="+parentid+"&random=" + new Date().getTime();
+			$("#tt").tree("options").url= rootPath+"/jasframework/privilege/menu/getListByAppId.do?appId="+$("#appId1").combobox("getValue")+"&oid="+parentid;
 			$("#tt").tree("reload");
 		}else{
 			var node=$('#tt').tree("find",parentid);
@@ -217,7 +218,7 @@ function getappsystem(){
 				$('#tt').tree("append",{parent:node.target,data:[{id:"1",text:"dd"}]});
 			}
 			/***end***/
-			$("#tt").tree("options").url= rootPath+"/jasframework/privilege/menu/getAllChildrenMenu.do?appnumber="+$("#appnumber1").combobox("getValue")+"&eventid="+parentid;
+			$("#tt").tree("options").url= rootPath+"/jasframework/privilege/menu/getChildrenMenuList.do?appId="+$("#appId1").combobox("getValue")+"&oid="+parentid;
 			$("#tt").tree("reload",node.target);
 			setTimeout(function(){
 				$("#tt").tree('select',node.target);
@@ -229,17 +230,19 @@ function getappsystem(){
 	function deletemenu(){
 		var row = $('#tt').tree('getSelected');
 		if (row != null) {
-			var checkurl=rootPath+"/jasframework/privilege/menu/ismenuisMenuChildrenExist.do?parentid="+row.id;
+			var checkurl=rootPath+"jasframework/privilege/menu/isMenuChildrenExist.do?parentId="+row.id;
 			$.getJSON(checkurl,function(data){
 				if(data.success==1){
-					var url= rootPath+"/jasframework/privilege/menu/deleteMenuById.do?menuId="+row.id+"&random=" + new Date().getTime();
+					var url= rootPath+"jasframework/privilege/menu/deleteById.do?oid="+row.id;
 					top.$.messager.confirm(getLanguageValue("delete"),getLanguageValue("deleteconfirm"),function(r){
 						if(r){
 							$.getJSON(url, function(data){
-								if(data.success==1){
+								if(data.status==1){
 									top.showAlert(getLanguageValue("success"),getLanguageValue("deletesuccess"),'ok',function(){
 										 $('#tt').tree('remove',row.target);
 									});
+								}else{
+									top.showAlert('提示',result.msg,'info');
 								}
 							});
 						}

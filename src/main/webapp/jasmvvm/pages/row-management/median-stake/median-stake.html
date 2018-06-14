@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>自定义表单配置</title>
+	<!-- <link rel="stylesheet" href="./libelement-ui/element-#0E2B4A/src/index.css"> -->
+	<link rel="stylesheet" href="./../../../lib/element-ui/v2.2.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../lib/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="./../../../src/css/main.css">
+</head>
+
+<body>
+	<div id="app" v-cloak>
+		<jas-list-wrapper>
+			<jas-search-for-list slot="search" v-model="topSearch" :fields="searchFields" @search="searchList"></jas-search-for-list>
+			<jas-table-for-list slot="list" :fields="tableFields" :form="topSearch"></jas-table-for-list>
+		</jas-list-wrapper>
+	</div>
+</body>
+
+<script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../lib/vue/vue.js"></script>
+<script src="./../../../lib/element-ui/v2.2.1/index.min.js"></script>
+<script src="./../../../common/components/jas-components.js"></script>
+<script src="./../../../common/js/jas-tools.js"></script>
+<script>
+	var vm = new Vue({
+		el: '#app',
+		data: function () {
+			return {
+				token: localStorage.getItem("token"),
+
+				topSearch: {
+					project_name: '',
+					pipeline_name: '',
+					median_stake_code: ''
+				},
+				searchFields: [ //
+					{
+						name: '项目名称',
+						field: 'project_name'
+					}, {
+						name: '管线名称',
+						field: 'pipeline_name'
+					}, {
+						name: '中线桩编号',
+						field: 'median_stake_code'
+					}
+				],
+				tableFields: [ //
+					{
+						name: '项目名称',
+						field: 'project_name'
+					}, {
+						name: '管线名称',
+						field: 'pipeline_name'
+					}, {
+						name: '中线桩编号',
+						field: 'median_stake_code'
+					}, {
+						name: '里程(km)',
+						field: 'mileage'
+					}, {
+						name: '高程',
+						field: 'pointz'
+					}, {
+						name: 'X坐标',
+						field: 'pointx'
+					}, {
+						name: 'Y坐标',
+						field: 'pointy'
+					}, {
+						name: '标石类型',
+						field: 'mark_stone_name'
+					}, {
+						name: '标石概略位置',
+						field: 'mark_stone_location'
+					}, {
+						name: '备注',
+						field: 'remarks'
+					}
+				],
+
+
+				//	序号	项目名称*	管线名称*	中线桩编号*	里程*	高程	X坐标*	Y坐标*	标石类型	标石概略位置	备注
+				formData: {
+					oid: '', //	主键
+					project_oid: '', //	项目oid
+					project_name: '', //	项目oid
+					pipeline_oid: '', //	管线oid
+					pipeline_name: '', //	管线oid
+					median_stake_code: '', //	中线桩编号
+					mileage: '', //	里程(km)
+					pointz: '', //	高程
+					pointx: '', //	X坐标
+					pointy: '', //	Y坐标
+					mark_stone_type: '', //	标石类型
+					mark_stone_name: '', //	标石类型
+					mark_stone_location: '', //	标石概略位置
+					remarks: '', //	备注
+					create_user_id: '', //	创建人id
+					create_user_name: '', //	创建人名称
+					create_datetime: '', //	创建时间
+					modify_user_id: '', //	修改人id
+					modify_user_name: '', //	修改人名称
+					modify_datetime: '', //	修改时间
+					active: '', //	有效标志
+				}
+			}
+		},
+		mounted: function () {
+			//this.getdataSoucreAndType();
+			// this.add();
+			// this.search();
+		},
+		methods: {
+
+
+			searchList: function () {
+				// this._requestTable();
+			},
+		},
+	});
+</script>
+
+</html>

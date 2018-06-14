@@ -11,10 +11,11 @@ body,
     height: 100%;
     color: #333;
     font-size: 14px;
+    background: #fff;
 }
 
 body {
-    font-family: "Helvetica Neue", Helvetica, "microsoft yahei", arial, STHeiTi, sans-serif;
+    font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
 }
 
 a {
@@ -59,6 +60,13 @@ button {
 }
 
 
+/* element样式修正--开始 */
+.el-cascader-menu__item--extensible:after {
+    right: 6px;
+}
+/* element样式修正--结束 */
+
+
 /* 弹性盒子相关--开始 */
 
 .jas-flex-box {
@@ -97,7 +105,6 @@ button {
     flex-basis: auto;
     min-height: 0;
     height: 0%;
-
 }
 
 .jas-flex-box.is-horizontal .is-grown {
@@ -109,8 +116,8 @@ button {
     min-width: 0;
     width: 0%;
 }
-/* 弹性盒子相关--结束 */
 
+/* 弹性盒子相关--结束 */
 
 /* v-bar自定义滚动条--开始 */
 
@@ -154,15 +161,13 @@ button {
     background-color: rgba(48, 121, 244, .5);
 }
 
-
 /* v-bar自定义滚动条--结束 */
-
 
 /* font-awesome字体样式调整--开始 */
 
 .el-menu-item [class^=fa] {
     margin-right: 5px;
-    width: 24px;
+    width: 20px;
     text-align: center;
     font-size: 16px;
     line-height: 18px;
@@ -172,26 +177,26 @@ button {
 .el-submenu [class^=fa] {
     vertical-align: middle;
     margin-right: 5px;
-    width: 24px;
+    width: 20px;
     text-align: center;
     font-size: 16px;
     line-height: 18px;
 }
+
 .el-button [class*=fa-]+span {
     margin-left: 5px;
 }
 
 /* font-awesome字体样式调整--结束 */
 
-
 /* iframe弹出框样式--开始 */
-.jas-iframe-dialog .el-dialog__header{
-    padding:20px 0 10px;
-    border-bottom: 1px solid  #e4e7ed;
+
+.jas-iframe-dialog .el-dialog__header {
+    padding: 20px 0 10px;
+    border-bottom: 1px solid #e4e7ed;
     margin: 0 20px;
     text-align: center;
 }
-
 
 .jas-iframe-dialog .el-dialog {
     height: 70vh;
@@ -212,5 +217,36 @@ button {
     height: 100%;
 }
 
-
 /* 弹出框样式--结束 */
+
+/* 详情表格--开始 */
+
+.jas-detail-table .table_wrap {
+    width: 100%;
+    table-layout: fixed;
+    empty-cells: show;
+    border-collapse: collapse;
+    border: 1px solid #cad9ea;
+}
+
+.jas-detail-table .table_wrap tr,
+.jas-detail-table .table_wrap th,
+.jas-detail-table .table_wrap td {
+    border: 1px solid #cad9ea;
+    padding: 6px 6px;
+    color: #333;
+    font-weight: normal;
+    word-wrap: break-word;
+    word-break: break-all;
+    line-height: 1.8;
+}
+
+.jas-detail-table .table_wrap th {
+    background-color: #f3f8fc;
+    width: 15%;
+    text-align: right
+}
+
+.jas-detail-table .table_wrap td {}
+
+/* 详情表格--结束 */

@@ -44,31 +44,32 @@ $(function() {
 	function loadRoleSelect() {
 		showProgress();
 		$.getJSON(rootPath+"jasframework/privilege/role/getListNoSuperadmin.do?", function(d) {
-			$('#roleId').combobox({   
+			$('#roleId').combobox({
 				 data:d.rows,
 				 valueField:'oid',   
 				 textField:'roleName'  ,
 				 onSelect:function(record){
-					 changeSelect(record.oid,$("#appId").combobox("getValue"))
+					 changeSelect(record.oid,$("#appId").combobox("getValue"));
 				 },
 				 onLoadSuccess:function(){
 					if($("#roleId").combobox("getValue")!=null || $("#roleId").combobox("getValue")!=""){
 						getappsystem();
 					}
 				 }
-				}); 
+			}); 
 			$('#roleId').combobox("setValue",d.rows[0].oid);
 			setComboObjWidth('roleId',0.25,'combobox','MainArea');
-			 var APP_NUMBER=$("#roleId").combobox("getValue");
-			 var url = rootPath+"jasframework/privilege/privilege/getAllConfig.do?roleId="+$("#roleId").combobox("getValue")+"&appId="+APP_NUMBER+"&r="+new Date().getTime();
+			/*var APP_NUMBER=$("#appId").combobox("getValue");
+			var url = rootPath+"jasframework/privilege/privilege/getAllConfig.do?roleId="+$("#roleId").combobox("getValue")+"&appId="+APP_NUMBER+"&r="+new Date().getTime();
 			$('#privilegeId').tree( {
 				url : url,
 				checkbox:true,
 				onLoadSuccess:function(node,data) {
+					console.log(data);
 				},
 				onClick : function(node) {
 				}
-			});
+			});*/
 		});
 	
 	}
@@ -183,11 +184,12 @@ $(function() {
 			url : url,
 			checkbox:true,
 			onLoadSuccess:function(node,data) {
-			},
-			onClick : function(node) {
+				console.log(data);
+			},onClick : function(node) {
 			}
 		});
 	}
+	
 	/**
 	 * 描述：获取应用系统并拼接成下拉列表
 	 */
@@ -196,15 +198,15 @@ $(function() {
 			url:rootPath+"/jasframework/privilege/application/getUserAppsystem.do",
 			type:"post",
 			success:function(result){
-				$('#appId').combobox({   
+				$('#appId').combobox({
 					 data:result,
 					 valueField:'oid',   
 					 textField:'appName'  ,
 					 onSelect:function(record){
-							if($("#roleId").combobox("getValue")==null || $("#roleId").combobox("getValue")==""){return;}
-							changeSelect($("#roleId").combobox("getValue"),record.oid);
+						 if($("#roleId").combobox("getValue")==null || $("#roleId").combobox("getValue")==""){return;}
+						 changeSelect($("#roleId").combobox("getValue"),record.oid);
 					 }
-					}); 
+				}); 
 				setComboObjWidth('appId',0.25,'combobox','MainArea');
 				$('#appId').combobox("setValue",result[0].oid);
 			},

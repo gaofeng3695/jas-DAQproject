@@ -23,24 +23,24 @@
 </head>
 <body>
 <!-- 权限编号 -->
-		<input type="hidden" id="menuid" value="101002"/>
+		<input type="hidden" id="menuid" value="P-PRI-0220"/>
 		
 <!-- 主体内容块 -->
 	<div id="contentArea" class="content-area">
 		<form class="content-area-main">
 			<table class="detail-table">
 				<tr>
-					<th><span >角色名称</span></th>
+					<th><span  key="role.roleName" class="paltform-i18n">角色名称</span></th>
 					<td><span id="name"></span></td>
-					<th><span >角色部门</span></th>
+					<th><span  key="role.unitName" class="paltform-i18n">角色部门</span></th>
 					<td><span id="unitName"></span></td>
 				</tr>
 				<tr>
-				   <th><span >角色类型</span></th>
+				   <th><span  key="role.roleType" class="paltform-i18n">角色类型</span></th>
 					<td colspan="3"><span id="roleType"></span></td>
 				</tr>
 				<tr>
-				    <th><span >描述</span></th>
+				    <th><span  key="role.description" class="paltform-i18n">描述</span></th>
 				    <td colspan="3"><span id="description"></span></td>
 				</tr>
 			</table>
@@ -53,7 +53,7 @@
 			<tr>
 				<td>
 					<a href="#" class="easyui-linkbutton close-btn" onclick="closeRole();">
-						<span >关闭</span>
+						<span  key="close" class="paltform-i18n">关闭</span>
 					</a>
 				</td>
 			</tr>

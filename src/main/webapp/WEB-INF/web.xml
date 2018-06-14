@@ -12,13 +12,16 @@
   </context-param>
   <context-param>
     <param-name>sessiontimeout</param-name>
-    <param-value>30</param-value>
+    <param-value>60</param-value>
   </context-param>
   <listener>
     <listener-class>cn.jasgroup.jasframework.security.base.ApplictionContextListener</listener-class>
   </listener>
   <listener>
     <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+  </listener>
+  <listener>
+    <listener-class>cn.jasgroup.jasframework.security.components.StartOpenOfficeServiceListener</listener-class>
   </listener>
   <listener>
     <listener-class>cn.jasgroup.jasframework.security.base.SessionListener</listener-class>
@@ -44,7 +47,7 @@
     <filter-class>cn.jasgroup.jasframework.security.base.LoginFilter</filter-class>
     <init-param>
       <param-name>exceptPaths</param-name>
-      <param-value>index.htm,login.htm,login.do,forgotPassword.do,findPassword.do,savePassword.do,editPassword.htm,sessiontimeout.html</param-value>
+      <param-value>login.htm,login.do,forgotPassword.do,findPassword.do,savePassword.do,editPassword.htm,sessiontimeout.html,timeout.html</param-value>
     </init-param>
   </filter>
   <filter-mapping>
@@ -86,7 +89,7 @@
     <load-on-startup>1</load-on-startup>
   </servlet>
   <session-config>
-    <session-timeout>30</session-timeout>
+    <session-timeout>60</session-timeout>
   </session-config>
   <resource-ref>
     <description>描述(可不要)</description>

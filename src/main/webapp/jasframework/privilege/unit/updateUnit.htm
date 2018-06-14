@@ -26,20 +26,20 @@
 	<input type="hidden" id="menuid" value="100603"/>
 <!-- 	<div id="dlg"> -->
 		<form id="editgroups" method="post">
-			<input type="hidden" name="eventid" id="eventid"/>
+			<input type="hidden" name="oid" id="oid"/>
 			<table align="center" class="edit-table" >	
 				<tr>
 					<td width="20%"><span key="unit.parentid" class="paltform-i18n">上级组织：</span></td>
-					<td width="30%"><input id="parentId" name="parentId" class="easyui-combotree" panelHeight="auto" style="width: 230px"></td>
+					<td width="30%"><input id="parentId" name="parentId" class="easyui-combotree" panelHeight="auto" required="true"></td>
 					<td width="20%"><span key="unit.name" class="paltform-i18n">组织机构名称：</span></td>
 					<td width="30%"><input id="unitName" name="unitName" class="easyui-validatebox input_bg" missingMessage="不能为空" required="true" validType="general" maxlength="25"></td>
 				</tr>
 				<tr>
-					<td width="20%"><span key="unit.unitid" class="paltform-i18n">组织机构编号：</span></td>
-					<td width="30%"><input id="unitNum" name="unitNum" class="easyui-validatebox input_bg" missingMessage="不能为空" required="true" validType="general" maxlength="25" ></td>
+					<td width="20%"><span key="unit.unitCode" class="paltform-i18n">组织机构编号：</span></td>
+					<td width="30%"><input id="unitCode" name="unitCode" class="easyui-validatebox input_bg" missingMessage="不能为空" required="true" validType="general" maxlength="25" ></td>
 					<td width="20%"><span key="unit.unittype" class="paltform-i18n">组织机构类型：</span></td>
 					<td width="30%">
-						<select name="unitType" id="unitType" class="easyui-combobox" editable="false" panelHeight="auto"  style="width: 230px" required="true">
+						<select name="unitType" id="unitType" class="easyui-combobox" editable="false" panelHeight="auto"  required="true">
 							<option value="1">部门</option>
 							<option value="2">单位</option>
 						</select>

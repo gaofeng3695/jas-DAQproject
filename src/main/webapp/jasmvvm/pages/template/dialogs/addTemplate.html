@@ -33,7 +33,7 @@
 			width: 100%;
 			position: absolute;
 			bottom: 0px;
-			z-index: 3000;
+			z-index: 190;
 			height: 40px;
 			line-height: 40px;
 		}
@@ -104,20 +104,21 @@
 </head>
 
 <body>
-	<div id="app">
+	<div id="app" v-cloak v-loading="isLoading">
 		<div class="content">
+
 			<el-form ref="formData" :model="formData" :label-width="labelwidth">
 				<template v-for="group in formAttr">
 					<div class="bulk" v-if="group.groupName">
-						<span class="title">
-						{{group.groupName}}
-					</span>
+						<span class="title" v-text="group.groupName">
+						</span>
 					</div>
 					<el-row :gutter="10">
 						<template v-for="item in group.data">
+
 							<el-col v-if="item.type=='UT_13'" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 								<el-form-item :prop="item.id" :label="item.name" :rules="item.verify">
-									<el-input v-if="item.type=='UT_13'" type="文本域" :rows="2" :size="item.size" v-model="formData[item.id]" :disabled="item.disabled"></el-input>
+									<el-input v-if="item.type=='UT_13'" autosize type="textarea" :rows="2" :size="item.size" v-model="formData[item.id]" :disabled="item.disabled"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col v-else :xs="formConfig.xs" :sm="formConfig.sm" :md="formConfig.md" :lg="formConfig.lg" :xl="formConfig.xl" :class="{'height' : item.type=='UT_14'||item.type=='UT_05'||item.type=='UT_06'||item.type=='UT_07'||item.type=='UT_08' }">
@@ -166,33 +167,41 @@
 					</el-row>
 				</template>
 				<el-row>
-					<el-upload multiple :limit="limitNum" :show-file-list="false" class="upload-demo" name="files" ref="upload" :action="actionURL"
-					  :on-exceed="onExceed" :on-change="uploadOnChange" :on-success="onsuccess" :file-list="fileList" :auto-upload="autoUpload"
-					  :on-progress="uploadOnProgress">
-						<div class="bulk" style="text-align: left">
-							<span class="title">上传附件<span style="padding-left:10px">{{fileListlength}}<span><span style="padding-left:5px">—<span><span style="padding-left:5px">{{limitNum}}<span></span>
-							<div style="float:right;font-size:18px;color:rgb(64, 158, 255)" slot="trigger" class="fa fa-upload" style="font-size:20px">
-							</div>
-						</div>
-					</el-upload>
-					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-						<div class="file-list">
-							<div v-for="(item,key) in fileListStatus" :key="key" class="file-item">
-								<div style="float:left">
-									<i class="el-icon-document"> </i>
-									<span style="padding-left:10px">{{item.name}}</span>
-								</div>
-								<div style="float:right">
-									<i v-if="item.oid" class="el-icon-view btn" @click="handlePreview(item)"> </i>
-									<i v-if="item.oid" class="el-icon-download btn" @click="handleDownload(item)"> </i>
-									<i class="el-icon-delete btn" @click="handleFileRemove(item,key)"> </i>
+					<template v-if="ifAttachment">
+						<el-upload multiple :limit="limitNum" :show-file-list="false" class="upload-demo" name="files" ref="upload" :action="actionURL"
+						  :on-exceed="onExceed" :on-change="uploadOnChange" :on-success="onsuccess" :file-list="fileList" :auto-upload="autoUpload"
+						  :on-progress="uploadOnProgress">
+							<div class="bulk" style="text-align: left">
+								<span class="title">
+									<span>上传附件</span>
+									<span style="padding-left:10px">{{fileListlength}}</span>
+									<span style="padding-left:5px">—</span>
+									<span style="padding-left:5px">{{limitNum}}</span>
+								</span>
+								<div style="float:right;font-size:18px;color:rgb(64, 158, 255)" slot="trigger" class="fa fa-upload" style="font-size:20px">
 								</div>
 							</div>
-							<div v-if="!pass && progress !== 0" class="file-item img-progress">
-								<el-progress :percentage="progress" :status="proStatus"></el-progress>
+						</el-upload>
+						<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+							<div class="file-list">
+								<div v-for="(item,key) in fileListStatus" :key="key" class="file-item">
+									<div style="float:left">
+										<i class="el-icon-document"> </i>
+										<span style="padding-left:10px">{{item.name}}</span>
+									</div>
+									<div style="float:right">
+										<i v-if="item.oid" class="el-icon-view btn" @click="handlePreview(item)"> </i>
+										<i v-if="item.oid" class="el-icon-download btn" @click="handleDownload(item)"> </i>
+										<i class="el-icon-delete btn" @click="handleFileRemove(item,key)"> </i>
+									</div>
+								</div>
+								<div v-if="!pass && progress !== 0" class="file-item img-progress">
+									<el-progress :percentage="progress" :status="proStatus"></el-progress>
+								</div>
 							</div>
-						</div>
-					</el-col>
+						</el-col>
+					</template>
+
 				</el-row>
 			</el-form>
 		</div>
@@ -213,10 +222,15 @@
 		el: "#app",
 		data: function () {
 			return {
+				isLoading: true,
 				rules: [],
-				formData: {},
-				formAttr: [],
-				labelwidth: "",
+				formData: {}, // 表单字段详情对象
+				formAttr: [], // 表单字段，分组排序，配置数组
+				// [{
+				// 	groupName: '分组名',
+				// 	data: that._sortArray(groupAttr)
+				// }]
+				labelwidth: "100",
 				formConfig: {
 					xs: 24,
 					sm: 12,
@@ -226,7 +240,7 @@
 				},
 				fileListlength: 0,
 				menuCode: "",
-				isEdit: {},
+				formDetail: {},
 				fileList: [],
 				fileListStatus: [],
 				pkArray: [],
@@ -239,7 +253,7 @@
 			}
 		},
 		computed: {
-			proStatus:function() { //上传状态
+			proStatus: function () { //上传状态
 				if (this.pass) {
 					return 'success';
 				} else if (this.pass == false) {
@@ -255,11 +269,13 @@
 				this.menuCode = param.menuCode;
 			}
 			delete param.menuCode;
-			this.isEdit = param;
-			if (JSON.stringify(this.isEdit) == '{}') {
-				this.requestConfig();
-			} else {
-				this.requestDetailByObj();
+			this.formDetail = param;
+			this.isAddPage = JSON.stringify(this.formDetail) == '{}'; // 根据URL中传入的数据判断该页面是否处于编辑页面
+			this.requestConfig();
+			this.requestRule();
+			this.requestFieldConfigByOid();
+			if (!this.isAddPage) {
+				this.requestDetailByObj(); //请求表单详情
 			}
 		},
 		methods: {
@@ -277,12 +293,12 @@
 						}
 						that.autoUpload = data.file.autoUpload;
 						that.limitNum = data.file.limitNum;
-						that.requestRule();
 					}
 				});
 			},
 			requestRule: function () { //显示请求规则，成功之后再去请求所有的
 				var that = this;
+
 				$.ajax({
 					type: "get",
 					url: "../../form-operation/js/regexp.json",
@@ -294,76 +310,60 @@
 						}
 					}
 				});
-				that.requestByOid();
 			},
-			requestByOid: function () {
+			requestFieldConfigByOid: function () { // 获取各个字段的配置信息
 				var that = this;
-				$.ajax({
-					type: "get",
-					url: jasTools.base.rootPath + "/functionConfiguration/getDetailByCode.do?token=" + localStorage.getItem("token"),
-					dataType: "json",
-					data: {
-						functionCode: that.menuCode
-					},
-					async: true,
-					success: function (data) {
-						if (data.status == 1) {
-							/*是否存在附件*/
-							if (data.data.ifAttachment == '1') {
-								that.ifAttachment = true;
-							} else {
-								that.ifAttachment = false;
+				var url = jasTools.base.rootPath + "/functionConfiguration/getDetailByCode.do";
+				jasTools.ajax.get(url, {
+					functionCode: that.menuCode
+				}, function (data) {
+					that.isLoading = false;
+					that.ifAttachment = !!(data.data.ifAttachment == 1); //是否存在附件
+					var fieldsGrouped = that._formatFieldsByGroup(data.data.functionFieldsBoList);
+					if (that.isAddPage) {
+						that.getAddField(fieldsGrouped);
+					} else {
+						that.getEditField(fieldsGrouped);
+					}
+				})
+			},
+			_formatFieldsByGroup: function (aFields) { // 将字段进行分组格式化
+				var map = {};
+				var dest = [];
+				for (var i = 0; i < aFields.length; i++) {
+					var ai = aFields[i];
+					if (!map[ai.groupIndex || ai.groupName]) {
+						dest.push({
+							groupName: ai.groupName,
+							index: ai.groupIndex || '',
+							data: [ai]
+						});
+						map[ai.groupIndex || ai.groupName] = ai;
+					} else {
+						for (var j = 0; j < dest.length; j++) {
+							var dj = dest[j];
+							if ((dj.index == ai.groupIndex) || (dj.groupName == ai.groupName)) {
+								dj.data.push(ai);
+								break;
 							}
-							/*是否存在附件*/
-							var arr = data.data.functionFieldsBoList;
-							var map = {};
-							var dest = [];
-							for (var i = 0; i < arr.length; i++) {
-								var ai = arr[i];
-								if (!map[ai.groupIndex || ai.groupName]) {
-									dest.push({
-										groupName: ai.groupName,
-										index: ai.groupIndex || '',
-										data: [ai]
-									});
-									map[ai.groupIndex || ai.groupName] = ai;
-								} else {
-									for (var j = 0; j < dest.length; j++) {
-										var dj = dest[j];
-										if ((dj.index == ai.groupIndex) || (dj.groupName == ai.groupName)) {
-											dj.data.push(ai);
-											break;
-										}
-									}
-								}
-							}
-
-							if (JSON.stringify(that.isEdit) == '{}') {
-								that.getAddField(that.isArrySort(dest));
-							} else {
-								that.getEditField(that.isArrySort(dest));
-							}
-						} else {
-							that.$message({
-								type: 'error',
-								message: '服务异常，请稍候尝试'
-							});
 						}
 					}
-				});
+
+				}
+				return this._sortArray(dest);
 			},
 			getAddField: function (data) {
 				var that = this;
-				data.forEach(function (group, index) {
+				data.forEach(function (group, index) { // 针对组数进行循环
 					var groupAttr = [];
-					group.data.forEach(function (item) {
+					group.data.forEach(function (item) { // 针对组内的每一项进行循环
 						var obj = {};
 						var options = [];
-						if (item.ifPrimaryKey) {
+						if (item.ifPrimaryKey) { // 找出oid的字段，创建uuid
 							that.pkArray.push(item.fieldName);
-							that.formData[item.fieldName] = that.createuuid();
+							that.formData[item.fieldName] = jasTools.base.createuuid();
 						}
-						if (item.domainList) {
+						if (item.domainList) { // 字段是阈值下拉选的
 							item.domainList.forEach(function (child) {
 								var obj = {};
 								for (var key in child) {
@@ -372,7 +372,7 @@
 								options.push(obj);
 							});
 						}
-						if (item.ifSave == '1') {
+						if (item.ifSave == '1') { //
 							obj = {
 								id: item.fieldName,
 								name: item.fieldNameCn,
@@ -383,19 +383,19 @@
 								verify: [],
 								requestUrl: item.requestPath,
 								childField: item.childField,
-								min: item.min || 1,
-								max: item.max || 10,
+								min: item.min || -Infinity,
+								max: item.max || Infinity,
 								index: item.rowIndex,
 							};
 							if (item.ifRequired == '1') {
 								obj.verify.push({
 									required: true,
-									message: item.placeholder,
+									message: item.placeholder || '该字段为必填项',
 									// trigger: 'blur'
 								});
 
 							}
-							if (item.uiType == 'UT_01') {
+							if (item.uiType == 'UT_01') { // 文本域
 								that.rules.forEach(function (ruleItem) {
 									if (ruleItem.id == item.regularExpression) {
 										obj.verify.push({
@@ -405,7 +405,7 @@
 									}
 								});
 							}
-							if (item.fieldLength && item.uiType == 'UT_01') {
+							if (item.fieldLength && item.uiType == 'UT_01') { // 添加长度限制
 								obj.verify.push({
 									min: "0",
 									max: item.fieldLength,
@@ -431,10 +431,11 @@
 					});
 					that.formAttr.push({
 						groupName: group.groupName,
-						data: that.isArrySort(groupAttr)
+						data: that._sortArray(groupAttr)
 					});
 				});
-				that.actionURL = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") + "&businessId=" +
+				that.actionURL = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") +
+					"&businessId=" +
 					that.formData[that.pkArray[0]] + "&businessType=file";
 			},
 			getEditField: function (data) {
@@ -468,8 +469,8 @@
 								requestUrl: item.requestPath,
 								childField: item.childField,
 								index: item.rowIndex,
-								min: item.min,
-								max: item.max,
+								min: item.min || -Infinity,
+								max: item.max || Infinity,
 								disabled: false
 							};
 							if (item.updateable == '1') {
@@ -495,7 +496,7 @@
 								obj.verify.push({
 									min: "0",
 									max: item.fieldLength,
-									message: "输入过长"
+									message: "不能超过" + item.fieldLength + "字"
 								});
 							}
 							if (item.uiType == 'UT_04' || item.uiType == 'UT_03' || item.uiType == 'UT_02') {
@@ -518,75 +519,50 @@
 					});
 					that.formAttr.push({
 						groupName: group.groupName,
-						data: that.isArrySort(groupAttr)
+						data: that._sortArray(groupAttr)
 					});
 				});
+
 				that.requestFiles();
-				that.actionURL = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") + "&businessId=" +
-					that.formData[that.pkArray[0]] + "&businessType=file";
+				that.actionURL = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") +
+					"&businessId=" + that.formData[that.pkArray[0]] + "&businessType=file";
 			},
 			requestFiles: function () {
 				var that = this;
-				$.ajax({
-					type: "get",
-					url: jasTools.base.rootPath + "/attachment/getInfo.do?token=" + localStorage.getItem("token") + "&businessId=" + that.formData[
-						that.pkArray[0]] + "&businessType=file",
-					dataType: "json",
-					contentType: "application/json",
-					success: function (data) {
-						if (data.status == 1) {
-							if (data.rows.length > 0) {
-								data.rows.forEach(function (item) {
-									that.fileList.push({
-										name: item.fileName,
-										size: item.size,
-										oid: item.oid
-									});
-									that.fileListStatus.push({
-										name: item.fileName,
-										size: item.size,
-										oid: item.oid
-									})
-								});
-								that.fileListlength = that.fileList.length;
-							}
-						} else {
-							that.$message({
-								type: 'error',
-								message: '服务异常，请稍候尝试'
-							});
-						}
-					}
+				var url = jasTools.base.rootPath + "/attachment/getInfo.do";
+				jasTools.ajax.get(url, {
+					businessType: 'file',
+					businessId: that.formData[that.pkArray[0]]
+				}, function (data) {
+					data.rows.forEach(function (item) {
+						var file = {
+							name: item.fileName,
+							size: item.size,
+							oid: item.oid
+						};
+						that.fileList.push(file);
+						that.fileListStatus.push(file);
+					});
+					that.fileListlength = that.fileList.length;
 				});
 			},
-			requestDetailByObj: function () {
+			requestDetailByObj: function () { //请求表单详情
 				var that = this;
-				$.ajax({
-					type: "POST",
-					url: jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/get.do?token=" + localStorage.getItem("token"),
-					dataType: "json",
-					contentType: "application/json",
-					data: JSON.stringify(that.isEdit),
-					success: function (data) {
-						if (data.status = 1) {
-							that.formData = data.data;
-							that.requestConfig();
-						}
-					}
+				var url = jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/get.do";
+				//该接口需要入参主键，因为主键不确定，所以全部传入表单对象
+				jasTools.ajax.post(url, this.formDetail, function (data) {
+					that.formData = data.data;
 				});
 			},
 			cancel: function () {
 				this.closeForm();
 			},
 			closeForm: function () {
-				window.parent.jasTools.dialog.close({
-					title: '增加',
-					src: '/pages/template/dialogs/addTemplate.html',
-				});
+				top.jasTools.dialog.close();
 			},
-			submit:function(formName) {
+			submit: function (formName) {
 				var that = this;
-				this.$refs[formName].validate(function(valid) {
+				this.$refs[formName].validate(function (valid) {
 					if (valid) {
 						that.submitToServer();
 					} else {
@@ -608,16 +584,19 @@
 					that.saveInfo();
 				} else {
 					var isNotFile = true;
-					that.fileListStatus.forEach(function (item) {
+					that.fileListStatus.forEach(function (item) { // 文件有oid代表已经在服务器上了，无需上传
 						if (!item.oid) {
 							isNotFile = false;
 							return;
 						}
 					});
 					if (isNotFile) {
-						that.saveInfo();
+						that.requestDeleteFiles(function () {
+							that.saveInfo();
+						});
 					} else {
-						that.actionURL = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") + "&businessId=" +
+						that.actionURL = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") +
+							"&businessId=" +
 							that.formData[that.pkArray[0]];
 						that.$refs.upload.submit();
 					}
@@ -626,110 +605,90 @@
 			onsuccess: function (e, file) {
 				var that = this;
 				that.pass = true;
-				that.$message.success("上传成功");
+				top.Vue.prototype.$message.success("上传成功");
 				that.fileList.push({
 					name: file.name,
 					size: file.size,
 				});
 				if (!that.autoUpload) {
-					that.saveInfo();
+					that.requestDeleteFiles(function () {
+						that.saveInfo();
+					});
 				}
 			},
 			saveInfo: function () {
 				var that = this;
-				var msg = "";
-				if (JSON.stringify(that.isEdit) == '{}') {
-					msg = "增加成功";
-					url = jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/save.do?token=" + localStorage.getItem("token");
-				} else {
-					msg = "修改成功";
-					url = jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/update.do?token=" + localStorage.getItem("token");
-				}
-				$.ajax({
-					type: "POST",
-					url: url,
-					dataType: "json",
-					contentType: "application/json",
-					data: JSON.stringify(that.formData),
-					async: true,
-					success: function (data) {
-						if (data.status == 1) {
-							window.top.Vue.prototype.$message({
-								message: msg,
-								type: 'success'
-							});
-							that.closeForm();
-						} else {
-							window.top.Vue.prototype.$message({
-								message: '服务异常，请稍候尝试',
-								type: 'error'
-							});
-						}
-					}
+				var str = that.isAddPage ? "save" : "update";
+				var url = jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/" + str + ".do"
+				jasTools.ajax.post(url, that.formData, function () {
+					top.Vue.prototype.$message({
+						message: that.isAddPage ? "增加成功" : "修改成功",
+						type: 'success'
+					});
+					that.closeForm();
 				});
 			},
 			handleFileRemove: function (file, i) {
 				var that = this;
-				that.$confirm('删除附件, 是否继续?', '提示', {
+				top.Vue.prototype.$confirm('删除附件, 是否继续?', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
-					type: 'warning'
-				}).then(function() {
-					that.fileList.splice(i, 1);
-					that.fileListStatus.splice(i, 1);
-					that.fileListlength = that.fileList.length;
-					if (file.oid) {
-						that.handleToServer(file);
-					} else {
-						that.$message({
-							message: '删除成功',
-							type: 'success'
-						});
-					}
-				}).catch(function() {
-					that.$message({
-						type: 'info',
-						message: '已取消删除'
-					});
-				});
-			},
-			handleToServer: function (file) {
-				var that = this;
-				$.ajax({
-					type: "get",
-					url: jasTools.base.rootPath + "/attachment/delete.do?token=" + localStorage.getItem("token") + "&eventids=" + file.oid,
-					contentType: "application/json",
-					dataType: "json",
-					success: function (data, status) {
-						if (data.status == 1) {
-							that.$message({
-								message: '删除成功',
-								type: 'success'
-							});
-						} else {
-							that.$message({
-								message: '删除失败',
-								type: 'info'
-							});
+					type: 'warning',
+					callback: function (status) {
+
+						if (status === 'confirm') {
+
+							that.fileList.splice(i, 1);
+							that.fileListStatus.splice(i, 1);
+							that.fileListlength = that.fileListStatus.length;
+
+							if (file.oid) {
+								// that.requestDeleteFiles(file);
+								if (that.filesToBeDelete) {
+									that.filesToBeDelete.push(file.oid)
+								} else {
+									that.filesToBeDelete = [file.oid]
+								}
+							} else {
+								top.Vue.prototype.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+							}
+
 						}
 					}
 				});
 			},
+			requestDeleteFiles: function (cb) {
+				var that = this;
+				if (!that.filesToBeDelete) {
+					cb && cb();
+					return;
+				}
+				jasTools.ajax.get(jasTools.base.rootPath + "/attachment/delete.do", {
+					oids: that.filesToBeDelete.join(',')
+				}, function (data) {
+					cb && cb();
+					// top.Vue.prototype.$message({
+					// 	message: '删除成功',
+					// 	type: 'success'
+					// });
+				});
+			},
 			handlePreview: function (file) {
-				// window.open("../pdfjs_1.10.88/web/viewer.html");
 				window.top.jasTools.dialog.show({
 					title: '预览',
 					width: '90%',
-					height: '100%',
-					src: "/pages/template/pdfjs_1.10.88/web/viewer.html?oid=" + file.oid,
-					cbForClose: function () {
-
-					}
+					height: '90%',
+					src: "./pages/template/pdfjs_1.10.88/web/viewer.html?oid=" + file.oid,
 				});
 			},
-			uploadOnChange: function (file, fileList) {
-				console.log("——————————change——————————")
-				console.log(file);
+			uploadOnChange: function (file, fileList) { //文件状态改变时的钩子，添加文件、上传成功和上传失败时都会被调用
+				// console.log("——————————change——————————")
+				// console.log(file);
+				var that = this;
+				that.fileListlength = fileList.length;
 				if (file.status == 'ready') {
 					this.pass = null;
 					this.progress = 0;
@@ -746,71 +705,55 @@
 			},
 			handleDownload: function (file) {
 				var that = this;
-				var options = {
-					"url": jasTools.base.rootPath + "/attachment/download.do?oid=" + file.oid + "&token=" + localStorage.getItem("token"),
-					"method": 'post'
-				}
-				var config = $.extend(true, {
-					method: 'get'
-				}, options);
-				var $iframe = $('<iframe id="down-file-iframe" />');
-				var $form = $('<form target="down-file-iframe" method="' + config.method + '" />');
-				$form.attr('action', config.url);
-				for (var key in config.data) {
-					$form.append('<input type="hidden" name="' + key + '" value="' + config.data[key] + '" />');
-				}
-				$iframe.append($form);
-				$(document.body).append($iframe);
-				$form[0].submit();
-				$iframe.remove();
+				jasTools.ajax.downloadByIframe('post', jasTools.base.rootPath + "/attachment/download.do", {
+					oid: file.oid
+				});
 			},
 			onExceed: function (files, fileList) {
 				var that = this;
-				that.$message({
+				top.Vue.prototype.$message({
 					message: '文件最多上传' + that.limitNum,
 					type: 'info'
 				});
 			},
 			getChildOpts: function (value, item) {
 				var that = this;
-				var options = [];
-				if (item.requestUrl) { //进行子级的查找 后台请求
-					$.ajax({
-						type: "post",
-						url: jasTools.base.rootPath + "/" + item.requestUrl + "?token=" + localStorage.getItem("token"),
-						contentType: "application/json",
-						data: JSON.stringify({
-							"rows": 100,
-							"page": 1,
-							"tableId": value
-						}),
-						dataType: "json",
-						success: function (data, status) {
-							if (data.status == 1) {
-								data.rows.forEach(function (item) {
-									var obj = {
-										"key": item.fieldName,
-										"value": item.fieldName,
-									};
-									options.push(obj);
-								});
-							}
-						}
-					});
+
+				var formatFormAttr = function (options) {
 					that.formAttr.forEach(function (parent, index) {
 						parent.data.forEach(function (child) {
-							if (child.id == item.childField) {
+							console.log("_________",item.childField)
+							if (item.childField.indexOf(child.id) !== -1) {
 								if (value) {
 									child.options = options;
 								} else {
-									options = [];
-									child.options = options;
+									child.options = [];
 								}
 								that.$set(that.formData, item.childField, "");
 							}
 						});
-						return;
 					});
+				};
+
+				if (item.requestUrl && value) { //进行子级的查找 后台请求
+					var key = jasTools.base.switchToCamelCase(item.id);
+					var obj = {
+						"rows": 100,
+						"page": 1,
+					};
+					obj[key] = value;
+					jasTools.ajax.post(jasTools.base.rootPath + "/" + item.requestUrl, obj, function (data) {
+						// data.rows.forEach(function (item) {
+						// 	var obj = {
+						// 		"key": item.fieldName,
+						// 		"value": item.fieldName,
+						// 	};
+						// 	options.push(obj);
+						// });
+						formatFormAttr(data.rows)
+					});
+				} else {
+					formatFormAttr([]);
 				}
 			},
 			visibleChange: function (falg, item) {
@@ -820,7 +763,7 @@
 						parent.data.forEach(function (child) {
 							if (child.childField == item.id) {
 								if (!that.formData[child.id]) {
-									that.$message({
+									top.Vue.prototype.$message({
 										message: '请先选择' + child.name,
 										type: 'warning'
 									});
@@ -885,20 +828,8 @@
 				}
 				return false
 			},
-			createuuid: function () {
-				var s = [];
-				var hexDigits = "0123456789abcdef";
-				for (var i = 0; i < 36; i++) {
-					s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
-				}
-				s[14] = "4";
-				s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);
-				s[8] = s[13] = s[18] = s[23] = "-";
-				var uuid = s.join("");
-				return uuid;
-			},
 
-			isArrySort: function (arry) {
+			_sortArray: function (arry) { // 数组冒泡排序
 				for (var unfix = arry.length - 1; unfix > 0; unfix--) {
 					for (var i = 0; i < unfix; i++) {
 						if (arry[i].index > arry[i + 1].index) {

@@ -9,7 +9,7 @@ $(function() {
 			onLoadSuccess:function(node,data) {
 				//加载成功后选中根节点
 		 		$('#tt').tree('select',$('#tt').tree('getRoot').target);
-	 			url = rootPath+'jasframework/privilege/unit/findUnitById.do?eventID='+data[0].id;
+	 			url = rootPath+'jasframework/privilege/unit/findUnitById.do?oid='+data[0].id;
 				$.post(url, function(bo) {
 					$('#right').form('load', bo);
 				}, 'json');
@@ -20,8 +20,9 @@ $(function() {
 			onBeforeExpand : function(node,param){
 			},
 			onClick : function(node) {
-	 			url = rootPath+'jasframework/privilege/unit/findUnitById.do?eventID=' + node.id;
+	 			url = rootPath+'jasframework/privilege/unit/findUnitById.do?oid=' + node.id;
 				$.post(url, function(bo) {
+					console.log(bo);
 					$('#right').form('load', bo);
 				}, 'json');
 				if (node.attributes.type==0) {
@@ -50,8 +51,8 @@ $(function() {
 		var eventID;
 		if (row != null) {
 			eventID = row.id;
-			url = "addUnit.htm?parentid=" + eventID;
-			top.getDlg(url, "saveiframe", getLanguageValue("unit.xinzengbumen"), 800, 400);
+			url = rootPath+"jasframework/privilege/unit/addUnit.htm?parentid=" + eventID;
+			top.getDlg(url, "saveiframe", getLanguageValue("unit.xinzengbumen"), 750, 350);
 		} else {
 			top.showAlert(getLanguageValue("tip"),getLanguageValue("chooserecord"), 'info');
 			return;
@@ -71,8 +72,8 @@ $(function() {
 		}
 		if (row != null) {
 			eventID = row.id;
-			url = "updateUnit.htm?isroot="+isroot+"&eventID=" + eventID;
-			top.getDlg(url, "saveiframe",getLanguageValue("unit.xiugaibumen"), 710, 310);
+			url = rootPath+"jasframework/privilege/unit/updateUnit.htm?isroot="+isroot+"&eventID=" + eventID;
+			top.getDlg(url, "saveiframe",getLanguageValue("unit.xiugaibumen"), 750, 350);
 		} else {
 			top.showAlert(getLanguageValue("tip"),getLanguageValue("chooserecord"), 'info');
 			return;
@@ -107,17 +108,17 @@ $(function() {
 			//确认删除
 			$.messager.confirm(getLanguageValue("unit.deleteunit"), getLanguageValue("unit.deletecomfirm"), function(r) {
 				if (r) {
-					var url = rootPath+'jasframework/privilege/unit/removeUnitById.do?eventId=' + row.id;
+					var url = rootPath+'jasframework/privilege/unit/removeUnitById.do?oid=' + row.id;
 					//执行删除
 					$.post(url, function(result) {
-						if (result.success) {
-							top.showAlert(getLanguageValue("unit.deleteunit"), result.ok, 'ok', function() {
+						if (result.status) {
+							top.showAlert(getLanguageValue("unit.deleteunit"), result.msg, 'msg', function() {
 							
 								var parent11=$('#tt').tree('getParent',$('#tt').tree('getSelected').target);
 							
 								$('#tt').tree('remove',$('#tt').tree('getSelected').target);
 								
-					 			url = rootPath+'jasframework/privilege/unit/findUnitById.do?eventID='+parent11.id;
+					 			url = rootPath+'jasframework/privilege/unit/findUnitById.do?oid='+parent11.id;
 								$.post(url, function(bo) {
 									$('#right').form('load', bo);
 								}, 'json');

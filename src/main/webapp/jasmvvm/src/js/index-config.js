@@ -1,16 +1,16 @@
 window.IndexConfig = {
 	menuWith: 200,
-	activeMenu: 'dash_board22211223123',
-	menusOpened: ['dash_board22211223123'],
+	activeMenu: 'P-PRI-0020',
+	menusOpened: ['P-PRI-0020'],
 	menus: [{
 			icon: 'el-icon-setting',
-			index: 'dash-board',
-			title: '自定义表单',
-			subs: [{
+			index: 'dash-board', //id
+			title: '自定义表单', //text
+			subs: [{ //children
 				index: 'dash-board222112',
 				title: '数据库表及字段维护',
 				closable: true,
-				link: './pages/table-operation/table-operation.html'
+				link: './pages/table-operation/table-operation.html' //attributes.URL
 			}, {
 				index: 'dash-board22211223',
 				title: '自定义表单配置',
@@ -31,8 +31,8 @@ window.IndexConfig = {
 		{
 			icon: 'fa fa-users',
 			index: 'dash-board32',
-			title: '对话框',
-			link: './pages/dialog/dialog.html'
+			title: '权限控制',
+			link: './../jasframework/privilege/adsync/adsyn.htm'
 		},
 		{
 			icon: 'fa fa-suitcase',

@@ -28,8 +28,8 @@
 		<!-- 左侧布局	 -->
 		<div  id="left" region="west"  class="easyui-panel"  key="primenu_caidanjiegou" split="false"  title="菜单结构"
 				style="width: 200px; height: 90%; overflow:auto;" >
-			<select id="appnumber1" name="appNumber1">
-				</select>
+			<select id="appId1" name="appId1">
+			</select>
 				<!-- 左侧权限树	 -->
 					<ul id="tt" class="easyui-tree" animate="false" collapsible="true" closable="false">
 					</ul>
@@ -46,7 +46,7 @@
 								</label>
 							</th>
 							<td style="width: 75%;">
-								<input id="parenteventid" name="parenteventid"  maxlength="25">
+								<input id="parentId" name="parentId" maxlength="25">
 							</td>
 						</tr>
 						<tr>
@@ -56,7 +56,7 @@
 								</label>
 							</th>
 							<td>
-								<input id="eventid" name="eventid" class="easyui-validatebox input_bg" maxlength="25">
+								<input id="oid" name="oid" class="easyui-validatebox input_bg" maxlength="25">
 							</td>
 						</tr>
 						<tr>
@@ -66,7 +66,7 @@
 								</label>
 							</th>
 							<td>
-								<input id="name" name="name" class="easyui-validatebox input_bg" maxlength="25">
+								<input id="menuName" name="menuName" class="easyui-validatebox input_bg" maxlength="25">
 							</td>
 						</tr>
 						<tr>
@@ -76,7 +76,7 @@
 								</label>
 							</th>
 							<td>
-								<select id="appnumber" name="appnumber"  class="easyui-validatebox input_bg">
+								<select id="appId" name="appId"  class="easyui-validatebox input_bg">
 <!-- 									<option value="1">基础开发平台</option> -->
 								</select>
 							</td>
@@ -98,7 +98,7 @@
 								</label>
 							</th>
 							<td>
-								<input id="ordernumber" name="ordernumber" class="easyui-validatebox input_bg" maxlength="25">
+								<input id="orderNum" name="orderNum" class="easyui-validatebox input_bg" maxlength="25">
 							</td>
 						</tr>
 						<tr>
@@ -164,19 +164,21 @@
 	<iframe id="exprotExcelIframe" style="display: none;"></iframe>
 </body>
 <script type="text/javascript">
-	$("#parentEventid").attr("disabled", "disabled");
+	$("#parentId").attr("disabled", "disabled");
 	$("#parentName").attr("disabled", "disabled");
 	$("#parentPrivilegeNumber").attr("disabled", "disabled");
-	$("#eventid").attr("disabled", "disabled");
+	$("#oid").attr("disabled", "disabled");
 	$("#unitid").attr("disabled", "disabled");
-	$("#name").attr("disabled", "disabled");
+	$("#menuName").attr("disabled", "disabled");
 	$("#businessrange").attr("disabled", "disabled");
 	$("#description").attr("disabled", "disabled");
 	$("#privilegeNumber").attr("disabled", "disabled");
 	$("#privilegeType").attr("disabled", "disabled");
-	$("#appnumber").attr("disabled", "disabled");
+	$("#appId").attr("disabled", "disabled");
 	$("#url").attr("disabled", "disabled");
-	$("#ordernumber").attr("disabled", "disabled");
+	$("#orderNum").attr("disabled", "disabled");
+	$("#icon").attr("disabled", "disabled");
+	$("#background").attr("disabled", "disabled");
 </script>
 
 </html>

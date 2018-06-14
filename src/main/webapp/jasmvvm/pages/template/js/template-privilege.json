@@ -1,0 +1,69 @@
+{
+    "tool": [{
+        "id": "bt_add",
+        "title": "增加",
+        "plain": "plain",
+        "icon": "el-icon-plus",
+        "size": "small",
+        "type": "primary"
+    },{
+        "id": "bt_import",
+        "title": "导入",
+        "plain": "plain",
+        "icon": "fa fa-mail-forward",
+        "size": "small",
+        "type": "primary"
+    },{
+        "id": "bt_export",
+        "title": "导出已选",
+        "plain": "plain",
+        "icon": "fa fa-mail-reply",
+        "size": "small",
+        "type": "primary"
+    },{
+        "id": "bt_expor",
+        "title": "导出全部",
+        "plain": "plain",
+        "icon": "fa fa-mail-reply-all",
+        "size": "small",
+        "type": "primary"
+    }, {
+        "id": "import",
+        "belongMenuCode": "F000001",
+        "title": "批量导入",
+        "plain": "plain",
+        "icon": "el-icon-plus",
+        "size": "small",
+        "type": "primary"
+    }],
+    "search": {
+        "selectTigger": true
+    },
+    "form": {
+        "col": 2,
+        "width": "80%",
+        "height": "80%",
+        "labelwidth":"155px"
+    },
+    "view": {
+        "col": 2,
+        "width": "80%",
+        "height": "80%"
+    },
+    "table": {
+        "tableWidth": 250
+
+    },
+    "pageAttr": {
+        "isShow": true,
+        "pagesizes": [10, 20, 50, 100],
+        "pagesize": 10
+    },
+    "file":{
+        "autoUpload":false,
+        "limitNum":2
+    }
+
+}
+
+

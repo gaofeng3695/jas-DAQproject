@@ -33,15 +33,16 @@ var eventID =getParamter("parentid");;
 
 	    var url = rootPath + 'jasframework/privilege/unit/saveUnit.do';
 	    var name = $("#unitName").val();
-	    var unitNum = $("#unitNum").val();
+	    var unitCode = $("#unitCode").val();
 	    //var url = './savePcUnit.do';
 	    $.ajax({
-	        type: "get",
+	        type: "POST",
+	        contentType: "application/json;charset=utf-8",
 	        url: rootPath + "jasframework/privilege/unit/checkUnitExist.do",
-	        data:{ "parentId": $("#parentId").combotree("getValue"), "unitName": name, "unitNum": unitNum },
+	        data:JSON.stringify({ "parentId": $("#parentId").combotree("getValue"), "unitName": name, "unitCode": unitCode }),
 	        dataType: "json",
 	        success: function (check) {
-	            if (check.error == '-1') {
+	            if (check.status == '-1') {
 	                top.showAlert(getLanguageValue("error"), check.msg, 'error');
 	            } else {
 	                //使用框架定义请求 token
@@ -51,9 +52,6 @@ var eventID =getParamter("parentid");;
 	                    contentType: "application/json;charset=utf-8",
 	                    data: JSON.stringify($('#addunit').serializeToJson()),
 	                    success: function (result) {
-	                    	console.log(result)
-//	                        result = eval('(' + result + ')');
-	                        //							reloadData('queryUnit.htm','#tt');
 	                        if (result.success == "1") {
 	                            top.showAlert("提示", "保存成功", 'ok', function () {
 	                                reloadData('queryUnit.htm', '#tt');

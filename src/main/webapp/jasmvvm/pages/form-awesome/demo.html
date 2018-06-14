@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>form表单配置</title>
+	<link rel="stylesheet" href="./../../lib/element-ui/v2.2.1/theme-chalk/index.min.css">
+	<style>
+	</style>
+</head>
+
+<body>
+	<div class="page" style="padding:10px;">
+		<div style="width:330px;border: 1px solid #f90;font-size:12px;">
+			<div>
+				<span style="color:red;font-weight: 700;">管理员</span>,您好！</div>
+			<div>登录次数：
+				<span style="color:red;">23</span>
+			</div>
+			<div>登录次数：
+				<span style="color:red;">2321323132</span>
+			</div>
+			<div>登录次数：
+				<span style="color:red;">2321323132撒大asd23asd声地</span>
+			</div>
+			<div>登录次数：
+				<span style="color:red;">2321323132暗室逢灯</span>
+			</div>
+		</div>
+	</div>
+	<script src="./../../lib/vue/vue.js "></script>
+	<script src="./../../lib/element-ui/v2.2.1/index.min.js"></script>
+	<script>
+		var vm = new Vue({
+			el: '.page',
+			data: function () {
+				return {
+
+
+				}
+			},
+			watch: {
+
+			},
+			mounted: function () {
+				var obj = {
+					"userName": "管理员", //用户名
+					"loginCount": 285,//总登录次数
+					"totalLoginDate": "14天  12小时  56分钟 6秒",//累计登录时长
+					"clientIp": "0:0:0:0:0:0:0:1",//上次登录ip
+					"lastLoginDate": "2018-05-25 09:19:23",//上次登录事件
+				}
+				this.$notify({
+					type: 'success',
+					title: '登录成功',
+					position: 'bottom-right',
+					dangerouslyUseHTMLString: true,
+					message: [
+						'<div style="font-size:12px;">',
+						'	<div><span style="color:red;font-weight: 700;">'+obj.userName+'</span>,您好！</div>',
+						'	<div>登录次数：<span style="color:red;">'+obj.loginCount+'</span></div>',
+						'	<div>累计在线时长：<span style="color:red;">'+obj.totalLoginDate+'</span></div>',
+						'	<div>上次登录IP：<span style="color:red;">'+obj.clientIp+'</span></div>',
+						'	<div>上次登录时间：<span style="color:red;">'+obj.lastLoginDate+'</span></div>',
+						'</div>'
+					].join('')
+				});
+			},
+			methods: {
+				view: function () {
+					this.viewform = true;;
+				}
+
+			}
+		});
+	</script>
+</body>

@@ -6,14 +6,27 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>中盈安信研发平台</title>
+
+	<!-- 老框架的样式依赖 -->
+	<link rel="stylesheet" href="../jasframework/common/css/jasframework-layout.css" />
+	<link rel="stylesheet" href="../jasframework/common/lib/easyui/themes/default/easyui.css" />
+	<link rel="stylesheet" href="../jasframework/common/lib/easyui/themes/icon.css" />
+	<link rel="stylesheet" href="../jasframework/common/css/common.css" />
+	<!-- <link rel="stylesheet" href="../jasframework/common/css/main.css" type="text/css" /> -->
+	<!-- 老框架的样式依赖END -->
+
 	<link rel="stylesheet" href="./lib/element-ui/v2.2.1/theme-chalk/index.min.css">
 	<link rel="stylesheet" href="./lib/font-awesome-4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="./src/css/main.css">
 	<link rel="stylesheet" href="./src/css/index.css">
+
+
+
+
 </head>
 
 <body>
-	<div id="app">
+	<div id="app" v-cloak>
 		<el-container class="outerwrapper">
 
 			<el-header height="80px" class="headerwrapper">
@@ -30,10 +43,13 @@
 					<div class="user-info">
 						<el-dropdown class="dropdown-wrapper" trigger="click" @command="handleCommand">
 							<span class="el-dropdown-link">
-								<img class="user-logo" src="./src/images/enterlogo.png"> 管理员
+								<img class="user-logo" src="./src/images/enterlogo.png"> {{username}}
 							</span>
 							<el-dropdown-menu slot="dropdown">
-								<el-dropdown-item command="loginout">退出</el-dropdown-item>
+								<el-dropdown-item command="fullscreen">切换全屏</el-dropdown-item>
+								<el-dropdown-item command="map">{{isMapOpen?'隐藏地图':'打开地图'}}</el-dropdown-item>
+								<el-dropdown-item command="resetPassword">修改密码</el-dropdown-item>
+								<el-dropdown-item command="loginout">退出登录</el-dropdown-item>
 							</el-dropdown-menu>
 						</el-dropdown>
 					</div>
@@ -42,13 +58,14 @@
 
 			</el-header>
 
-			<el-container>
+			<el-container style="height: 0%;">
+				<loading-bar :on-error-done="errorDone" :on-progress-done="progressDone" :progress="progress" :direction="direction" :error="error">
+				</loading-bar>
 				<el-aside style="background-color: #fff;width:auto;" class="jas-flex-box is-vertical menuwrapper">
 					<!-- sider 结束 -->
 					<div class="is-grown menusubwrap" :style="menuStyle" ref="menubar" v-bar>
 						<div>
-
-							<el-menu :default-active="currentTap" class="el-menu-vertical-demo" @select="selectMenu" :collapse="isCollapse">
+							<el-menu unique-opened :default-active="currentTap" class="el-menu-vertical-demo" @select="selectMenu" :collapse="isCollapse">
 								<!-- 第一层菜单开始 -->
 								<!-- tip:为什么不用递归渲染？因为vue组件递归的方式跟elementui提供的可收缩菜单插件相冲突，若要使用递归，就必须取消菜单可收缩的功能 -->
 								<template v-for="item in items">
@@ -121,16 +138,12 @@
 										<!-- 第二层菜单结束 -->
 
 									</el-submenu>
-
-
 									<el-menu-item :index="item.index" v-else>
 										<i :class="item.icon"></i>
 										<span slot="title">{{ item.title }}</span>
 									</el-menu-item>
 								</template>
 								<!-- 第一层菜单结束 -->
-
-
 								<!-- <nav-menu :nav-menus="items" /> -->
 							</el-menu>
 
@@ -141,34 +154,37 @@
 						</el-switch>
 					</div>
 
-
-
-
-
-
 					<!-- sider 结束 -->
 				</el-aside>
 				<el-main>
 					<div v-tabclose></div>
-					<el-tabs class="tabswrapper jas-flex-box" v-model="currentTap" type="card" @tab-remove="removeTab">
-						<el-tab-pane v-for="(item, index) in tabs" :key="item.link" :name="item.name" :closable="item.closable">
-							<span slot="label">
-								<i :class="item.icon||'el-icon-date'"></i> {{item.title}}
-							</span>
-							<div class="iframewrapper">
-								<div class="iframesubwrapper">
-									<iframe class="iframe" :src="item.link || './pages/index/index.html' " frameborder="0" height="100%"></iframe>
-								</div>
-							</div>
-						</el-tab-pane>
-					</el-tabs>
+
+					<multipane @paneresizestart="panelMoving = true" @paneresizestop="panelMoving = false" class="foo" layout="horizontal" style="height: 100%;">
+						<div v-loading="panelMoving" class="mapWrap" v-show="isMapOpen" :style="{ height: '40%', minHeight: '20%',maxHeight: '80%' }"
+						  element-loading-spinner="11" element-loading-background="rgba(0, 0, 0, 0)">
+							<iframe class="iframe" :src="mapSrc" frameborder="0" height="100%"></iframe>
+						</div>
+						<multipane-resizer v-show="isMapOpen"></multipane-resizer>
+						<div v-loading="panelMoving" :style="{ flexGrow: 1 }" style="height:0%;" element-loading-spinner="11" element-loading-background="rgba(0, 0, 0, 0)">
+							<el-tabs class="tabswrapper jas-flex-box" v-model="currentTap" type="card" @tab-remove="removeTab">
+								<el-tab-pane v-for="(item, index) in tabs" :key="item.link" :name="item.name" :closable="item.closable">
+									<span slot="label">
+										<i :class="item.icon||'el-icon-date'"></i> {{item.title}}
+									</span>
+									<div class="iframewrapper">
+										<div class="iframesubwrapper">
+											<iframe class="iframe" :src="item.link" frameborder="0" height="100%"></iframe>
+										</div>
+									</div>
+								</el-tab-pane>
+							</el-tabs>
+						</div>
+					</multipane>
+
 				</el-main>
 			</el-container>
 			<!-- <nav-menu :nav-menus="item.subs" /> -->
-
 		</el-container>
-
-
 
 	</div>
 
@@ -176,15 +192,26 @@
 <!-- import Vue before Element -->
 <script src="./lib/vue/vue.js"></script>
 <script src="./src/js/tab-directive.js"></script>
+<script src="./lib/jquery/jquery-1.12.4.min.js"></script>
+
+<!-- 老框架的JS依赖END -->
+<script type="text/javascript" src="../jasframework/common/lib/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../jasframework/common/js/AppConfig.js"></script>
+<script type="text/javascript" src="../jasframework/common/js/common.js"></script>
+<!-- 老框架的JS依赖END -->
+
 <!-- import JavaScript -->
 <script src="./lib/element-ui/v2.2.1/index.min.js"></script>
+<script src="./lib/screenfull/screenfull.min.js"></script>
 <script src="./lib/vue-bar/vue-bar.js"></script>
+<script src="./lib/loadingbar/vue2-loading-bar.min.js"></script>
+<script src="./lib/vue-multipane/vue-multipane.js"></script>
 
 <!-- <script src="https://unpkg.com/vuebar"></script> -->
 <!-- 先引入index的配置文件，再引入index文件 -->
 <script src="./common/components/jas-components.js"></script>
 <script src="./common/js/jas-tools.js"></script>
-<script src="./src/js/index-config.js"></script>
+<!-- <script src="./src/js/index-config.js"></script> -->
 <script src="./src/js/index.js"></script>
 
 </html>

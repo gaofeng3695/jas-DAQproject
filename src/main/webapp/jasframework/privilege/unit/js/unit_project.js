@@ -27,11 +27,11 @@
 		//确认删除
 		$.messager.confirm("提示", "确认删除？", function(r) {
 			if (r) {
-				var url = rootPath+'jasframework/privilege/unit/removeUnitById.do?eventId=' + currentSelectNode;
+				var url = rootPath+'jasframework/privilege/unit/removeUnitById.do?oid=' + currentSelectNode;
 				//执行删除
 				$.post(url, function(result) {
-					if (result.success) {
-						top.showAlert("提示", result.ok, 'ok', function() {
+					if (result.status) {
+						top.showAlert("提示", result.msg, 'ok', function() {
 							reloadNode(currentSelectNode,true)
 						});
 								 	

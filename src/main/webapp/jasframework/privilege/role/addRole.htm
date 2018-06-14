@@ -16,13 +16,13 @@
 <script type="text/javascript" src="../../common/lib/easyui/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="../../common/js/validate_class.js"></script>
 <script type="text/javascript" src="../../common/js/common.js"></script>
-<script type="text/javascript" src="js/addRole.js"></script>
 <script type="text/javascript" src="" id="i18nEasyui"></script>
 <script type="text/javascript" src="../../common/i18n/i18n.js"></script>
+<script type="text/javascript" src="js/addRole.js"></script>
 </head>
 <body>
 <!-- 权限编号 -->
-	<input type="hidden" id="menuid" value="101002" />
+	<input type="hidden" id="menuid" value="P-PRI-0220" />
 		
 <!-- 主体内容展示区域 -->
 	<div id="contentArea" class="content-area">
@@ -30,27 +30,27 @@
 			<table align="center" class="edit-table">
 				<tr>
 					<td width="15%">
-						<span>角色名称：</span>
+						<span key="role.roleName" class="paltform-i18n">角色名称：</span>
 					</td>
 					<td width="35%"><input 
 						class="easyui-validatebox input_bg" id='roleName'  name="roleName" missingmessage="不能为空"
 						required="true"  validType="general" maxLength=25>
 					</td>
-					<td  width="15%"><span >所属部门：</span></td>
+					<td  width="15%"><span key="role.unitId" class="paltform-i18n">所属部门：</span></td>
 					<td  width="35%"><input type="text" id="unitId"  class="easyui-combotree" 
 						name="unitId" panelHeight="auto"
 						style="width: 230px"  missingmessage="不能为空" required="true" /></td>
 				</tr>
 				<tr>
-					<td  width="15%"><span>角色类型：</span></td>
+					<td  width="15%"><span key="role.roleType" class="paltform-i18n">角色类型：</span></td>
 					<td width="35%"><select id="roleType" class="easyui-validatebox input_bg"  name="roleType"
 						required="true" style="width: 230px">
-							<option value="2">保护</option>
-							<option value="1">私有</option>
+							<option value="2">protect</option>
+							<option value="1">private</option>
 					</select></td>
 				</tr>
 				<tr>
-					<td colspan="1"><span>描述：</span></td>
+					<td colspan="1"><span key="role.description" class="paltform-i18n">描述：</span></td>
 					<td colspan="3">
 					<textarea name="description" cols="25" rows="5"
 							id="description" class="easyui-validatebox"
@@ -66,8 +66,8 @@
 			<table width="100%">
 				<tr>
 					<td  align="center">
-						<a href="#" id="saveButton" class="easyui-linkbutton save-btn" onclick="save()"> <span>保存</span></a>
-						<a href="#" class="easyui-linkbutton cancel-btn"  onclick="closePanel()"> <span>取消</span></a>
+						<a href="#" id="saveButton" class="easyui-linkbutton save-btn" onclick="save()"> <span key="save" class="paltform-i18n">保存</span></a>
+						<a href="#" class="easyui-linkbutton cancel-btn"  onclick="closePanel()"> <span key="cancel" class="paltform-i18n">取消</span></a>
 					</td>
 				</tr>
 			</table>

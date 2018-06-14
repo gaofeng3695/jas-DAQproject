@@ -5,7 +5,7 @@ var parentEventid = "";
 var eventID = getParamter("eventID");	
 $(function(){
 	//加载初始数据
-	$.getJSON(rootPath+'jasframework/privilege/unit/findUnitById.do', {'eventID':eventID},function(item, i){			
+	$.getJSON(rootPath+'jasframework/privilege/unit/findUnitById.do', {'oid':eventID},function(item, i){			
 		if(item.parentEventid){
 			parenteventid = item.parenteventid
 		 	if( parenteventid != ""){
@@ -108,7 +108,7 @@ function loadSelect(){
 }
 
 function reload(){
-	$.getJSON(rootPath+'jasframework/privilege/unit/findUnitById.do' ,{'eventID':eventID},function(item, i){	
+	$.getJSON(rootPath+'jasframework/privilege/unit/findUnitById.do' ,{'oid':eventID},function(item, i){	
 		$('#editgroups').form('load',item);				
 	});		
 }
@@ -136,7 +136,7 @@ function updateUnit(){
 	disableButtion("savebutton");
 	url = rootPath+'jasframework/privilege/unit/updateUnit.do';
 	var name = $("#name").val();
-	var unitNum = $("#unitNum").val();
+	var unitCode = $("#unitCode").val();
 	var parentEventid = $("#parentId").combotree("getValue");
 	var unittree=$("#parentId").combotree("tree");
 	var unitobj=unittree.tree("find",eventID);
@@ -161,7 +161,7 @@ function updateUnit(){
 	$.ajax({
 		type: "POST",
 	    url: rootPath + "jasframework/privilege/unit/checkUnitExist.do",
-	    data:JSON.stringify( { "parentId": $("#parentId").combotree("getValue"), "unitName": name, "unitNum": unitNum }),
+	    data:JSON.stringify( { "parentId": $("#parentId").combotree("getValue"), "unitName": name, "unitCode": unitCode }),
 	    dataType: "json",
 	   	success: function(check){
      		if (check.error=='-1'){

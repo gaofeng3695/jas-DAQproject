@@ -404,11 +404,11 @@
 			},
 			add: function () {
 				var that = this;
-				window.jasTools.dialog.show({
+				top.jasTools.dialog.show({
 					title: '增加',
 					width: that.config.form.width,
 					height: that.config.form.height,
-					src: './dialogs/addTemplate.html?menuCode=' + that.menuCode,
+					src: './pages/template/dialogs/addTemplate.html?menuCode=' + that.menuCode,
 					cbForClose: function () {
 						that.refresh();
 					}
@@ -419,11 +419,11 @@
 			},
 			viewRow: function (row) {
 				var that = this;
-				var src = './dialogs/viewTemplate.html?menuCode=' + that.menuCode;
+				var src = './pages/template/dialogs/viewTemplate.html?menuCode=' + that.menuCode;
 				for (var key in row) {
 					src += "&" + key + '=' + row[key];
 				}
-				window.jasTools.dialog.show({
+				top.jasTools.dialog.show({
 					title: '查看',
 					width: that.config.view.width,
 					height: that.config.view.height,
@@ -441,7 +441,7 @@
 						if (action === 'confirm') {
 								that.delRowToServer(row);
 						} else {
-							that.$message({
+							top.Vue.prototype.$message({
 								type: 'info',
 								message: '已取消删除'
 							});
@@ -455,7 +455,7 @@
 				// }).then(function() {
 				// 	that.delRowToServer(row);
 				// }).catch(function() {
-				// 	that.$message({
+				// 	top.Vue.prototype.$message({
 				// 		type: 'info',
 				// 		message: '已取消删除'
 				// 	});
@@ -472,13 +472,13 @@
 					data: JSON.stringify(row),
 					success: function (data) {
 						if (data.status == 1) {
-							that.$message({
+							top.Vue.prototype.$message({
 								type: 'success',
 								message: '删除成功'
 							});
 							that.refresh();
 						} else {
-							that.$message({
+							top.Vue.prototype.$message({
 								type: 'info',
 								message: '服务异常，请稍候尝试'
 							});
@@ -488,11 +488,11 @@
 			},
 			editRow: function (row) {
 				var that = this;
-				var src = './dialogs/addTemplate.html?menuCode=' + that.menuCode;
+				var src = './pages/template/dialogs/addTemplate.html?menuCode=' + that.menuCode;
 				for (var key in row) {
 					src += "&" + key + '=' + row[key];
 				}
-				window.jasTools.dialog.show({
+				top.jasTools.dialog.show({
 					title: '修改',
 					src: src,
 					cbForClose: function () {
