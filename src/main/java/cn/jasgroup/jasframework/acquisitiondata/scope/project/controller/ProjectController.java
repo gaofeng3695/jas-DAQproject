@@ -39,7 +39,7 @@ public class ProjectController extends BaseController{
 	  * <p>创建日期:2018年6月13日 下午4:24:01。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	@RequestMapping(value="getProjectList", method = RequestMethod.POST)
+	@RequestMapping(value="/getList", method = RequestMethod.POST)
 	@ResponseBody
 	public Object getProjectList(HttpServletRequest request){
 		ListResult<Map<String, Object>> result = null;
