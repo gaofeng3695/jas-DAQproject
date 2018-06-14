@@ -1,3 +1,38 @@
+Vue.component('jas-base-group-title', {
+	props: {
+		name: {
+			default: '表单分组',
+			type: String
+		},
+	},
+	template: [
+		'<div style="border-bottom: 1px solid rgb(228, 231, 237);margin-bottom:10px;">',
+		'	<span style="height: 32px;line-height:32px;display:inline-block;border-bottom: 2px solid rgb(64, 158, 255)">{{name}}</span>',
+		'</div>'
+	].join(''),
+});
+
+Vue.component('jas-file-upload', {
+	props: {
+		name: {
+			default: '表单分组',
+			type: String
+		},
+	},
+	template: [
+		'<el-upload :accept=".xls,.xlsx" :limit="1" :auto-upload="false" :file-list="fileList" ',
+		':on-success="fileUploaded" :on-remove="removeFile" ',
+		':on-exceed="uploaodNumberlimit" :action="uploadurl">',
+		'	<el-button slot="trigger" size="small" type="primary" plain>选取文件</el-button>',
+		'	<span style="padding-left: 10px;" class="el-upload__tip" slot="tip">最多上传5个附件</span>',
+		'</el-upload>',
+	].join(''),
+	mounted : function(){
+
+	},
+
+});
+
 Vue.component('jas-iframe-dialog', {
 	props: {
 		refSelf: {
@@ -238,7 +273,14 @@ Vue.component('jas-table-for-list', {
 			// 	field:'title',
 			// 	type:'text', // text、time
 			// }]
-		}
+		},
+		searchPath : {
+			type: String,
+			required: true
+		},
+		detailUrl: {},
+		addUrl: {},
+		editUrl: {},
 	},
 
 	data: function () {
@@ -296,14 +338,26 @@ Vue.component('jas-table-for-list', {
 		},
 		add: function () {
 			var that = this;
+			if (!this.addUrl) return;
 			top.jasTools.dialog.show({
-				width: '600px',
-				height: '600px',
+				width: '60%',
+				height: '80%',
 				title: '增加',
-				src: './pages/excel-template/dialogs/add.html',
+				src: this.addUrl,
 				cbForClose: function () {
 					that.refresh()
 				}
+			});
+		},
+		preview: function (row) {
+			var that = this;
+			if (!this.detailUrl) return;
+			var url = jasTools.base.setParamsToUrl(this.detailUrl, row)
+			top.jasTools.dialog.show({
+				width: '60%',
+				height: '80%',
+				title: '查看',
+				src: url,
 			});
 		},
 		_requestTable: function (str, cb) {
@@ -313,38 +367,21 @@ Vue.component('jas-table-for-list', {
 				pageNo: this.currentPage,
 				pageSize: this.pageSize,
 			}, this.form);
-			var url = jasTools.base.rootPath + "/jasframework/excelTemplate/getPage.do";
+			var url = jasTools.base.rootPath + this.searchPath;
 			jasTools.ajax.post(url, obj, function (data) {
 				setTimeout(function () {
 					that.loading = false;
 				}, 300);
-				data.rows = [{
-					oid: '', //	主键
-					project_oid: '', //	项目oid
-					project_name: '西南', //	项目oid
-					pipeline_oid: '', //	管线oid
-					pipeline_name: '中间线', //	管线oid
-					median_stake_code: 'ds23', //	中线桩编号
-					mileage: '12', //	里程(km)
-					pointz: '1.3', //	高程
-					pointx: '45.3', //	X坐标
-					pointy: '45.3', //	Y坐标
-					mark_stone_type: '', //	标石类型
-					mark_stone_name: '超级大', //	标石类型
-					mark_stone_location: '添上', //	标石概略位置
-					remarks: '快走啊', //	备注
-				}]
 				that.tableData = data.rows;
 				that.total = data.total;
 			});
 		},
 		edit: function (row) {
 			var that = this;
-			console.log(row);
-			var url = jasTools.base.setParamsToUrl('./pages/excel-template/dialogs/add.html', row)
+			var url = jasTools.base.setParamsToUrl(this.addUrl, row)
 			top.jasTools.dialog.show({
-				width: '600px',
-				height: '600px',
+				width: '60%',
+				height: '80%',
 				title: '修改',
 				src: url,
 				cbForClose: function () {
@@ -365,8 +402,8 @@ Vue.component('jas-table-for-list', {
 		},
 		_deleteItem: function (oid) {
 			var that = this;
-			var url = jasTools.base.rootPath + "/jasframework/excelTemplate/delete.do";
-			jasTools.ajax.get(url, {
+			var url = jasTools.base.rootPath + "/daq/medianStake/delete.do";
+			jasTools.ajax.post(url, {
 				oid: oid
 			}, function (data) {
 				top.Vue.prototype.$message({

@@ -64,6 +64,9 @@ button {
 .el-cascader-menu__item--extensible:after {
     right: 6px;
 }
+.el-select.el-select--small{
+    width: 100%;
+}
 /* element样式修正--结束 */
 
 

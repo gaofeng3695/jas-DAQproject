@@ -6,9 +6,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Document</title>
-	<link rel="stylesheet" href="./../../../lib/font-awesome-4.7.0/css/font-awesome.css">
-	<link rel="stylesheet" href="./../../../lib/element-ui/v2.2.1/theme-chalk/index.min.css">
-	<link rel="stylesheet" href="./../../../src/css/main.css">
+	<link rel="stylesheet" href="./../../../../lib/font-awesome-4.7.0/css/font-awesome.css">
+	<link rel="stylesheet" href="./../../../../lib/element-ui/v2.2.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../../src/css/main.css">
 	<style>
 		html,
 		body {
@@ -31,68 +31,112 @@
 		.el-form-item {
 			margin-bottom: 15px !important;
 		}
-
-		.el-textarea.el-input--small {
-			padding-top: 4px;
-		}
-
-		.upload-demo {
-			line-height: 1.4;
-		}
 	</style>
 </head>
 
 <body>
 	<div id="app" v-cloak>
 		<div class="content">
-			<el-form ref="tableFormData" :rules="rules" :model="tableFormData" label-width="100px">
+			<el-form ref="formData" :rules="rules" :model="formData" label-width="100px">
+
+				<jas-base-group-title name="基础数据"></jas-base-group-title>
 				<el-row :gutter="10">
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="模板名称" prop="excelTemplateName">
-							<el-input v-model="tableFormData.excelTemplateName" clearable placeholder="请输入模板名称" size="small"></el-input>
+						<el-form-item label="项目名称" prop="projectOid" required>
+							<el-select v-model="formData.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
+								<el-option v-for="item in domain.project" :key="item.key" :label="item.value" :value="item.key">
+								</el-option>
+							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="模板编号" prop="excelTemplateCode">
-							<el-input v-model="tableFormData.excelTemplateCode" clearable placeholder="请输入模板编号" size="small"></el-input>
+						<el-form-item label="管线名称" prop="pipelineOid">
+							<el-select v-model="formData.pipelineOid" clearable placeholder="请选择管线名称" size="small">
+								<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key">
+								</el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="中线桩编号" prop="medianStakeCode">
+							<el-input v-model="formData.medianStakeCode" clearable placeholder="请输入中线桩编号" size="small"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="里程(km)" prop="mileage">
+							<el-input v-model="formData.mileage" clearable placeholder="请输入里程(km)" size="small"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="高程" prop="pointz">
+							<el-input v-model="formData.pointz" clearable placeholder="请输入高程" size="small"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="X坐标" prop="pointx">
+							<el-input v-model="formData.pointx" clearable placeholder="请输入X坐标" size="small"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="Y坐标" prop="pointy">
+							<el-input v-model="formData.pointy" clearable placeholder="请输入Y坐标" size="small"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="标石类型" prop="markStoneType">
+							<el-select v-model="formData.markStoneType" clearable placeholder="标石类型" size="small">
+								<el-option v-for="item in domain.markStone" :key="item.key" :label="item.value" :value="item.key">
+								</el-option>
+							</el-select>
+
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="标石概略位置" prop="markStoneLocation">
+							<el-input v-model="formData.markStoneLocation" clearable placeholder="请输入标石概略位置" size="small"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-						<el-form-item label="备注" prop="description">
-							<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="tableFormData.remark"></el-input>
+						<el-form-item label="备注" prop="remarks">
+							<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
-				<el-row>
+				<!-- <el-row>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 						<el-form-item label="模板上传" prop="file">
-							<el-upload ref="upload" class="upload-demo" accept=".xls,.xlsx" :limit="1" :auto-upload="false" :on-change="changeFiles"
-							  :file-list="fileList" :on-success="fileUploaded" :on-remove="removeFile" :on-exceed="uploaodNumberlimit" drag :action="uploadurl">
-								<i class="el-icon-upload"></i>
-								<div class="el-upload__text">将文件拖到此处，或
-									<em>点击上传</em>
-								</div>
-								<div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
-							</el-upload>
 						</el-form-item>
 					</el-col>
-				</el-row>
+				</el-row> -->
+
+				<jas-base-group-title name="附件管理"></jas-base-group-title>
+
+				<el-upload ref="upload" accept=".xls,.xlsx" :limit="1" :auto-upload="false" :on-change="changeFiles" :file-list="fileList"
+				  :on-success="fileUploaded" :on-remove="removeFile" :on-exceed="uploaodNumberlimit" :action="uploadurl">
+					<el-button slot="trigger" size="small" type="primary" plain>选取文件</el-button>
+					<span style="padding-left: 10px;" class="el-upload__tip" slot="tip">最多上传5个附件</span>
+				</el-upload>
+
 			</el-form>
-			<!--<form-add :datasource="tableDataSource" :form="tableFormData" labelwidth="100px"></form-add>-->
+
+
+
+
+
 		</div>
 		<div slot="footer" class="dialog-footer" style="text-align: center">
 			<el-button size="small" @click="cancel()">取 消</el-button>
-			<el-button size="small" type="primary" @click="submit('tableFormData')">确 定</el-button>
+			<el-button size="small" type="primary" @click="submit('formData')">确 定</el-button>
 		</div>
 	</div>
 </body>
-<script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
-<script src="./../../../lib/vue/vue.js"></script>
-<script src="./../../../lib/element-ui/v2.2.1/index.min.js"></script>
-<script src="./../../../common/components/jas-components.js "></script>
-<script src="./../../../common/js/jas-tools.js"></script>
+<script src="./../../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../../lib/vue/vue.js"></script>
+<script src="./../../../../lib/element-ui/v2.2.1/index.min.js"></script>
+<script src="./../../../../common/components/jas-components.js "></script>
+<script src="./../../../../common/js/jas-tools.js"></script>
 <!--<script src="js/ajaxFileUpload.js"></script>-->
 <script>
 	var app = new Vue({
@@ -102,72 +146,171 @@
 			return {
 				uploadurl: jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token"),
 				fileList: [],
-
+				domain: {
+					project: [],
+					pipeline: [],
+					markStone: [],
+				},
 				rules: {
-					excelTemplateName: [{
+					projectOid: [{
 						required: true,
-						message: '请输入模板名称',
-						trigger: 'blur'
+						message: '项目名称为必填项',
+						trigger: 'change'
 					}],
-					excelTemplateCode: [{
+					pipelineOid: [{
 						required: true,
-						message: '请输入模板编号',
-						trigger: 'blur'
+						message: '管线名称为必填项',
+						trigger: 'change'
 					}],
-					file: [{
+					medianStakeCode: [{
 						required: true,
-						validator: function (rule, value, callback) {
-							if (that.$refs.upload.uploadFiles.length === 0) {
-								callback(new Error('请上传模板'));
-							} else {
-								callback();
-							}
-						}
-					}]
+						message: '中线桩编号为必填项',
+						trigger: 'change'
+					}],
+					mileage: [{
+						required: true,
+						message: '里程为必填项',
+						trigger: 'change'
+					}],
+					pointz: [{
+						required: true,
+						message: '高程为必填项',
+						trigger: 'change'
+					}],
+					pointx: [{
+						required: true,
+						message: 'X坐标为必填项',
+						trigger: 'change'
+					}],
+					pointy: [{
+						required: true,
+						message: 'Y坐标为必填项',
+						trigger: 'change'
+					}],
 				},
-				tableFormData: {
-					// oid: null,
-					excelTemplateName: "",
-					excelTemplateCode: "",
-					excelTemplateType: "1",
-					remark: "",
-					file: ''
-				},
+				formData: {
+					projectOid: '', //	项目oid
+					// projectName: '', //	项目oid
+					pipelineOid: '', //	管线oid
+					// pipelineName: '', //	管线oid
+					medianStakeCode: '', //	中线桩编号
+					mileage: '', //	里程(km)
+					pointz: '', //	高程
+					pointx: '', //	X坐标
+					pointy: '', //	Y坐标
+					markStoneType: '', //	标石类型
+					// markStoneTypeName: '', //	标石类型
+					markStoneLocation: '', //	标石概略位置
+					remarks: '', //	备注
+				}
 			}
 		},
 
 		mounted: function () {
+			var that = this;
 			var param = window.jasTools.base.getParamsInUrl(location.href);
 			if (param.oid) {
 				this.oid = param.oid;
-				this.tableFormData.oid = this.oid;
+				this.formData.oid = this.oid;
 				this.uploadurl = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") +
 					"&businessId=" + this.oid + "&businessType=excelTemplate";
+
 				this.isEdit = true;
-				this.tableFormData.excelTemplateName = param.excelTemplateName;
-				this.tableFormData.excelTemplateCode = param.excelTemplateCode;
-				this.tableFormData.remark = param.remark;
-				// this.getDetailByObjectId();
+				this.getDetailByObjectId();
 				this.requestFiles();
 			};
+			// app.$refs.upload.$refs['upload-inner'].handleClick()
 
+			this.requestDomainFromDomainTable('mark_stone_type_domain', function (arr) {
+				that.domain.markStone = arr;
+			});
+			this.requestDomainFromBizTable('/daq/project/getList.do', {}, function (arr) {
+				that.domain.project = arr;
+			});
 		},
 		methods: {
+			cancel: function () {
+				window.parent.jasTools.dialog.close(1);
+			},
+			requestDomainFromDomainTable: function (domainName, cb) {
+				var that = this;
+				var url = jasTools.base.rootPath + "/jasframework/sysdoman/getDoman.do";
+				jasTools.ajax.get(url, {
+					"domainName": domainName
+				}, function (data) {
+					var aDomain = data.map(function (item) {
+						return {
+							key: item.codeId,
+							value: item.codeName,
+						}
+					});
+					cb && cb(aDomain);
+				});
+			},
+			requestDomainFromBizTable: function (url, obj, cb) {
+				var that = this;
+				var url = jasTools.base.rootPath + url;
+				jasTools.ajax.post(url, obj, function (data) {
+					cb && cb(data.rows);
+				}, function () {
+					cb && cb([]);
+				});
+			},
+			projectChanged: function (val) {
+				var that = this;
+				if (val) {
+					this.requestDomainFromBizTable('/daq/pipeline/getList.do', {
+						projectOid: val
+					}, function (arr) {
+						that.domain.pipeline = arr;
+					});
+				} else {
+					that.domain.pipeline = [];
+					that.formData.pipelineOid = '';
+				}
+			},
+
 			submit: function (formName) {
 				var that = this;
 				this.$refs[formName].validate(function (valid) {
 					if (valid) {
-						that.checkNameOrCodeExist(function () {
-							that.save();
-						});
+						that.save();
 					}
 				});
 			},
+
+
+			save: function () {
+				var that = this;
+				var msg = "";
+				if (!this.isEdit) {
+					msg = "增加成功";
+					url = jasTools.base.rootPath + "/daq/medianStake/save.do";
+				} else {
+					msg = "修改成功";
+					url = jasTools.base.rootPath + "/daq/medianStake/update.do";
+				}
+
+				jasTools.ajax.post(url, that.formData, function (data) {
+					that.uploadFile(data.data || that.oid);
+				});
+
+			},
+			getDetailByObjectId: function () {
+				var that = this;
+				var url = jasTools.base.rootPath + "/jdbc/commonData/medianStake/get.do";
+				jasTools.ajax.post(url, that.formData, function (data) {
+					that.formData = data.data;
+					that.projectChanged(that.formData.projectOid);
+				});
+			},
+
+
 			requestFiles: function () {
 				var that = this;
 				var url = jasTools.base.rootPath + "/attachment/getInfo.do";
 				jasTools.ajax.get(url, {
-					businessType: 'excelTemplate',
+					businessType: 'file',
 					businessId: this.oid
 				}, function (data) {
 					data.rows.forEach(function (item) {
@@ -199,7 +342,7 @@
 						fileList.splice(index, 1);
 					}
 				} else {
-					this.$refs.tableFormData.validateField('file');
+					this.$refs.formData.validateField('file');
 				}
 			},
 			removeFile: function (file, fileList) {
@@ -216,7 +359,7 @@
 
 				that.deleteFilesToServer(function () {
 					that.uploadurl = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") +
-						"&businessId=" + oid + "&businessType=excelTemplate";
+						"&businessId=" + oid + "&businessType=file";
 					that.$nextTick(function () {
 						var afileToSubmit = that.$refs.upload.uploadFiles.filter(function (item) {
 							return !item.oid
@@ -242,65 +385,9 @@
 					cb && cb();
 				});
 			},
-			save: function () {
-				var that = this;
-				var msg = "";
-				if (!this.isEdit) {
-					msg = "增加成功";
-					url = jasTools.base.rootPath + "/jasframework/excelTemplate/save.do";
-				} else {
-					msg = "修改成功";
-					url = jasTools.base.rootPath + "/jasframework/excelTemplate/update.do";
-				}
-
-				jasTools.ajax.post(url, that.tableFormData, function (data) {
-					that.uploadFile(data.data || that.oid);
-				});
-
-			},
-			checkNameOrCodeExist: function (cb) {
-				var that = this;
-				if (this.isEdit) {
-					this.tableFormData.oid = this.oid;
-				}
-				var url = jasTools.base.rootPath + '/jasframework/excelTemplate/checkNameOrCodeExist.do';
-				jasTools.ajax.get(url, that.tableFormData, function (data) {
-					console.log(data);
-					cb && cb();
-				});
-			},
-
-			getDetailByObjectId: function () {
-				var that = this;
-
-				jasTools.ajax.get(url, that.tableFormData, function (data) {
-					console.log(data);
-					cb && cb();
-				});
-				$.ajax({
-					type: "get",
-					dataType: "json",
-					contentType: "application/json",
-					url: jasTools.base.rootPath + "/hibernate/commonData/domain/get.do?token=" + localStorage.getItem(
-						"token") + "&oid=" + oid,
-					success: function (data) {
-						if (data.status == 1) {
-							that.tableFormData = data.data;
-						} else {
-							that.$message({
-								type: 'error',
-								message: '服务异常，请稍候尝试'
-							});
-						}
-					}
-				});
-			},
 			uploaodNumberlimit: function () {
 				top.Vue.prototype.$message('模板文件只允许上传一个')
 			},
-			cancel: function () {
-				window.parent.jasTools.dialog.close(1);
-			}
 		},
 	});
 </script>
