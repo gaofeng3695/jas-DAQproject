@@ -279,7 +279,7 @@ CREATE TABLE daq_median_stake (
 	median_stake_code VARCHAR (50) NOT NULL,
 	project_oid VARCHAR (36) NOT NULL,
 	pipeline_oid VARCHAR (36) NOT NULL,
-	mileage NUMERIC (7, 3),
+	mileage NUMERIC (10, 3),
 	mark_stone_type VARCHAR (38),
 	mark_stone_location VARCHAR (150),
 	pointx NUMERIC (17, 9),

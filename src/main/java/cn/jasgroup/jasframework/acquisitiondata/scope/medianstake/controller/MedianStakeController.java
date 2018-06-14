@@ -20,6 +20,7 @@ import cn.jasgroup.framework.data.result.ListResult;
 import cn.jasgroup.framework.data.result.SimpleResult;
 import cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.dao.entity.MedianStake;
 import cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.service.MedianStakeService;
+import cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.service.bo.MedianStakeQueryBo;
 import cn.jasgroup.jasframework.base.controller.BaseController;
 import cn.jasgroup.jasframework.unique.UniqueHibernateService;
 import cn.jasgroup.jasframework.unique.UniqueResult;
@@ -104,13 +105,13 @@ public class MedianStakeController extends BaseController{
 	@RequestMapping(value="get",method = RequestMethod.GET)
 	@ResponseBody
 	public Object get(HttpServletRequest request,String oid){
-		SimpleResult<MedianStake> result = null;
+		SimpleResult<MedianStakeQueryBo> result = null;
 		try {
-			MedianStake medianStake = this.medianStakeService.get(oid);
-			result = new SimpleResult<MedianStake>(1, "200", "ok", medianStake);
+			MedianStakeQueryBo medianStake = this.medianStakeService.get(oid);
+			result = new SimpleResult<MedianStakeQueryBo>(1, "200", "ok", medianStake);
 		} catch (Exception e) {
 			e.printStackTrace();
-			result = new SimpleResult<MedianStake>(-1, "400", "ok");
+			result = new SimpleResult<MedianStakeQueryBo>(-1, "400", "ok");
 		}
 		return result;
 	}

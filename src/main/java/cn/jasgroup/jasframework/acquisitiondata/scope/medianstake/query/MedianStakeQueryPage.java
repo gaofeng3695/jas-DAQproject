@@ -31,7 +31,7 @@ public class MedianStakeQueryPage extends BaseJavaQuery{
 			sql += " and t.project_oid = :projectOid";
 		}
 		if(StringUtils.isNotBlank(pipelineOid)){
-			sql += "and t.pipeline_oid = :pipelineOid";
+			sql += " and t.pipeline_oid = :pipelineOid";
 		}
 		sql +=" order by t.create_datetime desc";
 		return sql;
