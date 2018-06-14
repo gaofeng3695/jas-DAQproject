@@ -135,7 +135,7 @@ var vm = new Vue({
     },
     isUrl: function (row) {
       var type = row.uiType;
-      return this.isSqlSelect(type) && !!row.childField;
+      return this.isSqlSelect(type) &&  row.childFieldArr && row.childFieldArr.length >0;
     },
     isTableSource: function (row) {
       var type = row.fieldSource;

@@ -10,110 +10,14 @@
 	<link rel="stylesheet" href="./../../../lib/element-ui/v2.2.1/theme-chalk/index.min.css">
 	<link rel="stylesheet" href="./../../../lib/font-awesome-4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="./../../../src/css/main.css">
-	<style>
-		.out-wrap {
-			padding: 15px;
-			box-sizing: border-box;
-			height: 100%;
-		}
-
-		.ta-right {
-			text-align: right;
-		}
-
-		.search-wrap {
-			padding-bottom: 10px;
-			border-bottom: 1px solid #e4e7ed;
-		}
-
-		.el-form-item {
-			margin-bottom: 0px;
-		}
-
-		.table-btn-wrap {
-			padding: 15px 0;
-		}
-
-		.table-opera-wrap {
-			padding: 15px 0 0;
-		}
-	</style>
 </head>
 
 <body>
 	<div id="app" v-cloak>
-		<div class="out-wrap jas-flex-box is-vertical">
-			<div class="search-wrap">
-				<el-form :model="topSearch" label-width="100px">
-					<el-row>
-						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
-							<el-form-item label="项目名称" prop="name">
-								<el-input size="small" v-model="topSearch.excelTemplateName" placeholder="请输入项目名称"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
-							<el-form-item label="管线名称" prop="source">
-								<el-input size="small" v-model="topSearch.excelTemplateCode" placeholder="请输入管线名称"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
-							<el-form-item label="中线桩编号" prop="source">
-								<el-input size="small" v-model="topSearch.excelTemplateCode" placeholder="请输入中线桩编号"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="24" :lg="6" :xl="6">
-							<el-form-item class="ta-right">
-								<el-button size="small" type="primary" @click="search">查询</el-button>
-								<el-button size="small" @click="reset">重置</el-button>
-							</el-form-item>
-						</el-col>
-					</el-row>
-				</el-form>
-			</div>
-
-			<div class="table-btn-wrap">
-				<el-button size="small" plain type="primary" icon="fa fa-plus" @click="add">增加</el-button>
-				<!-- <el-button class="fr" size="small" type="" icon="fa fa-refresh" @click="refresh"></el-button> -->
-				<el-button class="fr" size="small" icon="el-icon-refresh" @click="refresh"></el-button>
-			</div>
-			<div class="table-main-wrap is-grown">
-				<el-table v-loading="loading" height="100%" :data="tableData" border :header-cell-style="headStyle" style="width: 100%">
-
-					<el-table-column label="序号" type="index" align="center" width="50">
-					</el-table-column>
-					<el-table-column label="项目名称" align="center" prop="project_oid">
-					</el-table-column>
-					<el-table-column label="管线名称" align="center" prop="excelTemplateName">
-					</el-table-column>
-					<el-table-column label="里程(km)" align="center" prop="excelTemplateCode">
-					</el-table-column>
-					<el-table-column label="高程" align="center" prop="createDatetime">
-					</el-table-column>
-					<el-table-column label="X坐标" align="center" prop="remark">
-					</el-table-column>
-					<el-table-column label="Y坐标" align="center" prop="remark">
-					</el-table-column>
-					<el-table-column label="标石类型" align="center" prop="remark">
-					</el-table-column>
-					<el-table-column label="标石概略位置" align="center" prop="remark">
-					</el-table-column>
-					<el-table-column label="备注" align="center" prop="remark">
-					</el-table-column>
-					<el-table-column label="操作" align="center" width="240">
-						<template slot-scope="scope">
-							<el-button @click="preview(scope.row)" type="text" size="small">查看</el-button>
-							<el-button @click="edit(scope.row)" type="text" size="small">编辑</el-button>
-							<el-button @click="deleteItem(scope.row)" type="text" size="small">删除</el-button>
-						</template>
-					</el-table-column>
-				</el-table>
-			</div>
-			<div class="table-opera-wrap clearfix">
-				<el-pagination class="fr" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage"
-				  :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
-				</el-pagination>
-			</div>
-		</div>
+		<jas-list-wrapper>
+			<jas-search-for-list slot="search" v-model="topSearch" :fields="searchFields" @search="searchList"></jas-search-for-list>
+			<jas-table-for-list slot="list" :fields="tableFields" :form="topSearch"></jas-table-for-list>
+		</jas-list-wrapper>
 	</div>
 </body>
 
@@ -128,20 +32,60 @@
 		data: function () {
 			return {
 				token: localStorage.getItem("token"),
-				headStyle: {
-					'background-color': '#f5f7fa ',
-				},
-				topSearch: {
-					excelTemplateName: '',
-					excelTemplateCode: ''
-				},
-				currentPage: 1,
-				pageSize: 10,
-				total: 0,
-				loading: false,
-				tableData: [],
-				//	序号	项目名称*	管线名称*	中线桩编号*	里程*	高程	X坐标*	Y坐标*	标石类型	标石概略位置	备注
 
+				topSearch: {
+					project_name: '',
+					pipeline_name: '',
+					median_stake_code: ''
+				},
+				searchFields: [ //
+					{
+						name: '项目名称',
+						field: 'project_name'
+					}, {
+						name: '管线名称',
+						field: 'pipeline_name'
+					}, {
+						name: '中线桩编号',
+						field: 'median_stake_code'
+					}
+				],
+				tableFields: [ //
+					{
+						name: '项目名称',
+						field: 'project_name'
+					}, {
+						name: '管线名称',
+						field: 'pipeline_name'
+					}, {
+						name: '中线桩编号',
+						field: 'median_stake_code'
+					}, {
+						name: '里程(km)',
+						field: 'mileage'
+					}, {
+						name: '高程',
+						field: 'pointz'
+					}, {
+						name: 'X坐标',
+						field: 'pointx'
+					}, {
+						name: 'Y坐标',
+						field: 'pointy'
+					}, {
+						name: '标石类型',
+						field: 'mark_stone_name'
+					}, {
+						name: '标石概略位置',
+						field: 'mark_stone_location'
+					}, {
+						name: '备注',
+						field: 'remarks'
+					}
+				],
+
+
+				//	序号	项目名称*	管线名称*	中线桩编号*	里程*	高程	X坐标*	Y坐标*	标石类型	标石概略位置	备注
 				formData: {
 					oid: '', //	主键
 					project_oid: '', //	项目oid
@@ -170,131 +114,14 @@
 		mounted: function () {
 			//this.getdataSoucreAndType();
 			// this.add();
-			this.search();
+			// this.search();
 		},
 		methods: {
-			add: function () {
-				var that = this;
-				top.jasTools.dialog.show({
-					width: '600px',
-					height: '600px',
-					title: '增加',
-					src: './pages/excel-template/dialogs/add.html',
-					cbForClose: function () {
-						that.refresh()
-					}
-				});
-			},
-			search: function () {
-				this._requestTable();
-			},
-			_requestTable: function (str, cb) {
-				var that = this;
-				that.loading = true;
-				var url = jasTools.base.rootPath + "/jasframework/excelTemplate/getPage.do";
-				jasTools.ajax.post(url, {
-					excelTemplateName: that.topSearch.excelTemplateName,
-					excelTemplateCode: that.topSearch.excelTemplateCode,
-					pageNo: this.currentPage,
-					pageSize: this.pageSize,
-				}, function (data) {
-					setTimeout(function () {
-						that.loading = false;
-					}, 300);
-					that.tableData = data.rows;
-					that.total = data.total;
-				});
-			},
-			reset: function () {
-				this.topSearch.excelTemplateName = '';
-				this.topSearch.excelTemplateCode = '';
-				this.search();
-			},
-			refresh: function () {
-				this.search();
-			},
-			download: function (row) {
-				var that = this;
-				that.requestFiles(row.oid, function (oid) {
-					jasTools.ajax.downloadByIframe('post', jasTools.base.rootPath + "/attachment/download.do", {
-						oid: oid
-					});
-				});
 
-			},
-			requestFiles: function (oid, cb) {
-				var that = this;
-				var url = jasTools.base.rootPath + "/attachment/getInfo.do";
-				jasTools.ajax.get(url, {
-					businessType: 'excelTemplate',
-					businessId: oid
-				}, function (data) {
-					if (data.rows[0].oid) {
-						cb && cb(data.rows[0].oid)
-					}
-				});
-			},
-			preview: function (row) {
-				var that = this;
-				that.requestFiles(row.oid, function (oid) {
-					top.jasTools.dialog.show({
-						width: '80%',
-						height: '90%',
-						title: '预览模板',
-						src: './pages/template/pdfjs_1.10.88/web/viewer.html?oid=' + oid,
-						cbForClose: function () {
-							that.refresh()
-						}
-					});
-				});
-			},
-			edit: function (row) {
-				var that = this;
-				console.log(row);
-				var url = jasTools.base.setParamsToUrl('./pages/excel-template/dialogs/add.html', row)
-				top.jasTools.dialog.show({
-					width: '600px',
-					height: '600px',
-					title: '修改',
-					src: url,
-					cbForClose: function () {
-						that.refresh()
-					}
-				});
-			},
-			deleteItem: function (row) {
-				var that = this;
-				window.top.Vue.prototype.$confirm('您确定要删除本条数据吗？', '提示', {
-					type: 'warning',
-					callback: function (action) {
-						if (action === 'confirm') {
-							that._deleteItem(row.oid);
-						}
-					}
-				});
-			},
-			_deleteItem: function (oid) {
-				var that = this;
-				var url = jasTools.base.rootPath + "/jasframework/excelTemplate/delete.do";
-				jasTools.ajax.get(url, {
-					oid: oid
-				}, function (data) {
-					top.Vue.prototype.$message({
-						type: 'success',
-						message: '删除成功'
-					});
-					that.refresh();
-				});
-			},
 
-			handleSizeChange: function (val) {
-				this.pageSize = val;
-				this.search();
+			searchList: function () {
+				// this._requestTable();
 			},
-			handleCurrentChange: function (val) {
-				this.currentPage = val;
-				this.search();
-			}
 		},
 	});
 </script>
