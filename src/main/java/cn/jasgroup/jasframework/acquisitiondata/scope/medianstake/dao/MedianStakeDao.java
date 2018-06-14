@@ -29,7 +29,7 @@ public class MedianStakeDao extends BaseEntityDao<MedianStake,String>{
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getList(String projectOid,String pipelineOid){
-		String sql = "select t.median_stake_code as key,t.median_stake_code as value from daq_median_stake t where t.active=1";
+		String sql = "select t.oid as key,t.median_stake_code as value from daq_median_stake t where t.active=1";
 		if(StringUtils.isNotBlank(projectOid)){
 			sql += " and t.project_oid='"+projectOid+"'";
 		}
