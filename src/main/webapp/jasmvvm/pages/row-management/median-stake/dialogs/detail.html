@@ -95,7 +95,7 @@
 		methods: {
 			getDetailByObjectId: function () {
 				var that = this;
-				var url = jasTools.base.rootPath + "/jdbc/commonData/medianStake/get.do";
+				var url = jasTools.base.rootPath + "/daq/medianStake/get.do";
 				jasTools.ajax.get(url, this.params, function (data) {
 					that.detail = data.data;
 				});
