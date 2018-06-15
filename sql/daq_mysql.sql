@@ -196,6 +196,7 @@ CREATE TABLE daq_median_stake (
 	pointy NUMERIC (17, 9) COMMENT 'Y坐标',
 	pointz NUMERIC (7, 3) COMMENT '高程',
 	remarks VARCHAR (200) COMMENT '备注',
+	geo_state VARCHAR (10) COMMENT '空间数据状态',
 	create_user_id VARCHAR (36),
 	create_user_name VARCHAR (50),
 	create_datetime datetime,
