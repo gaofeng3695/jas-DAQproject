@@ -3,15 +3,25 @@ package cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.dao.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
+import cn.jasgroup.framework.spatial.annotation.Point;
+import cn.jasgroup.framework.spatial.support.enumeration.CalculateType;
 import cn.jasgroup.jasframework.base.annotation.UniqueConstraintStrategy;
 import cn.jasgroup.jasframework.base.annotation.UniqueConstraints;
 import cn.jasgroup.jasframework.engine.hibernate.entity.CommonHibernateEntity;
 
 @UniqueConstraints(
-	    strategys ={
-	        @UniqueConstraintStrategy(columnNames={"medianStakeCode"},name="中线桩编号已存在"),
-	    }
-	)
+    strategys ={
+        @UniqueConstraintStrategy(columnNames={"medianStakeCode"},name="中线桩编号已存在"),
+    }
+)
+@Point(
+	x="pointx",
+	y="pointy",
+	z="pointz",
+	m="mileage",
+	geometryColumnName="geom",
+	calculateType=CalculateType.Coordinates
+)
 @Entity(name = "daq_median_stake")
 public class MedianStake extends CommonHibernateEntity{
 	
@@ -44,6 +54,10 @@ public class MedianStake extends CommonHibernateEntity{
 
 	/** 备注 */
 	private String remarks;
+	/**
+     * 空间数据状态
+     */
+    private String geoState;
 	
 	@Column(name="median_stake_code", length=50)
 	public String getMedianStakeCode() {
@@ -144,5 +158,12 @@ public class MedianStake extends CommonHibernateEntity{
 		this.remarks = remarks;
 		super.setField("remarks");
 	}
-	
+	@Column(name="geo_state")
+	public String getGeoState() {
+		return geoState;
+	}
+
+	public void setGeoState(String geoState) {
+		this.geoState = geoState;
+	}
 }
