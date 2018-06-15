@@ -285,6 +285,7 @@ CREATE TABLE daq_median_stake (
 	pointx NUMERIC (17, 9),
 	pointy NUMERIC (17, 9),
 	pointz NUMERIC (7, 3),
+	geo_state VARCHAR (10),
 	remarks VARCHAR (200),
 	create_user_id VARCHAR (36),
 	create_user_name VARCHAR (50),
@@ -306,6 +307,11 @@ comment on column daq_median_stake.pointx is 'X坐标';
 comment on column daq_median_stake.pointy is 'X坐标';
 comment on column daq_median_stake.pointz is '高程';
 comment on column daq_median_stake.remarks is '备注';
+comment on column daq_median_stake.geo_state is '空间数据状态';
 create index INDEX_DAQ_MEDIAN_STAKE_MEDIAN_STAKE_CODE_5 ON daq_median_stake ( median_stake_code );
+
+select AddGeometryColumn('public', 'daq_median_stake', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_median_stake_geom_idx ON public.daq_median_stake USING gist (geom);
+
 
 /**********范围管理数据表end***************/

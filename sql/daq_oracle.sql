@@ -288,6 +288,7 @@ CREATE TABLE daq_median_stake (
 	pointy NUMBER (17, 9),
 	pointz NUMBER (7, 3),
 	remarks NVARCHAR2 (200),
+	geo_state NVARCHAR2(10),
 	create_user_id VARCHAR2 (36),
 	create_user_name NVARCHAR2 (50),
 	create_datetime TIMESTAMP (6),
@@ -308,6 +309,7 @@ comment on column daq_median_stake.pointx is 'X坐标';
 comment on column daq_median_stake.pointy is 'Y坐标';
 comment on column daq_median_stake.pointz is '高程';
 comment on column daq_median_stake.remarks is '备注';
+comment on column daq_median_stake.geo_state is '空间数据状态';
 create index INDEX_DAQ_MEDIAN_STAKE_MEDIAN_STAKE_CODE_5 ON daq_median_stake ( median_stake_code );
 
 /**********范围管理数据表end***************/
