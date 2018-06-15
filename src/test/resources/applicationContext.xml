@@ -274,7 +274,8 @@
         port="${rabbit.connect.port}" 
         username="${rabbit.connect.username}"  
         password="${rabbit.connect.password}" 
-        channel-cache-size="${rabbit.connect.channelCacheSize}"  
+        channel-cache-size="${rabbit.connect.channelCacheSize}"
+        virtual-host="${rabbit.connect.virtualHost}"
         publisher-returns="true" 
         publisher-confirms="true" />  
   
@@ -296,7 +297,7 @@
      
     
     <!-- 消息接收者 -->  
-    <bean id="spatialListener" class="cn.jasgroup.framework.spatial.mq.listener.SpatialPersistenceListener"></bean>  
+    <bean id="spatialListener" class="cn.jasgroup.jasopengis.data.jdbc.SpatialPersistenceListener"></bean>  
     <!-- queue litener 观察 监听模式 当有消息到达时会通知监听在对应的队列上的监听对象 -->  
     <rabbit:listener-container connection-factory="rabbitConnectionFactory" acknowledge="manual">  <!--  -->
          <rabbit:listener  queues="mq.spatial"  ref="spatialListener"/>  

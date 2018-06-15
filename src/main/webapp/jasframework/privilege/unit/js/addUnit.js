@@ -36,12 +36,13 @@ var eventID =getParamter("parentid");;
 	    var unitCode = $("#unitCode").val();
 	    //var url = './savePcUnit.do';
 	    $.ajax({
-	        type: "get",
+	        type: "POST",
+	        contentType: "application/json;charset=utf-8",
 	        url: rootPath + "jasframework/privilege/unit/checkUnitExist.do",
-	        data:{ "parentId": $("#parentId").combotree("getValue"), "unitName": name, "unitCode": unitCode },
+	        data:JSON.stringify({ "parentId": $("#parentId").combotree("getValue"), "unitName": name, "unitCode": unitCode }),
 	        dataType: "json",
 	        success: function (check) {
-	            if (check.error == '-1') {
+	            if (check.status == '-1') {
 	                top.showAlert(getLanguageValue("error"), check.msg, 'error');
 	            } else {
 	                //使用框架定义请求 token

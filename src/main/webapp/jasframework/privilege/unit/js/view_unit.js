@@ -14,7 +14,7 @@ $(function(){
 });
 
 function loadForm(){
-	url = rootPath+'jasframework/privilege/unit/findUnitById.do?eventID='+oid;
+	url = rootPath+'jasframework/privilege/unit/findUnitById.do?oid='+oid;
 	$.post(url, function(bo) {
 //		$('#viewSiteForm').form('load', bo);
 		$("#parentName").html(bo.parentName);

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>自定义表单配置</title>
+	<!-- <link rel="stylesheet" href="./libelement-ui/element-#0E2B4A/src/index.css"> -->
+	<link rel="stylesheet" href="./../../../lib/element-ui/v2.2.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../lib/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="./../../../src/css/main.css">
+	<style>
+		.el-form-item {
+			margin-bottom: 0px;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="app" v-cloak>
+		<jas-list-wrapper>
+
+			<el-form slot="search" :model="topSearch" label-width="100px">
+				<el-row>
+					<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
+						<el-form-item label="项目名称" prop="projectOid">
+							<el-select v-model="topSearch.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
+								<el-option v-for="item in domain.project" :key="item.key" :label="item.value" :value="item.key">
+								</el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
+						<el-form-item label="管线名称" prop="pipelineOid">
+							<el-select v-model="topSearch.pipelineOid" clearable placeholder="请选择管线名称" size="small">
+								<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key">
+								</el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
+						<el-form-item label="中线桩编号" prop="source">
+							<el-input v-model="topSearch.medianStakeCode" clearable placeholder="请输入中线桩编号" size="small"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="24" :lg="6" :xl="6">
+						<el-form-item style="float: right;">
+							<el-button size="small" type="primary" @click="searchList">查询</el-button>
+							<el-button size="small" @click="reset">重置</el-button>
+						</el-form-item>
+					</el-col>
+				</el-row>
+			</el-form>
+
+
+			<jas-table-for-list ref="table" slot="list" :fields="tableFields" :form="topSearch" search-path="/jdbc/commonData/medianStake/getPage.do"
+			  :add-url="addUrl" :detail-url="detailUrl"></jas-table-for-list>
+		</jas-list-wrapper>
+	</div>
+</body>
+
+<script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../lib/vue/vue.js"></script>
+<script src="./../../../lib/element-ui/v2.2.1/index.min.js"></script>
+<script src="./../../../common/components/jas-components.js"></script>
+<script src="./../../../common/js/jas-tools.js"></script>
+<script>
+	var vm = new Vue({
+		el: '#app',
+		data: function () {
+			return {
+				addUrl : './pages/row-management/median-stake/dialogs/add.html',
+				// addUrl: './dialogs/add.html',
+				detailUrl : './pages/row-management/median-stake/dialogs/detail.html',
+				// detailUrl: './dialogs/detail.html',
+				topSearch: {
+					projectOid: '',
+					pipelineOid: '',
+					medianStakeCode: ''
+				},
+				searchFields: [ //
+					{
+						name: '项目名称',
+						field: 'projectName'
+					}, {
+						name: '管线名称',
+						field: 'pipelineName'
+					}, {
+						name: '中线桩编号',
+						field: 'medianStakeCode'
+					}
+				],
+				tableFields: [ //
+					{
+						name: '项目名称',
+						field: 'projectName'
+					}, {
+						name: '管线名称',
+						field: 'pipelineName'
+					}, {
+						name: '中线桩编号',
+						field: 'medianStakeCode'
+					}, {
+						name: '里程(km)',
+						field: 'mileage'
+					}, {
+						name: '高程',
+						field: 'pointz'
+					}, {
+						name: 'X坐标',
+						field: 'pointx'
+					}, {
+						name: 'Y坐标',
+						field: 'pointy'
+					}, {
+						name: '标石类型',
+						field: 'markStoneTypeName'
+					}, {
+						name: '标石概略位置',
+						field: 'markStoneLocation'
+					}, {
+						name: '备注',
+						field: 'remarks'
+					}
+				],
+				domain: {
+					project: [],
+					pipeline: [],
+				},
+				//	序号	项目名称*	管线名称*	中线桩编号*	里程*	高程	X坐标*	Y坐标*	标石类型	标石概略位置	备注
+				formData: {
+					oid: '', //	主键
+					project_oid: '', //	项目oid
+					projectName: '', //	项目oid
+					pipeline_oid: '', //	管线oid
+					pipelineName: '', //	管线oid
+					medianStakeCode: '', //	中线桩编号
+					mileage: '', //	里程(km)
+					pointz: '', //	高程
+					pointx: '', //	X坐标
+					pointy: '', //	Y坐标
+					mark_stone_type: '', //	标石类型
+					markStoneTypeName: '', //	标石类型
+					markStoneLocation: '', //	标石概略位置
+					remarks: '', //	备注
+					create_user_id: '', //	创建人id
+					create_user_name: '', //	创建人名称
+					create_datetime: '', //	创建时间
+					modify_user_id: '', //	修改人id
+					modify_user_name: '', //	修改人名称
+					modify_datetime: '', //	修改时间
+					active: '', //	有效标志
+				}
+			}
+		},
+		mounted: function () {
+			var that = this;
+			this.requestDomainFromBizTable('/daq/project/getList.do', {}, function (arr) {
+				that.domain.project = arr;
+			});
+
+		},
+		methods: {
+			requestDomainFromBizTable: function (url, obj, cb) {
+				var that = this;
+				var url = jasTools.base.rootPath + url;
+				jasTools.ajax.post(url, obj, function (data) {
+					cb && cb(data.rows);
+				}, function () {
+					cb && cb([]);
+				});
+			},
+			projectChanged: function (val) {
+				var that = this;
+				if (val) {
+					this.requestDomainFromBizTable('/daq/pipeline/getList.do', {
+						projectOid: val
+					}, function (arr) {
+						that.domain.pipeline = arr;
+					});
+				} else {
+					that.domain.pipeline = [];
+					that.topSearch.pipelineOid = '';
+				}
+			},
+
+			searchList: function () {
+				this.$refs.table.search();
+			},
+			reset: function () {
+				this.topSearch.projectOid = '';
+				this.topSearch.pipelineOid = '';
+				this.topSearch.medianStakeCode = '';
+				this.$refs.table.search();
+
+
+			}
+		},
+	});
+</script>
+
+</html>

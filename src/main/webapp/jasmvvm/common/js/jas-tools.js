@@ -113,37 +113,53 @@
 		 * @param ms  毫秒数
 		 * @param cb  执行的函数
 		 */
-		var timeLimit = function (btnDom, ms, cb, cbFail) {
-			if (btnDom && btnDom.jasLastTime && ms) {
-				if ((new Date().getTime() - btnDom.jasLastTime) < ms) {
-					cbFail && cbFail();
-					return;
+
+		var getIdArrFromTree = function (treeData, nodeId, config) {
+
+			var pidArr = [nodeId];
+			var getPId = function (dataArr, id, pid) {
+				for (var i = 0; i < dataArr.length; i++) {
+					var item = dataArr[i];
+					if (item.id === id) {
+						return pid;
+					} else {
+						if (item.children && item.children.length > 0) {
+							var result = getPId(item.children, id, item.id);
+							if (result) return result;
+						}
+					}
 				}
-			}
-			if (btnDom) {
-				btnDom.jasLastTime = new Date().getTime();
-			}
-			cb && cb();
+			};
+			var getPPId = function (dataArr, id) {
+				var pid = getPId(dataArr, id, '');
+				if (pid) {
+					pidArr.push(pid);
+					getPPId(dataArr, pid);
+				} else {
+					return pidArr;
+				}
+			};
+
+			getPPId(treeData, nodeId);
+			return pidArr.reverse();
 		};
 
-		var loadingMask = null;
-		var showLoading = function (vueInst) {
-			if (vueInst && vueInst.$loading) {
-				// console.log(vueInst.$loading)
-			}
-		};
-		var closeLoading = function () {
-			if (!loadingMask) return;
-		};
+		//字符串下划线转为驼峰
+		var switchToCamelCase = function (string) {
+			// Support: IE9-11+
+			return string.replace(/_([a-z])/g, function (all, letter) {
+				return letter.toUpperCase();
+			});
+		}
+
 		return {
 			rootPath: getRootPath(),
 			createuuid: createuuid,
 			extend: extend,
 			getParamsInUrl: getParamsInUrl,
 			setParamsToUrl: setParamsToUrl,
-			timeLimit: timeLimit,
-			showLoading: showLoading,
-			closeLoading: closeLoading,
+			getIdArrFromTree: getIdArrFromTree,
+			switchToCamelCase: switchToCamelCase,
 		};
 	})();
 
@@ -370,6 +386,8 @@
 					}
 					if (data.status == 1) {
 						cb_success && cb_success(data);
+					} else if (!data.status && data) {
+						cb_success && cb_success(data);
 					} else {
 						cb_fail && cb_fail(data);
 						window.top.Vue.prototype.$message({
@@ -431,6 +449,7 @@
 						var arr = item.split('=');
 						if (arr[0] === 'filename') {
 							filename = arr[1];
+							filename = decodeURIComponent(filename);
 						}
 					});
 					// 返回200
@@ -442,9 +461,11 @@
 						var a = document.createElement('a');
 						a.download = filename;
 						a.href = e.target.result;
-						document.getElementsByTagName('body')[0].append(a); // 修复firefox中无法触发click
+						document.getElementsByTagName('body')[0].appendChild(a); // 修复firefox中无法触发click
+						// $(a).trigger('click');
 						a.click();
-						a.remove();
+						// a.remove();
+						a.parentNode.removeChild(a);
 						cbsuccess && cbsuccess(xhr);
 					}
 				} else {

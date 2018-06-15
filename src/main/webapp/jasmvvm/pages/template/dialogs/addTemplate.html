@@ -218,9 +218,6 @@
 <script src="./../../../common/js/jas-tools.js"></script>
 <!--<script src="js/ajaxFileUpload.js"></script>-->
 <script>
-
-
-
 	var app = new Vue({
 		el: "#app",
 		data: function () {
@@ -708,7 +705,7 @@
 			},
 			handleDownload: function (file) {
 				var that = this;
-				jasTools.ajax.downloadByPost(jasTools.base.rootPath + "/attachment/download.do", {
+				jasTools.ajax.downloadByIframe('post', jasTools.base.rootPath + "/attachment/download.do", {
 					oid: file.oid
 				});
 			},
@@ -721,37 +718,42 @@
 			},
 			getChildOpts: function (value, item) {
 				var that = this;
-				var options = [];
-				if (item.requestUrl) { //进行子级的查找 后台请求
 
-					jasTools.ajax.post(jasTools.base.rootPath + "/" + item.requestUrl, {
-						"rows": 100,
-						"page": 1,
-						"tableId": value
-					}, function (data) {
-						data.rows.forEach(function (item) {
-							var obj = {
-								"key": item.fieldName,
-								"value": item.fieldName,
-							};
-							options.push(obj);
-						});
-					});
-
+				var formatFormAttr = function (options) {
 					that.formAttr.forEach(function (parent, index) {
 						parent.data.forEach(function (child) {
-							if (child.id == item.childField) {
+							console.log("_________",item.childField)
+							if (item.childField.indexOf(child.id) !== -1) {
 								if (value) {
 									child.options = options;
 								} else {
-									options = [];
-									child.options = options;
+									child.options = [];
 								}
 								that.$set(that.formData, item.childField, "");
 							}
 						});
-						return;
 					});
+				};
+
+				if (item.requestUrl && value) { //进行子级的查找 后台请求
+					var key = jasTools.base.switchToCamelCase(item.id);
+					var obj = {
+						"rows": 100,
+						"page": 1,
+					};
+					obj[key] = value;
+					jasTools.ajax.post(jasTools.base.rootPath + "/" + item.requestUrl, obj, function (data) {
+						// data.rows.forEach(function (item) {
+						// 	var obj = {
+						// 		"key": item.fieldName,
+						// 		"value": item.fieldName,
+						// 	};
+						// 	options.push(obj);
+						// });
+						formatFormAttr(data.rows)
+					});
+				} else {
+					formatFormAttr([]);
 				}
 			},
 			visibleChange: function (falg, item) {

@@ -59,6 +59,17 @@ button {
     display: none;
 }
 
+
+/* element样式修正--开始 */
+.el-cascader-menu__item--extensible:after {
+    right: 6px;
+}
+.el-select.el-select--small{
+    width: 100%;
+}
+/* element样式修正--结束 */
+
+
 /* 弹性盒子相关--开始 */
 
 .jas-flex-box {
@@ -210,3 +221,35 @@ button {
 }
 
 /* 弹出框样式--结束 */
+
+/* 详情表格--开始 */
+
+.jas-detail-table .table_wrap {
+    width: 100%;
+    table-layout: fixed;
+    empty-cells: show;
+    border-collapse: collapse;
+    border: 1px solid #cad9ea;
+}
+
+.jas-detail-table .table_wrap tr,
+.jas-detail-table .table_wrap th,
+.jas-detail-table .table_wrap td {
+    border: 1px solid #cad9ea;
+    padding: 6px 6px;
+    color: #333;
+    font-weight: normal;
+    word-wrap: break-word;
+    word-break: break-all;
+    line-height: 1.8;
+}
+
+.jas-detail-table .table_wrap th {
+    background-color: #f3f8fc;
+    width: 15%;
+    text-align: right
+}
+
+.jas-detail-table .table_wrap td {}
+
+/* 详情表格--结束 */
