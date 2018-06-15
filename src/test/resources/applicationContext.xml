@@ -274,7 +274,8 @@
         port="${rabbit.connect.port}" 
         username="${rabbit.connect.username}"  
         password="${rabbit.connect.password}" 
-        channel-cache-size="${rabbit.connect.channelCacheSize}"  
+        channel-cache-size="${rabbit.connect.channelCacheSize}"
+        virtual-host="${rabbit.connect.virtualHost}"
         publisher-returns="true" 
         publisher-confirms="true" />  
   
