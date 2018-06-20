@@ -28,6 +28,7 @@ import cn.jasgroup.jasframework.base.controller.BaseController;
 @RequestMapping("daq/pipeline")
 public class TenderScopeController extends BaseController {
 
+	
 	@Autowired
 	private TenderScopeService TenderScopeService;
 
