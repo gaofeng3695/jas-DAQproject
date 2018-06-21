@@ -1,4 +1,4 @@
-package cn.jasgroup.jasframework.acquisitiondata.scope.scopeManager.dao.entity;
+package cn.jasgroup.jasframework.acquisitiondata.scope.tenderscope.dao.entity;
 
 public class TenderScopeBo {
 	private String oid;

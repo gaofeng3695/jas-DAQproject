@@ -1,51 +1,39 @@
-package cn.jasgroup.jasframework.acquisitiondata.scope.scopeManager.controller;
+package cn.jasgroup.jasframework.acquisitiondata.scope.tenderscope.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedCaseInsensitiveMap;
 
-import cn.jasgroup.jasframework.acquisitiondata.scope.scopeManager.dao.entity.TenderScopeBo;
-import cn.jasgroup.jasframework.acquisitiondata.scope.scopeManager.service.TenderScopeService;
-import cn.jasgroup.jasframework.base.controller.BaseController;
+import cn.jasgroup.jasframework.acquisitiondata.scope.tenderscope.dao.TenderScopeDAO;
+import cn.jasgroup.jasframework.acquisitiondata.scope.tenderscope.dao.entity.TenderScopeBo;
 
-/**
- * <p>功能描述：获取标段范围树。</p>
-  * <p> 葛建。</p>	
-  * @return
-  * @since JDK1.8。
-  * <p>创建日期:2018年6月20日 下午3:42:47。</p>
-  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
- */
-@RestController
-@RequestMapping("daq/pipeline")
-public class TenderScopeController extends BaseController {
+@Service
+@Transactional
+public class TenderScopeService {
 
-	
 	@Autowired
-	private TenderScopeService TenderScopeService;
+	private TenderScopeDAO tenderScopeDAO;
 
 	/**
 	 * 获取标段范围树
 	 * 
-	 * @param request
-	 * @param response
+	 * @param tenderId
+	 *            标段id
 	 * @return
 	 */
-	@RequestMapping("getTenderScopeTree")
-	public Object getScopeTree(HttpServletRequest request, HttpServletResponse response) {
-		String tenderId = request.getParameter("tenderId");
+	public List<Map<String, Object>> getTenderScopeTree(String tenderId) {
+		// 获取范围id
+		List<LinkedCaseInsensitiveMap> scopeIdList = tenderScopeDAO.getScopeIdByTenderId(tenderId);
 		// 获取项目id
-		String projectId = TenderScopeService.getProjectByTenderId(tenderId);
-		// 通过项目id获取标段范围Bo
-		List<TenderScopeBo> tenderScopeBoList = TenderScopeService.getBoByProjectId(projectId);
+		String projectId = tenderScopeDAO.getProjectByTenderId(tenderId);
+		// 通过项目id获取标段范围BoList
+		List<TenderScopeBo> tenderScopeBoList = tenderScopeDAO.getBoByProjectId(projectId);
 		// 用于封装返回数据
 		List<Map<String, Object>> itemsList = new ArrayList<Map<String, Object>>();
 		if (tenderScopeBoList == null) {
@@ -65,7 +53,8 @@ public class TenderScopeController extends BaseController {
 				Map<String, Object> item = new HashMap<String, Object>();
 				// 设置item的值
 				setItem(item, bo.getOid(), bo.getName(), bo.getType(), bo.getTypeName());
-				List<Map<String, Object>> childrenList = getPipelineById(bo.getOid(), tenderScopeBoList, typeMap);
+				List<Map<String, Object>> childrenList = getPipelineById(bo.getOid(), tenderScopeBoList, typeMap,
+						scopeIdList);
 				if (childrenList.size() > 0) {
 					item.put("state", "closed");
 					item.put("children", childrenList);
@@ -86,10 +75,11 @@ public class TenderScopeController extends BaseController {
 	 *            项目下所有的数据
 	 * @param typeMap
 	 *            五种类型初始化数据
+	 * @param scopeIdList
 	 * @return
 	 */
 	private List<Map<String, Object>> getPipelineById(String parentId, List<TenderScopeBo> tenderScopeBoList,
-			Map<String, String> typeMap) {
+			Map<String, String> typeMap, List<LinkedCaseInsensitiveMap> scopeIdList) {
 		List<Map<String, Object>> items = new ArrayList<Map<String, Object>>();
 		for (TenderScopeBo bo : tenderScopeBoList) {
 			// 根据项目过滤管线
@@ -97,7 +87,8 @@ public class TenderScopeController extends BaseController {
 				Map<String, Object> item = new HashMap<String, Object>();
 				// 设置item的值
 				setItem(item, bo.getOid(), bo.getName(), bo.getType(), bo.getTypeName());
-				List<Map<String, Object>> childrenList = getChildrenById(bo.getOid(), tenderScopeBoList, typeMap);
+				List<Map<String, Object>> childrenList = getChildrenById(bo.getOid(), tenderScopeBoList, typeMap,
+						scopeIdList);
 				if (childrenList.size() > 0) {
 					item.put("state", "closed");
 					item.put("children", childrenList);
@@ -117,16 +108,17 @@ public class TenderScopeController extends BaseController {
 	 *            项目下所有数据
 	 * @param typeMap
 	 *            五种类型初始化数据
+	 * @param scopeIdList
 	 * @return
 	 */
 	private List<Map<String, Object>> getChildrenById(String parentId, List<TenderScopeBo> tenderScopeBoList,
-			Map<String, String> typeMap) {
+			Map<String, String> typeMap, List<LinkedCaseInsensitiveMap> scopeIdList) {
 		List<Map<String, Object>> items = new ArrayList<Map<String, Object>>();
 		for (String key : typeMap.keySet()) {
 			Map<String, Object> item = new HashMap<String, Object>();
 			// 设置item的值
 			setItem(item, key, typeMap.get(key), key, typeMap.get(key));
-			List<Map<String, Object>> childrenList = getProvinceById(parentId, tenderScopeBoList, key);
+			List<Map<String, Object>> childrenList = getProvinceById(parentId, tenderScopeBoList, key, scopeIdList);
 			if (childrenList.size() > 0) {
 				item.put("state", "closed");
 				item.put("children", childrenList);
@@ -145,10 +137,11 @@ public class TenderScopeController extends BaseController {
 	 *            项目下所有数据
 	 * @param parentType
 	 *            父类type
+	 * @param scopeIdList
 	 * @return
 	 */
 	private List<Map<String, Object>> getProvinceById(String parentId, List<TenderScopeBo> tenderScopeBoList,
-			String parentType) {
+			String parentType, List<LinkedCaseInsensitiveMap> scopeIdList) {
 		List<Map<String, Object>> items = new ArrayList<Map<String, Object>>();
 		for (TenderScopeBo bo : tenderScopeBoList) {
 			// 通过管线id和五大类型过滤到对应的省份
@@ -157,7 +150,7 @@ public class TenderScopeController extends BaseController {
 				// 设置item的值
 				setItem(item, bo.getProvince(), bo.getProvinceName(), bo.getType(), bo.getTypeName());
 				List<Map<String, Object>> childrenList = getDeviceById(bo.getOid(), bo.getProvince(), parentType,
-						tenderScopeBoList);
+						tenderScopeBoList, scopeIdList);
 				if (childrenList.size() > 0) {
 					item.put("state", "closed");
 					item.put("children", childrenList);
@@ -177,17 +170,18 @@ public class TenderScopeController extends BaseController {
 	 *            父类type
 	 * @param tenderScopeBoList
 	 *            项目下所有数据
+	 * @param scopeIdList
 	 * @return
 	 */
 	private List<Map<String, Object>> getDeviceById(String oid, String provinceId, String parentType,
-			List<TenderScopeBo> tenderScopeBoList) {
+			List<TenderScopeBo> tenderScopeBoList, List<LinkedCaseInsensitiveMap> scopeIdList) {
 		List<Map<String, Object>> items = new ArrayList<Map<String, Object>>();
 		for (TenderScopeBo bo : tenderScopeBoList) {
 			// 通过省份、oid和类型过滤对应的子类数据
 			if (provinceId.equals(bo.getProvince()) && oid.equals(bo.getOid()) && parentType.equals(bo.getType())) {
 				Map<String, Object> item = new HashMap<String, Object>();
 				// 设置item的值
-				setItem(item, bo.getOid(), bo.getName(), bo.getType(), bo.getTypeName());
+				setItemAndCheck(item, bo.getOid(), bo.getName(), bo.getType(), bo.getTypeName(), bo.getOid(), scopeIdList);
 				items.add(item);
 			}
 		}
@@ -213,6 +207,24 @@ public class TenderScopeController extends BaseController {
 		Map<String, Object> attributesMap = new HashMap<String, Object>();
 		item.put("id", idField);
 		item.put("text", textField);
+		attributesMap.put("type", typeField);
+		attributesMap.put("typeName", typeNameField);
+		item.put("attributes", attributesMap);
+	}
+	
+	public void setItemAndCheck(Map<String, Object> item, String idField, String textField, String typeField,
+			String typeNameField, String BoId, List<LinkedCaseInsensitiveMap> scopeIdList) {
+		Map<String, Object> attributesMap = new HashMap<String, Object>();
+		item.put("id", idField);
+		item.put("text", textField);
+		for (LinkedCaseInsensitiveMap map : scopeIdList) {
+			if (map.get("scope_oid").equals(BoId)) {
+				attributesMap.put("checked", true);
+				break;
+			}else {
+				attributesMap.put("checked", false);
+			}
+		}
 		attributesMap.put("type", typeField);
 		attributesMap.put("typeName", typeNameField);
 		item.put("attributes", attributesMap);

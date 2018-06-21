@@ -1,11 +1,12 @@
-package cn.jasgroup.jasframework.acquisitiondata.scope.scopeManager.dao;
+package cn.jasgroup.jasframework.acquisitiondata.scope.tenderscope.dao;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.LinkedCaseInsensitiveMap;
 
-import cn.jasgroup.jasframework.acquisitiondata.scope.scopeManager.dao.entity.TenderScopeBo;
+import cn.jasgroup.jasframework.acquisitiondata.scope.tenderscope.dao.entity.TenderScopeBo;
 import cn.jasgroup.jasframework.dataaccess.base.BaseJdbcDao;
 
 @Repository
@@ -25,5 +26,10 @@ public class TenderScopeDAO {
 		return TenderScopeBoList;
 	}
 
+	public List<LinkedCaseInsensitiveMap> getScopeIdByTenderId(String tenderId) {
+		String sql = "select scope_oid  from daq_tenders_scope_ref where active=1 and tenders_oid=?";
+		List<LinkedCaseInsensitiveMap> scopeIdList = baseJdbcDao.queryForList(sql, new Object[]{tenderId});
+		return scopeIdList;
+	}
 	
 }
