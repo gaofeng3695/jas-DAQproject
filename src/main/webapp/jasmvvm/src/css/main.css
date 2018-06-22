@@ -104,6 +104,7 @@ button {
     -webkit-box-direction: normal;
     -ms-flex-direction: column;
     flex-direction: column;
+    height: 100%;
 }
 
 .jas-flex-box.is-horizontal {
@@ -259,7 +260,7 @@ button {
 
 .jas-detail-table .table_wrap th {
     background-color: #f3f8fc;
-    width: 15%;
+    width: 100px;
     text-align: right
 }
 
