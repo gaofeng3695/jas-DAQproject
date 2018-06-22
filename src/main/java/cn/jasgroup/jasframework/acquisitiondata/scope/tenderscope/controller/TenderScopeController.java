@@ -1,5 +1,6 @@
 package cn.jasgroup.jasframework.acquisitiondata.scope.tenderscope.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -7,9 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import cn.jasgroup.framework.data.result.BaseResult;
 import cn.jasgroup.jasframework.acquisitiondata.scope.tenderscope.service.TenderScopeService;
 import cn.jasgroup.jasframework.base.controller.BaseController;
 
@@ -36,9 +39,14 @@ public class TenderScopeController extends BaseController {
 	 * @return itemsList
 	 */
 	@RequestMapping("getTenderScopeTree")
-	public Object getScopeTree(HttpServletRequest request, HttpServletResponse response) {
-		String tenderId = request.getParameter("tenderId");
-		List<Map<String, Object>> itemsList = tenderScopeService.getTenderScopeTree(tenderId);
+	public Object getScopeTree(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String, String> param) {
+		String tenderId = param.get("tenderId");
+		List<Map<String, Object>> itemsList = new ArrayList<Map<String, Object>>();
+		try {
+			itemsList = tenderScopeService.getTenderScopeTree(tenderId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return itemsList;
 	}
 
