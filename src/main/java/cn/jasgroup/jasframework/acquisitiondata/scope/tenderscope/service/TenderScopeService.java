@@ -8,9 +8,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.LinkedCaseInsensitiveMap;
 
-import cn.jasgroup.jasframework.acquisitiondata.scope.tenderscope.dao.TenderScopeDAO;
+import cn.jasgroup.jasframework.acquisitiondata.scope.tenderscope.dao.TenderScopeDao;
 import cn.jasgroup.jasframework.acquisitiondata.scope.tenderscope.dao.entity.TenderScopeBo;
 
 @Service
@@ -18,7 +17,7 @@ import cn.jasgroup.jasframework.acquisitiondata.scope.tenderscope.dao.entity.Ten
 public class TenderScopeService {
 
 	@Autowired
-	private TenderScopeDAO tenderScopeDAO;
+	private TenderScopeDao tenderScopeDAO;
 
 	/**
 	 * 获取标段范围树
@@ -29,7 +28,7 @@ public class TenderScopeService {
 	 */
 	public List<Map<String, Object>> getTenderScopeTree(String tenderId) {
 		// 获取范围id
-		List<LinkedCaseInsensitiveMap> scopeIdList = tenderScopeDAO.getScopeIdByTenderId(tenderId);
+		List<Map<String,Object>> scopeIdList = tenderScopeDAO.getScopeIdByTenderId(tenderId);
 		// 获取项目id
 		String projectId = tenderScopeDAO.getProjectByTenderId(tenderId);
 		// 通过项目id获取标段范围BoList
@@ -52,7 +51,7 @@ public class TenderScopeService {
 			if ("-1".equals(bo.getType())) {
 				Map<String, Object> item = new HashMap<String, Object>();
 				// 设置item的值
-				setItem(item, bo.getOid(), bo.getName(), bo.getType(), bo.getTypeName());
+				setItem(item, bo.getOid(), bo.getName(), bo.getType(), "");
 				List<Map<String, Object>> childrenList = getPipelineById(bo.getOid(), tenderScopeBoList, typeMap,
 						scopeIdList);
 				if (childrenList.size() > 0) {
@@ -79,14 +78,14 @@ public class TenderScopeService {
 	 * @return
 	 */
 	private List<Map<String, Object>> getPipelineById(String parentId, List<TenderScopeBo> tenderScopeBoList,
-			Map<String, String> typeMap, List<LinkedCaseInsensitiveMap> scopeIdList) {
+			Map<String, String> typeMap, List<Map<String, Object>> scopeIdList) {
 		List<Map<String, Object>> items = new ArrayList<Map<String, Object>>();
 		for (TenderScopeBo bo : tenderScopeBoList) {
 			// 根据项目过滤管线
 			if (parentId.equals(bo.getParentOid())) {
 				Map<String, Object> item = new HashMap<String, Object>();
 				// 设置item的值
-				setItem(item, bo.getOid(), bo.getName(), bo.getType(), bo.getTypeName());
+				setItem(item, bo.getOid(), bo.getName(), bo.getType(), bo.getOid());
 				List<Map<String, Object>> childrenList = getChildrenById(bo.getOid(), tenderScopeBoList, typeMap,
 						scopeIdList);
 				if (childrenList.size() > 0) {
@@ -112,12 +111,12 @@ public class TenderScopeService {
 	 * @return
 	 */
 	private List<Map<String, Object>> getChildrenById(String parentId, List<TenderScopeBo> tenderScopeBoList,
-			Map<String, String> typeMap, List<LinkedCaseInsensitiveMap> scopeIdList) {
+			Map<String, String> typeMap, List<Map<String, Object>> scopeIdList) {
 		List<Map<String, Object>> items = new ArrayList<Map<String, Object>>();
 		for (String key : typeMap.keySet()) {
 			Map<String, Object> item = new HashMap<String, Object>();
 			// 设置item的值
-			setItem(item, key, typeMap.get(key), key, typeMap.get(key));
+			setItem(item, key, typeMap.get(key), key, parentId);
 			List<Map<String, Object>> childrenList = getProvinceById(parentId, tenderScopeBoList, key, scopeIdList);
 			if (childrenList.size() > 0) {
 				item.put("state", "closed");
@@ -141,12 +140,12 @@ public class TenderScopeService {
 	 * @return
 	 */
 	private List<Map<String, Object>> getProvinceById(String parentId, List<TenderScopeBo> tenderScopeBoList,
-			String parentType, List<LinkedCaseInsensitiveMap> scopeIdList) {
+			String parentType, List<Map<String, Object>> scopeIdList) {
 		List<Map<String, Object>> items = new ArrayList<Map<String, Object>>();
 		for (TenderScopeBo bo : tenderScopeBoList) {
 			// 通过管线id和五大类型过滤到对应的省份
 			if (parentId.equals(bo.getParentOid()) && parentType.equals(bo.getType())) {
-				Map<String, Object> item = new HashMap<String, Object>();
+				/*Map<String, Object> item = new HashMap<String, Object>();
 				// 设置item的值
 				setItem(item, bo.getProvince(), bo.getProvinceName(), bo.getType(), bo.getTypeName());
 				List<Map<String, Object>> childrenList = getDeviceById(bo.getOid(), bo.getProvince(), parentType,
@@ -155,7 +154,32 @@ public class TenderScopeService {
 					item.put("state", "closed");
 					item.put("children", childrenList);
 				}
-				items.add(item);
+				items.add(item);*/
+				boolean isExist = false;
+				if(items.size()>0){
+					for(Map<String, Object> obj:items){
+						String province = obj.get("id").toString();
+						if(province.equals(bo.getProvince())){
+							isExist = true;
+							Map<String, Object> item = new HashMap<String, Object>();
+							// 设置item的值
+							setItemAndCheck(item, bo.getOid(), bo.getName(), bo.getType(), bo.getParentOid(), bo.getOid(), scopeIdList);
+							((List<Map<String, Object>>)obj.get("children")).add(item);
+						}
+					}
+				}
+				if(!isExist){	
+					Map<String, Object> item = new HashMap<String, Object>();
+					// 设置item的值
+					setItem(item, bo.getProvince(), bo.getProvinceName(), bo.getType(), bo.getParentOid());
+					List<Map<String, Object>> childrenList = getDeviceById(bo.getOid(), bo.getProvince(), parentType,
+							tenderScopeBoList, scopeIdList);
+					if (childrenList.size() > 0) {
+						item.put("state", "closed");
+						item.put("children", childrenList);
+					}
+					items.add(item);
+				}
 			}
 		}
 		return items;
@@ -174,7 +198,7 @@ public class TenderScopeService {
 	 * @return
 	 */
 	private List<Map<String, Object>> getDeviceById(String oid, String provinceId, String parentType,
-			List<TenderScopeBo> tenderScopeBoList, List<LinkedCaseInsensitiveMap> scopeIdList) {
+			List<TenderScopeBo> tenderScopeBoList, List<Map<String, Object>> scopeIdList) {
 		List<Map<String, Object>> items = new ArrayList<Map<String, Object>>();
 		for (TenderScopeBo bo : tenderScopeBoList) {
 			// 通过省份、oid和类型过滤对应的子类数据
@@ -203,30 +227,38 @@ public class TenderScopeService {
 	 *            attributes中typeName属性的值
 	 */
 	public void setItem(Map<String, Object> item, String idField, String textField, String typeField,
-			String typeNameField) {
+			String pipelineOid) {
 		Map<String, Object> attributesMap = new HashMap<String, Object>();
 		item.put("id", idField);
 		item.put("text", textField);
 		attributesMap.put("type", typeField);
-		attributesMap.put("typeName", typeNameField);
+		attributesMap.put("pipelineOid", pipelineOid);
 		item.put("attributes", attributesMap);
 	}
 	
+	
 	public void setItemAndCheck(Map<String, Object> item, String idField, String textField, String typeField,
-			String typeNameField, String BoId, List<LinkedCaseInsensitiveMap> scopeIdList) {
+			String pipelineOid, String BoId, List<Map<String, Object>> scopeIdList) {
 		Map<String, Object> attributesMap = new HashMap<String, Object>();
+		Map<String, Object> scopeIdMap = new HashMap<String, Object>();
+		scopeIdMap.put("scope_oid", BoId);
 		item.put("id", idField);
 		item.put("text", textField);
-		for (LinkedCaseInsensitiveMap map : scopeIdList) {
-			if (map.get("scope_oid").equals(BoId)) {
-				attributesMap.put("checked", true);
-				break;
-			}else {
-				attributesMap.put("checked", false);
-			}
+		if (scopeIdList.contains(scopeIdMap)) {
+			attributesMap.put("checked", true);
+		}else {
+			attributesMap.put("checked", false);
 		}
+//		for (LinkedCaseInsensitiveMap map : scopeIdList) {
+//			if (map.get("scope_oid").equals(BoId)) {
+//				attributesMap.put("checked", true);
+//				break;
+//			}else {
+//				attributesMap.put("checked", false);
+//			}
+//		}
 		attributesMap.put("type", typeField);
-		attributesMap.put("typeName", typeNameField);
+		attributesMap.put("pipelineOid", pipelineOid);
 		item.put("attributes", attributesMap);
 	}
 
