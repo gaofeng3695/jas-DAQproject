@@ -60,6 +60,16 @@ public class TendersScopeController extends BaseController{
 		}
 		return result;
 	}
+	/**
+	 * <p>功能描述：标段范围查询接口。</p>
+	  * <p> 雷凯。</p>	
+	  * @param request
+	  * @param param
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年6月22日 下午3:23:47。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
 	@RequestMapping(value="getScopeDataTree",method = RequestMethod.POST)
 	@ResponseBody
 	public Object getScopeDataTree(HttpServletRequest request,@RequestBody Map<String,String> param){

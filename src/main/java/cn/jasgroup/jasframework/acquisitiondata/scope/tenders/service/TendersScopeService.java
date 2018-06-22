@@ -64,7 +64,7 @@ public class TendersScopeService extends BaseService{
 	}
 	
 	/***
-	  * <p>功能描述：。</p>
+	  * <p>功能描述：标段范围查询接口。</p>
 	  * <p> 雷凯。</p>	
 	  * @param tendersOid
 	  * @return
