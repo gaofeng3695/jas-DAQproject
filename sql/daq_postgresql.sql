@@ -6,6 +6,7 @@ CREATE TABLE daq_project (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
 	project_name VARCHAR (50) NOT NULL,
 	project_code VARCHAR (50) NOT NULL,
+	pipe_network_type_code VARCHAR (50),
 	medium_type_code VARCHAR (50),
 	construct_oid VARCHAR (36),
 	remarks VARCHAR (200),
@@ -21,6 +22,7 @@ comment on table daq_project is '项目表';
 comment on column daq_project.oid is '主键';
 comment on column daq_project.project_name is '项目名称';
 comment on column daq_project.project_code is '项目编号';
+comment on column daq_project.pipe_network_type_code is '管网类型编码';
 comment on column daq_project.medium_type_code is '介质类型编号';
 comment on column daq_project.construct_oid is '建设单位编号';
 comment on column daq_project.remarks is '备注';
@@ -313,5 +315,105 @@ create index INDEX_DAQ_MEDIAN_STAKE_MEDIAN_STAKE_CODE_5 ON daq_median_stake ( me
 select AddGeometryColumn('public', 'daq_median_stake', 'geom', 4490, 'POINT', 4);
 CREATE INDEX daq_median_stake_geom_idx ON public.daq_median_stake USING gist (geom);
 
+/***标段范围管理视图***/
+create or replace view v_daq_scope as select tt.*,a.name as province_name from (
+	select t.oid,t.oid as project_oid,null as parent_oid,t.project_name as name,1 as ordernum,-1 as type,'项目' as type_name,null as province from daq_project t where t.active=1
+	union all
+	select t.oid,t.project_oid,t.project_oid as parent_oid,t.pipeline_name as name,2 as ordernum,0 as type,'管线' as type_name, null province from daq_pipeline t where t.active=1
+	union all
+	select t.oid,t.project_oid,t.pipeline_oid as parent_oid,t.pipe_segment_name as name,3 as ordernum,1 as type,'线路段' as type_name,t.province from daq_pipe_segment t where t.active=1
+	union all
+	select t.oid,t.project_oid,t.pipeline_oid as parent_oid,t.cross_name as name,4 as ordernum,2 as type,'穿跨越' as type_name,t.province from daq_cross t where t.active=1
+	union all
+	select t.oid,t.project_oid,t.pipeline_oid as parent_oid,t.pipe_station_name as name,5 as ordernum,3 as type,'站场/阀室' as type_name,t.province from daq_pipe_station  t where t.active=1
+	union all
+	select t.oid,t.project_oid,t.pipeline_oid as parent_oid,t.road_name as name,6 as ordernum,4 as type,'伴行道路' as type_name,t.province from daq_maintenance_road t where t.active=1
+	union all
+	select t.oid,t.project_oid,t.pipeline_oid as parent_oid,t.power_line_name as name,7 as ordernum,5 as type,'外供电线路' as type_name,t.province from daq_power_line t where t.active=1
+	) tt left join area a on tt.province=a.oid order by tt.ordernum
+
+CREATE TABLE daq_tenders_scope_ref (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	pipeline_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	scope_oid VARCHAR (36),
+	scope_type VARCHAR (10),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL
+);
+comment on table daq_tenders_scope_ref is '标段范围关联表';
+comment on column daq_tenders_scope_ref.oid is '主键';
+comment on column daq_tenders_scope_ref.pipeline_oid is '管线oid';
+comment on column daq_tenders_scope_ref.tenders_oid is '标段oid';
+comment on column daq_tenders_scope_ref.scope_oid is '范围oid（即线路段oid或者站场oid等）';
+comment on column daq_tenders_scope_ref.scope_type is '范围类型（1：线路段，2：创跨越，3：站场/阀室，4：伴行道路，5：外供电线路）';
+comment on column daq_tenders_scope_ref.create_user_id is '创建人id';
+comment on column daq_tenders_scope_ref.create_user_name is '创建人名称';
+comment on column daq_tenders_scope_ref.create_datetime is '创建时间';
+comment on column daq_tenders_scope_ref.modify_user_id is '修改人id';
+comment on column daq_tenders_scope_ref.modify_user_name is '修改人名称';
+comment on column daq_tenders_scope_ref.modify_datetime is '修改时间';
+comment on column daq_tenders_scope_ref.active is '有效标志';
+create index INDEX_DAQ_TENDERS_SCOPE_REF_TENDERS_OID_5 ON daq_tenders_scope_ref ( tenders_oid );
+create index INDEX_DAQ_TENDERS_SCOPE_REF_SCOPE_OID_6 ON daq_tenders_scope_ref ( scope_oid );
 
 /**********范围管理数据表end***************/
+/**********权限管理数据表begin***************/
+/**实施范围视图**/
+create or replace view v_daq_implement_scope as 
+	select tt.*,a.name as province_name from (select t.oid,null as parent_oid,t.project_name as name,-2 as type,'项目' as type_name,t.oid as project_oid,null as province from daq_project t where t.active=1
+	union all
+	select distinct t.oid,t.project_oid as parent_oid,t.tenders_name as name,-1 as type,'标段' as type_name,t.project_oid,null as province from daq_tenders_scope_ref r join daq_tenders t on r.tenders_oid=t.oid where t.active=1
+	union all
+	select distinct t.oid,r.tenders_oid as parent_oid,t.pipeline_name as name,0 as type,'管线' as type_name,t.project_oid,null as province from daq_pipeline t join daq_tenders_scope_ref r on t.oid=r.pipeline_oid and t.active=1
+	union all
+	select t.oid,t.pipeline_oid as parent_oid,t.pipe_segment_name as name,1 as type,'线路段' as type_name,t.project_oid,t.province from daq_pipe_segment t join daq_tenders_scope_ref r on t.oid=r.scope_oid where t.active=1
+	union all
+	select t.oid,t.pipeline_oid as parent_oid,t.cross_name as name,2 as type,'穿跨越' as type_name,t.project_oid,t.province from daq_cross t join daq_tenders_scope_ref r on t.oid=r.scope_oid where t.active=1
+	union all
+	select t.oid,t.pipeline_oid as parent_oid,t.pipe_station_name as name,3 as type,'站场/阀室' as type_name,t.project_oid,t.province from daq_pipe_station t join daq_tenders_scope_ref r on t.oid=r.scope_oid where t.active=1
+	union all
+	select t.oid,t.pipeline_oid as parent_oid,t.road_name as name,4 as type,'伴行道路' as type_name,t.project_oid,t.province from daq_maintenance_road t join daq_tenders_scope_ref r on t.oid=r.scope_oid where t.active=1
+	union all
+	select t.oid,t.pipeline_oid as parent_oid,t.power_line_name as name,5 as type,'外供电线路' as type_name,t.project_oid,t.province from daq_power_line t join daq_tenders_scope_ref r on t.oid=r.scope_oid where t.active=1
+	) tt left join area a on tt.province=a.oid order by tt.type
+	
+CREATE TABLE daq_implement_scope_ref (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	unit_oid VARCHAR (36),
+	project_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	scope_oid VARCHAR (36),
+	scope_type VARCHAR (10),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT
+);
+
+comment on table daq_implement_scope_ref is '实施范围关联表';
+comment on column daq_implement_scope_ref.oid is '主键';
+comment on column daq_implement_scope_ref.unit_oid is '部门oid';
+comment on column daq_implement_scope_ref.project_oid is '项目oid';
+comment on column daq_implement_scope_ref.pipeline_oid is '管线oid';
+comment on column daq_implement_scope_ref.scope_oid is '实体oid（即线路段oid或者站场oid等）';
+comment on column daq_implement_scope_ref.scope_type is '实体类型（1：线路段，2：创跨越，3：站场/阀室，4：伴行道路，5：外供电线路）';
+comment on column daq_implement_scope_ref.create_user_id is '创建人id';
+comment on column daq_implement_scope_ref.create_user_name is '创建人名称';
+comment on column daq_implement_scope_ref.create_datetime is '创建时间';
+comment on column daq_implement_scope_ref.modify_user_id is '修改人id';
+comment on column daq_implement_scope_ref.modify_user_name is '修改人名称';
+comment on column daq_implement_scope_ref.modify_datetime is '修改时间';
+comment on column daq_implement_scope_ref.active is '有效标志';
+create index INDEX_DAQ_IMPLEMENT_SCOPE_REF_UNIT_OID_5 ON daq_implement_scope_ref ( unit_oid );
+create index INDEX_DAQ_IMPLEMENT_SCOPE_REF_PROJECT_OID_6 ON daq_implement_scope_ref ( project_oid );
+
+/**********权限管理数据表end***************/
