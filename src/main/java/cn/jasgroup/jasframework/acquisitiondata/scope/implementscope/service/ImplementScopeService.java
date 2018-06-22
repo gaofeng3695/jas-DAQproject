@@ -210,7 +210,16 @@ public class ImplementScopeService extends BaseService{
 			parentItem.setChildren(childrenItem);
 		}
 	}
-	
+	/***
+	  * <p>功能描述：施工单位与实施范围关联关系保存。</p>
+	  * <p> 雷凯。</p>	
+	  * @param unitOid
+	  * @param dataList
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年6月22日 下午3:24:40。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
 	public boolean saveRef(String unitOid,List<ImplementScope> dataList){
 		try {
 			this.implementScopeDao.deleteRef(unitOid);
