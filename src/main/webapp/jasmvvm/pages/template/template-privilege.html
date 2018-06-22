@@ -133,13 +133,14 @@
 			<!--表格区域-->
 			<el-table class="is-grown" v-loading="loading" :data="tableData" height='100' style="width: 100%;" :header-cell-style="headStyle"
 			  border stripe>
-				<el-table-column type="selection" width="55" align="center"></el-table-column>
-				<el-table-column type="index" label="序号" width="50" align="center"></el-table-column>
-				<el-table-column v-for="item in tableColumn" :prop="item.id" :label="item.name" align="center">
+				<el-table-column type="selection" width="55" align="center" fixed></el-table-column>
+				<el-table-column type="index" label="序号" width="50" align="center" fixed></el-table-column>
+				<el-table-column v-for="item,index in tableColumn" :fixed="index===0?true:false" :prop="item.id" :label="item.name" :key="item.id" align="center">
 				</el-table-column>
 				<el-table-column fixed="right" label="操作" :width="config.table.tableWidth" align="center">
 					<template slot-scope="scope">
 						<el-button @click="locateRow(scope.row)" v-if="privilege.indexOf('bt_position')>-1" type="text" size="small">定位</el-button>
+						<el-button @click="scopeRow(scope.row)" v-if="privilege.indexOf('bt_tenders_scope')>-1" type="text" size="small">范围</el-button>
 						<el-button @click="viewRow(scope.row)" v-if="privilege.indexOf('bt_select')>-1" type="text" size="small">查看</el-button>
 						<el-button @click="editRow(scope.row)" v-if="privilege.indexOf('bt_update')>-1" type="text" size="small">编辑</el-button>
 						<el-button @click="delRow(scope.row)" v-if="privilege.indexOf('bt_delete')>-1" type="text" size="small">删除</el-button>
@@ -459,6 +460,16 @@
 			locateRow: function (row) {
 				var that = this;
 				alert('定位');
+			},
+			scopeRow: function (row) {
+				var that = this;
+				var src = './pages/template/dialogs/tenders-scope.html';
+				top.jasTools.dialog.show({
+					title: '范围选择',
+					width: that.config.view.width,
+					height: that.config.view.height,
+					src: jasTools.base.setParamsToUrl(src,row),
+				});
 			},
 			viewRow: function (row) {
 				var that = this;

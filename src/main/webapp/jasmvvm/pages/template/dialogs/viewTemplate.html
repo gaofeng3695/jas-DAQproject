@@ -9,182 +9,27 @@
   <link rel="stylesheet" href="./../../../lib/font-awesome-4.7.0/css/font-awesome.css">
   <link rel="stylesheet" href="./../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
   <link rel="stylesheet" href="./../../../src/css/main.css">
-  <style>
-    html,
-    body {
-      width: 100%;
-    }
 
-    #app {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .content {
-      height: calc(100% - 40px);
-      overflow-y: auto;
-      overflow-x: hidden;
-    }
-
-    .dialog-footer {
-      background: #fff;
-      width: 100%;
-      position: absolute;
-      bottom: 0px;
-      z-index: 3000;
-      height: 40px;
-      line-height: 40px;
-    }
-
-    .outer-wrap {
-      /*border-bottom: 1px solid #ebeef5;*/
-      margin-bottom: -1px;
-      overflow: hidden;
-    }
-
-    .box {
-      /*box-sizing: border-box;*/
-      border-left: 1px solid #ebeef5;
-      border-top: 1px solid #ebeef5;
-    }
-
-    .detail-item {
-      margin-top: -1px;
-      margin-left: -1px;
-      overflow: hidden;
-      /*min-height: 40px;*/
-      line-height: 30px;
-      border: 1px solid #ebeef5;
-    }
-
-    .item-content {
-      position: relative;
-      height: 100%;
-      padding-left: 140px;
-    }
-
-    .left {
-      position: absolute;
-      left: 0px;
-      padding-left: 10px;
-      display: inline;
-      width: 130px;
-      border-right: 1px solid #ebeef5;
-      color: #333;
-      background: #FAFAFA;
-      height: 100%;
-    }
-
-    .right {
-      /*float: left;*/
-      padding-left: 10px;
-      color: #666;
-      display: inline-block;
-    }
-
-    .bulk {
-      padding-bottom: 10px;
-      margin-bottom: 15px;
-      border-bottom: 1px solid rgb(228, 231, 237);
-    }
-
-    .title {
-      padding: 0px 0px 10px 0px;
-      height: 100%;
-      border-bottom: 2px solid rgb(64, 158, 255);
-    }
-
-    .el-upload {
-      width: 100% !important
-    }
-
-    .height {
-      height: 56px;
-    }
-
-    .file-item {
-      height: 30px;
-      line-height: 30px;
-      width: 100%;
-      /*padding: 0px 10px*/
-    }
-
-    .file-item:hover {
-      background: #dcdfe6
-    }
-
-    .btn {
-      padding-left: 10px;
-      cursor: pointer;
-      font-size: 1.2em
-    }
-
-    .btn:hover {
-      color: #66b1ff;
-    }
-  </style>
 </head>
 
 <body>
   <div id="app" v-cloak>
-    <div class="content">
-      <div class="outer-wrap">
+    <jas-dialog-wrapper>
+      <div>
         <template v-for="group in formAttr">
-          <div class="bulk" v-show="isShowLine(group)">
-            <span class="title">
-              {{group.groupName}}
-            </span>
-          </div>
-          <el-row class="box" style="margin-bottom: 15px">
-            <template v-for="item in group.data">
-              <el-col class="detail-item" :xs="formConfig.xs" :sm="formConfig.sm" :md="formConfig.md" :lg="formConfig.lg" :xl="formConfig.xl">
-                <div class="item-content">
-                  <div class="left">
-                    {{item.name}}
-                  </div>
-                  <div class="right">
-                    {{formData[item.id]}}
-                  </div>
-                </div>
-              </el-col>
-            </template>
-          </el-row>
+          <jas-base-group-title :name="group.groupName" v-show="group.groupName"></jas-base-group-title>
+          <jas-detail-table :titles="group.data" :detail="formData"></jas-detail-table>
         </template>
-        <el-row v-if="isShowFiles">
-          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-            <el-upload disabled :show-file-list="false" class="upload-demo" :on-preview="handlePreview" action="#" :file-list="fileList1">
-              <div class="bulk" style="text-align: left">
-                <span class="title">上传附件</span>
-                <span style="padding-left:10px">{{fileListlength}}
-                  <span></span>
-              </div>
-            </el-upload>
-          </el-col>
-
-          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-            <div class="file-list">
-              <div v-for="(item,key) in fileList1" :key="key" class="file-item">
-                <div style="float:left">
-                  <i class="el-icon-document"> </i>
-                  <span style="padding-left:10px">{{item.name}}</span>
-                </div>
-                <div style="float:right">
-                  <i class="el-icon-view btn" @click="handlePreview(item)"> </i>
-                  <i class="el-icon-download btn" @click="handleDownload(item)"> </i>
-                </div>
-              </div>
-
-            </div>
-          </el-col>
-        </el-row>
+        <template v-if="isShowFiles">
+          <jas-base-group-title name="附件信息"></jas-base-group-title>
+          <jas-file-list :biz-id="bizId"></jas-file-list>
+        </template>
       </div>
+      <div slot="footer">
+        <!-- <el-button size="small" @click="cancel()">取 消</el-button> -->
+      </div>
+    </jas-dialog-wrapper>
 
-    </div>
-    <div slot="footer" class="dialog-footer" style="text-align: center">
-      <el-button size="small" @click="cancel()">取 消</el-button>
-    </div>
   </div>
 </body>
 <script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
@@ -194,12 +39,13 @@
 <script src="./../../../common/js/jas-tools.js"></script>
 <script>
   /*
-        先请求要展示的字段，再请求字段的详情，最后请求附件
-      */
+              先请求要展示的字段，再请求字段的详情，最后请求附件
+            */
   var app = new Vue({
     el: "#app",
     data: function () {
       return {
+        bizId: '',
         formData: {},
         formAttr: [],
         isQuery: {},
@@ -211,8 +57,6 @@
           lg: 6,
           xl: 6
         },
-        fileList1: [],
-        fileListlength: 0,
         pk: "",
         isShowFiles: false,
       }
@@ -223,24 +67,9 @@
       this.menuCode = param.menuCode;
       delete param.menuCode;
       this.isQuery = param;
-      this.requestConfig();
       this.requestBymenuCode();
     },
     methods: {
-      requestConfig: function () {
-        var that = this;
-        $.ajax({
-          type: "get",
-          url: "../js/template.json",
-          dataType: "json",
-          async: true,
-          success: function (data) {
-            if (data.view.col) {
-              that.setConfig(data.view.col);
-            }
-          }
-        });
-      },
       _formatFieldsByGroup: function (aFields) { // 将字段进行分组格式化
         var map = {};
         var dest = [];
@@ -272,6 +101,7 @@
           functionCode: that.menuCode
         }, function (data) {
           var fieldsGrouped = that._formatFieldsByGroup(data.data.functionFieldsBoList);
+          that.isShowFiles = data.data.ifAttachment == 1;
           that.getDetailField(fieldsGrouped);
           that.requestDetail();
         });
@@ -284,7 +114,7 @@
             var obj = {};
             if (item.ifDetails == "1") {
               obj = {
-                id: item.fieldName,
+                field: item.fieldName,
                 name: item.fieldNameCn,
                 type: item.uiType,
                 index: item.rowIndex || '',
@@ -309,72 +139,12 @@
         //该接口需要入参主键，因为主键不确定，所以全部传入表单对象
         jasTools.ajax.post(url, that.isQuery, function (data) {
           that.formData = data.data;
-          that.getFileById();
-        });
-      },
-      getFileById: function () { // 请求附件
-        var that = this;
-        var url = jasTools.base.rootPath + "/attachment/getInfo.do";
-        jasTools.ajax.get(url, {
-          businessType: 'file',
-          businessId: that.formData[that.pk]
-        }, function (data) {
-          if (data.rows.length > 0) {
-            data.rows.forEach(function (item) {
-              that.fileList1.push({
-                name: item.fileName,
-                size: item.size,
-                oid: item.oid
-              });
-            });
-            that.isShowFiles = true;
-            that.fileListlength = that.fileList1.length;
-          }
+          // that.getFileById();
+          that.bizId = that.formData[that.pk];
         });
       },
       cancel: function () {
-        this.closeForm();
-      },
-      closeForm: function () {
         window.parent.jasTools.dialog.close();
-      },
-
-      setConfig: function (col) {
-        if (col == 4) {
-          this.formConfig.xs = 24;
-          this.formConfig.sm = 12;
-          this.formConfig.md = 6;
-          this.formConfig.lg = 6;
-          this.formConfig.xl = 6;
-        }
-        if (col == 3) {
-          this.formConfig.xs = 24;
-          this.formConfig.sm = 12;
-          this.formConfig.md = 8;
-          this.formConfig.lg = 8;
-          this.formConfig.xl = 8;
-        }
-        if (col == 2) {
-          this.formConfig.xs = 24;
-          this.formConfig.sm = 12;
-          this.formConfig.md = 12;
-          this.formConfig.lg = 12;
-          this.formConfig.xl = 12;
-        }
-        if (col == 1) {
-          this.formConfig.xs = 24;
-          this.formConfig.sm = 24;
-          this.formConfig.md = 24;
-          this.formConfig.lg = 24;
-          this.formConfig.xl = 24;
-        }
-      },
-      isShowLine: function (group) {
-        if (group.groupName != null && group.groupName != "") {
-          return true;
-        } else {
-          return false;
-        }
       },
       isArrySort: function (arry) {
         for (var unfix = arry.length - 1; unfix > 0; unfix--) {
@@ -387,20 +157,6 @@
           }
         }
         return arry;
-      },
-      handlePreview: function (file) {
-        window.top.jasTools.dialog.show({
-          title: '预览',
-          width: '90%',
-          height: '90%',
-          src: "./pages/template/pdfjs_1.10.88/web/viewer.html?oid=" + file.oid,
-        });
-      },
-      handleDownload: function (file) {
-        var that = this;
-        jasTools.ajax.downloadByIframe('post', jasTools.base.rootPath + "/attachment/download.do", {
-          oid: file.oid
-        });
       },
     },
   });

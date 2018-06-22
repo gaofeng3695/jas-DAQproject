@@ -6,21 +6,21 @@
         "icon": "el-icon-plus",
         "size": "small",
         "type": "primary"
-    },{
+    }, {
         "id": "bt_import",
         "title": "导入",
         "plain": "plain",
         "icon": "fa fa-mail-forward",
         "size": "small",
         "type": "primary"
-    },{
+    }, {
         "id": "bt_export",
         "title": "导出已选",
         "plain": "plain",
         "icon": "fa fa-mail-reply",
         "size": "small",
         "type": "primary"
-    },{
+    }, {
         "id": "bt_expor",
         "title": "导出全部",
         "plain": "plain",
@@ -41,17 +41,17 @@
     },
     "form": {
         "col": 2,
-        "width": "80%",
+        "width": "60%",
         "height": "80%",
-        "labelwidth":"155px"
+        "labelwidth": "155px"
     },
     "view": {
         "col": 2,
-        "width": "80%",
+        "width": "60%",
         "height": "80%"
     },
     "table": {
-        "tableWidth": 250
+        "tableWidth": 210
 
     },
     "pageAttr": {
@@ -59,11 +59,9 @@
         "pagesizes": [10, 20, 50, 100],
         "pagesize": 10
     },
-    "file":{
-        "autoUpload":false,
-        "limitNum":2
+    "file": {
+        "autoUpload": false,
+        "limitNum": 2
     }
 
 }
-
-

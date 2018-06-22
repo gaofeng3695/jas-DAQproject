@@ -16,9 +16,9 @@
 <body>
 	<div id="app" v-cloak>
 		<jas-base-group-title name="中线桩信息"></jas-base-group-title>
-		<jas-detail-table :titles="fieldsArr" :column-num="columnNum" :detail="detail"></jas-detail-table>
+		<jas-detail-table :titles="fieldsArr" :detail="detail"></jas-detail-table>
 		<jas-base-group-title name="其他信息"></jas-base-group-title>
-		<jas-detail-table :titles="otherArr" :column-num="1" :detail="detail"></jas-detail-table>
+		<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
 
 		<jas-base-group-title name="附件信息"></jas-base-group-title>
 		<jas-file-list :biz-id="oid"></jas-file-list>

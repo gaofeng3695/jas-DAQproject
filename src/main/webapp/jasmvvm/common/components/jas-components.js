@@ -206,16 +206,14 @@ Vue.component('jas-detail-table', {
 			type: Array,
 			required: true
 		},
-		columnNum: {
-			default: 2,
-			type: Number
-		},
 		detail: {
 
 		}
 	},
 	data: function () {
-		return {}
+		return {
+			columnNum: 2,
+		}
 	},
 	computed: {
 		formatTitle: function () {
@@ -233,12 +231,14 @@ Vue.component('jas-detail-table', {
 					newTitle.push(_arr)
 				}
 			});
-			console.log()
+			if (this.titles.length === 1) {
+				this.columnNum = 1;
+			}
 			return newTitle;
 		}
 	},
 	template: [
-		'<div v-show="detail" class="jas-detail-table">',
+		'<div ref="table" v-show="detail" class="jas-detail-table">',
 		'<table class="table_wrap">',
 		'    <template v-for="item in formatTitle">',
 		'        <tr>',
@@ -251,6 +251,28 @@ Vue.component('jas-detail-table', {
 		'</table>',
 		'</div>'
 	].join(''),
+	methods: {
+		resizeColumn: function () {
+			var that = this;
+
+			var width = that.$refs.table.clientWidth;
+			if (width < 660) {
+				that.columnNum = 1;
+			} else if (width < 1400) {
+				that.columnNum = 2;
+			} else {
+				that.columnNum = 3;
+			}
+		}
+	},
+	mounted: function () {
+		var that = this;
+		this.resizeColumn();
+		$(window).on('resize', function () {
+			that.resizeColumn();
+
+		});
+	}
 });
 
 
@@ -399,7 +421,7 @@ Vue.component('jas-table-for-list', {
 		'	<el-table v-loading="loading" height="100%" :data="tableData" border :header-cell-style="headStyle" style="width: 100%">',
 		'		<el-table-column label="序号" type="index" align="center" width="50" fixed>',
 		'		</el-table-column>',
-		'		<el-table-column v-for="item,index in fields" :fixed="index=== 0?true:false" :label="item.name" :prop="item.field" align="center">',
+		'		<el-table-column v-for="item,index in fields" :key="item.oid" :fixed="index=== 0?true:false" :label="item.name" :prop="item.field" align="center">',
 		'		</el-table-column>',
 		'		<el-table-column label="操作" align="center" width="180" fixed="right">',
 		'			<template slot-scope="scope">',
@@ -529,8 +551,12 @@ Vue.component('jas-file-list', {
 			isrequest: true,
 		}
 	},
-	computed: {
-
+	watch: {
+		bizId: function () {
+			if (this.bizId) {
+				this._requestFiles(this.bizId);
+			}
+		}
 	},
 	template: [
 		'<div class="jas-file-list" v-show="!isrequest">',
@@ -545,7 +571,6 @@ Vue.component('jas-file-list', {
 		'</div>'
 	].join(''),
 	created: function () {
-		console.log(this.bizId)
 		if (this.bizId) {
 			this._requestFiles(this.bizId);
 		}
@@ -580,4 +605,25 @@ Vue.component('jas-file-list', {
 
 	},
 
+});
+
+Vue.component('jas-dialog-wrapper', {
+	props: {
+
+	},
+	data: function () {
+		return {
+
+		}
+	},
+	template: [
+		'<div class="jas-flex-box is-vertical">',
+		'  <div class="is-grown">',
+		'    <slot></slot>',
+		'  </div>',
+		'  <div style="text-align: center;padding-top:10px; ">',
+		'    <slot name="footer"></slot>',
+		'  </div>',
+		'</div>'
+	].join(''),
 });
