@@ -618,7 +618,7 @@ Vue.component('jas-dialog-wrapper', {
 	},
 	template: [
 		'<div class="jas-flex-box is-vertical">',
-		'  <div class="is-grown">',
+		'  <div class="is-grown" style="overflow: auto;">',
 		'    <slot></slot>',
 		'  </div>',
 		'  <div style="text-align: center;padding-top:10px; ">',

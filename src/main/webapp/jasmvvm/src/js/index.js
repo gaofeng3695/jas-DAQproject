@@ -16,8 +16,8 @@
 
 				isExpend: true,
 				menuWith: 200,
-				menusOpened: ['P-daq-scope-0001'],
-				currentTap: 'P-daq-scope-0001',
+				menusOpened: ['P-daq-scope-0009'],
+				currentTap: 'P-daq-scope-0009',
 				tabs: [], // 打开的标签页
 				items: [] //菜单数组
 			}
