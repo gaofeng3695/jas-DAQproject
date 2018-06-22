@@ -22,8 +22,8 @@ public class TenderScopeDAO {
 
 	public List<TenderScopeBo> getBoByProjectId(String projectId) {
 		String sql = "select * from v_daq_scope where project_oid=?";
-		List<TenderScopeBo> TenderScopeBoList = (List<TenderScopeBo>)baseJdbcDao.queryForList(sql, new Object[]{projectId}, TenderScopeBo.class);
-		return TenderScopeBoList;
+		List<TenderScopeBo> tenderScopeBoList = (List<TenderScopeBo>)baseJdbcDao.queryForList(sql, new Object[]{projectId}, TenderScopeBo.class);
+		return tenderScopeBoList;
 	}
 
 	public List<LinkedCaseInsensitiveMap> getScopeIdByTenderId(String tenderId) {
