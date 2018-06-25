@@ -545,6 +545,7 @@
 			selectChange: function (item) { //根据配置文件 是否立即触发
 				var that = this;
 				if(item.childField && item.requestPath){
+					console.log(item.childField)
 					that.setChildSelectOption(item.id,item.childField , item.requestPath,function(){
 						that.getUiType();
 					});
@@ -556,12 +557,12 @@
 				var that = this;
 				var setOptionsAndValue = function(options){
 					that.searchData.forEach(function(item){
-						if(item.id === childField){ // 子集字段
+						if(childField.indexOf(item.id) !== -1){ // 子集字段
 							item.options = options || [];
 							that.searchTable[item.id] = '';
-							fn && fn();
 						}
-					})
+					});
+					fn && fn();
 				};
 				if ( that.searchTable[fatherField]) { //进行子级的查找 后台请求
 					var key = jasTools.base.switchToCamelCase(fatherField);
