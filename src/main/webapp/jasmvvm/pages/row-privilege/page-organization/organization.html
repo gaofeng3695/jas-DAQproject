@@ -106,14 +106,22 @@
 			height: 100%;
 			padding: 0 10px;
 		}
+
+		.content .el-tabs__content {
+			width: 100%;
+			-webkit-box-flex: 1;
+			-ms-flex: 1;
+			flex: 1;
+			overflow: auto;
+		}
 	</style>
 </head>
 
 <body>
-	<div id="app" v-cloak>
+	<div id="app" v-cloak v-loading="loading.allLoading">
 
 		<multipane @paneresizestart="panelMoving = true" @paneresizestop="panelMoving = false" class="foo" layout="vertical" style="height: 100%;">
-			<div class="resizepanel" v-loading="panelMoving" :style="[{ width: panelShowed ?'300px' : '0px',maxWidth: '50%' }]" element-loading-spinner="11"
+			<div class="resizepanel jas-flex-box is-vertical" v-loading="panelMoving" :style="[{ width: panelShowed ?'300px' : '0px',maxWidth: '50%' }]" element-loading-spinner="11"
 			  element-loading-background="rgba(0, 0, 0, 0)">
 				<!-- <div class="orgtitle">组织机构管理</div> -->
 				<div class="filterwrap">
@@ -125,7 +133,7 @@
 					<el-button type="text" @click="editNode" :disabled="!currentNodeId">修改</el-button>
 					<el-button type="text" @click="deleteNode" :disabled="!currentNodeId">删除</el-button>
 				</div>
-				<el-tree ref="orgtree" :data="orgnData" node-key="id" :props="defaultProps" :default-expanded-keys="[currentNodeId]" highlight-current
+				<el-tree class="is-grown" ref="orgtree" :data="orgnData" node-key="id" :props="defaultProps" :default-expanded-keys="[currentNodeId]" highlight-current
 				  @node-click="clicknode" :expand-on-click-node="false" :filter-node-method="filterNode"></el-tree>
 			</div>
 			<multipane-resizer>
@@ -137,14 +145,22 @@
 			<div v-loading="panelMoving" :style="{ flexGrow: 1 }" style="width:0%;" element-loading-spinner="11" element-loading-background="rgba(0, 0, 0, 0)">
 
 				<div class="content">
-					<el-tabs v-model="activeName">
+					<el-tabs v-model="activeName" class="jas-flex-box" style="height:100%;overflow: auto">
 						<el-tab-pane label="部门详情" name="details">
 							<div v-loading="loading.orgDetail">
 								<jas-detail-table :titles="detailTitle" :column-num="1" :detail="detail" />
 							</div>
 						</el-tab-pane>
 						<el-tab-pane label="实施范围" name="scale">
-							<div>实施范围</div>
+							<div v-loading="loading.scopeTree">
+								<!-- <div style="text-align: right;"> -->
+								<div style="border-bottom: 1px solid #ececec;padding:0 0 10px;">
+									<el-button size="small" type="primary" @click="requestSaveScope">保存</el-button>
+								</div>
+								<el-tree ref="tree" :data="scopeData.treeData" show-checkbox node-key="id" :default-expanded-keys="scopeData.expandedKeys"
+								  :default-checked-keys="scopeData.checkedKeys" :props="scopeData.defaultProps">
+								</el-tree>
+							</div>
 						</el-tab-pane>
 					</el-tabs>
 				</div>
@@ -169,6 +185,15 @@
 		data: function () {
 			return {
 				detail: null,
+				scopeData: {
+					treeData: [],
+					defaultProps: {
+						children: 'children',
+						label: 'text',
+					},
+					checkedKeys: [],
+					expandedKeys: []
+				},
 				detailTitle: [ //
 					{
 						name: '上级组织机构',
@@ -197,7 +222,9 @@
 					},
 				],
 				loading: {
+					allLoading: false,
 					orgDetail: false,
+					scopeTree: false,
 				},
 				panelMoving: false,
 				panelShowed: true,
@@ -234,7 +261,12 @@
 				jasTools.ajax.get(url, {}, function (data) {
 					that.orgnData = data[0].children;
 					that.$nextTick(function () {
+						if (!that.currentNodeId) {
+							that.currentNodeId = data[0].children[0].id;
+						}
 						that.$refs.orgtree.setCurrentKey(that.currentNodeId);
+						that._requestOrgDetail(that.currentNodeId);
+						that._requestScopeTree(that.currentNodeId);
 					})
 				});
 			},
@@ -251,11 +283,59 @@
 					that.detail = data;
 				});
 			},
+
+			_requestScopeTree: function (unitOid) {
+				var that = this;
+				that.loading.scopeTree = true;
+				var src = jasTools.base.rootPath + '/daq/implementScope/getImplementScopeTree.do';
+				jasTools.ajax.post(src, {
+					unitOid: unitOid
+				}, function (data) {
+					setTimeout(function () {
+						that.loading.scopeTree = false;
+					}, 300)
+					that.scopeData.treeData = data.rows;
+					var expandedKeys = that.getNodekeysByGrade(that.scopeData.treeData, 1);
+					that.scopeData.expandedKeys = expandedKeys;
+					that.scopeData.checkedKeys = that.getCheckedNodekeys(that.scopeData.treeData);
+
+				});
+			},
+			requestSaveScope: function () {
+				var that = this;
+				this.loading.allLoading = true;
+				var checkedNodes = this.$refs.tree.getCheckedNodes().filter(function (item) {
+					if (item.attributes && item.attributes.type > 0) return true;
+				});
+				var src = jasTools.base.rootPath + '/daq/implementScope/saveRef.do';
+				var arr = checkedNodes.map(function (item) {
+					return {
+						scopeOid: item.id,
+						projectOid: item.attributes.projectOid,
+						pipelineOid: item.attributes.pipelineOid,
+						scopeType: item.attributes.type
+					};
+				});
+				jasTools.ajax.post(src, {
+					unitOid: this.currentNodeId, //标段oid
+					data: arr
+				}, function (data) {
+					setTimeout(function () {
+						that.loading.allLoading = false;
+					}, 0)
+					that._requestScopeTree(that.currentNodeId);
+					top.Vue.prototype.$message({
+						type: 'success',
+						message: '保存成功'
+					});
+				});
+			},
 			clicknode: function (node, b, c) {
 				// console.log(a, b, c)
 				this.currentNode = node;
 				this.currentNodeId = node.id;
 				this._requestOrgDetail(node.id);
+				this._requestScopeTree(node.id);
 			},
 
 
@@ -318,7 +398,41 @@
 					}
 				});
 			},
-
+			getCheckedNodekeys: function (treeData) {
+				var checkedKeys = [];
+				var getCheckedKeysFromArr = function (arr) {
+					arr.forEach(function (item) {
+						if (item.checked) {
+							checkedKeys.push(item.id);
+						}
+						if (item.children) {
+							getCheckedKeysFromArr(item.children);
+						}
+					})
+				};
+				getCheckedKeysFromArr(treeData);
+				return checkedKeys;
+			},
+			getNodekeysByGrade: function (treeData, nGrade) {
+				var grades = [];
+				var getGradeKeysFromArr = function (arr, index) {
+					++index;
+					arr.forEach(function (item) {
+						if (grades[index]) {
+							grades[index].push(item.id)
+						} else {
+							grades[index] = [item.id]
+						}
+						if (item.children) {
+							getGradeKeysFromArr(item.children, index);
+						}
+					});
+				};
+				getGradeKeysFromArr(treeData, -1);
+				nGrade = nGrade < 1 ? 1 : nGrade;
+				nGrade = nGrade > grades.length ? grades.length : nGrade;
+				return grades[nGrade - 1];
+			},
 		},
 	});
 </script>
