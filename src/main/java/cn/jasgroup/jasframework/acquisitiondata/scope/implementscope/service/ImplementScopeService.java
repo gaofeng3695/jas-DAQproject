@@ -133,7 +133,7 @@ public class ImplementScopeService extends BaseService{
 					isExistMaintenanceRoad = true;
 					break;
 				case "5":
-					setProvinceItem(powerLineItem,obj,null);
+					setProvinceItem(powerLineItem,obj,dataRefList);
 					isExistpowerLine = true;
 					break;
 				}
