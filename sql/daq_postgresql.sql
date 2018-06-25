@@ -312,6 +312,7 @@ comment on column daq_median_stake.remarks is '备注';
 comment on column daq_median_stake.geo_state is '空间数据状态';
 create index INDEX_DAQ_MEDIAN_STAKE_MEDIAN_STAKE_CODE_5 ON daq_median_stake ( median_stake_code );
 
+select dropgeometrycolumn('public', 'daq_median_stake', 'geom');
 select AddGeometryColumn('public', 'daq_median_stake', 'geom', 4490, 'POINT', 4);
 CREATE INDEX daq_median_stake_geom_idx ON public.daq_median_stake USING gist (geom);
 
