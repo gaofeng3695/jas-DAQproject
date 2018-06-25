@@ -9,7 +9,7 @@ CREATE TABLE daq_project (
 	project_code VARCHAR (50) NOT NULL COMMENT '项目编号',
 	medium_type_code VARCHAR (50) COMMENT '介质类型编号',
 	pipe_network_type_code VARCHAR (50) COMMENT '管网类型编号',
-	construct_oid VARCHAR (36) COMMENT '建设单位编号',
+	construct VARCHAR (50) COMMENT '建设单位编号',
 	remarks VARCHAR (200) COMMENT '备注',
 	create_user_id VARCHAR (36),
 	create_user_name VARCHAR (50),
