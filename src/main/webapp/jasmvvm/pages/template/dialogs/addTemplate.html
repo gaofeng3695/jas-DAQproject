@@ -576,13 +576,6 @@
 					};
 					obj[key] = value;
 					jasTools.ajax.post(jasTools.base.rootPath + "/" + item.requestUrl, obj, function (data) {
-						// data.rows.forEach(function (item) {
-						// 	var obj = {
-						// 		"key": item.fieldName,
-						// 		"value": item.fieldName,
-						// 	};
-						// 	options.push(obj);
-						// });
 						formatFormAttr(data.rows)
 					});
 				} else {

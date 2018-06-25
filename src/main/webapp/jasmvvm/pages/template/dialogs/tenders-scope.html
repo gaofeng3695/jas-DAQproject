@@ -94,6 +94,9 @@
         });
         this.requestSaveScope(checkedNodes);
       },
+      cancel: function () {
+        top.jasTools.dialog.close();
+      },
       getCheckedNodekeys : function(treeData){
         var checkedKeys = [];
         var getCheckedKeysFromArr = function(arr){
