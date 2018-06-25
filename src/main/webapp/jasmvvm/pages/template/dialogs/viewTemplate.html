@@ -38,9 +38,6 @@
 <script src="./../../../common/components/jas-components.js "></script>
 <script src="./../../../common/js/jas-tools.js"></script>
 <script>
-  /*
-              先请求要展示的字段，再请求字段的详情，最后请求附件
-            */
   var app = new Vue({
     el: "#app",
     data: function () {
@@ -50,24 +47,18 @@
         formAttr: [],
         isQuery: {},
         menuCode: "",
-        formConfig: {
-          xs: 24,
-          sm: 12,
-          md: 6,
-          lg: 6,
-          xl: 6
-        },
         pk: "",
         isShowFiles: false,
       }
     },
-    mounted: function () {
+    mounted: function () { //先请求要展示的字段，再请求字段的详情，最后请求附件
+
       var that = this;
       var param = window.jasTools.base.getParamsInUrl(location.href);
       this.menuCode = param.menuCode;
       delete param.menuCode;
       this.isQuery = param;
-      this.requestBymenuCode();
+      this.requestFieldsConfig();
     },
     methods: {
       _formatFieldsByGroup: function (aFields) { // 将字段进行分组格式化
@@ -94,7 +85,7 @@
         }
         return this.isArrySort(dest);
       },
-      requestBymenuCode: function () {
+      requestFieldsConfig: function () {
         var that = this;
         var url = jasTools.base.rootPath + "/functionConfiguration/getDetailByCode.do";
         jasTools.ajax.get(url, {
@@ -139,7 +130,6 @@
         //该接口需要入参主键，因为主键不确定，所以全部传入表单对象
         jasTools.ajax.post(url, that.isQuery, function (data) {
           that.formData = data.data;
-          // that.getFileById();
           that.bizId = that.formData[that.pk];
         });
       },
