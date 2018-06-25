@@ -14,22 +14,113 @@ Vue.component('jas-base-group-title', {
 
 Vue.component('jas-file-upload', {
 	props: {
-		name: {
-			default: '表单分组',
-			type: String
+		limit: {
+			default: 5,
+			type: Number
 		},
+		fileTypes: {
+			default: function () {
+				return []
+			},
+			type: Array
+		}
+	},
+	data: function () {
+		return {
+			fileList: [],
+			uploadurl: '',
+		}
+	},
+	computed: {
+		accept: function () {
+			return this.fileTypes.length > 0 ? '.' + this.fileTypes.join(',.') : '';
+		}
 	},
 	template: [
-		'<el-upload :accept=".xls,.xlsx" :limit="1" :auto-upload="false" :file-list="fileList" ',
-		':on-success="fileUploaded" :on-remove="removeFile" ',
+		'<el-upload ref="upload" :accept="accept" :limit="limit" :auto-upload="false" :file-list="fileList" ',
+		':on-change="changeFiles" :on-success="fileUploaded" :on-remove="removeFile" ',
 		':on-exceed="uploaodNumberlimit" :action="uploadurl">',
 		'	<el-button slot="trigger" size="small" type="primary" plain>选取文件</el-button>',
-		'	<span style="padding-left: 10px;" class="el-upload__tip" slot="tip">最多上传5个附件</span>',
+		'	<span style="padding-left: 10px;" class="el-upload__tip" slot="tip">{{"最多上传"+ limit +"个附件"}}</span>',
 		'</el-upload>',
 	].join(''),
-	mounted : function(){
-
-	},
+	methods: {
+		requestFile: function (bizId) {
+			var that = this;
+			var url = jasTools.base.rootPath + "/attachment/getInfo.do";
+			jasTools.ajax.get(url, {
+				businessType: 'file',
+				businessId: bizId
+			}, function (data) {
+				data.rows.forEach(function (item) {
+					var file = {
+						name: item.fileName,
+						size: item.size,
+						oid: item.oid
+					};
+					that.fileList.push(file);
+				});
+				that.fileListlength = that.fileList.length;
+			});
+		},
+		fileUploaded: function (response, file, fileList) {
+			this.$emit('success', response, file, fileList)
+		},
+		removeFile: function (file, fileList) {
+			if (file.status === 'success' && file.oid) {
+				if (this.filesToBeDelete) {
+					this.filesToBeDelete.push(file.oid);
+				} else {
+					this.filesToBeDelete = [file.oid];
+				}
+			}
+		},
+		uploadFile: function (oid) {
+			var that = this;
+			that._deleteFilesToServer(function () {
+				that.uploadurl = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") +
+					"&businessId=" + oid + "&businessType=file";
+				that.$nextTick(function () {
+					var afileToSubmit = that.$refs.upload.uploadFiles.filter(function (item) {
+						return !item.oid
+					});
+					if (afileToSubmit.length > 0) {
+						that.$refs.upload.submit();
+					} else {
+						that.fileUploaded();
+					}
+				});
+			});
+		},
+		_deleteFilesToServer: function (cb) {
+			var that = this;
+			if (!that.filesToBeDelete) {
+				cb && cb();
+				return;
+			}
+			jasTools.ajax.get(jasTools.base.rootPath + "/attachment/delete.do", {
+				oids: that.filesToBeDelete.join(',')
+			}, function (data) {
+				cb && cb();
+			});
+		},
+		changeFiles: function (file, fileList) {
+			var that = this;
+			if (file.status === "ready") {
+				var aFileName = file.name.split('.');
+				var fileTypes = this.fileTypes;
+				var type = aFileName[aFileName.length - 1 || 1];
+				if (!type || (fileTypes.length > 0 && fileTypes.indexOf(type) === -1)) { // 不是规定格式的文件
+					top.Vue.prototype.$message('请上传规定格式的文件');
+					var index = fileList.indexOf(file);
+					fileList.splice(index, 1);
+				}
+			}
+		},
+		uploaodNumberlimit: function () {
+			top.Vue.prototype.$message("最多上传" + this.limit + "个附件")
+		},
+	}
 
 });
 
@@ -115,16 +206,14 @@ Vue.component('jas-detail-table', {
 			type: Array,
 			required: true
 		},
-		columnNum: {
-			default: 2,
-			type: Number
-		},
 		detail: {
 
 		}
 	},
 	data: function () {
-		return {}
+		return {
+			columnNum: 2,
+		}
 	},
 	computed: {
 		formatTitle: function () {
@@ -142,12 +231,14 @@ Vue.component('jas-detail-table', {
 					newTitle.push(_arr)
 				}
 			});
-			console.log()
+			if (this.titles.length === 1) {
+				this.columnNum = 1;
+			}
 			return newTitle;
 		}
 	},
 	template: [
-		'<div v-show="detail" class="jas-detail-table">',
+		'<div ref="table" v-show="detail" class="jas-detail-table">',
 		'<table class="table_wrap">',
 		'    <template v-for="item in formatTitle">',
 		'        <tr>',
@@ -160,6 +251,28 @@ Vue.component('jas-detail-table', {
 		'</table>',
 		'</div>'
 	].join(''),
+	methods: {
+		resizeColumn: function () {
+			var that = this;
+
+			var width = that.$refs.table.clientWidth;
+			if (width < 660) {
+				that.columnNum = 1;
+			} else if (width < 1400) {
+				that.columnNum = 2;
+			} else {
+				that.columnNum = 3;
+			}
+		}
+	},
+	mounted: function () {
+		var that = this;
+		this.resizeColumn();
+		$(window).on('resize', function () {
+			that.resizeColumn();
+
+		});
+	}
 });
 
 
@@ -274,7 +387,7 @@ Vue.component('jas-table-for-list', {
 			// 	type:'text', // text、time
 			// }]
 		},
-		searchPath : {
+		searchPath: {
 			type: String,
 			required: true
 		},
@@ -306,11 +419,11 @@ Vue.component('jas-table-for-list', {
 		'</div>',
 		'<div class="is-grown">',
 		'	<el-table v-loading="loading" height="100%" :data="tableData" border :header-cell-style="headStyle" style="width: 100%">',
-		'		<el-table-column label="序号" type="index" align="center" width="50">',
+		'		<el-table-column label="序号" type="index" align="center" width="50" fixed>',
 		'		</el-table-column>',
-		'		<el-table-column v-for="item in fields" :label="item.name" :prop="item.field" align="center">',
+		'		<el-table-column v-for="item,index in fields" :key="item.oid" :fixed="index=== 0?true:false" :label="item.name" :prop="item.field" align="center">',
 		'		</el-table-column>',
-		'		<el-table-column label="操作" align="center" width="240">',
+		'		<el-table-column label="操作" align="center" width="180" fixed="right">',
 		'			<template slot-scope="scope">',
 		'				<el-button @click="preview(scope.row)" type="text" size="small">查看</el-button>',
 		'				<el-button @click="edit(scope.row)" type="text" size="small">编辑</el-button>',
@@ -423,4 +536,94 @@ Vue.component('jas-table-for-list', {
 		}
 	},
 
+});
+
+Vue.component('jas-file-list', {
+	props: {
+		bizId: {
+			type: String,
+			required: true
+		},
+	},
+	data: function () {
+		return {
+			fileList: [],
+			isrequest: true,
+		}
+	},
+	watch: {
+		bizId: function () {
+			if (this.bizId) {
+				this._requestFiles(this.bizId);
+			}
+		}
+	},
+	template: [
+		'<div class="jas-file-list" v-show="!isrequest">',
+		' <div v-show="fileList.length === 0" >无</div>',
+		'	<div v-for="file in fileList"  class="el-upload-list__item">',
+		'		<a class="el-upload-list__item-name">',
+		'			<i class="el-icon-document"></i>{{file.fileName}}',
+		'		</a>',
+		'		<i class="el-icon-download tipBtn" @click="download(file.oid)" style="right:10px;"></i>',
+		'		<i class="el-icon-view tipBtn" @click="preview(file.oid)" style="right:35px;"></i>',
+		'	</div>',
+		'</div>'
+	].join(''),
+	created: function () {
+		if (this.bizId) {
+			this._requestFiles(this.bizId);
+		}
+	},
+	methods: {
+		download: function (oid) {
+			var that = this;
+			jasTools.ajax.downloadByIframe('post', jasTools.base.rootPath + "/attachment/download.do", {
+				oid: oid
+			});
+		},
+		_requestFiles: function (oid) {
+			var that = this;
+			var url = jasTools.base.rootPath + "/attachment/getInfo.do";
+			jasTools.ajax.get(url, {
+				businessType: 'file',
+				businessId: oid
+			}, function (data) {
+				that.fileList = data.rows;
+				that.isrequest = false;
+			});
+		},
+		preview: function (oid) {
+			var that = this;
+			top.jasTools.dialog.show({
+				width: '80%',
+				height: '90%',
+				title: '预览模板',
+				src: './pages/template/pdfjs_1.10.88/web/viewer.html?oid=' + oid,
+			});
+		},
+
+	},
+
+});
+
+Vue.component('jas-dialog-wrapper', {
+	props: {
+
+	},
+	data: function () {
+		return {
+
+		}
+	},
+	template: [
+		'<div class="jas-flex-box is-vertical">',
+		'  <div class="is-grown" style="overflow: auto;">',
+		'    <slot></slot>',
+		'  </div>',
+		'  <div style="text-align: center;padding-top:10px; ">',
+		'    <slot name="footer"></slot>',
+		'  </div>',
+		'</div>'
+	].join(''),
 });

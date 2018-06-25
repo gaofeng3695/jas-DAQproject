@@ -7,7 +7,7 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Document</title>
 	<link rel="stylesheet" href="./../../../lib/font-awesome-4.7.0/css/font-awesome.css">
-	<link rel="stylesheet" href="./../../../lib/element-ui/v2.2.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
 	<link rel="stylesheet" href="./../../../src/css/main.css">
 	<style>
 		html,
@@ -72,9 +72,9 @@
 			line-height: 46px !important;
 		}
 
-		.el-upload {
+		/* .el-upload {
 			width: 100% !important
-		}
+		} */
 
 		.height {
 			height: 56px;
@@ -168,38 +168,11 @@
 				</template>
 				<el-row>
 					<template v-if="ifAttachment">
-						<el-upload multiple :limit="limitNum" :show-file-list="false" class="upload-demo" name="files" ref="upload" :action="actionURL"
-						  :on-exceed="onExceed" :on-change="uploadOnChange" :on-success="onsuccess" :file-list="fileList" :auto-upload="autoUpload"
-						  :on-progress="uploadOnProgress">
-							<div class="bulk" style="text-align: left">
-								<span class="title">
-									<span>上传附件</span>
-									<span style="padding-left:10px">{{fileListlength}}</span>
-									<span style="padding-left:5px">—</span>
-									<span style="padding-left:5px">{{limitNum}}</span>
-								</span>
-								<div style="float:right;font-size:18px;color:rgb(64, 158, 255)" slot="trigger" class="fa fa-upload" style="font-size:20px">
-								</div>
-							</div>
-						</el-upload>
-						<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-							<div class="file-list">
-								<div v-for="(item,key) in fileListStatus" :key="key" class="file-item">
-									<div style="float:left">
-										<i class="el-icon-document"> </i>
-										<span style="padding-left:10px">{{item.name}}</span>
-									</div>
-									<div style="float:right">
-										<i v-if="item.oid" class="el-icon-view btn" @click="handlePreview(item)"> </i>
-										<i v-if="item.oid" class="el-icon-download btn" @click="handleDownload(item)"> </i>
-										<i class="el-icon-delete btn" @click="handleFileRemove(item,key)"> </i>
-									</div>
-								</div>
-								<div v-if="!pass && progress !== 0" class="file-item img-progress">
-									<el-progress :percentage="progress" :status="proStatus"></el-progress>
-								</div>
-							</div>
-						</el-col>
+
+						<jas-base-group-title name="附件信息"></jas-base-group-title>
+
+						<jas-file-upload ref="upload" @success="uploadSuccess"></jas-file-upload>
+
 					</template>
 
 				</el-row>
@@ -213,7 +186,7 @@
 </body>
 <script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
 <script src="./../../../lib/vue/vue.js"></script>
-<script src="./../../../lib/element-ui/v2.2.1/index.min.js"></script>
+<script src="./../../../lib/element-ui/v2.4.1/index.min.js"></script>
 <script src="./../../../common/components/jas-components.js "></script>
 <script src="./../../../common/js/jas-tools.js"></script>
 <!--<script src="js/ajaxFileUpload.js"></script>-->
@@ -523,27 +496,11 @@
 					});
 				});
 
-				that.requestFiles();
+
 				that.actionURL = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") +
 					"&businessId=" + that.formData[that.pkArray[0]] + "&businessType=file";
-			},
-			requestFiles: function () {
-				var that = this;
-				var url = jasTools.base.rootPath + "/attachment/getInfo.do";
-				jasTools.ajax.get(url, {
-					businessType: 'file',
-					businessId: that.formData[that.pkArray[0]]
-				}, function (data) {
-					data.rows.forEach(function (item) {
-						var file = {
-							name: item.fileName,
-							size: item.size,
-							oid: item.oid
-						};
-						that.fileList.push(file);
-						that.fileListStatus.push(file);
-					});
-					that.fileListlength = that.fileList.length;
+				that.$nextTick(function () {
+					that.$refs.upload.requestFile(that.formData[that.pkArray[0]]); // 触发附件请求
 				});
 			},
 			requestDetailByObj: function () { //请求表单详情
@@ -562,159 +519,35 @@
 			},
 			submit: function (formName) {
 				var that = this;
-				this.$refs[formName].validate(function (valid) {
+				this.$refs[formName].validate(function (valid) { //
 					if (valid) {
-						that.submitToServer();
+						that._requestSaveFormData();
 					} else {
 						return false;
 					}
 				});
 			},
-			submitToServer: function () {
+			_requestSaveFormData: function () {
 				var that = this;
-				var url = "";
-				var msg = "";
+
+				var str = that.isAddPage ? "save" : "update";
+				var url = jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/" + str + ".do"
 				/*属性里面是数组的进行转换成字符串*/
 				for (key in that.formData) {
 					if (that.formData[key] instanceof Array) {
 						that.formData[key] = that.formData[key].join(",")
 					}
 				}
-				if (that.autoUpload) {
-					that.saveInfo();
-				} else {
-					var isNotFile = true;
-					that.fileListStatus.forEach(function (item) { // 文件有oid代表已经在服务器上了，无需上传
-						if (!item.oid) {
-							isNotFile = false;
-							return;
-						}
-					});
-					if (isNotFile) {
-						that.requestDeleteFiles(function () {
-							that.saveInfo();
-						});
-					} else {
-						that.actionURL = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") +
-							"&businessId=" +
-							that.formData[that.pkArray[0]];
-						that.$refs.upload.submit();
-					}
-				}
-			},
-			onsuccess: function (e, file) {
-				var that = this;
-				that.pass = true;
-				top.Vue.prototype.$message.success("上传成功");
-				that.fileList.push({
-					name: file.name,
-					size: file.size,
-				});
-				if (!that.autoUpload) {
-					that.requestDeleteFiles(function () {
-						that.saveInfo();
-					});
-				}
-			},
-			saveInfo: function () {
-				var that = this;
-				var str = that.isAddPage ? "save" : "update";
-				var url = jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/" + str + ".do"
 				jasTools.ajax.post(url, that.formData, function () {
-					top.Vue.prototype.$message({
-						message: that.isAddPage ? "增加成功" : "修改成功",
-						type: 'success'
-					});
-					that.closeForm();
+					that.$refs.upload.uploadFile(that.formData[that.pkArray[0]]); //触发上传附件
 				});
 			},
-			handleFileRemove: function (file, i) {
-				var that = this;
-				top.Vue.prototype.$confirm('删除附件, 是否继续?', '提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-					type: 'warning',
-					callback: function (status) {
-
-						if (status === 'confirm') {
-
-							that.fileList.splice(i, 1);
-							that.fileListStatus.splice(i, 1);
-							that.fileListlength = that.fileListStatus.length;
-
-							if (file.oid) {
-								// that.requestDeleteFiles(file);
-								if (that.filesToBeDelete) {
-									that.filesToBeDelete.push(file.oid)
-								} else {
-									that.filesToBeDelete = [file.oid]
-								}
-							} else {
-								top.Vue.prototype.$message({
-									message: '删除成功',
-									type: 'success'
-								});
-							}
-
-						}
-					}
-				});
-			},
-			requestDeleteFiles: function (cb) {
-				var that = this;
-				if (!that.filesToBeDelete) {
-					cb && cb();
-					return;
-				}
-				jasTools.ajax.get(jasTools.base.rootPath + "/attachment/delete.do", {
-					oids: that.filesToBeDelete.join(',')
-				}, function (data) {
-					cb && cb();
-					// top.Vue.prototype.$message({
-					// 	message: '删除成功',
-					// 	type: 'success'
-					// });
-				});
-			},
-			handlePreview: function (file) {
-				window.top.jasTools.dialog.show({
-					title: '预览',
-					width: '90%',
-					height: '90%',
-					src: "./pages/template/pdfjs_1.10.88/web/viewer.html?oid=" + file.oid,
-				});
-			},
-			uploadOnChange: function (file, fileList) { //文件状态改变时的钩子，添加文件、上传成功和上传失败时都会被调用
-				// console.log("——————————change——————————")
-				// console.log(file);
-				var that = this;
-				that.fileListlength = fileList.length;
-				if (file.status == 'ready') {
-					this.pass = null;
-					this.progress = 0;
-					this.fileListStatus.push({
-						name: file.name,
-						size: file.size
-					})
-				} else if (file.status == 'fail') {
-					this.$message.error("上传出错，请刷新重试！")
-				}
-			},
-			uploadOnProgress: function (e, file) { //开始上传
-				this.progress = Math.floor(e.percent)
-			},
-			handleDownload: function (file) {
-				var that = this;
-				jasTools.ajax.downloadByIframe('post', jasTools.base.rootPath + "/attachment/download.do", {
-					oid: file.oid
-				});
-			},
-			onExceed: function (files, fileList) {
-				var that = this;
+			uploadSuccess: function () {
 				top.Vue.prototype.$message({
-					message: '文件最多上传' + that.limitNum,
-					type: 'info'
+					message: this.isAddPage ? "增加成功" : "修改成功",
+					type: 'success'
 				});
+				this.closeForm();
 			},
 			getChildOpts: function (value, item) {
 				var that = this;
@@ -722,7 +555,7 @@
 				var formatFormAttr = function (options) {
 					that.formAttr.forEach(function (parent, index) {
 						parent.data.forEach(function (child) {
-							console.log("_________",item.childField)
+							console.log("_________", item.childField)
 							if (item.childField.indexOf(child.id) !== -1) {
 								if (value) {
 									child.options = options;
@@ -743,13 +576,6 @@
 					};
 					obj[key] = value;
 					jasTools.ajax.post(jasTools.base.rootPath + "/" + item.requestUrl, obj, function (data) {
-						// data.rows.forEach(function (item) {
-						// 	var obj = {
-						// 		"key": item.fieldName,
-						// 		"value": item.fieldName,
-						// 	};
-						// 	options.push(obj);
-						// });
 						formatFormAttr(data.rows)
 					});
 				} else {

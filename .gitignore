@@ -10,3 +10,4 @@ bs-config.js
 package.json
 node_modules
 .springBeans
+npm-debug.log
