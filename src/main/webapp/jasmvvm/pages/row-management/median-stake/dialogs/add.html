@@ -86,7 +86,7 @@
 							  placeholder="请输入Y坐标" size="small"></el-input-number>
 						</el-form-item>
 					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+					<!-- <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="标石类型" prop="markStoneType">
 							<el-select v-model="formData.markStoneType" clearable placeholder="标石类型" size="small">
 								<el-option v-for="item in domain.markStone" :key="item.key" :label="item.value" :value="item.key">
@@ -99,7 +99,7 @@
 						<el-form-item label="标石概略位置" prop="markStoneLocation">
 							<el-input v-model="formData.markStoneLocation" clearable placeholder="请输入标石概略位置" size="small"></el-input>
 						</el-form-item>
-					</el-col>
+					</el-col> -->
 				</el-row>
 				<jas-base-group-title name="其他信息"></jas-base-group-title>
 				<el-row>
@@ -147,7 +147,7 @@
 				domain: {
 					project: [],
 					pipeline: [],
-					markStone: [],
+					// markStone: [],
 				},
 				rules: {
 					projectOid: [{
@@ -219,9 +219,9 @@
 			};
 			// app.$refs.upload.$refs['upload-inner'].handleClick()
 
-			this.requestDomainFromDomainTable('mark_stone_type_domain', function (arr) {
-				that.domain.markStone = arr;
-			});
+			// this.requestDomainFromDomainTable('mark_stone_type_domain', function (arr) {
+			// 	that.domain.markStone = arr;
+			// });
 			this.requestDomainFromBizTable('/daq/project/getList.do', {}, function (arr) {
 				that.domain.project = arr;
 			});
