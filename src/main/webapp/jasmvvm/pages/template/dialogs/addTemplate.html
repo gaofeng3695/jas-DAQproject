@@ -550,7 +550,11 @@
 					}
 				}
 				jasTools.ajax.post(url, that.formData, function () {
-					that.$refs.upload.uploadFile(that.formData[that.pkArray[0]]); //触发上传附件
+					if (that.ifAttachment) {
+						that.$refs.upload.uploadFile(that.formData[that.pkArray[0]]); //触发上传附件
+					} else {
+						that.uploadSuccess();
+					}
 				});
 			},
 			uploadSuccess: function () {
@@ -582,7 +586,7 @@
 									// console.log('当前的要出发的select为', that.$refs[child.id][0])
 									that.$refs[child.id][0].$emit('change', {
 										value: that.formData[child.id],
-										isInit : false
+										isInit: false
 									});
 								}
 							}
