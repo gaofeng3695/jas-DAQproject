@@ -203,7 +203,12 @@
 			var param = window.jasTools.base.getParamsInUrl(location.href);
 			this.menuCode = param.menuCode;
 			//进行后台数据的请求
-			this._requestPrivilege(param.privilegeCode); //请求权限
+			if (param.privilegeCode) {
+				this._requestPrivilege(param.privilegeCode); //请求权限
+			} else {
+				this.privilege = ['bt_add','bt_update','bt_delete','bt_select','bt_export','bt_import','bt_position'];
+				this.requestConfig(); //请求模板的配置文件
+			}
 		},
 		methods: { //方法的写法
 			_requestPrivilege: function (privilegeCode) {
@@ -544,27 +549,27 @@
 			},
 			selectChange: function (item) { //根据配置文件 是否立即触发
 				var that = this;
-				if(item.childField && item.requestPath){
+				if (item.childField && item.requestPath) {
 					console.log(item.childField)
-					that.setChildSelectOption(item.id,item.childField , item.requestPath,function(){
+					that.setChildSelectOption(item.id, item.childField, item.requestPath, function () {
 						that.getUiType();
 					});
-				}else{
+				} else {
 					that.getUiType();
 				}
 			},
-			setChildSelectOption : function(fatherField,childField,requestPath,fn){
+			setChildSelectOption: function (fatherField, childField, requestPath, fn) {
 				var that = this;
-				var setOptionsAndValue = function(options){
-					that.searchData.forEach(function(item){
-						if(childField.indexOf(item.id) !== -1){ // 子集字段
+				var setOptionsAndValue = function (options) {
+					that.searchData.forEach(function (item) {
+						if (childField.indexOf(item.id) !== -1) { // 子集字段
 							item.options = options || [];
 							that.searchTable[item.id] = '';
 						}
 					});
 					fn && fn();
 				};
-				if ( that.searchTable[fatherField]) { //进行子级的查找 后台请求
+				if (that.searchTable[fatherField]) { //进行子级的查找 后台请求
 					var key = jasTools.base.switchToCamelCase(fatherField);
 					var obj = {
 						"rows": 100,
