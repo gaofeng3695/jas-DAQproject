@@ -44,7 +44,7 @@ public class ImplementScopeService extends BaseService{
 				Map<String,String> attributes = new HashMap<>();
 				attributes.put("type", type);
 				item.setAttributes(attributes);
-				item.setChildren(getProjectChildren(obj.get("oid").toString(),treeDataList,dataRefList));
+				item.setChildren(getProjectChildren(obj.get("oid").toString(),null,treeDataList,dataRefList));
 				resultTree.add(item);
 			}
 		}
@@ -61,7 +61,7 @@ public class ImplementScopeService extends BaseService{
 	  * <p>创建日期:2018年6月22日 上午11:30:44。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	private List<TreeItem> getProjectChildren(String parentId,List<Map<String,Object>> dataList,List<Map<String,Object>> dataRefList){
+	private List<TreeItem> getProjectChildren(String parentId,String tendersOid,List<Map<String,Object>> dataList,List<Map<String,Object>> dataRefList){
 		List<TreeItem> itemList = new ArrayList<TreeItem>();
 		for(Map<String,Object> obj : dataList){
 			String parentOid = obj.get("parent_oid")!=null?obj.get("parent_oid").toString():"";
@@ -73,7 +73,7 @@ public class ImplementScopeService extends BaseService{
 				Map<String,String> attributes = new HashMap<>();
 				attributes.put("type", type);
 				item.setAttributes(attributes);
-				item.setChildren(getProjectChildren(obj.get("oid").toString(),dataList,dataRefList));
+				item.setChildren(getProjectChildren(obj.get("oid").toString(),item.getId(),dataList,dataRefList));
 				itemList.add(item);
 			}else if(parentOid.equals(parentId) && type.equals("0")){
 				TreeItem item = new TreeItem();
@@ -82,7 +82,7 @@ public class ImplementScopeService extends BaseService{
 				Map<String,String> attributes = new HashMap<>();
 				attributes.put("type", type);
 				item.setAttributes(attributes);
-				item.setChildren(getPipelineChildren(obj.get("oid").toString(),dataList,dataRefList));
+				item.setChildren(getPipelineChildren(obj.get("oid").toString(),tendersOid,dataList,dataRefList));
 				itemList.add(item);
 			}
 		}
@@ -99,7 +99,7 @@ public class ImplementScopeService extends BaseService{
 	  * <p>创建日期:2018年6月22日 上午11:30:56。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	private List<TreeItem> getPipelineChildren(String parentId,List<Map<String,Object>> dataList,List<Map<String,Object>> dataRefList){
+	private List<TreeItem> getPipelineChildren(String parentId,String tendersOid,List<Map<String,Object>> dataList,List<Map<String,Object>> dataRefList){
 		List<TreeItem> itemList = new ArrayList<TreeItem>();
 		TreeItem segmentItem = new TreeItem("1",ScopeEnum.segment_scope.getName(),"0",false,new ArrayList<TreeItem>(),null);
 		TreeItem crossItem =  new TreeItem("2",ScopeEnum.cross_scope.getName(),"0",false,new ArrayList<TreeItem>(),null);
@@ -117,23 +117,23 @@ public class ImplementScopeService extends BaseService{
 			if(parentOid.equals(parentId)){
 				switch (type) {
 				case "1":
-					setProvinceItem(segmentItem,obj,dataRefList);
+					setProvinceItem(segmentItem,tendersOid,obj,dataRefList);
 					isExistSegment =true;
 					break;
 				case "2":
-					setProvinceItem(crossItem,obj,dataRefList);
+					setProvinceItem(crossItem,tendersOid,obj,dataRefList);
 					isExistCross = true;
 					break;
 				case "3":
-					setProvinceItem(pipeStationItem,obj,dataRefList);
+					setProvinceItem(pipeStationItem,tendersOid,obj,dataRefList);
 					isExistPipeStation = true;
 					break;
 				case "4":
-					setProvinceItem(maintenanceRoadItem,obj,dataRefList);
+					setProvinceItem(maintenanceRoadItem,tendersOid,obj,dataRefList);
 					isExistMaintenanceRoad = true;
 					break;
 				case "5":
-					setProvinceItem(powerLineItem,obj,dataRefList);
+					setProvinceItem(powerLineItem,tendersOid,obj,dataRefList);
 					isExistpowerLine = true;
 					break;
 				}
@@ -167,7 +167,7 @@ public class ImplementScopeService extends BaseService{
 	  * <p>创建日期:2018年6月20日 上午11:12:26。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	private void setProvinceItem(TreeItem parentItem,Map<String,Object> map,List<Map<String,Object>>dataRefList){
+	private void setProvinceItem(TreeItem parentItem,String tendersOid,Map<String,Object> map,List<Map<String,Object>>dataRefList){
 		TreeItem item = new TreeItem();
 		if(dataRefList!=null && dataRefList.size()>0){
 			Map<String,Object> flagMap = new HashMap<String,Object>();
@@ -183,6 +183,7 @@ public class ImplementScopeService extends BaseService{
 		attributes.put("type", type);
 		attributes.put("projectOid", map.get("project_oid").toString());
 		attributes.put("pipelineOid", map.get("parent_oid").toString());
+		attributes.put("tendersOid", tendersOid);
 		item.setAttributes(attributes);
 		
 		List<TreeItem> childrenItem = parentItem.getChildren();
@@ -233,15 +234,16 @@ public class ImplementScopeService extends BaseService{
 				dataSub.add(1, unitOid);
 				dataSub.add(2, entity.getProjectOid());
 				dataSub.add(3, entity.getPipelineOid());
-				dataSub.add(4, entity.getScopeOid());
-				dataSub.add(5, entity.getScopeType());
-				dataSub.add(6, entity.getCreateUserId());
-				dataSub.add(7, entity.getCreateUserName());
-				dataSub.add(8, entity.getCreateDatetime());
-				dataSub.add(9, entity.getModifyUserId());
-				dataSub.add(10, entity.getModifyUserName());
-				dataSub.add(11, entity.getModifyDatetime());
-				dataSub.add(12, entity.getActive());
+				dataSub.add(4, entity.getTendersOid());
+				dataSub.add(5, entity.getScopeOid());
+				dataSub.add(6, entity.getScopeType());
+				dataSub.add(7, entity.getCreateUserId());
+				dataSub.add(8, entity.getCreateUserName());
+				dataSub.add(9, entity.getCreateDatetime());
+				dataSub.add(10, entity.getModifyUserId());
+				dataSub.add(11, entity.getModifyUserName());
+				dataSub.add(12, entity.getModifyDatetime());
+				dataSub.add(13, entity.getActive());
 				list.add(dataSub);
 			}
 			return this.implementScopeDao.saveRef(list);

@@ -18,11 +18,10 @@ public class MedianStakeQueryPage extends BaseJavaQuery{
 	
 	@Override
 	public String getSql() {
-		String sql = "select t.*,p.project_name,l.pipeline_name,s.code_name as mark_stone_type_name "
+		String sql = "select t.*,p.project_name,l.pipeline_name "
 				+ "from daq_median_stake t "
 				+ "left join daq_project p on p.oid=t.project_oid "
 				+ "left join daq_pipeline l on l.oid=t.pipeline_oid "
-				+ "left join sys_domain s on s.code_id=t.mark_stone_type "
 				+ "where t.active=1";
 		if(StringUtils.isNotBlank(medianStakeCode)){
 			sql += " and t.median_stake_code like :medianStakeCode"; 
