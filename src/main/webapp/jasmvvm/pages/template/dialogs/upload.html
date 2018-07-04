@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, :true,-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
   <link rel="stylesheet" href="./../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
@@ -18,11 +18,45 @@
       padding-top: 10px;
     }
 
+    .content {
+      overflow: auto;
+    }
+
+    .errContent {
+      width: 400px;
+      overflow: auto;
+      margin: 40px auto 0;
+    }
 
     .upload-demo {
       text-align: center;
       width: 80%;
-      margin: auto;
+      margin: 50px auto;
+    }
+
+    .errtitle {
+      color: #fb6060;
+      height: 60px;
+      line-height: 60px;
+      text-align: center;
+    }
+
+    .errtitle i {
+      display: inline-block;
+      line-height: 60px;
+      font-size: 40px;
+      height: 60px;
+    }
+
+    .errtitle span {
+      display: inline-block;
+      vertical-align: top;
+      padding-left: 15px;
+      font-size: 18px;
+    }
+
+    .txt-c {
+      text-align: center;
     }
   </style>
 </head>
@@ -30,21 +64,108 @@
 <body>
   <div id="app" v-cloak>
     <div class="outer-wrap jas-flex-box is-vertical ">
+      <el-steps :active="step" finish-status="success" simple style="margin: 20px">
+        <el-step title="选择文件"></el-step>
+        <el-step title="验证数据"></el-step>
+        <el-step title="导入数据"></el-step>
+      </el-steps>
       <div class="content is-grown">
-        <el-upload class="upload-demo" drag action="https://jsonplaceholder.typicode.com/posts/">
-          <i class="el-icon-upload"></i>
-          <div class="el-upload__text">将文件拖到此处，或
-            <em>点击上传</em>
+        <div class="jas-flex-box is-vertical" v-show="step===0">
+          <div class="content is-grown">
+            <el-upload ref="upload" accept=".xls,.xlsx" class="upload-demo " drag :action="uploadUrl" :limit="1" :before-upload="beforeUpload"
+              :on-change="onUploadVerify" :auto-upload="false" :on-exceed="onExceed">
+              <i class="el-icon-upload"></i>
+              <div class="el-upload__text">将文件拖到此处，或
+                <em>点击上传</em>
+              </div>
+              <div class="el-upload__tip" slot="tip">只能上传Excel模板文件，最多同时上传一个</div>
+            </el-upload>
           </div>
-          <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
-        </el-upload>
-      </div>
-      <div class="dialog-footer" style="text-align: center">
-        <el-button size="small">取 消</el-button>
-        <el-button size="small" type="primary">确 定</el-button>
+          <div class="dialog-footer" style="text-align: center">
+            <el-button size="small">取 消</el-button>
+            <el-button size="small" @click="verifyExcel" type="primary">验证</el-button>
+          </div>
+        </div>
+        <div class="jas-flex-box is-vertical" v-show="step===1">
+          <div class="errContent is-grown">
+
+            <div v-show="varifyStatus==='success'">
+              <div class="errtitle" style="color:#67c23a;">
+                <i class="fa fa-check-circle" aria-hidden="true"></i>
+                <span>验证通过！</span>
+              </div>
+              <div class="txt-c">
+                请点击下方上传按钮，进行上传操作。
+              </div>
+            </div>
+            <div v-show="varifyStatus==='fail'">
+              <div class="errtitle">
+                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                <span>验证未通过！</span>
+              </div>
+              <div class="txt-c" style="padding-bottom: 10px;">
+                <span>数据总条数：{{varifyFail.totalCount}}</span>
+                <span>有效数据条数：{{varifyFail.validatedDataCount}}</span>
+              </div>
+              <div v-show="varifyFail.showErrMessage" v-html="errorMsg">
+              </div>
+            </div>
+            <div v-show="varifyStatus==='other'">
+              <div class="errtitle">
+                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                <span>验证未通过！</span>
+              </div>
+              <div class="txt-c">
+                {{errorMsg}}
+              </div>
+            </div>
+
+          </div>
+          <div class="dialog-footer" style="text-align: center">
+            <el-button size="small" @click="returnUpload">上一步</el-button>
+            <el-button size="small" :disabled="varifyStatus!=='success'" @click="requestSave(':true,')" type="primary">初始导入</el-button>
+            <el-button size="small" :disabled="varifyStatus!=='success'" @click="requestSave('update')" type="primary">更新导入</el-button>
+          </div>
+        </div>
+        <div class="jas-flex-box is-vertical" v-show="step===2">
+          <div class="errContent is-grown">
+            <div v-show="uploadStatus.errorCode!=1">
+              <div class="errtitle" style="color:#67c23a;">
+                <i class="fa fa-check-circle" aria-hidden="true"></i>
+                <span>导入成功！</span>
+              </div>
+              <div class="txt-c">
+                <div>成功导入数据 {{uploadStatus.addSuccessCount}} 条</div>
+                <div>未成功导入数据 {{uploadStatus.addFailureCount}} 条</div>
+                <div v-show="!uploadStatus.isinitial">
+                  <div>成功更新数据 {{uploadStatus.updateSuccessCount}} 条</div>
+                  <div>未成功更新数据 {{uploadStatus.updateFailureCount}} 条</div>
+                </div>
+              </div>
+
+            </div>
+            <div v-show="uploadStatus.errorCode==1">
+
+              <div class="errtitle">
+                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                <span>导入失败！</span>
+              </div>
+              <div class="txt-c">
+                <div v-show="uploadStatus.isinitial">
+                  {{uploadStatus.addErrorMessage}}
+                </div>
+                <div v-show="!uploadStatus.isinitial">
+                  {{uploadStatus.updateErrorMessage}}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="dialog-footer" style="text-align: center">
+            <el-button size="small" @click="" type="primary">完成</el-button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 </body>
 <!-- import Vue before Element -->
 <script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
@@ -59,13 +180,102 @@
     el: "#app",
     data: function () {
       return {
-
+        step: 0,
+        uploadUrl: jasTools.base.rootPath + '/importExcelController/importExcelData.do?token=' + localStorage.getItem(
+          'token'),
+        varifyStatus: '', // fail success  other
+        varifyFail: {
+          totalCount: 0,
+          validatedDataCount: 0,
+          showErrMessage: 0,
+        },
+        uploadStatus: {
+          isInitial: true,
+          errorCode: '', //错误编号 提示数据errorMess '1',失败 其他 成功
+          addSuccessCount: 0, //成功导入数据条数
+          addFailureCount: 0, //未成功导入数据条数
+          addErrorMessage: '', //导入错误信息
+          updateSuccessCount: 0, //成功更新条数
+          updateFailureCount: 0, //未成功更新条数
+          updateErrorMessage: '', //更新错误信息
+        },
+        errorMsg: '', // 验证的错误信息
       }
     },
     mounted: function () {
 
     },
-    methods: {}
+    methods: {
+      onExceed: function () {
+        top.Vue.prototype.$message({
+          type: 'info',
+          message: '最多上传一个模板'
+        })
+      },
+      returnUpload: function () {
+        this.$refs.upload.clearFiles();
+        this.step--;
+      },
+      onUploadVerify: function (file) {
+        var that = this;
+        console.log(file);
+        setTimeout(function () {
+          that.loading && that.loading.close();
+          if (file.status === 'success') {
+            that.step++;
+            var code = file.response.errorCode;
+            if (code == '06') {
+              that.varifyStatus = 'success'
+              that.errorMsg = '验证通过，请点击按钮进行上传。'
+            } else if (code == '05') {
+              that.varifyStatus = 'fail';
+              that.varifyFail.totalCount = file.response.totalCount;
+              that.varifyFail.validatedDataCount = file.response.validatedDataCount;
+              if (file.response.validatedDataCount != file.response.totalCount) {
+                that.varifyFail.showErrMessage = true;
+                that.errorMsg = file.response.errorMessage.split('$').join('<br>');
+              } else {
+                that.varifyFail.showErrMessage = false;
+              }
+            } else {
+              that.varifyStatus = 'other'
+              that.errorMsg = file.response.errorMessage;
+            }
+          } else if (file.status === 'fail') {
+
+          }
+        }, 300);
+      },
+      verifyExcel: function () {
+        this.$refs.upload.submit();
+      },
+      beforeUpload: function () {
+        this.loading = this.$loading({
+          // target:'.content',
+          lock: true,
+          text: '正在验证数据合法性',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+      },
+      requestSave: function (type) { //importType =":true,"(初始导入) / "update"（更新导入）
+        var that = this;
+        that.uploadStatus.isInitial = type === 'initial' ? true : false;
+        var url = jasTools.base.rootPath + '/importExcelController/saveData.do';
+        jasTools.ajax.post(url, {
+          importType: type
+        }, function (data) {
+          that.step++;
+          that.uploadStatus.errorCode = data.errorCode;
+          that.uploadStatus.addSuccessCount = data.addSuccessCount;
+          that.uploadStatus.addFailureCount = data.addFailureCount;
+          that.uploadStatus.addErrorMessage = data.addErrorMessage;
+          that.uploadStatus.updateSuccessCount = data.updateSuccessCount;
+          that.uploadStatus.updateFailureCount = data.updateFailureCount;
+          that.uploadStatus.updateErrorMessage = data.updateErrorMessage;
+        });
+      }
+    }
   });
 </script>
 
