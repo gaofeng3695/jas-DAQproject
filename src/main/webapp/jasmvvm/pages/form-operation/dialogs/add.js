@@ -706,7 +706,7 @@ var vm = new Vue({
           arr.push(obj);
         }
       });
-      var url = jasTools.base.rootPath + '/functionConfiguration/saveUniqueStrategy.do';
+      var url = jasTools.base.rootPath + '/functionConfiguration/updateUniqueStrategy.do';
       jasTools.ajax.post(url, {
         functionCode:that.functionCode,
         uniqueValidateFormList: arr

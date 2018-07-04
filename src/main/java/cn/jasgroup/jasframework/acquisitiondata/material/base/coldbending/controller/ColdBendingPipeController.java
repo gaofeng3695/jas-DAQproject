@@ -1,0 +1,93 @@
+package cn.jasgroup.jasframework.acquisitiondata.material.base.coldbending.controller;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import cn.jasgroup.framework.data.result.BaseResult;
+import cn.jasgroup.framework.data.result.SimpleResult;
+import cn.jasgroup.jasframework.acquisitiondata.material.base.coldbending.dao.entity.ColdBendingPipe;
+import cn.jasgroup.jasframework.acquisitiondata.material.base.coldbending.service.ColdBendingPipeService;
+import cn.jasgroup.jasframework.base.controller.BaseController;
+
+@RestController
+@RequestMapping("daq/clodBendingPipe")
+public class ColdBendingPipeController extends BaseController{
+	
+	@Resource(name="coldBendingPipeService")
+	private ColdBendingPipeService coldBendingPipeService;
+	
+	/***
+	  * <p>功能描述：冷弯管新增。</p>
+	  * <p> 雷凯。</p>	
+	  * @param request
+	  * @param coldBendingPipe
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年7月2日 下午3:01:56。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="save",method = RequestMethod.POST)
+	@ResponseBody
+	public Object save(HttpServletRequest request,ColdBendingPipe coldBendingPipe){
+		SimpleResult<String> result = null;
+		try{
+			String oid = this.coldBendingPipeService.save(coldBendingPipe);
+			result = new SimpleResult<>(1, "200", "ok",oid);
+		}catch (Exception e) {
+			e.printStackTrace();
+			result = new SimpleResult<>(-1, "400", "error");
+		}
+		return result;
+	}
+	/***
+	  * <p>功能描述：冷管修改。</p>
+	  * <p> 雷凯。</p>	
+	  * @param request
+	  * @param coldBendingPipe
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年7月2日 下午3:17:54。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="update",method = RequestMethod.POST)
+	@ResponseBody
+	public Object update(HttpServletRequest request,ColdBendingPipe coldBendingPipe){
+		BaseResult result = null;
+		try{
+			this.coldBendingPipeService.update(coldBendingPipe);
+			result = new BaseResult(1,"200","ok");
+		}catch (Exception e) {
+			result = new BaseResult(-1, "400", "error");
+			e.printStackTrace();
+		}
+		return result;
+	}
+	/***
+	  * <p>功能描述：冷弯管删除。</p>
+	  * <p> 雷凯。</p>	
+	  * @param request
+	  * @param coldBendingPipe
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年7月2日 下午4:00:51。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="delete",method = RequestMethod.POST)
+	@ResponseBody
+	public Object delete(HttpServletRequest request,ColdBendingPipe coldBendingPipe){
+		BaseResult result = null;
+		try{
+			this.coldBendingPipeService.delete(coldBendingPipe);
+			result = new BaseResult(1,"200","ok");
+		}catch (Exception e) {
+			result = new BaseResult(-1, "400", "error");
+			e.printStackTrace();
+		}
+		return result;
+	}
+}

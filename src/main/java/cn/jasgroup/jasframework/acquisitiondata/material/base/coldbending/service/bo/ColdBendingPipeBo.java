@@ -1,0 +1,330 @@
+package cn.jasgroup.jasframework.acquisitiondata.material.base.coldbending.service.bo;
+
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import cn.jasgroup.jasframework.base.data.CommonBaseBo;
+
+public class ColdBendingPipeBo extends CommonBaseBo{
+	/** 项目oid */
+	private String projectOid;
+	
+	/** 项目名称**/
+	private String projectName;
+
+	/** 标段oid */
+	private String tendersOid;
+	
+	/** 标段名称 */
+	private String tendersName;
+
+	/** 管线oid */
+	private String pipelienOid; 
+	
+	/** 管线名称 */
+	private String pipelienName; 
+
+	/** 线路段oid */
+	private String pipeSegmentOid;
+	
+	/** 线路段名称 */
+	private String pipeSegmentName; 
+
+	/** 原材料钢管编号 */
+	private String pipeCode; 
+
+	/** 冷弯管编号 */
+	private String pipeColdBendingCode; 
+
+	/** 合格证编号 */
+	private String certificateNum; 
+
+	/** 管子弯曲设计标准 */
+	private String pipeBendingStandards; 
+
+	/** 曲率半径（mm) */
+	private Double bendingRadius; 
+
+	/** 弯曲角度(°) */
+	private Double bendingAngle; 
+
+	/** 曲线长度(m) */
+	private Double curveLength; 
+
+	/** 直管段最小长度(m) */
+	private Double straightPipeLength; 
+
+	/** 长度(m) */
+	private Double pipeLength; 
+
+	/** 椭圆率(%) */
+	private Double ellipticity; 
+
+	/** 壁厚减薄率(%) */
+	private Double wallThicknessRedurate; 
+
+	/** 管径(mm) */
+	private Double pipeDiameter; 
+
+	/** 壁厚(mm) */
+	private Double wallThickness; 
+
+	/** 制作时间 */
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+	private Date produceDate; 
+
+	/** 施工单位 */
+	private String constructUnit; 
+
+	/** 监理单位 */
+	private String supervisionUnit; 
+
+	/** 监理工程师 */
+	private String supervisionEngineer; 
+
+	/** 采集人员 */
+	private String collectionPerson; 
+
+	/** 采集时间 */
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+	private Date collectionDate; 
+
+	/** 是否使用 */
+	private Integer isUse = 0; 
+
+	/** 备注 */
+	private String remarks;
+
+	public String getProjectOid() {
+		return projectOid;
+	}
+
+	public void setProjectOid(String projectOid) {
+		this.projectOid = projectOid;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public String getTendersOid() {
+		return tendersOid;
+	}
+
+	public void setTendersOid(String tendersOid) {
+		this.tendersOid = tendersOid;
+	}
+
+	public String getTendersName() {
+		return tendersName;
+	}
+
+	public void setTendersName(String tendersName) {
+		this.tendersName = tendersName;
+	}
+
+	public String getPipelienOid() {
+		return pipelienOid;
+	}
+
+	public void setPipelienOid(String pipelienOid) {
+		this.pipelienOid = pipelienOid;
+	}
+
+	public String getPipelienName() {
+		return pipelienName;
+	}
+
+	public void setPipelienName(String pipelienName) {
+		this.pipelienName = pipelienName;
+	}
+
+	public String getPipeSegmentOid() {
+		return pipeSegmentOid;
+	}
+
+	public void setPipeSegmentOid(String pipeSegmentOid) {
+		this.pipeSegmentOid = pipeSegmentOid;
+	}
+
+	public String getPipeSegmentName() {
+		return pipeSegmentName;
+	}
+
+	public void setPipeSegmentName(String pipeSegmentName) {
+		this.pipeSegmentName = pipeSegmentName;
+	}
+
+	public String getPipeCode() {
+		return pipeCode;
+	}
+
+	public void setPipeCode(String pipeCode) {
+		this.pipeCode = pipeCode;
+	}
+
+	public String getPipeColdBendingCode() {
+		return pipeColdBendingCode;
+	}
+
+	public void setPipeColdBendingCode(String pipeColdBendingCode) {
+		this.pipeColdBendingCode = pipeColdBendingCode;
+	}
+
+	public String getCertificateNum() {
+		return certificateNum;
+	}
+
+	public void setCertificateNum(String certificateNum) {
+		this.certificateNum = certificateNum;
+	}
+
+	public String getPipeBendingStandards() {
+		return pipeBendingStandards;
+	}
+
+	public void setPipeBendingStandards(String pipeBendingStandards) {
+		this.pipeBendingStandards = pipeBendingStandards;
+	}
+
+	public Double getBendingRadius() {
+		return bendingRadius;
+	}
+
+	public void setBendingRadius(Double bendingRadius) {
+		this.bendingRadius = bendingRadius;
+	}
+
+	public Double getBendingAngle() {
+		return bendingAngle;
+	}
+
+	public void setBendingAngle(Double bendingAngle) {
+		this.bendingAngle = bendingAngle;
+	}
+
+	public Double getCurveLength() {
+		return curveLength;
+	}
+
+	public void setCurveLength(Double curveLength) {
+		this.curveLength = curveLength;
+	}
+
+	public Double getStraightPipeLength() {
+		return straightPipeLength;
+	}
+
+	public void setStraightPipeLength(Double straightPipeLength) {
+		this.straightPipeLength = straightPipeLength;
+	}
+
+	public Double getPipeLength() {
+		return pipeLength;
+	}
+
+	public void setPipeLength(Double pipeLength) {
+		this.pipeLength = pipeLength;
+	}
+
+	public Double getEllipticity() {
+		return ellipticity;
+	}
+
+	public void setEllipticity(Double ellipticity) {
+		this.ellipticity = ellipticity;
+	}
+
+	public Double getWallThicknessRedurate() {
+		return wallThicknessRedurate;
+	}
+
+	public void setWallThicknessRedurate(Double wallThicknessRedurate) {
+		this.wallThicknessRedurate = wallThicknessRedurate;
+	}
+
+	public Double getPipeDiameter() {
+		return pipeDiameter;
+	}
+
+	public void setPipeDiameter(Double pipeDiameter) {
+		this.pipeDiameter = pipeDiameter;
+	}
+
+	public Double getWallThickness() {
+		return wallThickness;
+	}
+
+	public void setWallThickness(Double wallThickness) {
+		this.wallThickness = wallThickness;
+	}
+
+	public Date getProduceDate() {
+		return produceDate;
+	}
+
+	public void setProduceDate(Date produceDate) {
+		this.produceDate = produceDate;
+	}
+
+	public String getConstructUnit() {
+		return constructUnit;
+	}
+
+	public void setConstructUnit(String constructUnit) {
+		this.constructUnit = constructUnit;
+	}
+
+	public String getSupervisionUnit() {
+		return supervisionUnit;
+	}
+
+	public void setSupervisionUnit(String supervisionUnit) {
+		this.supervisionUnit = supervisionUnit;
+	}
+
+	public String getSupervisionEngineer() {
+		return supervisionEngineer;
+	}
+
+	public void setSupervisionEngineer(String supervisionEngineer) {
+		this.supervisionEngineer = supervisionEngineer;
+	}
+
+	public String getCollectionPerson() {
+		return collectionPerson;
+	}
+
+	public void setCollectionPerson(String collectionPerson) {
+		this.collectionPerson = collectionPerson;
+	}
+
+	public Date getCollectionDate() {
+		return collectionDate;
+	}
+
+	public void setCollectionDate(Date collectionDate) {
+		this.collectionDate = collectionDate;
+	}
+
+	public Integer getIsUse() {
+		return isUse;
+	}
+
+	public void setIsUse(Integer isUse) {
+		this.isUse = isUse;
+	}
+
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+}
