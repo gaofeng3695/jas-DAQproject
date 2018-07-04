@@ -430,6 +430,7 @@ Vue.component('jas-table-for-list', {
 		'</div>',
 		'<div class="is-grown">',
 		'	<el-table @selection-change="handleSelectionChange"  v-loading="loading" height="100%" :data="tableData" border :header-cell-style="headStyle" style="width: 100%">',
+		'    <el-table-column type="selection" width="55" align="center" fixed></el-table-column>',
 		'		<el-table-column label="序号" type="index" align="center" width="50" fixed>',
 		'		</el-table-column>',
 		'		<el-table-column v-for="item,index in fields" :key="item.oid" :fixed="index=== 0?true:false" :label="item.name" :prop="item.field" align="center">',
@@ -811,7 +812,7 @@ Vue.component('jas-import-export-btns', {
 				rows: '10000', //【最大分页数，固定为100000】
 				page: '1', //【页码，固定为1】
 				keyWord: {
-					oid: this.oids
+					oids: this.oids
 				}
 			}, function (data) {
 				that._downloadExportFile(data);
@@ -862,7 +863,7 @@ Vue.component('jas-import-export-btns', {
 			var that = this;
 			that._requestFileId(templateOid, function (id) {
 				jasTools.ajax.downloadByIframe('post', jasTools.base.rootPath + "/attachment/download.do", {
-					oids: id
+					oid: id
 				});
 			});
 		},
