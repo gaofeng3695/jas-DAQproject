@@ -550,7 +550,6 @@
 			selectChange: function (item) { //根据配置文件 是否立即触发
 				var that = this;
 				if (item.childField && item.requestPath) {
-					console.log(item.childField)
 					that.setChildSelectOption(item.id, item.childField, item.requestPath, function () {
 						that.getUiType();
 					});
