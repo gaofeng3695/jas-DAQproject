@@ -39,7 +39,7 @@ public class ImplementScopeDao extends BaseJdbcDao{
 	 */
 	public boolean saveRef(List<List<Object>> dataList){
 		try {
-			String sql = "insert into daq_implement_scope_ref (oid,unit_oid,project_oid,pipeline_oid,scope_oid,scope_type,create_user_id,create_user_name,create_datetime,modify_user_id,modify_user_name,modify_datetime,active) values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			String sql = "insert into daq_implement_scope_ref (oid,unit_oid,project_oid,pipeline_oid,tenders_oid,scope_oid,scope_type,create_user_id,create_user_name,create_datetime,modify_user_id,modify_user_name,modify_datetime,active) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			this.jdbcTemplate.importExecuteBatch(sql, dataList);
 			return true;
 		} catch (Exception e) {

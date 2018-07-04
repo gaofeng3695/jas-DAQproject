@@ -14,6 +14,9 @@ public class ImplementScope extends CommonHibernateEntity{
 
 	/** 管线oid */
 	private String pipelineOid; 
+	
+	/** 标段id **/
+	private String tendersOid; 
 
 	/** 实体oid（即线路段oid或者站场oid等） */
 	private String scopeOid; 
@@ -59,6 +62,14 @@ public class ImplementScope extends CommonHibernateEntity{
 
 	public void setScopeType(String scopeType) {
 		this.scopeType = scopeType;
+	}
+
+	public String getTendersOid() {
+		return tendersOid;
+	}
+
+	public void setTendersOid(String tendersOid) {
+		this.tendersOid = tendersOid;
 	} 
 	
 }
