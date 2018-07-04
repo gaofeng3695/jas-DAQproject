@@ -1,18 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>施工数据采集</title>
-    <link rel="stylesheet" href="lib/jquery-easyui/themes/default/easyui.css">
-    <link rel="stylesheet" href="lib/jquery-easyui/themes/icon.css">
-    <script src="lib/jquery/jquery-1.6.min.js"></script>
-    <script src="lib/jquery-easyui/jquery.easyui.min.js"></script>
-    <script id="mapApi" src="mapjs/mapjs4ol.js"></script>
+    <script id="mapApi" src="./mapjs/mapjs4ol.js"></script>
     <script>
-        var jasMap = new JasMap();
+        var onCenterStakeLayerClicked = function (e) {
+            //业务逻辑
+        };
+        var jasMap = new JasMap({
+            onMapLoaded: function (e) {
+                //
+                this.showMapInfo();
+            },
+            onLayerAdded: function (e) {
+                var layerId = e.data.layerId;
+                if (layerId === "centerlinestake") {
+                    //添加单个图层的点击事件
+                    this.addLayerClickEventListener(layerId, onCenterStakeLayerClicked);
+                }
+            }
+        });
     </script>
 </head>
+
 <body>
-    <div id="jasMap" class="jasmap"></div>
+    <div id="jasMap" class="jasmap" style="height:80%;width:60%;"></div>
 </body>
+
 </html>

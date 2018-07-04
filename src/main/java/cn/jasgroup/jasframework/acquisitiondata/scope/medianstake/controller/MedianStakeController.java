@@ -51,7 +51,7 @@ public class MedianStakeController extends BaseController{
 		try {
 			List<UniqueResult> uniqueResultList = uniqueService.checkSaveUnique(medianStake);
 			if(uniqueResultList.size() > 0){
-				ListResult<UniqueResult> listResult = new ListResult<UniqueResult>(-1,"","");
+				ListResult<UniqueResult> listResult = new ListResult<UniqueResult>(-1,"400",uniqueResultList.get(0).getName());
 				listResult.setRows(uniqueResultList);
 				return listResult;
 			}
@@ -80,7 +80,7 @@ public class MedianStakeController extends BaseController{
 		try {
 			List<UniqueResult> uniqueResultList = uniqueService.checkUpdateUnique(medianStake);
 			if(uniqueResultList.size() > 0){
-				ListResult<UniqueResult> listResult = new ListResult<UniqueResult>(-1,"","");
+				ListResult<UniqueResult> listResult = new ListResult<UniqueResult>(-1,"400",uniqueResultList.get(0).getName());
 				listResult.setRows(uniqueResultList);
 				return listResult;
 			}

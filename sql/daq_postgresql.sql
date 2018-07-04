@@ -8,7 +8,7 @@ CREATE TABLE daq_project (
 	project_code VARCHAR (50) NOT NULL,
 	pipe_network_type_code VARCHAR (50),
 	medium_type_code VARCHAR (50),
-	construct_oid VARCHAR (36),
+	construct VARCHAR (50),
 	remarks VARCHAR (200),
 	create_user_id VARCHAR (36),
 	create_user_name VARCHAR (50),
@@ -24,7 +24,7 @@ comment on column daq_project.project_name is '项目名称';
 comment on column daq_project.project_code is '项目编号';
 comment on column daq_project.pipe_network_type_code is '管网类型编码';
 comment on column daq_project.medium_type_code is '介质类型编号';
-comment on column daq_project.construct_oid is '建设单位编号';
+comment on column daq_project.construct is '建设单位编号';
 comment on column daq_project.remarks is '备注';
 
 create index INDEX_DAQ_PROJECT_PROJECT_NAME_5 ON daq_project ( project_name );
@@ -312,6 +312,7 @@ comment on column daq_median_stake.remarks is '备注';
 comment on column daq_median_stake.geo_state is '空间数据状态';
 create index INDEX_DAQ_MEDIAN_STAKE_MEDIAN_STAKE_CODE_5 ON daq_median_stake ( median_stake_code );
 
+select dropgeometrycolumn('public', 'daq_median_stake', 'geom');
 select AddGeometryColumn('public', 'daq_median_stake', 'geom', 4490, 'POINT', 4);
 CREATE INDEX daq_median_stake_geom_idx ON public.daq_median_stake USING gist (geom);
 

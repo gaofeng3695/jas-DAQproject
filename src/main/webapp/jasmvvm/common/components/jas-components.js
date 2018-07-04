@@ -374,6 +374,7 @@ Vue.component('jas-search-for-list', {
 
 Vue.component('jas-table-for-list', {
 	props: {
+		privilegeCode: {},
 		form: {
 			type: Object,
 			required: true
@@ -391,6 +392,10 @@ Vue.component('jas-table-for-list', {
 			type: String,
 			required: true
 		},
+		deletePath: {
+			type: String,
+			required: true
+		},
 		detailUrl: {},
 		addUrl: {},
 		editUrl: {},
@@ -401,6 +406,7 @@ Vue.component('jas-table-for-list', {
 			headStyle: {
 				'background-color': '#f5f7fa ',
 			},
+			privilege: [], //权限数组 bt_add,bt_update,bt_delete,bt_select,bt_export,bt_import,bt_position
 			tableData: [],
 			currentPage: 1,
 			loading: true,
@@ -414,7 +420,7 @@ Vue.component('jas-table-for-list', {
 	template: [
 		'<div  class="jas-flex-box is-vertical is-grown">',
 		'<div style="padding: 15px 0;">',
-		'	<el-button size="small" plain type="primary" icon="fa fa-plus" @click="add">增加</el-button>',
+		'	<el-button size="small" plain type="primary" icon="fa fa-plus" v-if="isHasPrivilege(' + "'bt_add'" + ')"  @click="add">增加</el-button>',
 		'	<el-button class="fr" size="small" icon="el-icon-refresh" @click="refresh"></el-button>',
 		'</div>',
 		'<div class="is-grown">',
@@ -425,9 +431,10 @@ Vue.component('jas-table-for-list', {
 		'		</el-table-column>',
 		'		<el-table-column label="操作" align="center" width="180" fixed="right">',
 		'			<template slot-scope="scope">',
-		'				<el-button @click="preview(scope.row)" type="text" size="small">查看</el-button>',
-		'				<el-button @click="edit(scope.row)" type="text" size="small">编辑</el-button>',
-		'				<el-button @click="deleteItem(scope.row)" type="text" size="small">删除</el-button>',
+		'				<el-button @click="locate(scope.row)" type="text" size="small">定位</el-button>',
+		'				<el-button @click="preview(scope.row)" v-if="isHasPrivilege(' + "'bt_select'" + ')" type="text" size="small">查看</el-button>',
+		'				<el-button @click="edit(scope.row)" v-if="isHasPrivilege(' + "'bt_update'" + ')"  type="text" size="small">编辑</el-button>',
+		'				<el-button @click="deleteItem(scope.row)" v-if="isHasPrivilege(' + "'bt_delete'" + ')"   type="text" size="small">删除</el-button>',
 		'			</template>',
 		'		</el-table-column>',
 		'	</el-table>',
@@ -439,10 +446,45 @@ Vue.component('jas-table-for-list', {
 		'</div>',
 		'</div>',
 	].join(''),
+	watch: {
+		privilegeCode: function () {
+			if (this.privilegeCode) {
+				this._requestPrivilege(this.privilegeCode);
+			} else {
+				this.search();
+			}
+		}
+	},
 	mounted: function () {
-		this.search();
+		if (this.privilegeCode) {
+			this._requestPrivilege(this.privilegeCode);
+		} else {
+			this.search();
+		}
 	},
 	methods: {
+		locate: function (item) {
+			this.$emit('locate', item)
+		},
+		isHasPrivilege: function (sName) {
+			if (this.privilegeCode && this.privilege.indexOf(sName) === -1) {
+				return false;
+			}
+			return true;
+		},
+		_requestPrivilege: function (privilegeCode) {
+			var that = this;
+			var url = jasTools.base.rootPath + "/jasframework/privilege/privilege/getFunctionConfig.do";
+			jasTools.ajax.get(url, {
+				privilegeCode: privilegeCode, //菜单权限编号
+				appId: "402894a152681ba30152681e8b320003" //应用id，值默认
+			}, function (data) {
+				that.privilege = data.rows.map(function (item) {
+					return item.functionType;
+				});
+				that.search();
+			});
+		},
 		search: function () {
 			this._requestTable();
 		},
@@ -515,7 +557,7 @@ Vue.component('jas-table-for-list', {
 		},
 		_deleteItem: function (oid) {
 			var that = this;
-			var url = jasTools.base.rootPath + "/daq/medianStake/delete.do";
+			var url = jasTools.base.rootPath + this.deletePath;
 			jasTools.ajax.post(url, {
 				oid: oid
 			}, function (data) {
@@ -618,7 +660,7 @@ Vue.component('jas-dialog-wrapper', {
 	},
 	template: [
 		'<div class="jas-flex-box is-vertical">',
-		'  <div class="is-grown">',
+		'  <div class="is-grown" style="overflow: auto;">',
 		'    <slot></slot>',
 		'  </div>',
 		'  <div style="text-align: center;padding-top:10px; ">',
@@ -626,4 +668,76 @@ Vue.component('jas-dialog-wrapper', {
 		'  </div>',
 		'</div>'
 	].join(''),
+});
+
+Vue.component('jas-two-panel-resizer', {
+	props: {
+		layout: { // horizontal
+			type: String,
+		},
+		length: {
+			type: String,
+		}
+	},
+	data: function () {
+		return {
+			panelMoving: false,
+			panelShowed: true,
+			mainPanelStyle: {},
+			closeClass:'',
+			openClass:'',
+		}
+	},
+	computed: {
+		closePanelStyle: function () {
+			if (this.layout === 'horizontal') {
+				return {
+					height: this.panelShowed ? this.length : '0%',
+					minHeight: '0%',
+					maxHeight: '100%',
+				}
+			} else {
+				return {
+					width: this.panelShowed ? this.length : '0%',
+					minWidth: '0%',
+					maxWidth: '100%',
+				}
+			}
+		}
+	},
+	template: [
+		'<multipane @paneresizestart="panelMoving = true" @paneresizestop="panelMoving = false" class="foo" :layout="layout">',
+		'	<div v-loading="panelMoving" class="resizepanel" :style="closePanelStyle" element-loading-spinner="11" element-loading-background="rgba(0, 0, 0, 0)">',
+		'		<slot name="closePanel"></slot>',
+		'	</div>',
+		'	<multipane-resizer>',
+		'		<div class="resizertap" @click="panelShowed=!panelShowed">',
+		'			<i v-show="panelShowed" :class="closeClass"></i>',
+		'			<i v-show="!panelShowed" :class="openClass"></i>',
+		'		</div>',
+		'	</multipane-resizer>',
+		'	<div v-loading="panelMoving" :style="[{ flexGrow: 1},mainPanelStyle]" element-loading-spinner="11" element-loading-background="rgba(0, 0, 0, 0)">',
+		'		<slot name="mainPanel"></slot>',
+		'	</div>',
+		'</multipane>'
+	].join(''),
+	methods: {
+
+
+	},
+	mounted: function () {
+		if (this.layout === 'horizontal') {
+			this.mainPanelStyle = {
+				height: 0
+			};
+			this.closeClass='fa fa-angle-up';
+			this.openClass='fa fa-angle-down';
+		} else {
+			this.mainPanelStyle = {
+				width: 0
+			};
+			this.closeClass='fa fa-angle-left';
+			this.openClass='fa fa-angle-right';
+		}
+	}
 });
