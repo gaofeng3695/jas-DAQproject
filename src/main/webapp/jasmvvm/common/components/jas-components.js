@@ -399,6 +399,8 @@ Vue.component('jas-table-for-list', {
 		detailUrl: {},
 		addUrl: {},
 		editUrl: {},
+		templateCode: {},
+		className: {},
 	},
 
 	data: function () {
@@ -412,6 +414,7 @@ Vue.component('jas-table-for-list', {
 			loading: true,
 			total: 0,
 			pageSize: 10,
+			oids: [],
 		}
 	},
 	computed: {
@@ -421,10 +424,12 @@ Vue.component('jas-table-for-list', {
 		'<div  class="jas-flex-box is-vertical is-grown">',
 		'<div style="padding: 15px 0;">',
 		'	<el-button size="small" plain type="primary" icon="fa fa-plus" v-if="isHasPrivilege(' + "'bt_add'" + ')"  @click="add">增加</el-button>',
+		'<jas-import-export-btns :isImport="isHasPrivilege(' + "'bt_import'" + ')" :isExport="isHasPrivilege(' + "'bt_export'" + ')" ',
+		'		:form="form" :oids="oids" :template-code="templateCode" :class-name="className"></jas-import-export-btns>',
 		'	<el-button class="fr" size="small" icon="el-icon-refresh" @click="refresh"></el-button>',
 		'</div>',
 		'<div class="is-grown">',
-		'	<el-table v-loading="loading" height="100%" :data="tableData" border :header-cell-style="headStyle" style="width: 100%">',
+		'	<el-table @selection-change="handleSelectionChange"  v-loading="loading" height="100%" :data="tableData" border :header-cell-style="headStyle" style="width: 100%">',
 		'		<el-table-column label="序号" type="index" align="center" width="50" fixed>',
 		'		</el-table-column>',
 		'		<el-table-column v-for="item,index in fields" :key="item.oid" :fixed="index=== 0?true:false" :label="item.name" :prop="item.field" align="center">',
@@ -463,6 +468,11 @@ Vue.component('jas-table-for-list', {
 		}
 	},
 	methods: {
+		handleSelectionChange: function (val) {
+			this.oids = val.map(function (item) {
+				return item.oid;
+			});
+		},
 		locate: function (item) {
 			this.$emit('locate', item)
 		},
@@ -684,8 +694,8 @@ Vue.component('jas-two-panel-resizer', {
 			panelMoving: false,
 			panelShowed: true,
 			mainPanelStyle: {},
-			closeClass:'',
-			openClass:'',
+			closeClass: '',
+			openClass: '',
 		}
 	},
 	computed: {
@@ -730,14 +740,147 @@ Vue.component('jas-two-panel-resizer', {
 			this.mainPanelStyle = {
 				height: 0
 			};
-			this.closeClass='fa fa-angle-up';
-			this.openClass='fa fa-angle-down';
+			this.closeClass = 'fa fa-angle-up';
+			this.openClass = 'fa fa-angle-down';
 		} else {
 			this.mainPanelStyle = {
 				width: 0
 			};
-			this.closeClass='fa fa-angle-left';
-			this.openClass='fa fa-angle-right';
+			this.closeClass = 'fa fa-angle-left';
+			this.openClass = 'fa fa-angle-right';
 		}
+	}
+});
+
+
+Vue.component('jas-import-export-btns', {
+	props: {
+		templateCode: { // horizontal
+			type: String,
+		},
+		className: {
+			type: String,
+		},
+		oids: {
+			type: Array,
+		},
+		form: {
+			type: Object,
+		},
+		isImport: {
+			type: Boolean,
+			default: true,
+		},
+		isExport: {
+			type: Boolean,
+			default: true,
+		},
+	},
+	data: function () {
+		return {}
+	},
+	template: [
+		'<span style="margin-left: 10px;" v-show="templateCode">',
+		'<el-button size="small" v-if="isImport" type="primary" plain="plain" icon="fa fa-mail-forward" @click="bt_import">导入</el-button>',
+		'<el-button size="small" :disabled="oids.length==0" v-if="isExport" type="primary" plain="plain" icon="fa fa-mail-reply" @click="bt_export">导出已选</el-button>',
+		'<el-button size="small" v-if="isExport" type="primary" plain="plain" icon="fa fa-mail-reply-all" @click="bt_export_all">导出全部</el-button>',
+		'<el-button size="small" v-if="isImport" type="primary" plain="plain" icon="fa fa-download" @click="bt_download">下载模板</el-button>',
+		'</span>',
+	].join(''),
+	methods: {
+		bt_import: function () { // 导入
+			var that = this;
+			var src = './pages/template/dialogs/upload.html';
+			top.jasTools.dialog.show({
+				title: '导入',
+				width: '600px',
+				height: '600px',
+				src: src,
+				cbForClose: function () {
+
+				}
+			});
+		},
+		bt_export: function (obj) {
+			var that = this;
+			var url = jasTools.base.rootPath + '/importExcelController/exportExcel.do';
+			jasTools.ajax.post(url, {
+				templateCode: this.templateCode,
+				modelId: 'B', //【导出策略，现固定为B】
+				className: this.className, //【后台query类全路径】
+				rows: '10000', //【最大分页数，固定为100000】
+				page: '1', //【页码，固定为1】
+				keyWord: {
+					oid: this.oids
+				}
+			}, function (data) {
+				that._downloadExportFile(data);
+			});
+		},
+		bt_export_all: function (obj) { // 导出全部
+			var that = this;
+			var url = jasTools.base.rootPath + '/importExcelController/exportExcel.do';
+			jasTools.ajax.post(url, {
+				templateCode: this.templateCode,
+				modelId: 'B', //【导出策略，现固定为B】
+				className: this.className, //【后台query类全路径】
+				rows: '10000', //【最大分页数，固定为100000】
+				page: '1', //【页码，固定为1】
+				keyWord: this.form
+			}, function (data) {
+				// return
+				that._downloadExportFile(data.data);
+			});
+		},
+		_downloadExportFile: function (id) {
+			var that = this;
+			var url = jasTools.base.rootPath + "/importExcelController/downLoadExel.do";
+			jasTools.ajax.downloadByIframe('post', url, {
+				fileId: id
+			});
+		},
+		bt_download: function () { // 下载模板
+			var that = this;
+			this._requestTemplateOid(this.templateCode, function (templateOid) {
+				that._requestTemplateFileOid(templateOid);
+			});
+		},
+		_requestTemplateOid: function (templateCode, cb) {
+			var that = this;
+			var url = jasTools.base.rootPath + "/jasframework/excelTemplate/getPage.do";
+			jasTools.ajax.post(url, {
+				excelTemplateName: '',
+				excelTemplateCode: templateCode,
+				pageNo: 1,
+				pageSize: 1,
+			}, function (data) {
+				that.templateOid = data.rows[0].oid;
+				cb && cb(that.templateOid);
+			});
+		},
+		_requestTemplateFileOid: function (templateOid) {
+			var that = this;
+			that._requestFileId(templateOid, function (id) {
+				jasTools.ajax.downloadByIframe('post', jasTools.base.rootPath + "/attachment/download.do", {
+					oids: id
+				});
+			});
+		},
+		_requestFileId: function (oid, cb) {
+			var that = this;
+			var url = jasTools.base.rootPath + "/attachment/getInfo.do";
+			jasTools.ajax.get(url, {
+				businessType: 'excelTemplate',
+				businessId: oid
+			}, function (data) {
+				if (data.rows[0].oid) {
+					cb && cb(data.rows[0].oid)
+				}
+			});
+		},
+
+	},
+	mounted: function () {
+
 	}
 });

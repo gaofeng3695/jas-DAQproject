@@ -82,7 +82,7 @@
             </el-upload>
           </div>
           <div class="dialog-footer" style="text-align: center">
-            <el-button size="small">取 消</el-button>
+            <el-button size="small" @click="closeDialog">取 消</el-button>
             <el-button size="small" @click="verifyExcel" type="primary">验证</el-button>
           </div>
         </div>
@@ -122,8 +122,8 @@
 
           </div>
           <div class="dialog-footer" style="text-align: center">
-            <el-button size="small" @click="returnUpload">上一步</el-button>
-            <el-button size="small" :disabled="varifyStatus!=='success'" @click="requestSave(':true,')" type="primary">初始导入</el-button>
+            <el-button size="small" @click="returnUpload">重新导入</el-button>
+            <el-button size="small" :disabled="varifyStatus!=='success'" @click="requestSave('initial')" type="primary">初始导入</el-button>
             <el-button size="small" :disabled="varifyStatus!=='success'" @click="requestSave('update')" type="primary">更新导入</el-button>
           </div>
         </div>
@@ -142,15 +142,8 @@
                   <div>未成功更新数据 {{uploadStatus.updateFailureCount}} 条</div>
                 </div>
               </div>
-
-            </div>
-            <div v-show="uploadStatus.errorCode==1">
-
-              <div class="errtitle">
-                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
-                <span>导入失败！</span>
-              </div>
-              <div class="txt-c">
+              <div v-show="uploadStatus.addErrorMessage || uploadStatus.updateErrorMessage">
+                <div>错误信息：</div>
                 <div v-show="uploadStatus.isinitial">
                   {{uploadStatus.addErrorMessage}}
                 </div>
@@ -159,13 +152,25 @@
                 </div>
               </div>
             </div>
+            <div v-show="uploadStatus.errorCode==1">
+
+              <div class="errtitle">
+                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                <span>导入失败！</span>
+              </div>
+              <div class="txt-c">
+                {{uploadStatus.errorMess}}
+              </div>
+            </div>
           </div>
           <div class="dialog-footer" style="text-align: center">
+            <el-button size="small" @click="returnUpload">重新导入</el-button>
             <el-button size="small" @click="" type="primary">完成</el-button>
           </div>
         </div>
       </div>
     </div>
+  </div>
 </body>
 <!-- import Vue before Element -->
 <script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
@@ -206,6 +211,9 @@
 
     },
     methods: {
+      closeDialog : function(){
+        top.jasTools.dialog.close();
+      },
       onExceed: function () {
         top.Vue.prototype.$message({
           type: 'info',
@@ -214,7 +222,7 @@
       },
       returnUpload: function () {
         this.$refs.upload.clearFiles();
-        this.step--;
+        this.step = 0;
       },
       onUploadVerify: function (file) {
         var that = this;
@@ -262,11 +270,12 @@
         var that = this;
         that.uploadStatus.isInitial = type === 'initial' ? true : false;
         var url = jasTools.base.rootPath + '/importExcelController/saveData.do';
-        jasTools.ajax.post(url, {
+        jasTools.ajax.get(url, {
           importType: type
         }, function (data) {
           that.step++;
           that.uploadStatus.errorCode = data.errorCode;
+          that.uploadStatus.errorMess = data.errorMess;
           that.uploadStatus.addSuccessCount = data.addSuccessCount;
           that.uploadStatus.addFailureCount = data.addFailureCount;
           that.uploadStatus.addErrorMessage = data.addErrorMessage;

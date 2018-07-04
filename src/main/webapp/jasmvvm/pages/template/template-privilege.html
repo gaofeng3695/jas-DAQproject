@@ -125,14 +125,19 @@
 					<el-button :size="item.size" v-if="privilege.join('').indexOf(item.id)>-1" :type="item.type" :plain="item.plain" :icon="item.icon"
 					  @click="item.functionName">{{item.title}}</el-button>
 				</template>
+
+
+				<jas-import-export-btns :isImport="privilege.join('').indexOf('bt_import')>-1" :isExport="privilege.join('').indexOf('bt_export')>-1"
+				  :form="searchTable" :oids="oids" :template-code="templateCode" :class-name="className"></jas-import-export-btns>
+
 				<div style="display:inline-block;float:right">
 					<el-button size="small" icon="el-icon-refresh" @click="refresh"></el-button>
 					<!--<el-button size="small" type="primary" plain="plain" @click="refresh">刷新</el-button>-->
 				</div>
 			</el-row>
 			<!--表格区域-->
-			<el-table class="is-grown" v-loading="loading" :data="tableData" height='100' style="width: 100%;" :header-cell-style="headStyle"
-			  border stripe>
+			<el-table class="is-grown" v-loading="loading" @selection-change="handleSelectionChange" :data="tableData" height='100' style="width: 100%;"
+			  :header-cell-style="headStyle" border stripe>
 				<el-table-column type="selection" width="55" align="center" fixed></el-table-column>
 				<el-table-column type="index" label="序号" width="50" align="center" fixed></el-table-column>
 				<el-table-column v-for="item,index in tableColumn" :fixed="index===0?true:false" :prop="item.id" :label="item.name" :key="item.id"
@@ -171,6 +176,8 @@
 				headStyle: {
 					'background-color': '#f5f7fa ',
 				},
+				templateCode: "",
+				className: '',
 				privilege: [], //权限数组 bt_add,bt_update,bt_delete,bt_select,bt_export,bt_import,bt_position
 				btnxs: 12,
 				btnlg: 6,
@@ -181,6 +188,7 @@
 				},
 				searchData: [],
 				btns: [],
+				oids: [],
 				tableData: [], //表格数据
 				tableColumn: [], //表示列
 				tableColumns: [], //排序过渡列
@@ -202,15 +210,24 @@
 		mounted: function () {
 			var param = window.jasTools.base.getParamsInUrl(location.href);
 			this.menuCode = param.menuCode;
+
+			this.templateCode = param.templateCode || "stake-2";
+			this.className = param.className ||
+				'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';
 			//进行后台数据的请求
 			if (param.privilegeCode) {
 				this._requestPrivilege(param.privilegeCode); //请求权限
 			} else {
-				this.privilege = ['bt_add','bt_update','bt_delete','bt_select','bt_export','bt_import','bt_position'];
+				this.privilege = ['bt_add', 'bt_update', 'bt_delete', 'bt_select', 'bt_export', 'bt_import', 'bt_position'];
 				this.requestConfig(); //请求模板的配置文件
 			}
 		},
 		methods: { //方法的写法
+			handleSelectionChange: function (val) {
+				this.oids = val.map(function (item) {
+					return item.oid;
+				});
+			},
 			_requestPrivilege: function (privilegeCode) {
 				var that = this;
 				var url = jasTools.base.rootPath + "/jasframework/privilege/privilege/getFunctionConfig.do";
@@ -425,28 +442,8 @@
 					}
 				});
 			},
-			bt_import: function () { // 导入
-				var that = this;
-				var src = './pages/template/dialogs/upload.html?menuCode=' + that.menuCode;
 
-				top.jasTools.dialog.show({
-					title: '导入',
-					width: '600px',
-					height: '600px',
-					src: src,
-					cbForClose: function () {
 
-					}
-				});
-			},
-			bt_export: function () {
-				var that = this;
-				alert('daochu')
-			},
-			bt_expor: function () { // 导出全部
-				var that = this;
-				alert('导出全部')
-			},
 			clickFunction: function (row, name) {
 				definedFunction[name](row);
 			},
