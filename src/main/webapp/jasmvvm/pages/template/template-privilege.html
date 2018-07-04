@@ -7,7 +7,7 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Document</title>
 	<link rel="stylesheet" href="./../../lib/font-awesome-4.7.0/css/font-awesome.css">
-	<link rel="stylesheet" href="./../../lib/element-ui/v2.2.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
 	<link rel="stylesheet" href="./../../src/css/main.css">
 	<style>
 		.el-form-item {
@@ -62,14 +62,14 @@
 								<el-form-item :label="item.name">
 									<el-input v-if="item.type=='UT_01'" :placeholder="item.placeholder" v-model="searchTable[item.id]" size="small" clearable>
 									</el-input>
-									<el-select v-model="searchTable[item.id]" v-if="isSelect(item)" style="width:100%" size="small" @change="selectChange()"
+									<el-select v-model="searchTable[item.id]" v-if="isSelect(item)" style="width:100%" size="small" @change="selectChange(item)"
 									  clearable>
 										<template v-for="option in item.options">
 											<el-option :key="option.value" :label="option.value" :value="option.key">
 											</el-option>
 										</template>
 									</el-select>
-									<el-select v-model="searchTable[item.id]" multiple v-if="isMultiSelect(item)" style="width:100%" size="small" @change="selectChange()"
+									<el-select v-model="searchTable[item.id]" multiple v-if="isMultiSelect(item)" style="width:100%" size="small" @change="selectChange(item)"
 									  clearable>
 										<template v-for="option in item.options">
 											<el-option :key="option.value" :label="option.value" :value="option.key">
@@ -133,13 +133,15 @@
 			<!--表格区域-->
 			<el-table class="is-grown" v-loading="loading" :data="tableData" height='100' style="width: 100%;" :header-cell-style="headStyle"
 			  border stripe>
-				<el-table-column type="selection" width="55" align="center"></el-table-column>
-				<el-table-column type="index" label="序号" width="50" align="center"></el-table-column>
-				<el-table-column v-for="item in tableColumn" :prop="item.id" :label="item.name" align="center">
+				<el-table-column type="selection" width="55" align="center" fixed></el-table-column>
+				<el-table-column type="index" label="序号" width="50" align="center" fixed></el-table-column>
+				<el-table-column v-for="item,index in tableColumn" :fixed="index===0?true:false" :prop="item.id" :label="item.name" :key="item.id"
+				  align="center">
 				</el-table-column>
 				<el-table-column fixed="right" label="操作" :width="config.table.tableWidth" align="center">
 					<template slot-scope="scope">
 						<el-button @click="locateRow(scope.row)" v-if="privilege.indexOf('bt_position')>-1" type="text" size="small">定位</el-button>
+						<el-button @click="scopeRow(scope.row)" v-if="privilege.indexOf('bt_tenders_scope')>-1" type="text" size="small">范围</el-button>
 						<el-button @click="viewRow(scope.row)" v-if="privilege.indexOf('bt_select')>-1" type="text" size="small">查看</el-button>
 						<el-button @click="editRow(scope.row)" v-if="privilege.indexOf('bt_update')>-1" type="text" size="small">编辑</el-button>
 						<el-button @click="delRow(scope.row)" v-if="privilege.indexOf('bt_delete')>-1" type="text" size="small">删除</el-button>
@@ -156,7 +158,7 @@
 </body>
 <script src="./../../lib/jquery/jquery-1.12.4.min.js"></script>
 <script src="./../../lib/vue/vue.js"></script>
-<script src="./../../lib/element-ui/v2.2.1/index.min.js"></script>
+<script src="./../../lib/element-ui/v2.4.1/index.min.js"></script>
 <script src="./../../common/components/jas-components.js "></script>
 <script src="./../../common/js/jas-tools.js"></script>
 <script src="js/userDefinedFunction.js"></script>
@@ -201,7 +203,12 @@
 			var param = window.jasTools.base.getParamsInUrl(location.href);
 			this.menuCode = param.menuCode;
 			//进行后台数据的请求
-			this._requestPrivilege(param.privilegeCode); //请求权限
+			if (param.privilegeCode) {
+				this._requestPrivilege(param.privilegeCode); //请求权限
+			} else {
+				this.privilege = ['bt_add','bt_update','bt_delete','bt_select','bt_export','bt_import','bt_position'];
+				this.requestConfig(); //请求模板的配置文件
+			}
 		},
 		methods: { //方法的写法
 			_requestPrivilege: function (privilegeCode) {
@@ -240,41 +247,27 @@
 									that.btns.push(item);
 								}
 							});
-							that.requestByFunctionCode(); //根据选中的是那个功能的id 进行页面的绘制
+							that.requestFieldsConfig(); //根据选中的是那个功能的id 进行页面的绘制
 						}
 						that.searchform.rows = data.pageAttr.pagesize;
 					}
 				});
 			},
-			requestByFunctionCode: function () {
+			requestFieldsConfig: function () {
 				var that = this;
-				$.ajax({
-					type: "get",
-					url: jasTools.base.rootPath + "/functionConfiguration/getDetailByCode.do?token=" + localStorage.getItem(
-						"token"),
-					dataType: "json",
-					data: {
-						functionCode: that.menuCode
-					},
-					async: true,
-					success: function (data) {
-						if (data.status == 1) {
-							if (data.data.functionFieldsBoList.length == 0) {
-								window.top.Vue.prototype.$message({
-									message: '请给此功能配置相应的字段',
-									type: 'warning'
-								});
-								that.loading = false;
-								return;
-							}
-							that.getSearchFieldAndList(data.data);
-						} else {
-							window.top.Vue.prototype.$message({
-								message: '服务异常，请稍候尝试',
-								type: 'error'
-							});
-						}
+				var url = jasTools.base.rootPath + "/functionConfiguration/getDetailByCode.do"
+				jasTools.ajax.get(url, {
+					functionCode: that.menuCode
+				}, function (data) {
+					if (data.data.functionFieldsBoList.length == 0) {
+						window.top.Vue.prototype.$message({
+							message: '请给此功能配置相应的字段',
+							type: 'warning'
+						});
+						that.loading = false;
+						return;
 					}
+					that.getSearchFieldAndList(data.data);
 				});
 			},
 			getSearchFieldAndList: function (data) {
@@ -292,7 +285,6 @@
 						});
 					}
 					if (item.ifQuery == "1") {
-						// console.log(item.uiType);
 						that.searchData.push({
 							id: item.fieldName,
 							name: item.fieldNameCn,
@@ -300,6 +292,8 @@
 							placeholder: item.plplaceholder,
 							options: options,
 							queryIndex: item.queryIndex,
+							childField: item.childField,
+							requestPath: item.requestPath,
 						});
 						that.searchUi.push({
 							id: item.fieldName,
@@ -460,6 +454,16 @@
 				var that = this;
 				alert('定位');
 			},
+			scopeRow: function (row) {
+				var that = this;
+				var src = './pages/template/dialogs/tenders-scope.html';
+				top.jasTools.dialog.show({
+					title: '范围选择',
+					width: that.config.view.width,
+					height: that.config.view.height,
+					src: jasTools.base.setParamsToUrl(src, row),
+				});
+			},
 			viewRow: function (row) {
 				var that = this;
 				var src = './pages/template/dialogs/viewTemplate.html?menuCode=' + that.menuCode;
@@ -543,10 +547,40 @@
 				this.searchform.page = val;
 				this.requestTableList();
 			},
-			selectChange: function () { //根据配置文件 是否立即触发
+			selectChange: function (item) { //根据配置文件 是否立即触发
 				var that = this;
-				if (that.config.search.selectTigger) {
+				if (item.childField && item.requestPath) {
+					console.log(item.childField)
+					that.setChildSelectOption(item.id, item.childField, item.requestPath, function () {
+						that.getUiType();
+					});
+				} else {
 					that.getUiType();
+				}
+			},
+			setChildSelectOption: function (fatherField, childField, requestPath, fn) {
+				var that = this;
+				var setOptionsAndValue = function (options) {
+					that.searchData.forEach(function (item) {
+						if (childField.indexOf(item.id) !== -1) { // 子集字段
+							item.options = options || [];
+							that.searchTable[item.id] = '';
+						}
+					});
+					fn && fn();
+				};
+				if (that.searchTable[fatherField]) { //进行子级的查找 后台请求
+					var key = jasTools.base.switchToCamelCase(fatherField);
+					var obj = {
+						"rows": 100,
+						"page": 1,
+					};
+					obj[key] = that.searchTable[fatherField];
+					jasTools.ajax.post(jasTools.base.rootPath + "/" + requestPath, obj, function (data) {
+						setOptionsAndValue(data.rows)
+					});
+				} else {
+					setOptionsAndValue();
 				}
 			},
 			calculate: function () {

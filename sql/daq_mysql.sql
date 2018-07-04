@@ -8,7 +8,8 @@ CREATE TABLE daq_project (
 	project_name VARCHAR (50) NOT NULL COMMENT '项目名称',
 	project_code VARCHAR (50) NOT NULL COMMENT '项目编号',
 	medium_type_code VARCHAR (50) COMMENT '介质类型编号',
-	construct_oid VARCHAR (36) COMMENT '建设单位编号',
+	pipe_network_type_code VARCHAR (50) COMMENT '管网类型编号',
+	construct VARCHAR (50) COMMENT '建设单位编号',
 	remarks VARCHAR (200) COMMENT '备注',
 	create_user_id VARCHAR (36),
 	create_user_name VARCHAR (50),
@@ -196,6 +197,7 @@ CREATE TABLE daq_median_stake (
 	pointy NUMERIC (17, 9) COMMENT 'Y坐标',
 	pointz NUMERIC (7, 3) COMMENT '高程',
 	remarks VARCHAR (200) COMMENT '备注',
+	geo_state VARCHAR (10) COMMENT '空间数据状态',
 	create_user_id VARCHAR (36),
 	create_user_name VARCHAR (50),
 	create_datetime datetime,
@@ -206,5 +208,41 @@ CREATE TABLE daq_median_stake (
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = '中线桩表';
 create index INDEX_DAQ_MEDIAN_STAKE_MEDIAN_STAKE_CODE_5 ON daq_median_stake ( median_stake_code );
 
+CREATE TABLE daq_tenders_scope_ref (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY COMMENT '主键',
+	pipeline_oid VARCHAR (36) COMMENT '管线oid',
+	tenders_oid VARCHAR (36) COMMENT '标段oid',
+	scope_oid VARCHAR (36) COMMENT '实体oid（即线路段oid或者站场oid等）',
+	scope_type VARCHAR (10) COMMENT '实体类型（1：线路段，2：创跨越，3：站场/阀室，4：伴行道路，5：外供电线路）',
+	create_user_id VARCHAR (36) COMMENT '创建人id',
+	create_user_name VARCHAR (50) COMMENT '创建人名称',
+	create_datetime datetime COMMENT '创建时间',
+	modify_user_id VARCHAR (36) COMMENT '修改人id',
+	modify_user_name VARCHAR (50) COMMENT '修改人名称',
+	modify_datetime datetime COMMENT '修改时间',
+	active SMALLINT NOT NULL COMMENT '有效标志'
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = '标段范围关联表';
+create index INDEX_DAQ_TENDERS_SCOPE_REF_TENDERS_OID_5 ON daq_tenders_scope_ref ( tenders_oid );
+create index INDEX_DAQ_TENDERS_SCOPE_REF_SCOPE_OID_6 ON daq_tenders_scope_ref ( scope_oid );
 
 /**********范围管理数据表end***************/
+/**********权限管理数据表begin***************/
+CREATE TABLE daq_implement_scope_ref (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY COMMENT '主键',
+	unit_oid VARCHAR (36) COMMENT '部门oid',
+	project_oid VARCHAR (36) COMMENT '项目oid',
+	pipeline_oid VARCHAR (36) COMMENT '管线oid',
+	scope_oid VARCHAR (36) COMMENT '实体oid（即线路段oid或者站场oid等）',
+	scope_type VARCHAR (10) COMMENT '实体类型（1：线路段，2：创跨越，3：站场/阀室，4：伴行道路，5：外供电线路）',
+	create_user_id VARCHAR (36) COMMENT '创建人id',
+	create_user_name VARCHAR (50) COMMENT '创建人名称',
+	create_datetime datetime COMMENT '创建时间',
+	modify_user_id VARCHAR (36) COMMENT '修改人id',
+	modify_user_name VARCHAR (50) COMMENT '修改人名称',
+	modify_datetime datetime COMMENT '修改时间',
+	active SMALLINT COMMENT '有效标志'
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = '实施范围关联表';
+create index INDEX_DAQ_IMPLEMENT_SCOPE_REF_UNIT_OID_5 ON daq_implement_scope_ref ( unit_oid );
+create index INDEX_DAQ_IMPLEMENT_SCOPE_REF_PROJECT_OID_6 ON daq_implement_scope_ref ( project_oid );
+
+/**********权限管理数据表end***************/

@@ -4,6 +4,9 @@ var vm = new Vue({
   el: '#app',
   data: function () {
     return {
+      uniqueFileds: [],
+      uniqueFieldOption: [],
+      linkedFieldOption: [],
       mirrorConfig: {
         mode: 'text/x-sql',
         lineWrapping: true,
@@ -98,7 +101,7 @@ var vm = new Vue({
   },
   mounted: function () {
     var that = this;
-
+    // this.getUniqueDetail('F000024');
   },
   methods: {
     isUi: function (type) {
@@ -135,7 +138,7 @@ var vm = new Vue({
     },
     isUrl: function (row) {
       var type = row.uiType;
-      return this.isSqlSelect(type) &&  row.childFieldArr && row.childFieldArr.length >0;
+      return this.isSqlSelect(type) && row.childFieldArr && row.childFieldArr.length > 0;
     },
     isTableSource: function (row) {
       var type = row.fieldSource;
@@ -153,6 +156,7 @@ var vm = new Vue({
       jasTools.ajax.get(jasTools.base.rootPath + '/functionConfiguration/get.do', {
         id: oid
       }, function (data) {
+        that.functionCode = data.data.functionCode;
         that.ruleForm.name = data.data.functionName;
         that.ruleForm.ifAttachment = data.data.ifAttachment;
         that.ruleForm.source = data.data.tableName;
@@ -634,24 +638,97 @@ var vm = new Vue({
       window.parent.jasTools.dialog.close();
     },
 
-    saveFieldConfig: function () { // 保存字段配置信息
+    saveFieldConfig: function (isClose) { // 保存字段配置信息
+      var that = this;
+      that.isLoadingFieldInfo=true;
       var isSort = this._formatSortInfo();
       if (isSort) {
-        var funFunctionFieldsForms = this.privateTable.map(function(item){
+        var funFunctionFieldsForms = this.privateTable.map(function (item) {
           item.childField = item.childFieldArr.join(',');
           return item;
         });
         jasTools.ajax.post(jasTools.base.rootPath + '/functionFields/save.do', {
           funFunctionFieldsForms: funFunctionFieldsForms,
         }, function (data) {
-          parent.window.jasTools.dialog.close(1);
-          window.top.Vue.prototype.$message({
-            message: '保存成功',
-            type: 'success'
-          });
+          that.isLoadingFieldInfo=false;
+          if (isClose == 1) {
+            parent.window.jasTools.dialog.close(1);
+            window.top.Vue.prototype.$message({
+              message: '保存成功',
+              type: 'success'
+            });
+          } else {
+            that.indexPage++;
+            that.getUniqueDetail(that.functionCode);
+            that.setUniqueOptions();
+          }
         });
       }
     },
+    setUniqueOptions: function () {
+      var that = this;
+      that.uniqueFieldOption = [];
+      that.linkedFieldOption = [];
+      this.filterTable.forEach(function (item) { // 新增、修改、搜索的字段
+        var obj = {
+          name: item.fieldNameCn,
+          id: item.fieldName
+        };
+        that.linkedFieldOption.push(obj);
+        if (true) {
+          that.uniqueFieldOption.push(obj);
+        }
+      });
+    },
+    getUniqueDetail: function (functionCode) {
 
+      var that = this;
+      var url = jasTools.base.rootPath + '/functionConfiguration/getUniqueStrategy.do';
+      jasTools.ajax.get(url, {
+        functionCode: functionCode
+      }, function (data) {
+        that.uniqueFileds = data.data.map(function (item) {
+          item.formatUniqueCondition = item.uniqueCondition.split(',');
+          return item;
+        });
+      })
+    },
+    saveUnique: function () {
+      var that = this;
+      var arr = [];
+      this.uniqueFileds.forEach(function (item) {
+        var obj = {};
+        if (item.uniqueField) {
+          obj.uniqueField = item.uniqueField;
+          obj.uniqueCondition = item.formatUniqueCondition.join(',');
+          obj.functionCode = that.functionCode;
+          obj.uniqueFieldMessage = item.uniqueFieldMessage;
+          arr.push(obj);
+        }
+      });
+      var url = jasTools.base.rootPath + '/functionConfiguration/saveUniqueStrategy.do';
+      jasTools.ajax.post(url, {
+        functionCode:that.functionCode,
+        uniqueValidateFormList: arr
+      }, function (data) {
+        parent.window.jasTools.dialog.close(1);
+        window.top.Vue.prototype.$message({
+          message: '保存成功',
+          type: 'success'
+        });
+      })
+    },
+    deleteUniqueItem: function (row) {
+      var index = this.uniqueFileds.indexOf(row);
+      this.uniqueFileds.splice(index, 1);
+    },
+    addUniqueField: function () {
+      this.uniqueFileds.push({
+        formatUniqueCondition: [],
+        uniqueCondition: "",
+        uniqueField: "",
+        uniqueFieldMessage: "",
+      });
+    }
   },
 });

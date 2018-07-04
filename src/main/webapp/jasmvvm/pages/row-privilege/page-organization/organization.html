@@ -7,79 +7,14 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>组织机构管理</title>
 	<!-- <link rel="stylesheet" href="./libelement-ui/element-#0E2B4A/src/index.css"> -->
-	<link rel="stylesheet" href="./../../../lib/element-ui/v2.2.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
 	<link rel="stylesheet" href="./../../../lib/font-awesome-4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="./../../../src/css/main.css">
 	<style>
-		/* 分栏样式 */
-
-		.multipane:not(.is-resizing) .resizepanel {
-			transition: width 0.3s;
-		}
-
 		.resizepanel {
 			overflow-x: hidden;
 			overflow-y: auto;
 		}
-
-		.multipane.foo.layout-v .multipane-resizer {
-			margin: 0;
-			left: 0;
-			/* reset default styling */
-			width: 10px;
-			background: #f1f1f1;
-		}
-
-		.multipane.foo.layout-h .multipane-resizer {
-			margin: 0;
-			top: 0;
-			/* reset default styling */
-			height: 10px;
-			background: #f1f1f1;
-		}
-
-		.multipane-resizer {
-			margin: 0;
-			left: 0;
-			position: relative;
-		}
-
-		.multipane.foo.layout-v .multipane-resizer .resizertap {
-			width: 100%;
-			height: 40px;
-			background: #409EFF;
-			opacity: 0.5;
-			color: #fff;
-			top: 50%;
-			left: 0;
-			position: absolute;
-			margin-top: -20px;
-			cursor: pointer;
-			line-height: 40px;
-			text-align: center;
-		}
-
-		.multipane.foo.layout-v .multipane-resizer .resizertap:hover {
-			opacity: 0.7;
-		}
-
-		/* .multipane.foo.layout-v .multipane-resizer:before {
-			display: block;
-			content: "";
-			width: 3px;
-			height: 40px;
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			margin-top: -20px;
-			margin-left: -2.5px;
-			border-right: 1px solid #ccc;
-			border-left: 1px solid #ccc;
-		}
-
-		.multipane.foo.layout-v .multipane-resizer:hover:before {
-			border-color: #999;
-		} */
 
 		.orgtitle {
 			height: 40px;
@@ -106,16 +41,22 @@
 			height: 100%;
 			padding: 0 10px;
 		}
+
+		.content .el-tabs__content {
+			width: 100%;
+			-webkit-box-flex: 1;
+			-ms-flex: 1;
+			flex: 1;
+			overflow: auto;
+		}
 	</style>
 </head>
 
 <body>
-	<div id="app" v-cloak>
+	<div id="app" v-cloak v-loading="loading.allLoading">
 
-		<multipane @paneresizestart="panelMoving = true" @paneresizestop="panelMoving = false" class="foo" layout="vertical" style="height: 100%;">
-			<div class="resizepanel" v-loading="panelMoving" :style="[{ width: panelShowed ?'300px' : '0px',maxWidth: '50%' }]" element-loading-spinner="11"
-			  element-loading-background="rgba(0, 0, 0, 0)">
-				<!-- <div class="orgtitle">组织机构管理</div> -->
+		<jas-two-panel-resizer layout="vertical" length="300px">
+			<template slot="closePanel">
 				<div class="filterwrap">
 					<el-input prefix-icon="el-icon-search" size="small" placeholder="输入关键字进行过滤" v-model="filterText">
 					</el-input>
@@ -125,32 +66,32 @@
 					<el-button type="text" @click="editNode" :disabled="!currentNodeId">修改</el-button>
 					<el-button type="text" @click="deleteNode" :disabled="!currentNodeId">删除</el-button>
 				</div>
-				<el-tree ref="orgtree" :data="orgnData" node-key="id" :props="defaultProps" :default-expanded-keys="[currentNodeId]" highlight-current
-				  @node-click="clicknode" :expand-on-click-node="false" :filter-node-method="filterNode"></el-tree>
-			</div>
-			<multipane-resizer>
-				<div class="resizertap" @click="panelShowed=!panelShowed">
-					<i v-show="panelShowed" class="fa fa-angle-left"></i>
-					<i v-show="!panelShowed" class="fa fa-angle-right"></i>
-				</div>
-			</multipane-resizer>
-			<div v-loading="panelMoving" :style="{ flexGrow: 1 }" style="width:0%;" element-loading-spinner="11" element-loading-background="rgba(0, 0, 0, 0)">
-
-				<div class="content">
-					<el-tabs v-model="activeName">
-						<el-tab-pane label="部门详情" name="details">
-							<div v-loading="loading.orgDetail">
-								<jas-detail-table :titles="detailTitle" :column-num="1" :detail="detail" />
+				<el-tree class="is-grown" ref="orgtree" :data="orgnData" node-key="id" :props="defaultProps" :default-expanded-keys="[currentNodeId]"
+				  highlight-current @node-click="clicknode" :expand-on-click-node="false" :filter-node-method="filterNode"></el-tree>
+			</template>
+			<div class="content" slot="mainPanel">
+				<el-tabs v-model="activeName" class="jas-flex-box" style="height:100%;overflow: auto">
+					<el-tab-pane label="部门详情" name="details">
+						<div v-loading="loading.orgDetail">
+							<jas-detail-table :titles="detailTitle" :detail="detail" />
+						</div>
+					</el-tab-pane>
+					<el-tab-pane label="实施范围" name="scale">
+						<div v-loading="loading.scopeTree">
+							<!-- <div style="text-align: right;"> -->
+							<div style="border-bottom: 1px solid #ececec;padding:0 0 10px;">
+								<el-button size="small" type="primary" @click="requestSaveScope">保存</el-button>
 							</div>
-						</el-tab-pane>
-						<el-tab-pane label="实施范围" name="scale">
-							<div>实施范围</div>
-						</el-tab-pane>
-					</el-tabs>
-				</div>
-
+							<el-tree ref="tree" :data="scopeData.treeData" show-checkbox node-key="id" :default-expanded-keys="scopeData.expandedKeys"
+							  :default-checked-keys="scopeData.checkedKeys" :props="scopeData.defaultProps">
+							</el-tree>
+						</div>
+					</el-tab-pane>
+				</el-tabs>
 			</div>
-		</multipane>
+		</jas-two-panel-resizer>
+
+
 
 
 	</div>
@@ -160,7 +101,7 @@
 <script src="./../../../lib/vue/vue.js"></script>
 <script src="./../../../lib/vue-multipane/vue-multipane.js"></script>
 
-<script src="./../../../lib/element-ui/v2.2.1/index.min.js"></script>
+<script src="./../../../lib/element-ui/v2.4.1/index.min.js"></script>
 <script src="./../../../common/components/jas-components.js"></script>
 <script src="./../../../common/js/jas-tools.js"></script>
 <script>
@@ -169,6 +110,15 @@
 		data: function () {
 			return {
 				detail: null,
+				scopeData: {
+					treeData: [],
+					defaultProps: {
+						children: 'children',
+						label: 'text',
+					},
+					checkedKeys: [],
+					expandedKeys: []
+				},
 				detailTitle: [ //
 					{
 						name: '上级组织机构',
@@ -197,7 +147,9 @@
 					},
 				],
 				loading: {
+					allLoading: false,
 					orgDetail: false,
+					scopeTree: false,
 				},
 				panelMoving: false,
 				panelShowed: true,
@@ -234,7 +186,12 @@
 				jasTools.ajax.get(url, {}, function (data) {
 					that.orgnData = data[0].children;
 					that.$nextTick(function () {
+						if (!that.currentNodeId) {
+							that.currentNodeId = data[0].children[0].id;
+						}
 						that.$refs.orgtree.setCurrentKey(that.currentNodeId);
+						that._requestOrgDetail(that.currentNodeId);
+						that._requestScopeTree(that.currentNodeId);
 					})
 				});
 			},
@@ -251,11 +208,60 @@
 					that.detail = data;
 				});
 			},
+
+			_requestScopeTree: function (unitOid) {
+				var that = this;
+				that.loading.scopeTree = true;
+				var src = jasTools.base.rootPath + '/daq/implementScope/getImplementScopeTree.do';
+				jasTools.ajax.post(src, {
+					unitOid: unitOid
+				}, function (data) {
+					setTimeout(function () {
+						that.loading.scopeTree = false;
+					}, 300)
+					that.scopeData.treeData = data.rows;
+					var expandedKeys = that.getNodekeysByGrade(that.scopeData.treeData, 1);
+					that.scopeData.expandedKeys = expandedKeys;
+					that.scopeData.checkedKeys = that.getCheckedNodekeys(that.scopeData.treeData);
+
+				});
+			},
+			requestSaveScope: function () {
+				var that = this;
+				this.loading.allLoading = true;
+				var checkedNodes = this.$refs.tree.getCheckedNodes().filter(function (item) {
+					if (item.attributes && item.attributes.type > 0) return true;
+				});
+				var src = jasTools.base.rootPath + '/daq/implementScope/saveRef.do';
+				var arr = checkedNodes.map(function (item) {
+					return {
+						scopeOid: item.id,
+						projectOid: item.attributes.projectOid,
+						pipelineOid: item.attributes.pipelineOid,
+						tendersOid: item.attributes.tendersOid,
+						scopeType: item.attributes.type
+					};
+				});
+				jasTools.ajax.post(src, {
+					unitOid: this.currentNodeId, //标段oid
+					data: arr
+				}, function (data) {
+					setTimeout(function () {
+						that.loading.allLoading = false;
+					}, 0)
+					that._requestScopeTree(that.currentNodeId);
+					top.Vue.prototype.$message({
+						type: 'success',
+						message: '保存成功'
+					});
+				});
+			},
 			clicknode: function (node, b, c) {
 				// console.log(a, b, c)
 				this.currentNode = node;
 				this.currentNodeId = node.id;
 				this._requestOrgDetail(node.id);
+				this._requestScopeTree(node.id);
 			},
 
 
@@ -318,7 +324,41 @@
 					}
 				});
 			},
-
+			getCheckedNodekeys: function (treeData) {
+				var checkedKeys = [];
+				var getCheckedKeysFromArr = function (arr) {
+					arr.forEach(function (item) {
+						if (item.checked) {
+							checkedKeys.push(item.id);
+						}
+						if (item.children) {
+							getCheckedKeysFromArr(item.children);
+						}
+					})
+				};
+				getCheckedKeysFromArr(treeData);
+				return checkedKeys;
+			},
+			getNodekeysByGrade: function (treeData, nGrade) {
+				var grades = [];
+				var getGradeKeysFromArr = function (arr, index) {
+					++index;
+					arr.forEach(function (item) {
+						if (grades[index]) {
+							grades[index].push(item.id)
+						} else {
+							grades[index] = [item.id]
+						}
+						if (item.children) {
+							getGradeKeysFromArr(item.children, index);
+						}
+					});
+				};
+				getGradeKeysFromArr(treeData, -1);
+				nGrade = nGrade < 1 ? 1 : nGrade;
+				nGrade = nGrade > grades.length ? grades.length : nGrade;
+				return grades[nGrade - 1];
+			},
 		},
 	});
 </script>

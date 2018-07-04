@@ -1,3 +1,129 @@
+Vue.component('jas-base-group-title', {
+	props: {
+		name: {
+			default: '表单分组',
+			type: String
+		},
+	},
+	template: [
+		'<div style="border-bottom: 1px solid rgb(228, 231, 237);margin-bottom:10px;">',
+		'	<span style="height: 32px;line-height:32px;display:inline-block;border-bottom: 2px solid rgb(64, 158, 255)">{{name}}</span>',
+		'</div>'
+	].join(''),
+});
+
+Vue.component('jas-file-upload', {
+	props: {
+		limit: {
+			default: 5,
+			type: Number
+		},
+		fileTypes: {
+			default: function () {
+				return []
+			},
+			type: Array
+		}
+	},
+	data: function () {
+		return {
+			fileList: [],
+			uploadurl: '',
+		}
+	},
+	computed: {
+		accept: function () {
+			return this.fileTypes.length > 0 ? '.' + this.fileTypes.join(',.') : '';
+		}
+	},
+	template: [
+		'<el-upload ref="upload" :accept="accept" :limit="limit" :auto-upload="false" :file-list="fileList" ',
+		':on-change="changeFiles" :on-success="fileUploaded" :on-remove="removeFile" ',
+		':on-exceed="uploaodNumberlimit" :action="uploadurl">',
+		'	<el-button slot="trigger" size="small" type="primary" plain>选取文件</el-button>',
+		'	<span style="padding-left: 10px;" class="el-upload__tip" slot="tip">{{"最多上传"+ limit +"个附件"}}</span>',
+		'</el-upload>',
+	].join(''),
+	methods: {
+		requestFile: function (bizId) {
+			var that = this;
+			var url = jasTools.base.rootPath + "/attachment/getInfo.do";
+			jasTools.ajax.get(url, {
+				businessType: 'file',
+				businessId: bizId
+			}, function (data) {
+				data.rows.forEach(function (item) {
+					var file = {
+						name: item.fileName,
+						size: item.size,
+						oid: item.oid
+					};
+					that.fileList.push(file);
+				});
+				that.fileListlength = that.fileList.length;
+			});
+		},
+		fileUploaded: function (response, file, fileList) {
+			this.$emit('success', response, file, fileList)
+		},
+		removeFile: function (file, fileList) {
+			if (file.status === 'success' && file.oid) {
+				if (this.filesToBeDelete) {
+					this.filesToBeDelete.push(file.oid);
+				} else {
+					this.filesToBeDelete = [file.oid];
+				}
+			}
+		},
+		uploadFile: function (oid) {
+			var that = this;
+			that._deleteFilesToServer(function () {
+				that.uploadurl = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") +
+					"&businessId=" + oid + "&businessType=file";
+				that.$nextTick(function () {
+					var afileToSubmit = that.$refs.upload.uploadFiles.filter(function (item) {
+						return !item.oid
+					});
+					if (afileToSubmit.length > 0) {
+						that.$refs.upload.submit();
+					} else {
+						that.fileUploaded();
+					}
+				});
+			});
+		},
+		_deleteFilesToServer: function (cb) {
+			var that = this;
+			if (!that.filesToBeDelete) {
+				cb && cb();
+				return;
+			}
+			jasTools.ajax.get(jasTools.base.rootPath + "/attachment/delete.do", {
+				oids: that.filesToBeDelete.join(',')
+			}, function (data) {
+				cb && cb();
+			});
+		},
+		changeFiles: function (file, fileList) {
+			var that = this;
+			if (file.status === "ready") {
+				var aFileName = file.name.split('.');
+				var fileTypes = this.fileTypes;
+				var type = aFileName[aFileName.length - 1 || 1];
+				if (!type || (fileTypes.length > 0 && fileTypes.indexOf(type) === -1)) { // 不是规定格式的文件
+					top.Vue.prototype.$message('请上传规定格式的文件');
+					var index = fileList.indexOf(file);
+					fileList.splice(index, 1);
+				}
+			}
+		},
+		uploaodNumberlimit: function () {
+			top.Vue.prototype.$message("最多上传" + this.limit + "个附件")
+		},
+	}
+
+});
+
 Vue.component('jas-iframe-dialog', {
 	props: {
 		refSelf: {
@@ -80,16 +206,14 @@ Vue.component('jas-detail-table', {
 			type: Array,
 			required: true
 		},
-		columnNum: {
-			default: 2,
-			type: Number
-		},
 		detail: {
 
 		}
 	},
 	data: function () {
-		return {}
+		return {
+			columnNum: 2,
+		}
 	},
 	computed: {
 		formatTitle: function () {
@@ -107,12 +231,14 @@ Vue.component('jas-detail-table', {
 					newTitle.push(_arr)
 				}
 			});
-			console.log()
+			if (this.titles.length === 1) {
+				this.columnNum = 1;
+			}
 			return newTitle;
 		}
 	},
 	template: [
-		'<div v-show="detail" class="jas-detail-table">',
+		'<div ref="table" v-show="detail" class="jas-detail-table">',
 		'<table class="table_wrap">',
 		'    <template v-for="item in formatTitle">',
 		'        <tr>',
@@ -125,6 +251,28 @@ Vue.component('jas-detail-table', {
 		'</table>',
 		'</div>'
 	].join(''),
+	methods: {
+		resizeColumn: function () {
+			var that = this;
+
+			var width = that.$refs.table.clientWidth;
+			if (width < 660) {
+				that.columnNum = 1;
+			} else if (width < 1400) {
+				that.columnNum = 2;
+			} else {
+				that.columnNum = 3;
+			}
+		}
+	},
+	mounted: function () {
+		var that = this;
+		this.resizeColumn();
+		$(window).on('resize', function () {
+			that.resizeColumn();
+
+		});
+	}
 });
 
 
@@ -226,6 +374,7 @@ Vue.component('jas-search-for-list', {
 
 Vue.component('jas-table-for-list', {
 	props: {
+		privilegeCode: {},
 		form: {
 			type: Object,
 			required: true
@@ -238,7 +387,18 @@ Vue.component('jas-table-for-list', {
 			// 	field:'title',
 			// 	type:'text', // text、time
 			// }]
-		}
+		},
+		searchPath: {
+			type: String,
+			required: true
+		},
+		deletePath: {
+			type: String,
+			required: true
+		},
+		detailUrl: {},
+		addUrl: {},
+		editUrl: {},
 	},
 
 	data: function () {
@@ -246,6 +406,7 @@ Vue.component('jas-table-for-list', {
 			headStyle: {
 				'background-color': '#f5f7fa ',
 			},
+			privilege: [], //权限数组 bt_add,bt_update,bt_delete,bt_select,bt_export,bt_import,bt_position
 			tableData: [],
 			currentPage: 1,
 			loading: true,
@@ -259,20 +420,21 @@ Vue.component('jas-table-for-list', {
 	template: [
 		'<div  class="jas-flex-box is-vertical is-grown">',
 		'<div style="padding: 15px 0;">',
-		'	<el-button size="small" plain type="primary" icon="fa fa-plus" @click="add">增加</el-button>',
+		'	<el-button size="small" plain type="primary" icon="fa fa-plus" v-if="isHasPrivilege(' + "'bt_add'" + ')"  @click="add">增加</el-button>',
 		'	<el-button class="fr" size="small" icon="el-icon-refresh" @click="refresh"></el-button>',
 		'</div>',
 		'<div class="is-grown">',
 		'	<el-table v-loading="loading" height="100%" :data="tableData" border :header-cell-style="headStyle" style="width: 100%">',
-		'		<el-table-column label="序号" type="index" align="center" width="50">',
+		'		<el-table-column label="序号" type="index" align="center" width="50" fixed>',
 		'		</el-table-column>',
-		'		<el-table-column v-for="item in fields" :label="item.name" :prop="item.field" align="center">',
+		'		<el-table-column v-for="item,index in fields" :key="item.oid" :fixed="index=== 0?true:false" :label="item.name" :prop="item.field" align="center">',
 		'		</el-table-column>',
-		'		<el-table-column label="操作" align="center" width="240">',
+		'		<el-table-column label="操作" align="center" width="180" fixed="right">',
 		'			<template slot-scope="scope">',
-		'				<el-button @click="preview(scope.row)" type="text" size="small">查看</el-button>',
-		'				<el-button @click="edit(scope.row)" type="text" size="small">编辑</el-button>',
-		'				<el-button @click="deleteItem(scope.row)" type="text" size="small">删除</el-button>',
+		'				<el-button @click="locate(scope.row)" type="text" size="small">定位</el-button>',
+		'				<el-button @click="preview(scope.row)" v-if="isHasPrivilege(' + "'bt_select'" + ')" type="text" size="small">查看</el-button>',
+		'				<el-button @click="edit(scope.row)" v-if="isHasPrivilege(' + "'bt_update'" + ')"  type="text" size="small">编辑</el-button>',
+		'				<el-button @click="deleteItem(scope.row)" v-if="isHasPrivilege(' + "'bt_delete'" + ')"   type="text" size="small">删除</el-button>',
 		'			</template>',
 		'		</el-table-column>',
 		'	</el-table>',
@@ -284,10 +446,45 @@ Vue.component('jas-table-for-list', {
 		'</div>',
 		'</div>',
 	].join(''),
+	watch: {
+		privilegeCode: function () {
+			if (this.privilegeCode) {
+				this._requestPrivilege(this.privilegeCode);
+			} else {
+				this.search();
+			}
+		}
+	},
 	mounted: function () {
-		this.search();
+		if (this.privilegeCode) {
+			this._requestPrivilege(this.privilegeCode);
+		} else {
+			this.search();
+		}
 	},
 	methods: {
+		locate: function (item) {
+			this.$emit('locate', item)
+		},
+		isHasPrivilege: function (sName) {
+			if (this.privilegeCode && this.privilege.indexOf(sName) === -1) {
+				return false;
+			}
+			return true;
+		},
+		_requestPrivilege: function (privilegeCode) {
+			var that = this;
+			var url = jasTools.base.rootPath + "/jasframework/privilege/privilege/getFunctionConfig.do";
+			jasTools.ajax.get(url, {
+				privilegeCode: privilegeCode, //菜单权限编号
+				appId: "402894a152681ba30152681e8b320003" //应用id，值默认
+			}, function (data) {
+				that.privilege = data.rows.map(function (item) {
+					return item.functionType;
+				});
+				that.search();
+			});
+		},
 		search: function () {
 			this._requestTable();
 		},
@@ -296,14 +493,26 @@ Vue.component('jas-table-for-list', {
 		},
 		add: function () {
 			var that = this;
+			if (!this.addUrl) return;
 			top.jasTools.dialog.show({
-				width: '600px',
-				height: '600px',
+				width: '60%',
+				height: '80%',
 				title: '增加',
-				src: './pages/excel-template/dialogs/add.html',
+				src: this.addUrl,
 				cbForClose: function () {
 					that.refresh()
 				}
+			});
+		},
+		preview: function (row) {
+			var that = this;
+			if (!this.detailUrl) return;
+			var url = jasTools.base.setParamsToUrl(this.detailUrl, row)
+			top.jasTools.dialog.show({
+				width: '60%',
+				height: '80%',
+				title: '查看',
+				src: url,
 			});
 		},
 		_requestTable: function (str, cb) {
@@ -313,38 +522,21 @@ Vue.component('jas-table-for-list', {
 				pageNo: this.currentPage,
 				pageSize: this.pageSize,
 			}, this.form);
-			var url = jasTools.base.rootPath + "/jasframework/excelTemplate/getPage.do";
+			var url = jasTools.base.rootPath + this.searchPath;
 			jasTools.ajax.post(url, obj, function (data) {
 				setTimeout(function () {
 					that.loading = false;
 				}, 300);
-				data.rows = [{
-					oid: '', //	主键
-					project_oid: '', //	项目oid
-					project_name: '西南', //	项目oid
-					pipeline_oid: '', //	管线oid
-					pipeline_name: '中间线', //	管线oid
-					median_stake_code: 'ds23', //	中线桩编号
-					mileage: '12', //	里程(km)
-					pointz: '1.3', //	高程
-					pointx: '45.3', //	X坐标
-					pointy: '45.3', //	Y坐标
-					mark_stone_type: '', //	标石类型
-					mark_stone_name: '超级大', //	标石类型
-					mark_stone_location: '添上', //	标石概略位置
-					remarks: '快走啊', //	备注
-				}]
 				that.tableData = data.rows;
 				that.total = data.total;
 			});
 		},
 		edit: function (row) {
 			var that = this;
-			console.log(row);
-			var url = jasTools.base.setParamsToUrl('./pages/excel-template/dialogs/add.html', row)
+			var url = jasTools.base.setParamsToUrl(this.addUrl, row)
 			top.jasTools.dialog.show({
-				width: '600px',
-				height: '600px',
+				width: '60%',
+				height: '80%',
 				title: '修改',
 				src: url,
 				cbForClose: function () {
@@ -365,8 +557,8 @@ Vue.component('jas-table-for-list', {
 		},
 		_deleteItem: function (oid) {
 			var that = this;
-			var url = jasTools.base.rootPath + "/jasframework/excelTemplate/delete.do";
-			jasTools.ajax.get(url, {
+			var url = jasTools.base.rootPath + this.deletePath;
+			jasTools.ajax.post(url, {
 				oid: oid
 			}, function (data) {
 				top.Vue.prototype.$message({
@@ -386,4 +578,166 @@ Vue.component('jas-table-for-list', {
 		}
 	},
 
+});
+
+Vue.component('jas-file-list', {
+	props: {
+		bizId: {
+			type: String,
+			required: true
+		},
+	},
+	data: function () {
+		return {
+			fileList: [],
+			isrequest: true,
+		}
+	},
+	watch: {
+		bizId: function () {
+			if (this.bizId) {
+				this._requestFiles(this.bizId);
+			}
+		}
+	},
+	template: [
+		'<div class="jas-file-list" v-show="!isrequest">',
+		' <div v-show="fileList.length === 0" >无</div>',
+		'	<div v-for="file in fileList"  class="el-upload-list__item">',
+		'		<a class="el-upload-list__item-name">',
+		'			<i class="el-icon-document"></i>{{file.fileName}}',
+		'		</a>',
+		'		<i class="el-icon-download tipBtn" @click="download(file.oid)" style="right:10px;"></i>',
+		'		<i class="el-icon-view tipBtn" @click="preview(file.oid)" style="right:35px;"></i>',
+		'	</div>',
+		'</div>'
+	].join(''),
+	created: function () {
+		if (this.bizId) {
+			this._requestFiles(this.bizId);
+		}
+	},
+	methods: {
+		download: function (oid) {
+			var that = this;
+			jasTools.ajax.downloadByIframe('post', jasTools.base.rootPath + "/attachment/download.do", {
+				oid: oid
+			});
+		},
+		_requestFiles: function (oid) {
+			var that = this;
+			var url = jasTools.base.rootPath + "/attachment/getInfo.do";
+			jasTools.ajax.get(url, {
+				businessType: 'file',
+				businessId: oid
+			}, function (data) {
+				that.fileList = data.rows;
+				that.isrequest = false;
+			});
+		},
+		preview: function (oid) {
+			var that = this;
+			top.jasTools.dialog.show({
+				width: '80%',
+				height: '90%',
+				title: '预览模板',
+				src: './pages/template/pdfjs_1.10.88/web/viewer.html?oid=' + oid,
+			});
+		},
+
+	},
+
+});
+
+Vue.component('jas-dialog-wrapper', {
+	props: {
+
+	},
+	data: function () {
+		return {
+
+		}
+	},
+	template: [
+		'<div class="jas-flex-box is-vertical">',
+		'  <div class="is-grown" style="overflow: auto;">',
+		'    <slot></slot>',
+		'  </div>',
+		'  <div style="text-align: center;padding-top:10px; ">',
+		'    <slot name="footer"></slot>',
+		'  </div>',
+		'</div>'
+	].join(''),
+});
+
+Vue.component('jas-two-panel-resizer', {
+	props: {
+		layout: { // horizontal
+			type: String,
+		},
+		length: {
+			type: String,
+		}
+	},
+	data: function () {
+		return {
+			panelMoving: false,
+			panelShowed: true,
+			mainPanelStyle: {},
+			closeClass:'',
+			openClass:'',
+		}
+	},
+	computed: {
+		closePanelStyle: function () {
+			if (this.layout === 'horizontal') {
+				return {
+					height: this.panelShowed ? this.length : '0%',
+					minHeight: '0%',
+					maxHeight: '100%',
+				}
+			} else {
+				return {
+					width: this.panelShowed ? this.length : '0%',
+					minWidth: '0%',
+					maxWidth: '100%',
+				}
+			}
+		}
+	},
+	template: [
+		'<multipane @paneresizestart="panelMoving = true" @paneresizestop="panelMoving = false" class="foo" :layout="layout">',
+		'	<div v-loading="panelMoving" class="resizepanel" :style="closePanelStyle" element-loading-spinner="11" element-loading-background="rgba(0, 0, 0, 0)">',
+		'		<slot name="closePanel"></slot>',
+		'	</div>',
+		'	<multipane-resizer>',
+		'		<div class="resizertap" @click="panelShowed=!panelShowed">',
+		'			<i v-show="panelShowed" :class="closeClass"></i>',
+		'			<i v-show="!panelShowed" :class="openClass"></i>',
+		'		</div>',
+		'	</multipane-resizer>',
+		'	<div v-loading="panelMoving" :style="[{ flexGrow: 1},mainPanelStyle]" element-loading-spinner="11" element-loading-background="rgba(0, 0, 0, 0)">',
+		'		<slot name="mainPanel"></slot>',
+		'	</div>',
+		'</multipane>'
+	].join(''),
+	methods: {
+
+
+	},
+	mounted: function () {
+		if (this.layout === 'horizontal') {
+			this.mainPanelStyle = {
+				height: 0
+			};
+			this.closeClass='fa fa-angle-up';
+			this.openClass='fa fa-angle-down';
+		} else {
+			this.mainPanelStyle = {
+				width: 0
+			};
+			this.closeClass='fa fa-angle-left';
+			this.openClass='fa fa-angle-right';
+		}
+	}
 });

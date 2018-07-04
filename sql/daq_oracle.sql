@@ -7,8 +7,9 @@ CREATE TABLE daq_project (
 	oid VARCHAR2 (36) NOT NULL PRIMARY KEY,
 	project_name NVARCHAR2 (50) NOT NULL,
 	project_code VARCHAR2 (50) NOT NULL,
+	pipe_network_type_code VARCHAR2 (50),
 	medium_type_code VARCHAR2 (50),
-	construct_oid VARCHAR2 (36),
+	construct NVARCHAR2 (50),
 	remarks NVARCHAR2 (200),
 	create_user_id VARCHAR2 (36),
 	create_user_name NVARCHAR2 (50),
@@ -23,7 +24,8 @@ comment on column daq_project.oid is '主键';
 comment on column daq_project.project_name is '项目名称';
 comment on column daq_project.project_code is '项目编号';
 comment on column daq_project.medium_type_code is '介质类型编号';
-comment on column daq_project.construct_oid is '建设单位编号';
+comment on column daq_project.pipe_network_type_code is '管网类型编号';
+comment on column daq_project.construct is '建设单位编号';
 comment on column daq_project.remarks is '备注';
 create index INDEX_DAQ_PROJECT_PROJECT_NAME_5 ON daq_project ( project_name );
 create index INDEX_DAQ_PROJECT_PROJECT_CODE_6 ON daq_project ( project_code );
@@ -288,6 +290,7 @@ CREATE TABLE daq_median_stake (
 	pointy NUMBER (17, 9),
 	pointz NUMBER (7, 3),
 	remarks NVARCHAR2 (200),
+	geo_state NVARCHAR2(10),
 	create_user_id VARCHAR2 (36),
 	create_user_name NVARCHAR2 (50),
 	create_datetime TIMESTAMP (6),
@@ -308,6 +311,70 @@ comment on column daq_median_stake.pointx is 'X坐标';
 comment on column daq_median_stake.pointy is 'Y坐标';
 comment on column daq_median_stake.pointz is '高程';
 comment on column daq_median_stake.remarks is '备注';
+comment on column daq_median_stake.geo_state is '空间数据状态';
 create index INDEX_DAQ_MEDIAN_STAKE_MEDIAN_STAKE_CODE_5 ON daq_median_stake ( median_stake_code );
 
+CREATE TABLE daq_tenders_scope_ref (
+	oid VARCHAR2 (36) NOT NULL PRIMARY KEY,
+	pipeline_oid VARCHAR2 (36),
+	tenders_oid VARCHAR2 (36),
+	scope_oid VARCHAR2 (36),
+	scope_type VARCHAR2 (10),
+	create_user_id VARCHAR2 (36),
+	create_user_name NVARCHAR2 (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR2 (36),
+	modify_user_name NVARCHAR2 (50),
+	modify_datetime DATE,
+	active NUMBER (1) NOT NULL
+);
+comment on table daq_tenders_scope_ref is '标段范围关联表';
+comment on column daq_tenders_scope_ref.oid is '主键';
+comment on column daq_tenders_scope_ref.pipeline_oid is '管线oid';
+comment on column daq_tenders_scope_ref.tenders_oid is '标段oid';
+comment on column daq_tenders_scope_ref.scope_oid is '实体oid（即线路段oid或者站场oid等）';
+comment on column daq_tenders_scope_ref.scope_type is '实体类型（1：线路段，2：创跨越，3：站场/阀室，4：伴行道路，5：外供电线路）';
+comment on column daq_tenders_scope_ref.create_user_id is '创建人id';
+comment on column daq_tenders_scope_ref.create_user_name is '创建人名称';
+comment on column daq_tenders_scope_ref.create_datetime is '创建时间';
+comment on column daq_tenders_scope_ref.modify_user_id is '修改人id';
+comment on column daq_tenders_scope_ref.modify_user_name is '修改人名称';
+comment on column daq_tenders_scope_ref.modify_datetime is '修改时间';
+comment on column daq_tenders_scope_ref.active is '有效标志';
+create index INDEX_DAQ_TENDERS_SCOPE_REF_TENDERS_OID_5 ON daq_tenders_scope_ref ( tenders_oid );
+create index INDEX_DAQ_TENDERS_SCOPE_REF_SCOPE_OID_6 ON daq_tenders_scope_ref ( scope_oid );
+
 /**********范围管理数据表end***************/
+/**********权限管理数据表begin***************/
+CREATE TABLE daq_implement_scope_ref (
+	oid VARCHAR2 (36) NOT NULL PRIMARY KEY,
+	unit_oid NVARCHAR2 (36),
+	project_oid VARCHAR2 (36),
+	pipeline_oid VARCHAR2 (36),
+	scope_oid VARCHAR2 (36),
+	scope_type VARCHAR2 (10),
+	create_user_id VARCHAR2 (36),
+	create_user_name NVARCHAR2 (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR2 (36),
+	modify_user_name NVARCHAR2 (50),
+	modify_datetime DATE,
+	active NUMBER (1)
+);
+comment on table daq_implement_scope_ref is '实施范围关联表';
+comment on column daq_implement_scope_ref.oid is '主键';
+comment on column daq_implement_scope_ref.unit_oid is '部门oid';
+comment on column daq_implement_scope_ref.project_oid is '项目oid';
+comment on column daq_implement_scope_ref.pipeline_oid is '管线oid';
+comment on column daq_implement_scope_ref.scope_oid is '实体oid（即线路段oid或者站场oid等）';
+comment on column daq_implement_scope_ref.scope_type is '实体类型（1：线路段，2：创跨越，3：站场/阀室，4：伴行道路，5：外供电线路）';
+comment on column daq_implement_scope_ref.create_user_id is '创建人id';
+comment on column daq_implement_scope_ref.create_user_name is '创建人名称';
+comment on column daq_implement_scope_ref.create_datetime is '创建时间';
+comment on column daq_implement_scope_ref.modify_user_id is '修改人id';
+comment on column daq_implement_scope_ref.modify_user_name is '修改人名称';
+comment on column daq_implement_scope_ref.modify_datetime is '修改时间';
+comment on column daq_implement_scope_ref.active is '有效标志';
+create index INDEX_DAQ_IMPLEMENT_SCOPE_REF_UNIT_OID_5 ON daq_implement_scope_ref ( unit_oid );
+create index INDEX_DAQ_IMPLEMENT_SCOPE_REF_PROJECT_OID_6 ON daq_implement_scope_ref ( project_oid );
+/**********权限管理数据表end***************/
