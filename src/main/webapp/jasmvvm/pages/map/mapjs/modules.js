@@ -59,7 +59,9 @@ var BaseMapToolsBar = function(options){
             }
         });
     };
-
+    var onMapResized = function(e){
+        _self.resetLayout();//
+    };
     _self.moduleClass = "map-module-basemaptoolsbar";
     _self.template =
         "<div class='"+_self.moduleClass +"' style='display:none;'>" +
@@ -157,9 +159,10 @@ var BaseMapToolsBar = function(options){
     };
     _self.startup = function(){
         _self.addToolsItemClickListener();
-        _self.resetLayout();//
         _self.show(true);
         _self.mapApi.subscribe(_self.mapApi.Events.ModuleStateChanged ,onModuleStateChanged );
+        _self.mapApi.subscribe(_self.mapApi.Events.MapResizedEvent ,onMapResized );
+        _self.resetLayout();//
         return this;
     };
     _self.domCreate = function(){

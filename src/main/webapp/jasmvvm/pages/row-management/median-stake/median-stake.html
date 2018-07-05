@@ -23,7 +23,7 @@
 
 <body>
 	<div id="app" v-cloak>
-		<jas-two-panel-resizer layout="horizontal" length="40%">
+		<jas-two-panel-resizer layout="horizontal" length="40%" @paneresize="paneresize">
 			<div slot="closePanel" id="jasMap" class="jasmap"></div>
 			<jas-list-wrapper slot="mainPanel">
 				<el-form slot="search" :model="topSearch" label-width="100px">
@@ -192,7 +192,7 @@
 				this.jasMap = new JasMap({
 					onMapLoaded: function (e) {
 						//
-						this.showMapInfo();
+						// this.logMapInfo();
 					},
 					onLayerAdded: function (e) {
 						var layerId = e.data.layerId;
@@ -235,7 +235,11 @@
 				this.$refs.table.search();
 			},
 			locate: function (row) {
-				this.jasMap.flashGraphic('daq_median_stake' + "." + row.oid, 'daq_median_stake');
+				this.jasMap.flashGraphic(row.oid, 'daq_median_stake');
+			},
+			paneresize : function(){
+				console.log('resuze map..........')
+				this.jasMap.resizeMap();
 			}
 		},
 	});
