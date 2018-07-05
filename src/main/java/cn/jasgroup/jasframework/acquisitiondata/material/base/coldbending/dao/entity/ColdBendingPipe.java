@@ -3,16 +3,16 @@ package cn.jasgroup.jasframework.acquisitiondata.material.base.coldbending.dao.e
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
-import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
 import cn.jasgroup.jasframework.base.annotation.Process;
+import cn.jasgroup.jasframework.base.annotation.UpdateDeleteSet;
 import cn.jasgroup.jasframework.engine.hibernate.entity.CommonHibernateEntity;
-import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 
 /***
  * 
@@ -25,11 +25,11 @@ import cn.jasgroup.jasframework.support.ThreadLocalHolder;
  */
 @CommonSaveConfig(
     afterAdvice = {
-        @Process(service = "coldBendingPipeService", method = "chanageOriginalPipeUseState(pipeCode)")
+        @Process(service = "coldBendingPipeService", method = "chanageOriginalPipeUseState()")
     }
 )
 
-@JdbcEntity(name="daq_material_pipe_cold_bending")
+@Entity(name="daq_material_pipe_cold_bending")
 public class ColdBendingPipe extends CommonHibernateEntity{
 	/** 项目oid */
 	private String projectOid; 
@@ -38,7 +38,7 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 	private String tendersOid; 
 
 	/** 管线oid */
-	private String pipelienOid; 
+	private String pipelineOid; 
 
 	/** 线路段oid */
 	private String pipeSegmentOid; 
@@ -86,7 +86,7 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 	private Date produceDate; 
 
 	/** 施工单位 */
-	private String constructUnit = ThreadLocalHolder.getCurrentUser().getUnitId(); 
+	private String constructUnit; 
 
 	/** 监理单位 */
 	private String supervisionUnit; 
@@ -113,6 +113,7 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 
 	public void setProjectOid(String projectOid) {
 		this.projectOid = projectOid;
+		super.setField("projectOid");
 	}
 	@Column(name="tenders_oid")
 	public String getTendersOid() {
@@ -121,15 +122,17 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 
 	public void setTendersOid(String tendersOid) {
 		this.tendersOid = tendersOid;
+		super.setField("tendersOid");
 	}
 
-	@Column(name="pipelien_oid")
-	public String getPipelienOid() {
-		return pipelienOid;
+	@Column(name="pipeline_oid")
+	public String getPipelineOid() {
+		return pipelineOid;
 	}
 
-	public void setPipelienOid(String pipelienOid) {
-		this.pipelienOid = pipelienOid;
+	public void setPipelineOid(String pipelineOid) {
+		this.pipelineOid = pipelineOid;
+		super.setField("pipelineOid");
 	}
 	
 	@Column(name="pipe_segment_oid")
@@ -139,6 +142,7 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 
 	public void setPipeSegmentOid(String pipeSegmentOid) {
 		this.pipeSegmentOid = pipeSegmentOid;
+		super.setField("pipeSegmentOid");
 	}
 	
 	@Column(name="pipe_code")
@@ -148,6 +152,7 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 
 	public void setPipeCode(String pipeCode) {
 		this.pipeCode = pipeCode;
+		super.setField("pipeCode");
 	}
 	
 	@Column(name="pipe_cold_bending_code")
@@ -157,6 +162,7 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 
 	public void setPipeColdBendingCode(String pipeColdBendingCode) {
 		this.pipeColdBendingCode = pipeColdBendingCode;
+		super.setField("pipeColdBendingCode");
 	}
 
 	@Column(name="certificate_num")
@@ -166,6 +172,7 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 
 	public void setCertificateNum(String certificateNum) {
 		this.certificateNum = certificateNum;
+		super.setField("certificateNum");
 	}
 
 	@Column(name="pipe_bending_standards")
@@ -175,6 +182,7 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 
 	public void setPipeBendingStandards(String pipeBendingStandards) {
 		this.pipeBendingStandards = pipeBendingStandards;
+		super.setField("pipeBendingStandards");
 	}
 
 	@Column(name="bending_radius")
@@ -184,6 +192,7 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 
 	public void setBendingRadius(Double bendingRadius) {
 		this.bendingRadius = bendingRadius;
+		super.setField("bendingRadius");
 	}
 
 	@Column(name="bending_angle")
@@ -193,6 +202,7 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 
 	public void setBendingAngle(Double bendingAngle) {
 		this.bendingAngle = bendingAngle;
+		super.setField("bendingAngle");
 	}
 
 	@Column(name="curve_length")
@@ -202,6 +212,7 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 
 	public void setCurveLength(Double curveLength) {
 		this.curveLength = curveLength;
+		super.setField("curveLength");
 	}
 
 	@Column(name="straight_pipe_length")
@@ -211,6 +222,7 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 
 	public void setStraightPipeLength(Double straightPipeLength) {
 		this.straightPipeLength = straightPipeLength;
+		super.setField("straightPipeLength");
 	}
 
 	@Column(name="pipe_length")
@@ -220,6 +232,7 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 
 	public void setPipeLength(Double pipeLength) {
 		this.pipeLength = pipeLength;
+		super.setField("pipeLength");
 	}
 
 	public Double getEllipticity() {
@@ -228,6 +241,7 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 
 	public void setEllipticity(Double ellipticity) {
 		this.ellipticity = ellipticity;
+		super.setField("ellipticity");
 	}
 
 	@Column(name="wall_thickness_redurate")
@@ -237,6 +251,7 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 
 	public void setWallThicknessRedurate(Double wallThicknessRedurate) {
 		this.wallThicknessRedurate = wallThicknessRedurate;
+		super.setField("wallThicknessRedurate");
 	}
 
 	@Column(name="pipe_diameter")
@@ -246,6 +261,7 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 
 	public void setPipeDiameter(Double pipeDiameter) {
 		this.pipeDiameter = pipeDiameter;
+		super.setField("pipeDiameter");
 	}
 
 	@Column(name="wall_thickness")
@@ -255,8 +271,10 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 
 	public void setWallThickness(Double wallThickness) {
 		this.wallThickness = wallThickness;
+		super.setField("wallThickness");
 	}
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+	
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="produce_date")
 	public Date getProduceDate() {
@@ -265,6 +283,7 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 
 	public void setProduceDate(Date produceDate) {
 		this.produceDate = produceDate;
+		super.setField("produceDate");
 	}
 
 	@Column(name="construct_unit")
@@ -274,6 +293,7 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 
 	public void setConstructUnit(String constructUnit) {
 		this.constructUnit = constructUnit;
+		super.setField("constructUnit");
 	}
 
 	@Column(name="supervision_unit")
@@ -283,6 +303,7 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 
 	public void setSupervisionUnit(String supervisionUnit) {
 		this.supervisionUnit = supervisionUnit;
+		super.setField("supervisionUnit");
 	}
 
 	@Column(name="supervision_engineer")
@@ -292,6 +313,7 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 
 	public void setSupervisionEngineer(String supervisionEngineer) {
 		this.supervisionEngineer = supervisionEngineer;
+		super.setField("supervisionEngineer");
 	}
 
 	@Column(name="collection_person")
@@ -301,9 +323,10 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 
 	public void setCollectionPerson(String collectionPerson) {
 		this.collectionPerson = collectionPerson;
+		super.setField("collectionPerson");
 	}
 
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="collection_date")
 	public Date getCollectionDate() {
@@ -312,8 +335,10 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 
 	public void setCollectionDate(Date collectionDate) {
 		this.collectionDate = collectionDate;
+		super.setField("collectionDate");
 	}
 
+	@UpdateDeleteSet
 	@Column(name="is_use")
 	public Integer getIsUse() {
 		return isUse;
@@ -321,6 +346,7 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 
 	public void setIsUse(Integer isUse) {
 		this.isUse = isUse;
+		super.setField("isUse");
 	}
 
 	public String getRemarks() {
@@ -329,5 +355,6 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
+		super.setField("remarks");
 	}
 }
