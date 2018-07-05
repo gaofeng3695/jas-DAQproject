@@ -101,7 +101,7 @@
               resize(initialPaneWidth, pageX - initialPageX) :
               resize(initialPaneHeight, pageY - initialPageY);
 
-            self.$emit('paneResize', pane, resizer, size);
+            self.$emit('paneresize', pane, resizer, size);
           };
 
           var onMouseUp = function () {

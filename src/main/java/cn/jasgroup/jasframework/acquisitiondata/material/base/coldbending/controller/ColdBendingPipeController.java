@@ -3,6 +3,7 @@ package cn.jasgroup.jasframework.acquisitiondata.material.base.coldbending.contr
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,7 +34,7 @@ public class ColdBendingPipeController extends BaseController{
 	 */
 	@RequestMapping(value="save",method = RequestMethod.POST)
 	@ResponseBody
-	public Object save(HttpServletRequest request,ColdBendingPipe coldBendingPipe){
+	public Object save(HttpServletRequest request,@RequestBody ColdBendingPipe coldBendingPipe){
 		SimpleResult<String> result = null;
 		try{
 			String oid = this.coldBendingPipeService.save(coldBendingPipe);
@@ -56,7 +57,7 @@ public class ColdBendingPipeController extends BaseController{
 	 */
 	@RequestMapping(value="update",method = RequestMethod.POST)
 	@ResponseBody
-	public Object update(HttpServletRequest request,ColdBendingPipe coldBendingPipe){
+	public Object update(HttpServletRequest request,@RequestBody ColdBendingPipe coldBendingPipe){
 		BaseResult result = null;
 		try{
 			this.coldBendingPipeService.update(coldBendingPipe);
@@ -79,7 +80,7 @@ public class ColdBendingPipeController extends BaseController{
 	 */
 	@RequestMapping(value="delete",method = RequestMethod.POST)
 	@ResponseBody
-	public Object delete(HttpServletRequest request,ColdBendingPipe coldBendingPipe){
+	public Object delete(HttpServletRequest request,@RequestBody ColdBendingPipe coldBendingPipe){
 		BaseResult result = null;
 		try{
 			this.coldBendingPipeService.delete(coldBendingPipe);

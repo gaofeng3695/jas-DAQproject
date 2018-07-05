@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 
 public class ColdBendingPipeBo extends CommonBaseBo{
+	private String oid;
 	/** 项目oid */
 	private String projectOid;
 	
@@ -20,10 +21,10 @@ public class ColdBendingPipeBo extends CommonBaseBo{
 	private String tendersName;
 
 	/** 管线oid */
-	private String pipelienOid; 
+	private String pipelineOid; 
 	
 	/** 管线名称 */
-	private String pipelienName; 
+	private String pipelineName; 
 
 	/** 线路段oid */
 	private String pipeSegmentOid;
@@ -87,11 +88,11 @@ public class ColdBendingPipeBo extends CommonBaseBo{
 	private String collectionPerson; 
 
 	/** 采集时间 */
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
 	private Date collectionDate; 
 
 	/** 是否使用 */
-	private Integer isUse = 0; 
+	private String isUse; 
 
 	/** 备注 */
 	private String remarks;
@@ -128,20 +129,21 @@ public class ColdBendingPipeBo extends CommonBaseBo{
 		this.tendersName = tendersName;
 	}
 
-	public String getPipelienOid() {
-		return pipelienOid;
+
+	public String getPipelineOid() {
+		return pipelineOid;
 	}
 
-	public void setPipelienOid(String pipelienOid) {
-		this.pipelienOid = pipelienOid;
+	public void setPipelineOid(String pipelineOid) {
+		this.pipelineOid = pipelineOid;
 	}
 
-	public String getPipelienName() {
-		return pipelienName;
+	public String getPipelineName() {
+		return pipelineName;
 	}
 
-	public void setPipelienName(String pipelienName) {
-		this.pipelienName = pipelienName;
+	public void setPipelineName(String pipelineName) {
+		this.pipelineName = pipelineName;
 	}
 
 	public String getPipeSegmentOid() {
@@ -312,11 +314,11 @@ public class ColdBendingPipeBo extends CommonBaseBo{
 		this.collectionDate = collectionDate;
 	}
 
-	public Integer getIsUse() {
+	public String getIsUse() {
 		return isUse;
 	}
 
-	public void setIsUse(Integer isUse) {
+	public void setIsUse(String isUse) {
 		this.isUse = isUse;
 	}
 
@@ -327,4 +329,13 @@ public class ColdBendingPipeBo extends CommonBaseBo{
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
 	}
+
+	public String getOid() {
+		return oid;
+	}
+
+	public void setOid(String oid) {
+		this.oid = oid;
+	}
+	
 }

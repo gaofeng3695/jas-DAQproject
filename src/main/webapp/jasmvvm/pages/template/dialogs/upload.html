@@ -135,20 +135,16 @@
                 <span>导入成功！</span>
               </div>
               <div class="txt-c">
-                <div>成功导入数据 {{uploadStatus.addSuccessCount}} 条</div>
-                <div>未成功导入数据 {{uploadStatus.addFailureCount}} 条</div>
-                <div v-show="!uploadStatus.isinitial">
-                  <div>成功更新数据 {{uploadStatus.updateSuccessCount}} 条</div>
-                  <div>未成功更新数据 {{uploadStatus.updateFailureCount}} 条</div>
+                <div>成功导入数据 {{uploadStatus.addSuccessCount}} 条，未成功导入数据 {{uploadStatus.addFailureCount}} 条</div>
+                <div v-show="!uploadStatus.isInitial">
+                  <div>成功更新数据 {{uploadStatus.updateSuccessCount}} 条，未成功更新数据 {{uploadStatus.updateFailureCount}} 条</div>
                 </div>
               </div>
-              <div v-show="uploadStatus.addErrorMessage || uploadStatus.updateErrorMessage">
-                <div>错误信息：</div>
-                <div v-show="uploadStatus.isinitial">
-                  {{uploadStatus.addErrorMessage}}
+              <div style="margin-top: 24px;" v-show="uploadStatus.addErrorMessage || uploadStatus.updateErrorMessage">
+                <!-- <div>错误信息：</div> -->
+                <div v-show="uploadStatus.isInitial" v-html="uploadStatus.addErrorMessage">
                 </div>
-                <div v-show="!uploadStatus.isinitial">
-                  {{uploadStatus.updateErrorMessage}}
+                <div v-show="!uploadStatus.isInitial" v-html="uploadStatus.updateErrorMessage">
                 </div>
               </div>
             </div>
@@ -211,7 +207,7 @@
 
     },
     methods: {
-      closeDialog : function(){
+      closeDialog: function () {
         top.jasTools.dialog.close();
       },
       onExceed: function () {
@@ -226,7 +222,6 @@
       },
       onUploadVerify: function (file) {
         var that = this;
-        console.log(file);
         setTimeout(function () {
           that.loading && that.loading.close();
           if (file.status === 'success') {
@@ -268,7 +263,7 @@
       },
       requestSave: function (type) { //importType =":true,"(初始导入) / "update"（更新导入）
         var that = this;
-        that.uploadStatus.isInitial = type === 'initial' ? true : false;
+        that.uploadStatus.isInitial = (type === 'initial') ? true : false;
         var url = jasTools.base.rootPath + '/importExcelController/saveData.do';
         jasTools.ajax.get(url, {
           importType: type
@@ -276,12 +271,12 @@
           that.step++;
           that.uploadStatus.errorCode = data.errorCode;
           that.uploadStatus.errorMess = data.errorMess;
-          that.uploadStatus.addSuccessCount = data.addSuccessCount;
-          that.uploadStatus.addFailureCount = data.addFailureCount;
-          that.uploadStatus.addErrorMessage = data.addErrorMessage;
-          that.uploadStatus.updateSuccessCount = data.updateSuccessCount;
-          that.uploadStatus.updateFailureCount = data.updateFailureCount;
-          that.uploadStatus.updateErrorMessage = data.updateErrorMessage;
+          that.uploadStatus.addSuccessCount = data.addSuccessCount || 0;
+          that.uploadStatus.addFailureCount = data.addFailureCount || 0;
+          that.uploadStatus.addErrorMessage =data.addErrorMessage && data.addErrorMessage.split('$').join('<br>');
+          that.uploadStatus.updateSuccessCount = data.updateSuccessCount || 0;
+          that.uploadStatus.updateFailureCount = data.updateFailureCount || 0;
+          that.uploadStatus.updateErrorMessage =data.updateErrorMessage && data.updateErrorMessage.split('$').join('<br>');
         });
       }
     }

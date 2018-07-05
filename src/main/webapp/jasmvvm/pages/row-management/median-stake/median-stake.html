@@ -23,14 +23,14 @@
 
 <body>
 	<div id="app" v-cloak>
-		<jas-two-panel-resizer layout="horizontal" length="40%">
+		<jas-two-panel-resizer layout="horizontal" length="40%" @paneresize="paneresize">
 			<div slot="closePanel" id="jasMap" class="jasmap"></div>
 			<jas-list-wrapper slot="mainPanel">
 				<el-form slot="search" :model="topSearch" label-width="100px">
 					<el-row>
 						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
 							<el-form-item label="项目名称" prop="projectOid">
-								<el-select v-model="topSearch.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
+								<el-select v-model="topSearch.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged,searchList">
 									<el-option v-for="item in domain.project" :key="item.key" :label="item.value" :value="item.key">
 									</el-option>
 								</el-select>
@@ -38,7 +38,7 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
 							<el-form-item label="管线名称" prop="pipelineOid">
-								<el-select v-model="topSearch.pipelineOid" clearable placeholder="请选择管线名称" size="small">
+								<el-select @change="searchList" v-model="topSearch.pipelineOid" clearable placeholder="请选择管线名称" size="small">
 									<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key">
 									</el-option>
 								</el-select>
@@ -192,7 +192,7 @@
 				this.jasMap = new JasMap({
 					onMapLoaded: function (e) {
 						//
-						this.showMapInfo();
+						// this.logMapInfo();
 					},
 					onLayerAdded: function (e) {
 						var layerId = e.data.layerId;
@@ -235,7 +235,10 @@
 				this.$refs.table.search();
 			},
 			locate: function (row) {
-				this.jasMap.flashGraphic('daq_median_stake' + "." + row.oid, 'daq_median_stake');
+				this.jasMap.flashGraphic(row.oid, 'daq_median_stake');
+			},
+			paneresize : function(){
+				this.jasMap.resizeMap();
 			}
 		},
 	});
