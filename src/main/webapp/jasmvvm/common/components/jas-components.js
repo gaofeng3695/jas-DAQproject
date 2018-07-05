@@ -697,19 +697,20 @@ Vue.component('jas-two-panel-resizer', {
 			mainPanelStyle: {},
 			closeClass: '',
 			openClass: '',
+			_length: '',
 		}
 	},
 	computed: {
 		closePanelStyle: function () {
 			if (this.layout === 'horizontal') {
 				return {
-					height: this.panelShowed ? this.length : '0%',
+					height: this.panelShowed ? this._length : '0%',
 					minHeight: '0%',
 					maxHeight: '100%',
 				}
 			} else {
 				return {
-					width: this.panelShowed ? this.length : '0%',
+					width: this.panelShowed ? this._length : '0%',
 					minWidth: '0%',
 					maxWidth: '100%',
 				}
@@ -717,7 +718,7 @@ Vue.component('jas-two-panel-resizer', {
 		}
 	},
 	template: [
-		'<multipane @paneresizestart="panelMoving = true" @paneresizestop="panelMoving = false" class="foo" :layout="layout">',
+		'<multipane @paneresizestart="panelMoving = true" @paneresize="paneresize" @paneresizestop="paneresizestop" class="foo" :layout="layout">',
 		'	<div v-loading="panelMoving" class="resizepanel" :style="closePanelStyle" element-loading-spinner="11" element-loading-background="rgba(0, 0, 0, 0)">',
 		'		<slot name="closePanel"></slot>',
 		'	</div>',
@@ -733,8 +734,16 @@ Vue.component('jas-two-panel-resizer', {
 		'</multipane>'
 	].join(''),
 	methods: {
-
-
+		paneresize: function () {
+			this.$emit('paneresize');
+		},
+		paneresizestop: function (pane, resizer, size) {
+			this.panelMoving = false;
+			this._length = size;
+		}
+	},
+	created: function () {
+		this._length = this.length;
 	},
 	mounted: function () {
 		if (this.layout === 'horizontal') {
@@ -750,6 +759,7 @@ Vue.component('jas-two-panel-resizer', {
 			this.closeClass = 'fa fa-angle-left';
 			this.openClass = 'fa fa-angle-right';
 		}
+
 	}
 });
 

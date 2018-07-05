@@ -8,6 +8,7 @@ var Constants = {
     "events": {
         "ErrorEvent": "ErrorEvent",//
         "MapLoadedEvent": "MapLoadedEvent",
+        "MapResizedEvent": "MapResizedEvent",
         "BaseMapLayersLoaded": "BaseMapLayersLoaded",
         "OptionalLayersLoaded": "OptionalLayersLoaded",
         "ModulesLoadedEvent": "ModulesLoaded",
@@ -49,6 +50,7 @@ var Constants = {
         "layerSetNotFound": "没有找到对应的layerSet",
         "repeatIdError": "重复ID",
         "hasNoIdError": "ID不存在",
+        "hasNoStyleError": "样式不存在",
         "hasNoProj4js": "自定义投影需要引入proj4.js",
         "hasNoConfigDataError":"配置不存在"
     },
@@ -57,9 +59,9 @@ var Constants = {
     }
 };
 /**
- *
+ * 之前的版本使用M，推荐使用JasMap
  */
-var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
+var JasMap = null ,M = null;
 /**
  * 加载平台依赖的类库和配置文件、浏览器兼容问题处理
  */
@@ -100,12 +102,13 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
             appScriptId:"mapApi",
             appConfigPath:"config.json",
             appName:"",
+            dpi:window.screen.deviceXDPI ?window.screen.deviceXDPI :96 ,
             duration:500,
             drawLayerId:"overLayer",
             drawLayerIndex:1000,
             defaultZoomLevel:10,
             defaultZoomScale:50000,
-            defaultHighlightColor:[ 255,0,255,1],
+            defaultHighlightColor:'rgba(255,0,255,1)',
             onConfigLoaded:function(e){
 
             },
@@ -119,6 +122,9 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
 
             },
             onModuleStartup:function(e){
+
+            },
+            onMapResized:function(e){
 
             }
         };
@@ -142,6 +148,7 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
             eventManager.registerEvent( _this.Events .ErrorEvent ,apiDefaults.onError);
             eventManager.registerEvent( _this.Events .ModuleStartupEvent ,apiDefaults.onModuleStartup);
             eventManager.registerEvent( _this.Events .OptionalLayerAddedEvent ,apiDefaults.onLayerAdded);
+            eventManager.registerEvent( _this.Events .MapResizedEvent ,apiDefaults.onMapResized);
             eventManager.startup();
             styleManager.startup();
             mapManager.startup();
@@ -155,13 +162,13 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
         /**
          *
          */
-        _this.showMapInfo = function(){
+        _this.logMapInfo = function(){
             var view = _this.map.getView();
             var info = {};
             info.size = _this.map.getSize();
             info.center = view.getCenter();
             info.currentZoom = view.getZoom();
-            console.info("MapInfo:" + JSON.stringify(info));
+            console.log("MapInfo:" + JSON.stringify(info));
         };
         /*********导航类*********/
         _this.centerAt = function(x, y ){
@@ -209,6 +216,14 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
                 });
             }
         };
+        _this.setResolution = function(re){
+            if(!isNaN(re) ){
+                _this.map.getView().animate({
+                    resolution: re,
+                    duration: apiDefaults.duration
+                });
+            }
+        };
         _this.zoomHome = function(){
             var args = [].concat(_this.mapConfig.mapOptions.center) ;
             var level = _this.mapConfig.mapOptions.level ;
@@ -225,7 +240,12 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
         };
         _this.zoomAt = function(x, y , level){
             _this.centerAt(x, y);
-            _this.setLevel(level===undefined ? apiDefaults.defaultZoomLevel :level);
+            if(level=== undefined ){
+                var re = commonUtil.scaleToResolution(apiDefaults.defaultZoomScale);
+                _this.setResolution(re);
+            }else {
+                _this.setLevel(level);
+            }
         };
         _this.zoomLayer = function(layerId){
             var layer = _this.getLayerById(layerId);
@@ -245,7 +265,7 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
             }
         };
         _this.hideZoomSlider = function(){
-            alert("开发中...");
+            console.info("开发中...");
         };
         /*********信息获取类********/
         _this.getLayerById = function(layerId){
@@ -278,7 +298,8 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
             var result = [];
             if(source){
                 if(featureId){
-                    result.push(source.getFeatureById(featureId));
+                    var ft = source.getFeatureById(featureId);
+                    ft && result.push(ft);
                 }else{
                     var features = source.getFeatures();
                     for(var i = 0 ; i < features.length ; i++){
@@ -303,6 +324,9 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
             };
             var params = commonUtil.extend(defaults , obj);
             return new ol.style.Style(params);
+        };
+        _this.showInfoWindow = function(x, y ,content ,title ,width ,height){
+            mapManager.updateInfoWindow.apply(this,arguments);
         };
         /********图层操作类********/
         _this.addLayer = function(layer ){
@@ -372,7 +396,7 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
                 name :  ''
             });
             if( params.attributes.id ){
-                feature.setId( params.attributes.id );
+                feature.setId( params.layerId + "." + params.attributes.id );
             }
             var style = new ol.style.Style({
                 image : new ol.style.Icon({
@@ -650,9 +674,14 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
         };
         _this.addLayerClickEventListener = function(layerId , func){
             var layer = _this.getLayerById(layerId);
+            if(!layer){
+                eventManager.publishError(_this.Strings.hasNoIdError + ",layerId=" + layerId);
+                return ;
+            }
             if(layer && typeof func === "function"){
                 var interaction = new ol.interaction.Select({
-                    condition: ol.events.condition.click
+                    condition: ol.events.condition.click,
+                    layers:[layer]
                 });
                 interaction.on("select",function(e){
                     var features = e.selected;
@@ -664,7 +693,9 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
                         result.push({ id:id ,attributes:attributes });
                     }
                     if(result .length > 0){
-                        func({features:result });
+                        var pixel = e.mapBrowserEvent.pixel;
+                        var coordinate = e.mapBrowserEvent.coordinate;
+                        func({features:result ,pixel:pixel ,coordinate:coordinate});
                     }
                 });
                 _this.map.addInteraction(interaction);
@@ -723,39 +754,25 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
                 "center":true,
                 "scale":20000 // 与map lods参数或底图的比例尺设置相关
             };
+            layerId = layerId ? layerId : apiDefaults.drawLayerId;
             var params = commonUtil.extend(defaults,options);
             var features = [];
-            if(typeof target === "string")
-                features = _this.getFeatures(target ,layerId);
+            if(typeof target === "string") {
+                if (target.indexOf(".") < 0) {
+                    target = layerId + "." + target;//geotools
+                }
+                features = _this.getFeatures(target, layerId);
+            }
             else if(typeof target === "object")
                 features = _this.getFeatures(null,layerId ,target);
-            var getBoldStyle = function(s){
-                var style = s.clone();
-                if(style.getFill()){
-                    var fill = style.getFill();
-                    fill.setColor(apiDefaults.defaultHighlightColor);
-                }
-                if(style.getStroke()){
-                    var stroke = style.getStroke();
-                    var width = stroke.getWidth() + 2;
-                    stroke.setWidth(width);
-                }
-                if(style.getImage()){
-                    var image = style.getImage();
-                    var scale = image.getScale() * 1.25;
-                    image.setScale(scale);
-                }
-                return style;
-            };
+
             var prepareFlashStyle = function(){
                 if(features && features.length > 0){
                     for(var i = 0 ; i < features .length ; i++) {
                         var f1 = features[i];
                         var fStyle1 =  f1.getStyle();
-                        if(fStyle1){
-                            f1.set("preSymbol",fStyle1);
-                            f1.set("boldSymbol",getBoldStyle(fStyle1));
-                        }
+                        f1.set("preSymbol",fStyle1);
+                        f1.set("boldSymbol",styleManager.getBoldStyle(fStyle1));
                     }
                     return true;
                 }
@@ -764,7 +781,7 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
             var featureStyleFlash = function(flg){
                 for(var i = 0 ; i < features .length ; i++){
                     var f = features[i];
-                    var fStyle =  f.getStyle();
+                    var fStyle = null;
                     if(flg){
                         fStyle = f.get("boldSymbol");
                     }else{
@@ -942,6 +959,9 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
             // }
             return moduleManager.getModuleById(moduleId);
         };
+        _this.resizeMap = function(){
+            _this.map.updateSize();
+        };
         //
         function MapManager(){
             MapManager.NAVIGATOR = "navigator" ;
@@ -970,14 +990,19 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
                     var scaleLineControl = new ol.control.ScaleLine({
                         "units":"metric",
                         "topOutUnits":"千米",
-                        "topInUnits":"米",
-                        "render":function(){
-
-                        }
+                        "topInUnits":"米"
+                        //,
+                        // "render":function(){
+                        //
+                        // }
                     });
                     _this.map.getControls().push(scaleLineControl);
                 }
+                _this.map.on("change:size",function(e){
+                    eventManager.publishEvent( _this.Events .MapResizedEvent );
+                });
                 eventManager.publishEvent( _this.Events .MapLoadedEvent ,null, 10);
+
             };
             var onConfigLoaded = function(e){
                 _this.apiConfig = e.data;
@@ -1136,41 +1161,68 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
             _class.drawInteracting = null;
             _class.editInteracting = null;
             _class.flashSelect = null;//图层高亮
-            _class.clickSelect = null;//图层单击
-
-            /**
-             *
-             * @param params [{layer:layer , callback:function(e){}}]
-             */
-            _class.addLayersClickInteract = function(params){
-                if(_class.clickSelect){
-                    _this.map.removeInteraction(_class.clickSelect);
-                    _class.clickSelect = null;
-                }
-                if(params && params.length > 0){
-                    var layers = [],callbacks = [];
-                    var size = 0 ;
-                    for(var i = 0 ; i < params .length ; ++i){
-                        var param = params[i];
-                        if(param.layer && param.callback){
-                            layers.push(params.layer);
-                            callbacks.push(params.callback);
-                            ++size ;
-                        }
-                    }
-                    _class.clickSelect = new ol.interaction.Select({
-                        condition: ol.events.condition.click,
-                        layers:layers
-                    });
-                    _this.map.addInteraction(_class.clickSelect);
-                    _class.clickSelect.on("select",function(e){
-                        for(i = 0 ; i < size ; i++){
-
-                        }
-                    });
-                }
-            };
             //-----------------------
+
+            //--infowindow--
+            var infoWindowOverlay = null;
+            var popupElement = null;
+            var titleContainer = null;
+            var titleElement = null;
+            var contentContainer = null;
+            var contentElement = null;
+            var titleCloser = null;
+            _class.updateInfoWindow = function(x,y,content,title){
+                if(!infoWindowOverlay){
+                    popupElement = document.createElement("div");
+                    popupElement.className = "map-popup";
+                    popupElement.id = "popup";
+                    //title
+                    titleContainer = document.createElement("div");
+                    titleContainer.id = "popup-title";
+                    titleElement = document.createElement("p");
+                    titleCloser = document.createElement("a");
+                    titleCloser.href = "#";
+                    titleCloser.id = "popup-closer";
+                    titleCloser.className = "map-popup-closer";
+                    titleContainer.appendChild(titleElement);
+                    titleContainer.appendChild(titleCloser);
+                    //
+                    var href = document.createElement("hr");
+                    //content
+                    contentContainer = document.createElement("div");
+                    contentContainer.id ="popup-content";
+                    contentElement= document.createElement("div");
+                    contentContainer.appendChild(contentElement);
+                    //
+                    popupElement.appendChild(titleContainer);
+                    popupElement.appendChild(href);
+                    popupElement.appendChild(contentContainer);
+                    infoWindowOverlay = new ol.Overlay({
+                        element: popupElement ,
+                        autoPan: true,
+                        autoPanAnimation: {
+                            duration: 250
+                        }
+                    });
+                    _this.map.addOverlay(infoWindowOverlay);
+                    //
+                    titleCloser.onclick = function() {
+                        infoWindowOverlay.setPosition(undefined);
+                        titleCloser.blur();
+                        return false;
+                    };
+                }
+                titleElement.innerHTML = title ? title : "信息窗口";
+
+                if(content instanceof Node){
+                    contentElement.innerHTML="";
+                    contentElement.appendChild(content)  ;
+                }else if(content instanceof String){
+                    contentElement.innerHTML = content ? content :"无";
+                }
+                infoWindowOverlay.setPosition([ x, y ]);
+            };
+
             _class.defineProjection = function(epsgString){
                 if(epsgString === "EPSG:4326" || epsgString === "EPSG:3857"){
                     return epsgString;
@@ -1207,6 +1259,7 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
                 eventManager.registerEvent( _this.Events .ConfigLoadedEvent ,onConfigLoaded);
                 eventManager.registerEvent( _this.Events .MapLoadedEvent ,onMapLoaded);
                 eventManager.registerEvent( _this.Events .OptionalLayersLoaded ,onOptionLayersLoaded);
+
             };
             _class.active = function(state,vectorLayer,param ){
                 _this.removeEventListener(_class.drawInteracting);
@@ -1267,7 +1320,6 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
         }
         function StyleManager(){
             var _class = this;
-            //自定义style模型
             var defaultStyle = {
                 radius:"5",
                 picture:null,
@@ -1281,6 +1333,12 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
                 fill_color:"rgb(255,204,51,0.7)",
                 fill_opacity:1
             };
+            var onMapLoaded = function(e){
+                if(typeof mapStyleTemplates !== "undefined"){
+                    _class.mapStyleTemplates = mapStyleTemplates;
+                }
+            };
+            _class.mapStyleTemplates = {};
             _class.drawStyle = function(param){
                 var styleParam = commonUtil.extend({},defaultStyle,param);
                 var style = {
@@ -1317,39 +1375,71 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
             };
             _class.parse = function(styleParam){
                 if( !styleParam ) return ;
-                var style = {
-                    fill: new ol.style.Fill({
-                        color: styleParam.fill_color
-                    }),
-                    stroke: new ol.style.Stroke({
-                        color: styleParam.border_color,
-                        width: styleParam.border_width
-                    })
-                } ;
-                if(styleParam.picture){
-                    style.image = new ol.style.Icon({
-                        anchor: [0.5, 1],
-                        offset:[styleParam.offset_x,styleParam.offset_y],
-                        size:[ styleParam.height , styleParam.width],
-                        anchorXUnits: 'fraction',
-                        anchorYUnits: 'pixels',
-                        src: styleParam.picture
-                    });
-                }else{
-                    style.image = new ol.style.Circle({
-                        radius: styleParam.radius,
-                        stroke: new ol.style.Stroke({
-                            color: styleParam.border_color
-                        }),
+                if(typeof styleParam ==="string"){
+                    if( _class.mapStyleTemplates[styleParam]){
+                        return _class.mapStyleTemplates[styleParam]
+                    }else{
+                        eventManager.publishInfo(_this.Strings.hasNoStyleError + ",style=" + styleParam);
+                    }
+                }else if(typeof styleParam ==="object"){
+                    var style = {
                         fill: new ol.style.Fill({
                             color: styleParam.fill_color
+                        }),
+                        stroke: new ol.style.Stroke({
+                            color: styleParam.border_color,
+                            width: styleParam.border_width
                         })
-                    })
+                    } ;
+                    if(styleParam.picture){
+                        style.image = new ol.style.Icon({
+                            anchor: [0.5, 1],
+                            offset:[styleParam.offset_x,styleParam.offset_y],
+                            size:[ styleParam.height , styleParam.width],
+                            anchorXUnits: 'fraction',
+                            anchorYUnits: 'pixels',
+                            src: styleParam.picture
+                        });
+                    }else{
+                        style.image = new ol.style.Circle({
+                            radius: styleParam.radius,
+                            stroke: new ol.style.Stroke({
+                                color: styleParam.border_color
+                            }),
+                            fill: new ol.style.Fill({
+                                color: styleParam.fill_color
+                            })
+                        })
+                    }
+                    return new ol.style.Style(style);
                 }
-                return new ol.style.Style(style);
+
             };
             _class.startup =  function(){
-
+                eventManager.registerEvent( _this.Events .MapLoadedEvent ,onMapLoaded);
+            };
+            _class.getBoldStyle = function(s){
+                var style = s ? s.clone():ol.style.Style.default_[0].clone();
+                if(style.getFill()){
+                    var fill = style.getFill();
+                    fill.setColor(apiDefaults.defaultHighlightColor);
+                }
+                if(style.getStroke()){
+                    var stroke = style.getStroke();
+                    var width = stroke.getWidth() + 2;
+                    stroke.setWidth(width);
+                }
+                if(style.getImage()){
+                    var image = style.getImage();
+                    var scale = image.getScale() * 1.5;
+                    image.setScale(scale);
+                }
+                return style;
+            };
+            _class.addMapStyle = function(name,style){
+                if(!_class.mapStyleTemplates[name]){
+                    _class.mapStyleTemplates[name] = style;
+                }
             }
         }
         function LayerManager(){
@@ -1358,7 +1448,6 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
             var _optionalLayerConfig = null;
             var _baseMapLayerConfig = null;
             var _flashLayers = [];
-            var _clickLayers = {};
 
             var defaultGridSet = {
                 "tileSize":[256,256],
@@ -1564,7 +1653,7 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
                     for(var j = 0 ; j < layersConfig.length ;j++){
                         var layerConfig = layersConfig[j];
                         var layer = _class.createLayer(layerConfig);
-                        if(layerConfig && layerConfig.flash===true){
+                        if(layerConfig && layerConfig.flash === true){
                             _flashLayers.push(layer);
                         }
                         _class.optionalLayers.push(layer);
@@ -1599,6 +1688,7 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
                 _baseMapLayerConfig = _mapConfig.basemaps;
                 parseLayerConfigs();
             };
+
             _class.optionalLayers = [];
             _class.baseMapLayers = [];
             _class.startup = function(){
@@ -1674,6 +1764,7 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
                 }
                 return layer;
             };
+
         }
         function EventManager(){
             var _class = this;
@@ -2018,7 +2109,6 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
             var apiScript = null;
             _class.startup = function(){
                 apiScript = document.getElementById(apiOptions.appScriptId);
-                //var apiOpts = getMapOptions();//读取data-options
                 basePath = getBasePath();
                 var configPath = getMapConfigPath();//读取data-config
                 if(configPath) {
@@ -2031,10 +2121,12 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
                                 if (type==="dojo" && conf.dojoConfig) { // loadResources之前定义
                                     global.dojoConfig = conf.dojoConfig;
                                 }
-                            }, null, function () {
+                            }, function(){
+                                console.info("资源加载完成：",arguments[0]);
+                            }, function () {
                                 eventManager.timeEnd( _this.Strings.dependenceLoading);
                                 eventManager.publishEvent( _this.Events .ConfigLoadedEvent,conf);
-                            });
+                            },conf.async );
                         }else{
                             eventManager.publishEvent( _this.Events .ConfigLoadedEvent,conf);
                         }
@@ -2073,8 +2165,9 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
                     }
                 });
             }
-            function loadResources( ress, onOneBeginLoad, onOneLoad, onLoad){
+            function loadResources( ress, onOneBeginLoad, onOneLoad, onLoad, async){
                 var loaded = [];
+                var relys = {};
                 function _onOneLoad(url){
                     if(loaded.indexOf(url) > -1){
                         return;
@@ -2083,6 +2176,14 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
                     if(onOneLoad){
                         onOneLoad(url, loaded.length);
                     }
+                    if(relys[url]){
+                        var arrs = relys[url];
+                        for(var i = 0 ; i < arrs.length; i++ ){
+                            if(arrs[i].url){
+                                loadResource(arrs[i].type, arrs[i].url, onOneBeginLoad, _onOneLoad);
+                            }
+                        }
+                    }
                     if(loaded.length === ress.length){
                         if(onLoad){
                             onLoad();
@@ -2090,7 +2191,12 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
                     }
                 }
                 for(var i = 0; i < ress.length; i ++){
-                    if(ress[i].url){
+                    if(ress[i].relyOn){
+                        if(!relys[ress[i].relyOn]){
+                            relys[ress[i].relyOn] = [];
+                        }
+                        relys[ress[i].relyOn].push(ress[i]);
+                    } else if(ress[i].url){
                         loadResource(ress[i].type, ress[i].url, onOneBeginLoad, _onOneLoad);
                     }
                 }
@@ -2101,7 +2207,7 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
                 }
                 if(type === 'css'){
                     loadCss(url);
-                }else{
+                }else if(type==="js"){
                     loadJs(url);
                 }
                 function createElement(config) {
@@ -2156,7 +2262,6 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
                     }
                 }
             }
-
             function getMapConfigPath(){
                 if(apiScript){
                     var path = apiScript.getAttribute("dataaccess-config");
@@ -2275,6 +2380,17 @@ var JasMap = null ,M = null;//之前的版本使用M，推荐使用JasMap
                 //xmlHttp.setRequestHeader("Content-type","application/json");
                 xmlHttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
                 xmlHttp.send();
+            };
+            _class.scaleToResolution = function(scale){
+                var espg = _this.map.getView().getProjection().getCode();
+                if(espg==="EPSG:4490" || espg==="EPSG:4326"){
+                    //1:scale = 1 : (96 * 2 * Math.PI * 6378137 * resolution / 360 / 0.0254)
+                    return   ( scale * 360 * 0.0254 ) /( 96 * 2 * Math.PI * 6378137);
+                }else {
+                    //(espg==="EPSG:3857")
+                    //1:scale = 1 : (96 * Resolution / 0.0254)
+                    return  scale * 0.0254 / apiDefaults.dpi;
+                }
             };
             _class.appendUrl = function(url, fieldName , fieldValue){
                 if(url.indexOf("?")<0){
