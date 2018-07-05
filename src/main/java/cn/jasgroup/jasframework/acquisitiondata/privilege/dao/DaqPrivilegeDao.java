@@ -22,7 +22,7 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 	 */
 	public List<Map<String,Object>> getProjectList(String unitOid){
 		String sql = "with recursive pri_unit_temp(oid,parent_id) as ("
-				+ "select t.oid,t.parent_id from pri_unit t where t.oid=? and t.active=1"
+				+ "select t.oid,t.parent_id from pri_unit t where t.oid=? and t.active=1 "
 				+ "union all "
 				+ "select t.oid,t.parent_id from pri_unit t inner join pri_unit_temp b on t.parent_id=b.oid and t.active=1 "
 				+ ")"
@@ -39,14 +39,14 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 	  * <p>创建日期:2018年7月3日 下午2:01:05。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public List<Map<String,Object>> getTendersList(String unitOid){
+	public List<Map<String,Object>> getTendersList(String unitOid,String projectOid){
 		String sql = "with recursive pri_unit_temp(oid,parent_id) as ("
-				+ "select t.oid,t.parent_id from pri_unit t where t.oid=? and t.active=1"
+				+ "select t.oid,t.parent_id from pri_unit t where t.oid=? and t.active=1 "
 				+ "union all "
 				+ "select t.oid,t.parent_id from pri_unit t inner join pri_unit_temp b on t.parent_id=b.oid and t.active=1 "
 				+ ")"
-				+ "select distinct tt.oid as key,tt.tenders_name as value from daq_implement_scope_ref t left join (select oid,tenders_name from daq_tenders where active=1) tt on t.tenders_oid=tt.oid where t.unit_oid in (select oid from pri_unit_temp);";
-		return this.queryForList(sql, new Object[]{unitOid});
+				+ "select distinct tt.oid as key,tt.tenders_name as value from daq_implement_scope_ref t left join (select oid,tenders_name,project_oid from daq_tenders where active=1) tt on t.tenders_oid=tt.oid where t.unit_oid in (select oid from pri_unit_temp) and tt.project_oid=?";
+		return this.queryForList(sql, new Object[]{unitOid,projectOid});
 	}
 	/***
 	  * <p>功能描述：根据项根据标段oid获取部门及部门一下的管线列表。</p>
@@ -59,7 +59,7 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 	 */
 	public List<Map<String,Object>> getPipelineList(String tendersOid,String unitOid){
 		String sql = "with recursive pri_unit_temp(oid,parent_id) as ("
-				+ "select t.oid,t.parent_id from pri_unit t where t.oid='"+unitOid+"' and t.active=1"
+				+ "select t.oid,t.parent_id from pri_unit t where t.oid='"+unitOid+"' and t.active=1 "
 				+ "union all "
 				+ "select t.oid,t.parent_id from pri_unit t inner join pri_unit_temp b on t.parent_id=b.oid and t.active=1 "
 				+ ")"
@@ -81,7 +81,7 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 	 */
 	public List<Map<String,Object>> getPipeSegmentOrCrossList(String pipelineOid,String unitOid){
 		String sql = "with recursive pri_unit_temp(oid,parent_id) as ("
-				+ "select t.oid,t.parent_id from pri_unit t where t.oid='"+unitOid+"' and t.active=1"
+				+ "select t.oid,t.parent_id from pri_unit t where t.oid='"+unitOid+"' and t.active=1 "
 				+ "union all "
 				+ "select t.oid,t.parent_id from pri_unit t inner join pri_unit_temp b on t.parent_id=b.oid and t.active=1 "
 				+ ")"

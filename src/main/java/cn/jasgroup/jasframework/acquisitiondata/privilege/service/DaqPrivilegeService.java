@@ -39,9 +39,9 @@ public class DaqPrivilegeService extends BaseService{
 	  * <p>创建日期:2018年7月3日 下午2:08:16。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public List<Map<String,Object>>getTendersList(){
+	public List<Map<String,Object>>getTendersList(String projectOid){
 		String unitOid = ThreadLocalHolder.getCurrentUser().getUnitId();
-		return this.daqPrivilegeDao.getTendersList(unitOid);
+		return this.daqPrivilegeDao.getTendersList(unitOid,projectOid);
 	}
 	/***
 	  * <p>功能描述：根据项根据标段oid获取部门及部门一下的管线列表。</p>
