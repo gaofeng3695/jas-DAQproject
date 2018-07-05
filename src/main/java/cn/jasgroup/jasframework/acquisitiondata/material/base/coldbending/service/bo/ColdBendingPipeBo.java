@@ -76,10 +76,16 @@ public class ColdBendingPipeBo extends CommonBaseBo{
 	private Date produceDate; 
 
 	/** 施工单位 */
-	private String constructUnit; 
+	private String constructUnit;
+	
+	/** 施工单位名称 */
+	private String constructUnitName; 
 
 	/** 监理单位 */
-	private String supervisionUnit; 
+	private String supervisionUnit;
+	
+	/** 监理单位 */
+	private String supervisionUnitName; 
 
 	/** 监理工程师 */
 	private String supervisionEngineer; 
@@ -336,6 +342,22 @@ public class ColdBendingPipeBo extends CommonBaseBo{
 
 	public void setOid(String oid) {
 		this.oid = oid;
+	}
+
+	public String getConstructUnitName() {
+		return constructUnitName;
+	}
+
+	public void setConstructUnitName(String constructUnitName) {
+		this.constructUnitName = constructUnitName;
+	}
+
+	public String getSupervisionUnitName() {
+		return supervisionUnitName;
+	}
+
+	public void setSupervisionUnitName(String supervisionUnitName) {
+		this.supervisionUnitName = supervisionUnitName;
 	}
 	
 }
