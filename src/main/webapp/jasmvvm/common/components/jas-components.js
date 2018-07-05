@@ -835,8 +835,6 @@ Vue.component('jas-import-export-btns', {
 				templateCode: this.templateCode,
 				modelId: 'B', //【导出策略，现固定为B】
 				className: this.className, //【后台query类全路径】
-				rows: '10000', //【最大分页数，固定为100000】
-				page: '1', //【页码，固定为1】
 				keyWord: this.form
 			}, function (data) {
 				// return
