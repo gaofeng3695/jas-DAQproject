@@ -1339,6 +1339,7 @@ CREATE TABLE daq_construction_weld (
 	supervision_engineer varchar(50),
 	collection_person varchar(30),
 	collection_date timestamp(6),
+	geo_state varchar(10),
 	remarks varchar(200),
 	create_user_id varchar(36),
 	create_user_name varchar(50),
@@ -1379,6 +1380,7 @@ comment on column daq_construction_weld.supervision_unit IS '监理单位';
 comment on column daq_construction_weld.supervision_engineer IS '监理工程师';
 comment on column daq_construction_weld.collection_person IS '采集人员';
 comment on column daq_construction_weld.collection_date IS '采集日期';
+comment on column daq_construction_weld.geo_state IS '空间数据状态';
 comment on column daq_construction_weld.remarks IS '备注';
 comment on column daq_construction_weld.create_user_id IS '创建人id';
 comment on column daq_construction_weld.create_user_name IS '创建人名称';
@@ -1387,6 +1389,12 @@ comment on column daq_construction_weld.modify_user_id IS '修改人id';
 comment on column daq_construction_weld.modify_user_name IS '修改人名称';
 comment on column daq_construction_weld.modify_datetime IS '修改时间';
 comment on column daq_construction_weld.active IS '有效标志';
+CREATE INDEX index_daq_construction_weld_weld_code_9 ON daq_construction_weld USING btree (weld_code);
+ALTER TABLE daq_construction_weld ADD PRIMARY KEY (oid);
+select dropgeometrycolumn('public', 'daq_construction_weld', 'geom');
+select AddGeometryColumn('public', 'daq_construction_weld', 'geom', 4490, 'POINT', 4);
+CREATE INDEX point_test_geom_idx ON public.daq_construction_weld USING gist (geom);
+
 
 CREATE TABLE daq_weld_anticorrosion_check (
 	oid varchar(36) NOT NULL,
@@ -1682,8 +1690,6 @@ comment on column daq_weld_rework_weld.modify_user_name IS '修改人名称';
 comment on column daq_weld_rework_weld.modify_datetime IS '修改时间';
 comment on column daq_weld_rework_weld.active IS '有效标志';
 
-CREATE INDEX index_daq_construction_weld_weld_code_9 ON daq_construction_weld USING btree (weld_code);
-ALTER TABLE daq_construction_weld ADD PRIMARY KEY (oid);
 CREATE INDEX index_daq_weld_anticorrosion_check_weld_oid_9 ON daq_weld_anticorrosion_check USING btree (weld_oid);
 ALTER TABLE daq_weld_anticorrosion_check ADD PRIMARY KEY (oid);
 CREATE INDEX index_daq_weld_anticorrosion_repair_weld_oid_9 ON daq_weld_anticorrosion_repair USING btree (weld_oid);
