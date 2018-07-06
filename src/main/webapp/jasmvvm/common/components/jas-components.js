@@ -424,7 +424,7 @@ Vue.component('jas-table-for-list', {
 		'<div  class="jas-flex-box is-vertical is-grown">',
 		'<div style="padding: 15px 0;">',
 		'	<el-button size="small" plain type="primary" icon="fa fa-plus" v-if="isHasPrivilege(' + "'bt_add'" + ')"  @click="add">增加</el-button>',
-		'<jas-import-export-btns :isImport="isHasPrivilege(' + "'bt_import'" + ')" :isExport="isHasPrivilege(' + "'bt_export'" + ')" ',
+		'<jas-import-export-btns :is-import="isHasPrivilege(' + "'bt_import'" + ')" :is-export="isHasPrivilege(' + "'bt_export'" + ')" ',
 		'		:form="form" :oids="oids" :template-code="templateCode" :class-name="className"></jas-import-export-btns>',
 		'	<el-button class="fr" size="small" icon="el-icon-refresh" @click="refresh"></el-button>',
 		'</div>',
