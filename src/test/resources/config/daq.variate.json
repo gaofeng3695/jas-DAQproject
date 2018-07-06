@@ -1,0 +1,9 @@
+[
+	{
+		"name": "current_unit_id",
+		"script":{
+			"service": "daqInjectService",
+			"method":"injectCurrentUnitId()"
+		}
+	}
+]
