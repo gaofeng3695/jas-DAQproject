@@ -75,7 +75,7 @@ public class ColdBendingPipeQuery extends BaseJavaQuery{
 				sql +=" and t.pipe_cold_bending_code like :pipeColdBendingCode";
 			}
 		}
-		sql += " and t.construct_unit in (select u.oid from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid='"+unitOid+"')";
+		sql += " and t.construct_unit in (select uu.oid from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid='"+unitOid+"')";
 		sql += " order by t.create_datetime desc";
 		return sql;
 	}
