@@ -217,7 +217,7 @@ public class CheckPipeColdBending extends CommonJdbcEntity{
 
 	public void setBendAngle(Double bendAngle) {
 		this.bendAngle = bendAngle; 
-		super.setField("");
+		super.setField("bendAngle");
 	}
 
 	public String getWeldPosition() {
