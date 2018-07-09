@@ -626,7 +626,7 @@
 				if (falg) {
 					that.formAttr.forEach(function (parent, index) {
 						parent.data.forEach(function (child) {
-							if (child.childField == item.id) {
+							if (child.childField.indexOf(item.id) > -1) {
 								if (!that.formData[child.id]) {
 									top.Vue.prototype.$message({
 										message: '请先选择' + child.name,

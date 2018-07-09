@@ -6,8 +6,8 @@ Vue.component('jas-base-group-title', {
 		},
 	},
 	template: [
-		'<div style="border-bottom: 1px solid rgb(228, 231, 237);margin-bottom:10px;">',
-		'	<span style="height: 32px;line-height:32px;display:inline-block;border-bottom: 2px solid rgb(64, 158, 255)">{{name}}</span>',
+		'<div style="margin:10px 0 6px;line-height:32px;">',
+		'	<span style="padding:0px 4px 0px 4px;height: 22px;line-height:22px;display:inline-block;background: #ecf5ff;border-left: 2px solid rgb(64, 158, 255)">{{name}}</span>',
 		'</div>'
 	].join(''),
 });
@@ -819,13 +819,11 @@ Vue.component('jas-import-export-btns', {
 				templateCode: this.templateCode,
 				modelId: 'B', //【导出策略，现固定为B】
 				className: this.className, //【后台query类全路径】
-				rows: '10000', //【最大分页数，固定为100000】
-				page: '1', //【页码，固定为1】
 				keyWord: {
 					oids: this.oids
 				}
 			}, function (data) {
-				that._downloadExportFile(data);
+				that._downloadExportFile(data.data);
 			});
 		},
 		bt_export_all: function (obj) { // 导出全部
