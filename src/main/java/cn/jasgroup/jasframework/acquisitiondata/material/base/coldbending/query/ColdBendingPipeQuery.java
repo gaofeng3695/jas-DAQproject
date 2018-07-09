@@ -3,13 +3,26 @@ package cn.jasgroup.jasframework.acquisitiondata.material.base.coldbending.query
 import org.apache.commons.lang.StringUtils;
 
 import cn.jasgroup.jasframework.acquisitiondata.material.base.coldbending.service.bo.ColdBendingPipeBo;
+import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 
+/***
+  * 
+  *<p>类描述：。
+  *{@link cn.jasgroup.jasframework.acquisitiondata.variate.DaqInjectService #injectDataAuthoritySql()}</p>
+  * @author 雷凯 。
+  * @version v1.0.0.1。
+  * @since JDK1.8。
+  *<p>创建日期：2018年7月9日 下午3:32:17。</p>
+ */
 @QueryConfig(
 	scene="/coldBendingPipe/getPage",
-	resultClass=ColdBendingPipeBo.class
+	resultClass=ColdBendingPipeBo.class,
+	queryBeforeProcess = {
+			@Process(service = "daqInjectService" , method = "injectDataAuthoritySql(dataAuthoritySql)")
+		}
 )
 public class ColdBendingPipeQuery extends BaseJavaQuery{
 	/**
@@ -75,7 +88,7 @@ public class ColdBendingPipeQuery extends BaseJavaQuery{
 				sql +=" and t.pipe_cold_bending_code like :pipeColdBendingCode";
 			}
 		}
-		sql += " and t.construct_unit in (select uu.oid from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid='"+unitOid+"')";
+		sql +=  this.dataAuthoritySql;
 		sql += " order by t.create_datetime desc";
 		return sql;
 	}
