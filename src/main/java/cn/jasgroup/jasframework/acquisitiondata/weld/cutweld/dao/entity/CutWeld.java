@@ -1,8 +1,6 @@
 package cn.jasgroup.jasframework.acquisitiondata.weld.cutweld.dao.entity;
 
-import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
-import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
 import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
 import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
@@ -14,23 +12,16 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
   * @version v1.0.0.1。
   * @since JDK1.8。
   *<p>创建日期：2018年7月6日 下午5:35:47。</p>
+  *{@link cn.jasgroup.jasframework.acquisitiondata.weld.cutweld.service.CutWeldService #savePipeAfterCut()}
  */
-
 @CommonSaveConfig(
-		scene = "/cutPipe/save"
+		scene = "/cutWeld/save"
 //		,
-//		beforeAdvice = {
-//				//将appVersionMenuList，webVersionMenuList合并到versionMenuList中
-//				@Process(service = "studentService", method = "injectPhoneCountBeforeSaveStudent()")
+//		afterAdvice = {
+//				//将切管后的钢管信息保存到钢管表
+//				@Process(service = "cutWeldService", method = "savePipeAfterCut()")
 //		}
 	)
-@CommonUpdateConfig(
-	scene = "/cutPipe/update"
-)
-@CommonDeleteConfig(
-	scene = "/cutPipe/delete"
-)
-
 @JdbcEntity(name="daq_cut_pipe")
 public class CutWeld extends CommonJdbcEntity{
 	
@@ -94,6 +85,11 @@ public class CutWeld extends CommonJdbcEntity{
 	 */
 	private Double fifthParagraphLength; 
 
+	/**
+	 * 审核状态
+	 */
+	private Integer approveStatus;
+	
 	/**
 	 * 备注 
 	 */
@@ -205,6 +201,15 @@ public class CutWeld extends CommonJdbcEntity{
 	public void setFifthParagraphLength(Double fifthParagraphLength) {
 		this.fifthParagraphLength = fifthParagraphLength; 
 		super.setField("fifthParagraphLength");
+	}
+	
+	public Integer getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(Integer approveStatus) {
+		this.approveStatus = approveStatus;
+		super.setField("approveStatus");
 	}
 
 	public String getRemarks() {

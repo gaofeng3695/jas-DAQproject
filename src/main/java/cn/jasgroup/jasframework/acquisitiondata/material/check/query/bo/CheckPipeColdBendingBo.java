@@ -13,7 +13,37 @@ public class CheckPipeColdBendingBo {
 	 * oid
 	 */
 	private String oid ;
-	
+
+	/**
+	 * 项目oid
+	 */
+	private String projectOid;
+
+	/**
+	 * 项目名称
+	 */
+	private String projectName;
+
+	/**
+	 * 监工单位oid
+	 */
+	private String constructionUnit;
+
+	/**
+	 * 监工单位名称
+	 */
+	private String unitName;
+
+	/**
+	 * 标段oid
+	 */
+	private String tendersOid;
+
+	/**
+	 * 标段名称
+	 */
+	private String tendersName;
+
 	/**
 	 * 冷弯管编号
 	 */
@@ -39,6 +69,11 @@ public class CheckPipeColdBendingBo {
 	 */
 	private Double wallThickness; 
 
+	/**
+	 * 弯制单位
+	 */
+	private String productionUnit;
+	
 	/**
 	 *  弯制角度(°)
 	 */
@@ -92,6 +127,54 @@ public class CheckPipeColdBendingBo {
 		this.oid = oid;
 	}
 
+	public String getProjectOid() {
+		return projectOid;
+	}
+
+	public void setProjectOid(String projectOid) {
+		this.projectOid = projectOid;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public String getConstructionUnit() {
+		return constructionUnit;
+	}
+
+	public void setConstructionUnit(String constructionUnit) {
+		this.constructionUnit = constructionUnit;
+	}
+
+	public String getUnitName() {
+		return unitName;
+	}
+
+	public void setUnitName(String unitName) {
+		this.unitName = unitName;
+	}
+
+	public String getTendersOid() {
+		return tendersOid;
+	}
+
+	public void setTendersOid(String tendersOid) {
+		this.tendersOid = tendersOid;
+	}
+
+	public String getTendersName() {
+		return tendersName;
+	}
+
+	public void setTendersName(String tendersName) {
+		this.tendersName = tendersName;
+	}
+
 	public String getPipeColdBendingCode() {
 		return pipeColdBendingCode;
 	}
@@ -130,6 +213,14 @@ public class CheckPipeColdBendingBo {
 
 	public void setWallThickness(Double wallThickness) {
 		this.wallThickness = wallThickness;
+	}
+
+	public String getProductionUnit() {
+		return productionUnit;
+	}
+
+	public void setProductionUnit(String productionUnit) {
+		this.productionUnit = productionUnit;
 	}
 
 	public Double getBendAngle() {

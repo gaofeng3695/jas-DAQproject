@@ -2,11 +2,11 @@ package cn.jasgroup.jasframework.acquisitiondata.weld.reworkweld.query;
 
 import org.apache.commons.lang.StringUtils;
 
-import cn.jasgroup.jasframework.acquisitiondata.weld.reworkweld.dao.entity.ReworkWeld;
+import cn.jasgroup.jasframework.acquisitiondata.weld.reworkweld.query.bo.ReworkWeldBo;
 import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 
-@QueryConfig(scene = "/reworkWeld/getPage", resultClass = ReworkWeld.class)
+@QueryConfig(scene = "/reworkWeld/getPage", resultClass = ReworkWeldBo.class)
 public class ReworkWeldQuery extends BaseJavaQuery {
 	
 	/**

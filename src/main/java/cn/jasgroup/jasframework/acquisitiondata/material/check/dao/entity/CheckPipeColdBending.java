@@ -41,6 +41,21 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 public class CheckPipeColdBending extends CommonJdbcEntity{
 
 	/**
+	 *  项目oid 
+	 */
+	private String projectOid; 
+
+	/**
+	 *  监工单位oid
+	 */
+	private String constructionUnit; 
+
+	/**
+	 *  标段oid
+	 */
+	private String tendersOid; 
+
+	/**
 	 * 冷弯管编号
 	 */
 	private String pipeColdBendingCode; 
@@ -65,6 +80,11 @@ public class CheckPipeColdBending extends CommonJdbcEntity{
 	 */
 	private Double wallThickness; 
 
+	/**
+	 * 弯制单位
+	 */
+	private String productionUnit;
+	
 	/**
 	 *  弯制角度(°)
 	 */
@@ -110,6 +130,33 @@ public class CheckPipeColdBending extends CommonJdbcEntity{
 	 */
 	private String remarks;
 
+	public String getProjectOid() {
+		return projectOid;
+	}
+
+	public void setProjectOid(String projectOid) {
+		this.projectOid = projectOid;
+		super.setField("projectOid");
+	}
+
+	public String getConstructionUnit() {
+		return constructionUnit;
+	}
+
+	public void setConstructionUnit(String constructionUnit) {
+		this.constructionUnit = constructionUnit;
+		super.setField("constructionUnit");
+	}
+
+	public String getTendersOid() {
+		return tendersOid;
+	}
+
+	public void setTendersOid(String tendersOid) {
+		this.tendersOid = tendersOid;
+		super.setField("tendersOid");
+	}
+
 	public String getPipeColdBendingCode() {
 		return pipeColdBendingCode; 
 	}
@@ -153,6 +200,15 @@ public class CheckPipeColdBending extends CommonJdbcEntity{
 	public void setWallThickness(Double wallThickness) {
 		this.wallThickness = wallThickness; 
 		super.setField("wallThickness");
+	}
+	
+	public String getProductionUnit() {
+		return productionUnit;
+	}
+
+	public void setProductionUnit(String productionUnit) {
+		this.productionUnit = productionUnit;
+		super.setField("productionUnit");
 	}
 
 	public Double getBendAngle() {
