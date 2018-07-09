@@ -543,7 +543,7 @@ CREATE TABLE daq_material_closure (
 	steel_grade varchar(50),
 	outside_diameter numeric(9,3),
 	wall_thickness numeric(9,3),
-	connection_methods varchar(20),
+	connection_methods varchar(50),
 	coating_methods varchar(50),
 	manufacturer varchar(50),
 	manufacturer_date timestamp(6),
@@ -1050,6 +1050,9 @@ ALTER TABLE daq_material_tee ADD PRIMARY KEY (oid);
 /**********线路物资检查信息begin***************/
 CREATE TABLE daq_check_coating_pipe (
 	oid varchar(36) NOT NULL,
+	project_oid varchar(36),
+	tenders_oid varchar(36),
+	construction_unit varchar(36),
 	pipe_code varchar(50),
 	groove_check varchar(5),
 	pipe_end_proring_check varchar(5),
@@ -1071,6 +1074,9 @@ CREATE TABLE daq_check_coating_pipe (
 );
 comment on table daq_check_coating_pipe IS '防腐管检查及信息记录表';
 comment on column daq_check_coating_pipe.oid IS '主键';
+comment on column daq_check_coating_pipe.project_oid IS '项目oid';
+comment on column daq_check_coating_pipe.tenders_oid IS '标段oid';
+comment on column daq_check_coating_pipe.construction_unit IS '施工单位';
 comment on column daq_check_coating_pipe.pipe_code IS '钢管编号';
 comment on column daq_check_coating_pipe.groove_check IS '坡口检查';
 comment on column daq_check_coating_pipe.pipe_end_proring_check IS '管端保护圈';
@@ -1092,6 +1098,9 @@ comment on column daq_check_coating_pipe.active IS '有效标志';
 
 CREATE TABLE daq_check_hot_bends (
 	oid varchar(36) NOT NULL,
+	project_oid varchar(36),
+	tenders_oid varchar(36),
+	construction_unit varchar(36),
 	hot_bends_code varchar(50),
 	weld_position varchar(5),
 	pipe_length varchar(5),
@@ -1112,6 +1121,9 @@ CREATE TABLE daq_check_hot_bends (
 );
 comment on table daq_check_hot_bends IS '热煨弯管检查信息记录表';
 comment on column daq_check_hot_bends.oid IS '主键';
+comment on column daq_check_coating_pipe.project_oid IS '项目oid';
+comment on column daq_check_coating_pipe.tenders_oid IS '标段oid';
+comment on column daq_check_coating_pipe.construction_unit IS '施工单位';
 comment on column daq_check_hot_bends.hot_bends_code IS '弯管编号';
 comment on column daq_check_hot_bends.weld_position IS '纵焊缝位置';
 comment on column daq_check_hot_bends.pipe_length IS '直管段长度';
@@ -1132,6 +1144,9 @@ comment on column daq_check_hot_bends.active IS '有效标志';
 
 CREATE TABLE daq_check_insulated_joint (
 	oid varchar(36) NOT NULL,
+	project_oid varchar(36),
+	tenders_oid varchar(36),
+	construction_unit varchar(36),
 	manufacturer_code varchar(36),
 	certification_num varchar(60),
 	diameter numeric(9,3),
@@ -1152,6 +1167,9 @@ CREATE TABLE daq_check_insulated_joint (
 );
 comment on table daq_check_insulated_joint IS '绝缘接头检查及信息记录表';
 comment on column daq_check_insulated_joint.oid IS '主键';
+comment on column daq_check_coating_pipe.project_oid IS '项目oid';
+comment on column daq_check_coating_pipe.tenders_oid IS '标段oid';
+comment on column daq_check_coating_pipe.construction_unit IS '施工单位';
 comment on column daq_check_insulated_joint.manufacturer_code IS '出厂编号';
 comment on column daq_check_insulated_joint.certification_num IS '合格证编号';
 comment on column daq_check_insulated_joint.diameter IS '公称直径(mm)';
@@ -1172,11 +1190,15 @@ comment on column daq_check_insulated_joint.active IS '有效标志';
 
 CREATE TABLE daq_check_pipe_cold_bending (
 	oid varchar(36) NOT NULL,
+	project_oid varchar(36),
+	tenders_oid varchar(36),
+	construction_unit varchar(36),
 	pipe_cold_bending_code varchar(50),
 	certificate_num varchar(60),
 	pipe_length numeric(9,3),
 	pipe_diameter numeric(9,3),
 	wall_thickness numeric(9,3),
+	production_unit varchar(60),
 	bend_angle numeric(4),
 	weld_position varchar(5),
 	ovality varchar(5),
@@ -1196,11 +1218,15 @@ CREATE TABLE daq_check_pipe_cold_bending (
 );
 comment on table daq_check_pipe_cold_bending IS '冷弯管检查及信息记录表';
 comment on column daq_check_pipe_cold_bending.oid IS '主键';
+comment on column daq_check_coating_pipe.project_oid IS '项目oid';
+comment on column daq_check_coating_pipe.tenders_oid IS '标段oid';
+comment on column daq_check_coating_pipe.construction_unit IS '施工单位';
 comment on column daq_check_pipe_cold_bending.pipe_cold_bending_code IS '冷弯管编号';
 comment on column daq_check_pipe_cold_bending.certificate_num IS '合格证编号';
 comment on column daq_check_pipe_cold_bending.pipe_length IS '弯管长度(m)';
 comment on column daq_check_pipe_cold_bending.pipe_diameter IS '管径(mm)';
 comment on column daq_check_pipe_cold_bending.wall_thickness IS '壁厚(mm）';
+comment on column daq_check_pipe_cold_bending.production_unit IS '弯制单位';
 comment on column daq_check_pipe_cold_bending.bend_angle IS '弯制角度(°）';
 comment on column daq_check_pipe_cold_bending.weld_position IS '纵焊缝位置';
 comment on column daq_check_pipe_cold_bending.ovality IS '椭圆度<0.6%D';
@@ -1220,6 +1246,9 @@ comment on column daq_check_pipe_cold_bending.active IS '有效标志';
 
 CREATE TABLE daq_check_reducer (
 	oid varchar(36) NOT NULL,
+	project_oid varchar(36),
+	tenders_oid varchar(36),
+	construction_unit varchar(36),
 	reducer_code varchar(36),
 	ovality varchar(5),
 	groove_check varchar(5),
@@ -1238,6 +1267,9 @@ CREATE TABLE daq_check_reducer (
 );
 comment on table daq_check_reducer IS '大小头检查及信息记录表';
 comment on column daq_check_reducer.oid IS '主键';
+comment on column daq_check_coating_pipe.project_oid IS '项目oid';
+comment on column daq_check_coating_pipe.tenders_oid IS '标段oid';
+comment on column daq_check_coating_pipe.construction_unit IS '施工单位';
 comment on column daq_check_reducer.reducer_code IS '大小头编号';
 comment on column daq_check_reducer.ovality IS '椭圆度<0.6%D';
 comment on column daq_check_reducer.groove_check IS '坡口检查';
@@ -1256,6 +1288,9 @@ comment on column daq_check_reducer.active IS '有效标志';
 
 CREATE TABLE daq_check_tee (
 	oid varchar(36) NOT NULL,
+	project_oid varchar(36),
+	tenders_oid varchar(36),
+	construction_unit varchar(36),
 	tee_code varchar(36),
 	pipe_wall_thickness numeric(9,3),
 	branch_wall_thickness numeric(9,3),
@@ -1276,6 +1311,9 @@ CREATE TABLE daq_check_tee (
 );
 comment on table daq_check_tee IS '三通检查及信息记录表';
 comment on column daq_check_tee.oid IS '主键';
+comment on column daq_check_coating_pipe.project_oid IS '项目oid';
+comment on column daq_check_coating_pipe.tenders_oid IS '标段oid';
+comment on column daq_check_coating_pipe.construction_unit IS '施工单位';
 comment on column daq_check_tee.tee_code IS '三通编号';
 comment on column daq_check_tee.pipe_wall_thickness IS '管端壁厚(mm)';
 comment on column daq_check_tee.branch_wall_thickness IS '拔制端壁厚（mm）';
@@ -1339,6 +1377,7 @@ CREATE TABLE daq_construction_weld (
 	supervision_engineer varchar(50),
 	collection_person varchar(30),
 	collection_date timestamp(6),
+	approve_status SMALLINT default 0,
 	geo_state varchar(10),
 	remarks varchar(200),
 	create_user_id varchar(36),
@@ -1347,7 +1386,7 @@ CREATE TABLE daq_construction_weld (
 	modify_user_id varchar(36),
 	modify_user_name varchar(50),
 	modify_datetime timestamp(6),
-	active SMALLINT NOT NULL
+	active SMALLINT default 0 NOT NULL
 );
 comment on table daq_construction_weld IS '焊口信息表';
 comment on column daq_construction_weld.oid IS '主键';
@@ -1380,6 +1419,7 @@ comment on column daq_construction_weld.supervision_unit IS '监理单位';
 comment on column daq_construction_weld.supervision_engineer IS '监理工程师';
 comment on column daq_construction_weld.collection_person IS '采集人员';
 comment on column daq_construction_weld.collection_date IS '采集日期';
+comment on column daq_construction_weld.approve_status IS '审核状态';
 comment on column daq_construction_weld.geo_state IS '空间数据状态';
 comment on column daq_construction_weld.remarks IS '备注';
 comment on column daq_construction_weld.create_user_id IS '创建人id';
@@ -1423,6 +1463,7 @@ CREATE TABLE daq_weld_anticorrosion_check (
 	supervision_engineer varchar(50),
 	collection_person varchar(30),
 	collection_date timestamp(6),
+	approve_status SMALLINT default 0,
 	remarks varchar(200),
 	create_user_id varchar(36),
 	create_user_name varchar(50),
@@ -1459,6 +1500,7 @@ comment on column daq_weld_anticorrosion_check.supervision_unit IS '监理单位
 comment on column daq_weld_anticorrosion_check.supervision_engineer IS '监理工程师';
 comment on column daq_weld_anticorrosion_check.collection_person IS '数据采集人';
 comment on column daq_weld_anticorrosion_check.collection_date IS '采集日期';
+comment on column daq_weld_anticorrosion_check.approve_status IS '审核状态';
 comment on column daq_weld_anticorrosion_check.remarks IS '备注';
 comment on column daq_weld_anticorrosion_check.create_user_id IS '创建人id';
 comment on column daq_weld_anticorrosion_check.create_user_name IS '创建人名称';
@@ -1487,6 +1529,7 @@ CREATE TABLE daq_weld_anticorrosion_repair (
 	supervision_engineer varchar(50),
 	collection_person varchar(30),
 	collection_date timestamp(6),
+	approve_status SMALLINT default 0,
 	remarks varchar(200),
 	create_user_id varchar(36),
 	create_user_name varchar(50),
@@ -1515,6 +1558,7 @@ comment on column daq_weld_anticorrosion_repair.supervision_unit IS '监理单�
 comment on column daq_weld_anticorrosion_repair.supervision_engineer IS '监理工程师';
 comment on column daq_weld_anticorrosion_repair.collection_person IS '数据采集人';
 comment on column daq_weld_anticorrosion_repair.collection_date IS '采集日期';
+comment on column daq_weld_anticorrosion_repair.approve_status IS '审核状态';
 comment on column daq_weld_anticorrosion_repair.remarks IS '备注';
 comment on column daq_weld_anticorrosion_repair.create_user_id IS '创建人id';
 comment on column daq_weld_anticorrosion_repair.create_user_name IS '创建人名称';
@@ -1543,6 +1587,7 @@ CREATE TABLE daq_weld_anticorrosion_test (
 	supervision_engineer varchar(50),
 	collection_person varchar(30),
 	collection_date timestamp(6),
+	approve_status SMALLINT default 0,
 	remarks varchar(200),
 	create_user_id varchar(36),
 	create_user_name varchar(50),
@@ -1571,6 +1616,7 @@ comment on column daq_weld_anticorrosion_test.supervision_unit IS '监理单位'
 comment on column daq_weld_anticorrosion_test.supervision_engineer IS '监理工程师';
 comment on column daq_weld_anticorrosion_test.collection_person IS '数据采集人';
 comment on column daq_weld_anticorrosion_test.collection_date IS '采集日期';
+comment on column daq_weld_anticorrosion_test.approve_status IS '审核状态';
 comment on column daq_weld_anticorrosion_test.remarks IS '备注';
 comment on column daq_weld_anticorrosion_test.create_user_id IS '创建人id';
 comment on column daq_weld_anticorrosion_test.create_user_name IS '创建人名称';
@@ -1596,6 +1642,7 @@ CREATE TABLE daq_weld_cut (
 	supervision_engineer varchar(50),
 	collection_person varchar(30),
 	collection_date timestamp(6),
+	approve_status SMALLINT default 0,
 	remarks varchar(200),
 	create_user_id varchar(36),
 	create_user_name varchar(50),
@@ -1621,6 +1668,7 @@ comment on column daq_weld_cut.supervision_unit IS '监理单位';
 comment on column daq_weld_cut.supervision_engineer IS '监理工程师';
 comment on column daq_weld_cut.collection_person IS '数据采集人';
 comment on column daq_weld_cut.collection_date IS '采集日期';
+comment on column daq_weld_cut.approve_status IS '审核状态';
 comment on column daq_weld_cut.remarks IS '备注';
 comment on column daq_weld_cut.create_user_id IS '创建人id';
 comment on column daq_weld_cut.create_user_name IS '创建人名称';
@@ -1651,6 +1699,7 @@ CREATE TABLE daq_weld_rework_weld (
 	supervision_engineer varchar(50),
 	collection_person varchar(30),
 	collection_date timestamp(6),
+	approve_status SMALLINT default 0,
 	remarks varchar(200),
 	create_user_id varchar(36),
 	create_user_name varchar(50),
@@ -1681,6 +1730,7 @@ comment on column daq_weld_rework_weld.supervision_unit IS '监理单位';
 comment on column daq_weld_rework_weld.supervision_engineer IS '监理工程师';
 comment on column daq_weld_rework_weld.collection_person IS '采集人员';
 comment on column daq_weld_rework_weld.collection_date IS '采集日期';
+comment on column daq_weld_rework_weld.approve_status IS '审核状态';
 comment on column daq_weld_rework_weld.remarks IS '备注';
 comment on column daq_weld_rework_weld.create_user_id IS '创建人id';
 comment on column daq_weld_rework_weld.create_user_name IS '创建人名称';
@@ -1703,6 +1753,7 @@ ALTER TABLE daq_weld_cut ADD PRIMARY KEY (oid);
 CREATE INDEX index_daq_weld_rework_weld_weld_oid_9 ON daq_weld_rework_weld USING btree (weld_oid);
 CREATE INDEX index_daq_weld_rework_weld_rework_weld_code_10 ON daq_weld_rework_weld USING btree (rework_weld_code);
 ALTER TABLE daq_weld_rework_weld ADD PRIMARY KEY (oid);
+
 CREATE TABLE daq_cut_pipe (
 	oid varchar(36) NOT NULL,
 	project_oid varchar(36),
@@ -1717,6 +1768,7 @@ CREATE TABLE daq_cut_pipe (
 	third_paragraph_length numeric(9,3),
 	fourth_paragraph_length numeric(9,3),
 	fifth_paragraph_length numeric(9,3),
+	approve_status SMALLINT default 0,
 	remarks varchar(200),
 	create_user_id varchar(36),
 	create_user_name varchar(50),
@@ -1740,6 +1792,7 @@ comment on column daq_cut_pipe.second_paragraph_length IS '第二段长度(m)';
 comment on column daq_cut_pipe.third_paragraph_length IS '第三段长度(m)';
 comment on column daq_cut_pipe.fourth_paragraph_length IS '第四段长度(m)';
 comment on column daq_cut_pipe.fifth_paragraph_length IS '第五段长度(m)';
+comment on column daq_cut_pipe.approve_status IS '审核状态';
 comment on column daq_cut_pipe.remarks IS '备注';
 comment on column daq_cut_pipe.create_user_id IS '创建人id';
 comment on column daq_cut_pipe.create_user_name IS '创建人名称';
