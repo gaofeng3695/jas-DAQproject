@@ -412,7 +412,6 @@ public class SteelPipe extends BaseJdbcEntity{
 		super.setField("isCut");
 	}
 
-	@UpdateDeleteSet
 	public Integer getIsUse() {
 		return isUse; 
 	}
@@ -422,7 +421,6 @@ public class SteelPipe extends BaseJdbcEntity{
 		super.setField("isUse");
 	}
 
-	@UpdateDeleteSet
 	public Integer getIsHotBend() {
 		return isHotBend; 
 	}

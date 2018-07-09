@@ -68,7 +68,7 @@ public class CheckPipeColdBendingQuery extends BaseJavaQuery {
 				conditionSql += " and cpcb.construction_unit = :constructionUnit";
 			}
 			if (StringUtils.isNotBlank(pipeColdBendingCode)) {
-				conditionSql += " and pipe_cold_bending_code = :pipeColdBendingCode";
+				conditionSql += " and pipe_cold_bending_code like :pipeColdBendingCode";
 			}
 			conditionSql += " order by  cpcb.create_datetime desc";
 		}

@@ -1,7 +1,5 @@
 package cn.jasgroup.jasframework.acquisitiondata.weld.cutweld.service;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
