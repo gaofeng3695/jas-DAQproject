@@ -433,7 +433,7 @@ Vue.component('jas-table-for-list', {
 		'    <el-table-column type="selection" width="55" align="center" fixed></el-table-column>',
 		'		<el-table-column label="序号" type="index" align="center" width="50" fixed>',
 		'		</el-table-column>',
-		'		<el-table-column v-for="item,index in fields" :key="item.oid" :fixed="index=== 0?true:false" :label="item.name" :prop="item.field" align="center">',
+		'		<el-table-column v-for="item,index in fields" :key="item.oid" :fixed="index=== 0?true:false" :label="item.name" :prop="item.field" :formatter="item.formatter" align="center">',
 		'		</el-table-column>',
 		'		<el-table-column label="操作" align="center" width="180" fixed="right">',
 		'			<template slot-scope="scope">',
