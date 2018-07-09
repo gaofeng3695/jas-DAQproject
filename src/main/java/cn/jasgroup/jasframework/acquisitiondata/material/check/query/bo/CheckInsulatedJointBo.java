@@ -1,6 +1,11 @@
 package cn.jasgroup.jasframework.acquisitiondata.material.check.query.bo;
 
 public class CheckInsulatedJointBo {
+
+	/**
+	 * oid
+	 */
+	private String oid ;
 	
 	/**
 	 *  出厂编号 
@@ -51,6 +56,14 @@ public class CheckInsulatedJointBo {
 	 *  备注
 	 */
 	private String remarks;
+
+	public String getOid() {
+		return oid;
+	}
+
+	public void setOid(String oid) {
+		this.oid = oid;
+	}
 
 	public String getManufacturerCode() {
 		return manufacturerCode;
