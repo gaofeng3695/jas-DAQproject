@@ -1,127 +1,201 @@
 package cn.jasgroup.jasframework.acquisitiondata.material.check.query.bo;
 
+import java.util.Date;
+
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class CheckPipeColdBendingBo {
 
 	/**
-	 * 出厂编号
+	 * oid
 	 */
-	private String manufacturerCode;
+	private String oid ;
+	
+	/**
+	 * 冷弯管编号
+	 */
+	private String pipeColdBendingCode; 
 
 	/**
-	 * 合格证编号
+	 *  合格证编号
 	 */
-	private String certificationNum;
+	private String certificateNum; 
+
+	/** 
+	 * 弯管长度(m)
+	 */
+	private Double pipeLength; 
 
 	/**
-	 * 公称直径(mm)
+	 * 管径(mm)
 	 */
-	private Double diameter;
+	private Double pipeDiameter; 
+
+	/** 
+	 * 壁厚(mm）
+	 */
+	private Double wallThickness; 
 
 	/**
-	 * 公称压力(MPa)
+	 *  弯制角度(°)
 	 */
-	private Double pressure;
+	private Double bendAngle; 
 
 	/**
-	 * 生产厂家
+	 *  纵焊缝位置 
 	 */
-	private String manufacturer;
+	private String weldPosition; 
+
+	/** 
+	 * 椭圆度<0.6%D 
+	 */
+	private String ovality; 
+
+	/** 
+	 * 坡口检查
+	 */
+	private String grooveCheck; 
 
 	/**
-	 * 测试仪器
+	 *  防腐层内外表面质量
 	 */
-	private String testEquipment;
+	private String coatingIoFaceCheck; 
 
 	/**
-	 * 仪器规格型号
+	 *  防腐层端部内外涂层
 	 */
-	private String specandModel;
+	private String coatingIoEndsCheck; 
+
+	/** 
+	 * 检查人
+	 */
+	private String checkedBy; 
 
 	/**
-	 * 实测绝缘电阻值(MΩ)
+	 *  检查日期
 	 */
-	private String resistanceVal;
+	private Date checkedDate; 
 
-	/**
-	 * 验收结论
-	 */
-	private String checkResults;
-
-	/**
+	/** 
 	 * 备注
 	 */
 	private String remarks;
 
-	public String getManufacturerCode() {
-		return manufacturerCode;
+	public String getOid() {
+		return oid;
 	}
 
-	public void setManufacturerCode(String manufacturerCode) {
-		this.manufacturerCode = manufacturerCode;
+	public void setOid(String oid) {
+		this.oid = oid;
 	}
 
-	public String getCertificationNum() {
-		return certificationNum;
+	public String getPipeColdBendingCode() {
+		return pipeColdBendingCode;
 	}
 
-	public void setCertificationNum(String certificationNum) {
-		this.certificationNum = certificationNum;
+	public void setPipeColdBendingCode(String pipeColdBendingCode) {
+		this.pipeColdBendingCode = pipeColdBendingCode;
 	}
 
-	public Double getDiameter() {
-		return diameter;
+	public String getCertificateNum() {
+		return certificateNum;
 	}
 
-	public void setDiameter(Double diameter) {
-		this.diameter = diameter;
+	public void setCertificateNum(String certificateNum) {
+		this.certificateNum = certificateNum;
 	}
 
-	public Double getPressure() {
-		return pressure;
+	public Double getPipeLength() {
+		return pipeLength;
 	}
 
-	public void setPressure(Double pressure) {
-		this.pressure = pressure;
+	public void setPipeLength(Double pipeLength) {
+		this.pipeLength = pipeLength;
 	}
 
-	public String getManufacturer() {
-		return manufacturer;
+	public Double getPipeDiameter() {
+		return pipeDiameter;
 	}
 
-	public void setManufacturer(String manufacturer) {
-		this.manufacturer = manufacturer;
+	public void setPipeDiameter(Double pipeDiameter) {
+		this.pipeDiameter = pipeDiameter;
 	}
 
-	public String getTestEquipment() {
-		return testEquipment;
+	public Double getWallThickness() {
+		return wallThickness;
 	}
 
-	public void setTestEquipment(String testEquipment) {
-		this.testEquipment = testEquipment;
+	public void setWallThickness(Double wallThickness) {
+		this.wallThickness = wallThickness;
 	}
 
-	public String getSpecandModel() {
-		return specandModel;
+	public Double getBendAngle() {
+		return bendAngle;
 	}
 
-	public void setSpecandModel(String specandModel) {
-		this.specandModel = specandModel;
+	public void setBendAngle(Double bendAngle) {
+		this.bendAngle = bendAngle;
 	}
 
-	public String getResistanceVal() {
-		return resistanceVal;
+	public String getWeldPosition() {
+		return weldPosition;
 	}
 
-	public void setResistanceVal(String resistanceVal) {
-		this.resistanceVal = resistanceVal;
+	public void setWeldPosition(String weldPosition) {
+		this.weldPosition = weldPosition;
 	}
 
-	public String getCheckResults() {
-		return checkResults;
+	public String getOvality() {
+		return ovality;
 	}
 
-	public void setCheckResults(String checkResults) {
-		this.checkResults = checkResults;
+	public void setOvality(String ovality) {
+		this.ovality = ovality;
+	}
+
+	public String getGrooveCheck() {
+		return grooveCheck;
+	}
+
+	public void setGrooveCheck(String grooveCheck) {
+		this.grooveCheck = grooveCheck;
+	}
+
+	public String getCoatingIoFaceCheck() {
+		return coatingIoFaceCheck;
+	}
+
+	public void setCoatingIoFaceCheck(String coatingIoFaceCheck) {
+		this.coatingIoFaceCheck = coatingIoFaceCheck;
+	}
+
+	public String getCoatingIoEndsCheck() {
+		return coatingIoEndsCheck;
+	}
+
+	public void setCoatingIoEndsCheck(String coatingIoEndsCheck) {
+		this.coatingIoEndsCheck = coatingIoEndsCheck;
+	}
+
+	public String getCheckedBy() {
+		return checkedBy;
+	}
+
+	public void setCheckedBy(String checkedBy) {
+		this.checkedBy = checkedBy;
+	}
+
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getCheckedDate() {
+		return checkedDate;
+	}
+
+	public void setCheckedDate(Date checkedDate) {
+		this.checkedDate = checkedDate;
 	}
 
 	public String getRemarks() {

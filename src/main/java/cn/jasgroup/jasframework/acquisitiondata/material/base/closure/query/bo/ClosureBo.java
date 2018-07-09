@@ -2,10 +2,20 @@ package cn.jasgroup.jasframework.acquisitiondata.material.base.closure.query.bo;
 
 import java.util.Date;
 
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 
 public class ClosureBo extends CommonBaseBo {
 
+	/**
+	 * oid
+	 */
+	private String oid ;
+	
 	/**
 	 * 封堵物编号
 	 */
@@ -111,6 +121,14 @@ public class ClosureBo extends CommonBaseBo {
 	 */
 	private String remarks;
 
+	public String getOid() {
+		return oid;
+	}
+
+	public void setOid(String oid) {
+		this.oid = oid;
+	}
+
 	public String getClosureCode() {
 		return closureCode;
 	}
@@ -207,6 +225,8 @@ public class ClosureBo extends CommonBaseBo {
 		this.manufacturer = manufacturer;
 	}
 
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+	@Temporal(TemporalType.TIMESTAMP)
 	public Date getManufacturerDate() {
 		return manufacturerDate;
 	}
