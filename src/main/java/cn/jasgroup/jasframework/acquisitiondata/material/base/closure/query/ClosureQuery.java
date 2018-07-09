@@ -2,36 +2,51 @@ package cn.jasgroup.jasframework.acquisitiondata.material.base.closure.query;
 
 import org.apache.commons.lang.StringUtils;
 
-import cn.jasgroup.jasframework.acquisitiondata.material.base.closure.dao.entity.Closure;
+import cn.jasgroup.jasframework.acquisitiondata.material.base.closure.query.bo.ClosureBo;
 import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 
-@QueryConfig(scene = "/closure/getPage", resultClass = Closure.class)
+/**
+ * 
+  *<p>类描述：封堵物分页查询。</p>
+  * @author 葛建 。
+  * @version v1.0.0.1。
+  * @since JDK1.8。
+  *<p>创建日期：2018年7月6日 下午5:38:09。</p>
+ */
+@QueryConfig(scene = "/closure/getPage", resultClass = ClosureBo.class)
 public class ClosureQuery extends BaseJavaQuery {
+	
 	/**
 	 * 唯一标识
 	 */
 	private String oid;
+	
 	/**
 	 * 项目oid
 	 */
 	private String projectOid;
+	
 	/**
 	 * 标段oid
 	 */
 	private String tendersOid;
+	
 	/**
 	 * 管线oid
 	 */
 	private String pipelineOid;
+	
 	/**
 	 * 封堵物编号
 	 */
 	private String closureCode;
+	
 	/**
 	 * 封堵物类型
 	 */
 	private String closureType;
+	
 	/***
 	 * 是否使用
 	 */

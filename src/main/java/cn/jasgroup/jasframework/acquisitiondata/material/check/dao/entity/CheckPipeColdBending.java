@@ -40,46 +40,74 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 @JdbcEntity(name="daq_check_pipe_cold_bending")
 public class CheckPipeColdBending extends CommonJdbcEntity{
 
-	/** 冷弯管编号 */
+	/**
+	 * 冷弯管编号
+	 */
 	private String pipeColdBendingCode; 
 
-	/** 合格证编号 */
+	/**
+	 *  合格证编号
+	 */
 	private String certificateNum; 
 
-	/** 弯管长度(m) */
+	/** 
+	 * 弯管长度(m)
+	 */
 	private Double pipeLength; 
 
-	/** 管径(mm) */
+	/**
+	 * 管径(mm)
+	 */
 	private Double pipeDiameter; 
 
-	/** 壁厚(mm） */
+	/** 
+	 * 壁厚(mm）
+	 */
 	private Double wallThickness; 
 
-	/** 弯制角度(°） */
+	/**
+	 *  弯制角度(°)
+	 */
 	private Double bendAngle; 
 
-	/** 纵焊缝位置 */
+	/**
+	 *  纵焊缝位置 
+	 */
 	private String weldPosition; 
 
-	/** 椭圆度<0.6%D */
+	/** 
+	 * 椭圆度<0.6%D 
+	 */
 	private String ovality; 
 
-	/** 坡口检查 */
+	/** 
+	 * 坡口检查
+	 */
 	private String grooveCheck; 
 
-	/** 防腐层内外表面质量 */
+	/**
+	 *  防腐层内外表面质量
+	 */
 	private String coatingIoFaceCheck; 
 
-	/** 防腐层端部内外涂层 */
+	/**
+	 *  防腐层端部内外涂层
+	 */
 	private String coatingIoEndsCheck; 
 
-	/** 检查人 */
+	/** 
+	 * 检查人
+	 */
 	private String checkedBy; 
 
-	/** 检查日期 */
+	/**
+	 *  检查日期
+	 */
 	private Date checkedDate; 
 
-	/** 备注 */
+	/** 
+	 * 备注
+	 */
 	private String remarks;
 
 	public String getPipeColdBendingCode() {
@@ -190,7 +218,7 @@ public class CheckPipeColdBending extends CommonJdbcEntity{
 		super.setField("checkedBy");
 	}
 
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
 	@Temporal(TemporalType.TIMESTAMP)
 	public Date getCheckedDate() {
 		return checkedDate; 
