@@ -104,5 +104,18 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 		String sql = "select t.oid as key,t.unit_name as value from pri_unit t left join daq_implement_scope_ref i on t.oid = i.unit_oid where i.tenders_oid=? and t.hierarchy like 'Unit.0001.0004%' and t.active=1";
 		return this.queryForList(sql, new Object[]{tendersOid});
 	}
+	/***
+	  * <p>功能描述：根据标段oid获取该标段下施工单位。</p>
+	  * <p> 雷凯。</p>	
+	  * @param tendersOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年7月9日 上午11:13:18。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String,Object>> getConstructionUnitByTendersOid(String tendersOid){
+		String sql = "select t.oid as key,t.unit_name as value from pri_unit t left join daq_implement_scope_ref i on t.oid = i.unit_oid where i.tenders_oid=? and t.hierarchy like 'Unit.0001.0005%' and t.active=1";
+		return this.queryForList(sql, new Object[]{tendersOid});
+	}
 	
 }
