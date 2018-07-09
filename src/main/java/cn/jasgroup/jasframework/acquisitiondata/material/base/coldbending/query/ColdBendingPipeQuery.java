@@ -87,6 +87,9 @@ public class ColdBendingPipeQuery extends BaseJavaQuery{
 			if(StringUtils.isNotBlank(pipeColdBendingCode)){
 				sql +=" and t.pipe_cold_bending_code like :pipeColdBendingCode";
 			}
+			if(StringUtils.isNotBlank(isUse)){
+				sql +=" and t.is_use=:isUse";
+			}
 		}
 		sql +=  this.dataAuthoritySql;
 		sql += " order by t.create_datetime desc";
