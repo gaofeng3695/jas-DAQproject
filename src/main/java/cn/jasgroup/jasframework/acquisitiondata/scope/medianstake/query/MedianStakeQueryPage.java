@@ -20,12 +20,6 @@ public class MedianStakeQueryPage extends BaseJavaQuery{
 	 
 	private List<String> oids;
 	
-	/**
-	 * modelId: B 导出
-	 */
-	 
-	private String modelId;
-	
 	private String projectOid;
 	private String pipelineOid;
 	private String medianStakeCode;
@@ -37,16 +31,6 @@ public class MedianStakeQueryPage extends BaseJavaQuery{
 				+ "left join daq_project p on p.oid=t.project_oid "
 				+ "left join daq_pipeline l on l.oid=t.pipeline_oid "
 				+ "where t.active=1";
-		if(StringUtils.isNotBlank(modelId)){	// 导出语句
-			sql = "select "
-					+ "p.project_name as project_oid,"
-					+ "l.pipeline_name as pipeline_oid,"
-					+ "median_stake_code,mileage,pointx,pointy,pointz "
-					+ "from daq_median_stake t "
-					+ "left join daq_project p on p.oid=t.project_oid "
-					+ "left join daq_pipeline l on l.oid=t.pipeline_oid "
-					+ "where t.active=1";
-		}
 		if(StringUtils.isNotBlank(medianStakeCode)){
 			sql += " and t.median_stake_code like :medianStakeCode"; 
 		}
@@ -96,14 +80,6 @@ public class MedianStakeQueryPage extends BaseJavaQuery{
 
 	public void setOids(List<String> oids) {
 		this.oids = oids;
-	}
-
-	public String getModelId() {
-		return modelId;
-	}
-
-	public void setModelId(String modelId) {
-		this.modelId = modelId;
 	}
 
 }
