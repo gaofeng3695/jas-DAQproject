@@ -157,7 +157,7 @@ public class CheckInsulatedJoint extends CommonJdbcEntity{
 
 	public void setPressure(Double pressure) {
 		this.pressure = pressure;
-		super.setField("");
+		super.setField("pressure");
 	}
 
 	public String getManufacturer() {
