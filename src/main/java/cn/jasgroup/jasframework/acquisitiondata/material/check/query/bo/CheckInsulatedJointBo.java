@@ -1,37 +1,7 @@
-package cn.jasgroup.jasframework.acquisitiondata.material.check.dao.entity;
-import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
-import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
-import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
-import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
-import cn.jasgroup.jasframework.base.annotation.UniqueConstraintStrategy;
-import cn.jasgroup.jasframework.base.annotation.UniqueConstraints;
-import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
+package cn.jasgroup.jasframework.acquisitiondata.material.check.query.bo;
 
-/**
- * 
-  *<p>类描述：绝缘接头检查及信息记录实体类。</p>
-  * @author 葛建 。
-  * @version v1.0.0.1。
-  * @since JDK1.8。
-  *<p>创建日期：2018年7月5日 上午10:14:38。</p>
- */
-@CommonSaveConfig(
-		scene = "/checkInsulatedJoint/save"
-	)
-	@CommonUpdateConfig(
-		scene = "/checkInsulatedJoint/update"
-	)
-	@CommonDeleteConfig(
-		scene = "/checkInsulatedJoint/delete"
-	)
-@UniqueConstraints(
-		strategys ={
-			@UniqueConstraintStrategy(columnNames={"manufacturerCode"})
-		}
-	)
-@JdbcEntity(name="daq_check_insulated_joint")
-public class CheckInsulatedJoint extends CommonJdbcEntity{
-
+public class CheckInsulatedJointBo {
+	
 	/**
 	 *  出厂编号 
 	 */
@@ -88,7 +58,6 @@ public class CheckInsulatedJoint extends CommonJdbcEntity{
 
 	public void setManufacturerCode(String manufacturerCode) {
 		this.manufacturerCode = manufacturerCode;
-		super.setField("manufacturerCode");
 	}
 
 	public String getCertificationNum() {
@@ -97,7 +66,6 @@ public class CheckInsulatedJoint extends CommonJdbcEntity{
 
 	public void setCertificationNum(String certificationNum) {
 		this.certificationNum = certificationNum;
-		super.setField("certificationNum");
 	}
 
 	public Double getDiameter() {
@@ -106,7 +74,6 @@ public class CheckInsulatedJoint extends CommonJdbcEntity{
 
 	public void setDiameter(Double diameter) {
 		this.diameter = diameter;
-		super.setField("diameter");
 	}
 
 	public Double getPressure() {
@@ -115,7 +82,6 @@ public class CheckInsulatedJoint extends CommonJdbcEntity{
 
 	public void setPressure(Double pressure) {
 		this.pressure = pressure;
-		super.setField("");
 	}
 
 	public String getManufacturer() {
@@ -124,7 +90,6 @@ public class CheckInsulatedJoint extends CommonJdbcEntity{
 
 	public void setManufacturer(String manufacturer) {
 		this.manufacturer = manufacturer;
-		super.setField("manufacturer");
 	}
 
 	public String getTestEquipment() {
@@ -133,7 +98,6 @@ public class CheckInsulatedJoint extends CommonJdbcEntity{
 
 	public void setTestEquipment(String testEquipment) {
 		this.testEquipment = testEquipment;
-		super.setField("testEquipment");
 	}
 
 	public String getSpecandModel() {
@@ -142,7 +106,6 @@ public class CheckInsulatedJoint extends CommonJdbcEntity{
 
 	public void setSpecandModel(String specandModel) {
 		this.specandModel = specandModel;
-		super.setField("specandModel");
 	}
 
 	public String getResistanceVal() {
@@ -151,7 +114,6 @@ public class CheckInsulatedJoint extends CommonJdbcEntity{
 
 	public void setResistanceVal(String resistanceVal) {
 		this.resistanceVal = resistanceVal;
-		super.setField("resistanceVal");
 	}
 
 	public String getCheckResults() {
@@ -160,7 +122,6 @@ public class CheckInsulatedJoint extends CommonJdbcEntity{
 
 	public void setCheckResults(String checkResults) {
 		this.checkResults = checkResults;
-		super.setField("checkResults");
 	}
 
 	public String getRemarks() {
@@ -169,7 +130,6 @@ public class CheckInsulatedJoint extends CommonJdbcEntity{
 
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
-		super.setField("remarks");
 	}
 	
 }

@@ -8,26 +8,32 @@ import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 
 @QueryConfig(scene = "/reworkWeld/getPage", resultClass = ReworkWeld.class)
 public class ReworkWeldQuery extends BaseJavaQuery {
+	
 	/**
 	 * 唯一标识
 	 */
 	private String oid;
+	
 	/**
 	 * 项目oid
 	 */
 	private String projectOid;
+	
 	/**
 	 * 标段oid
 	 */
 	private String tendersOid;
+	
 	/**
 	 * 管线oid
 	 */
 	private String pipelineOid;
+	
 	/**
 	 * 线路段/穿跨越
 	 */
 	private String pipeSegmentOrCrossOid;
+	
 	/**
 	 * 返修口编号
 	 */

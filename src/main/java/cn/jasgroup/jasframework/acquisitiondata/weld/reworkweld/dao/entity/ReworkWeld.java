@@ -14,6 +14,15 @@ import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
 import cn.jasgroup.jasframework.base.annotation.UniqueConstraintStrategy;
 import cn.jasgroup.jasframework.base.annotation.UniqueConstraints;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
+
+/**
+ * 
+  *<p>类描述：焊口返修实体。</p>
+  * @author 葛建 。
+  * @version v1.0.0.1。
+  * @since JDK1.8。
+  *<p>创建日期：2018年7月6日 下午5:35:16。</p>
+ */
 @CommonSaveConfig(
 		scene = "/reworkWeld/save"
 	)
@@ -31,64 +40,104 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 @JdbcEntity(name="daq_weld_rework_weld")
 public class ReworkWeld extends CommonJdbcEntity{
 
-	/** 项目oid */
+	/** 
+	 * 项目oid
+	 */
 	private String projectOid; 
 
-	/** 管线oid */
+	/** 
+	 * 管线oid
+	 */
 	private String pipelineOid; 
 
-	/** 标段oid */
+	/** 
+	 * 标段oid
+	 */
 	private String tendersOid; 
 
-	/** 线路段/穿跨越 */
+	/** 
+	 * 线路段/穿跨越
+	 */
 	private String pipeSegmentOrCrossOid; 
 
-	/** 返修口编号 */
+	/** 
+	 * 返修口编号
+	 */
 	private String weldOid; 
 
-	/** 返修后焊口编号 */
+	/**
+	 *  返修后焊口编号
+	 */
 	private String reworkWeldCode; 
 
-	/** 焊条批号 */
+	/** 
+	 * 焊条批号
+	 */
 	private String weldRodBatchNum; 
 
-	/** 焊丝批号 */
+	/**
+	 *  焊丝批号
+	 */
 	private String weldWireBatchNum; 
 
-	/** 焊接工艺规程 */
+	/**
+	 *  焊接工艺规程
+	 */
 	private String weldProduce; 
 
-	/** 填充人员 */
+	/** 
+	 * 填充人员 
+	 */
 	private String coverOid; 
 
-	/** 打底人员 */
+	/** 
+	 * 打底人员
+	 */
 	private String padderOid; 
 
-	/** 盖面人员 */
+	/** 
+	 * 盖面人员
+	 */
 	private String renderOid; 
 
-	/** 焊接日期 */
+	/**
+	 *  焊接日期
+	 */
 	private Date weldDate; 
 
-	/** 施工单位 */
+	/** 
+	 * 施工单位
+	 */
 	private String constructUnit; 
 
-	/** 施工机组代号 */
+	/**
+	 *  施工机组代号
+	 */
 	private String workUnitOid; 
 
-	/** 监理单位 */
+	/**
+	 * 监理单位
+	 */
 	private String supervisionUnit; 
 
-	/** 监理工程师 */
+	/**
+	 *  监理工程师
+	 */
 	private String supervisionEngineer; 
 
-	/** 采集人员 */
+	/** 
+	 * 采集人员 
+	 */
 	private String collectionPerson; 
 
-	/** 采集日期 */
+	/** 
+	 * 采集日期
+	 */
 	private Date collectionDate; 
 
-	/** 备注 */
+	/** 
+	 * 备注
+	 */
 	private String remarks; 
 
 	public String getProjectOid() {
@@ -199,7 +248,7 @@ public class ReworkWeld extends CommonJdbcEntity{
 		super.setField("");
 	}
 
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
 	@Temporal(TemporalType.TIMESTAMP)
 	public Date getWeldDate() {
 		return weldDate; 
@@ -255,7 +304,7 @@ public class ReworkWeld extends CommonJdbcEntity{
 		super.setField("collectionDate");
 	}
 
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
 	@Temporal(TemporalType.TIMESTAMP)
 	public Date getCollectionDate() {
 		return collectionDate; 
