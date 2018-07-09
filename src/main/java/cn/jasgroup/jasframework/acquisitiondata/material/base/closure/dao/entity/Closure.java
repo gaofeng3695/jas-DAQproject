@@ -108,7 +108,7 @@ public class Closure extends CommonJdbcEntity{
 	/**
 	 *  是否使用
 	 */
-	private Integer isUse; 
+	private Integer isUse = 0; 
 
 	/**
 	 *  备注
@@ -234,7 +234,6 @@ public class Closure extends CommonJdbcEntity{
 		super.setField("tendersOid");
 	}
 
-	@UpdateDeleteSet
 	public Integer getIsUse() {
 		return isUse; 
 	}

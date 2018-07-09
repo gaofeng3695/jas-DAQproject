@@ -19,7 +19,7 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 //		,
 //		afterAdvice = {
 //				//将切管后的钢管信息保存到钢管表
-//				@Process(service = "cutWeldService", method = "savePipeAfterCut()")
+//				@Process(service = "CutWeldService", method = "savePipeAfterCut()")
 //		}
 	)
 @JdbcEntity(name="daq_cut_pipe")

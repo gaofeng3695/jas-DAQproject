@@ -86,10 +86,13 @@ public class ClosureQuery extends BaseJavaQuery {
 				conditionSql += " and mc.pipeline_oid = :pipelineOid";
 			}
 			if (StringUtils.isNotBlank(closureCode)) {
-				conditionSql += " and mc.closure_code = :closureCode";
+				conditionSql += " and mc.closure_code like :closureCode";
 			}
 			if (StringUtils.isNotBlank(closureType)) {
 				conditionSql += " and mc.closure_type = :closureType";
+			}
+			if (StringUtils.isNotBlank(isUse)) {
+				conditionSql += " and mc.is_use = :isUse";
 			}
 			conditionSql += " order by mc.create_datetime desc";
 		}

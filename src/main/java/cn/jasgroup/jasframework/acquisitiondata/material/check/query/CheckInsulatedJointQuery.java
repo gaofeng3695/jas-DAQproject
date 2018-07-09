@@ -28,7 +28,7 @@ public class CheckInsulatedJointQuery extends BaseJavaQuery {
 	private String projectOid; 
 
 	/**
-	 *  管线oid
+	 *  监工单位oid
 	 */
 	private String constructionUnit; 
 
@@ -68,7 +68,7 @@ public class CheckInsulatedJointQuery extends BaseJavaQuery {
 				conditionSql += " and cij.construction_unit = :constructionUnit";
 			}
 			if (StringUtils.isNotBlank(manufacturerCode)) {
-				conditionSql += " and manufacturer_code = :manufacturerCode";
+				conditionSql += " and manufacturer_code like :manufacturerCode";
 			}
 			conditionSql += " order by  cij.create_datetime desc";
 		}
