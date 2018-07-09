@@ -6,7 +6,37 @@ public class CheckInsulatedJointBo {
 	 * oid
 	 */
 	private String oid ;
-	
+
+	/**
+	 * 项目oid
+	 */
+	private String projectOid;
+
+	/**
+	 * 项目名称
+	 */
+	private String projectName;
+
+	/**
+	 * 监工单位oid
+	 */
+	private String constructionUnit;
+
+	/**
+	 * 监工单位名称
+	 */
+	private String unitName;
+
+	/**
+	 * 标段oid
+	 */
+	private String tendersOid;
+
+	/**
+	 * 标段名称
+	 */
+	private String tendersName;
+
 	/**
 	 *  出厂编号 
 	 */
@@ -63,6 +93,54 @@ public class CheckInsulatedJointBo {
 
 	public void setOid(String oid) {
 		this.oid = oid;
+	}
+
+	public String getProjectOid() {
+		return projectOid;
+	}
+
+	public void setProjectOid(String projectOid) {
+		this.projectOid = projectOid;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public String getConstructionUnit() {
+		return constructionUnit;
+	}
+
+	public void setConstructionUnit(String constructionUnit) {
+		this.constructionUnit = constructionUnit;
+	}
+
+	public String getUnitName() {
+		return unitName;
+	}
+
+	public void setUnitName(String unitName) {
+		this.unitName = unitName;
+	}
+
+	public String getTendersOid() {
+		return tendersOid;
+	}
+
+	public void setTendersOid(String tendersOid) {
+		this.tendersOid = tendersOid;
+	}
+
+	public String getTendersName() {
+		return tendersName;
+	}
+
+	public void setTendersName(String tendersName) {
+		this.tendersName = tendersName;
 	}
 
 	public String getManufacturerCode() {
