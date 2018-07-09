@@ -54,7 +54,7 @@ public class ColdBendingPipeQuery extends BaseJavaQuery{
 	/***
 	 * 是否使用
 	 */
-	private String isUse;
+	private Integer isUse;
 	
 	@Override
 	public String getSql() {
@@ -87,7 +87,7 @@ public class ColdBendingPipeQuery extends BaseJavaQuery{
 			if(StringUtils.isNotBlank(pipeColdBendingCode)){
 				sql +=" and t.pipe_cold_bending_code like :pipeColdBendingCode";
 			}
-			if(StringUtils.isNotBlank(isUse)){
+			if(StringUtils.isNotBlank(String.valueOf(isUse))){
 				sql +=" and t.is_use=:isUse";
 			}
 		}
@@ -138,11 +138,11 @@ public class ColdBendingPipeQuery extends BaseJavaQuery{
 		this.pipeColdBendingCode = pipeColdBendingCode;
 	}
 
-	public String getIsUse() {
+	public Integer getIsUse() {
 		return isUse;
 	}
 
-	public void setIsUse(String isUse) {
+	public void setIsUse(Integer isUse) {
 		this.isUse = isUse;
 	}
 }
