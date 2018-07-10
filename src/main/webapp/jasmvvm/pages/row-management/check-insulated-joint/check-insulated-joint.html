@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>自定义表单配置</title>
+	<!-- <link rel="stylesheet" href="./libelement-ui/element-#0E2B4A/src/index.css"> -->
+	<link rel="stylesheet" href="./../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../lib/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="./../../../src/css/main.css">
+	<style>
+		.el-form-item {
+			margin-bottom: 0px;
+		}
+
+		.jasmap {
+			overflow: hidden;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="app" v-cloak>
+		<jas-list-wrapper>
+			<el-form slot="search" :model="topSearch" label-width="100px">
+				<el-row>
+					<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+						<el-form-item label="项目名称" prop="projectOid">
+							<el-select v-model="topSearch.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
+								<el-option v-for="item in domain.project" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+						<el-form-item label="标段名称" prop="tendersOid">
+							<el-select v-model="topSearch.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
+								<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+						<el-form-item label="施工单位" prop="constructionUnit">
+							<el-select v-model="topSearch.constructionUnit" clearable placeholder="请选择施工单位" size="small">
+								<el-option v-for="item in domain.constructionUnitArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+						<el-form-item label="出厂编号">
+							<el-input v-model="topSearch.manufacturerCode" clearable placeholder="请输入出厂编号" size="small"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+						<el-form-item style="float: right;">
+							<el-button size="small" type="primary" @click="searchList">查询</el-button>
+							<el-button size="small" @click="reset">重置</el-button>
+						</el-form-item>
+					</el-col>
+				</el-row>
+			</el-form>
+
+		<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" search-path="/jdbc/commonData/checkInsulatedJoint/getPage.do"
+			  :add-url="addUrl" :detail-url="detailUrl" delete-path="/jdbc/commonData/checkInsulatedJoint/delete.do" :class-name="className" :template-code="templateCode"></jas-table-for-list>
+		</jas-list-wrapper>
+	</div>
+</body>
+<script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../lib/vue/vue.js"></script>
+<script src="./../../../lib/vue-multipane/vue-multipane.js"></script>
+<script src="./../../../lib/element-ui/v2.4.1/index.min.js"></script>
+<script src="./../../../common/components/jas-components.js"></script>
+<script src="./../../../common/js/jas-tools.js"></script>
+<script>
+	var vm = new Vue({
+		el: '#app',
+		data: function () {
+			return {
+				className: '',
+				templateCode: '',
+				addUrl: './pages/row-management/check-insulated-joint/dialogs/add.html',
+				detailUrl: './pages/row-management/check-insulated-joint/dialogs/detail.html',
+				privilegeCode: '',
+				topSearch: {
+					manufacturerCode: "",
+					projectOid: "",
+					tendersOid: "",
+					constructionUnit: ""
+				},
+				tableFields: [{
+					name: '项目名称',
+					field: 'projectName'
+				},{
+					name: '标段名称',
+					field: 'tendersName'
+				},{
+					name: '施工单位',
+					field: 'unitName'
+				},{
+					name: '出厂编号',
+					field: 'manufacturerCode'
+				}, {
+					name: '生产厂家',
+					field: 'manufacturer'
+				}, {
+					name: '合格证编号',
+					field: 'certificationNum'
+				}, {
+					name: "公称直径(mm)",
+					field: "diameter"
+				}, {
+					name: "公称压力(mpa)",
+					field: "pressure"
+				}, {
+					name: '测试仪器',
+					field: 'testEquipment'
+				}, {
+					name: '仪器规格型号',
+					field: 'specandModel'
+				}, {
+					name: '实用绝缘电阻值(MΩ)',
+					field: 'resistanceVal'
+				}, {
+					name: '验收结论',
+					field: 'checkResults'
+				}, {
+					name: '备注',
+					field: 'remarks'
+				}],
+				domain: {
+					constructionUnitArr: [],
+					project: [], //项目
+					tenders: [], //标段
+				}
+			}
+		},
+		mounted: function () {
+			var that = this;
+			var param = window.jasTools.base
+				.getParamsInUrl(location.href);
+			this.privilegeCode = param.privilegeCode;
+			this.templateCode = param.templateCode; //|| "stake-2";
+			this.className = param.className; // || 'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';
+			this.requestDomainFromBizTable(
+				'/daq/privilege/getProjectList.do', {},
+				function (
+					arr) {
+					that.domain.project = arr;
+				});
+		},
+		methods: {
+			requestDomainFromBizTable: function (url, obj, cb) {
+				var that = this;
+				var url = jasTools.base.rootPath + url;
+				jasTools.ajax.post(url, obj, function (data) {
+					cb && cb(data.rows);
+				}, function () {
+					cb && cb([]);
+				});
+			},
+			projectChanged: function (val) {
+				var that = this;
+				if (val) {
+					this.requestDomainFromBizTable(
+						'/daq/privilege/getTendersList.do', {
+							projectOid: val
+						},
+						function (arr) {
+							that.domain.tenders = arr;
+						});
+				} else {
+					that.domain.tenders = [];
+				}
+			},
+			tendersChanged: function (val) { //根据标段触发管线列表
+				var that = this;
+				if (val) {
+					this
+						.requestDomainFromBizTable(
+							'/daq/privilege/getConstructionUnitByTendersOid.do', {
+								tendersOid: val
+							},
+							function (arr) {
+								that.domain.constructionUnitArr = arr;
+							});
+				} else {
+					that.domain.constructionUnitArr = [];
+				}
+			},
+			searchList: function () {
+				this.$refs.table.search();
+			},
+			reset: function () {
+				this.topSearch.manufacturerCode = '';
+				this.topSearch.constructionUnit='';
+				this.topSearch.projectOid='';
+				this.topSearch.tendersOid='';
+				this.$refs.table.search();
+			}
+		},
+	});
+</script>
+
+</html>

@@ -50,7 +50,7 @@ public class ClosureQuery extends BaseJavaQuery {
 	/***
 	 * 是否使用
 	 */
-	private String isUse;
+	private Integer isUse;
 
 	@Override
 	public String getQuerySql() {
@@ -86,10 +86,13 @@ public class ClosureQuery extends BaseJavaQuery {
 				conditionSql += " and mc.pipeline_oid = :pipelineOid";
 			}
 			if (StringUtils.isNotBlank(closureCode)) {
-				conditionSql += " and mc.closure_code = :closureCode";
+				conditionSql += " and mc.closure_code like :closureCode";
 			}
 			if (StringUtils.isNotBlank(closureType)) {
 				conditionSql += " and mc.closure_type = :closureType";
+			}
+			if ( isUse != null ){
+				conditionSql += " and mc.is_use = :isUse";
 			}
 			conditionSql += " order by mc.create_datetime desc";
 		}
@@ -128,7 +131,10 @@ public class ClosureQuery extends BaseJavaQuery {
 	}
 
 	public String getClosureCode() {
-		return closureCode;
+		if (StringUtils.isNotBlank(closureCode)) {
+			return "%"+closureCode+"%";
+		}
+		return null;
 	}
 
 	public void setClosureCode(String closureCode) {
@@ -143,11 +149,11 @@ public class ClosureQuery extends BaseJavaQuery {
 		this.closureType = closureType;
 	}
 
-	public String getIsUse() {
+	public Integer getIsUse() {
 		return isUse;
 	}
 
-	public void setIsUse(String isUse) {
+	public void setIsUse(Integer isUse) {
 		this.isUse = isUse;
 	}
 

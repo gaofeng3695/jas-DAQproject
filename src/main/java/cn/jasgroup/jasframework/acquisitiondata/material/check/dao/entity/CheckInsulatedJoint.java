@@ -33,6 +33,21 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 public class CheckInsulatedJoint extends CommonJdbcEntity{
 
 	/**
+	 *  项目oid 
+	 */
+	private String projectOid; 
+
+	/**
+	 *  监工单位oid
+	 */
+	private String constructionUnit; 
+
+	/**
+	 *  标段oid
+	 */
+	private String tendersOid; 
+
+	/**
 	 *  出厂编号 
 	 */
 	private String manufacturerCode; 
@@ -82,6 +97,33 @@ public class CheckInsulatedJoint extends CommonJdbcEntity{
 	 */
 	private String remarks;
 
+	public String getProjectOid() {
+		return projectOid;
+	}
+
+	public void setProjectOid(String projectOid) {
+		this.projectOid = projectOid;
+		super.setField("projectOid");
+	}
+
+	public String getConstructionUnit() {
+		return constructionUnit;
+	}
+
+	public void setConstructionUnit(String constructionUnit) {
+		this.constructionUnit = constructionUnit;
+		super.setField("constructionUnit");
+	}
+
+	public String getTendersOid() {
+		return tendersOid;
+	}
+
+	public void setTendersOid(String tendersOid) {
+		this.tendersOid = tendersOid;
+		super.setField("tendersOid");
+	}
+
 	public String getManufacturerCode() {
 		return manufacturerCode;
 	}
@@ -115,7 +157,7 @@ public class CheckInsulatedJoint extends CommonJdbcEntity{
 
 	public void setPressure(Double pressure) {
 		this.pressure = pressure;
-		super.setField("");
+		super.setField("pressure");
 	}
 
 	public String getManufacturer() {

@@ -6,7 +6,7 @@ Vue.component('jas-base-group-title', {
 		},
 	},
 	template: [
-		'<div style="margin:10px 0 6px;line-height:32px;">',
+		'<div style="margin:0px 0 6px;line-height:32px;padding-top:10px;border-bottom:1px solid #ecf5ff;">',
 		'	<span style="padding:0px 4px 0px 4px;height: 22px;line-height:22px;display:inline-block;background: #ecf5ff;border-left: 2px solid rgb(64, 158, 255)">{{name}}</span>',
 		'</div>'
 	].join(''),
@@ -291,7 +291,6 @@ Vue.component('jas-list-wrapper', {
 	].join(''),
 });
 
-
 Vue.component('jas-search-for-list', {
 	model: {
 		prop: 'form',
@@ -374,7 +373,9 @@ Vue.component('jas-search-for-list', {
 
 Vue.component('jas-table-for-list', {
 	props: {
-		privilegeCode: {},
+		privilegeCode: {
+			type: [String, Array],
+		},
 		form: {
 			type: Object,
 			required: true
@@ -433,7 +434,7 @@ Vue.component('jas-table-for-list', {
 		'    <el-table-column type="selection" width="55" align="center" fixed></el-table-column>',
 		'		<el-table-column label="序号" type="index" align="center" width="50" fixed>',
 		'		</el-table-column>',
-		'		<el-table-column v-for="item,index in fields" :key="item.oid" :fixed="index=== 0?true:false" :label="item.name" :prop="item.field" align="center">',
+		'		<el-table-column v-for="item,index in fields" :key="item.oid" :fixed="index=== 0?true:false" :label="item.name" :prop="item.field" :formatter="item.formatter" align="center">',
 		'		</el-table-column>',
 		'		<el-table-column label="操作" align="center" width="180" fixed="right">',
 		'			<template slot-scope="scope">',
@@ -485,16 +486,22 @@ Vue.component('jas-table-for-list', {
 		},
 		_requestPrivilege: function (privilegeCode) {
 			var that = this;
-			var url = jasTools.base.rootPath + "/jasframework/privilege/privilege/getFunctionConfig.do";
-			jasTools.ajax.get(url, {
-				privilegeCode: privilegeCode, //菜单权限编号
-				appId: "402894a152681ba30152681e8b320003" //应用id，值默认
-			}, function (data) {
-				that.privilege = data.rows.map(function (item) {
-					return item.functionType;
+			if (!privilegeCode) return;
+			if ((typeof privilegeCode) === 'string') {
+				var url = jasTools.base.rootPath + "/jasframework/privilege/privilege/getFunctionConfig.do";
+				jasTools.ajax.get(url, {
+					privilegeCode: privilegeCode, //菜单权限编号
+					appId: "402894a152681ba30152681e8b320003" //应用id，值默认
+				}, function (data) {
+					that.privilege = data.rows.map(function (item) {
+						return item.functionType;
+					});
+					that.search();
 				});
+			} else {
+				that.privilege = privilegeCode;
 				that.search();
-			});
+			}
 		},
 		search: function () {
 			this._requestTable();
