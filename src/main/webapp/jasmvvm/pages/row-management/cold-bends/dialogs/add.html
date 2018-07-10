@@ -127,49 +127,61 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="曲率半径(mm)">
-							<el-input v-model="formData.bendingRadius" placeholder="请输入曲率半径(mm)" size="small"></el-input>
+							<el-input-number :precision="3" :step="1" :max="1000" controls-position="right" v-model="formData.bendingRadius" clearable placeholder="请输入曲率半径(mm)"
+							  size="small"></el-input-number>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="曲线长度(mm)">
-							<el-input v-model="formData.curveLength" placeholder="请输入曲线长度" size="small"></el-input>
+						<el-input-number :precision="3" :step="1" :max="10000" controls-position="right" v-model="formData.curveLength" clearable placeholder="请输入曲线长度"
+							  size="small"></el-input-number>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="弯曲角度(°)" prop="bendingAngle" required>
-							<el-input v-model="formData.bendingAngle" placeholder="请输入弯曲角度" size="small"></el-input>
+							<el-input-number :precision="3" :step="1" :max="10000" controls-position="right" v-model="formData.bendingAngle" clearable placeholder="请输入弯曲角度"
+							  size="small"></el-input-number>
+						
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="直管段最小长度(m)">
-							<el-input v-model="formData.straightPipeLength" placeholder="请输入直管段最小长度" size="small"></el-input>
+						<el-input-number :precision="3" :step="1" :max="10000" controls-position="right" v-model="formData.straightPipeLength" clearable placeholder="请输入直管段最小长度"
+							  size="small"></el-input-number>
+						
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="椭圆率(%)">
-							<el-input v-model="formData.ellipticity" placeholder="请输入椭圆率" size="small"></el-input>
+							<el-input-number :precision="3" :step="1" :max="1000" controls-position="right" v-model="formData.ellipticity" clearable placeholder="请输入椭圆率"
+							  size="small"></el-input-number>
+			
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="壁厚减薄率(%)">
-							<el-input v-model="formData.wallThicknessRedurate" placeholder="请输入壁厚减薄率(%)" size="small"></el-input>
+						<el-input-number :precision="3" :step="1" :max="1000" controls-position="right" v-model="formData.wallThicknessRedurate" clearable placeholder="请输入壁厚减薄率(%)"
+							  size="small"></el-input-number>
 						</el-form-item>
 					</el-col>
 
 
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="长度(m)">
-							<el-input v-model="formData.pipeLength" placeholder="请输入长度" size="small"></el-input>
+						<el-input-number :precision="3" :step="1" :max="10000" controls-position="right" v-model="formData.pipeLength" clearable placeholder="请输入长度"
+							  size="small"></el-input-number>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="管径(mm)">
-							<el-input v-model="formData.pipeDiameter" placeholder="请输入管径" size="small"></el-input>
+						<el-input-number :precision="2" :step="1" :max="10000" controls-position="right" v-model="formData.pipeDiameter" clearable placeholder="请输入管径"
+							  size="small"></el-input-number>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="壁厚(mm)">
-							<el-input v-model="formData.wallThickness" placeholder="请输入壁厚" size="small"></el-input>
+						<el-input-number :precision="2" :step="1" :max="10000" controls-position="right" v-model="formData.wallThickness" clearable placeholder="请输入壁厚"
+							  size="small"></el-input-number>
 						</el-form-item>
 					</el-col>
 
@@ -294,6 +306,7 @@
 					supervisionEngineer: "",
 					collectionPerson: "",
 					collectionDate: "",
+					isUse:0,
 					remarks: ""
 				}
 			}
@@ -439,6 +452,7 @@
 						"/daq/clodBendingPipe/save.do";
 				} else {
 					msg = "修改成功";
+					delete that.formData.isUse;
 					url = jasTools.base.rootPath +
 						"/daq/clodBendingPipe/update.do";
 				}
@@ -462,7 +476,7 @@
 			getDetailByObjectId: function () {
 				var that = this;
 				var url = jasTools.base.rootPath + "/jdbc/commonData/coldBendingPipe/getPage.do";
-				jasTools.ajax.post(url, that.formData, function (data) {
+				jasTools.ajax.post(url, {oid:that.oid}, function (data) {
 					for (var key in that.formData) {
 						that.formData[key] = data.rows[0][key];
 					}

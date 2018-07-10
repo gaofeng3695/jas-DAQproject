@@ -17,12 +17,11 @@
 	<div id="app" v-cloak>
 		<jas-base-group-title name="基础数据"></jas-base-group-title>
 		<jas-detail-table :titles="baseArr" :detail="detail"></jas-detail-table>
-		<jas-base-group-title name="冷弯信息数据"></jas-base-group-title>
-		<jas-detail-table :titles="fieldsArr" :detail="detail"></jas-detail-table>
+
 		<jas-base-group-title name="其他信息"></jas-base-group-title>
 		<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
 
-	<!--	<jas-base-group-title name="附件信息"></jas-base-group-title>
+		<!--	<jas-base-group-title name="附件信息"></jas-base-group-title>
 		<jas-file-list :biz-id="oid"></jas-file-list>-->
 	</div>
 </body>
@@ -48,95 +47,45 @@
 						field: 'tendersName',
 					},
 					{
-						name: '管线名称',
-						field: 'pipelineName',
-					},
-					{
-						name: '线路段/穿跨越',
-						field: 'pipeSegmentName',
-					},
-					{
 						name: '施工单位',
-						field: 'constructUnitName',
+						field: 'unitName',
 					},
 					{
-						name: '监理单位',
-						field: 'supervisionUnitName',
-					},
-					{
-						name: '监理工程师',
-						field: 'supervisionEngineer',
-					},
-					{
-						name: '采集日期',
-						field: 'collectionDate',
-					},
-					{
-						name: '采集人员',
-						field: 'collectionPerson',
-					}
+					name: '出厂编号',
+					field: 'manufacturerCode'
+				}, {
+					name: '生产厂家',
+					field: 'manufacturer'
+				}, {
+					name: '合格证编号',
+					field: 'certificationNum'
+				}, {
+					name: "公称直径(mm)",
+					field: "diameter"
+				}, {
+					name: "公称压力(mpa)",
+					field: "pressure"
+				}, {
+					name: '测试仪器',
+					field: 'testEquipment'
+				}, {
+					name: '仪器规格型号',
+					field: 'specandModel'
+				}, {
+					name: '实用绝缘电阻值(MΩ)',
+					field: 'resistanceVal'
+				}, {
+					name: '验收结论',
+					field: 'checkResults'
+				}
 				],
-				fieldsArr: [ //
-							{
-								name: '原材料钢管编号',
-								field: 'pipeCode',
-							},
-							{
-								name: '冷湾编号',
-								field: 'pipeColdBendingCode',
-							},
-							{
-								name: '管子弯曲设计标准',
-								field: 'pipeBendingStandards',
-							},
-							{
-								name: '曲率半径(mm)',
-								field: 'bendingRadius',
-							},
-							{
-								name: '弯曲角度(°)',
-								field: 'bendingAngle',
-							},
-							{
-								name: '曲线长度(mm)',
-								field: 'curveLength',
-							},
-							{
-								name: '直管段最小长度(m)',
-								field: 'straightPipeLength',
-							},
-							{
-								name: '椭圆率(%)',
-								field: 'ellipticity',
-							},
-							{
-								name: '壁厚减薄率(%)',
-								field: 'wallThicknessRedurate',
-							},
-							{
-								name: '长度(m)',
-								field: 'pipeLength',
-							},
-							{
-								name: '管径(mm)',
-								field: 'pipeDiameter',
-							},
-							{
-								name: '壁厚(mm)',
-								field: 'wallThickness',
-							},
-							{
-								name: '制作日期',
-								field: 'produceDate',
-							}
-						],
 				otherArr: [{
 					name: '备注',
 					field: 'remarks',
 				}],
 				detail: {},
 				columnNum: 2,
-				oid:'',
+				oid: '',
 			}
 		},
 
@@ -153,15 +102,13 @@
 		methods: {
 			getDetailByObjectId: function () {
 				var that = this;
-				var url = jasTools.base.rootPath + "/jdbc/commonData/coldBendingPipe/getPage.do";
-				jasTools.ajax.post(url, {oid:this.oid}, function (data) {				
+				var url = jasTools.base.rootPath + "/jdbc/commonData/checkInsulatedJoint/getPage.do";
+				jasTools.ajax.post(url, this.params, function (data) {
+
 					that.detail = data.rows[0];
+
 				});
 			},
-
-			
-
-
 		},
 	});
 </script>

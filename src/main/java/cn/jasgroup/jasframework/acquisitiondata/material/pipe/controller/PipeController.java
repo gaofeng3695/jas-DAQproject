@@ -19,6 +19,14 @@ public class PipeController {
 	@Autowired
 	private PipeService pipeService;
 	
+	/**
+	 * <p>功能描述：查询未使用的钢管。</p>
+	  * <p> 葛建。</p>	
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年7月10日 上午9:57:29。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
 	@RequestMapping("/getCutAndNotUse")
 	public Object getNotUseAndHasCut(){
 		ListResult<Map<String, Object>> result= null;

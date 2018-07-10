@@ -1,44 +1,51 @@
-package cn.jasgroup.jasframework.acquisitiondata.weld.cutweld.dao.entity;
+package cn.jasgroup.jasframework.acquisitiondata.weld.cutweld.query.bo;
 
-import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
-import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
-import cn.jasgroup.jasframework.base.annotation.Process;
-import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
+import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 
 /**
  * 
-  *<p>类描述：钢管切管实体。</p>
+  *<p>类描述：钢管切管Bo。</p>
   * @author 葛建 。
   * @version v1.0.0.1。
   * @since JDK1.8。
-  *<p>创建日期：2018年7月6日 下午5:35:47。</p>
-  *{@link cn.jasgroup.jasframework.acquisitiondata.weld.cutweld.service.CutWeldService #savePipeAfterCut()}
+  *<p>创建日期：2018年7月10日 上午8:58:02。</p>
  */
-@CommonSaveConfig(
-		scene = "/cutWeld/save"
-		,
-		afterAdvice = {
-				//将切管后的钢管信息保存到钢管表
-				@Process(service = "cutWeldService", method = "savePipeAfterCut()")
-		}
-	)
-@JdbcEntity(name="daq_cut_pipe")
-public class CutWeld extends CommonJdbcEntity{
+public class CutWeldBo extends CommonBaseBo{
 	
 	/**
-	 *  项目oid 
+	 * oid
 	 */
-	private String projectOid; 
+	private String oid;
+	
+	/**
+	 * 项目oid
+	 */
+	private String projectOid;
+
+	/**
+	 * 项目名称
+	 */
+	private String projectName;
 
 	/**
 	 * 管线oid
 	 */
-	private String pipelineOid; 
+	private String pipelineOid;
+
+	/**
+	 * 管线名称
+	 */
+	private String pipelineName;
 
 	/**
 	 * 标段oid
 	 */
-	private String tendersOid; 
+	private String tendersOid;
+
+	/**
+	 * 标段名称
+	 */
+	private String tendersName;
 
 	/**
 	 * 钢管编号
@@ -93,132 +100,150 @@ public class CutWeld extends CommonJdbcEntity{
 	/**
 	 * 备注 
 	 */
-	private String remarks; 
+	private String remarks;
+
+	public String getOid() {
+		return oid;
+	}
+
+	public void setOid(String oid) {
+		this.oid = oid;
+	}
 
 	public String getProjectOid() {
-		return projectOid; 
+		return projectOid;
 	}
 
 	public void setProjectOid(String projectOid) {
-		this.projectOid = projectOid; 
-		super.setField("projectOid");
+		this.projectOid = projectOid;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
 	}
 
 	public String getPipelineOid() {
-		return pipelineOid; 
+		return pipelineOid;
 	}
 
 	public void setPipelineOid(String pipelineOid) {
-		this.pipelineOid = pipelineOid; 
-		super.setField("pipelineOid");
+		this.pipelineOid = pipelineOid;
+	}
+
+	public String getPipelineName() {
+		return pipelineName;
+	}
+
+	public void setPipelineName(String pipelineName) {
+		this.pipelineName = pipelineName;
 	}
 
 	public String getTendersOid() {
-		return tendersOid; 
+		return tendersOid;
 	}
 
 	public void setTendersOid(String tendersOid) {
-		this.tendersOid = tendersOid; 
-		super.setField("tendersOid");
+		this.tendersOid = tendersOid;
+	}
+
+	public String getTendersName() {
+		return tendersName;
+	}
+
+	public void setTendersName(String tendersName) {
+		this.tendersName = tendersName;
 	}
 
 	public String getPipeOid() {
-		return pipeOid; 
+		return pipeOid;
 	}
 
 	public void setPipeOid(String pipeOid) {
-		this.pipeOid = pipeOid; 
-		super.setField("pipeOid");
+		this.pipeOid = pipeOid;
 	}
 
 	public Double getPipeDiameter() {
-		return pipeDiameter; 
+		return pipeDiameter;
 	}
 
 	public void setPipeDiameter(Double pipeDiameter) {
-		this.pipeDiameter = pipeDiameter; 
-		super.setField("pipeDiameter");
+		this.pipeDiameter = pipeDiameter;
 	}
 
 	public Double getWallThickness() {
-		return wallThickness; 
+		return wallThickness;
 	}
 
 	public void setWallThickness(Double wallThickness) {
-		this.wallThickness = wallThickness; 
-		super.setField("wallThickness");
+		this.wallThickness = wallThickness;
 	}
 
 	public Integer getSegmentsNum() {
-		return segmentsNum; 
+		return segmentsNum;
 	}
 
 	public void setSegmentsNum(Integer segmentsNum) {
-		this.segmentsNum = segmentsNum; 
-		super.setField("segmentsNum");
+		this.segmentsNum = segmentsNum;
 	}
 
 	public Double getFirstParagraphLength() {
-		return firstParagraphLength; 
+		return firstParagraphLength;
 	}
 
 	public void setFirstParagraphLength(Double firstParagraphLength) {
-		this.firstParagraphLength = firstParagraphLength; 
-		super.setField("firstParagraphLength");
+		this.firstParagraphLength = firstParagraphLength;
 	}
 
 	public Double getSecondParagraphLength() {
-		return secondParagraphLength; 
+		return secondParagraphLength;
 	}
 
 	public void setSecondParagraphLength(Double secondParagraphLength) {
-		this.secondParagraphLength = secondParagraphLength; 
-		super.setField("secondParagraphLength");
+		this.secondParagraphLength = secondParagraphLength;
 	}
 
 	public Double getThirdParagraphLength() {
-		return thirdParagraphLength; 
+		return thirdParagraphLength;
 	}
 
 	public void setThirdParagraphLength(Double thirdParagraphLength) {
-		this.thirdParagraphLength = thirdParagraphLength; 
-		super.setField("thirdParagraphLength");
+		this.thirdParagraphLength = thirdParagraphLength;
 	}
 
 	public Double getFourthParagraphLength() {
-		return fourthParagraphLength; 
+		return fourthParagraphLength;
 	}
 
 	public void setFourthParagraphLength(Double fourthParagraphLength) {
-		this.fourthParagraphLength = fourthParagraphLength; 
-		super.setField("fourthParagraphLength");
+		this.fourthParagraphLength = fourthParagraphLength;
 	}
 
 	public Double getFifthParagraphLength() {
-		return fifthParagraphLength; 
+		return fifthParagraphLength;
 	}
 
 	public void setFifthParagraphLength(Double fifthParagraphLength) {
-		this.fifthParagraphLength = fifthParagraphLength; 
-		super.setField("fifthParagraphLength");
+		this.fifthParagraphLength = fifthParagraphLength;
 	}
-	
+
 	public Integer getApproveStatus() {
 		return approveStatus;
 	}
 
 	public void setApproveStatus(Integer approveStatus) {
 		this.approveStatus = approveStatus;
-		super.setField("approveStatus");
 	}
 
 	public String getRemarks() {
-		return remarks; 
+		return remarks;
 	}
 
 	public void setRemarks(String remarks) {
-		this.remarks = remarks; 
-		super.setField("remarks");
-	}
-
+		this.remarks = remarks;
+	} 
+	
 }

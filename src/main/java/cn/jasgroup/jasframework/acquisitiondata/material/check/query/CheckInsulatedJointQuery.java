@@ -21,7 +21,22 @@ public class CheckInsulatedJointQuery extends BaseJavaQuery {
 	 * 唯一标识
 	 */
 	private String oid;
-	
+
+	/**
+	 *  项目oid 
+	 */
+	private String projectOid; 
+
+	/**
+	 *  监工单位oid
+	 */
+	private String constructionUnit; 
+
+	/**
+	 *  标段oid
+	 */
+	private String tendersOid; 
+
 	/**
 	 * 出厂编号 
 	 */
@@ -29,7 +44,11 @@ public class CheckInsulatedJointQuery extends BaseJavaQuery {
 	
 	@Override
 	public String getQuerySql() {
-		String sql ="select * from daq_check_insulated_joint cij where cij.active=1 ";
+		String sql ="select cij.*,pro.project_name, pi.unit_name,te.tenders_name from daq_check_insulated_joint cij "
+				+ " LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = cij.project_oid "
+				+ "LEFT JOIN (SELECT oid, unit_name, active FROM pri_unit where active=1) pi ON pi.oid = cij.construction_unit "
+				+ "LEFT JOIN (SELECT oid, tenders_name, active FROM daq_tenders where active=1) te ON te.oid = cij.tenders_oid "
+				+ "where cij.active=1 ";
 		sql += getConditionSql();
 		return sql;
 	}
@@ -37,10 +56,19 @@ public class CheckInsulatedJointQuery extends BaseJavaQuery {
 	private String getConditionSql() {
 		String conditionSql = "";
 		if (StringUtils.isNotBlank(oid)) {
-			conditionSql += " and oid = :oid";
+			conditionSql += " and cij.oid = :oid";
 		}else {
+			if (StringUtils.isNotBlank(projectOid)) {
+				conditionSql += " and cij.project_oid = :projectOid";
+			}
+			if (StringUtils.isNotBlank(tendersOid)) {
+				conditionSql += " and cij.tenders_oid = :tendersOid";
+			}
+			if (StringUtils.isNotBlank(constructionUnit)) {
+				conditionSql += " and cij.construction_unit = :constructionUnit";
+			}
 			if (StringUtils.isNotBlank(manufacturerCode)) {
-				conditionSql += " and manufacturer_code = :manufacturerCode";
+				conditionSql += " and manufacturer_code like :manufacturerCode";
 			}
 			conditionSql += " order by  cij.create_datetime desc";
 		}
@@ -55,8 +83,35 @@ public class CheckInsulatedJointQuery extends BaseJavaQuery {
 		this.oid = oid;
 	}
 
+	public String getProjectOid() {
+		return projectOid;
+	}
+
+	public void setProjectOid(String projectOid) {
+		this.projectOid = projectOid;
+	}
+
+	public String getConstructionUnit() {
+		return constructionUnit;
+	}
+
+	public void setConstructionUnit(String constructionUnit) {
+		this.constructionUnit = constructionUnit;
+	}
+
+	public String getTendersOid() {
+		return tendersOid;
+	}
+
+	public void setTendersOid(String tendersOid) {
+		this.tendersOid = tendersOid;
+	}
+
 	public String getManufacturerCode() {
-		return manufacturerCode;
+		if(StringUtils.isNotBlank(manufacturerCode)){
+			return "%"+manufacturerCode+"%";
+		}
+		return null;
 	}
 
 	public void setManufacturerCode(String manufacturerCode) {
