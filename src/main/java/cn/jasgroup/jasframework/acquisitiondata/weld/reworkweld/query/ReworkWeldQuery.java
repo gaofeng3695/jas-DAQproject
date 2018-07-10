@@ -6,6 +6,14 @@ import cn.jasgroup.jasframework.acquisitiondata.weld.reworkweld.query.bo.ReworkW
 import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 
+/**
+ * 
+  *<p>类描述：焊口返修分页查询。</p>
+  * @author 葛建 。
+  * @version v1.0.0.1。
+  * @since JDK1.8。
+  *<p>创建日期：2018年7月10日 上午8:56:41。</p>
+ */
 @QueryConfig(scene = "/reworkWeld/getPage", resultClass = ReworkWeldBo.class)
 public class ReworkWeldQuery extends BaseJavaQuery {
 	
