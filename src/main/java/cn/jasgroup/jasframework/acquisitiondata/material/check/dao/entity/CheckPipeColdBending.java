@@ -16,7 +16,6 @@ import cn.jasgroup.jasframework.base.annotation.UniqueConstraints;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 
 /**
- * 
   *<p>类描述：冷弯管检查及信息记录实体类。</p>
   * @author 葛建 。
   * @version v1.0.0.1。
@@ -24,19 +23,19 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
   *<p>创建日期：2018年7月5日 上午9:17:52。</p>
  */
 @CommonSaveConfig(
-		scene = "/checkPipeColdBending/save"
-	)
-	@CommonUpdateConfig(
-		scene = "/checkPipeColdBending/update"
-	)
-	@CommonDeleteConfig(
-		scene = "/checkPipeColdBending/delete"
-	)
+	scene = "/checkPipeColdBending/save"
+)
+@CommonUpdateConfig(
+	scene = "/checkPipeColdBending/update"
+)
+@CommonDeleteConfig(
+	scene = "/checkPipeColdBending/delete"
+)
 @UniqueConstraints(
-		strategys ={
-			@UniqueConstraintStrategy(columnNames={"pipeColdBendingCode"})
-		}
-	)
+	strategys ={
+		@UniqueConstraintStrategy(columnNames={"pipeColdBendingCode"})
+	}
+)
 @JdbcEntity(name="daq_check_pipe_cold_bending")
 public class CheckPipeColdBending extends CommonJdbcEntity{
 

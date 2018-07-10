@@ -16,19 +16,19 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
   *<p>创建日期：2018年7月5日 上午10:14:38。</p>
  */
 @CommonSaveConfig(
-		scene = "/checkInsulatedJoint/save"
-	)
-	@CommonUpdateConfig(
-		scene = "/checkInsulatedJoint/update"
-	)
-	@CommonDeleteConfig(
-		scene = "/checkInsulatedJoint/delete"
-	)
+	scene = "/checkInsulatedJoint/save"
+)
+@CommonUpdateConfig(
+	scene = "/checkInsulatedJoint/update"
+)
+@CommonDeleteConfig(
+	scene = "/checkInsulatedJoint/delete"
+)
 @UniqueConstraints(
-		strategys ={
-			@UniqueConstraintStrategy(columnNames={"manufacturerCode"})
-		}
-	)
+	strategys ={
+		@UniqueConstraintStrategy(columnNames={"manufacturerCode"})
+	}
+)
 @JdbcEntity(name="daq_check_insulated_joint")
 public class CheckInsulatedJoint extends CommonJdbcEntity{
 

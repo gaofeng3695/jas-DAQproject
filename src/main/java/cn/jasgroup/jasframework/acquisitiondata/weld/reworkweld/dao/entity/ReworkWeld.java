@@ -24,19 +24,19 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
   *<p>创建日期：2018年7月6日 下午5:35:16。</p>
  */
 @CommonSaveConfig(
-		scene = "/reworkWeld/save"
-	)
-	@CommonUpdateConfig(
-		scene = "/reworkWeld/update"
-	)
-	@CommonDeleteConfig(
-		scene = "/reworkWeld/delete"
-	)
+	scene = "/reworkWeld/save"
+)
+@CommonUpdateConfig(
+	scene = "/reworkWeld/update"
+)
+@CommonDeleteConfig(
+	scene = "/reworkWeld/delete"
+)
 @UniqueConstraints(
-		strategys ={
-			@UniqueConstraintStrategy(columnNames={"reworkWeldCode"})
-		}
-	)
+	strategys ={
+		@UniqueConstraintStrategy(columnNames={"reworkWeldCode"})
+	}
+)
 @JdbcEntity(name="daq_weld_rework_weld")
 public class ReworkWeld extends CommonJdbcEntity{
 
