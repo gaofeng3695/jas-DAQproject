@@ -78,7 +78,8 @@
 
 							<el-col v-if="item.type=='UT_13'" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 								<el-form-item :prop="item.id" :label="item.name" :rules="item.verify">
-									<el-input v-if="item.type=='UT_13'" :autosize="{ minRows: 2}" type="textarea" :rows="2" :size="item.size" v-model="formData[item.id]" :disabled="item.disabled"></el-input>
+									<el-input v-if="item.type=='UT_13'" :autosize="{ minRows: 2}" type="textarea" :rows="2" :size="item.size" v-model="formData[item.id]"
+									  :disabled="item.disabled"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col v-else :xs="formConfig.xs" :sm="formConfig.sm" :md="formConfig.md" :lg="formConfig.lg" :xl="formConfig.xl" :class="{'height' : item.type=='UT_14'||item.type=='UT_05'||item.type=='UT_06'||item.type=='UT_07'||item.type=='UT_08' }">
@@ -542,6 +543,7 @@
 							if (childField === child.id) { // 确认是级联子集字段
 								if (value) { // 父级有值
 									child.options = options; // 赋值下拉选项
+
 								} else {
 									child.options = []; // 清空下拉选项
 								}
@@ -553,6 +555,14 @@
 										isInit: false
 									});
 								}
+								if (options.length === 1) { //只有一个选项就自动复制
+									that.$set(that.formData, child.id, options[0].key); // 赋值 子级联的value
+									that.$refs[child.id][0].$emit('change', { // 触发子级联的change事件
+										value: that.formData[child.id],
+										isInit: false
+									});
+								}
+
 							}
 						});
 					});
