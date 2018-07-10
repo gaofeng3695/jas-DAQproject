@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<link rel="stylesheet" href="./../../../../lib/font-awesome-4.7.0/css/font-awesome.css">
+	<link rel="stylesheet" href="./../../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../../src/css/main.css">
+	<style>
+		html,
+		body {
+			width: 100%;
+		}
+
+		#app {
+			width: 100%;
+			height: 100%;
+			position: relative;
+			overflow: hidden;
+		}
+
+		.content {
+			height: calc(100% - 40px);
+			overflow-y: auto;
+			overflow-x: hidden;
+		}
+
+		.el-form-item {
+			margin-bottom: 15px !important;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="app" v-cloak>
+		<div class="content">
+			<el-form ref="formData" :rules="rules" :model="formData" label-width="150px">
+				<jas-base-group-title name="基础数据"></jas-base-group-title>
+				<el-row :gutter="10">
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="项目名称" prop="projectOid" required>
+							<el-select v-model="formData.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
+								<el-option v-for="item in domain.project" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="标段名称" prop="tendersOid" required>
+							<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
+								<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="施工单位" prop="constructionUnit" required>
+							<el-select v-model="formData.constructionUnit" clearable placeholder="请选择施工单位" size="small">
+								<el-option v-for="item in domain.constructionUnitArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="冷弯管编号" prop="pipeColdBendingCode" required>
+							<el-input v-model="formData.pipeColdBendingCode" clearable placeholder="请输入冷弯管" size="small"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="合格编号" prop="certificateNum" required>
+							<el-input v-model="formData.certificateNum" clearable placeholder="请输入合格编号" size="small"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="弯制单位">
+							<el-input v-model="formData.productionUnit" clearable placeholder="请输入弯制单位" size="small"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="弯管长度(m)">
+							<el-input-number :precision="3" :step="1" :max="100000" controls-position="right" v-model="formData.pipeLength" clearable placeholder="弯管长度(m)"
+							  size="small"></el-input-number>
+							<!--<el-input v-model="formData.pipeLength" clearable placeholder="请输入弯道长度(m)" size="small"></el-input>-->
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="弯制角度(°)">
+							<el-input-number :precision="0" :step="1" :max="10000" controls-position="right" v-model="formData.bendAngle" clearable placeholder="弯制角度(°)"
+							  size="small"></el-input-number>
+						
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="管径(mm)">
+						<el-input-number :precision="3" :step="1" :max="100000" controls-position="right" v-model="formData.pipeDiameter" clearable placeholder="请输入管径(mm)"
+							  size="small"></el-input-number>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="壁厚(mm)">
+						<el-input-number :precision="3" :step="1" :max="100000" controls-position="right" v-model="formData.wallThickness" clearable placeholder="请输入壁厚(mm)"
+							  size="small"></el-input-number>
+						
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="纵焊缝位置">
+							<el-select v-model="formData.weldPosition" clearable placeholder="请选择纵焊缝位置" size="small">
+								<el-option v-for="item in domain.isPass" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="椭圆度">
+							<el-select v-model="formData.ovality" clearable placeholder="椭圆度" size="small">
+								<el-option v-for="item in domain.isPass" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="坡口检查">
+							<el-select v-model="formData.grooveCheck" clearable placeholder="请选择坡口检查" size="small">
+								<el-option v-for="item in domain.isPass" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="防腐层内外表面质量">
+							<el-select v-model="formData.coatingIoFaceCheck" clearable placeholder="请选择防腐层内外表面质量" size="small">
+								<el-option v-for="item in domain.isPass" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="防腐层端部内外涂层">
+							<el-select v-model="formData.coatingIoEndsCheck" clearable placeholder="请选择防腐层端部内外涂层" size="small">
+								<el-option v-for="item in domain.isPass" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="检查日期">
+							<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入检查日期" v-model="formData.checkedDate" size="small" style="width: 100%;">
+							</el-date-picker>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="检查人">
+							<el-input v-model="formData.checkedBy" clearable placeholder="请输入检查人" size="small"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<jas-base-group-title name="其他信息"></jas-base-group-title>
+				<el-row>
+					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+						<el-form-item label="备注" prop="remarks">
+							<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<!-- <el-row>
+					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+						<el-form-item label="模板上传" prop="file">
+						</el-form-item>
+					</el-col>
+				</el-row> -->
+				<!--<jas-base-group-title name="附件信息"></jas-base-group-title>
+
+				<jas-file-upload ref="upload" @success="uploadSuccess"></jas-file-upload>-->
+			</el-form>
+
+
+
+
+
+		</div>
+		<div slot="footer" class="dialog-footer" style="text-align: center">
+			<el-button size="small" @click="cancel()">取 消</el-button>
+			<el-button size="small" type="primary" @click="submit('formData')">确 定 </el-button>
+		</div>
+	</div>
+</body>
+<script src="./../../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../../lib/vue/vue.js"></script>
+<script src="./../../../../lib/element-ui/v2.4.1/index.min.js"></script>
+<script src="./../../../../common/components/jas-components.js "></script>
+<script src="./../../../../common/js/jas-tools.js"></script>
+<!--<script src="js/ajaxFileUpload.js"></script>-->
+<script>
+	var app = new Vue({
+		el: "#app",
+		data: function () {
+			var that = this;
+			return {
+				domain: {
+					isPass: [{
+						key: '0',
+						value: '合格'
+					}, {
+						key: '1',
+						value: '不合格'
+					}],
+					constructionUnitArr: [],
+					project: [], //项目
+					tenders: [], //标段
+				},
+				rules: {
+					pipeColdBendingCode: [{
+						required: true,
+						message: '冷弯管编号为必填项',
+						trigger: 'change'
+					}],
+					certificateNum: [{
+						required: true,
+						message: '合格编号为必填项',
+						trigger: 'change'
+					}],
+					projectOid: [{
+						required: true,
+						message: '项目名称为必填项',
+						trigger: 'change'
+					}],
+					tendersOid: [{
+						required: true,
+						message: '标段名称为必填项',
+						trigger: 'change'
+					}],
+					constructionUnit: [{
+						required: true,
+						message: '施工单位为必填项',
+						trigger: 'change'
+					}]
+				},
+				formData: {
+					projectOid:"",
+					tendersOid:"",
+					constructionUnit:"",
+					"pipeColdBendingCode": "",
+					"certificateNum": "",
+					"productionUnit": "",
+					"pipeLength": "",
+					"pipeDiameter": "",
+					"wallThickness": "",
+					"bendAngle": "",
+					"weldPosition": "0",
+					"ovality": "0",
+					"grooveCheck": "0",
+					"coatingIoFaceCheck": "0",
+					"coatingIoEndsCheck": "0",
+					"checkedBy": "",
+					"checkedDate": "",
+					"remarks": ""
+				}
+			}
+		},
+
+		mounted: function () {
+			var that = this;
+			var param = window.jasTools.base
+				.getParamsInUrl(location.href);
+			if (param.oid) {
+				this.oid = param.oid;
+				this.formData.oid = this.oid;
+				// this.uploadurl = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") +
+				// 	"&businessId=" + this.oid + "&businessType=excelTemplate";
+
+				this.isEdit = true;
+				this.getDetailByObjectId();
+				// this.$refs.upload.requestFile(this.oid);
+			};
+			this.requestDomainFromBizTable(
+				'/daq/privilege/getProjectList.do', {},
+				function (
+					arr) {
+					that.domain.project = arr;
+				});
+
+		},
+		methods: {
+			requestDomainFromBizTable: function (url, obj, cb) {
+				var that = this;
+				var url = jasTools.base.rootPath + url;
+				jasTools.ajax.post(url, obj, function (data) {
+					cb && cb(data.rows);
+				}, function () {
+					cb && cb([]);
+				});
+			},
+			projectChanged: function (val) {
+				var that = this;
+				if (val) {
+					this.requestDomainFromBizTable(
+						'/daq/privilege/getTendersList.do', {
+							projectOid: val
+						},
+						function (arr) {
+							that.domain.tenders = arr;
+						});
+				} else {
+					that.domain.tenders = [];
+				}
+			},
+			tendersChanged: function (val) { //根据标段触发管线列表
+				var that = this;
+				if (val) {
+					this
+						.requestDomainFromBizTable(
+							'/daq/privilege/getConstructionUnitByTendersOid.do', {
+								tendersOid: val
+							},
+							function (arr) {
+								that.domain.constructionUnitArr = arr;
+							});
+				} else {
+					that.domain.constructionUnitArr = [];
+				}
+			},
+			cancel: function (param) {
+				window.parent.jasTools.dialog.close(param);
+			},
+			submit: function (formName) {
+				var that = this;
+				this.$refs[formName].validate(function (valid) {
+					if (valid) {
+						that.save();
+					}
+				});
+			},
+
+			save: function () {
+				var that = this;
+				var msg = "";
+				if (!this.isEdit) {
+					msg = "增加成功";
+					url = jasTools.base.rootPath +
+						"/jdbc/commonData/checkPipeColdBending/save.do";
+				} else {
+					msg = "修改成功";
+					url = jasTools.base.rootPath +
+						"/jdbc/commonData/checkPipeColdBending/update.do";
+				}
+
+				jasTools.ajax.post(url, that.formData, function (data) {
+					top.Vue.prototype.$message({
+						type: 'success',
+						message: !this.isEdit ? '保存成功' : '修改成功'
+					});
+					that.cancel(1);
+				});
+
+			},
+			// uploadSuccess: function () {
+			// 	top.Vue.prototype.$message({
+			// 		type: 'success',
+			// 		message: !this.isEdit ? '保存成功' : '修改成功'
+			// 	});
+			// 	this.cancel(1);
+			// },
+			getDetailByObjectId: function () {
+				var that = this;
+				var url = jasTools.base.rootPath +
+					"/jdbc/commonData/checkPipeColdBending/getPage.do";
+				jasTools.ajax.post(url, that.formData, function (data) {
+					for (var key in that.formData) {
+						that.formData[key] = data.rows[0][key];
+					}
+					that.projectChanged(data.rows[0].projectOid);
+					that.tendersChanged(data.rows[0].tendersOid);
+				});
+				
+			},
+		},
+	});
+</script>
+
+</html>

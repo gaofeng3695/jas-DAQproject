@@ -338,7 +338,6 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 		super.setField("collectionDate");
 	}
 
-	@UpdateDeleteSet
 	@Column(name="is_use")
 	public Integer getIsUse() {
 		return isUse;

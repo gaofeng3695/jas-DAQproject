@@ -23,49 +23,33 @@
 
 <body>
 	<div id="app" v-cloak>
-
-
-		<jas-list-wrapper slot="mainPanel">
+		<jas-list-wrapper>
 			<el-form slot="search" :model="topSearch" label-width="100px">
 				<el-row>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+					<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
 						<el-form-item label="项目名称" prop="projectOid">
 							<el-select v-model="topSearch.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
 								<el-option v-for="item in domain.project" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+					<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
 						<el-form-item label="标段名称" prop="tendersOid">
 							<el-select v-model="topSearch.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
 								<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item label="管线名称" prop="pipelineOid">
-							<el-select v-model="topSearch.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged">
-								<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+					<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+						<el-form-item label="施工单位" prop="constructionUnit">
+							<el-select v-model="topSearch.constructionUnit" clearable placeholder="请选择施工单位" size="small">
+								<el-option v-for="item in domain.constructionUnitArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item label="线路段/穿跨越" prop="pipeSegmentOid">
-							<el-select v-model="topSearch.pipeSegmentOid" clearable placeholder="请选择线路段" size="small">
-								<el-option v-for="item in domain.pipeSegment" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+					<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
 						<el-form-item label="冷弯管编号">
 							<el-input v-model="topSearch.pipeColdBendingCode" clearable placeholder="请输入冷弯管编号" size="small"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item label="是否使用">
-							<el-select v-model="topSearch.isUse" clearable placeholder="请选择是否使用" size="small">
-								<el-option v-for="item in domain.isUses" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -76,14 +60,12 @@
 					</el-col>
 				</el-row>
 			</el-form>
-			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" search-path="/jdbc/commonData/coldBendingPipe/getPage.do"
-			  :add-url="addUrl" :detail-url="detailUrl" delete-path="/daq/clodBendingPipe/delete.do" :class-name="className" :template-code="templateCode"></jas-table-for-list>
+			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" search-path="/jdbc/commonData/checkPipeColdBending/getPage.do"
+			  :add-url="addUrl" :detail-url="detailUrl" delete-path="/jdbc/commonData/checkPipeColdBending/delete.do" :class-name="className"
+			  :template-code="templateCode"></jas-table-for-list>
 		</jas-list-wrapper>
-
-
 	</div>
 </body>
-
 <script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
 <script src="./../../../lib/vue/vue.js"></script>
 <script src="./../../../lib/vue-multipane/vue-multipane.js"></script>
@@ -97,115 +79,124 @@
 			return {
 				className: '',
 				templateCode: '',
-				addUrl: './pages/row-management/cold-bends/dialogs/add.html',
-				detailUrl: './pages/row-management/cold-bends/dialogs/detail.html',
+				addUrl: './pages/row-management/check-cold-bends/dialogs/add.html',
+				detailUrl: './pages/row-management/check-cold-bends/dialogs/detail.html',
 				privilegeCode: '',
 				topSearch: {
-					projectOid: '',
-					tendersOid: '',
-					pipelineOid: '',
-					pipeSegmentOid: '', //线路段
-					pipeColdBendingCode: '', //冷弯管编号
-					isUse: '',
-					"page": 1,
-					"rows": 10
+					pipeColdBendingCode: "",
+					projectOid: "",
+					tendersOid: "",
+					constructionUnit: ""
 				},
 				tableFields: [{
 					name: '项目名称',
 					field: 'projectName'
-				},{
-					name: '是否使用',
-					field: 'isUse'
 				}, {
-					name: '管线名称',
-					field: 'pipelineName'
-				},  {
 					name: '标段名称',
 					field: 'tendersName'
-				},{
-					name:"线路段名称",
-					field:"pipeSegmentName"
-				},{
+				}, {
+					name: '施工单位',
+					field: 'unitName'
+				}, {
 					name: '冷弯管编号',
 					field: 'pipeColdBendingCode'
-				},{
-					name: '原材料钢管编号',
-					field: 'pipeCode'
 				}, {
-					name: '管子弯曲设计要求技术标准',
-					field: 'pipeBendingStandards'
-				},  {
-					name: '曲率半径（mm)',
-					field: 'bendingRadius'
+					name: '合格编号',
+					field: 'certificateNum'
 				}, {
-					name: '弯曲角度(°)',
-					field: 'bendingAngle'
+					name: '弯制单位',
+					field: 'productionUnit'
 				}, {
-					name: '曲线长度(m)',
-					field: 'curveLength'
+					name: "弯道长度(m)",
+					field: "pipeLength"
 				}, {
-					name: '直管段最小长度(m)',
-					field: 'straightPipeLength'
-				},{
-					name: '椭圆率(%)',
-					field: 'ellipticity'
-				},  {
-					name: '壁厚减薄率(%)',
-					field: 'wallThicknessRedurate'
-				},
-				{
-					name: '长度(m)',
-					field: 'pipeLength'
-				},  {
+					name: "弯制角度(°)",
+					field: "bendAngle"
+				}, {
 					name: '管径(mm)',
 					field: 'pipeDiameter'
 				}, {
 					name: '壁厚(mm)',
 					field: 'wallThickness'
-				}, 
-				{
-					name: '制作时间',
-					field: 'produceDate'
 				}, {
-					name: '施工单位',
-					field: 'constructUnitName'
+					name: '纵焊缝位置',
+					field: 'weldPosition',
+					formatter: function (row, column, cellvalue, index) {
+						if (cellvalue == '0') {
+							return '合格';
+						} else {
+							return '不合格';
+						}
+					}
 				}, {
-					name: '监理单位',
-					field: 'supervisionUnitName'
+					name: '椭圆度<0.6%D',
+					field: 'ovality',
+					formatter: function (row, column, cellvalue, index) {
+						if (cellvalue == '0') {
+							return '合格';
+						} else {
+							return '不合格';
+						}
+					}
 				}, {
-					name: '数据采集人',
-					field: 'collectionPerson'
+					name: '坡口检查',
+					field: 'grooveCheck',
+					formatter: function (row, column, cellvalue, index) {
+						if (cellvalue == '0') {
+							return '合格';
+						} else {
+							return '不合格';
+						}
+					}
 				}, {
-					name: '监理工程师',
-					field: 'supervisionEngineer'
+					name: '防腐层内外表面质量',
+					field: 'coatingIoFaceCheck',
+					formatter: function (row, column, cellvalue, index) {
+						if (cellvalue == '0') {
+							return '合格';
+						} else {
+							return '不合格';
+						}
+					}
 				}, {
-					name: '采集日期',
-					field: 'collectionDate'
+					name: '防腐层端部内外涂层',
+					field: 'coatingIoEndsCheck',
+					formatter: function (row, column, cellvalue, index) {
+						if (cellvalue == '0') {
+							return '合格';
+						} else {
+							return '不合格';
+						}
+					}
+				}, {
+					name: '检查人',
+					field: 'checkedBy'
+				}, {
+					name: '检查日期',
+					field: 'checkedDate'
 				}],
 				domain: {
+					isPass: [{
+						key: '0',
+						value: '合格'
+					}, {
+						key: '1',
+						value: '不合格'
+					}],
+					constructionUnitArr: [],
 					project: [], //项目
 					tenders: [], //标段
-					pipeline: [], //管线
-					pipeSegment: [],
-					isUses: [{
-						key: 0,
-						value: '否'
-					}, {
-						key: 1,
-						value: '是'
-					}],
 				}
 			}
 		},
-
 		mounted: function () {
 			var that = this;
 			var param = window.jasTools.base
 				.getParamsInUrl(location.href);
 			this.privilegeCode = param.privilegeCode;
 			this.templateCode = param.templateCode; //|| "stake-2";
-			this.className = param.className; // || 'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';					
-					this.requestDomainFromBizTable(
+			this.className = param.className; // || 'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';
+			this.requestDomainFromBizTable(
 				'/daq/privilege/getProjectList.do', {},
 				function (
 					arr) {
@@ -234,7 +225,6 @@
 						});
 				} else {
 					that.domain.tenders = [];
-					that.formData.tendersOid = '';
 				}
 			},
 			tendersChanged: function (val) { //根据标段触发管线列表
@@ -242,45 +232,26 @@
 				if (val) {
 					this
 						.requestDomainFromBizTable(
-							'/daq/privilege/getPipelineListByTendersOid.do', {
+							'/daq/privilege/getConstructionUnitByTendersOid.do', {
 								tendersOid: val
 							},
 							function (arr) {
-								that.domain.pipeline = arr;
+								that.domain.constructionUnitArr = arr;
 							});
 				} else {
-					that.domain.pipeline = [];
-					that.formData.pipelineOid = '';
-				}
-			},
-			pipelineChanged: function (val) { //根据管线触发线路段/穿跨越
-				var that = this;
-				if (val) {
-					this
-						.requestDomainFromBizTable(
-							'/daq/privilege/getPipeSegmentOrCrossList.do', {
-								pipelineOid: val
-							},
-							function (arr) {
-								that.domain.pipeSegment = arr;
-							});
-				} else {
-					that.domain.pipeSegment = [];
-					that.formData.pipeSegmentOid = '';
+					that.domain.constructionUnitArr = [];
 				}
 			},
 			searchList: function () {
 				this.$refs.table.search();
 			},
 			reset: function () {
-				this.topSearch.projectOid = '';
-				this.topSearch.pipelineOid = '';
-				this.topSearch.tendersOid = '';
-				this.topSearch.pipeSegmentOid = '';
 				this.topSearch.pipeColdBendingCode = '';
-				this.topSearch.isUse='';
+				this.topSearch.constructionUnit = '';
+				this.topSearch.projectOid = '';
+				this.topSearch.tendersOid = '';
 				this.$refs.table.search();
-			},
+			}
 		},
 	});
 </script>

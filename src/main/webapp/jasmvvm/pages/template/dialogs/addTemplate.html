@@ -38,18 +38,6 @@
 			line-height: 40px;
 		}
 
-		.bulk {
-			padding-bottom: 10px;
-			margin-bottom: 22px;
-			border-bottom: 1px solid rgb(228, 231, 237);
-		}
-
-		.title {
-			padding: 0px 0px 10px 0px;
-			height: 100%;
-			border-bottom: 2px solid rgb(64, 158, 255);
-		}
-
 		.el-date-editor,
 		.el-input-number {
 			width: 100% !important;
@@ -72,53 +60,26 @@
 			line-height: 46px !important;
 		}
 
-		/* .el-upload {
-			width: 100% !important
-		} */
-
 		.height {
 			height: 56px;
-		}
-
-		.file-item {
-			height: 30px;
-			line-height: 30px;
-			width: 100%;
-			/*padding: 0px 10px*/
-		}
-
-		.file-item:hover {
-			background: #dcdfe6
-		}
-
-		.btn {
-			padding-left: 10px;
-			cursor: pointer;
-			font-size: 1.2em
-		}
-
-		.btn:hover {
-			color: #66b1ff;
 		}
 	</style>
 </head>
 
 <body>
 	<div id="app" v-cloak v-loading="isLoading">
-		<div class="content">
 
+		<jas-dialog-wrapper>
 			<el-form ref="formData" :model="formData" :label-width="labelwidth">
 				<template v-for="group in formAttr">
-					<div class="bulk" v-if="group.groupName">
-						<span class="title" v-text="group.groupName">
-						</span>
-					</div>
-					<el-row :gutter="10">
+					<jas-base-group-title v-if="group.groupName" :name="group.groupName"></jas-base-group-title>
+					<el-row>
 						<template v-for="item in group.data">
 
 							<el-col v-if="item.type=='UT_13'" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 								<el-form-item :prop="item.id" :label="item.name" :rules="item.verify">
-									<el-input v-if="item.type=='UT_13'" autosize type="textarea" :rows="2" :size="item.size" v-model="formData[item.id]" :disabled="item.disabled"></el-input>
+									<el-input v-if="item.type=='UT_13'" :autosize="{ minRows: 2}" type="textarea" :rows="2" :size="item.size" v-model="formData[item.id]"
+									  :disabled="item.disabled"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col v-else :xs="formConfig.xs" :sm="formConfig.sm" :md="formConfig.md" :lg="formConfig.lg" :xl="formConfig.xl" :class="{'height' : item.type=='UT_14'||item.type=='UT_05'||item.type=='UT_06'||item.type=='UT_07'||item.type=='UT_08' }">
@@ -177,11 +138,11 @@
 
 				</el-row>
 			</el-form>
-		</div>
-		<div slot="footer" class="dialog-footer" style="text-align: center">
-			<el-button size="small" @click="cancel()">取 消</el-button>
-			<el-button size="small" type="primary" @click="submit('formData')">确 定</el-button>
-		</div>
+			<div slot="footer">
+				<el-button size="small" @click="cancel()">取 消</el-button>
+				<el-button size="small" type="primary" @click="submit('formData')">确 定</el-button>
+			</div>
+		</jas-dialog-wrapper>
 	</div>
 </body>
 <script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
@@ -582,6 +543,7 @@
 							if (childField === child.id) { // 确认是级联子集字段
 								if (value) { // 父级有值
 									child.options = options; // 赋值下拉选项
+
 								} else {
 									child.options = []; // 清空下拉选项
 								}
@@ -593,6 +555,14 @@
 										isInit: false
 									});
 								}
+								if (options.length === 1) { //只有一个选项就自动复制
+									that.$set(that.formData, child.id, options[0].key); // 赋值 子级联的value
+									that.$refs[child.id][0].$emit('change', { // 触发子级联的change事件
+										value: that.formData[child.id],
+										isInit: false
+									});
+								}
+
 							}
 						});
 					});
@@ -615,7 +585,7 @@
 				};
 
 				oFieldConfig.childField.split(',').forEach(function (childField, index) {
-					if(!oFieldConfig.requestUrl) return;
+					if (!oFieldConfig.requestUrl) return;
 					var urls = oFieldConfig.requestUrl.split(',');
 					var url = urls[index] || urls[0];
 					getAndSet(childField, url);
