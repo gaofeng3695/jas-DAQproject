@@ -108,7 +108,10 @@ public class CheckInsulatedJointQuery extends BaseJavaQuery {
 	}
 
 	public String getManufacturerCode() {
-		return manufacturerCode;
+		if(StringUtils.isNotBlank(manufacturerCode)){
+			return "%"+manufacturerCode+"%";
+		}
+		return null;
 	}
 
 	public void setManufacturerCode(String manufacturerCode) {

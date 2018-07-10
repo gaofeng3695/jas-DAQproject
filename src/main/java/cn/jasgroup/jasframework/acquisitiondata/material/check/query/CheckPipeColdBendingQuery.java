@@ -108,7 +108,10 @@ public class CheckPipeColdBendingQuery extends BaseJavaQuery {
 	}
 
 	public String getPipeColdBendingCode() {
-		return pipeColdBendingCode;
+		if (StringUtils.isNotBlank(pipeColdBendingCode)) {
+			return "%"+pipeColdBendingCode+"%";
+		}
+		return null;
 	}
 
 	public void setPipeColdBendingCode(String pipeColdBendingCode) {
