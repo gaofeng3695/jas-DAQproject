@@ -2349,3 +2349,341 @@ comment on column daq_detection_pa_ultrasonic_sub.modify_datetime is '修改时�
 comment on column daq_detection_pa_ultrasonic_sub.active is '有效标志';
 create index INDEX_daq_detection_pa_ultrasonic_sub_WELD_CODE_6 ON daq_detection_pa_ultrasonic_sub ( weld_code );
 /**********管道检测信息end***************/
+/**********管道敷设信息begin***************/
+CREATE TABLE daq_lay_surveying (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipe_segment_or_cross_oid VARCHAR (36),
+	median_stake_oid VARCHAR (36),
+	relative_mileage NUMERIC (9, 3),
+	measured_angle NUMERIC (9, 3),
+	drawing_angle NUMERIC (9, 3),
+	left_width NUMERIC (8, 3),
+	right_width NUMERIC (8, 3),
+	construct_date TIMESTAMP (6),
+	construct_unit VARCHAR (36),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	approve_status SMALLINT,
+	geo_state varchar(10),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL default 0
+);
+
+comment on table daq_lay_surveying is '测量放线表';
+comment on column daq_lay_surveying.oid is '主键';
+comment on column daq_lay_surveying.project_oid is '项目oid';
+comment on column daq_lay_surveying.pipeline_oid is '管线oid';
+comment on column daq_lay_surveying.tenders_oid is '标段oid';
+comment on column daq_lay_surveying.pipe_segment_or_cross_oid is '线路段/穿跨越';
+comment on column daq_lay_surveying.median_stake_oid is '桩号';
+comment on column daq_lay_surveying.relative_mileage is '里程(m)';
+comment on column daq_lay_surveying.measured_angle is '实测转角(°)';
+comment on column daq_lay_surveying.drawing_angle is '图纸转角(°)';
+comment on column daq_lay_surveying.left_width is '左侧放线宽度(m)';
+comment on column daq_lay_surveying.right_width is '右侧放线宽度(m)';
+comment on column daq_lay_surveying.construct_date is '施工日期';
+comment on column daq_lay_surveying.construct_unit is '施工单位';
+comment on column daq_lay_surveying.supervision_unit is '监理单位';
+comment on column daq_lay_surveying.supervision_engineer is '监理工程师';
+comment on column daq_lay_surveying.collection_person is '采集人员';
+comment on column daq_lay_surveying.collection_date is '采集日期';
+comment on column daq_lay_surveying.approve_status is '审核状态';
+comment on column daq_lay_surveying.geo_state is '空间数据状态';
+comment on column daq_lay_surveying.remarks is '备注';
+comment on column daq_lay_surveying.create_user_id is '创建人id';
+comment on column daq_lay_surveying.create_user_name is '创建人名称';
+comment on column daq_lay_surveying.create_datetime is '创建时间';
+comment on column daq_lay_surveying.modify_user_id is '修改人id';
+comment on column daq_lay_surveying.modify_user_name is '修改人名称';
+comment on column daq_lay_surveying.modify_datetime is '修改时间';
+comment on column daq_lay_surveying.active is '有效标志';
+select AddGeometryColumn('public', 'daq_lay_surveying', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_lay_surveying_geom_idx ON public.daq_lay_surveying USING gist (geom);
+
+CREATE TABLE daq_lay_pipe_trench_excavation (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipe_segment_or_cross_oid VARCHAR (36),
+	start_median_stake_oid VARCHAR (36),
+	start_relative_mileage NUMERIC (9, 3),
+	end_median_stake_oid VARCHAR (36),
+	end_relative_mileage NUMERIC (9, 3),
+	soil_type VARCHAR (45),
+	pipe_trench_depth NUMERIC (8, 3),
+	groove_width NUMERIC (8, 3),
+	slope_angle NUMERIC (8, 3),
+	groove_height NUMERIC (8, 3),
+	design_corner_angle NUMERIC (9, 3),
+	actual_corner_angle NUMERIC (9, 3),
+	conclusion SMALLINT,
+	acceptance_opinion VARCHAR (200),
+	construct_unit VARCHAR (36),
+	construct_date TIMESTAMP (6),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	approve_status SMALLINT,
+	geo_state varchar(10),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL default 0
+);
+
+comment on table daq_lay_pipe_trench_excavation is '管沟开挖表';
+comment on column daq_lay_pipe_trench_excavation.oid is '主键';
+comment on column daq_lay_pipe_trench_excavation.project_oid is '项目oid';
+comment on column daq_lay_pipe_trench_excavation.pipeline_oid is '管线oid';
+comment on column daq_lay_pipe_trench_excavation.tenders_oid is '标段oid';
+comment on column daq_lay_pipe_trench_excavation.pipe_segment_or_cross_oid is '线路段/穿跨越';
+comment on column daq_lay_pipe_trench_excavation.start_median_stake_oid is '起始桩号';
+comment on column daq_lay_pipe_trench_excavation.start_relative_mileage is '相对起始桩里程(m)';
+comment on column daq_lay_pipe_trench_excavation.end_median_stake_oid is '结束桩号';
+comment on column daq_lay_pipe_trench_excavation.end_relative_mileage is '相对结束桩里程(m)';
+comment on column daq_lay_pipe_trench_excavation.soil_type is '土壤类别';
+comment on column daq_lay_pipe_trench_excavation.pipe_trench_depth is '管沟深度(m)';
+comment on column daq_lay_pipe_trench_excavation.groove_width is '沟底宽度(m)';
+comment on column daq_lay_pipe_trench_excavation.slope_angle is '放坡角度(°)';
+comment on column daq_lay_pipe_trench_excavation.groove_height is '沟底长度(m)';
+comment on column daq_lay_pipe_trench_excavation.design_corner_angle is '设计转角(°)';
+comment on column daq_lay_pipe_trench_excavation.actual_corner_angle is '实际转角(°)';
+comment on column daq_lay_pipe_trench_excavation.conclusion is '结论';
+comment on column daq_lay_pipe_trench_excavation.acceptance_opinion is '检查验收意见';
+comment on column daq_lay_pipe_trench_excavation.construct_unit is '施工单位';
+comment on column daq_lay_pipe_trench_excavation.construct_date is '施工日期';
+comment on column daq_lay_pipe_trench_excavation.supervision_unit is '监理单位';
+comment on column daq_lay_pipe_trench_excavation.supervision_engineer is '监理工程师';
+comment on column daq_lay_pipe_trench_excavation.collection_person is '采集人员';
+comment on column daq_lay_pipe_trench_excavation.collection_date is '采集日期';
+comment on column daq_lay_pipe_trench_excavation.approve_status is '审核状态';
+comment on column daq_lay_pipe_trench_excavation.geo_state is '空间数据状态';
+comment on column daq_lay_pipe_trench_excavation.remarks is '备注';
+comment on column daq_lay_pipe_trench_excavation.create_user_id is '创建人id';
+comment on column daq_lay_pipe_trench_excavation.create_user_name is '创建人名称';
+comment on column daq_lay_pipe_trench_excavation.create_datetime is '创建时间';
+comment on column daq_lay_pipe_trench_excavation.modify_user_id is '修改人id';
+comment on column daq_lay_pipe_trench_excavation.modify_user_name is '修改人名称';
+comment on column daq_lay_pipe_trench_excavation.modify_datetime is '修改时间';
+comment on column daq_lay_pipe_trench_excavation.active is '有效标志';
+select AddGeometryColumn('public', 'daq_lay_pipe_trench_excavation', 'geom', 4490, 'LINESTRING', 4);
+CREATE INDEX daq_lay_pipe_trench_excavation_geom_idx ON public.daq_lay_pipe_trench_excavation USING gist (geom);
+
+CREATE TABLE daq_lay_pipe_trench_backfill (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipe_segment_or_cross_oid VARCHAR (36),
+	start_median_stake_oid VARCHAR (36),
+	start_relative_mileage NUMERIC (9, 3),
+	end_median_stake_oid VARCHAR (36),
+	end_relative_mileage NUMERIC (9, 3),
+	backfill_length NUMERIC (8, 3),
+	backfill_thickness NUMERIC (8, 3),
+	one_backfill_thickness NUMERIC (8, 3),
+	two_backfill_thickness NUMERIC (8, 3),
+	sign_type VARCHAR (50),
+	sign_length NUMERIC (8, 3),
+	sign_depth NUMERIC (8, 3),
+	construct_unit VARCHAR (36),
+	construct_date TIMESTAMP (6),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	approve_status SMALLINT,
+	geo_state varchar(10),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL default 0
+);
+comment on table daq_lay_pipe_trench_backfill is '回填表';
+comment on column daq_lay_pipe_trench_backfill.oid is '主键';
+comment on column daq_lay_pipe_trench_backfill.project_oid is '项目oid';
+comment on column daq_lay_pipe_trench_backfill.pipeline_oid is '管线oid';
+comment on column daq_lay_pipe_trench_backfill.tenders_oid is '标段oid';
+comment on column daq_lay_pipe_trench_backfill.pipe_segment_or_cross_oid is '线路段/穿跨越';
+comment on column daq_lay_pipe_trench_backfill.start_median_stake_oid is '起始桩号';
+comment on column daq_lay_pipe_trench_backfill.start_relative_mileage is '相对起始桩里程(m)';
+comment on column daq_lay_pipe_trench_backfill.end_median_stake_oid is '结束桩号';
+comment on column daq_lay_pipe_trench_backfill.end_relative_mileage is '相对结束桩里程(m)';
+comment on column daq_lay_pipe_trench_backfill.backfill_length is '回填长度(m)';
+comment on column daq_lay_pipe_trench_backfill.backfill_thickness is '细土回填厚度(mm)';
+comment on column daq_lay_pipe_trench_backfill.one_backfill_thickness is '一次回填厚度(mm)';
+comment on column daq_lay_pipe_trench_backfill.two_backfill_thickness is '二次回填厚度(mm)';
+comment on column daq_lay_pipe_trench_backfill.sign_type is '埋地标识类型';
+comment on column daq_lay_pipe_trench_backfill.sign_length is '标识长度(m)';
+comment on column daq_lay_pipe_trench_backfill.sign_depth is '标识埋深(m)';
+comment on column daq_lay_pipe_trench_backfill.construct_unit is '施工单位';
+comment on column daq_lay_pipe_trench_backfill.construct_date is '施工日期';
+comment on column daq_lay_pipe_trench_backfill.supervision_unit is '监理单位';
+comment on column daq_lay_pipe_trench_backfill.supervision_engineer is '监理工程师';
+comment on column daq_lay_pipe_trench_backfill.collection_person is '采集人员';
+comment on column daq_lay_pipe_trench_backfill.collection_date is '采集日期';
+comment on column daq_lay_pipe_trench_backfill.approve_status is '审核状态';
+comment on column daq_lay_pipe_trench_backfill.geo_state is '空间数据状态';
+comment on column daq_lay_pipe_trench_backfill.remarks is '备注';
+comment on column daq_lay_pipe_trench_backfill.create_user_id is '创建人id';
+comment on column daq_lay_pipe_trench_backfill.create_user_name is '创建人名称';
+comment on column daq_lay_pipe_trench_backfill.create_datetime is '创建时间';
+comment on column daq_lay_pipe_trench_backfill.modify_user_id is '修改人id';
+comment on column daq_lay_pipe_trench_backfill.modify_user_name is '修改人名称';
+comment on column daq_lay_pipe_trench_backfill.modify_datetime is '修改时间';
+comment on column daq_lay_pipe_trench_backfill.active is '有效标志';
+select AddGeometryColumn('public', 'daq_lay_pipe_trench_backfill', 'geom', 4490, 'LINESTRING', 4);
+CREATE INDEX daq_lay_pipe_trench_backfill_geom_idx ON public.daq_lay_pipe_trench_backfill USING gist (geom);
+
+CREATE TABLE daq_lay_land_restoration (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipe_segment_or_cross_oid VARCHAR (36),
+	start_median_stake_oid VARCHAR (36),
+	start_relative_mileage NUMERIC (9, 3),
+	end_median_stake_oid VARCHAR (36),
+	end_relative_mileage NUMERIC (9, 3),
+	certificate_num VARCHAR (60),
+	LENGTH NUMERIC (9, 3),
+	region VARCHAR (60),
+	construct_unit VARCHAR (36),
+	construct_date TIMESTAMP (6),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	approve_status SMALLINT,
+	geo_state varchar(10),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL default 0
+);
+
+comment on table daq_lay_land_restoration is '地貌恢复表';
+comment on column daq_lay_land_restoration.oid is '主键';
+comment on column daq_lay_land_restoration.project_oid is '项目oid';
+comment on column daq_lay_land_restoration.pipeline_oid is '管线oid';
+comment on column daq_lay_land_restoration.tenders_oid is '标段oid';
+comment on column daq_lay_land_restoration.pipe_segment_or_cross_oid is '线路段/穿跨越';
+comment on column daq_lay_land_restoration.start_median_stake_oid is '起始桩号';
+comment on column daq_lay_land_restoration.start_relative_mileage is '相对起始桩里程(m)';
+comment on column daq_lay_land_restoration.end_median_stake_oid is '结束桩号';
+comment on column daq_lay_land_restoration.end_relative_mileage is '相对结束桩里程(m)';
+comment on column daq_lay_land_restoration.certificate_num is '证书编号';
+comment on column daq_lay_land_restoration.length is '长度(m)';
+comment on column daq_lay_land_restoration.region is '经过地区';
+comment on column daq_lay_land_restoration.construct_unit is '施工单位';
+comment on column daq_lay_land_restoration.construct_date is '施工日期';
+comment on column daq_lay_land_restoration.supervision_unit is '监理单位';
+comment on column daq_lay_land_restoration.supervision_engineer is '监理工程师';
+comment on column daq_lay_land_restoration.collection_person is '采集人员';
+comment on column daq_lay_land_restoration.collection_date is '采集日期';
+comment on column daq_lay_land_restoration.approve_status is '审核状态';
+comment on column daq_lay_land_restoration.geo_state is '空间数据状态';
+comment on column daq_lay_land_restoration.remarks is '备注';
+comment on column daq_lay_land_restoration.create_user_id is '创建人id';
+comment on column daq_lay_land_restoration.create_user_name is '创建人名称';
+comment on column daq_lay_land_restoration.create_datetime is '创建时间';
+comment on column daq_lay_land_restoration.modify_user_id is '修改人id';
+comment on column daq_lay_land_restoration.modify_user_name is '修改人名称';
+comment on column daq_lay_land_restoration.modify_datetime is '修改时间';
+comment on column daq_lay_land_restoration.active is '有效标志';
+select AddGeometryColumn('public', 'daq_lay_land_restoration', 'geom', 4490, 'LINESTRING', 4);
+CREATE INDEX daq_lay_land_restoration_geom_idx ON public.daq_lay_land_restoration USING gist (geom);
+
+CREATE TABLE daq_lay_thermal_insulation (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipe_segment_or_cross_oid VARCHAR (36),
+	start_median_stake_oid VARCHAR (36),
+	start_relative_mileage NUMERIC (9, 3),
+	end_median_stake_oid VARCHAR (36),
+	end_relative_mileage NUMERIC (9, 3),
+	insulation_material VARCHAR (50),
+	insulation_thickness NUMERIC (9, 3),
+	protective_tape VARCHAR (50),
+	protective_thickness NUMERIC (8, 3),
+	manufacturer VARCHAR (50),
+	manufacturer_address VARCHAR (75),
+	construct_unit VARCHAR (36),
+	construct_date TIMESTAMP (6),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	approve_status SMALLINT,
+	geo_state varchar(10),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL default 0
+);
+comment on table daq_lay_thermal_insulation is '保温表';
+comment on column daq_lay_thermal_insulation.oid is '主键';
+comment on column daq_lay_thermal_insulation.project_oid is '项目oid';
+comment on column daq_lay_thermal_insulation.pipeline_oid is '管线oid';
+comment on column daq_lay_thermal_insulation.tenders_oid is '标段oid';
+comment on column daq_lay_thermal_insulation.pipe_segment_or_cross_oid is '线路段/穿跨越';
+comment on column daq_lay_thermal_insulation.start_median_stake_oid is '起始桩号';
+comment on column daq_lay_thermal_insulation.start_relative_mileage is '相对起始桩里程(m)';
+comment on column daq_lay_thermal_insulation.end_median_stake_oid is '结束桩号';
+comment on column daq_lay_thermal_insulation.end_relative_mileage is '相对结束桩里程(m)';
+comment on column daq_lay_thermal_insulation.insulation_material is '保温材料';
+comment on column daq_lay_thermal_insulation.insulation_thickness is '保温层厚度(mm)';
+comment on column daq_lay_thermal_insulation.protective_tape is '防护层结构';
+comment on column daq_lay_thermal_insulation.protective_thickness is '防护层厚度(mm)';
+comment on column daq_lay_thermal_insulation.manufacturer is '保温层生产厂家';
+comment on column daq_lay_thermal_insulation.manufacturer_address is '具体地址';
+comment on column daq_lay_thermal_insulation.construct_unit is '施工单位';
+comment on column daq_lay_thermal_insulation.construct_date is '施工日期';
+comment on column daq_lay_thermal_insulation.supervision_unit is '监理单位';
+comment on column daq_lay_thermal_insulation.supervision_engineer is '监理工程师';
+comment on column daq_lay_thermal_insulation.collection_person is '采集人员';
+comment on column daq_lay_thermal_insulation.collection_date is '采集日期';
+comment on column daq_lay_thermal_insulation.approve_status is '审核状态';
+comment on column daq_lay_thermal_insulation.geo_state is '空间数据状态';
+comment on column daq_lay_thermal_insulation.remarks is '备注';
+comment on column daq_lay_thermal_insulation.create_user_id is '创建人id';
+comment on column daq_lay_thermal_insulation.create_user_name is '创建人名称';
+comment on column daq_lay_thermal_insulation.create_datetime is '创建时间';
+comment on column daq_lay_thermal_insulation.modify_user_id is '修改人id';
+comment on column daq_lay_thermal_insulation.modify_user_name is '修改人名称';
+comment on column daq_lay_thermal_insulation.modify_datetime is '修改时间';
+comment on column daq_lay_thermal_insulation.active is '有效标志';
+select AddGeometryColumn('public', 'daq_lay_thermal_insulation', 'geom', 4490, 'LINESTRING', 4);
+CREATE INDEX daq_lay_thermal_insulation_geom_idx ON public.daq_lay_thermal_insulation USING gist (geom);
+/**********管道敷设信息end***************/
