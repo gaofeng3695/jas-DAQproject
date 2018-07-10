@@ -564,7 +564,11 @@
 				});
 				this.closeForm();
 			},
-			getChildOpts: function (oParam, item) {
+			getChildOpts: function (oParam, oFieldConfig) {
+				// 获取级联下拉选的选项
+				// oParam: value值或者obj对象
+				// item: 当前字段的配置信息
+				// 第一次触发（isInit），不会清空value值,其他的会清空value值
 				var that = this;
 				var isInit = false;
 				var value = oParam;
@@ -572,19 +576,19 @@
 					isInit = oParam.isInit;
 					value = oParam.value;
 				}
-				var formatFormAttr = function (options) {
+				var formatFormAttr = function (childField, options) { // 入参下拉选项
 					that.formAttr.forEach(function (parent, index) {
-						parent.data.forEach(function (child) {
-							if (item.childField.indexOf(child.id) !== -1) {
-								if (value) {
-									child.options = options;
+						parent.data.forEach(function (child) { // 遍历字段
+							if (childField === child.id) { // 确认是级联子集字段
+								if (value) { // 父级有值
+									child.options = options; // 赋值下拉选项
 								} else {
-									child.options = [];
+									child.options = []; // 清空下拉选项
 								}
-								if (!isInit) {
-									that.$set(that.formData, child.id, "");
+								if (!isInit) { // 不是初始化
+									that.$set(that.formData, child.id, ""); // 清空子级联的value
 									// console.log('当前的要出发的select为', that.$refs[child.id][0])
-									that.$refs[child.id][0].$emit('change', {
+									that.$refs[child.id][0].$emit('change', { // 触发子级联的change事件
 										value: that.formData[child.id],
 										isInit: false
 									});
@@ -594,26 +598,35 @@
 					});
 				};
 
-				if (item.requestUrl && value) { //进行子级的查找 后台请求
-					var key = jasTools.base.switchToCamelCase(item.id);
-					var obj = {
-						"rows": 100,
-						"page": 1,
-					};
-					obj[key] = value;
-					jasTools.ajax.post(jasTools.base.rootPath + "/" + item.requestUrl, obj, function (data) {
-						formatFormAttr(data.rows)
-					});
-				} else {
-					formatFormAttr([]);
-				}
+				var getAndSet = function (childField, requestUrl) {
+					if (requestUrl && value) { //进行子级的查找 后台请求
+						var key = jasTools.base.switchToCamelCase(oFieldConfig.id);
+						var obj = {
+							"rows": 100,
+							"page": 1,
+						};
+						obj[key] = value;
+						jasTools.ajax.post(jasTools.base.rootPath + "/" + requestUrl, obj, function (data) {
+							formatFormAttr(childField, data.rows)
+						});
+					} else {
+						formatFormAttr(childField, []);
+					}
+				};
+
+				oFieldConfig.childField.split(',').forEach(function (childField, index) {
+					if(!oFieldConfig.requestUrl) return;
+					var urls = oFieldConfig.requestUrl.split(',');
+					var url = urls[index] || urls[0];
+					getAndSet(childField, url);
+				});
 			},
 			visibleChange: function (falg, item) {
 				var that = this;
 				if (falg) {
 					that.formAttr.forEach(function (parent, index) {
 						parent.data.forEach(function (child) {
-							if (child.childField == item.id) {
+							if (child.childField.indexOf(item.id) > -1) {
 								if (!that.formData[child.id]) {
 									top.Vue.prototype.$message({
 										message: '请先选择' + child.name,

@@ -7,12 +7,12 @@ import javax.persistence.TemporalType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
-import cn.jasgroup.jasframework.base.annotation.CommonGetConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
 import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
 import cn.jasgroup.jasframework.base.annotation.UniqueConstraintStrategy;
 import cn.jasgroup.jasframework.base.annotation.UniqueConstraints;
+import cn.jasgroup.jasframework.base.annotation.UpdateDeleteSet;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 
 /**
@@ -40,49 +40,79 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 @JdbcEntity(name="daq_material_closure")
 public class Closure extends CommonJdbcEntity{
 
-	/** 封堵物编号 */
+	/**
+	 * 封堵物编号
+	 */
 	private String closureCode; 
 
-	/** 封堵物类型 */
+	/**
+	 * 封堵物类型
+	 */
 	private String closureType; 
 
-	/** 材质 */
+	/**
+	 *  材质
+	 */
 	private String material; 
 
-	/** 钢材等级 */
+	/**
+	 * 钢材等级
+	 */
 	private String steelGrade; 
 
-	/** 管道外壁直径(mm) */
+	/**
+	 * 管道外壁直径(mm)
+	 */
 	private Double outsideDiameter; 
 
-	/** 管道壁厚(mm) */
+	/**
+	 * 管道壁厚(mm)
+	 */
 	private Double wallThickness; 
 
-	/** 连接方式 */
+	/**
+	 * 连接方式
+	 */
 	private String connectionMethods; 
 
-	/** 防腐方式 */
+	/**
+	 *  防腐方式
+	 */
 	private String coatingMethods; 
 
-	/** 生产厂家 */
+	/**
+	 *  生产厂家
+	 */
 	private String manufacturer; 
 
-	/** 生产日期 */
+	/**
+	 *  生产日期
+	 */
 	private Date manufacturerDate; 
 
-	/** 项目oid */
+	/**
+	 *  项目oid 
+	 */
 	private String projectOid; 
 
-	/** 管线oid */
+	/**
+	 *  管线oid
+	 */
 	private String pipelineOid; 
 
-	/** 标段oid */
+	/**
+	 *  标段oid
+	 */
 	private String tendersOid; 
 
-	/** 是否使用 */
+	/**
+	 *  是否使用
+	 */
 	private Integer isUse; 
 
-	/** 备注 */
+	/**
+	 *  备注
+	 */
 	private String remarks; 
 
 	public String getClosureCode() {
@@ -166,7 +196,7 @@ public class Closure extends CommonJdbcEntity{
 		super.setField("manufacturer");
 	}
 
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
 	@Temporal(TemporalType.TIMESTAMP)
 	public Date getManufacturerDate() {
 		return manufacturerDate; 
@@ -204,7 +234,7 @@ public class Closure extends CommonJdbcEntity{
 		super.setField("tendersOid");
 	}
 
-	
+	@UpdateDeleteSet
 	public Integer getIsUse() {
 		return isUse; 
 	}

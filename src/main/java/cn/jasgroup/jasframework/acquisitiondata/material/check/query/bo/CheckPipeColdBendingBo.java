@@ -1,4 +1,4 @@
-package cn.jasgroup.jasframework.acquisitiondata.material.check.dao.entity;
+package cn.jasgroup.jasframework.acquisitiondata.material.check.query.bo;
 
 import java.util.Date;
 
@@ -7,39 +7,13 @@ import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
-import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
-import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
-import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
-import cn.jasgroup.jasframework.base.annotation.UniqueConstraintStrategy;
-import cn.jasgroup.jasframework.base.annotation.UniqueConstraints;
-import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
+public class CheckPipeColdBendingBo {
 
-/**
- * 
-  *<p>类描述：冷弯管检查及信息记录实体类。</p>
-  * @author 葛建 。
-  * @version v1.0.0.1。
-  * @since JDK1.8。
-  *<p>创建日期：2018年7月5日 上午9:17:52。</p>
- */
-@CommonSaveConfig(
-		scene = "/checkPipeColdBending/save"
-	)
-	@CommonUpdateConfig(
-		scene = "/checkPipeColdBending/update"
-	)
-	@CommonDeleteConfig(
-		scene = "/checkPipeColdBending/delete"
-	)
-@UniqueConstraints(
-		strategys ={
-			@UniqueConstraintStrategy(columnNames={"pipeColdBendingCode"})
-		}
-	)
-@JdbcEntity(name="daq_check_pipe_cold_bending")
-public class CheckPipeColdBending extends CommonJdbcEntity{
-
+	/**
+	 * oid
+	 */
+	private String oid ;
+	
 	/**
 	 * 冷弯管编号
 	 */
@@ -110,132 +84,126 @@ public class CheckPipeColdBending extends CommonJdbcEntity{
 	 */
 	private String remarks;
 
+	public String getOid() {
+		return oid;
+	}
+
+	public void setOid(String oid) {
+		this.oid = oid;
+	}
+
 	public String getPipeColdBendingCode() {
-		return pipeColdBendingCode; 
+		return pipeColdBendingCode;
 	}
 
 	public void setPipeColdBendingCode(String pipeColdBendingCode) {
-		this.pipeColdBendingCode = pipeColdBendingCode; 
-		super.setField("pipeColdBendingCode");
+		this.pipeColdBendingCode = pipeColdBendingCode;
 	}
 
 	public String getCertificateNum() {
-		return certificateNum; 
+		return certificateNum;
 	}
 
 	public void setCertificateNum(String certificateNum) {
-		this.certificateNum = certificateNum; 
-		super.setField("certificateNum");
+		this.certificateNum = certificateNum;
 	}
 
 	public Double getPipeLength() {
-		return pipeLength; 
+		return pipeLength;
 	}
 
 	public void setPipeLength(Double pipeLength) {
-		this.pipeLength = pipeLength; 
-		super.setField("pipeLength");
+		this.pipeLength = pipeLength;
 	}
 
 	public Double getPipeDiameter() {
-		return pipeDiameter; 
+		return pipeDiameter;
 	}
 
 	public void setPipeDiameter(Double pipeDiameter) {
-		this.pipeDiameter = pipeDiameter; 
-		super.setField("pipeDiameter");
+		this.pipeDiameter = pipeDiameter;
 	}
 
 	public Double getWallThickness() {
-		return wallThickness; 
+		return wallThickness;
 	}
 
 	public void setWallThickness(Double wallThickness) {
-		this.wallThickness = wallThickness; 
-		super.setField("wallThickness");
+		this.wallThickness = wallThickness;
 	}
 
 	public Double getBendAngle() {
-		return bendAngle; 
+		return bendAngle;
 	}
 
 	public void setBendAngle(Double bendAngle) {
-		this.bendAngle = bendAngle; 
-		super.setField("");
+		this.bendAngle = bendAngle;
 	}
 
 	public String getWeldPosition() {
-		return weldPosition; 
+		return weldPosition;
 	}
 
 	public void setWeldPosition(String weldPosition) {
-		this.weldPosition = weldPosition; 
-		super.setField("weldPosition");
+		this.weldPosition = weldPosition;
 	}
 
 	public String getOvality() {
-		return ovality; 
+		return ovality;
 	}
 
 	public void setOvality(String ovality) {
-		this.ovality = ovality; 
-		super.setField("ovality");
+		this.ovality = ovality;
 	}
 
 	public String getGrooveCheck() {
-		return grooveCheck; 
+		return grooveCheck;
 	}
 
 	public void setGrooveCheck(String grooveCheck) {
-		this.grooveCheck = grooveCheck; 
-		super.setField("grooveCheck");
+		this.grooveCheck = grooveCheck;
 	}
 
 	public String getCoatingIoFaceCheck() {
-		return coatingIoFaceCheck; 
+		return coatingIoFaceCheck;
 	}
 
 	public void setCoatingIoFaceCheck(String coatingIoFaceCheck) {
-		this.coatingIoFaceCheck = coatingIoFaceCheck; 
-		super.setField("coatingIoFaceCheck");
+		this.coatingIoFaceCheck = coatingIoFaceCheck;
 	}
 
 	public String getCoatingIoEndsCheck() {
-		return coatingIoEndsCheck; 
+		return coatingIoEndsCheck;
 	}
 
 	public void setCoatingIoEndsCheck(String coatingIoEndsCheck) {
-		this.coatingIoEndsCheck = coatingIoEndsCheck; 
-		super.setField("coatingIoEndsCheck");
+		this.coatingIoEndsCheck = coatingIoEndsCheck;
 	}
 
 	public String getCheckedBy() {
-		return checkedBy; 
+		return checkedBy;
 	}
 
 	public void setCheckedBy(String checkedBy) {
-		this.checkedBy = checkedBy; 
-		super.setField("checkedBy");
+		this.checkedBy = checkedBy;
 	}
 
 	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
 	@Temporal(TemporalType.TIMESTAMP)
 	public Date getCheckedDate() {
-		return checkedDate; 
+		return checkedDate;
 	}
 
 	public void setCheckedDate(Date checkedDate) {
-		this.checkedDate = checkedDate; 
-		super.setField("checkedDate");
+		this.checkedDate = checkedDate;
 	}
 
 	public String getRemarks() {
-		return remarks; 
+		return remarks;
 	}
 
 	public void setRemarks(String remarks) {
-		this.remarks = remarks; 
-		super.setField("remarks");
+		this.remarks = remarks;
 	}
 
 }

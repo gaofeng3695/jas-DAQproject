@@ -6,8 +6,8 @@ Vue.component('jas-base-group-title', {
 		},
 	},
 	template: [
-		'<div style="border-bottom: 1px solid rgb(228, 231, 237);margin-bottom:10px;">',
-		'	<span style="height: 32px;line-height:32px;display:inline-block;border-bottom: 2px solid rgb(64, 158, 255)">{{name}}</span>',
+		'<div style="margin:10px 0 6px;line-height:32px;">',
+		'	<span style="padding:0px 4px 0px 4px;height: 22px;line-height:22px;display:inline-block;background: #ecf5ff;border-left: 2px solid rgb(64, 158, 255)">{{name}}</span>',
 		'</div>'
 	].join(''),
 });
@@ -424,7 +424,7 @@ Vue.component('jas-table-for-list', {
 		'<div  class="jas-flex-box is-vertical is-grown">',
 		'<div style="padding: 15px 0;">',
 		'	<el-button size="small" plain type="primary" icon="fa fa-plus" v-if="isHasPrivilege(' + "'bt_add'" + ')"  @click="add">增加</el-button>',
-		'<jas-import-export-btns :isImport="isHasPrivilege(' + "'bt_import'" + ')" :isExport="isHasPrivilege(' + "'bt_export'" + ')" ',
+		'<jas-import-export-btns :is-import="isHasPrivilege(' + "'bt_import'" + ')" :is-export="isHasPrivilege(' + "'bt_export'" + ')" ',
 		'		:form="form" :oids="oids" :template-code="templateCode" :class-name="className"></jas-import-export-btns>',
 		'	<el-button class="fr" size="small" icon="el-icon-refresh" @click="refresh"></el-button>',
 		'</div>',
@@ -819,13 +819,11 @@ Vue.component('jas-import-export-btns', {
 				templateCode: this.templateCode,
 				modelId: 'B', //【导出策略，现固定为B】
 				className: this.className, //【后台query类全路径】
-				rows: '10000', //【最大分页数，固定为100000】
-				page: '1', //【页码，固定为1】
 				keyWord: {
 					oids: this.oids
 				}
 			}, function (data) {
-				that._downloadExportFile(data);
+				that._downloadExportFile(data.data);
 			});
 		},
 		bt_export_all: function (obj) { // 导出全部

@@ -2,16 +2,26 @@ package cn.jasgroup.jasframework.acquisitiondata.material.check.query;
 
 import org.apache.commons.lang.StringUtils;
 
-import cn.jasgroup.jasframework.acquisitiondata.material.check.dao.entity.CheckInsulatedJoint;
+import cn.jasgroup.jasframework.acquisitiondata.material.check.query.bo.CheckInsulatedJointBo;
 import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 
-@QueryConfig(scene = "/checkInsulatedJoint/getPage", resultClass = CheckInsulatedJoint.class)
+/**
+ * 
+  *<p>类描述：绝缘接头检查分页查询。</p>
+  * @author 葛建 。
+  * @version v1.0.0.1。
+  * @since JDK1.8。
+  *<p>创建日期：2018年7月6日 下午5:38:47。</p>
+ */
+@QueryConfig(scene = "/checkInsulatedJoint/getPage", resultClass = CheckInsulatedJointBo.class)
 public class CheckInsulatedJointQuery extends BaseJavaQuery {
+	
 	/**
 	 * 唯一标识
 	 */
 	private String oid;
+	
 	/**
 	 * 出厂编号 
 	 */

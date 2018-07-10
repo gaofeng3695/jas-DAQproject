@@ -1,0 +1,8 @@
+{
+	"baseEntity": [
+		"current_unit_id"
+	],
+	"baseQuery": [
+		"current_unit_id"
+	]
+}

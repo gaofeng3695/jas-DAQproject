@@ -53,12 +53,13 @@ public class DaqPrivilegeController extends BaseController{
 	  * <p>创建日期:2018年7月3日 上午11:38:18。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	@RequestMapping(value="getTendersList")
+	@RequestMapping(value="getTendersList",method = RequestMethod.POST)
 	@ResponseBody
-	public Object getTendersList(HttpServletRequest request){
+	public Object getTendersList(HttpServletRequest request,@RequestBody Map<String,String> param){
 		ListResult<Map<String,Object>> result=null;
+		String projectOid=param.get("projectOid");
 		try {
-			List<Map<String,Object>> rows = this.daqPrivilegeService.getTendersList();
+			List<Map<String,Object>> rows = this.daqPrivilegeService.getTendersList(projectOid);
 			result = new ListResult<>(1, "200", "ok", rows);
 		} catch (Exception e) {
 			result = new ListResult<>(-1, "400", "error");
@@ -130,6 +131,33 @@ public class DaqPrivilegeController extends BaseController{
 				return new BaseResult(-1, "error", "标段id不能为空！");
 			}
 			List<Map<String,Object>> rows = this.daqPrivilegeService.getSupervisionUnitByTendersOid(tendersOid);
+			result = new ListResult<>(1, "200", "ok", rows);
+		} catch (Exception e) {
+			result = new ListResult<>(-1, "400", "error");
+			e.printStackTrace();
+		}
+		return result;
+	}
+	/***
+	  * <p>功能描述：根据标段获取施工单位列表。</p>
+	  * <p> 雷凯。</p>	
+	  * @param request
+	  * @param param
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年7月9日 上午11:12:08。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="/getConstructionUnitByTendersOid",method = RequestMethod.POST)
+	@ResponseBody
+	public Object getConstructionUnitByTendersOid(HttpServletRequest request,@RequestBody Map<String,String> param){
+		ListResult<Map<String,Object>> result = null;
+		try {
+			String tendersOid = param.get("tendersOid");
+			if(StringUtils.isBlank(tendersOid)){
+				return new BaseResult(-1, "error", "标段id不能为空！");
+			}
+			List<Map<String,Object>> rows = this.daqPrivilegeService.getConstructionUnitByTendersOid(tendersOid);
 			result = new ListResult<>(1, "200", "ok", rows);
 		} catch (Exception e) {
 			result = new ListResult<>(-1, "400", "error");
