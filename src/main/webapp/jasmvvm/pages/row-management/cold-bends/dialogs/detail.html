@@ -154,8 +154,7 @@
 			getDetailByObjectId: function () {
 				var that = this;
 				var url = jasTools.base.rootPath + "/jdbc/commonData/coldBendingPipe/getPage.do";
-				jasTools.ajax.post(url, this.params, function (data) {
-					console.log(data);
+				jasTools.ajax.post(url, {oid:this.oid}, function (data) {				
 					that.detail = data.rows[0];
 				});
 			},

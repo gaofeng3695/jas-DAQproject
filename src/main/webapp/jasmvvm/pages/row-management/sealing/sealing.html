@@ -119,6 +119,16 @@
 					name: '封堵物编号',
 					field: 'closureCode',
 				}, {
+					name: '是否使用',
+					field: 'isUse',
+					formatter:function(row,column,cellvalue,index){
+						if(cellvalue=='0'){
+							return '否';
+						}else{
+							return '是';
+						}
+					}
+				},{
 					name: '封堵物类型',
 					field: 'closureType',
 					formatter:function(row,column,cellvalue,index){

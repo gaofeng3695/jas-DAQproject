@@ -57,11 +57,18 @@
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item label="弯管编号">
-							<el-input v-model="topSearch.pipeColdBendingCode" clearable placeholder="请输入弯管编号" size="small"></el-input>
+						<el-form-item label="冷弯管编号">
+							<el-input v-model="topSearch.pipeColdBendingCode" clearable placeholder="请输入冷弯管编号" size="small"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+						<el-form-item label="是否使用">
+							<el-select v-model="topSearch.isUse" clearable placeholder="请选择是否使用" size="small">
+								<el-option v-for="item in domain.isUses" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 						<el-form-item style="float: right;">
 							<el-button size="small" type="primary" @click="searchList">查询</el-button>
 							<el-button size="small" @click="reset">重置</el-button>
@@ -106,6 +113,9 @@
 				tableFields: [{
 					name: '项目名称',
 					field: 'projectName'
+				},{
+					name: '是否使用',
+					field: 'isUse'
 				}, {
 					name: '管线名称',
 					field: 'pipelineName'
@@ -177,6 +187,13 @@
 					tenders: [], //标段
 					pipeline: [], //管线
 					pipeSegment: [],
+					isUses: [{
+						key: 0,
+						value: '否'
+					}, {
+						key: 1,
+						value: '是'
+					}],
 				}
 			}
 		},
@@ -261,6 +278,7 @@
 				this.topSearch.tendersOid = '';
 				this.topSearch.pipeSegmentOid = '';
 				this.topSearch.pipeColdBendingCode = '';
+				this.topSearch.isUse='';
 				this.$refs.table.search();
 			},
 		},
