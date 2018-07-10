@@ -1,5 +1,7 @@
 package cn.jasgroup.jasframework.acquisitiondata.privilege.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +19,8 @@ import cn.jasgroup.framework.data.result.BaseResult;
 import cn.jasgroup.framework.data.result.ListResult;
 import cn.jasgroup.jasframework.acquisitiondata.privilege.service.DaqPrivilegeService;
 import cn.jasgroup.jasframework.base.controller.BaseController;
+import cn.jasgroup.jasframework.security.AuthUser;
+import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 
 @RestController
 @RequestMapping(value="daq/privilege")
@@ -160,6 +164,60 @@ public class DaqPrivilegeController extends BaseController{
 			List<Map<String,Object>> rows = this.daqPrivilegeService.getConstructionUnitByTendersOid(tendersOid);
 			result = new ListResult<>(1, "200", "ok", rows);
 		} catch (Exception e) {
+			result = new ListResult<>(-1, "400", "error");
+			e.printStackTrace();
+		}
+		return result;
+	}
+	/***
+	  * <p>功能描述：根据线路段oid或者穿跨越oid获取中线桩列表。</p>
+	  * <p> 雷凯。</p>	
+	  * @param request
+	  * @param param
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年7月10日 下午2:23:38。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="/getMedianStakeList",method = RequestMethod.POST)
+	@ResponseBody
+	public Object getMedianStakeList(HttpServletRequest request,@RequestBody Map<String,String> param){
+		ListResult<Map<String,Object>> result = null;
+		try {
+			String pipeSegmentOrCrossOid = param.get("pipeSegmentOrCrossOid");
+			if(StringUtils.isBlank(pipeSegmentOrCrossOid)){
+				return new BaseResult(-1, "error", "oid不能为空！");
+			}
+			List<Map<String,Object>> rows = this.daqPrivilegeService.getMedianStakeList(pipeSegmentOrCrossOid);
+			result = new ListResult<>(1, "200", "ok", rows);
+		} catch (Exception e) {
+			result = new ListResult<>(-1, "400", "error");
+			e.printStackTrace();
+		}
+		return result;
+	}
+	/***
+	  * <p>功能描述：获取当前用户所在部门。</p>
+	  * <p> 雷凯。</p>	
+	  * @param request
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年7月10日 下午1:54:28。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="/getCurrentUnitId",method = RequestMethod.POST)
+	@ResponseBody
+	public Object getCurrentUnitId(HttpServletRequest request){
+		ListResult<Map<String,Object>> result = null;
+		try{
+			List<Map<String,Object>> rows = new ArrayList<Map<String,Object>>();
+			AuthUser currentUser = ThreadLocalHolder.getCurrentUser();
+			Map<String,Object> data = new HashMap<String,Object>();
+			data.put("key", currentUser.getUnitId());
+			data.put("value", currentUser.getUnitName());
+			rows.add(data);
+			result = new ListResult<>(1, "200", "ok", rows);
+		}catch(Exception e){
 			result = new ListResult<>(-1, "400", "error");
 			e.printStackTrace();
 		}
