@@ -131,7 +131,10 @@ public class ClosureQuery extends BaseJavaQuery {
 	}
 
 	public String getClosureCode() {
-		return closureCode;
+		if (StringUtils.isNotBlank(closureCode)) {
+			return "%"+closureCode+"%";
+		}
+		return null;
 	}
 
 	public void setClosureCode(String closureCode) {
