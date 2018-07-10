@@ -50,7 +50,7 @@ public class ClosureQuery extends BaseJavaQuery {
 	/***
 	 * 是否使用
 	 */
-	private String isUse;
+	private Integer isUse;
 
 	@Override
 	public String getQuerySql() {
@@ -91,7 +91,7 @@ public class ClosureQuery extends BaseJavaQuery {
 			if (StringUtils.isNotBlank(closureType)) {
 				conditionSql += " and mc.closure_type = :closureType";
 			}
-			if (StringUtils.isNotBlank(isUse)) {
+			if ( isUse != null ){
 				conditionSql += " and mc.is_use = :isUse";
 			}
 			conditionSql += " order by mc.create_datetime desc";
@@ -146,11 +146,11 @@ public class ClosureQuery extends BaseJavaQuery {
 		this.closureType = closureType;
 	}
 
-	public String getIsUse() {
+	public Integer getIsUse() {
 		return isUse;
 	}
 
-	public void setIsUse(String isUse) {
+	public void setIsUse(Integer isUse) {
 		this.isUse = isUse;
 	}
 

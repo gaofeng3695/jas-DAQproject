@@ -9,6 +9,14 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 
+/**
+ * 
+  *<p>类描述：焊口返修Bo。</p>
+  * @author 葛建 。
+  * @version v1.0.0.1。
+  * @since JDK1.8。
+  *<p>创建日期：2018年7月10日 上午8:57:12。</p>
+ */
 public class ReworkWeldBo extends CommonBaseBo {
 
 	/**

@@ -2,6 +2,14 @@ package cn.jasgroup.jasframework.acquisitiondata.weld.cutweld.query.bo;
 
 import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 
+/**
+ * 
+  *<p>类描述：钢管切管Bo。</p>
+  * @author 葛建 。
+  * @version v1.0.0.1。
+  * @since JDK1.8。
+  *<p>创建日期：2018年7月10日 上午8:58:02。</p>
+ */
 public class CutWeldBo extends CommonBaseBo{
 	
 	/**

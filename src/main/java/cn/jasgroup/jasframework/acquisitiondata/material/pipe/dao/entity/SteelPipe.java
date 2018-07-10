@@ -9,10 +9,18 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
 import cn.jasgroup.jasframework.base.annotation.UpdateDeleteSet;
-import cn.jasgroup.jasframework.engine.jdbc.entity.BaseJdbcEntity;
+import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 
+/**
+ * 
+  *<p>类描述：钢管实体。</p>
+  * @author 葛建 。
+  * @version v1.0.0.1。
+  * @since JDK1.8。
+  *<p>创建日期：2018年7月10日 上午9:11:18。</p>
+ */
 @JdbcEntity(name="daq_material_pipe")
-public class SteelPipe extends BaseJdbcEntity{
+public class SteelPipe extends CommonJdbcEntity{
 
 	/**
 	 *  项目oid

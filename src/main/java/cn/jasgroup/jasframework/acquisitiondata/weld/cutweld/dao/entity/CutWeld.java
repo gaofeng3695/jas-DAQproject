@@ -16,11 +16,11 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
  */
 @CommonSaveConfig(
 		scene = "/cutWeld/save"
-//		,
-//		afterAdvice = {
-//				//将切管后的钢管信息保存到钢管表
-//				@Process(service = "CutWeldService", method = "savePipeAfterCut()")
-//		}
+		,
+		afterAdvice = {
+				//将切管后的钢管信息保存到钢管表
+				@Process(service = "cutWeldService", method = "savePipeAfterCut()")
+		}
 	)
 @JdbcEntity(name="daq_cut_pipe")
 public class CutWeld extends CommonJdbcEntity{
