@@ -199,7 +199,7 @@
 #### 列表组件 jas-table-for-list
 
 1. 列表组件，包含顶部操作按钮（新增，导入，导出），表格，分页控件
-2. 内部集成了权限功能，使用权限接口控制按钮显隐
+2. 内部集成了权限功能，使用权限接口或权限数组控制按钮显隐
 
 > 代码
 
@@ -208,24 +208,23 @@
     <jas-table-for-list ref="table" slot="list" :fields="tableFields" :form="topSearch" search-path="/jdbc/commonData/medianStake/getPage.do" :add-url="addUrl" :detail-url="detailUrl"></jas-table-for-list>
 </body>
 <script>
-    this.$refs.upload.requestFile(this.oid); // 触发附件请求
 
 </script>
 ```
 
 > 属性
 
-|      参数      |                        说明                        |  类型  | 可选值 | 默认值 |
-| :------------: | :------------------------------------------------: | :----: | :----: | :----: |
-|     fields     | 表格的各个项的数组，例[{name:'xxx', field :'xxx'}] | array  |        |        |
-|      form      |                 表格请求的传参对象                 |  obj   |        |        |
-|  search-path   |                 刷新列表的请求路径                 | string |        |        |
-|  delete-path   |                删除某一项的请求路径                | string |        |        |
-|    add-url     |             打开添加和编辑模态框的路径             | string |        |        |
-|   detail-url   |                打开详情模态框的路径                | string |        |        |
-| privilege-code |          按钮权限编码，没有则拥有所有权限          | string |        |        |
-|  templateCode  |              导入导出组件用的模板编号              | string |        |        |
-|   className    |             导入导出组件用的后台接口类             | string |        |        |
+|      参数      |                             说明                             |     类型     | 可选值 | 默认值 |
+| :------------: | :----------------------------------------------------------: | :----------: | :----: | :----: |
+|     fields     |      表格的各个项的数组，例[{name:'xxx', field :'xxx'}]      |    array     |        |        |
+|      form      |                      表格请求的传参对象                      |     obj      |        |        |
+|  search-path   |                      刷新列表的请求路径                      |    string    |        |        |
+|  delete-path   |                     删除某一项的请求路径                     |    string    |        |        |
+|    add-url     |                  打开添加和编辑模态框的路径                  |    string    |        |        |
+|   detail-url   |                     打开详情模态框的路径                     |    string    |        |        |
+| privilege-code | 1.按钮权限编码，为空则拥有所有权限 <br />2.权限数组['bt_add','bt_update','bt_delete',<br />'bt_select','bt_export','bt_import','bt_position '] | string/array |        |        |
+|  templateCode  |                   导入导出组件用的模板编号                   |    string    |        |        |
+|   className    |                  导入导出组件用的后台接口类                  |    string    |        |        |
 
 > 方法
 
