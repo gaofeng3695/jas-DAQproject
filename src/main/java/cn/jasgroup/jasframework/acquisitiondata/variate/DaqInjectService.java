@@ -40,7 +40,7 @@ public class DaqInjectService {
 		}else if(hierarchy.startsWith(UnitHierarchyEnum.detection_unit.getHierarchy())){//检测单位
 			dataAuthoritySql = " and detection_unit in (select uu.oid from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid='"+unitOid+"')";
 		}else{
-			dataAuthoritySql = "";
+			dataAuthoritySql = " and create_user_id='"+ThreadLocalHolder.getCurrentUserId()+"'";
 		}
 		query.setDataAuthoritySql(dataAuthoritySql);
 	}
