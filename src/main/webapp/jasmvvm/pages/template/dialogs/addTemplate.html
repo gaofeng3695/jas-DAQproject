@@ -537,31 +537,26 @@
 					isInit = oParam.isInit;
 					value = oParam.value;
 				}
-				var formatFormAttr = function (childField, options) { // 入参下拉选项
+				var setChildOptionsAndValue = function (childField, options) { // 入参下拉选项
 					that.formAttr.forEach(function (parent, index) {
 						parent.data.forEach(function (child) { // 遍历字段
 							if (childField === child.id) { // 确认是级联子集字段
 								if (value) { // 父级有值
 									child.options = options; // 赋值下拉选项
-
 								} else {
 									child.options = []; // 清空下拉选项
 								}
 								if (!isInit) { // 不是初始化
 									that.$set(that.formData, child.id, ""); // 清空子级联的value
-									// console.log('当前的要出发的select为', that.$refs[child.id][0])
-									that.$refs[child.id][0].$emit('change', { // 触发子级联的change事件
-										value: that.formData[child.id],
-										isInit: false
-									});
 								}
 								if (options.length === 1) { //只有一个选项就自动复制
 									that.$set(that.formData, child.id, options[0].key); // 赋值 子级联的value
-									that.$refs[child.id][0].$emit('change', { // 触发子级联的change事件
-										value: that.formData[child.id],
-										isInit: false
-									});
 								}
+								that.$refs[child.id][0].$emit('change', { // 触发子级联的change事件
+									value: that.formData[child.id],
+									isInit: isInit
+								});
+
 
 							}
 						});
@@ -577,10 +572,10 @@
 						};
 						obj[key] = value;
 						jasTools.ajax.post(jasTools.base.rootPath + "/" + requestUrl, obj, function (data) {
-							formatFormAttr(childField, data.rows)
+							setChildOptionsAndValue(childField, data.rows)
 						});
 					} else {
-						formatFormAttr(childField, []);
+						setChildOptionsAndValue(childField, []);
 					}
 				};
 
