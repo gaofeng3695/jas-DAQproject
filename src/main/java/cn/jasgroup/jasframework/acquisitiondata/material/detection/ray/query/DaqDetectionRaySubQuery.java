@@ -24,7 +24,7 @@ import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 )
 public class DaqDetectionRaySubQuery extends BaseJavaQuery{
 
-	public List<String> oids;
+	private List<String> oids;
 
 	@Override
 	public String getSql() {

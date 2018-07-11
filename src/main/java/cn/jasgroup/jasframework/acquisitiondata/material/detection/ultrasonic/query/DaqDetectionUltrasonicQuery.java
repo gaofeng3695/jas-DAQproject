@@ -1,33 +1,33 @@
-package cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.query;
+package cn.jasgroup.jasframework.acquisitiondata.material.detection.ultrasonic.query;
 
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
-import cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.query.bo.DaqDetectionRayBo;
+import cn.jasgroup.jasframework.acquisitiondata.material.detection.ultrasonic.query.bo.DaqDetectionUltrasonicBo;
 import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 
 /**
- * @description 射线检测主表query
+ * @description 超声波主表查询类
  * @author zhangyi
- * @date 2018年7月10日上午11:07:55
+ * @date 2018年7月11日上午9:57:24
  * @version V1.0
  * @since JDK 1.80
  */
 
 @QueryConfig(
-	scene = "/detectionRay/getPage", 
-	resultClass = DaqDetectionRayBo.class,
+	scene="/detectionUltrasonic/getPage",
+	resultClass=DaqDetectionUltrasonicBo.class,
 	queryBeforeProcess = {
 		@Process(service = "daqInjectService" , method = "injectDataAuthoritySql(dataAuthoritySql)")
 	}
 )
-public class DaqDetectionRayQuery extends BaseJavaQuery {
+public class DaqDetectionUltrasonicQuery extends BaseJavaQuery{
 
 	private List<String> oids;
-
+	
 	private String projectOid;
 	private String pipelineOid;
 	private String weldCode;
@@ -38,7 +38,7 @@ public class DaqDetectionRayQuery extends BaseJavaQuery {
 				+ " d2.code_name as evaluationGradeName,"
 				+ "	p.project_name,"
 				+ "	l.pipeline_name"
-				+ " from daq_detection_ray t "
+				+ " from daq_detection_ultrasonic t "
 				+ " left join sys_domain d1 on d1.code_id = t.detection_type"
 				+ " left join sys_domain d2 on d2.code_id = t.evaluation_grade"
 				+ " left join daq_project p on p.oid=t.project_oid "
@@ -54,7 +54,7 @@ public class DaqDetectionRayQuery extends BaseJavaQuery {
 			sql += " and t.weld_code like :weldCode ";
 		}
 		if (null != oids && oids.size() > 0) {
-			sql += " and oid in (:oids) ";
+			sql += " and t.oid in (:oids) ";
 		}
 		sql +=" order by t.create_datetime desc";
 		return sql;
@@ -94,4 +94,5 @@ public class DaqDetectionRayQuery extends BaseJavaQuery {
 	public void setWeldCode(String weldCode) {
 		this.weldCode = weldCode;
 	}
+	
 }
