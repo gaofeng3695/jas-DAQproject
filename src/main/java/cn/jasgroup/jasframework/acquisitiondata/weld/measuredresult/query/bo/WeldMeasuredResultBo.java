@@ -1,24 +1,19 @@
-package cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.query.bo;
+package cn.jasgroup.jasframework.acquisitiondata.weld.measuredresult.query.bo;
 
 import java.util.Date;
-
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 
 /**
  * 
-  *<p>类描述：焊口信息Bo。</p>
+  *<p>类描述：焊口测量成果信息Bo。</p>
   * @author 葛建 。
   * @version v1.0.0.1。
   * @since JDK1.8。
-  *<p>创建日期：2018年7月11日 下午2:10:36。</p>
+  *<p>创建日期：2018年7月11日 下午4:44:42。</p>
  */
-public class ConstructionWeldBo extends CommonBaseBo {
-	
+public class WeldMeasuredResultBo extends CommonBaseBo {
+
 	/**
 	 * oid
 	 */
@@ -65,29 +60,14 @@ public class ConstructionWeldBo extends CommonBaseBo {
 	private String pipeSegmentOrCrossName;
 
 	/**
+	 * 焊口oid
+	 */
+	private String weldOid;
+
+	/**
 	 * 焊口编号
 	 */
 	private String weldCode;
-
-	/**
-	 * 焊口类型
-	 */
-	private String weldType;
-
-	/**
-	 * 焊口类型名称
-	 */
-	private String weldTypeName;
-
-	/**
-	 * 焊接方式
-	 */
-	private String weldMethod;
-
-	/**
-	 * 焊接方式名称
-	 */
-	private String weldMethodName;
 
 	/**
 	 * 桩号
@@ -105,44 +85,39 @@ public class ConstructionWeldBo extends CommonBaseBo {
 	private Double relativeMileage;
 
 	/**
-	 * 前管件类型
+	 * 坐标X(m)
 	 */
-	private String frontPipeType;
+	private Double pointx;
 
 	/**
-	 * 前管件编号
+	 * 坐标Y(m)
 	 */
-	private String frontPipeCode;
+	private Double pointy;
 
 	/**
-	 * 后管件类型
+	 * 地表高程(m)
 	 */
-	private String backPipeType;
+	private Double surfaceeLevation;
 
 	/**
-	 * 后管件编号
+	 * 管顶高程(m)
 	 */
-	private String backPipeCode;
+	private Double pipeTopElevation;
 
 	/**
-	 * 焊条批号
+	 * 埋深(m)
 	 */
-	private String weldRodBatchNum;
+	private Double buriedDepth;
 
 	/**
-	 * 焊丝批号
+	 * 测量人
 	 */
-	private String weldWireBatchNum;
+	private String surveyCrew;
 
 	/**
-	 * 焊接工艺规程
+	 * 测量日期
 	 */
-	private String weldProduce;
-
-	/**
-	 * 外观质量检查
-	 */
-	private Integer surfaceCheck;
+	private Date surveyDate;
 
 	/**
 	 * 施工单位
@@ -153,46 +128,6 @@ public class ConstructionWeldBo extends CommonBaseBo {
 	 * 施工单位名称
 	 */
 	private String constructUnitName;
-
-	/**
-	 * 施工机组代号
-	 */
-	private String workUnitOid;
-
-	/**
-	 * 施工机组编号
-	 */
-	private String workUnitCode;
-
-	/**
-	 * 盖面人员
-	 */
-	private String coverOid;
-
-	/**
-	 * 填充人员
-	 */
-	private String padderOid;
-
-	/**
-	 * 打底人员
-	 */
-	private String renderOid;
-
-	/**
-	 * 是否金口
-	 */
-	private Integer isGoldeJoint;
-
-	/**
-	 * 是否连头口
-	 */
-	private Integer isPipeHead;
-
-	/**
-	 * 施工日期
-	 */
-	private Date constructDate;
 
 	/**
 	 * 监理单位
@@ -210,7 +145,7 @@ public class ConstructionWeldBo extends CommonBaseBo {
 	private String supervisionEngineer;
 
 	/**
-	 * 采集人员
+	 * 数据采集人
 	 */
 	private String collectionPerson;
 
@@ -220,14 +155,14 @@ public class ConstructionWeldBo extends CommonBaseBo {
 	private Date collectionDate;
 
 	/**
-	 * 审核状态
-	 */
-	private Integer approveStatus;
-
-	/**
 	 * 空间数据状态
 	 */
 	private String geoState;
+
+	/**
+	 * 审核状态
+	 */
+	private Integer approveStatus;
 
 	/**
 	 * 备注
@@ -306,44 +241,20 @@ public class ConstructionWeldBo extends CommonBaseBo {
 		this.pipeSegmentOrCrossName = pipeSegmentOrCrossName;
 	}
 
+	public String getWeldOid() {
+		return weldOid;
+	}
+
+	public void setWeldOid(String weldOid) {
+		this.weldOid = weldOid;
+	}
+
 	public String getWeldCode() {
 		return weldCode;
 	}
 
 	public void setWeldCode(String weldCode) {
 		this.weldCode = weldCode;
-	}
-
-	public String getWeldType() {
-		return weldType;
-	}
-
-	public void setWeldType(String weldType) {
-		this.weldType = weldType;
-	}
-
-	public String getWeldTypeName() {
-		return weldTypeName;
-	}
-
-	public void setWeldTypeName(String weldTypeName) {
-		this.weldTypeName = weldTypeName;
-	}
-
-	public String getWeldMethod() {
-		return weldMethod;
-	}
-
-	public void setWeldMethod(String weldMethod) {
-		this.weldMethod = weldMethod;
-	}
-
-	public String getWeldMethodName() {
-		return weldMethodName;
-	}
-
-	public void setWeldMethodName(String weldMethodName) {
-		this.weldMethodName = weldMethodName;
 	}
 
 	public String getMedianStakeOid() {
@@ -370,68 +281,60 @@ public class ConstructionWeldBo extends CommonBaseBo {
 		this.relativeMileage = relativeMileage;
 	}
 
-	public String getFrontPipeType() {
-		return frontPipeType;
+	public Double getPointx() {
+		return pointx;
 	}
 
-	public void setFrontPipeType(String frontPipeType) {
-		this.frontPipeType = frontPipeType;
+	public void setPointx(Double pointx) {
+		this.pointx = pointx;
 	}
 
-	public String getFrontPipeCode() {
-		return frontPipeCode;
+	public Double getPointy() {
+		return pointy;
 	}
 
-	public void setFrontPipeCode(String frontPipeCode) {
-		this.frontPipeCode = frontPipeCode;
+	public void setPointy(Double pointy) {
+		this.pointy = pointy;
 	}
 
-	public String getBackPipeType() {
-		return backPipeType;
+	public Double getSurfaceeLevation() {
+		return surfaceeLevation;
 	}
 
-	public void setBackPipeType(String backPipeType) {
-		this.backPipeType = backPipeType;
+	public void setSurfaceeLevation(Double surfaceeLevation) {
+		this.surfaceeLevation = surfaceeLevation;
 	}
 
-	public String getBackPipeCode() {
-		return backPipeCode;
+	public Double getPipeTopElevation() {
+		return pipeTopElevation;
 	}
 
-	public void setBackPipeCode(String backPipeCode) {
-		this.backPipeCode = backPipeCode;
+	public void setPipeTopElevation(Double pipeTopElevation) {
+		this.pipeTopElevation = pipeTopElevation;
 	}
 
-	public String getWeldRodBatchNum() {
-		return weldRodBatchNum;
+	public Double getBuriedDepth() {
+		return buriedDepth;
 	}
 
-	public void setWeldRodBatchNum(String weldRodBatchNum) {
-		this.weldRodBatchNum = weldRodBatchNum;
+	public void setBuriedDepth(Double buriedDepth) {
+		this.buriedDepth = buriedDepth;
 	}
 
-	public String getWeldWireBatchNum() {
-		return weldWireBatchNum;
+	public String getSurveyCrew() {
+		return surveyCrew;
 	}
 
-	public void setWeldWireBatchNum(String weldWireBatchNum) {
-		this.weldWireBatchNum = weldWireBatchNum;
+	public void setSurveyCrew(String surveyCrew) {
+		this.surveyCrew = surveyCrew;
 	}
 
-	public String getWeldProduce() {
-		return weldProduce;
+	public Date getSurveyDate() {
+		return surveyDate;
 	}
 
-	public void setWeldProduce(String weldProduce) {
-		this.weldProduce = weldProduce;
-	}
-
-	public Integer getSurfaceCheck() {
-		return surfaceCheck;
-	}
-
-	public void setSurfaceCheck(Integer surfaceCheck) {
-		this.surfaceCheck = surfaceCheck;
+	public void setSurveyDate(Date surveyDate) {
+		this.surveyDate = surveyDate;
 	}
 
 	public String getConstructUnit() {
@@ -448,72 +351,6 @@ public class ConstructionWeldBo extends CommonBaseBo {
 
 	public void setConstructUnitName(String constructUnitName) {
 		this.constructUnitName = constructUnitName;
-	}
-
-	public String getWorkUnitOid() {
-		return workUnitOid;
-	}
-
-	public void setWorkUnitOid(String workUnitOid) {
-		this.workUnitOid = workUnitOid;
-	}
-
-	public String getWorkUnitCode() {
-		return workUnitCode;
-	}
-
-	public void setWorkUnitCode(String workUnitCode) {
-		this.workUnitCode = workUnitCode;
-	}
-
-	public String getCoverOid() {
-		return coverOid;
-	}
-
-	public void setCoverOid(String coverOid) {
-		this.coverOid = coverOid;
-	}
-
-	public String getPadderOid() {
-		return padderOid;
-	}
-
-	public void setPadderOid(String padderOid) {
-		this.padderOid = padderOid;
-	}
-
-	public String getRenderOid() {
-		return renderOid;
-	}
-
-	public void setRenderOid(String renderOid) {
-		this.renderOid = renderOid;
-	}
-
-	public Integer getIsGoldeJoint() {
-		return isGoldeJoint;
-	}
-
-	public void setIsGoldeJoint(Integer isGoldeJoint) {
-		this.isGoldeJoint = isGoldeJoint;
-	}
-
-	public Integer getIsPipeHead() {
-		return isPipeHead;
-	}
-
-	public void setIsPipeHead(Integer isPipeHead) {
-		this.isPipeHead = isPipeHead;
-	}
-
-	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
-	@Temporal(TemporalType.TIMESTAMP)
-	public Date getConstructDate() {
-		return constructDate;
-	}
-
-	public void setConstructDate(Date constructDate) {
-		this.constructDate = constructDate;
 	}
 
 	public String getSupervisionUnit() {
@@ -548,8 +385,6 @@ public class ConstructionWeldBo extends CommonBaseBo {
 		this.collectionPerson = collectionPerson;
 	}
 
-	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
-	@Temporal(TemporalType.TIMESTAMP)
 	public Date getCollectionDate() {
 		return collectionDate;
 	}
@@ -558,20 +393,20 @@ public class ConstructionWeldBo extends CommonBaseBo {
 		this.collectionDate = collectionDate;
 	}
 
-	public Integer getApproveStatus() {
-		return approveStatus;
-	}
-
-	public void setApproveStatus(Integer approveStatus) {
-		this.approveStatus = approveStatus;
-	}
-
 	public String getGeoState() {
 		return geoState;
 	}
 
 	public void setGeoState(String geoState) {
 		this.geoState = geoState;
+	}
+
+	public Integer getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(Integer approveStatus) {
+		this.approveStatus = approveStatus;
 	}
 
 	public String getRemarks() {
