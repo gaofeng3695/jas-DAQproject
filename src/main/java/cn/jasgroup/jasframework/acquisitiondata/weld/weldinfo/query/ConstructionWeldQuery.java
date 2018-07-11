@@ -6,6 +6,14 @@ import cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.query.bo.Construct
 import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 
+/**
+ * 
+  *<p>类描述：焊口信息分页查询。</p>
+  * @author 葛建 。
+  * @version v1.0.0.1。
+  * @since JDK1.8。
+  *<p>创建日期：2018年7月11日 下午4:44:59。</p>
+ */
 @QueryConfig(scene = "/constructionWeld/getPage", resultClass = ConstructionWeldBo.class)
 public class ConstructionWeldQuery extends BaseJavaQuery{
 
