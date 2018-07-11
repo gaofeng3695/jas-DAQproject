@@ -15,7 +15,7 @@ public class PipeDao {
 	private BaseJdbcDao baseJdbcDao;
 	
 	public List<Map<String, Object>> getPipeList() {
-		String sql ="select pipe_code as key,pipe_code as value from daq_material_pipe where active=1 and is_use=0";
+		String sql ="select pipe_code as key,pipe_code as value from daq_material_pipe where active=1 and is_use=0 and pipe_length >= 1";
 		return baseJdbcDao.queryForList(sql, null);
 	}
 	
