@@ -1807,6 +1807,74 @@ comment on column daq_cut_pipe.modify_datetime IS '修改时间';
 comment on column daq_cut_pipe.active IS '有效标志';
 CREATE INDEX index_daq_cut_pipe_pipe_oid_8 ON daq_cut_pipe USING btree (pipe_oid);
 ALTER TABLE daq_cut_pipe ADD PRIMARY KEY (oid);
+
+CREATE TABLE daq_weld_measured_result (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipe_segment_or_cross_oid VARCHAR (36),
+	weld_oid VARCHAR (36),
+	median_stake_oid VARCHAR (36),
+	relative_mileage NUMERIC (9, 3),
+	pointx NUMERIC (10, 3),
+	pointy NUMERIC (11, 3),
+	surfacee_levation NUMERIC (9, 2),
+	pipe_top_elevation NUMERIC (9, 2),
+	buried_depth NUMERIC (9, 2),
+	survey_crew VARCHAR (20),
+	survey_date TIMESTAMP (6),
+	construct_unit VARCHAR (36),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state varchar(10),
+	approve_status SMALLINT,
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL default 0
+);
+comment on table daq_weld_measured_result is '焊口测量成果信息表';
+comment on column daq_weld_measured_result.oid is '主键';
+comment on column daq_weld_measured_result.project_oid is '项目oid';
+comment on column daq_weld_measured_result.pipeline_oid is '管线oid';
+comment on column daq_weld_measured_result.tenders_oid is '标段oid';
+comment on column daq_weld_measured_result.pipe_segment_or_cross_oid is '线路段/穿跨越';
+comment on column daq_weld_measured_result.weld_oid is '焊口编号';
+comment on column daq_weld_measured_result.median_stake_oid is '桩号';
+comment on column daq_weld_measured_result.relative_mileage is '相对桩位置(m)';
+comment on column daq_weld_measured_result.pointx is '坐标X(m)';
+comment on column daq_weld_measured_result.pointy is '坐标Y(m)';
+comment on column daq_weld_measured_result.surfacee_levation is '地表高程(m)';
+comment on column daq_weld_measured_result.pipe_top_elevation is '管顶高程(m)';
+comment on column daq_weld_measured_result.buried_depth is '埋深(m)';
+comment on column daq_weld_measured_result.survey_crew is '测量人';
+comment on column daq_weld_measured_result.survey_date is '测量日期';
+comment on column daq_weld_measured_result.construct_unit is '施工单位';
+comment on column daq_weld_measured_result.supervision_unit is '监理单位';
+comment on column daq_weld_measured_result.supervision_engineer is '监理工程师';
+comment on column daq_weld_measured_result.collection_person is '数据采集人';
+comment on column daq_weld_measured_result.collection_date is '采集日期';
+comment on column daq_weld_measured_result.geo_state is '空间数据状态';
+comment on column daq_weld_measured_result.approve_status is '审核状态';
+comment on column daq_weld_measured_result.remarks is '备注';
+comment on column daq_weld_measured_result.create_user_id is '创建人id';
+comment on column daq_weld_measured_result.create_user_name is '创建人名称';
+comment on column daq_weld_measured_result.create_datetime is '创建时间';
+comment on column daq_weld_measured_result.modify_user_id is '修改人id';
+comment on column daq_weld_measured_result.modify_user_name is '修改人名称';
+comment on column daq_weld_measured_result.modify_datetime is '修改时间';
+comment on column daq_weld_measured_result.active is '有效标志';
+create index INDEX_DAQ_WELD_MEASURED_RESULT_WELD_OID_9 ON daq_weld_measured_result ( weld_oid );
+select AddGeometryColumn('public', 'daq_weld_measured_result', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_weld_measured_result_geom_idx ON public.daq_weld_measured_result USING gist (geom);
+
 /**********管道焊接信息end***************/
 /**********管道检测信息begin***************/
 CREATE TABLE daq_detection_ray (
@@ -2687,3 +2755,557 @@ comment on column daq_lay_thermal_insulation.active is '有效标志';
 select AddGeometryColumn('public', 'daq_lay_thermal_insulation', 'geom', 4490, 'LINESTRING', 4);
 CREATE INDEX daq_lay_thermal_insulation_geom_idx ON public.daq_lay_thermal_insulation USING gist (geom);
 /**********管道敷设信息end***************/
+/**********管道穿跨越信息begin***************/
+CREATE TABLE daq_cross_excavation (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	cross_oid VARCHAR (36),
+	crossing_department VARCHAR (50),
+	cross_length NUMERIC (9, 2),
+	cross_max_length NUMERIC (10, 2),
+	start_median_stake_oid VARCHAR (36),
+	start_relative_mileage NUMERIC (8, 0),
+	end_median_stake_oid VARCHAR (36),
+	end_relative_mileage NUMERIC (8, 0),
+	start_pointx NUMERIC (9, 3),
+	start_pointy NUMERIC (9, 3),
+	start_pointz NUMERIC (9, 3),
+	end_pointx NUMERIC (9, 3),
+	end_pointy NUMERIC (9, 3),
+	end_pointz NUMERIC (9, 3),
+	steady_tube_measures VARCHAR (200),
+	commencement_date TIMESTAMP (6),
+	completion_date TIMESTAMP (6),
+	construct_unit VARCHAR (36),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	approve_status SMALLINT,
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL
+);
+comment on table daq_cross_excavation is '开挖穿越表';
+comment on column daq_cross_excavation.oid is '主键';
+comment on column daq_cross_excavation.project_oid is '项目oid';
+comment on column daq_cross_excavation.tenders_oid is '标段oid';
+comment on column daq_cross_excavation.pipeline_oid is '管线oid';
+comment on column daq_cross_excavation.cross_oid is '穿跨越oid';
+comment on column daq_cross_excavation.crossing_department is '穿越物管理单位';
+comment on column daq_cross_excavation.cross_length is '穿越长度(m)';
+comment on column daq_cross_excavation.cross_max_length is '穿越最大深度(m)';
+comment on column daq_cross_excavation.start_median_stake_oid is '起始桩号';
+comment on column daq_cross_excavation.start_relative_mileage is '相对起始桩位置(m)';
+comment on column daq_cross_excavation.end_median_stake_oid is '结束桩号';
+comment on column daq_cross_excavation.end_relative_mileage is '相对结束桩位置(m)';
+comment on column daq_cross_excavation.start_pointx is '起始点X坐标';
+comment on column daq_cross_excavation.start_pointy is '起始点Y坐标';
+comment on column daq_cross_excavation.start_pointz is '起始点高程(m)';
+comment on column daq_cross_excavation.end_pointx is '结束点X坐标';
+comment on column daq_cross_excavation.end_pointy is '结束点Y坐标';
+comment on column daq_cross_excavation.end_pointz is '结束点高程(m)';
+comment on column daq_cross_excavation.steady_tube_measures is '稳管措施';
+comment on column daq_cross_excavation.commencement_date is '开工日期';
+comment on column daq_cross_excavation.completion_date is '完工日期';
+comment on column daq_cross_excavation.construct_unit is '施工单位';
+comment on column daq_cross_excavation.supervision_unit is '监理单位';
+comment on column daq_cross_excavation.supervision_engineer is '监理工程师';
+comment on column daq_cross_excavation.collection_person is '采集人员';
+comment on column daq_cross_excavation.collection_date is '采集日期';
+comment on column daq_cross_excavation.geo_state is '空间数据状态';
+comment on column daq_cross_excavation.approve_status is '审核状态';
+comment on column daq_cross_excavation.remarks is '备注';
+comment on column daq_cross_excavation.create_user_id is '创建人id';
+comment on column daq_cross_excavation.create_user_name is '创建人名称';
+comment on column daq_cross_excavation.create_datetime is '创建时间';
+comment on column daq_cross_excavation.modify_user_id is '修改人id';
+comment on column daq_cross_excavation.modify_user_name is '修改人名称';
+comment on column daq_cross_excavation.modify_datetime is '修改时间';
+comment on column daq_cross_excavation.active is '有效标志';
+create index INDEX_DAQ_CROSS_EXCAVATION_CROSS_OID_8 ON daq_cross_excavation ( cross_oid );
+select AddGeometryColumn('public', 'daq_cross_excavation', 'geom', 4490, 'LINESTRING', 4);
+CREATE INDEX daq_cross_excavation_geom_idx ON public.daq_cross_excavation USING gist (geom);
+
+CREATE TABLE daq_cross_pipe_jacking (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	cross_oid VARCHAR (36),
+	crossing_department VARCHAR (50),
+	cross_length NUMERIC (9, 2),
+	cross_max_length NUMERIC (10, 2),
+	start_median_stake_oid VARCHAR (36),
+	start_relative_mileage NUMERIC (8, 0),
+	end_median_stake_oid VARCHAR (36),
+	end_relative_mileage NUMERIC (8, 0),
+	start_pointx NUMERIC (9, 3),
+	start_pointy NUMERIC (9, 3),
+	start_pointz NUMERIC (9, 3),
+	end_pointx NUMERIC (9, 3),
+	end_pointy NUMERIC (9, 3),
+	end_pointz NUMERIC (9, 3),
+	commencement_date TIMESTAMP (6),
+	completion_date TIMESTAMP (6),
+	construct_unit VARCHAR (36),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	approve_status SMALLINT,
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL
+);
+comment on table daq_cross_pipe_jacking is '顶管穿越表';
+comment on column daq_cross_pipe_jacking.oid is '主键';
+comment on column daq_cross_pipe_jacking.project_oid is '项目oid';
+comment on column daq_cross_pipe_jacking.tenders_oid is '标段oid';
+comment on column daq_cross_pipe_jacking.pipeline_oid is '管线oid';
+comment on column daq_cross_pipe_jacking.cross_oid is '穿跨越oid';
+comment on column daq_cross_pipe_jacking.crossing_department is '穿越物管理单位';
+comment on column daq_cross_pipe_jacking.cross_length is '穿越长度(m)';
+comment on column daq_cross_pipe_jacking.cross_max_length is '穿越最大深度(m)';
+comment on column daq_cross_pipe_jacking.start_median_stake_oid is '起始桩号';
+comment on column daq_cross_pipe_jacking.start_relative_mileage is '相对起始桩位置(m)';
+comment on column daq_cross_pipe_jacking.end_median_stake_oid is '结束桩号';
+comment on column daq_cross_pipe_jacking.end_relative_mileage is '相对结束桩位置(m)';
+comment on column daq_cross_pipe_jacking.start_pointx is '起始点X坐标';
+comment on column daq_cross_pipe_jacking.start_pointy is '起始点Y坐标';
+comment on column daq_cross_pipe_jacking.start_pointz is '起始点高程(m)';
+comment on column daq_cross_pipe_jacking.end_pointx is '结束点X坐标';
+comment on column daq_cross_pipe_jacking.end_pointy is '结束点Y坐标';
+comment on column daq_cross_pipe_jacking.end_pointz is '结束点高程(m)';
+comment on column daq_cross_pipe_jacking.commencement_date is '开工日期';
+comment on column daq_cross_pipe_jacking.completion_date is '完工日期';
+comment on column daq_cross_pipe_jacking.construct_unit is '施工单位';
+comment on column daq_cross_pipe_jacking.supervision_unit is '监理单位';
+comment on column daq_cross_pipe_jacking.supervision_engineer is '监理工程师';
+comment on column daq_cross_pipe_jacking.collection_person is '采集人员';
+comment on column daq_cross_pipe_jacking.collection_date is '采集日期';
+comment on column daq_cross_pipe_jacking.geo_state is '空间数据状态';
+comment on column daq_cross_pipe_jacking.approve_status is '审核状态';
+comment on column daq_cross_pipe_jacking.remarks is '备注';
+comment on column daq_cross_pipe_jacking.create_user_id is '创建人id';
+comment on column daq_cross_pipe_jacking.create_user_name is '创建人名称';
+comment on column daq_cross_pipe_jacking.create_datetime is '创建时间';
+comment on column daq_cross_pipe_jacking.modify_user_id is '修改人id';
+comment on column daq_cross_pipe_jacking.modify_user_name is '修改人名称';
+comment on column daq_cross_pipe_jacking.modify_datetime is '修改时间';
+comment on column daq_cross_pipe_jacking.active is '有效标志';
+create index INDEX_daq_cross_pipe_jacking_CROSS_OID_8 ON daq_cross_pipe_jacking ( cross_oid );
+select AddGeometryColumn('public', 'daq_cross_pipe_jacking', 'geom', 4490, 'LINESTRING', 4);
+CREATE INDEX daq_cross_pipe_jacking_geom_idx ON public.daq_cross_pipe_jacking USING gist (geom);
+
+CREATE TABLE daq_cross_box_culvert (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	cross_oid VARCHAR (36),
+	crossing_department VARCHAR (50),
+	cross_length NUMERIC (9, 2),
+	cross_max_length NUMERIC (10, 2),
+	start_median_stake_oid VARCHAR (36),
+	start_relative_mileage NUMERIC (8, 0),
+	end_median_stake_oid VARCHAR (36),
+	end_relative_mileage NUMERIC (8, 0),
+	start_pointx NUMERIC (9, 3),
+	start_pointy NUMERIC (9, 3),
+	start_pointz NUMERIC (9, 3),
+	end_pointx NUMERIC (9, 3),
+	end_pointy NUMERIC (9, 3),
+	end_pointz NUMERIC (9, 3),
+	commencement_date TIMESTAMP (6),
+	completion_date TIMESTAMP (6),
+	construct_unit VARCHAR (36),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	approve_status SMALLINT,
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL
+);
+comment on table daq_cross_box_culvert is '箱涵穿越表';
+comment on column daq_cross_box_culvert.oid is '主键';
+comment on column daq_cross_box_culvert.project_oid is '项目oid';
+comment on column daq_cross_box_culvert.tenders_oid is '标段oid';
+comment on column daq_cross_box_culvert.pipeline_oid is '管线oid';
+comment on column daq_cross_box_culvert.cross_oid is '穿跨越oid';
+comment on column daq_cross_box_culvert.crossing_department is '穿越物管理单位';
+comment on column daq_cross_box_culvert.cross_length is '穿越长度(m)';
+comment on column daq_cross_box_culvert.cross_max_length is '穿越最大深度(m)';
+comment on column daq_cross_box_culvert.start_median_stake_oid is '起始桩号';
+comment on column daq_cross_box_culvert.start_relative_mileage is '相对起始桩位置(m)';
+comment on column daq_cross_box_culvert.end_median_stake_oid is '结束桩号';
+comment on column daq_cross_box_culvert.end_relative_mileage is '相对结束桩位置(m)';
+comment on column daq_cross_box_culvert.start_pointx is '起始点X坐标';
+comment on column daq_cross_box_culvert.start_pointy is '起始点Y坐标';
+comment on column daq_cross_box_culvert.start_pointz is '起始点高程(m)';
+comment on column daq_cross_box_culvert.end_pointx is '结束点X坐标';
+comment on column daq_cross_box_culvert.end_pointy is '结束点Y坐标';
+comment on column daq_cross_box_culvert.end_pointz is '结束点高程(m)';
+comment on column daq_cross_box_culvert.commencement_date is '开工日期';
+comment on column daq_cross_box_culvert.completion_date is '完工日期';
+comment on column daq_cross_box_culvert.construct_unit is '施工单位';
+comment on column daq_cross_box_culvert.supervision_unit is '监理单位';
+comment on column daq_cross_box_culvert.supervision_engineer is '监理工程师';
+comment on column daq_cross_box_culvert.collection_person is '采集人员';
+comment on column daq_cross_box_culvert.collection_date is '采集日期';
+comment on column daq_cross_box_culvert.geo_state is '空间数据状态';
+comment on column daq_cross_box_culvert.approve_status is '审核状态';
+comment on column daq_cross_box_culvert.remarks is '备注';
+comment on column daq_cross_box_culvert.create_user_id is '创建人id';
+comment on column daq_cross_box_culvert.create_user_name is '创建人名称';
+comment on column daq_cross_box_culvert.create_datetime is '创建时间';
+comment on column daq_cross_box_culvert.modify_user_id is '修改人id';
+comment on column daq_cross_box_culvert.modify_user_name is '修改人名称';
+comment on column daq_cross_box_culvert.modify_datetime is '修改时间';
+comment on column daq_cross_box_culvert.active is '有效标志';
+create index INDEX_daq_cross_box_culvert_CROSS_OID_8 ON daq_cross_box_culvert ( cross_oid );
+select AddGeometryColumn('public', 'daq_cross_box_culvert', 'geom', 4490, 'LINESTRING', 4);
+CREATE INDEX daq_cross_box_culvert_geom_idx ON public.daq_cross_box_culvert USING gist (geom);
+
+CREATE TABLE daq_cross_drilling (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	cross_oid VARCHAR (36),
+	crossing_department VARCHAR (50),
+	cross_length NUMERIC (9, 2),
+	cross_max_length NUMERIC (10, 2),
+	start_median_stake_oid VARCHAR (36),
+	start_relative_mileage NUMERIC (8, 0),
+	end_median_stake_oid VARCHAR (36),
+	end_relative_mileage NUMERIC (8, 0),
+	start_pointx NUMERIC (9, 3),
+	start_pointy NUMERIC (9, 3),
+	start_pointz NUMERIC (9, 3),
+	end_pointx NUMERIC (9, 3),
+	end_pointy NUMERIC (9, 3),
+	end_pointz NUMERIC (9, 3),
+	exit_angle NUMERIC (12, 6),
+	enter_angle NUMERIC (12, 6),
+	commencement_date TIMESTAMP (6),
+	completion_date TIMESTAMP (6),
+	construct_unit VARCHAR (36),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	approve_status SMALLINT,
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL
+);
+comment on table daq_cross_drilling is '定向钻穿越表';
+comment on column daq_cross_drilling.oid is '主键';
+comment on column daq_cross_drilling.project_oid is '项目oid';
+comment on column daq_cross_drilling.tenders_oid is '标段oid';
+comment on column daq_cross_drilling.pipeline_oid is '管线oid';
+comment on column daq_cross_drilling.cross_oid is '穿跨越oid';
+comment on column daq_cross_drilling.crossing_department is '穿越物管理单位';
+comment on column daq_cross_drilling.cross_length is '穿越长度(m)';
+comment on column daq_cross_drilling.cross_max_length is '穿越最大深度(m)';
+comment on column daq_cross_drilling.start_median_stake_oid is '起始桩号';
+comment on column daq_cross_drilling.start_relative_mileage is '相对起始桩位置(m)';
+comment on column daq_cross_drilling.end_median_stake_oid is '结束桩号';
+comment on column daq_cross_drilling.end_relative_mileage is '相对结束桩位置(m)';
+comment on column daq_cross_drilling.start_pointx is '入土点X坐标';
+comment on column daq_cross_drilling.start_pointy is '入土点Y坐标';
+comment on column daq_cross_drilling.start_pointz is '入土点高程(m)';
+comment on column daq_cross_drilling.end_pointx is '出土点X坐标';
+comment on column daq_cross_drilling.end_pointy is '出土点Y坐标';
+comment on column daq_cross_drilling.end_pointz is '出土点高程(m)';
+comment on column daq_cross_drilling.exit_angle is '入土角';
+comment on column daq_cross_drilling.enter_angle is '出土角';
+comment on column daq_cross_drilling.commencement_date is '开工日期';
+comment on column daq_cross_drilling.completion_date is '完工日期';
+comment on column daq_cross_drilling.construct_unit is '施工单位';
+comment on column daq_cross_drilling.supervision_unit is '监理单位';
+comment on column daq_cross_drilling.supervision_engineer is '监理工程师';
+comment on column daq_cross_drilling.collection_person is '采集人员';
+comment on column daq_cross_drilling.collection_date is '采集日期';
+comment on column daq_cross_drilling.geo_state is '空间数据状态';
+comment on column daq_cross_drilling.approve_status is '审核状态';
+comment on column daq_cross_drilling.remarks is '备注';
+comment on column daq_cross_drilling.create_user_id is '创建人id';
+comment on column daq_cross_drilling.create_user_name is '创建人名称';
+comment on column daq_cross_drilling.create_datetime is '创建时间';
+comment on column daq_cross_drilling.modify_user_id is '修改人id';
+comment on column daq_cross_drilling.modify_user_name is '修改人名称';
+comment on column daq_cross_drilling.modify_datetime is '修改时间';
+comment on column daq_cross_drilling.active is '有效标志';
+create index INDEX_daq_cross_drilling_CROSS_OID_8 ON daq_cross_drilling ( cross_oid );
+select AddGeometryColumn('public', 'daq_cross_drilling', 'geom', 4490, 'LINESTRING', 4);
+CREATE INDEX daq_cross_drilling_geom_idx ON public.daq_cross_drilling USING gist (geom);
+
+CREATE TABLE daq_cross_shield (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	cross_oid VARCHAR (36),
+	crossing_department VARCHAR (50),
+	cross_length NUMERIC (9, 2),
+	cross_max_length NUMERIC (10, 2),
+	start_median_stake_oid VARCHAR (36),
+	start_relative_mileage NUMERIC (8, 0),
+	end_median_stake_oid VARCHAR (36),
+	end_relative_mileage NUMERIC (8, 0),
+	start_pointx NUMERIC (9, 3),
+	start_pointy NUMERIC (9, 3),
+	start_pointz NUMERIC (9, 3),
+	end_pointx NUMERIC (9, 3),
+	end_pointy NUMERIC (9, 3),
+	end_pointz NUMERIC (9, 3),
+	commencement_date TIMESTAMP (6),
+	completion_date TIMESTAMP (6),
+	construct_unit VARCHAR (36),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	approve_status SMALLINT,
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL
+);
+comment on table daq_cross_shield is '盾构隧道穿越表';
+comment on column daq_cross_shield.oid is '主键';
+comment on column daq_cross_shield.project_oid is '项目oid';
+comment on column daq_cross_shield.tenders_oid is '标段oid';
+comment on column daq_cross_shield.pipeline_oid is '管线oid';
+comment on column daq_cross_shield.cross_oid is '穿跨越oid';
+comment on column daq_cross_shield.crossing_department is '穿越物管理单位';
+comment on column daq_cross_shield.cross_length is '穿越长度(m)';
+comment on column daq_cross_shield.cross_max_length is '穿越最大深度(m)';
+comment on column daq_cross_shield.start_median_stake_oid is '起始桩号';
+comment on column daq_cross_shield.start_relative_mileage is '相对起始桩位置(m)';
+comment on column daq_cross_shield.end_median_stake_oid is '结束桩号';
+comment on column daq_cross_shield.end_relative_mileage is '相对结束桩位置(m)';
+comment on column daq_cross_shield.start_pointx is '起始点X坐标';
+comment on column daq_cross_shield.start_pointy is '起始点Y坐标';
+comment on column daq_cross_shield.start_pointz is '起始点高程(m)';
+comment on column daq_cross_shield.end_pointx is '结束点X坐标';
+comment on column daq_cross_shield.end_pointy is '结束点Y坐标';
+comment on column daq_cross_shield.end_pointz is '结束点高程(m)';
+comment on column daq_cross_shield.commencement_date is '开工日期';
+comment on column daq_cross_shield.completion_date is '完工日期';
+comment on column daq_cross_shield.construct_unit is '施工单位';
+comment on column daq_cross_shield.supervision_unit is '监理单位';
+comment on column daq_cross_shield.supervision_engineer is '监理工程师';
+comment on column daq_cross_shield.collection_person is '采集人员';
+comment on column daq_cross_shield.collection_date is '采集日期';
+comment on column daq_cross_shield.geo_state is '空间数据状态';
+comment on column daq_cross_shield.approve_status is '审核状态';
+comment on column daq_cross_shield.remarks is '备注';
+comment on column daq_cross_shield.create_user_id is '创建人id';
+comment on column daq_cross_shield.create_user_name is '创建人名称';
+comment on column daq_cross_shield.create_datetime is '创建时间';
+comment on column daq_cross_shield.modify_user_id is '修改人id';
+comment on column daq_cross_shield.modify_user_name is '修改人名称';
+comment on column daq_cross_shield.modify_datetime is '修改时间';
+comment on column daq_cross_shield.active is '有效标志';
+create index INDEX_daq_cross_shield_CROSS_OID_8 ON daq_cross_shield ( cross_oid );
+select AddGeometryColumn('public', 'daq_cross_shield', 'geom', 4490, 'LINESTRING', 4);
+CREATE INDEX daq_cross_shield_geom_idx ON public.daq_cross_shield USING gist (geom);
+
+CREATE TABLE daq_cross_drilling_blasting (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	cross_oid VARCHAR (36),
+	crossing_department VARCHAR (50),
+	cross_length NUMERIC (9, 2),
+	cross_max_length NUMERIC (10, 2),
+	start_median_stake_oid VARCHAR (36),
+	start_relative_mileage NUMERIC (8, 0),
+	end_median_stake_oid VARCHAR (36),
+	end_relative_mileage NUMERIC (8, 0),
+	start_pointx NUMERIC (9, 3),
+	start_pointy NUMERIC (9, 3),
+	start_pointz NUMERIC (9, 3),
+	end_pointx NUMERIC (9, 3),
+	end_pointy NUMERIC (9, 3),
+	end_pointz NUMERIC (9, 3),
+	steady_tube_measures VARCHAR(200),
+	cofferdam_grade VARCHAR(50),
+	lining_type VARCHAR(50),
+	commencement_date TIMESTAMP (6),
+	completion_date TIMESTAMP (6),
+	construct_unit VARCHAR (36),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	approve_status SMALLINT,
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL
+);
+comment on table daq_cross_drilling_blasting is '钻爆隧道穿越表';
+comment on column daq_cross_drilling_blasting.oid is '主键';
+comment on column daq_cross_drilling_blasting.project_oid is '项目oid';
+comment on column daq_cross_drilling_blasting.tenders_oid is '标段oid';
+comment on column daq_cross_drilling_blasting.pipeline_oid is '管线oid';
+comment on column daq_cross_drilling_blasting.cross_oid is '穿跨越oid';
+comment on column daq_cross_drilling_blasting.crossing_department is '穿越物管理单位';
+comment on column daq_cross_drilling_blasting.cross_length is '穿越长度(m)';
+comment on column daq_cross_drilling_blasting.cross_max_length is '穿越最大深度(m)';
+comment on column daq_cross_drilling_blasting.start_median_stake_oid is '起始桩号';
+comment on column daq_cross_drilling_blasting.start_relative_mileage is '相对起始桩位置(m)';
+comment on column daq_cross_drilling_blasting.end_median_stake_oid is '结束桩号';
+comment on column daq_cross_drilling_blasting.end_relative_mileage is '相对结束桩位置(m)';
+comment on column daq_cross_drilling_blasting.start_pointx is '起始点X坐标';
+comment on column daq_cross_drilling_blasting.start_pointy is '起始点Y坐标';
+comment on column daq_cross_drilling_blasting.start_pointz is '起始点高程(m)';
+comment on column daq_cross_drilling_blasting.end_pointx is '结束点X坐标';
+comment on column daq_cross_drilling_blasting.end_pointy is '结束点Y坐标';
+comment on column daq_cross_drilling_blasting.end_pointz is '结束点高程(m)';
+comment on column daq_cross_drilling_blasting.steady_tube_measures is '稳管措施';
+comment on column daq_cross_drilling_blasting.cofferdam_grade is '钻爆围堰等级';
+comment on column daq_cross_drilling_blasting.lining_type is '衬砌形式';
+comment on column daq_cross_drilling_blasting.commencement_date is '开工日期';
+comment on column daq_cross_drilling_blasting.completion_date is '完工日期';
+comment on column daq_cross_drilling_blasting.construct_unit is '施工单位';
+comment on column daq_cross_drilling_blasting.supervision_unit is '监理单位';
+comment on column daq_cross_drilling_blasting.supervision_engineer is '监理工程师';
+comment on column daq_cross_drilling_blasting.collection_person is '采集人员';
+comment on column daq_cross_drilling_blasting.collection_date is '采集日期';
+comment on column daq_cross_drilling_blasting.geo_state is '空间数据状态';
+comment on column daq_cross_drilling_blasting.approve_status is '审核状态';
+comment on column daq_cross_drilling_blasting.remarks is '备注';
+comment on column daq_cross_drilling_blasting.create_user_id is '创建人id';
+comment on column daq_cross_drilling_blasting.create_user_name is '创建人名称';
+comment on column daq_cross_drilling_blasting.create_datetime is '创建时间';
+comment on column daq_cross_drilling_blasting.modify_user_id is '修改人id';
+comment on column daq_cross_drilling_blasting.modify_user_name is '修改人名称';
+comment on column daq_cross_drilling_blasting.modify_datetime is '修改时间';
+comment on column daq_cross_drilling_blasting.active is '有效标志';
+create index INDEX_daq_cross_drilling_blasting_CROSS_OID_8 ON daq_cross_drilling_blasting ( cross_oid );
+select AddGeometryColumn('public', 'daq_cross_drilling_blasting', 'geom', 4490, 'LINESTRING', 4);
+CREATE INDEX daq_cross_drilling_blasting_geom_idx ON public.daq_cross_drilling_blasting USING gist (geom);
+
+CREATE TABLE daq_cross_across (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	cross_oid VARCHAR (36),
+	crossing_department VARCHAR (50),
+	across_type VARCHAR (50),
+	cross_length NUMERIC (9, 2),
+	cross_max_length NUMERIC (10, 2),
+	start_median_stake_oid VARCHAR (36),
+	start_relative_mileage NUMERIC (8, 0),
+	end_median_stake_oid VARCHAR (36),
+	end_relative_mileage NUMERIC (8, 0),
+	start_pointx NUMERIC (9, 3),
+	start_pointy NUMERIC (9, 3),
+	start_pointz NUMERIC (9, 3),
+	end_pointx NUMERIC (9, 3),
+	end_pointy NUMERIC (9, 3),
+	end_pointz NUMERIC (9, 3),
+	commencement_date TIMESTAMP (6),
+	completion_date TIMESTAMP (6),
+	construct_unit VARCHAR (36),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	approve_status SMALLINT,
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL
+);
+comment on table daq_cross_across is '跨越表';
+comment on column daq_cross_across.oid is '主键';
+comment on column daq_cross_across.project_oid is '项目oid';
+comment on column daq_cross_across.tenders_oid is '标段oid';
+comment on column daq_cross_across.pipeline_oid is '管线oid';
+comment on column daq_cross_across.cross_oid is '穿跨越oid';
+comment on column daq_cross_across.crossing_department is '穿越物管理单位';
+comment on column daq_cross_across.cross_length is '穿越长度(m)';
+comment on column daq_cross_across.across_type is '跨越类型';
+comment on column daq_cross_across.cross_max_length is '穿越最大深度(m)';
+comment on column daq_cross_across.start_median_stake_oid is '起始桩号';
+comment on column daq_cross_across.start_relative_mileage is '相对起始桩位置(m)';
+comment on column daq_cross_across.end_median_stake_oid is '结束桩号';
+comment on column daq_cross_across.end_relative_mileage is '相对结束桩位置(m)';
+comment on column daq_cross_across.start_pointx is '起始点X坐标';
+comment on column daq_cross_across.start_pointy is '起始点Y坐标';
+comment on column daq_cross_across.start_pointz is '起始点高程(m)';
+comment on column daq_cross_across.end_pointx is '结束点X坐标';
+comment on column daq_cross_across.end_pointy is '结束点Y坐标';
+comment on column daq_cross_across.end_pointz is '结束点高程(m)';
+comment on column daq_cross_across.commencement_date is '开工日期';
+comment on column daq_cross_across.completion_date is '完工日期';
+comment on column daq_cross_across.construct_unit is '施工单位';
+comment on column daq_cross_across.supervision_unit is '监理单位';
+comment on column daq_cross_across.supervision_engineer is '监理工程师';
+comment on column daq_cross_across.collection_person is '采集人员';
+comment on column daq_cross_across.collection_date is '采集日期';
+comment on column daq_cross_across.geo_state is '空间数据状态';
+comment on column daq_cross_across.approve_status is '审核状态';
+comment on column daq_cross_across.remarks is '备注';
+comment on column daq_cross_across.create_user_id is '创建人id';
+comment on column daq_cross_across.create_user_name is '创建人名称';
+comment on column daq_cross_across.create_datetime is '创建时间';
+comment on column daq_cross_across.modify_user_id is '修改人id';
+comment on column daq_cross_across.modify_user_name is '修改人名称';
+comment on column daq_cross_across.modify_datetime is '修改时间';
+comment on column daq_cross_across.active is '有效标志';
+create index INDEX_daq_cross_across_CROSS_OID_8 ON daq_cross_across ( cross_oid );
+select AddGeometryColumn('public', 'daq_cross_across', 'geom', 4490, 'LINESTRING', 4);
+CREATE INDEX daq_cross_across_geom_idx ON public.daq_cross_across USING gist (geom);
+/**********管道穿跨越信息end***************/
