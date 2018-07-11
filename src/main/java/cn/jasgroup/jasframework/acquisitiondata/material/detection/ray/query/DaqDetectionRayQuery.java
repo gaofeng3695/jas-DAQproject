@@ -30,6 +30,8 @@ public class DaqDetectionRayQuery extends BaseJavaQuery {
 
 	private String projectOid;
 	private String pipelineOid;
+	private String tendersOid;
+	private String pipeSegmentOrCrossOid;
 	private String weldCode;
 	
 	@Override
@@ -37,18 +39,28 @@ public class DaqDetectionRayQuery extends BaseJavaQuery {
 		String sql = "select t.*,d1.code_name as detectionTypeName,"
 				+ " d2.code_name as evaluationGradeName,"
 				+ "	p.project_name,"
-				+ "	l.pipeline_name"
+				+ "	l.pipeline_name,"
+				+ "	dt.tenders_name,"
+				+ "	v.name as pipeSegmentOrCrossName"
 				+ " from daq_detection_ray t "
 				+ " left join sys_domain d1 on d1.code_id = t.detection_type"
 				+ " left join sys_domain d2 on d2.code_id = t.evaluation_grade"
 				+ " left join daq_project p on p.oid=t.project_oid "
 				+ " left join daq_pipeline l on l.oid=t.pipeline_oid "
+				+ " left join daq_tenders dt on dt.oid=t.tenders_oid "
+				+ " left join v_daq_pipe_segment_cross v on v.oid=t.pipe_segment_or_cross_oid "
 				+ " where t.active = 1";
 		if(StringUtils.isNotBlank(projectOid)){
 			sql += " and t.project_oid = :projectOid ";
 		}
 		if(StringUtils.isNotBlank(pipelineOid)){
 			sql += " and t.pipeline_oid = :pipelineOid ";
+		}
+		if(StringUtils.isNotBlank(tendersOid)){
+			sql += " and t.tenders_oid = :tendersOid ";
+		}
+		if(StringUtils.isNotBlank(pipeSegmentOrCrossOid)){
+			sql += " and t.pipe_segment_or_cross_oid = :pipeSegmentOrCrossOid ";
 		}
 		if(StringUtils.isNotBlank(weldCode)){
 			sql += " and t.weld_code like :weldCode ";
@@ -94,4 +106,21 @@ public class DaqDetectionRayQuery extends BaseJavaQuery {
 	public void setWeldCode(String weldCode) {
 		this.weldCode = weldCode;
 	}
+
+	public String getTendersOid() {
+		return tendersOid;
+	}
+
+	public void setTendersOid(String tendersOid) {
+		this.tendersOid = tendersOid;
+	}
+
+	public String getPipeSegmentOrCrossOid() {
+		return pipeSegmentOrCrossOid;
+	}
+
+	public void setPipeSegmentOrCrossOid(String pipeSegmentOrCrossOid) {
+		this.pipeSegmentOrCrossOid = pipeSegmentOrCrossOid;
+	}
+	
 }

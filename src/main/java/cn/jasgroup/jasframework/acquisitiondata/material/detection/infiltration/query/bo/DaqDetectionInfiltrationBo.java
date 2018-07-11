@@ -2,6 +2,8 @@ package cn.jasgroup.jasframework.acquisitiondata.material.detection.infiltration
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 
 /**
@@ -47,7 +49,12 @@ public class DaqDetectionInfiltrationBo extends CommonBaseBo{
 	/**
 	 * 线路段/穿跨越 
 	 */
-	private String pipeSegmentOrCrossOid; 
+	private String pipeSegmentOrCrossOid;
+	
+	/**
+	 * 线路段/穿跨越 名称
+	 */
+	private String pipeSegmentOrCrossName; 
 
 	/**
 	 * 焊口编号 
@@ -186,6 +193,7 @@ public class DaqDetectionInfiltrationBo extends CommonBaseBo{
 		this.detectionReportNum = detectionReportNum;
 	}
 
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
 	public Date getDetectionDeta() {
 		return detectionDeta;
 	}
@@ -250,6 +258,7 @@ public class DaqDetectionInfiltrationBo extends CommonBaseBo{
 		this.supervisionEngineer = supervisionEngineer;
 	}
 
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
 	public Date getCollectionDate() {
 		return collectionDate;
 	}
@@ -273,5 +282,12 @@ public class DaqDetectionInfiltrationBo extends CommonBaseBo{
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
 	}
-	
+
+	public String getPipeSegmentOrCrossName() {
+		return pipeSegmentOrCrossName;
+	}
+
+	public void setPipeSegmentOrCrossName(String pipeSegmentOrCrossName) {
+		this.pipeSegmentOrCrossName = pipeSegmentOrCrossName;
+	}
 }
