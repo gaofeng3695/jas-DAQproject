@@ -1,4 +1,4 @@
-package cn.jasgroup.jasframework.acquisitiondata.material.detection.infiltration.dao.entity;
+package cn.jasgroup.jasframework.acquisitiondata.material.detection.magneticpowder.dao.entity;
 
 import javax.persistence.Transient;
 
@@ -12,20 +12,20 @@ import cn.jasgroup.jasframework.domain.utils.DomainUtil;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 
 /**
- * <p>类描述：渗透检测主表。</p>
+ * <p>类描述：磁粉检测子表。</p>
  * @author 张毅
  * @version v1.0.0.1。
  * @since JDK1.8。
- * <p>创建日期：2018年7月11日 上午11:10:38。</p>
+ * <p>创建日期：2018年7月12日 上午9:38:24。</p>
  */
-
-@CommonSaveConfig(scene = "/detectionInfiltrationSub/save")
-@CommonUpdateConfig(scene = "/detectionInfiltrationSub/update")
-@CommonDeleteConfig(scene = "/detectionInfiltrationSub/delete")
-@CommonDeleteBatchConfig(scene = "/detectionInfiltrationSub/deleteBatch")
-@CommonGetConfig(scene = "/detectionInfiltrationSub/get") 
-@JdbcEntity(name="daq_detection_infiltration_sub")
-public class DaqDetectionInfiltrationSub extends CommonJdbcEntity {
+ 
+@CommonSaveConfig(scene = "/detectionMagneticPowderSub/save")
+@CommonUpdateConfig(scene = "/detectionMagneticPowderSub/update")
+@CommonDeleteConfig(scene = "/detectionMagneticPowderSub/delete")
+@CommonDeleteBatchConfig(scene = "/detectionMagneticPowderSub/deleteBatch")
+@CommonGetConfig(scene = "/detectionMagneticPowderSub/get")
+@JdbcEntity(name="daq_detection_magnetic_powder_sub")
+public class DaqDetectionMagneticPowderSub extends CommonJdbcEntity {
 
 	/**
 	 * 主表oid 
@@ -96,7 +96,7 @@ public class DaqDetectionInfiltrationSub extends CommonJdbcEntity {
 		this.defectSize = defectSize; 
 		super.setField("defectSize");
 	}
-	
+
 	@Transient
 	public String getDefectPropertiesName() {
 		return DomainUtil.getValue("defect_properties_domain", defectProperties); 
@@ -104,5 +104,4 @@ public class DaqDetectionInfiltrationSub extends CommonJdbcEntity {
 
 	public void setDefectPropertiesName(String defectPropertiesName) {
 	}
-
 }

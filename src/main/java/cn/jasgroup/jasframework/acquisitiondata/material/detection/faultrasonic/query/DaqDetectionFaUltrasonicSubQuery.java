@@ -1,30 +1,30 @@
-package cn.jasgroup.jasframework.acquisitiondata.material.detection.infiltration.query;
+package cn.jasgroup.jasframework.acquisitiondata.material.detection.faultrasonic.query;
 
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
-import cn.jasgroup.jasframework.acquisitiondata.material.detection.infiltration.query.bo.DaqDetectionInfiltrationSubBo;
+import cn.jasgroup.jasframework.acquisitiondata.material.detection.faultrasonic.query.bo.DaqDetectionFaUltrasonicSubBo;
 import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 
 /**
- * @description 查询渗透检测子表query
+ * @description 全自动超声波检测子表
  * @author zhangyi
- * @date 2018年7月11日上午11:15:52
+ * @date 2018年7月12日上午10:21:29
  * @version V1.0
  * @since JDK 1.80
  */
 
 @QueryConfig(
-	scene ="/detectionInfiltrationSub/getPage",
-	resultClass= DaqDetectionInfiltrationSubBo.class,
+	scene = "/detectionFaUltrasonicSub/getPage", 
+	resultClass = DaqDetectionFaUltrasonicSubBo.class,
 	queryBeforeProcess = {
 		@Process(service = "daqInjectService" , method = "injectDataAuthoritySql(dataAuthoritySql)")
-	}	
+	}
 )
-public class DaqDetectionInfiltrationSubQuery extends BaseJavaQuery{
+public class DaqDetectionFaUltrasonicSubQuery extends BaseJavaQuery {
 
 	private List<String> oids;
 	
@@ -32,15 +32,14 @@ public class DaqDetectionInfiltrationSubQuery extends BaseJavaQuery{
 
 	@Override
 	public String getSql() {
-		String sql = "select t.*,d.code_name as defectPropertiesName"
-				+ " from daq_detection_infiltration_sub t "
-				+ " left join sys_domain d on d.code_id = t.defect_properties"
+		String sql = "select t.*"
+				+ " from daq_detection_fa_ultrasonic_sub t "
 				+ " where t.active = 1";
 		if(StringUtils.isNotBlank(parentOid)){
-			sql += " and parent_oid = :parentOid ";
+			sql += " and t.parent_oid = :parentOid ";
 		}
 		if (null != oids && oids.size() > 0) {
-			sql += " and oid in (:oids) ";
+			sql += " and t.oid in (:oids) ";
 		}
 		sql +=" order by t.create_datetime desc";
 		return sql;

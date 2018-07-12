@@ -1,4 +1,4 @@
-package cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.query.bo;
+package cn.jasgroup.jasframework.acquisitiondata.material.detection.magneticpowder.query.bo;
 
 import java.util.Date;
 
@@ -7,89 +7,125 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 
 /**
- * @description 射线检测主表查询bo
+ * @description 磁粉检测主表bo
  * @author zhangyi
- * @date 2018年7月10日下午3:50:50
+ * @date 2018年7月12日上午9:45:55
  * @version V1.0
  * @since JDK 1.80
  */
 
-public class DaqDetectionRayBo extends CommonBaseBo{
-	
+public class DaqDetectionMagneticPowderBo extends CommonBaseBo{
+
 	/**
-	 * 数据oid
+	 * 数据oid 
 	 */
 	private String oid;
-
-	/** 项目oid */
+	
+	/**
+	 * 项目oid 
+	 */
 	private String projectOid;
 	
-	/** 项目名称 */
+	/**
+	 * 项目名称
+	 */
 	private String projectName;
 
-	/** 管线oid */
-	private String pipelineOid;
+	/**
+	 * 管线oid 
+	 */
+	private String pipelineOid; 
 	
-	/** 管线名称 */
+	/**
+	 * 管线名称
+	 */
 	private String pipelineName;
 
-	/** 标段oid */
+	/**
+	 * 标段oid 
+	 */
 	private String tendersOid;
 	
+	
+	/**
+	 * 标段名称 
+	 */
 	private String tendersName;
 
-	/** 线路段/穿跨越 */
-	private String pipeSegmentOrCrossOid;
-	
-	/** 线路段/穿跨越 名称*/
+	/**
+	 * 线路段/穿跨越 
+	 */
+	private String pipeSegmentOrCrossOid; 
+
+	/** 
+	 * 线路段/穿跨越 名称
+	 */
 	private String pipeSegmentOrCrossName;
 	
-	/** 焊口编号 */
-	private String weldCode;
+	/**
+	 * 焊口编号 
+	 */
+	private String weldCode; 
 
-	/** 检测报告编号 */
-	private String detectionReportNum;
+	/**
+	 * 检测报告编号 
+	 */
+	private String detectionReportNum; 
 
-	/** 检测日期 */
-	private Date detectionDeta;
-
-	/** 检测类型 */
-	private String detectionType;
 	
-	/** 检测类型 阈值名称*/
-	private String detectionTypeName;
+	/**
+	 * 检测日期 
+	 */
+	private Date detectionDeta; 
 
-	/** 评定等级 */
-	private String evaluationGrade;
-	
-	/** 评定等级阈值名称 */
-	private String evaluationGradeName;
+	/**
+	 * 评定结果 
+	 */
+	private Integer evaluationResult; 
 
-	/** 评定结果 */
-	private Integer evaluationResult;
+	/**
+	 * 检测处置 
+	 */
+	private String detectionDispose; 
 
-	/** 检测处置 */
-	private String detectionDispose;
+	/**
+	 * 检测长度(mm) 
+	 */
+	private Double detectionLength; 
 
-	/** 检测单位 */
-	private String detectionUnit;
+	/**
+	 * 检测单位 
+	 */
+	private String detectionUnit; 
 
-	/** 检测人员 */
-	private String detectionPerson;
+	/**
+	 * 检测人员 
+	 */
+	private String detectionPerson; 
 
-	/** 监理单位 */
-	private String supervisionUnit;
+	/**
+	 * 监理单位 
+	 */
+	private String supervisionUnit; 
 
-	/** 监理工程师 */
-	private String supervisionEngineer;
+	/**
+	 * 监理工程师 
+	 */
+	private String supervisionEngineer; 
 
-	/** 采集日期 */
-	private Date collectionDate;
+	/**
+	 * 采集日期 
+	 */
+	private Date collectionDate; 
 
-	/** 审核状态 */
-	private Integer approveStatus;
+	/**
+	 * 审核状态 
+	 */
+	private Integer approveStatus; 
 
-	/** 备注 */
+	/**
+	 * 备注 
+	 */
 	private String remarks;
 	
 	public String getOid() {
@@ -172,6 +208,14 @@ public class DaqDetectionRayBo extends CommonBaseBo{
 		this.detectionReportNum = detectionReportNum;
 	}
 
+	public String getPipeSegmentOrCrossName() {
+		return pipeSegmentOrCrossName;
+	}
+
+	public void setPipeSegmentOrCrossName(String pipeSegmentOrCrossName) {
+		this.pipeSegmentOrCrossName = pipeSegmentOrCrossName;
+	}
+
 	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
 	public Date getDetectionDeta() {
 		return detectionDeta;
@@ -179,38 +223,6 @@ public class DaqDetectionRayBo extends CommonBaseBo{
 
 	public void setDetectionDeta(Date detectionDeta) {
 		this.detectionDeta = detectionDeta;
-	}
-
-	public String getDetectionType() {
-		return detectionType;
-	}
-
-	public void setDetectionType(String detectionType) {
-		this.detectionType = detectionType;
-	}
-
-	public String getDetectionTypeName() {
-		return detectionTypeName;
-	}
-
-	public void setDetectionTypeName(String detectionTypeName) {
-		this.detectionTypeName = detectionTypeName;
-	}
-
-	public String getEvaluationGrade() {
-		return evaluationGrade;
-	}
-
-	public void setEvaluationGrade(String evaluationGrade) {
-		this.evaluationGrade = evaluationGrade;
-	}
-
-	public String getEvaluationGradeName() {
-		return evaluationGradeName;
-	}
-
-	public void setEvaluationGradeName(String evaluationGradeName) {
-		this.evaluationGradeName = evaluationGradeName;
 	}
 
 	public Integer getEvaluationResult() {
@@ -227,6 +239,14 @@ public class DaqDetectionRayBo extends CommonBaseBo{
 
 	public void setDetectionDispose(String detectionDispose) {
 		this.detectionDispose = detectionDispose;
+	}
+
+	public Double getDetectionLength() {
+		return detectionLength;
+	}
+
+	public void setDetectionLength(Double detectionLength) {
+		this.detectionLength = detectionLength;
 	}
 
 	public String getDetectionUnit() {
@@ -285,12 +305,5 @@ public class DaqDetectionRayBo extends CommonBaseBo{
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
 	}
-
-	public String getPipeSegmentOrCrossName() {
-		return pipeSegmentOrCrossName;
-	}
-
-	public void setPipeSegmentOrCrossName(String pipeSegmentOrCrossName) {
-		this.pipeSegmentOrCrossName = pipeSegmentOrCrossName;
-	}
+	
 }

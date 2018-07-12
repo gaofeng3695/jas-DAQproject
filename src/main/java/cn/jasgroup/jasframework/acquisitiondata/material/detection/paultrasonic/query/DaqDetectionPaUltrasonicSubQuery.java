@@ -1,46 +1,45 @@
-package cn.jasgroup.jasframework.acquisitiondata.material.detection.infiltration.query;
+package cn.jasgroup.jasframework.acquisitiondata.material.detection.paultrasonic.query;
 
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
-import cn.jasgroup.jasframework.acquisitiondata.material.detection.infiltration.query.bo.DaqDetectionInfiltrationSubBo;
+import cn.jasgroup.jasframework.acquisitiondata.material.detection.paultrasonic.query.bo.DaqDetectionPaUltrasonicSubBo;
 import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 
 /**
- * @description 查询渗透检测子表query
+ * @description TODO
  * @author zhangyi
- * @date 2018年7月11日上午11:15:52
+ * @date 2018年7月12日上午11:09:06
  * @version V1.0
  * @since JDK 1.80
  */
 
 @QueryConfig(
-	scene ="/detectionInfiltrationSub/getPage",
-	resultClass= DaqDetectionInfiltrationSubBo.class,
+	scene = "/detectionPaUltrasonicSub/getPage", 
+	resultClass = DaqDetectionPaUltrasonicSubBo.class,
 	queryBeforeProcess = {
 		@Process(service = "daqInjectService" , method = "injectDataAuthoritySql(dataAuthoritySql)")
-	}	
+	}
 )
-public class DaqDetectionInfiltrationSubQuery extends BaseJavaQuery{
+public class DaqDetectionPaUltrasonicSubQuery extends BaseJavaQuery {
 
-	private List<String> oids;
+private List<String> oids;
 	
 	private String parentOid;
 
 	@Override
 	public String getSql() {
-		String sql = "select t.*,d.code_name as defectPropertiesName"
-				+ " from daq_detection_infiltration_sub t "
-				+ " left join sys_domain d on d.code_id = t.defect_properties"
+		String sql = "select t.*,"
+				+ " from daq_detection_pa_ultrasonic_sub t "
 				+ " where t.active = 1";
 		if(StringUtils.isNotBlank(parentOid)){
-			sql += " and parent_oid = :parentOid ";
+			sql += " and t.parent_oid = :parentOid ";
 		}
 		if (null != oids && oids.size() > 0) {
-			sql += " and oid in (:oids) ";
+			sql += " and t.oid in (:oids) ";
 		}
 		sql +=" order by t.create_datetime desc";
 		return sql;

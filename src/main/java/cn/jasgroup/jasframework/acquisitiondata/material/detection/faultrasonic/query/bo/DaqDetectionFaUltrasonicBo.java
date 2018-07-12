@@ -1,4 +1,4 @@
-package cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.query.bo;
+package cn.jasgroup.jasframework.acquisitiondata.material.detection.faultrasonic.query.bo;
 
 import java.util.Date;
 
@@ -7,91 +7,135 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 
 /**
- * @description 射线检测主表查询bo
+ * @description 全自动超声波检测主表Bo
  * @author zhangyi
- * @date 2018年7月10日下午3:50:50
+ * @date 2018年7月12日上午10:20:10
  * @version V1.0
  * @since JDK 1.80
  */
 
-public class DaqDetectionRayBo extends CommonBaseBo{
+public class DaqDetectionFaUltrasonicBo extends CommonBaseBo {
 	
 	/**
 	 * 数据oid
 	 */
 	private String oid;
 
-	/** 项目oid */
+	/**
+	 * 项目oid 
+	 */
 	private String projectOid;
 	
-	/** 项目名称 */
+	/**
+	 * 项目名称
+	 */
 	private String projectName;
 
-	/** 管线oid */
+	/**
+	 * 管线oid 
+	 */
 	private String pipelineOid;
 	
-	/** 管线名称 */
+	/**
+	 * 管线名称
+	 */
 	private String pipelineName;
 
-	/** 标段oid */
+	/**
+	 * 标段oid 
+	 */
 	private String tendersOid;
 	
+	/**
+	 * 标段名称 
+	 */
 	private String tendersName;
 
-	/** 线路段/穿跨越 */
+	/**
+	 * 线路段/穿跨越 
+	 */
 	private String pipeSegmentOrCrossOid;
 	
-	/** 线路段/穿跨越 名称*/
+	/** 
+	 * 线路段/穿跨越 名称
+	 */
 	private String pipeSegmentOrCrossName;
-	
-	/** 焊口编号 */
-	private String weldCode;
 
-	/** 检测报告编号 */
-	private String detectionReportNum;
+	/**
+	 * 焊口编号 
+	 */
+	private String weldCode; 
 
-	/** 检测日期 */
-	private Date detectionDeta;
+	/**
+	 * 检测报告编号 
+	 */
+	private String detectionReportNum; 
 
-	/** 检测类型 */
+	/**
+	 * 检测日期 
+	 */
+	private Date detectionDeta; 
+
+	/**
+	 * 检测类型 
+	 */
 	private String detectionType;
 	
-	/** 检测类型 阈值名称*/
+	/**
+	 * 检测类型 阈值名称
+	 */
 	private String detectionTypeName;
 
-	/** 评定等级 */
-	private String evaluationGrade;
-	
-	/** 评定等级阈值名称 */
-	private String evaluationGradeName;
+	/**
+	 * 检测处置 
+	 */
+	private String detectionDispose; 
 
-	/** 评定结果 */
-	private Integer evaluationResult;
+	/**
+	 * 评定结果 
+	 */
+	private Integer evaluationResult; 
 
-	/** 检测处置 */
-	private String detectionDispose;
+	/**
+	 * 检测单位 
+	 */
+	private String detectionUnit; 
 
-	/** 检测单位 */
-	private String detectionUnit;
+	/**
+	 * 检测人员 
+	 */
+	private String detectionPerson; 
 
-	/** 检测人员 */
-	private String detectionPerson;
+	/**
+	 * 审核人员 
+	 */
+	private String auditor; 
 
-	/** 监理单位 */
-	private String supervisionUnit;
+	/**
+	 * 监理单位 
+	 */
+	private String supervisionUnit; 
 
-	/** 监理工程师 */
-	private String supervisionEngineer;
+	/**
+	 * 监理工程师 
+	 */
+	private String supervisionEngineer; 
 
-	/** 采集日期 */
-	private Date collectionDate;
+	/**
+	 * 采集日期 
+	 */
+	private Date collectionDate; 
 
-	/** 审核状态 */
-	private Integer approveStatus;
+	/**
+	 * 审核状态 
+	 */
+	private Integer approveStatus; 
 
-	/** 备注 */
+	/**
+	 * 备注 
+	 */
 	private String remarks;
-	
+
 	public String getOid() {
 		return oid;
 	}
@@ -156,6 +200,14 @@ public class DaqDetectionRayBo extends CommonBaseBo{
 		this.pipeSegmentOrCrossOid = pipeSegmentOrCrossOid;
 	}
 
+	public String getPipeSegmentOrCrossName() {
+		return pipeSegmentOrCrossName;
+	}
+
+	public void setPipeSegmentOrCrossName(String pipeSegmentOrCrossName) {
+		this.pipeSegmentOrCrossName = pipeSegmentOrCrossName;
+	}
+
 	public String getWeldCode() {
 		return weldCode;
 	}
@@ -172,7 +224,7 @@ public class DaqDetectionRayBo extends CommonBaseBo{
 		this.detectionReportNum = detectionReportNum;
 	}
 
-	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
 	public Date getDetectionDeta() {
 		return detectionDeta;
 	}
@@ -197,20 +249,12 @@ public class DaqDetectionRayBo extends CommonBaseBo{
 		this.detectionTypeName = detectionTypeName;
 	}
 
-	public String getEvaluationGrade() {
-		return evaluationGrade;
+	public String getDetectionDispose() {
+		return detectionDispose;
 	}
 
-	public void setEvaluationGrade(String evaluationGrade) {
-		this.evaluationGrade = evaluationGrade;
-	}
-
-	public String getEvaluationGradeName() {
-		return evaluationGradeName;
-	}
-
-	public void setEvaluationGradeName(String evaluationGradeName) {
-		this.evaluationGradeName = evaluationGradeName;
+	public void setDetectionDispose(String detectionDispose) {
+		this.detectionDispose = detectionDispose;
 	}
 
 	public Integer getEvaluationResult() {
@@ -219,14 +263,6 @@ public class DaqDetectionRayBo extends CommonBaseBo{
 
 	public void setEvaluationResult(Integer evaluationResult) {
 		this.evaluationResult = evaluationResult;
-	}
-
-	public String getDetectionDispose() {
-		return detectionDispose;
-	}
-
-	public void setDetectionDispose(String detectionDispose) {
-		this.detectionDispose = detectionDispose;
 	}
 
 	public String getDetectionUnit() {
@@ -245,6 +281,14 @@ public class DaqDetectionRayBo extends CommonBaseBo{
 		this.detectionPerson = detectionPerson;
 	}
 
+	public String getAuditor() {
+		return auditor;
+	}
+
+	public void setAuditor(String auditor) {
+		this.auditor = auditor;
+	}
+
 	public String getSupervisionUnit() {
 		return supervisionUnit;
 	}
@@ -261,7 +305,7 @@ public class DaqDetectionRayBo extends CommonBaseBo{
 		this.supervisionEngineer = supervisionEngineer;
 	}
 
-	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
 	public Date getCollectionDate() {
 		return collectionDate;
 	}
@@ -285,12 +329,5 @@ public class DaqDetectionRayBo extends CommonBaseBo{
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
 	}
-
-	public String getPipeSegmentOrCrossName() {
-		return pipeSegmentOrCrossName;
-	}
-
-	public void setPipeSegmentOrCrossName(String pipeSegmentOrCrossName) {
-		this.pipeSegmentOrCrossName = pipeSegmentOrCrossName;
-	}
+	
 }
