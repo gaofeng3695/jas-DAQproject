@@ -11,6 +11,11 @@ import cn.jasgroup.jasframework.base.data.CommonBaseBo;
  */
 
 public class DaqDetectionInfiltrationSubBo extends CommonBaseBo{
+	
+	/**
+	 * 数据oid
+	 */
+	private String oid;
 
 	/** 主表oid */
 	private String parentOid;
@@ -29,6 +34,14 @@ public class DaqDetectionInfiltrationSubBo extends CommonBaseBo{
 
 	/** 缺陷尺寸(mm/mm²/点) */
 	private Double defectSize;
+
+	public String getOid() {
+		return oid;
+	}
+
+	public void setOid(String oid) {
+		this.oid = oid;
+	}
 
 	public String getParentOid() {
 		return parentOid;

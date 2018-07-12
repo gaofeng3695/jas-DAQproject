@@ -1,20 +1,18 @@
-package cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.query.bo;
+package cn.jasgroup.jasframework.acquisitiondata.material.detection.magneticpowder.query.bo;
 
 import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 
 /**
- * @description 射线检测子表Bo类
+ * @description 磁粉检测子表bo
  * @author zhangyi
- * @date 2018年7月10日下午5:14:07
+ * @date 2018年7月12日上午10:05:20
  * @version V1.0
  * @since JDK 1.80
  */
 
-public class DaqDetectionRaySubBo extends CommonBaseBo{
+public class DaqDetectionMagneticPowderSubBo extends CommonBaseBo{
 	
-	/**
-	 * 数据oid
-	 */
+	/** 数据oid */
 	private String oid;
 
 	/** 主表oid */

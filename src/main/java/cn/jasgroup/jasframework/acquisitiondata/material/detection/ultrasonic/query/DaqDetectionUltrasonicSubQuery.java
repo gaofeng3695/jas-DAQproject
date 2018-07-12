@@ -33,7 +33,7 @@ public class DaqDetectionUltrasonicSubQuery extends BaseJavaQuery{
 	@Override
 	public String getSql() {
 		String sql = "select t.*,d.code_name as defectPropertiesName"
-				+ " from daq_detection_ray_sub t "
+				+ " from daq_detection_ultrasonic_sub t "
 				+ " left join sys_domain d on d.code_id = t.defect_properties"
 				+ " where t.active = 1";
 		if(StringUtils.isNotBlank(parentOid)){
