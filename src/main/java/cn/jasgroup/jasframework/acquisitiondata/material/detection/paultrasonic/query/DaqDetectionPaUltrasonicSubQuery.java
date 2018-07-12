@@ -32,7 +32,7 @@ private List<String> oids;
 
 	@Override
 	public String getSql() {
-		String sql = "select t.*,"
+		String sql = "select t.*"
 				+ " from daq_detection_pa_ultrasonic_sub t "
 				+ " where t.active = 1";
 		if(StringUtils.isNotBlank(parentOid)){
