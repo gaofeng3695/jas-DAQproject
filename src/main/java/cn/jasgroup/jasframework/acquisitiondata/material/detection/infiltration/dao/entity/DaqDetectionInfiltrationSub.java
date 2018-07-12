@@ -1,11 +1,14 @@
 package cn.jasgroup.jasframework.acquisitiondata.material.detection.infiltration.dao.entity;
 
+import javax.persistence.Transient;
+
 import cn.jasgroup.jasframework.base.annotation.CommonDeleteBatchConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonGetConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
 import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
+import cn.jasgroup.jasframework.domain.utils.DomainUtil;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 
 /**
@@ -92,6 +95,14 @@ public class DaqDetectionInfiltrationSub extends CommonJdbcEntity {
 	public void setDefectSize(Double defectSize) {
 		this.defectSize = defectSize; 
 		super.setField("defectSize");
+	}
+	
+	@Transient
+	public String getDefectPropertiesName() {
+		return DomainUtil.getValue("defect_properties_domain", defectProperties); 
+	}
+
+	public void setDefectPropertiesName(String defectPropertiesName) {
 	}
 
 }
