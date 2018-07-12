@@ -8,7 +8,7 @@ import cn.jasgroup.jasframework.acquisitiondata.material.detection.ultrasonic.qu
 import cn.jasgroup.jasframework.dataaccess.base.BaseJdbcDao;
 
 /**
- * @description TODO
+ * @description 超声波检测
  * @author zhangyi
  * @date 2018年7月11日下午6:57:39
  * @version V1.0

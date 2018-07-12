@@ -27,7 +27,7 @@ import cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.service.D
  */
 
 @RestController
-@RequestMapping("/daq/DetectionRay")
+@RequestMapping("/daq/detectionRay")
 public class DaqDetectionRayController {
 
 	@Autowired

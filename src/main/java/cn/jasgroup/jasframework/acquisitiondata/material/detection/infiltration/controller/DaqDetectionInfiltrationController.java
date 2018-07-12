@@ -19,7 +19,7 @@ import cn.jasgroup.jasframework.acquisitiondata.material.detection.infiltration.
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.infiltration.service.DaqDetectionInfiltrationService;
 
 /**
- * @description TODO
+ * @description 渗透检测
  * @author zhangyi
  * @date 2018年7月11日下午4:47:34
  * @version V1.0

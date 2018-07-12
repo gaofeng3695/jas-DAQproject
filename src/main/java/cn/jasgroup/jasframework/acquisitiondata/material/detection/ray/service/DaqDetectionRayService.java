@@ -11,7 +11,7 @@ import cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.query.bo.
 import cn.jasgroup.jasframework.engine.jdbc.service.CommonDataJdbcService;
 
 /**
- * @description TODO
+ * @description 射线检测service
  * @author zhangyi
  * @date 2018年7月11日下午6:43:02
  * @version V1.0
