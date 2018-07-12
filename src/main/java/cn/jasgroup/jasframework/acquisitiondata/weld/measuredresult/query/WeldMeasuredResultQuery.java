@@ -3,6 +3,7 @@ package cn.jasgroup.jasframework.acquisitiondata.weld.measuredresult.query;
 import org.apache.commons.lang.StringUtils;
 
 import cn.jasgroup.jasframework.acquisitiondata.weld.measuredresult.query.bo.WeldMeasuredResultBo;
+import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 
@@ -13,8 +14,14 @@ import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
   * @version v1.0.0.1。
   * @since JDK1.8。
   *<p>创建日期：2018年7月11日 下午4:44:18。</p>
+  * {@link cn.jasgroup.jasframework.acquisitiondata.variate.DaqInjectService #injectDataAuthoritySql()}
  */
-@QueryConfig(scene = "/weldMeasuredResult/getPage", resultClass = WeldMeasuredResultBo.class)
+@QueryConfig(scene = "/weldMeasuredResult/getPage", 
+			 resultClass = WeldMeasuredResultBo.class,
+			 queryBeforeProcess = {
+				 @Process(service = "daqInjectService" , method = "injectDataAuthoritySql(dataAuthoritySql)")
+			 }
+)
 public class WeldMeasuredResultQuery extends BaseJavaQuery{
 
 	/**

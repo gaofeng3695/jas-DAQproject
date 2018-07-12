@@ -36,7 +36,7 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 	x="pointx",
 	y="pointy" ,
 	geometryColumnName="geom",
-	calculateType=CalculateType.SingleAnchorAndDeviation,
+	calculateType=CalculateType.Coordinates,
 	anchorClass=MedianStake.class,
 	anchorOid="medianStakeOid",
 	deviation="relativeMileage"
