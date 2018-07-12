@@ -3,6 +3,7 @@ package cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.query;
 import org.apache.commons.lang.StringUtils;
 
 import cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.query.bo.ConstructionWeldBo;
+import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 
@@ -13,8 +14,14 @@ import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
   * @version v1.0.0.1。
   * @since JDK1.8。
   *<p>创建日期：2018年7月11日 下午4:44:59。</p>
+  * {@link cn.jasgroup.jasframework.acquisitiondata.variate.DaqInjectService #injectDataAuthoritySql()}
  */
-@QueryConfig(scene = "/constructionWeld/getPage", resultClass = ConstructionWeldBo.class)
+@QueryConfig(scene = "/constructionWeld/getPage",
+			 resultClass = ConstructionWeldBo.class,
+			 queryBeforeProcess = {
+				 @Process(service = "daqInjectService" , method = "injectDataAuthoritySql(dataAuthoritySql)")
+			 }
+)
 public class ConstructionWeldQuery extends BaseJavaQuery{
 
 	/**
