@@ -40,6 +40,27 @@
 			<el-form ref="formData" :rules="rules" :model="formData" label-width="150px">
 				<jas-base-group-title name="基础数据"></jas-base-group-title>
 				<el-row :gutter="10">
+								<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="项目名称" prop="projectOid" required>
+							<el-select v-model="formData.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
+								<el-option v-for="item in domain.project" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="标段名称" prop="tendersOid" required>
+							<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
+								<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="管线名称" prop="pipelineOid" required>
+							<el-select v-model="formData.pipelineOid" clearable placeholder="请选择管线名称" size="small" >
+								<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="封堵物编号" prop="closureCode" required>
 							<el-input v-model="formData.closureCode" clearable placeholder="请输入封堵物编号" size="small"></el-input>
@@ -176,7 +197,10 @@
 					}], //材质
 					steelGrades:[],//钢管等级
 					connectionMethodsArr:[],
-					coatingMethodsArr:[]
+					coatingMethodsArr:[],
+					project: [],
+					pipeline: [],
+					tenders: [],
 					//监理单位
 				},
 				ischoose:false,
@@ -184,6 +208,21 @@
 					closureCode: [{
 						required: true,
 						message: '封堵物编号为必填项',
+						trigger: 'change'
+					}],
+					projectOid: [{
+						required: true,
+						message: '项目名称为必填项',
+						trigger: 'change'
+					}],
+					tendersOid: [{
+						required: true,
+						message: '标段名称为必填项',
+						trigger: 'change'
+					}],
+					pipelineOid: [{
+						required: true,
+						message: '管线名称为必填项',
 						trigger: 'change'
 					}],
 					closureType: [{
@@ -214,14 +253,17 @@
 		mounted: function () {
 			var that = this;
 			var param = window.jasTools.base.getParamsInUrl(location.href);
-			that.requestDomainFromBizTable("steel_grade_domain", function (arr) {
+			that.requestDomainFromCommonTable("steel_grade_domain", function (arr) {
 				that.domain.steelGrades = arr;
 			});
-			that.requestDomainFromBizTable("connection_methods_domain", function (arr) {
+			that.requestDomainFromCommonTable("connection_methods_domain", function (arr) {
 				that.domain.connectionMethodsArr = arr;
 			});
-			that.requestDomainFromBizTable("coating_methods_domain", function (arr) {
+			that.requestDomainFromCommonTable("coating_methods_domain", function (arr) {
 				that.domain.coatingMethodsArr = arr;
+			});
+			that.requestDomainFromBizTable('/daq/privilege/getProjectList.do', {}, function (arr) {
+				that.domain.project = arr;
 			});
 			if (param.oid) {
 				this.oid = param.oid;
@@ -240,7 +282,16 @@
 			cancel: function (param) {
 				window.parent.jasTools.dialog.close(param);
 			},
-			requestDomainFromBizTable: function (domainName,cb) {
+			requestDomainFromBizTable: function (url, obj, cb) {
+				var that = this;
+				var url = jasTools.base.rootPath + url;
+				jasTools.ajax.post(url, obj, function (data) {
+					cb && cb(data.rows);
+				}, function () {
+					cb && cb([]);
+				});
+			},
+			requestDomainFromCommonTable: function (domainName,cb) {
 				var that = this;
 				var url = jasTools.base.rootPath + "/jasframework/sysdoman/getDoman.do";
 				jasTools.ajax.get(url, {
@@ -254,6 +305,39 @@
 					});
 					cb && cb(aDomain);
 				});
+			},
+			projectChanged: function (val) {
+				var that = this;
+				if (val) {
+					this.requestDomainFromBizTable(
+						'/daq/privilege/getTendersList.do', {
+							projectOid: val
+						},
+						function (arr) {
+							that.domain.tenders = arr;
+						});
+				} else {
+					that.domain.tenders = [];
+					that.formData.tendersOid = '';
+					that.domain.pipeline = [];
+					that.formData.pipelineOid = '';
+				}
+			},
+			tendersChanged: function (val) { //根据标段触发管线列表
+				var that = this;
+				if (val) {
+					this.requestDomainFromBizTable(
+						'/daq/privilege/getPipelineListByTendersOid.do', {
+							tendersOid: val
+						},
+						function (arr) {
+							that.domain.pipeline = arr;
+						});
+				} else {
+					that.domain.pipeline = [];
+					that.formData.pipelineOid = '';
+				}
+				
 			},
 			materialChanged:function(val){
 				if(val==0){
@@ -302,7 +386,9 @@
 					for (var key in that.formData) {
 						that.formData[key] = data.rows[0][key];
 					}
-					that.materialChanged(that.formData.material)
+					that.materialChanged(that.formData.material);
+					that.projectChanged(that.formData.projectOid);
+					that.tendersChanged(that.formData.tendersOid);
 				});
 			},
 		},

@@ -24,19 +24,19 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
   *<p>创建日期：2018年7月4日 下午3:32:00。</p>
  */
 @CommonSaveConfig(
-		scene = "/closure/save"
-	)
-	@CommonUpdateConfig(
-		scene = "/closure/update"
-	)
-	@CommonDeleteConfig(
-		scene = "/closure/delete"
-	)
+	scene = "/closure/save"
+)
+@CommonUpdateConfig(
+	scene = "/closure/update"
+)
+@CommonDeleteConfig(
+	scene = "/closure/delete"
+)
 @UniqueConstraints(
-		strategys ={
-			@UniqueConstraintStrategy(columnNames={"closureCode"})
-		}
-	)
+	strategys ={
+		@UniqueConstraintStrategy(columnNames={"closureCode"})
+	}
+)
 @JdbcEntity(name="daq_material_closure")
 public class Closure extends CommonJdbcEntity{
 

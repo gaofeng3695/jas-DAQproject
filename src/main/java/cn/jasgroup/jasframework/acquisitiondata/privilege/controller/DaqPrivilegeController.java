@@ -223,4 +223,29 @@ public class DaqPrivilegeController extends BaseController{
 		}
 		return result;
 	}
+	/***
+	  * <p>功能描述：根据管线oid和穿越类型获取当前用户所在部门及下级部门下的穿越列表。</p>
+	  * <p> 雷凯。</p>	
+	  * @param request
+	  * @param param
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年7月10日 下午6:18:12。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="/getCrossList",method = RequestMethod.POST)
+	@ResponseBody
+	public Object getCrossList(HttpServletRequest request,@RequestBody Map<String,String> param){
+		ListResult<Map<String,Object>> result = null;
+		try {
+			String pipelineOid = param.get("pipelineOid");
+			String crossWay = param.get("crossWay");
+			List<Map<String,Object>> rows = this.daqPrivilegeService.getCrossList(pipelineOid,crossWay);
+			result = new ListResult<>(1, "200", "ok", rows);
+		} catch (Exception e) {
+			result = new ListResult<>(-1, "400", "error");
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

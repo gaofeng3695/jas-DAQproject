@@ -131,4 +131,27 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 		String sql ="select t.oid as key,t.median_stake_code as value from (select v.*,n.median_stake_code as start_median_stake_code,m.median_stake_code as end_median_stake_code from v_daq_pipe_segment_cross v left join (select oid,median_stake_code from daq_median_stake where active=1) n on n.oid=v.start_stake_oid left join (select oid,median_stake_code from daq_median_stake where active=1) m on m.oid=v.end_stake_oid) vv left join daq_median_stake t on t.median_stake_code>=vv.start_median_stake_code and t.median_stake_code<=vv.end_median_stake_code where vv.oid =?";
 		return this.queryForList(sql, new Object[]{pipeSegmentOrCrossOid});
 	}
+	
+	/***
+	  * <p>功能描述：根据管线oid和穿越类型获取当前用户所在部门及下级部门下的穿越列表。</p>
+	  * <p> 雷凯。</p>	
+	  * @param pipelineOid
+	  * @param crossWay 穿越方式
+	  * @param unitOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年7月10日 下午6:15:06。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String,Object>> getCrossList(String pipelineOid,String crossWay,String unitOid){
+		String sql = "with recursive pri_unit_temp(oid,parent_id) as ("
+				+ "select t.oid,t.parent_id from pri_unit t where t.oid='"+unitOid+"' and t.active=1 "
+				+ "union all "
+				+ "select t.oid,t.parent_id from pri_unit t inner join pri_unit_temp b on t.parent_id=b.oid and t.active=1 "
+				+ ")"
+				+ "select distinct c.oid as key,c.cross_code as value,c.cross_length as length from daq_cross c left join daq_implement_scope_ref t on t.scope_oid=c.oid where t.unit_oid in (select oid from pri_unit_temp) ";
+			sql += " and t.pipeline_oid='"+pipelineOid+"'";
+			sql +="  and c.cross_way_code='"+crossWay+"'";
+		return this.queryForList(sql, null);
+	}
 }

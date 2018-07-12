@@ -225,6 +225,9 @@
 						});
 				} else {
 					that.domain.tenders = [];
+					that.topSearch.tendersOid = '';
+					that.domain.constructionUnitArr = [];
+					that.topSearch.constructionUnit = '';
 				}
 			},
 			tendersChanged: function (val) { //根据标段触发管线列表
@@ -240,6 +243,7 @@
 							});
 				} else {
 					that.domain.constructionUnitArr = [];
+					that.topSearch.constructionUnit = '';
 				}
 			},
 			searchList: function () {

@@ -3,6 +3,7 @@ package cn.jasgroup.jasframework.acquisitiondata.weld.cutweld.query;
 import org.apache.commons.lang.StringUtils;
 
 import cn.jasgroup.jasframework.acquisitiondata.weld.cutweld.query.bo.CutWeldBo;
+import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 
@@ -13,8 +14,14 @@ import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
   * @version v1.0.0.1。
   * @since JDK1.8。
   *<p>创建日期：2018年7月10日 上午8:58:19。</p>
+  * {@link cn.jasgroup.jasframework.acquisitiondata.variate.DaqInjectService #injectDataAuthoritySql()}
  */
-@QueryConfig(scene = "/cutWeld/getPage", resultClass = CutWeldBo.class)
+@QueryConfig(scene = "/cutWeld/getPage", 
+			 resultClass = CutWeldBo.class,
+			 queryBeforeProcess = {
+			 	 @Process(service = "daqInjectService" , method = "injectDataAuthoritySql(dataAuthoritySql)")
+			 }
+)
 public class CutWeldQuery extends BaseJavaQuery{
 	
 	/**
