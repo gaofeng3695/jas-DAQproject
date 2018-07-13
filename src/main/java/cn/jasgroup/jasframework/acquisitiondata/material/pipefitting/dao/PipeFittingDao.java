@@ -27,28 +27,28 @@ public class PipeFittingDao{
 		String sql= null;
 		switch (pipeTypeCode) {
 		case "pipe_type_code_001"://直钢管
-			sql = "select t.pipe_code as value,t.pipe_code as key from daq_material_pipe t where t.active=1 and t.is_cut=1 and t.is_use=0 and t.is_cold_bend=0";
+			sql = "select pipe_code as value,pipe_code as key from daq_material_pipe t where active=1 and is_cut=1 and is_use=0 and is_cold_bend=0";
 			break;
 		case "pipe_type_code_002"://热煨弯管
-			sql = "select t.hot_bends_code as key,t.hot_bends_code as value from daq_material_hot_bends  t where t.active=1 and t.is_use=0";
+			sql = "select hot_bends_code as key,hot_bends_code as value from daq_material_hot_bends  t where active=1 and is_use=0";
 			break;
 		case "pipe_type_code_003"://三通
-			sql = "select t.tee_code as key,t.tee_code as value from daq_material_tee  t where t.active=1 and t.is_use=0";
+			sql = "select tee_code as key,tee_code as value from daq_material_tee  t where active=1 and is_use=0";
 			break;
 		case "pipe_type_code_004"://阀门
 			sql = "";
 			break;
 		case "pipe_type_code_005"://绝缘接头
-			sql = "select t.manufacturer_code as key,t.manufacturer_code as value from daq_material_insulated_joint  t where t.active=1 and t.is_use=0";
+			sql = "select manufacturer_code as key,manufacturer_code as value from daq_material_insulated_joint  t where active=1 and is_use=0";
 			break;
 		case "pipe_type_code_006"://大小头
-			sql = "select t.reducer_code as key,t.reducer_code as value from daq_material_reducer  t where t.active=1 and t.is_use=0";
+			sql = "select reducer_code as key,reducer_code as value from daq_material_reducer  t where active=1 and is_use=0";
 			break;
 		case "pipe_type_code_007"://封堵物
-			sql = "select t.closure_code as key,t.closure_code as value from daq_material_closure  t where t.active=1 and t.is_use=0";
+			sql = "select closure_code as key,closure_code as value from daq_material_closure  t where active=1 and is_use=0";
 			break;
 		case "pipe_type_code_008"://冷弯管
-			sql = "select t.pipe_cold_bending_code as key,t.pipe_cold_bending_code as value from daq_material_pipe_cold_bending  t where t.active=1 and t.is_use=0 and t.pipe_segment_or_cross_oid='"+pipeSegmentOrCrossOid+"'";
+			sql = "select pipe_cold_bending_code as key,pipe_cold_bending_code as value from daq_material_pipe_cold_bending  t where active=1 and is_use=0 and pipe_segment_or_cross_oid='"+pipeSegmentOrCrossOid+"'";
 			break;
 		}
 		return this.baseJdbcTemplate.queryForListHump(sql, null);
@@ -72,28 +72,28 @@ public class PipeFittingDao{
 		}
 		switch (pipeTypeCode) {
 		case "pipe_type_code_001"://直钢管
-			sql = "update daq_material_pipe t set t.project_oid='"+projectOid+"',t.tenders_oid='"+tendersOid+"',t.pipeline_oid='"+pipelineOid+"',t.is_use="+isUse+" where t.pipe_code='"+pipeCode+"'";
+			sql = "update daq_material_pipe set project_oid='"+projectOid+"',tenders_oid='"+tendersOid+"',pipeline_oid='"+pipelineOid+"',is_use="+isUse+" where pipe_code='"+pipeCode+"'";
 			break;
 		case "pipe_type_code_002"://热煨弯管
-			sql = "update daq_material_hot_bends t set t.project_oid='"+projectOid+"',t.tenders_oid='"+tendersOid+"',t.pipeline_oid='"+pipelineOid+"',t.is_use="+isUse+" where t.hot_bends_code='"+pipeCode+"'";
+			sql = "update daq_material_hot_bends set project_oid='"+projectOid+"',tenders_oid='"+tendersOid+"',pipeline_oid='"+pipelineOid+"',is_use="+isUse+" where hot_bends_code='"+pipeCode+"'";
 			break;
 		case "pipe_type_code_003"://三通
-			sql = "update daq_material_tee t set t.project_oid='"+projectOid+"',t.tenders_oid='"+tendersOid+"',t.pipeline_oid='"+pipelineOid+"',t.is_use="+isUse+" where t.tee_code='"+pipeCode+"'";
+			sql = "update daq_material_tee set project_oid='"+projectOid+"',tenders_oid='"+tendersOid+"',pipeline_oid='"+pipelineOid+"',is_use="+isUse+" where tee_code='"+pipeCode+"'";
 			break;
 		case "pipe_type_code_004"://阀门
 			sql = "";
 			break;
 		case "pipe_type_code_005"://绝缘接头
-			sql = "update daq_material_insulated_joint t set t.project_oid='"+projectOid+"',t.tenders_oid='"+tendersOid+"',t.pipeline_oid='"+pipelineOid+"',t.is_use="+isUse+" where t.manufacturer_code='"+pipeCode+"'";
+			sql = "update daq_material_insulated_joint set project_oid='"+projectOid+"',tenders_oid='"+tendersOid+"',pipeline_oid='"+pipelineOid+"',is_use="+isUse+" where manufacturer_code='"+pipeCode+"'";
 			break;
 		case "pipe_type_code_006"://大小头
-			sql = "update daq_material_reducer t set t.project_oid='"+projectOid+"',t.tenders_oid='"+tendersOid+"',t.pipeline_oid='"+pipelineOid+"',t.is_use="+isUse+" where t.reducer_code='"+pipeCode+"'";
+			sql = "update daq_material_reducer set project_oid='"+projectOid+"',tenders_oid='"+tendersOid+"',pipeline_oid='"+pipelineOid+"',is_use="+isUse+" where reducer_code='"+pipeCode+"'";
 			break;
 		case "pipe_type_code_007"://封堵物
-			sql = "update daq_material_closure t set t.project_oid='"+projectOid+"',t.tenders_oid='"+tendersOid+"',t.pipeline_oid='"+pipelineOid+"',t.is_use="+isUse+" where t.closure_code='"+pipeCode+"'";
+			sql = "update daq_material_closure set project_oid='"+projectOid+"',tenders_oid='"+tendersOid+"',pipeline_oid='"+pipelineOid+"',is_use="+isUse+" where closure_code='"+pipeCode+"'";
 			break;
 		case "pipe_type_code_008"://冷弯管
-			sql = "update daq_material_pipe_cold_bending t set t.is_use="+isUse+" where t.pipe_cold_bending_code='"+pipeCode+"'";
+			sql = "update daq_material_pipe_cold_bending set is_use="+isUse+" where pipe_cold_bending_code='"+pipeCode+"'";
 			break;
 		}
 		this.baseJdbcTemplate.update(sql, null);
