@@ -225,6 +225,7 @@
 | privilege-code | 1.按钮权限编码，为空则拥有所有权限 <br />2.权限数组['bt_add','bt_update','bt_delete',<br />'bt_select','bt_export','bt_import','bt_position '] | string/array |        |        |
 |  templateCode  |                   导入导出组件用的模板编号                   |    string    |        |        |
 |   className    |                  导入导出组件用的后台接口类                  |    string    |        |        |
+|    selfBtns    |                本身按钮的显隐，可选['locate']                |    array     |        |        |
 
 > 方法
 

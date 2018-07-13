@@ -307,6 +307,7 @@ button {
     box-sizing: border-box;
     padding-top: 10px;
     padding-bottom: 20px;
+    padding: 0px 0px 10px;
 }
 
 .jas-iframe-dialog .dialog-iframe {
