@@ -15,7 +15,7 @@ public class WorkPersonDao {
 	private BaseJdbcDao baseJdbcDao;
 
 	public List<Map<String, Object>> getListByCondition(String workUnitOid, String str) {
-		String sql = "select oid as key, personnel_name as value from daq_work_personnel where work_unit_oid='"+workUnitOid+"' and personnel_type in ("+str+");";
+		String sql = "select oid as key, personnel_name as value from daq_work_personnel where active=1 and work_unit_oid='"+workUnitOid+"' and personnel_type in ("+str+");";
 		return baseJdbcDao.queryForList(sql, null);
 	}
 
