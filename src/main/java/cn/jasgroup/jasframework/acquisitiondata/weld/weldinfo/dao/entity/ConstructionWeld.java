@@ -21,7 +21,8 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
  * <p>类描述：焊口实体类
  * {@link cn.jasgroup.jasframework.acquisitiondata.material.pipefitting.service.PipeFittingService #saveChanagePipeFittingUseState()}
  * {@link cn.jasgroup.jasframework.acquisitiondata.material.pipefitting.service.PipeFittingService #updateChanagePipeFittingUseState()}
- * {@link cn.jasgroup.jasframework.acquisitiondata.material.pipefitting.service.PipeFittingService #deleteChanagePipeFittingUseState()}</p>
+ * {@link cn.jasgroup.jasframework.acquisitiondata.material.pipefitting.service.PipeFittingService #deleteChanagePipeFittingUseState()}
+ * {@link cn.jasgroup.jasframework.acquisitiondata.material.pipefitting.service.PipeFittingService #updateChanageBeforeAdvice()}</p>
  * @author admin 。
  * @version v1.0.0.1。
  * @since JDK1.8.0_101。
@@ -35,6 +36,9 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 )
 @CommonUpdateConfig(
 	scene = "/constructionWeld/update",
+	beforeAdvice={
+			@Process(service = "pipeFittingService", method = "updateChanageBeforeAdvice()")
+		},
 	afterAdvice={
 			@Process(service = "pipeFittingService", method = "updateChanagePipeFittingUseState()")
 		}

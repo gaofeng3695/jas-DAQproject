@@ -12,6 +12,7 @@ import cn.jasgroup.jasframework.acquisitiondata.material.pipefitting.dao.PipeFit
 import cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.dao.WeldDao;
 import cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.dao.entity.ConstructionWeld;
 import cn.jasgroup.jasframework.engine.hibernate.service.CommonDataHibernateService;
+import cn.jasgroup.jasframework.support.BaseEntityThreadLocalHolder;
 
 @Service
 @Transactional
@@ -65,6 +66,15 @@ public class PipeFittingService extends CommonDataHibernateService{
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public void updateChanagePipeFittingUseState(ConstructionWeld constructionWeld){
+		ConstructionWeld oldConstructionWeld = (ConstructionWeld) BaseEntityThreadLocalHolder.getEntitySnap();
+		String oldFrontPipeCode = oldConstructionWeld.getFrontPipeCode();
+		String oldFrontPipeTypeCode = oldConstructionWeld.getFrontPipeType();
+		this.pipeFittingDao.updatePipeFitting("", "", "", oldFrontPipeCode, oldFrontPipeTypeCode,0);
+		String oldBackPipeCode = oldConstructionWeld.getBackPipeCode();
+		String oldBackPipeTypeCode = oldConstructionWeld.getBackPipeType();
+		this.pipeFittingDao.updatePipeFitting("", "", "", oldBackPipeCode, oldBackPipeTypeCode,0);
+		
+		
 		String projectOid = constructionWeld.getProjectOid();
 		String tendersOid = constructionWeld.getTendersOid();
 		String pipelineOid = constructionWeld.getPipelineOid();
@@ -75,13 +85,10 @@ public class PipeFittingService extends CommonDataHibernateService{
 		String backPipeTypeCode = constructionWeld.getBackPipeType();
 		this.pipeFittingDao.updatePipeFitting(projectOid, tendersOid, pipelineOid, backPipeCode, backPipeTypeCode,1);
 		
+	}
+	public void updateChanageBeforeAdvice(ConstructionWeld constructionWeld){
 		ConstructionWeld oldConstructionWeld = (ConstructionWeld) weldDao.find(constructionWeld.getOid());
-		String oldFrontPipeCode = oldConstructionWeld.getFrontPipeCode();
-		String oldFrontPipeTypeCode = oldConstructionWeld.getFrontPipeType();
-		this.pipeFittingDao.updatePipeFitting("", "", "", oldFrontPipeCode, oldFrontPipeTypeCode,0);
-		String oldBackPipeCode = oldConstructionWeld.getBackPipeCode();
-		String oldBackPipeTypeCode = oldConstructionWeld.getBackPipeType();
-		this.pipeFittingDao.updatePipeFitting("", "", "", oldBackPipeCode, oldBackPipeTypeCode,0);
+		BaseEntityThreadLocalHolder.setEntitySnap(oldConstructionWeld);
 	}
 	/***
 	  * <p>功能描述：删除焊口信息时更新管件信息。</p>
