@@ -23,7 +23,7 @@ public class WorkPersonService {
 			str = typeArray[0];
 		}else{
 			for (int i = 0; i < typeArray.length-1; i++) {
-				str = "'"+typeArray[i]+"',";
+				str += "'"+typeArray[i]+"',";
 			}
 			str += "'"+typeArray[typeArray.length-1]+"'";
 		}
