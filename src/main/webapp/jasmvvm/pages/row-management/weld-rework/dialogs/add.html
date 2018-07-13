@@ -68,7 +68,7 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-					
+
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="施工单位" prop="constructUnit" required>
 							<el-select v-model="formData.constructUnit" disabled placeholder="请选择施工单位" size="small">
@@ -76,20 +76,20 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-			 <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="施工机组代号" prop="workUnitOid" required>
 							<el-select v-model="formData.workUnitOid" placeholder="请选择施工机组代号" size="small" @change="workUnitChange">
 								<el-option v-for="item in domain.workUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="焊接日期">
 							<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入焊接日期" v-model="formData.weldDate" size="small" style="width: 100%;">
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="打底人员">
 							<el-select v-model="formData.padderOid" clearable placeholder="请选择打底人员" size="small">
 								<el-option v-for="item in domain.persons" :key="item.key" :label="item.value" :value="item.key"> </el-option>
@@ -103,7 +103,7 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-				
+
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="盖面人员">
 							<el-select v-model="formData.renderOid" clearable placeholder="请选择盖面人员" size="small">
@@ -111,7 +111,7 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-				
+
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="监理单位" prop="supervisionUnit" required>
 							<el-select v-model="formData.supervisionUnit" clearable placeholder="请选择监理单位" size="small">
@@ -141,7 +141,7 @@
 				</el-row>
 				<jas-base-group-title name="返修数据"></jas-base-group-title>
 				<el-row>
-				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="返修口编号" prop="weldOid" required>
 							<el-select v-model="formData.weldOid" clearable placeholder="请选择线路段" size="small" @change="weldChanged">
 								<el-option v-for="item in domain.welds" :key="item.key" :label="item.value" :value="item.key"> </el-option>
@@ -165,10 +165,13 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="焊接工艺规格" prop="weldProduce" required>
-							<el-input v-model="formData.weldProduce" clearable placeholder="请输入焊接工艺规格" size="small"></el-input>
+							<el-select v-model="formData.weldProduce" clearable placeholder="请选择焊接工艺规格" size="small" @change="weldChanged">
+								<el-option v-for="item in domain.weldProduces" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+							<!--<el-input v-model="formData.weldProduce" clearable placeholder="请输入焊接工艺规格" size="small"></el-input>-->
 						</el-form-item>
 					</el-col>
-		           
+
 				</el-row>
 				<jas-base-group-title name="其他信息"></jas-base-group-title>
 				<el-row>
@@ -221,14 +224,9 @@
 					welds: [], //返修焊口编号
 					supervisionUnits: [], //监理单位
 					constructUnits: [], //施工单位
-					workUnits:[{
-						key:"1",
-						value:"1"
-					}],//机组
-					persons:[{
-						key:"1",
-						name:"test"
-					}]
+					workUnits: [], //机组
+					weldProduces: [], //焊接工艺
+					persons: []
 
 				},
 				rules: {
@@ -282,13 +280,32 @@
 						message: '监理单位为必填项',
 						trigger: 'change'
 					}],
-
+					weldProduce: [{
+						required: true,
+						message: '焊接工艺规格为必填项',
+						trigger: 'change'
+					}],
 				},
 				formData: {
 					projectOid: "",
 					tendersOid: "",
 					pipelineOid: "",
 					pipeSegmentOrCrossOid: "",
+					constructUnit:'',
+					workUnitOid:"",
+					weldDate:"",
+					coverOid: "",
+				      padderOid: "",
+				      renderOid: "",
+				      supervisionUnit:"",
+				      supervisionEngineer:"",
+				      collectionPerson:"",
+				      collectionDate:"",
+				      weldOid:"",
+				      reworkWeldCode:"",
+				      weldRodBatchNum:"",
+				      weldWireBatchNum:"",
+				      weldProduce:"",
 					remarks: ""
 				}
 			}
@@ -371,7 +388,40 @@
 					that.formData.pipeSegmentOrCrossOid = '';
 					that.domain.supervisionUnits = [];
 					that.formData.supervisionUnit = '';
+				}
+				that.getWorkUints(val); //获取机组
+				that.getWeldproduct(val); //获取焊接工艺
+			},
+			getWeldproduct: function (val) {
+				var that = this;
+				if (val) {
+					this.requestDomainFromBizTable(
+						'/daq/weldProduct/getListByCondition.do', {
+							projectOid: val,
 
+						},
+						function (arr) {
+							that.domain.weldProduces = arr;
+						});
+				} else {
+					that.domain.weldProduces = [];
+					that.formData.weldProduce = '';
+				}
+			},
+			getWorkUints: function (val) {
+				var that = this;
+				if (val) {
+					this.requestDomainFromBizTable(
+						'/daq/workUnit/getWorkUnitList.do', {
+							projectOid: val,
+							types: "work_unit_type_code_001,work_unit_type_code_010,work_unit_type_code_012"
+						},
+						function (arr) {
+							that.domain.workUnits = arr;
+						});
+				} else {
+					that.domain.workUnits = [];
+					that.formData.workUnitOid = '';
 				}
 			},
 			tendersChanged: function (val) { //根据标段触发管线列表
@@ -453,8 +503,9 @@
 				if (val) {
 					this
 						.requestDomainFromBizTable(
-							'/daq/reworkWeld/getPersonByWorkUnit.do', {
-								workUnitOid: val
+							'/daq/workPerson/getWorkPersonList.do', {
+								workUnitOid: val,
+								"types":"personnel_type_code_005,personnel_type_code_001"
 							},
 							function (arr) {
 								that.domain.persons = arr;
@@ -516,9 +567,9 @@
 					}
 					that.projectChanged(data.rows[0].projectOid);
 					that.tendersChanged(data.rows[0].tendersOid);
-					that.getSupervisionUnit(data.rows[0].tendersOid);
 					that.pipelineChanged(data.rows[0].pipelineOid);
 					that.pipeSegmentChanged(data.rows[0].pipeSegmentOrCrossOid);
+					that.workUnitChange(data.rows[0].workUnitOid);
 				});
 			},
 		},
