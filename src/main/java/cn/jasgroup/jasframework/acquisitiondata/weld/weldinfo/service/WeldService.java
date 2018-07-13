@@ -21,6 +21,4 @@ public class WeldService extends CommonDataHibernateService{
 	public List<Map<String,Object>> getWeldList(String pipeSegmentOrCrossOid){
 		return this.weldDao.getWeldList(pipeSegmentOrCrossOid);
 	}
-	
-	
 }

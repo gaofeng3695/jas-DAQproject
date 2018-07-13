@@ -9,8 +9,8 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import cn.jasgroup.jasframework.acquisitiondata.material.pipefitting.dao.PipeFittingDao;
+import cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.dao.WeldDao;
 import cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.dao.entity.ConstructionWeld;
-import cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.service.WeldService;
 import cn.jasgroup.jasframework.engine.hibernate.service.CommonDataHibernateService;
 
 @Service
@@ -21,7 +21,7 @@ public class PipeFittingService extends CommonDataHibernateService{
 	private PipeFittingDao pipeFittingDao;
 	
 	@Resource
-	private WeldService weldService;
+	private WeldDao weldDao;
 	
 	/***
 	  * <p>功能描述：根据管件类型获取相应的管件列表。</p>
@@ -53,7 +53,7 @@ public class PipeFittingService extends CommonDataHibernateService{
 		this.pipeFittingDao.updatePipeFitting(projectOid, tendersOid, pipelineOid, frontPipeCode, frontPipeTypeCode,1);
 		String backPipeCode = constructionWeld.getBackPipeCode();
 		String backPipeTypeCode = constructionWeld.getBackPipeType();
-		this.pipeFittingDao.updatePipeFitting(projectOid, tendersOid, pipelineOid, backPipeCode, backPipeTypeCode,0);
+		this.pipeFittingDao.updatePipeFitting(projectOid, tendersOid, pipelineOid, backPipeCode, backPipeTypeCode,1);
 	}
 	
 	/**
@@ -75,7 +75,7 @@ public class PipeFittingService extends CommonDataHibernateService{
 		String backPipeTypeCode = constructionWeld.getBackPipeType();
 		this.pipeFittingDao.updatePipeFitting(projectOid, tendersOid, pipelineOid, backPipeCode, backPipeTypeCode,1);
 		
-		ConstructionWeld oldConstructionWeld = (ConstructionWeld) weldService.get(ConstructionWeld.class, constructionWeld.getOid());
+		ConstructionWeld oldConstructionWeld = (ConstructionWeld) weldDao.find(constructionWeld.getOid());
 		String oldFrontPipeCode = oldConstructionWeld.getFrontPipeCode();
 		String oldFrontPipeTypeCode = oldConstructionWeld.getFrontPipeType();
 		this.pipeFittingDao.updatePipeFitting("", "", "", oldFrontPipeCode, oldFrontPipeTypeCode,0);
@@ -92,7 +92,7 @@ public class PipeFittingService extends CommonDataHibernateService{
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public void deleteChanagePipeFittingUseState(ConstructionWeld constructionWeld){
-		ConstructionWeld oldConstructionWeld = (ConstructionWeld) weldService.get(ConstructionWeld.class, constructionWeld.getOid());
+		ConstructionWeld oldConstructionWeld = (ConstructionWeld) weldDao.find(constructionWeld.getOid());
 		String oldFrontPipeCode = oldConstructionWeld.getFrontPipeCode();
 		String oldFrontPipeTypeCode = oldConstructionWeld.getFrontPipeType();
 		this.pipeFittingDao.updatePipeFitting("", "", "", oldFrontPipeCode, oldFrontPipeTypeCode,0);
