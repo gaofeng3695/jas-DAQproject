@@ -403,9 +403,36 @@
 				},
 				formData: {
 					projectOid: "",
-					tendersOid: "",
 					pipelineOid: "",
+					tendersOid: "",
 					pipeSegmentOrCrossOid: "",
+					weldCode: null,
+					weldType: "",
+					weldMethod: "",
+					medianStakeOid: "",
+					relativeMileage: "",
+					frontPipeType: "",
+					frontPipeCode: null,
+					backPipeType: null,
+					backPipeCode: null,
+					weldRodBatchNum: null,
+					weldWireBatchNum: null,
+					weldProduce: null,
+					surfaceCheck: null,
+					constructUnit: null,
+					workUnitOid: null,
+					coverOid: null,
+					padderOid: null,
+					renderOid: null,
+					isGoldeJoint: null,
+					isPipeHead: null,
+					constructDate: null,
+					supervisionUnit: null,
+					supervisionEngineer: null,
+					collectionPerson: null,
+					collectionDate: null,
+					//    "approveStatus": null,
+					//  "geoState": "正常",
 					remarks: ""
 				}
 			}
@@ -620,7 +647,7 @@
 							});
 				} else {
 					that.domain.frontPipeCodes = [];
-					that.formData.frontPipeCode="";
+					that.formData.frontPipeCode = "";
 				}
 			},
 			backpipeChange: function (val) { //触发后管件编号
@@ -681,7 +708,7 @@
 			// },
 			getDetailByObjectId: function () {
 				var that = this;
-				var url = jasTools.base.rootPath + "/jdbc/commonData/reworkWeld/getPage.do";
+				var url = jasTools.base.rootPath + "/jdbc/commonData/constructionWeld/getPage.do";
 				jasTools.ajax.post(url, {
 					oid: that.oid
 				}, function (data) {
@@ -693,6 +720,9 @@
 					that.getSupervisionUnit(data.rows[0].tendersOid);
 					that.pipelineChanged(data.rows[0].pipelineOid);
 					that.pipeSegmentChanged(data.rows[0].pipeSegmentOrCrossOid);
+					that.getWorkPerson(data.rows[0].workUnitOid);
+					that.backpipeChange(data.rows[0].backPipeType);
+					that.frontpipeChange(data.rows[0].frontPipeType);
 				});
 			},
 		},
