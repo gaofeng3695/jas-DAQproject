@@ -57,8 +57,9 @@ public class ReworkWeldQuery extends BaseJavaQuery {
 	@Override
 	public String getQuerySql() {
 		String sql ="SELECT wrw.oid,wrw.project_oid,pro.project_name, wrw.pipeline_oid,pi.pipeline_name,wrw.tenders_oid,te.tenders_name,"
-					+ "wrw.pipe_segment_or_cross_oid,vpsc.name,wrw.weld_oid, cw.weld_code, wrw.rework_weld_code, wrw.weld_rod_batch_num,"
-					+ "wrw.weld_wire_batch_num, wrw.weld_produce,wrw.cover_oid,wrw.padder_oid,wrw.render_oid,wrw.weld_date,"
+					+ "wrw.pipe_segment_or_cross_oid,vpsc.name as pipe_segment_or_cross_name,wrw.weld_oid, cw.weld_code, wrw.rework_weld_code, "
+					+ "wrw.weld_rod_batch_num,wrw.weld_wire_batch_num, wrw.weld_produce, wps.weld_produce_code, wrw.cover_oid, wp.personnel_name as cover_name, "
+					+ "wrw.padder_oid, wpe.personnel_name as padder_name,wrw.render_oid, wper.personnel_name as render_name, wrw.weld_date,"
 					+ "wrw.construct_unit, u.unit_name as construct_unit_name,wrw.work_unit_oid, wu.work_unit_code, wrw.supervision_unit,"
 					+ "pu.unit_name as supervision_unit_name, wrw.supervision_engineer,wrw.collection_person,wrw.collection_date,wrw.remarks,"
 					+ "wrw.create_user_id,wrw.create_user_name,wrw.create_datetime,wrw.modify_user_id,wrw.modify_user_name,	wrw.modify_datetime,wrw.active"
@@ -71,6 +72,10 @@ public class ReworkWeldQuery extends BaseJavaQuery {
 					+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) pu on pu.oid = wrw.supervision_unit "
 					+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) u on u.oid = wrw.construct_unit "
 					+ "LEFT JOIN (select oid, work_unit_code, active from daq_work_unit where active=1) wu ON wu.oid = wrw.work_unit_oid "
+					+ "LEFT JOIN (SELECT oid, weld_produce_code, active FROM daq_weld_produce_specification where active=1) wps ON wps.oid = wrw.weld_produce "
+					+ "LEFT JOIN (SELECT oid, personnel_name, active FROM daq_work_personnel where active=1) wp ON wp.oid = wrw.cover_oid "
+					+ "LEFT JOIN (SELECT oid, personnel_name, active FROM daq_work_personnel where active=1) wpe ON wpe.oid = wrw.padder_oid "
+					+ "LEFT JOIN (SELECT oid, personnel_name, active FROM daq_work_personnel where active=1) wper ON wper.oid = wrw.render_oid "
 					+ "WHERE wrw.active = 1";
 		sql += getConditionSql();
 		return sql;

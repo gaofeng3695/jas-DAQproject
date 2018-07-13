@@ -245,7 +245,7 @@ public class ReworkWeld extends CommonJdbcEntity{
 
 	public void setRenderOid(String renderOid) {
 		this.renderOid = renderOid; 
-		super.setField("");
+		super.setField("renderOid");
 	}
 
 	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")

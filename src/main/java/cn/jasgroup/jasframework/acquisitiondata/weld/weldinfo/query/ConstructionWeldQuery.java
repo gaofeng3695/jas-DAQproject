@@ -90,7 +90,7 @@ public class ConstructionWeldQuery extends BaseJavaQuery{
 				conditionSql += " and cw.pipe_segment_or_cross_oid = :pipeSegmentOrCrossOid";
 			}
 			if (StringUtils.isNotBlank(weldCode)) {
-				conditionSql += " and cw.weldCode like :weldCode";
+				conditionSql += " and cw.weld_code like :weldCode";
 			}
 			conditionSql += " order by cw.create_datetime desc";
 		}
