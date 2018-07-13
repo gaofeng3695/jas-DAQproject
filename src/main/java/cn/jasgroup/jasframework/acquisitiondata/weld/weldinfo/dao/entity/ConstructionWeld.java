@@ -14,23 +14,36 @@ import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
 import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
+import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 
 /**
- * <p>类描述：焊口实体类</p>
+ * <p>类描述：焊口实体类
+ * {@link cn.jasgroup.jasframework.acquisitiondata.material.pipefitting.service.PipeFittingService #saveChanagePipeFittingUseState()}
+ * {@link cn.jasgroup.jasframework.acquisitiondata.material.pipefitting.service.PipeFittingService #updateChanagePipeFittingUseState()}
+ * {@link cn.jasgroup.jasframework.acquisitiondata.material.pipefitting.service.PipeFittingService #deleteChanagePipeFittingUseState()}</p>
  * @author admin 。
  * @version v1.0.0.1。
  * @since JDK1.8.0_101。
  * <p>创建日期：2018-07-11 10:43:23。</p>
  */
 @CommonSaveConfig(
-		scene = "/constructionWeld/save"
+		scene = "/constructionWeld/save",
+		afterAdvice={
+			@Process(service = "pipeFittingService", method = "saveChanagePipeFittingUseState()")
+		}
 )
 @CommonUpdateConfig(
-	scene = "/constructionWeld/update"
+	scene = "/constructionWeld/update",
+	afterAdvice={
+			@Process(service = "pipeFittingService", method = "updateChanagePipeFittingUseState()")
+		}
 )
 @CommonDeleteConfig(
-	scene = "/constructionWeld/delete"
+	scene = "/constructionWeld/delete",
+	afterAdvice={
+			@Process(service = "pipeFittingService", method = "deleteChanagePipeFittingUseState()")
+		}
 )
 @Point(
 	scopeFieldName="pipelineOid",
