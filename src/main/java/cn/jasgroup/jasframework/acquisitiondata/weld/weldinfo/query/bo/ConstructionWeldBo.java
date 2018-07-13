@@ -140,6 +140,11 @@ public class ConstructionWeldBo extends CommonBaseBo {
 	private String weldProduce;
 
 	/**
+	 *  焊接工艺规程编号
+	 */
+	private String weldProduceCode; 
+
+	/**
 	 * 外观质量检查
 	 */
 	private Integer surfaceCheck;
@@ -164,20 +169,35 @@ public class ConstructionWeldBo extends CommonBaseBo {
 	 */
 	private String workUnitCode;
 
-	/**
-	 * 盖面人员
+	/** 
+	 * 填充人员 
 	 */
-	private String coverOid;
+	private String coverOid; 
 
-	/**
-	 * 填充人员
+	/** 
+	 * 填充人员名称 
+	 */
+	private String coverName; 
+
+	/** 
+	 * 打底人员
 	 */
 	private String padderOid;
 
-	/**
-	 * 打底人员
+	/** 
+	 * 打底人员名称 
 	 */
-	private String renderOid;
+	private String padderName; 
+
+	/** 
+	 * 盖面人员
+	 */
+	private String renderOid; 
+
+	/** 
+	 * 盖面人员名称 
+	 */
+	private String renderName; 
 
 	/**
 	 * 是否金口
@@ -426,6 +446,14 @@ public class ConstructionWeldBo extends CommonBaseBo {
 		this.weldProduce = weldProduce;
 	}
 
+	public String getWeldProduceCode() {
+		return weldProduceCode;
+	}
+
+	public void setWeldProduceCode(String weldProduceCode) {
+		this.weldProduceCode = weldProduceCode;
+	}
+
 	public Integer getSurfaceCheck() {
 		return surfaceCheck;
 	}
@@ -472,6 +500,30 @@ public class ConstructionWeldBo extends CommonBaseBo {
 
 	public void setCoverOid(String coverOid) {
 		this.coverOid = coverOid;
+	}
+
+	public String getCoverName() {
+		return coverName;
+	}
+
+	public void setCoverName(String coverName) {
+		this.coverName = coverName;
+	}
+
+	public String getPadderName() {
+		return padderName;
+	}
+
+	public void setPadderName(String padderName) {
+		this.padderName = padderName;
+	}
+
+	public String getRenderName() {
+		return renderName;
+	}
+
+	public void setRenderName(String renderName) {
+		this.renderName = renderName;
 	}
 
 	public String getPadderOid() {
