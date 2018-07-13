@@ -186,17 +186,6 @@
 				actionURL: jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token"),
 			}
 		},
-		computed: {
-			proStatus: function () { //上传状态
-				if (this.pass) {
-					return 'success';
-				} else if (this.pass == false) {
-					return 'exception';
-				} else {
-					return '';
-				}
-			}
-		},
 		mounted: function () {
 			var param = window.jasTools.base.getParamsInUrl(location.href);
 			if (param.menuCode) {

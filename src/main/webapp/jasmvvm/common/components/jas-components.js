@@ -238,13 +238,13 @@ Vue.component('jas-detail-table', {
 		}
 	},
 	template: [
-		'<div ref="table" v-show="detail" class="jas-detail-table">',
+		'<div v-show="detail" class="jas-detail-table">',
 		'<table class="table_wrap">',
 		'    <template v-for="item in formatTitle">',
 		'        <tr>',
 		'            <template v-for="subitem in item">',
 		'                <th>{{subitem.name}}</th>',
-		'                <td>{{detail[subitem.field]}}</td>',
+		'                <td v-text="formatValue(detail[subitem.field],subitem.formatter)"></td>',
 		'            </template>',
 		'        </tr>',
 		'    </template>',
@@ -252,10 +252,16 @@ Vue.component('jas-detail-table', {
 		'</div>'
 	].join(''),
 	methods: {
+		formatValue: function (value, formatter) {
+			if (formatter) {
+				return formatter('', '', value, '');
+			}
+			return value;
+		},
 		resizeColumn: function () {
 			var that = this;
 
-			var width = that.$refs.table.clientWidth;
+			var width = that.$el.clientWidth;
 			if (width < 660) {
 				that.columnNum = 1;
 			} else if (width < 1400) {
@@ -272,7 +278,7 @@ Vue.component('jas-detail-table', {
 			that.resizeColumn();
 
 		});
-	}
+	},
 });
 
 
@@ -376,6 +382,12 @@ Vue.component('jas-table-for-list', {
 		privilegeCode: {
 			type: [String, Array],
 		},
+		selfBtns: {
+			type: Array, // [locate]
+			default: function () {
+				return []
+			}
+		},
 		form: {
 			type: Object,
 			required: true
@@ -438,7 +450,7 @@ Vue.component('jas-table-for-list', {
 		'		</el-table-column>',
 		'		<el-table-column label="操作" align="center" width="180" fixed="right">',
 		'			<template slot-scope="scope">',
-		'				<el-button @click="locate(scope.row)" type="text" size="small">定位</el-button>',
+		'				<el-button @click="locate(scope.row)"  v-if="selfBtns.indexOf(' + "'locate'" + ')> -1" type="text" size="small">定位</el-button>',
 		'				<el-button @click="preview(scope.row)" v-if="isHasPrivilege(' + "'bt_select'" + ')" type="text" size="small">查看</el-button>',
 		'				<el-button @click="edit(scope.row)" v-if="isHasPrivilege(' + "'bt_update'" + ')"  type="text" size="small">编辑</el-button>',
 		'				<el-button @click="deleteItem(scope.row)" v-if="isHasPrivilege(' + "'bt_delete'" + ')"   type="text" size="small">删除</el-button>',
@@ -455,19 +467,13 @@ Vue.component('jas-table-for-list', {
 	].join(''),
 	watch: {
 		privilegeCode: function () {
-			if (this.privilegeCode) {
-				this._requestPrivilege(this.privilegeCode);
-			} else {
-				this.search();
-			}
+			this._requestPrivilege(this.privilegeCode);
+			this.search();
 		}
 	},
 	mounted: function () {
-		if (this.privilegeCode) {
-			this._requestPrivilege(this.privilegeCode);
-		} else {
-			this.search();
-		}
+		this._requestPrivilege(this.privilegeCode);
+		this.search();
 	},
 	methods: {
 		handleSelectionChange: function (val) {
@@ -496,11 +502,9 @@ Vue.component('jas-table-for-list', {
 					that.privilege = data.rows.map(function (item) {
 						return item.functionType;
 					});
-					that.search();
 				});
 			} else {
 				that.privilege = privilegeCode;
-				that.search();
 			}
 		},
 		search: function () {
@@ -678,10 +682,10 @@ Vue.component('jas-dialog-wrapper', {
 	},
 	template: [
 		'<div class="jas-flex-box is-vertical">',
-		'  <div class="is-grown" style="overflow: auto;">',
-		'    <slot></slot>',
+		'  <div class="is-grown" style="padding: 0 20px;overflow: auto;">',
+		'    <div><slot></slot></div>',
 		'  </div>',
-		'  <div style="text-align: center;padding-top:10px; ">',
+		'  <div style="text-align: center;padding-top:10px;margin: 0 20px;border-top: 1px solid #e4e7ed;">',
 		'    <slot name="footer"></slot>',
 		'  </div>',
 		'</div>'
@@ -897,4 +901,299 @@ Vue.component('jas-import-export-btns', {
 	mounted: function () {
 
 	}
+});
+
+Vue.component('jas-form-items', {
+	props: {
+		fields: { // horizontal
+			type: Array,
+		},
+		fieldsConfig: {
+			type: Object,
+		},
+		form: {
+			type: Object,
+		},
+	},
+	data: function () {
+		return {
+			fatherSelectList: [],
+			childSelectList: [],
+		}
+	},
+	computed: {},
+	template: [
+		'<el-row>',
+		'	<template v-for="item in fields">',
+		'		<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">',
+		'			<el-form-item :label="item.name"  :prop="item.field" :rules="fieldsConfig[item.field] && fieldsConfig[item.field].rules" style="margin-bottom: 15px ">',
+		'				<template v-if="fieldsConfig[item.field].type == \'select\'">',
+		'					<el-select :ref="item.field" v-model="form[item.field]" clearable :placeholder="\'请选择\'+item.name" size="small" @visible-change="visibleChange($event,item.field)"  @change="fatherSelectChanged($event,item.field)">',
+		'						<el-option v-for="option in fieldsConfig[item.field].options" :key="option.key" :label="option.value" :value="option.key"></el-option>',
+		'					</el-select>',
+		'				</template>',
+		'				<template v-if="fieldsConfig[item.field].type == \'input\'">',
+		'					<el-input v-model="form[item.field]" :placeholder="\'请输入\'+item.name" size="small" clearable></el-input>',
+		'				</template>',
+		'				<template v-if="fieldsConfig[item.field].type == \'date\'">',
+		'					<el-date-picker clearable value-format="yyyy-MM-dd HH:mm:ss" type="date" :placeholder="\'请选择\'+item.name" v-model="form[item.field]" size="small" style="width: 100%;"></el-date-picker>',
+		'				</template>',
+		'			</el-form-item>',
+		'		</el-col>',
+		'	</template>',
+		'</el-row>',
+	].join(''),
+	methods: {
+		triggerFatherSelectsChange: function (fatherSelectList) {
+			var that = this;
+			var SelectList = fatherSelectList || that.fatherSelectList;
+			setTimeout(function () {
+				SelectList.forEach(function (item) {
+					that.$refs[item][0].$emit('change', true)
+				});
+			}, 0);
+		},
+		labelWidth: function (name) {
+			return name.length > 5 ? '220px' : '100px';
+		},
+		resetFieldsConfig: function (fields, fieldsConfig) {
+			var that = this;
+			var rulesObj = {};
+			var fieldArr = [];
+			var fieldNameArr = [];
+			fields.forEach(function (item) {
+				fieldArr.push(item.field);
+				fieldNameArr.push(item.name);
+			});
+
+			for (var field in fieldsConfig) {
+				var fieldIndex = fieldArr.indexOf(field);
+				if (fieldIndex > -1 && fieldsConfig.hasOwnProperty(field)) {
+					var config = fieldsConfig[field];
+					/* 初始化赋值 */
+					if (!config.options) {
+						that.$set(config, 'options', []);
+						that.$set(config, 'rules', []);
+					}
+					if (config.type === 'select' && config.childSelect && config.childSelect.length > 0) {
+						that.childSelectList.push.apply(that.childSelectList, config.childSelect);
+						that.fatherSelectList.push(field);
+					}
+
+					/* 设置验证规则 */
+					if (config.isRequired) {
+
+						config.rules = [{
+							required: true,
+							message: fieldNameArr[fieldIndex] + '为必填项',
+							trigger: 'change'
+						}]
+					}
+					/* 请求阈值 */
+					if (config.domainName) {
+						(function (field, config) {
+							that.requestDomainFromDomainTable(config.domainName, function (options) {
+								config.options = options;
+							});
+						})(field, config)
+					}
+					if (config.optionUrl) {
+						(function (field, config) {
+							jasTools.ajax.post(jasTools.base.rootPath + "/" + config.optionUrl, {}, function (data) {
+								config.options = data.rows;
+							});
+						})(field, config)
+					}
+				}
+			}
+
+			that.fatherSelectList = that.fatherSelectList.filter(function (field) {
+				return that.childSelectList.indexOf(field) === -1;
+			});
+
+		},
+		visibleChange: function (isShowOptions, currentField) {
+			if (!isShowOptions) return;
+			var fieldArr = [];
+			var fieldNameArr = [];
+			var fieldsConfig = this.fieldsConfig;
+
+			this.fields.forEach(function (item) {
+				fieldArr.push(item.field);
+				fieldNameArr.push(item.name);
+			});
+			for (var field in fieldsConfig) {
+				var fieldIndex = fieldArr.indexOf(field);
+				if (fieldIndex > -1 && fieldsConfig.hasOwnProperty(field)) {
+					if (fieldsConfig[field].childSelect && fieldsConfig[field].childSelect.indexOf(currentField) > -1) {
+						if (!this.form[field]) {
+							top.Vue.prototype.$message({
+								message: '请先选择' + fieldNameArr[fieldIndex],
+								type: 'warning'
+							});
+						}
+					}
+				}
+			}
+		},
+		fatherSelectChanged: function (isInit, fatherField) {
+			var that = this;
+			var fieldConfig = this.fieldsConfig[fatherField];
+			var form = this.form;
+			var setChildOptionsAndValue = function (childField, options) { // 入参下拉选项
+				that.fieldsConfig[childField].options = options;
+				!isInit && (form[childField] = '');
+				if (options.length === 1) { //只有一个选项就自动复制
+					form[childField] = options[0].key;
+				}
+				that.$refs[childField][0].$emit('change', isInit);
+			};
+
+			var getAndSet = function (fatherField, fatherValue, childField, requestUrl) {
+				if (fatherValue) { //进行子级的查找 后台请求
+					var obj = {
+						"rows": 100,
+						"page": 1,
+					};
+					obj[fatherField] = fatherValue;
+					jasTools.ajax.post(jasTools.base.rootPath + "/" + requestUrl, obj, function (data) {
+						setChildOptionsAndValue(childField, data.rows)
+					});
+				} else {
+					setChildOptionsAndValue(childField, []);
+				}
+			};
+
+			fieldConfig.childSelect && fieldConfig.childSelect.forEach(function (childField, index) {
+				if (!fieldConfig.childUrl || fieldConfig.childUrl.length === 0) return;
+				var url = fieldConfig.childUrl[index] || fieldConfig.childUrl[0];
+				getAndSet(fatherField, form[fatherField], childField, url);
+			});
+
+		},
+		requestDomainFromDomainTable: function (domainName, cb) {
+			var that = this;
+			var url = jasTools.base.rootPath + "/jasframework/sysdoman/getDoman.do";
+			jasTools.ajax.get(url, {
+				"domainName": domainName
+			}, function (data) {
+				var aDomain = data.map(function (item) {
+					return {
+						key: item.codeId,
+						value: item.codeName,
+					}
+				});
+				cb && cb(aDomain);
+			});
+		},
+		requestDomainFromBizTable: function (url, obj, cb) {
+			var that = this;
+			var url = jasTools.base.rootPath + url;
+			jasTools.ajax.post(url, obj, function (data) {
+				cb && cb(data.rows);
+			}, function () {
+				cb && cb([]);
+			});
+		},
+	},
+	created: function () {},
+	mounted: function () {
+		this.resetFieldsConfig(this.fields, this.fieldsConfig);
+	}
+});
+
+Vue.component('jas-sub-form-group', {
+	props: {
+		groupName: {
+			type: String,
+		},
+		fields: { // horizontal
+			type: Array,
+		},
+		fieldsConfig: {
+			type: Object,
+		},
+		formList: {
+			type: Array,
+		},
+		formDefault: {
+			type: Object,
+		},
+	},
+	data: function () {
+		return {}
+	},
+	template: [
+		'<div>',
+		'	<div v-show="formList.length === 0">',
+		'		<div style="padding-top: 10px;float: right;">',
+		'			<el-button @click="addFormGroup(formList)" type="text" size="small">新增</el-button>',
+		'		</div>',
+		'		<jas-base-group-title :name="groupName"></jas-base-group-title>',
+		'		<el-row>无</el-row>',
+		'	</div>',
+		'	<div v-for="row,index in formList" >',
+		'		<div style="padding-top: 10px;float: right;">',
+		'			<el-button v-show="formList.length-1==index" @click="addFormGroup(formList)"  type="text" size="small">新增</el-button>',
+		'			<el-button v-show="row.operationFlag != -1" @click="removeFormGroup(formList,index)" type="text" size="small">删除</el-button>',
+		'			<el-button v-show="row.operationFlag == -1" @click="resetFormGroup(formList,index)" type="text" size="small">恢复</el-button>',
+		'		</div>',
+		'		<jas-base-group-title :name="groupName+(index+1)"></jas-base-group-title>',
+		'		<jas-form-items v-show="row.operationFlag != -1" :form="row" :fields="fields" :fields-config="fieldsConfig"></jas-form-items>',
+		'		<div v-show="row.operationFlag === -1" >已被删除</div>',
+		'	</div>',
+		'</div>',
+	].join(''),
+	methods: {
+		resetFormGroup:function(formList, index){
+			formList[index].operationFlag = 2;   // -1（删除），0（不变），1（新增），2（修改）
+		},
+		removeFormGroup: function (formList, index) {
+			if (formList[index].oid) {
+				formList[index].operationFlag = -1;
+			} else {
+				formList.splice(index, 1);
+			}
+		},
+		addFormGroup: function (formList) {
+			var obj = {};
+			for (var item in this.formDefault) {
+				if (this.formDefault.hasOwnProperty(item)) {
+					obj[item] = this.formDefault[item]
+				}
+			}
+			obj.operationFlag = 1;
+			formList.push(obj);
+		},
+	},
+});
+
+Vue.component('jas-sub-detail-group', {
+	props: {
+		groupName: {
+			type: String,
+		},
+		fields: { // horizontal
+			type: Array,
+		},
+		detailList: {
+			type: Array,
+		},
+	},
+	data: function () {
+		return {}
+	},
+	template: [
+		'<div>',
+		'	 <div v-show="detailList && detailList.length == 0">',
+		'	 	<jas-base-group-title :name="groupName"></jas-base-group-title>',
+		'	 	<div>无</div>',
+		'	 </div>',
+		'	 <div v-for="detail,index in detailList">',
+		'	 	<jas-base-group-title :name="groupName+(index+1)"></jas-base-group-title>',
+		'	 	<jas-detail-table :titles="fields" :detail="detail"></jas-detail-table>',
+		'	 </div>',
+		'</div>',
+	].join(''),
+	methods: {},
 });
