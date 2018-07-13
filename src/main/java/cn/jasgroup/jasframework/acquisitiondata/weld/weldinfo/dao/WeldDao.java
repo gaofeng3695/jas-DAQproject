@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
+import cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.dao.entity.ConstructionWeld;
 import cn.jasgroup.jasframework.dataaccess.base.BaseJdbcDao;
 
 @Repository
@@ -15,4 +16,14 @@ public class WeldDao extends BaseJdbcDao{
 		return this.queryForList(sql, new Object[]{pipeSegmentOrCrossOid});
 	}
 	
+	@SuppressWarnings("unchecked")
+	public ConstructionWeld find(String oid){
+		String sql = "select * from daq_construction_weld t where t.oid=?";
+		List<ConstructionWeld> list = this.queryForList(sql, new Object[]{oid}, ConstructionWeld.class);
+		if(list!=null && list.size()>0){
+			return list.get(0);
+		}else{
+			return null;
+		}
+	}
 }
