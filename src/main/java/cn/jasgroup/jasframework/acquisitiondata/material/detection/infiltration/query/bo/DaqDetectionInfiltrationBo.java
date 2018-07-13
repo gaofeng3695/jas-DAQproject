@@ -1,9 +1,12 @@
 package cn.jasgroup.jasframework.acquisitiondata.material.detection.infiltration.query.bo;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import cn.jasgroup.jasframework.acquisitiondata.material.detection.infiltration.dao.entity.DaqDetectionInfiltrationSub;
 import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 
 /**
@@ -125,6 +128,11 @@ public class DaqDetectionInfiltrationBo extends CommonBaseBo{
 	 * 备注 
 	 */
 	private String remarks;
+	
+	/**
+	 * 子表集合
+	 * */
+	private List<DaqDetectionInfiltrationSub> infiltrationSubList = new ArrayList<DaqDetectionInfiltrationSub>();
 	
 	public String getOid() {
 		return oid;
@@ -303,4 +311,13 @@ public class DaqDetectionInfiltrationBo extends CommonBaseBo{
 	public void setPipeSegmentOrCrossName(String pipeSegmentOrCrossName) {
 		this.pipeSegmentOrCrossName = pipeSegmentOrCrossName;
 	}
+
+	public List<DaqDetectionInfiltrationSub> getInfiltrationSubList() {
+		return infiltrationSubList;
+	}
+
+	public void setInfiltrationSubList(List<DaqDetectionInfiltrationSub> infiltrationSubList) {
+		this.infiltrationSubList = infiltrationSubList;
+	}
+	
 }

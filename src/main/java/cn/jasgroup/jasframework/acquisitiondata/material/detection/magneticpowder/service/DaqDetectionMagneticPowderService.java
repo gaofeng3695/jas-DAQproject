@@ -1,11 +1,15 @@
 package cn.jasgroup.jasframework.acquisitiondata.material.detection.magneticpowder.service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.magneticpowder.dao.DaqDetectionMagneticPowderDao;
+import cn.jasgroup.jasframework.acquisitiondata.material.detection.magneticpowder.dao.DaqDetectionMagneticPowderSubDao;
+import cn.jasgroup.jasframework.acquisitiondata.material.detection.magneticpowder.dao.entity.DaqDetectionMagneticPowderSub;
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.magneticpowder.query.bo.DaqDetectionMagneticPowderBo;
 import cn.jasgroup.jasframework.engine.jdbc.service.CommonDataJdbcService;
 
@@ -23,6 +27,9 @@ public class DaqDetectionMagneticPowderService extends CommonDataJdbcService{
 
 	@Autowired
 	private DaqDetectionMagneticPowderDao magneticPowderDao;
+	
+	@Autowired
+	private DaqDetectionMagneticPowderSubDao magneticPowderSubDao;
 	
 	/**
 	 * <p>功能描述：审核。</p>
@@ -48,6 +55,11 @@ public class DaqDetectionMagneticPowderService extends CommonDataJdbcService{
 	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public DaqDetectionMagneticPowderBo get(String oid){
-		return this.magneticPowderDao.get(oid);
+		DaqDetectionMagneticPowderBo magneticPowderBo = this.magneticPowderDao.get(oid);
+		if(null != magneticPowderBo){
+			List<DaqDetectionMagneticPowderSub> powderSubList = this.magneticPowderSubDao.getList(oid);
+			magneticPowderBo.setPowderSubList(powderSubList);
+		}
+		return magneticPowderBo;
 	}
 }

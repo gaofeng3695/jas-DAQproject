@@ -1,5 +1,7 @@
 package cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +9,10 @@ import org.springframework.stereotype.Service;
 
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.infiltration.query.bo.DaqDetectionInfiltrationBo;
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.dao.DaqDetectionRayDao;
+import cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.dao.DaqDetectionRaySubDao;
+import cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.dao.entity.DaqDetectionRaySub;
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.query.bo.DaqDetectionRayBo;
+import cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.query.bo.DaqDetectionRaySubBo;
 import cn.jasgroup.jasframework.engine.jdbc.service.CommonDataJdbcService;
 
 /**
@@ -24,6 +29,9 @@ public class DaqDetectionRayService extends CommonDataJdbcService{
 
 	@Autowired
 	private DaqDetectionRayDao rayDao;
+	
+	@Autowired
+	private DaqDetectionRaySubDao raySubDao;
 	
 	/**
 	 * <p>功能描述：审核。</p>
@@ -49,6 +57,11 @@ public class DaqDetectionRayService extends CommonDataJdbcService{
 	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public DaqDetectionRayBo get(String oid){
-		return this.rayDao.get(oid);
+		DaqDetectionRayBo rayBo = this.rayDao.get(oid);
+		if(null != rayBo){
+			List<DaqDetectionRaySub> raySubList = raySubDao.getList(oid);
+			rayBo.setRaySubList(raySubList);
+		}
+		return rayBo;
 	}
 }

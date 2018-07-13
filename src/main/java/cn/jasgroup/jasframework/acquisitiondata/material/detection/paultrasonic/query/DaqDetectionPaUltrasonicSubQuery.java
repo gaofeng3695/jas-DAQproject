@@ -26,7 +26,7 @@ import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 )
 public class DaqDetectionPaUltrasonicSubQuery extends BaseJavaQuery {
 
-private List<String> oids;
+	private List<String> oids;
 	
 	private String parentOid;
 

@@ -1,11 +1,15 @@
 package cn.jasgroup.jasframework.acquisitiondata.material.detection.infiltration.service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.infiltration.dao.DaqDetectionInfiltrationDao;
+import cn.jasgroup.jasframework.acquisitiondata.material.detection.infiltration.dao.DaqDetectionInfiltrationSubDao;
+import cn.jasgroup.jasframework.acquisitiondata.material.detection.infiltration.dao.entity.DaqDetectionInfiltrationSub;
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.infiltration.query.bo.DaqDetectionInfiltrationBo;
 import cn.jasgroup.jasframework.engine.jdbc.service.CommonDataJdbcService;
 
@@ -23,6 +27,9 @@ public class DaqDetectionInfiltrationService extends CommonDataJdbcService{
 
 	@Autowired
 	private DaqDetectionInfiltrationDao infiltrationDao;
+	
+	@Autowired
+	private DaqDetectionInfiltrationSubDao infiltrationSubDao;
 	
 	/**
 	 * <p>功能描述：审核。</p>
@@ -48,6 +55,11 @@ public class DaqDetectionInfiltrationService extends CommonDataJdbcService{
 	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public DaqDetectionInfiltrationBo getDetail(String oid){
-		return this.infiltrationDao.get(oid);
+		DaqDetectionInfiltrationBo infiltrationBo = this.infiltrationDao.get(oid);
+		if(null != infiltrationBo){
+			List<DaqDetectionInfiltrationSub> infiltrationSubList = this.infiltrationSubDao.getList(oid);
+			infiltrationBo.setInfiltrationSubList(infiltrationSubList);
+		}
+		return infiltrationBo;
 	}
 }

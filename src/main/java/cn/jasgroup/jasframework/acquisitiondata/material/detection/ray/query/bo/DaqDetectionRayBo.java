@@ -1,9 +1,12 @@
 package cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.query.bo;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.dao.entity.DaqDetectionRaySub;
 import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 
 /**
@@ -91,6 +94,9 @@ public class DaqDetectionRayBo extends CommonBaseBo{
 
 	/** 备注 */
 	private String remarks;
+	
+	/** 射线检测子表集合 */
+	private List<DaqDetectionRaySub> raySubList = new ArrayList<DaqDetectionRaySub>();
 	
 	public String getOid() {
 		return oid;
@@ -293,4 +299,13 @@ public class DaqDetectionRayBo extends CommonBaseBo{
 	public void setPipeSegmentOrCrossName(String pipeSegmentOrCrossName) {
 		this.pipeSegmentOrCrossName = pipeSegmentOrCrossName;
 	}
+
+	public List<DaqDetectionRaySub> getRaySubList() {
+		return raySubList;
+	}
+
+	public void setRaySubList(List<DaqDetectionRaySub> raySubList) {
+		this.raySubList = raySubList;
+	}
+	
 }

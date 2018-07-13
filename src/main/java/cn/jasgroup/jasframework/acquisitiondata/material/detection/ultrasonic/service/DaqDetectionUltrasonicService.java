@@ -1,11 +1,15 @@
 package cn.jasgroup.jasframework.acquisitiondata.material.detection.ultrasonic.service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.ultrasonic.dao.DaqDetectionUltrasonicDao;
+import cn.jasgroup.jasframework.acquisitiondata.material.detection.ultrasonic.dao.DaqDetectionUltrasonicSubDao;
+import cn.jasgroup.jasframework.acquisitiondata.material.detection.ultrasonic.dao.entity.DaqDetectionUltrasonicSub;
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.ultrasonic.query.bo.DaqDetectionUltrasonicBo;
 import cn.jasgroup.jasframework.engine.jdbc.service.CommonDataJdbcService;
 
@@ -23,6 +27,9 @@ public class DaqDetectionUltrasonicService extends CommonDataJdbcService{
 	
 	@Autowired
 	private DaqDetectionUltrasonicDao ultrasonicDao;
+	
+	@Autowired
+	private DaqDetectionUltrasonicSubDao ultrasonicSubDao;
 	
 	/**
 	 * <p>功能描述：审核。</p>
@@ -48,7 +55,12 @@ public class DaqDetectionUltrasonicService extends CommonDataJdbcService{
 	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public DaqDetectionUltrasonicBo get(String oid){
-		return this.ultrasonicDao.get(oid);
+		DaqDetectionUltrasonicBo ultrasonicBo =  this.ultrasonicDao.get(oid);
+		if(null != ultrasonicBo){
+			List<DaqDetectionUltrasonicSub> ultrasonicSubList = this.ultrasonicSubDao.getList(oid);
+			ultrasonicBo.setUltrasonicSubList(ultrasonicSubList);
+		}
+		return ultrasonicBo;
 	}
 	
 }

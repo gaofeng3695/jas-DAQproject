@@ -1,9 +1,12 @@
 package cn.jasgroup.jasframework.acquisitiondata.material.detection.faultrasonic.query.bo;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import cn.jasgroup.jasframework.acquisitiondata.material.detection.faultrasonic.dao.entity.DaqDetectionFaUltrasonicSub;
 import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 
 /**
@@ -135,6 +138,11 @@ public class DaqDetectionFaUltrasonicBo extends CommonBaseBo {
 	 * 备注 
 	 */
 	private String remarks;
+	
+	/**
+	 * 子表集合
+	 */
+	private List<DaqDetectionFaUltrasonicSub> faUltrasonicSubList = new ArrayList<DaqDetectionFaUltrasonicSub>();
 
 	public String getOid() {
 		return oid;
@@ -328,6 +336,14 @@ public class DaqDetectionFaUltrasonicBo extends CommonBaseBo {
 
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
+	}
+
+	public List<DaqDetectionFaUltrasonicSub> getFaUltrasonicSubList() {
+		return faUltrasonicSubList;
+	}
+
+	public void setFaUltrasonicSubList(List<DaqDetectionFaUltrasonicSub> faUltrasonicSubList) {
+		this.faUltrasonicSubList = faUltrasonicSubList;
 	}
 	
 }

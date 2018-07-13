@@ -1,10 +1,5 @@
 package cn.jasgroup.jasframework.acquisitiondata.material.detection.faultrasonic.dao.entity;
 
-import cn.jasgroup.jasframework.base.annotation.CommonDeleteBatchConfig;
-import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
-import cn.jasgroup.jasframework.base.annotation.CommonGetConfig;
-import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
-import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
 import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 
@@ -18,11 +13,6 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
  * <p>创建日期：2018年7月12日 上午10:29:24。</p>
  */
  
-@CommonSaveConfig(scene = "/detectionFaUltrasonicSub/save")
-@CommonUpdateConfig(scene = "/detectionFaUltrasonicSub/update")
-@CommonDeleteConfig(scene = "/detectionUltrasonicSub/delete")
-@CommonDeleteBatchConfig(scene = "/detectionFaUltrasonicSub/deleteBatch")
-@CommonGetConfig(scene = "/detectionFaUltrasonicSub/get")
 @JdbcEntity(name="daq_detection_fa_ultrasonic_sub")
 public class DaqDetectionFaUltrasonicSub extends CommonJdbcEntity {
 
