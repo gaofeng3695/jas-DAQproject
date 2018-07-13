@@ -63,30 +63,56 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="线路段/穿跨越" prop="pipeSegmentOrCrossOid" required>
-							<el-select v-model="formData.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small">
+							<el-select v-model="formData.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small" @change="pipeSegmentChanged">
 								<el-option v-for="item in domain.pipeSegment" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
+
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="采集人员">
-							<el-input v-model="formData.collectionPerson" clearable placeholder="请输入中线桩编号" size="small"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="施工单位">
+						<el-form-item label="施工单位" prop="constructUnit" required>
 							<el-select v-model="formData.constructUnit" disabled placeholder="请选择施工单位" size="small">
 								<el-option v-for="item in domain.constructUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="采集日期">
-							<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入采集日期" v-model="formData.collectionDate" size="small"
+						<el-form-item label="施工机组代号" prop="workUnitOid" required>
+							<el-select v-model="formData.workUnitOid" placeholder="请选择施工机组代号" size="small">
+								<el-option v-for="item in domain.workUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="施工日期">
+							<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入施工日期" v-model="formData.constructDate" size="small"
 							  style="width: 100%;">
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="打底人员">
+							<el-select v-model="formData.padderOid" clearable placeholder="请选择打底人员" size="small">
+								<el-option v-for="item in domain.persons" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="填充人员">
+							<el-select v-model="formData.coverOid" clearable placeholder="请选择填充人员" size="small">
+								<el-option v-for="item in domain.persons" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="盖面人员">
+							<el-select v-model="formData.renderOid" clearable placeholder="请选择盖面人员" size="small">
+								<el-option v-for="item in domain.persons" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="监理单位" prop="supervisionUnit" required>
 							<el-select v-model="formData.supervisionUnit" clearable placeholder="请选择监理单位" size="small">
@@ -99,93 +125,130 @@
 							<el-input v-model="formData.supervisionEngineer" clearable placeholder="请输入监理工程师" size="small"></el-input>
 						</el-form-item>
 					</el-col>
+
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="采集人员">
+							<el-input v-model="formData.collectionPerson" clearable placeholder="请输入中线桩编号" size="small"></el-input>
+						</el-form-item>
+					</el-col>
+
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="采集日期">
+							<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入采集日期" v-model="formData.collectionDate" size="small"
+							  style="width: 100%;">
+							</el-date-picker>
+						</el-form-item>
+					</el-col>
 				</el-row>
-				<jas-base-group-title name="冷湾信息数据"></jas-base-group-title>
+				<jas-base-group-title name="位置数据"></jas-base-group-title>
 				<el-row>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="原材料钢管编号" prop="pipeCode" required>
-							<el-select v-model="formData.pipeCode" placeholder="请选择原材料钢管编号" size="small" @change="pipeCodeChanged">
-								<el-option v-for="item in domain.pipeCodes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+						<el-form-item label="桩号" prop="medianStakeOid" required>
+							<el-select v-model="formData.medianStakeOid" clearable placeholder="请选择桩号" size="small">
+								<el-option v-for="item in domain.medianStakes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="冷湾编号" prop="pipeColdBendingCode" required>
-							<el-input v-model="formData.pipeColdBendingCode" disabled placeholder="请输入冷湾编号" size="small"></el-input>
+						<el-form-item label="相对桩位置" prop="relativeMileage" required>
+							<el-input-number :precision="3" :step="1" :max="100000" controls-position="right" v-model="formData.relativeMileage" clearable
+							  placeholder="请输入相对桩位置" size="small"></el-input-number>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<jas-base-group-title name="焊口数据"></jas-base-group-title>
+				<el-row>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="焊口编号" prop="weldCode" required>
+							<el-input v-model="formData.weldCode" placeholder="请输入焊口编号" size="small"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="管子弯曲设计标准">
-							<el-input v-model="formData.pipeBendingStandards" placeholder="请输入管子弯曲设计标准" size="small"></el-input>
+						<el-form-item label="焊口类型" prop="weldType" required>
+							<el-select v-model="formData.weldType" clearable placeholder="请选择焊口类型" size="small">
+								<el-option v-for="item in domain.weldTypes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+							<!--<el-input v-model="formData.weldType" placeholder="请输入焊口类型" size="small"></el-input>-->
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="制作日期">
-							<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入采集日期" v-model="formData.produceDate" size="small" style="width: 100%;">
-							</el-date-picker>
+						<el-form-item label="焊接方式">
+							<el-select v-model="formData.weldMethod" clearable placeholder="请选择焊接方式" size="small">
+								<el-option v-for="item in domain.weldMethods" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="曲率半径(mm)">
-							<el-input-number :precision="3" :step="1" :max="1000" controls-position="right" v-model="formData.bendingRadius" clearable placeholder="请输入曲率半径(mm)"
-							  size="small"></el-input-number>
+						<el-form-item label="前管件类型">
+							<el-select v-model="formData.frontPipeType" clearable placeholder="请选择前管件类型" size="small" @change="frontpipeChange">
+								<el-option v-for="item in domain.pipeTypes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+							<!--<el-input v-model="formData.frontPipeType" placeholder="请输入前管件类型" size="small"></el-input>-->
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="曲线长度(mm)">
-						<el-input-number :precision="3" :step="1" :max="10000" controls-position="right" v-model="formData.curveLength" clearable placeholder="请输入曲线长度"
-							  size="small"></el-input-number>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="弯曲角度(°)" prop="bendingAngle" required>
-							<el-input-number :precision="3" :step="1" :max="10000" controls-position="right" v-model="formData.bendingAngle" clearable placeholder="请输入弯曲角度"
-							  size="small"></el-input-number>
-						
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="直管段最小长度(m)">
-						<el-input-number :precision="3" :step="1" :max="10000" controls-position="right" v-model="formData.straightPipeLength" clearable placeholder="请输入直管段最小长度"
-							  size="small"></el-input-number>
-						
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="椭圆率(%)">
-							<el-input-number :precision="3" :step="1" :max="1000" controls-position="right" v-model="formData.ellipticity" clearable placeholder="请输入椭圆率"
-							  size="small"></el-input-number>
-			
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="壁厚减薄率(%)">
-						<el-input-number :precision="3" :step="1" :max="1000" controls-position="right" v-model="formData.wallThicknessRedurate" clearable placeholder="请输入壁厚减薄率(%)"
-							  size="small"></el-input-number>
-						</el-form-item>
-					</el-col>
+						<el-form-item label="前管件编号">
+							<el-select v-model="formData.frontPipeCode" clearable placeholder="请选择前管件编号" size="small">
+								<el-option v-for="item in domain.frontPipeCodes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
 
-
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="长度(m)">
-						<el-input-number :precision="3" :step="1" :max="10000" controls-position="right" v-model="formData.pipeLength" clearable placeholder="请输入长度"
-							  size="small"></el-input-number>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="管径(mm)">
-						<el-input-number :precision="2" :step="1" :max="10000" controls-position="right" v-model="formData.pipeDiameter" clearable placeholder="请输入管径"
-							  size="small"></el-input-number>
+						<el-form-item label="后管件类型">
+							<el-select v-model="formData.backPipeType" clearable placeholder="请选择后管件类型" size="small" @change="backpipeChange">
+								<el-option v-for="item in domain.pipeTypes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+							<!--<el-input v-model="formData.backPipeType" placeholder="请输入后管件类型" size="small"></el-input>-->
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="壁厚(mm)">
-						<el-input-number :precision="2" :step="1" :max="10000" controls-position="right" v-model="formData.wallThickness" clearable placeholder="请输入壁厚"
-							  size="small"></el-input-number>
+						<el-form-item label="后管件编号">
+							<el-select v-model="formData.backPipeCode" clearable placeholder="请选择后管件编号" size="small">
+								<el-option v-for="item in domain.backPipeCodes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+							<!--<el-input v-model="formData.backPipeCode" placeholder="请输入后管件编号" size="small"></el-input>-->
 						</el-form-item>
 					</el-col>
-
-
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="焊条批号">
+							<el-input v-model="formData.weldRodBatchNum" clearable placeholder="请输入焊条批号" size="small"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="焊丝批号">
+							<el-input v-model="formData.weldWireBatchNum" clearable placeholder="请输入焊丝批号" size="small"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="焊接工艺规格">
+							<el-select v-model="formData.weldProduce" clearable placeholder="请选择焊接工艺" size="small">
+								<el-option v-for="item in domain.weldProduces" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+							<!--<el-input v-model="formData.weldProduce" clearable placeholder="请输入焊接工艺规格" size="small"></el-input>-->
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="外观质量检查">
+							<el-select v-model="formData.surfaceCheck" clearable placeholder="请选择外观质量检查" size="small">
+								<el-option v-for="item in domain.surfaceChecks" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="是否金口">
+							<el-select v-model="formData.isGoldeJoint" clearable placeholder="请选择是否金口" size="small">
+								<el-option v-for="item in domain.isPass" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="是否连头口">
+							<el-select v-model="formData.isPipeHead" clearable placeholder="请选择是否连头口" size="small">
+								<el-option v-for="item in domain.isPass" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
 				</el-row>
 				<jas-base-group-title name="其他信息"></jas-base-group-title>
 				<el-row>
@@ -235,10 +298,31 @@
 					pipeline: [],
 					tenders: [],
 					pipeSegment: [],
-					pipeCodes: [],
-					supervisionUnits: [],
+					supervisionUnits: [], //监理单位
 					constructUnits: [], //施工单位
-					//监理单位
+					medianStakes: [], //桩号
+					workUnits: [], //机组
+					persons: [],
+					weldTypes: [], //焊口类型
+					weldProduces: [], //焊接工艺
+					weldMethods: [], //焊接方式
+					pipeTypes: [], //管件类型
+					frontPipeCodes: [], //前管件
+					backPipeCodes: [], //后管件
+					surfaceChecks: [{
+						key: '0',
+						value: '合格'
+					}, {
+						key: '1',
+						value: '不合格'
+					}], //外观质量检查
+					isPass: [{
+						key: '0',
+						value: '是'
+					}, {
+						key: '1',
+						value: '否'
+					}] //是否
 				},
 				rules: {
 					projectOid: [{
@@ -261,52 +345,43 @@
 						message: '线路段/穿跨越为必填项',
 						trigger: 'change'
 					}],
+					weldOid: [{
+						required: true,
+						message: '返修口编号',
+						trigger: 'change'
+					}],
+					reworkWeldCode: [{
+						required: true,
+						message: '返修后焊口编号',
+						trigger: 'change'
+					}],
+					weldProduce: [{
+						required: true,
+						message: '焊接工艺规格',
+						trigger: 'change'
+					}],
+					constructUnit: [{
+						required: true,
+						message: '施工单位',
+						trigger: 'change'
+					}],
+					workUnitOid: [{
+						required: true,
+						message: '施工机组代号',
+						trigger: 'change'
+					}],
 					supervisionUnit: [{
 						required: true,
 						message: '监理单位为必填项',
 						trigger: 'change'
 					}],
-					pipeCode: [{
-						required: true,
-						message: '原材料钢管编号为必填项',
-						trigger: 'change'
-					}],
-					pipeColdBendingCode: [{
-						required: true,
-						message: '冷湾编号为必填项',
-						trigger: 'change'
-					}],
-					bendingAngle: [{
-						required: true,
-						message: '弯曲角度为必填项',
-						trigger: 'change'
-					}]
+
 				},
 				formData: {
 					projectOid: "",
 					tendersOid: "",
 					pipelineOid: "",
 					pipeSegmentOrCrossOid: "",
-					pipeCode: "",
-					certificateNum: "",
-					pipeColdBendingCode: "",
-					pipeBendingStandards: "",
-					bendingRadius: "",
-					bendingAngle: "",
-					curveLength: "",
-					straightPipeLength: "",
-					pipeLength: "",
-					ellipticity: "",
-					wallThicknessRedurate: "",
-					pipeDiameter: "",
-					wallThickness: "",
-					produceDate: "",
-					constructUnit: "",
-					supervisionUnit: "",
-					supervisionEngineer: "",
-					collectionPerson: "",
-					collectionDate: "",
-					isUse:0,
 					remarks: ""
 				}
 			}
@@ -324,22 +399,22 @@
 			if (param.oid) {
 				this.oid = param.oid;
 				this.formData.oid = this.oid;
-				// this.uploadurl = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") +
-				// 	"&businessId=" + this.oid + "&businessType=excelTemplate";
-
 				this.isEdit = true;
 				this.getDetailByObjectId();
-				// this.$refs.upload.requestFile(this.oid);
 			};
 
 			this.requestDomainFromBizTable('/daq/privilege/getProjectList.do', {}, function (arr) {
 				that.domain.project = arr;
 			});
-			this.requestDomainFromBizTable(
-				'/daq/materialPipe/getCutAndNotUse.do', {},
-				function (arr) {
-					that.domain.pipeCodes = arr;
-				});
+			 this.requestDomainFromDomainTable('welding_method_temp_domain', function (arr) {
+			 	that.domain.weldMethods = arr;
+			}); //查询焊接方式
+			this.requestDomainFromDomainTable('weld_type_domain', function (arr) {
+				that.domain.weldTypes = arr;
+			}); //查询焊口类型
+			this.requestDomainFromDomainTable('pipe_type_domain', function (arr) {
+				that.domain.pipeTypes = arr;
+			}); //查询焊口类型
 		},
 		methods: {
 			cancel: function (param) {
@@ -389,7 +464,41 @@
 					that.formData.pipeSegmentOrCrossOid = '';
 					that.domain.supervisionUnits = [];
 					that.formData.supervisionUnit = '';
-					
+				}
+				that.getWorkUints(val); //进行获取施工机组
+				that.getWorkPerson(val); //获取机组人员
+				that.getWeldproduct(val); //获取焊接工艺
+			},
+			getWeldproduct: function (val) {
+				var that = this;
+				if (val) {
+					this.requestDomainFromBizTable(
+						'/daq/weldProduct/getListByCondition.do', {
+							projectOid: val,
+
+						},
+						function (arr) {
+							that.domain.weldProduces = arr;
+						});
+				} else {
+					that.domain.weldProduces = [];
+					that.formData.weldProduce = '';
+				}
+			},
+			getWorkUints: function (val) {
+				var that = this;
+				if (val) {
+					this.requestDomainFromBizTable(
+						'/daq/workUnit/getWorkUnitList.do', {
+							projectOid: val,
+							types: "work_unit_type_code_001,work_unit_type_code_010,work_unit_type_code_012"
+						},
+						function (arr) {
+							that.domain.workUnits = arr;
+						});
+				} else {
+					that.domain.workUnits = [];
+					that.formData.workUnitOid = '';
 				}
 			},
 			tendersChanged: function (val) { //根据标段触发管线列表
@@ -440,8 +549,46 @@
 					that.formData.pipeSegmentOrCrossOid = '';
 				}
 			},
-			pipeCodeChanged: function (val) {
-				this.formData.pipeColdBendingCode = val + "-LW";
+			pipeSegmentChanged: function (val) {
+				var that = this;
+				if (val) {
+					this.requestDomainFromBizTable(
+						'/daq/privilege/getMedianStakeList.do', {
+							pipeSegmentOrCrossOid: val
+						},
+						function (arr) {
+							that.domain.medianStakes = arr;
+						});
+				} else {
+					that.domain.medianStakes = [];
+					that.formData.medianStakeOid = '';
+				}
+				that.getMedianStake(val); //根据线路段获取桩号
+			}, //获取桩号
+			getWorkPerson: function (val) {
+				var that = this;
+				if (val) {
+					this
+						.requestDomainFromBizTable(
+							'/daq/workPerson/getWorkPersonList.do', {
+								projectOid: val,
+								types: "personnel_type_code_005,personnel_type_code_006"
+							},
+							function (arr) {
+								that.domain.persons = arr;
+							});
+				} else {
+					that.domain.persons = [];
+					that.formData.coverOid = '';
+					that.formData.padderOid = '';
+					that.formData.renderOid = '';
+				}
+			},
+			frontpipeChange: function (val) {//触发前管件编号
+
+			},
+			backpipeChange: function (val) {//触发后管件编号
+
 			},
 			submit: function (formName) {
 				var that = this;
@@ -458,12 +605,12 @@
 				if (!this.isEdit) {
 					msg = "增加成功";
 					url = jasTools.base.rootPath +
-						"/daq/clodBendingPipe/save.do";
+						"/jdbc/commonData/reworkWeld/save.do";
 				} else {
 					msg = "修改成功";
 					delete that.formData.isUse;
 					url = jasTools.base.rootPath +
-						"/daq/clodBendingPipe/update.do";
+						"/jdbc/commonData/reworkWeld/update.do";
 				}
 
 				jasTools.ajax.post(url, that.formData, function (data) {
@@ -484,8 +631,10 @@
 			// },
 			getDetailByObjectId: function () {
 				var that = this;
-				var url = jasTools.base.rootPath + "/jdbc/commonData/coldBendingPipe/getPage.do";
-				jasTools.ajax.post(url, {oid:that.oid}, function (data) {
+				var url = jasTools.base.rootPath + "/jdbc/commonData/reworkWeld/getPage.do";
+				jasTools.ajax.post(url, {
+					oid: that.oid
+				}, function (data) {
 					for (var key in that.formData) {
 						that.formData[key] = data.rows[0][key];
 					}
@@ -493,6 +642,7 @@
 					that.tendersChanged(data.rows[0].tendersOid);
 					that.getSupervisionUnit(data.rows[0].tendersOid);
 					that.pipelineChanged(data.rows[0].pipelineOid);
+					that.pipeSegmentChanged(data.rows[0].pipeSegmentOrCrossOid);
 				});
 			},
 		},
