@@ -102,7 +102,12 @@ public class DaqDetectionFaUltrasonicBo extends CommonBaseBo {
 	/**
 	 * 检测单位 
 	 */
-	private String detectionUnit; 
+	private String detectionUnit;
+	
+	/**
+	 * 检测单位名称 
+	 */
+	private String detectionUnitName; 
 
 	/**
 	 * 检测人员 
@@ -117,7 +122,12 @@ public class DaqDetectionFaUltrasonicBo extends CommonBaseBo {
 	/**
 	 * 监理单位 
 	 */
-	private String supervisionUnit; 
+	private String supervisionUnit;
+	
+	/**
+	 * 监理单位名称 
+	 */
+	private String supervisionUnitName; 
 
 	/**
 	 * 监理工程师 
@@ -344,6 +354,22 @@ public class DaqDetectionFaUltrasonicBo extends CommonBaseBo {
 
 	public void setFaUltrasonicSubList(List<DaqDetectionFaUltrasonicSub> faUltrasonicSubList) {
 		this.faUltrasonicSubList = faUltrasonicSubList;
+	}
+
+	public String getDetectionUnitName() {
+		return detectionUnitName;
+	}
+
+	public void setDetectionUnitName(String detectionUnitName) {
+		this.detectionUnitName = detectionUnitName;
+	}
+
+	public String getSupervisionUnitName() {
+		return supervisionUnitName;
+	}
+
+	public void setSupervisionUnitName(String supervisionUnitName) {
+		this.supervisionUnitName = supervisionUnitName;
 	}
 	
 }
