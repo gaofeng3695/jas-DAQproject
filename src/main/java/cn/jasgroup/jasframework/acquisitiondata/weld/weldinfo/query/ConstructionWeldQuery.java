@@ -51,14 +51,14 @@ public class ConstructionWeldQuery extends BaseJavaQuery{
 
 	@Override
 	public String getQuerySql() {
-		String sql = "SELECT cw.*,pro.project_code, pi.pipeline_code, te.tenders_code, vpsc.name as pipe_segment_or_cross_name, ms.median_stake_code,"
+		String sql = "SELECT cw.*,pro.project_name, pi.pipeline_name, te.tenders_name, vpsc.name as pipe_segment_or_cross_name, ms.median_stake_code,"
 					+ " u.unit_name as construct_unit_name, pu.unit_name as supervision_unit_name, wu.work_unit_code, d.code_name as weld_type_name,wps.weld_produce_code, "
 					+ "dm.code_name as weld_method_name,wp.personnel_name as cover_name, wpe.personnel_name as padder_name, wper.personnel_name as render_name,"
 					+ "pf.code_name as front_pipe_type_name,bp.code_name as back_pipe_type_name "
 					+ "FROM daq_construction_weld cw "
-					+ "LEFT JOIN (SELECT oid, project_code, active FROM daq_project where active=1) pro ON pro.oid = cw.project_oid "
-					+ "LEFT JOIN (SELECT oid, pipeline_code, active FROM daq_pipeline where active=1) pi ON pi.oid = cw.pipeline_oid "
-					+ "LEFT JOIN (SELECT oid, tenders_code, active FROM daq_tenders where active=1) te ON te.oid = cw.tenders_oid "
+					+ "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = cw.project_oid "
+					+ "LEFT JOIN (SELECT oid, pipeline_name, active FROM daq_pipeline where active=1) pi ON pi.oid = cw.pipeline_oid "
+					+ "LEFT JOIN (SELECT oid, tenders_name, active FROM daq_tenders where active=1) te ON te.oid = cw.tenders_oid "
 					+ "LEFT JOIN (select * from v_daq_pipe_segment_cross) vpsc on vpsc.oid = cw.pipe_segment_or_cross_oid "
 					+ "LEFT JOIN (select oid, median_stake_code, active from daq_median_stake where active=1) ms ON ms.oid = cw.median_stake_oid "
 					+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) pu on pu.oid = cw.supervision_unit "

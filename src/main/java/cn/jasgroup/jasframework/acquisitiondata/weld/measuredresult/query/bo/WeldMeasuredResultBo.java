@@ -27,7 +27,7 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 	/**
 	 * 项目编号
 	 */
-	private String projectCode;
+	private String projectName;
 
 	/**
 	 * 管线oid
@@ -37,7 +37,7 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 	/**
 	 * 管线编号
 	 */
-	private String pipelineCode;
+	private String pipelineName;
 
 	/**
 	 * 标段oid
@@ -47,7 +47,7 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 	/**
 	 * 标段编号
 	 */
-	private String tendersCode;
+	private String tendersName;
 
 	/**
 	 * 线路段/穿跨越
@@ -185,12 +185,12 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 		this.projectOid = projectOid;
 	}
 
-	public String getProjectCode() {
-		return projectCode;
+	public String getProjectName() {
+		return projectName;
 	}
 
-	public void setProjectCode(String projectCode) {
-		this.projectCode = projectCode;
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
 	}
 
 	public String getPipelineOid() {
@@ -201,12 +201,12 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 		this.pipelineOid = pipelineOid;
 	}
 
-	public String getPipelineCode() {
-		return pipelineCode;
+	public String getPipelineName() {
+		return pipelineName;
 	}
 
-	public void setPipelineCode(String pipelineCode) {
-		this.pipelineCode = pipelineCode;
+	public void setPipelineName(String pipelineName) {
+		this.pipelineName = pipelineName;
 	}
 
 	public String getTendersOid() {
@@ -217,12 +217,12 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 		this.tendersOid = tendersOid;
 	}
 
-	public String getTendersCode() {
-		return tendersCode;
+	public String getTendersName() {
+		return tendersName;
 	}
 
-	public void setTendersCode(String tendersCode) {
-		this.tendersCode = tendersCode;
+	public void setTendersName(String tendersName) {
+		this.tendersName = tendersName;
 	}
 
 	public String getPipeSegmentOrCrossOid() {

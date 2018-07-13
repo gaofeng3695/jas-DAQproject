@@ -51,12 +51,12 @@ public class WeldMeasuredResultQuery extends BaseJavaQuery{
 
 	@Override
 	public String getQuerySql() {
-		String sql ="SELECT wmr.*,pro.project_code, pi.pipeline_code, te.tenders_code, vpsc.name as pipe_segment_or_cross_name, cw.weld_code, "
+		String sql ="SELECT wmr.*,pro.project_name, pi.pipeline_name, te.tenders_name, vpsc.name as pipe_segment_or_cross_name, cw.weld_code, "
 					+ "ms.median_stake_code, u.unit_name as construct_unit_name, pu.unit_name as supervision_unit_name "
 					+ "FROM daq_weld_measured_result wmr "
-					+ "LEFT JOIN (SELECT oid, project_code, active FROM daq_project where active=1) pro ON pro.oid = wmr.project_oid "
-					+ "LEFT JOIN (SELECT oid, pipeline_code, active FROM daq_pipeline where active=1) pi ON pi.oid = wmr.pipeline_oid "
-					+ "LEFT JOIN (SELECT oid, tenders_code, active FROM daq_tenders where active=1) te ON te.oid = wmr.tenders_oid "
+					+ "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = wmr.project_oid "
+					+ "LEFT JOIN (SELECT oid, pipeline_name, active FROM daq_pipeline where active=1) pi ON pi.oid = wmr.pipeline_oid "
+					+ "LEFT JOIN (SELECT oid, tenders_name, active FROM daq_tenders where active=1) te ON te.oid = wmr.tenders_oid "
 					+ "LEFT JOIN (select * from v_daq_pipe_segment_cross) vpsc on vpsc.oid = wmr.pipe_segment_or_cross_oid "
 					+ "LEFT JOIN (select oid, weld_code, active from daq_construction_weld where active=1) cw ON cw.oid = wmr.weld_oid "
 					+ "LEFT JOIN (select oid, median_stake_code, active from daq_median_stake where active=1) ms ON ms.oid = wmr.median_stake_oid "
