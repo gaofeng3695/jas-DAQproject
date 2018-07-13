@@ -57,8 +57,8 @@ public class ReworkWeldQuery extends BaseJavaQuery {
 	@Override
 	public String getQuerySql() {
 		String sql ="SELECT wrw.oid,wrw.project_oid,pro.project_name, wrw.pipeline_oid,pi.pipeline_name,wrw.tenders_oid,te.tenders_name,"
-					+ "wrw.pipe_segment_or_cross_oid,vpsc.name,wrw.weld_oid, cw.weld_code, wrw.rework_weld_code, wrw.weld_rod_batch_num,"
-					+ "wrw.weld_wire_batch_num, wrw.weld_produce,wrw.cover_oid,wrw.padder_oid,wrw.render_oid,wrw.weld_date,"
+					+ "wrw.pipe_segment_or_cross_oid,vpsc.name as pipe_segment_or_cross_name,wrw.weld_oid, cw.weld_code, wrw.rework_weld_code, "
+					+ "wrw.weld_rod_batch_num,wrw.weld_wire_batch_num, wrw.weld_produce,wrw.cover_oid,wrw.padder_oid,wrw.render_oid,wrw.weld_date,"
 					+ "wrw.construct_unit, u.unit_name as construct_unit_name,wrw.work_unit_oid, wu.work_unit_code, wrw.supervision_unit,"
 					+ "pu.unit_name as supervision_unit_name, wrw.supervision_engineer,wrw.collection_person,wrw.collection_date,wrw.remarks,"
 					+ "wrw.create_user_id,wrw.create_user_name,wrw.create_datetime,wrw.modify_user_id,wrw.modify_user_name,	wrw.modify_datetime,wrw.active"

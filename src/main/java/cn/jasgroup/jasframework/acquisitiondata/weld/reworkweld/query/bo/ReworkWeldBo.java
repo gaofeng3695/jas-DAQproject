@@ -62,7 +62,7 @@ public class ReworkWeldBo extends CommonBaseBo {
 	/**
 	 * 线路段/穿跨越名称
 	 */
-	private String name; 
+	private String pipeSegmentOrCrossName; 
 
 	/** 
 	 * 返修口id
@@ -228,12 +228,12 @@ public class ReworkWeldBo extends CommonBaseBo {
 		this.pipeSegmentOrCrossOid = pipeSegmentOrCrossOid;
 	}
 
-	public String getName() {
-		return name;
+	public String getPipeSegmentOrCrossName() {
+		return pipeSegmentOrCrossName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setPipeSegmentOrCrossName(String pipeSegmentOrCrossName) {
+		this.pipeSegmentOrCrossName = pipeSegmentOrCrossName;
 	}
 
 	public String getWeldOid() {
