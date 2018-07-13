@@ -796,7 +796,7 @@ CREATE TABLE daq_material_pipe (
 	coating_factory varchar(70),
 	is_cut SMALLINT DEFAULT 0,
 	is_use SMALLINT DEFAULT 0,
-	is_hot_bend SMALLINT DEFAULT 0,
+	is_cold_bend SMALLINT DEFAULT 0,
 	remarks varchar(200),
 	create_user_id varchar(36),
 	create_user_name varchar(50),
@@ -836,7 +836,7 @@ comment on column daq_material_pipe.coating_certificate_num IS '防腐证书编�
 comment on column daq_material_pipe.coating_factory IS '防腐加工厂家';
 comment on column daq_material_pipe.is_cut IS '是否切管';
 comment on column daq_material_pipe.is_use IS '是否使用';
-comment on column daq_material_pipe.is_hot_bend IS '是否热弯';
+comment on column daq_material_pipe.is_cold_bend IS '是否冷弯';
 comment on column daq_material_pipe.remarks IS '备注';
 comment on column daq_material_pipe.create_user_id IS '创建人id';
 comment on column daq_material_pipe.create_user_name IS '创建人名称';
@@ -851,7 +851,7 @@ CREATE TABLE daq_material_pipe_cold_bending (
 	project_oid varchar(36),
 	tenders_oid varchar(36),
 	pipeline_oid varchar(36),
-	pipe_segment_oid varchar(36),
+	pipe_segment_or_cross_oid varchar(36),
 	pipe_code varchar(50),
 	pipe_cold_bending_code varchar(53),
 	certificate_num varchar(60),
@@ -886,7 +886,7 @@ comment on column daq_material_pipe_cold_bending.oid IS '主键';
 comment on column daq_material_pipe_cold_bending.project_oid IS '项目oid';
 comment on column daq_material_pipe_cold_bending.tenders_oid IS '标段oid';
 comment on column daq_material_pipe_cold_bending.pipeline_oid IS '管线oid';
-comment on column daq_material_pipe_cold_bending.pipe_segment_oid IS '线路段oid';
+comment on column daq_material_pipe_cold_bending.pipe_segment_or_cross_oid IS '线路段/穿跨越oid';
 comment on column daq_material_pipe_cold_bending.pipe_code IS '原材料钢管编号';
 comment on column daq_material_pipe_cold_bending.pipe_cold_bending_code IS '冷弯管编号';
 comment on column daq_material_pipe_cold_bending.certificate_num IS '合格证编号';

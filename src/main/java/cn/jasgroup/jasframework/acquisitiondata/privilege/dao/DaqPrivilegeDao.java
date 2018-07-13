@@ -154,4 +154,24 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 			sql +="  and c.cross_way_code='"+crossWay+"'";
 		return this.queryForList(sql, null);
 	}
+	/***
+	  * <p>功能描述：根据管线oid获取当前用户所在部门及下级部门下的线路段列表。</p>
+	  * <p> 雷凯。</p>	
+	  * @param pipelineOid
+	  * @param unitOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年7月11日 下午3:22:00。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String,Object>> getPipeSegmentList(String pipelineOid,String unitOid){
+		String sql = "with recursive pri_unit_temp(oid,parent_id) as ("
+				+ "select t.oid,t.parent_id from pri_unit t where t.oid='"+unitOid+"' and t.active=1 "
+				+ "union all "
+				+ "select t.oid,t.parent_id from pri_unit t inner join pri_unit_temp b on t.parent_id=b.oid and t.active=1 "
+				+ ")"
+				+ "select distinct s.oid as key,s.pipe_segment_code as value from daq_pipe_segment s left join daq_implement_scope_ref t on t.scope_oid=s.oid where t.unit_oid in (select oid from pri_unit_temp)";
+			sql += " and t.pipeline_oid='"+pipelineOid+"'";
+			return this.queryForList(sql, null);
+	}
 }
