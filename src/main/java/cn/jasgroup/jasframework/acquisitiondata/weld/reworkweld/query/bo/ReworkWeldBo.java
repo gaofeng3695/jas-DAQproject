@@ -94,20 +94,40 @@ public class ReworkWeldBo extends CommonBaseBo {
 	 */
 	private String weldProduce; 
 
+	/**
+	 *  焊接工艺规程编号
+	 */
+	private String weldProduceCode; 
+
 	/** 
 	 * 填充人员 
 	 */
 	private String coverOid; 
 
 	/** 
+	 * 填充人员名称 
+	 */
+	private String coverName; 
+
+	/** 
 	 * 打底人员
 	 */
-	private String padderOid; 
+	private String padderOid;
+
+	/** 
+	 * 打底人员名称 
+	 */
+	private String padderName; 
 
 	/** 
 	 * 盖面人员
 	 */
 	private String renderOid; 
+
+	/** 
+	 * 盖面人员名称 
+	 */
+	private String renderName; 
 
 	/**
 	 *  焊接日期
@@ -174,6 +194,38 @@ public class ReworkWeldBo extends CommonBaseBo {
 
 	public String getProjectOid() {
 		return projectOid;
+	}
+
+	public String getWeldProduceCode() {
+		return weldProduceCode;
+	}
+
+	public void setWeldProduceCode(String weldProduceCode) {
+		this.weldProduceCode = weldProduceCode;
+	}
+
+	public String getCoverName() {
+		return coverName;
+	}
+
+	public void setCoverName(String coverName) {
+		this.coverName = coverName;
+	}
+
+	public String getPadderName() {
+		return padderName;
+	}
+
+	public void setPadderName(String padderName) {
+		this.padderName = padderName;
+	}
+
+	public String getRenderName() {
+		return renderName;
+	}
+
+	public void setRenderName(String renderName) {
+		this.renderName = renderName;
 	}
 
 	public void setProjectOid(String projectOid) {
