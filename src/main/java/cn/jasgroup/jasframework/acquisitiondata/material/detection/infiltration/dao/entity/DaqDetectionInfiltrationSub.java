@@ -19,11 +19,6 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
  * <p>创建日期：2018年7月11日 上午11:10:38。</p>
  */
 
-@CommonSaveConfig(scene = "/detectionInfiltrationSub/save")
-@CommonUpdateConfig(scene = "/detectionInfiltrationSub/update")
-@CommonDeleteConfig(scene = "/detectionInfiltrationSub/delete")
-@CommonDeleteBatchConfig(scene = "/detectionInfiltrationSub/deleteBatch")
-@CommonGetConfig(scene = "/detectionInfiltrationSub/get") 
 @JdbcEntity(name="daq_detection_infiltration_sub")
 public class DaqDetectionInfiltrationSub extends CommonJdbcEntity {
 

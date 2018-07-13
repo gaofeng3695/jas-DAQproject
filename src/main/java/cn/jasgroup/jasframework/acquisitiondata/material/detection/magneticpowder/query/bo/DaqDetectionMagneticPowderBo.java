@@ -1,9 +1,12 @@
 package cn.jasgroup.jasframework.acquisitiondata.material.detection.magneticpowder.query.bo;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import cn.jasgroup.jasframework.acquisitiondata.material.detection.magneticpowder.dao.entity.DaqDetectionMagneticPowderSub;
 import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 
 /**
@@ -127,6 +130,11 @@ public class DaqDetectionMagneticPowderBo extends CommonBaseBo{
 	 * 备注 
 	 */
 	private String remarks;
+	
+	/**
+	 * 子表集合 
+	 */
+	private List<DaqDetectionMagneticPowderSub> powderSubList = new ArrayList<DaqDetectionMagneticPowderSub>();
 	
 	public String getOid() {
 		return oid;
@@ -304,6 +312,14 @@ public class DaqDetectionMagneticPowderBo extends CommonBaseBo{
 
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
+	}
+
+	public List<DaqDetectionMagneticPowderSub> getPowderSubList() {
+		return powderSubList;
+	}
+
+	public void setPowderSubList(List<DaqDetectionMagneticPowderSub> powderSubList) {
+		this.powderSubList = powderSubList;
 	}
 	
 }

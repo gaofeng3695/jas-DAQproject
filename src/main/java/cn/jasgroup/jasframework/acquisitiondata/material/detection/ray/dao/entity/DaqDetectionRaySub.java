@@ -3,11 +3,6 @@ package cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.dao.enti
 import javax.persistence.Column;
 import javax.persistence.Transient;
 
-import cn.jasgroup.jasframework.base.annotation.CommonDeleteBatchConfig;
-import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
-import cn.jasgroup.jasframework.base.annotation.CommonGetConfig;
-import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
-import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
 import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
 import cn.jasgroup.jasframework.domain.utils.DomainUtil;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
@@ -20,11 +15,6 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
  * <p>创建日期：2018年7月10日 上午9:55:56。</p>
  */
 
-@CommonSaveConfig(scene = "/detectionRaySub/save")
-@CommonUpdateConfig(scene = "/detectionRaySub/update")
-@CommonDeleteConfig(scene = "/detectionRaySub/delete")
-@CommonDeleteBatchConfig(scene = "/detectionRaySub/deleteBatch")
-@CommonGetConfig(scene = "/detectionRaySub/get")
 @JdbcEntity(name = "daq_detection_ray_sub")
 public class DaqDetectionRaySub extends CommonJdbcEntity {
 

@@ -1,9 +1,12 @@
 package cn.jasgroup.jasframework.acquisitiondata.material.detection.paultrasonic.query.bo;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import cn.jasgroup.jasframework.acquisitiondata.material.detection.paultrasonic.dao.entity.DaqDetectionPaUltrasonicSub;
 import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 
 /**
@@ -136,6 +139,11 @@ public class DaqDetectionPaUltrasonicBo extends CommonBaseBo {
 	 */
 	private String remarks;
 
+	/**
+	 * 子表集合
+	 */
+	private List<DaqDetectionPaUltrasonicSub> paUltrasonicSubList = new ArrayList<DaqDetectionPaUltrasonicSub>();
+	
 	public String getOid() {
 		return oid;
 	}
@@ -328,6 +336,14 @@ public class DaqDetectionPaUltrasonicBo extends CommonBaseBo {
 
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
+	}
+
+	public List<DaqDetectionPaUltrasonicSub> getPaUltrasonicSubList() {
+		return paUltrasonicSubList;
+	}
+
+	public void setPaUltrasonicSubList(List<DaqDetectionPaUltrasonicSub> paUltrasonicSubList) {
+		this.paUltrasonicSubList = paUltrasonicSubList;
 	}
 	
 }
