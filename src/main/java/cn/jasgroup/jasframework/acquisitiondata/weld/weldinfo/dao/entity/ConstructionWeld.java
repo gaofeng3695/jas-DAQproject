@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import cn.jasgroup.framework.spatial.annotation.Point;
 import cn.jasgroup.framework.spatial.support.enumeration.CalculateType;
+import cn.jasgroup.framework.spatial.support.enumeration.ScopeType;
 import cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.dao.entity.MedianStake;
 import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
@@ -32,6 +33,8 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 	scene = "/constructionWeld/delete"
 )
 @Point(
+	scopeFieldName="pipelineOid",
+	scopeType=ScopeType.CURRENT,
 	geometryColumnName="geom",
 	calculateType=CalculateType.SingleAnchorAndDeviation,
 	anchorClass=MedianStake.class,
