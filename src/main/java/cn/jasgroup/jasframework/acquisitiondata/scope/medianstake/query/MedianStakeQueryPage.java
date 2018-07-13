@@ -1,5 +1,7 @@
 package cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query;
 
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 
 import cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.service.bo.MedianStakeQueryBo;
@@ -11,6 +13,12 @@ import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 	resultClass=MedianStakeQueryBo.class
 )
 public class MedianStakeQueryPage extends BaseJavaQuery{
+	
+	/**
+	 * oids: ID集合
+	 */
+	 
+	private List<String> oids;
 	
 	private String projectOid;
 	private String pipelineOid;
@@ -31,6 +39,9 @@ public class MedianStakeQueryPage extends BaseJavaQuery{
 		}
 		if(StringUtils.isNotBlank(pipelineOid)){
 			sql += " and t.pipeline_oid = :pipelineOid";
+		}
+		if(null != oids && oids.size()>0){
+			sql += " and t.oid in (:oids)";
 		}
 		sql +=" order by t.create_datetime desc";
 		return sql;
@@ -63,4 +74,12 @@ public class MedianStakeQueryPage extends BaseJavaQuery{
 		this.medianStakeCode = medianStakeCode;
 	}
 	
+	public List<String> getOids() {
+		return oids;
+	}
+
+	public void setOids(List<String> oids) {
+		this.oids = oids;
+	}
+
 }

@@ -84,7 +84,11 @@
 	          	<groupId>cn.jasgroup.jasframework</groupId>
 				<artifactId>jasframework-security</artifactId>
 	        	</exclusion>
-	      	</exclusions>
+	        	<exclusion>
+	        		<groupId>cn.jasgroup.jasframework</groupId>
+	        		<artifactId>jasframework-spatial</artifactId>
+	        	</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 	        <groupId>com.google.guava</groupId>
@@ -110,6 +114,11 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency> -->
+		<dependency>  
+		    <groupId>org.hibernate</groupId>  
+		    <artifactId>hibernate-validator</artifactId>  
+		    <version>5.1.0.Final</version>  
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

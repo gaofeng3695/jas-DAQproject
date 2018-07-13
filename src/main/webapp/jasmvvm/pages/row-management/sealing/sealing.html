@@ -118,6 +118,15 @@
 				tableFields: [{
 					name: '封堵物编号',
 					field: 'closureCode',
+				},{
+					name: '项目名称',
+					field: 'projectName'
+				}, {
+					name: '管线名称',
+					field: 'pipelineName'
+				},  {
+					name: '标段名称',
+					field: 'tendersName'
 				}, {
 					name: '是否使用',
 					field: 'isUse',
@@ -230,7 +239,9 @@
 						});
 				} else {
 					that.domain.tenders = [];
-					that.formData.tendersOid = '';
+					that.topSearch.tendersOid = '';
+					that.domain.pipeline = [];
+					that.topSearch.pipelineOid = '';
 				}
 			},
 			tendersChanged: function (val) { //根据标段触发管线列表
@@ -246,7 +257,7 @@
 							});
 				} else {
 					that.domain.pipeline = [];
-					that.formData.pipelineOid = '';
+					that.topSearch.pipelineOid = '';
 				}
 			},
 

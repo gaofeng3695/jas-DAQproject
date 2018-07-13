@@ -108,6 +108,10 @@ public class ConstructionWeldBo extends CommonBaseBo {
 	 * 前管件类型
 	 */
 	private String frontPipeType;
+	/**
+	 * 前管件类型名称
+	 */
+	private String frontPipeTypeName;
 
 	/**
 	 * 前管件编号
@@ -118,6 +122,11 @@ public class ConstructionWeldBo extends CommonBaseBo {
 	 * 后管件类型
 	 */
 	private String backPipeType;
+	
+	/**
+	 * 后管件类型名称
+	 */
+	private String backPipeTypeName;
 
 	/**
 	 * 后管件编号
@@ -634,4 +643,20 @@ public class ConstructionWeldBo extends CommonBaseBo {
 		this.remarks = remarks;
 	}
 
+	public String getFrontPipeTypeName() {
+		return frontPipeTypeName;
+	}
+
+	public void setFrontPipeTypeName(String frontPipeTypeName) {
+		this.frontPipeTypeName = frontPipeTypeName;
+	}
+
+	public String getBackPipeTypeName() {
+		return backPipeTypeName;
+	}
+
+	public void setBackPipeTypeName(String backPipeTypeName) {
+		this.backPipeTypeName = backPipeTypeName;
+	}
+	
 }

@@ -62,8 +62,8 @@
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="线路段/穿跨越" prop="pipeSegmentOid" required>
-							<el-select v-model="formData.pipeSegmentOid" clearable placeholder="请选择线路段" size="small">
+						<el-form-item label="线路段/穿跨越" prop="pipeSegmentOrCrossOid" required>
+							<el-select v-model="formData.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small">
 								<el-option v-for="item in domain.pipeSegment" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
@@ -256,7 +256,7 @@
 						message: '管线名称为必填项',
 						trigger: 'change'
 					}],
-					pipeSegmentOid: [{
+					pipeSegmentOrCrossOid: [{
 						required: true,
 						message: '线路段/穿跨越为必填项',
 						trigger: 'change'
@@ -286,7 +286,7 @@
 					projectOid: "",
 					tendersOid: "",
 					pipelineOid: "",
-					pipeSegmentOid: "",
+					pipeSegmentOrCrossOid: "",
 					pipeCode: "",
 					certificateNum: "",
 					pipeColdBendingCode: "",
@@ -383,6 +383,13 @@
 				} else {
 					that.domain.tenders = [];
 					that.formData.tendersOid = '';
+					that.domain.pipeline = [];
+					that.formData.pipelineOid = '';
+					that.domain.pipeSegment = [];
+					that.formData.pipeSegmentOrCrossOid = '';
+					that.domain.supervisionUnits = [];
+					that.formData.supervisionUnit = '';
+					
 				}
 			},
 			tendersChanged: function (val) { //根据标段触发管线列表
@@ -398,6 +405,8 @@
 				} else {
 					that.domain.pipeline = [];
 					that.formData.pipelineOid = '';
+					that.domain.pipeSegment = [];
+					that.formData.pipeSegmentOrCrossOid = '';
 				}
 				that.getSupervisionUnit(val); //根据标段获取监理单位
 			},
@@ -428,7 +437,7 @@
 						});
 				} else {
 					that.domain.pipeSegment = [];
-					that.formData.pipeSegmentOid = '';
+					that.formData.pipeSegmentOrCrossOid = '';
 				}
 			},
 			pipeCodeChanged: function (val) {

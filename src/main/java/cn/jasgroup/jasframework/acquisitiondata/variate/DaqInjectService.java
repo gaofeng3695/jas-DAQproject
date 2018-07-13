@@ -24,6 +24,15 @@ public class DaqInjectService {
 		baseData.setValue("current_unit_id", ThreadLocalHolder.getCurrentUser().getUnitId());
 	}
 	
+	/**
+	  * <p>功能描述：。</p>
+	  * <p> 雷凯。</p>	
+	  * @param query
+	  * @param dataAuthoritySql
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年7月13日 下午3:51:42。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
 	public void injectDataAuthoritySql(BaseJavaQuery query,String dataAuthoritySql){
 		String unitOid = ThreadLocalHolder.getCurrentUser().getUnitId();
 		List<PriUnit> unitEntityList = unitDao.findUnitByID(unitOid);

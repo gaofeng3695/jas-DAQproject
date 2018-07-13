@@ -53,7 +53,8 @@ public class ConstructionWeldQuery extends BaseJavaQuery{
 	public String getQuerySql() {
 		String sql = "SELECT cw.*,pro.project_code, pi.pipeline_code, te.tenders_code, vpsc.name as pipe_segment_or_cross_name, ms.median_stake_code,"
 					+ " u.unit_name as construct_unit_name, pu.unit_name as supervision_unit_name, wu.work_unit_code, d.code_name as weld_type_name,wps.weld_produce_code, "
-					+ "dm.code_name as weld_method_name,wp.personnel_name as cover_name, wpe.personnel_name as padder_name, wper.personnel_name as render_name "
+					+ "dm.code_name as weld_method_name,wp.personnel_name as cover_name, wpe.personnel_name as padder_name, wper.personnel_name as render_name,"
+					+ "pf.code_name as front_pipe_type_name,bp.code_name as back_pipe_type_name "
 					+ "FROM daq_construction_weld cw "
 					+ "LEFT JOIN (SELECT oid, project_code, active FROM daq_project where active=1) pro ON pro.oid = cw.project_oid "
 					+ "LEFT JOIN (SELECT oid, pipeline_code, active FROM daq_pipeline where active=1) pi ON pi.oid = cw.pipeline_oid "
@@ -69,6 +70,8 @@ public class ConstructionWeldQuery extends BaseJavaQuery{
 					+ "LEFT JOIN (SELECT oid, personnel_name, active FROM daq_work_personnel where active=1) wp ON wp.oid = cw.cover_oid "
 					+ "LEFT JOIN (SELECT oid, personnel_name, active FROM daq_work_personnel where active=1) wpe ON wpe.oid = cw.padder_oid "
 					+ "LEFT JOIN (SELECT oid, personnel_name, active FROM daq_work_personnel where active=1) wper ON wper.oid = cw.render_oid "
+					+ "left join (select code_id, code_name from sys_domain where active=1) pf on cw.front_pipe_type= pf.code_id "
+					+ "left join (select code_id, code_name from sys_domain where active=1) bp on cw.back_pipe_type=bp.code_id "
 					+ "WHERE cw.active = 1";
 		sql += getConditionSql();
 		return sql;
