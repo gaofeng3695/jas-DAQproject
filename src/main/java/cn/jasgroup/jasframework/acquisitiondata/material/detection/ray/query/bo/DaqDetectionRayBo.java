@@ -76,12 +76,18 @@ public class DaqDetectionRayBo extends CommonBaseBo{
 
 	/** 检测单位 */
 	private String detectionUnit;
+	
+	/** 检测单位名称 */
+	private String detectionUnitName;
 
 	/** 检测人员 */
 	private String detectionPerson;
 
 	/** 监理单位 */
 	private String supervisionUnit;
+	
+	/** 监理单位名称 */
+	private String supervisionUnitName;
 
 	/** 监理工程师 */
 	private String supervisionEngineer;
@@ -306,6 +312,22 @@ public class DaqDetectionRayBo extends CommonBaseBo{
 
 	public void setRaySubList(List<DaqDetectionRaySub> raySubList) {
 		this.raySubList = raySubList;
+	}
+
+	public String getDetectionUnitName() {
+		return detectionUnitName;
+	}
+
+	public void setDetectionUnitName(String detectionUnitName) {
+		this.detectionUnitName = detectionUnitName;
+	}
+
+	public String getSupervisionUnitName() {
+		return supervisionUnitName;
+	}
+
+	public void setSupervisionUnitName(String supervisionUnitName) {
+		this.supervisionUnitName = supervisionUnitName;
 	}
 	
 }
