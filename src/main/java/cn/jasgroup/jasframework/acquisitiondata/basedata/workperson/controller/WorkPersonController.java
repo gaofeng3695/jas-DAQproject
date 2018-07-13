@@ -20,11 +20,11 @@ public class WorkPersonController {
 	
 	@RequestMapping("getWorkPersonList")
 	public Object getWorkPersonList(@RequestBody  Map<String, String> param){
-		String projectOid = param.get("projectOid");
+		String workUnitOid = param.get("workUnitOid");
 		String types = param.get("types");
 		ListResult<Map<String, Object>> result= null;
 		try{
-			List<Map<String, Object>> rows = this.workPersonService.getListByCondition(projectOid, types);
+			List<Map<String, Object>> rows = this.workPersonService.getListByCondition(workUnitOid, types);
 			result = new ListResult<>(1,"200","ok",rows);
 		}catch(Exception e){
 			result = new ListResult<>(-1,"400","error");
