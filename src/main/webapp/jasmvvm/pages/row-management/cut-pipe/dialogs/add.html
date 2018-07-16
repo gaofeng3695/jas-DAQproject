@@ -65,7 +65,7 @@
 
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="钢管编号" prop="pipeOid" required>
-								<el-select v-model="formData.pipeOid" :disabled="isEdit" clearable placeholder="请选择钢管编号" size="small">
+								<el-select v-model="formData.pipeOid"  clearable :disabled="isEdit" placeholder="请选择钢管编号" size="small">
 									<el-option v-for="item in domain.pipes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
@@ -92,7 +92,7 @@
 						<template v-for="item in segmentArrs">
 							<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 								<el-form-item :label="item.label" :prop="item.key" required>
-									<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData[item.key]" clearable
+									<el-input-number :precision="3" :step="1" :min="0" :max="1000000" controls-position="right" v-model="formData[item.key]" clearable
 									  :placeholder="item.placeholder" size="small"></el-input-number>
 								</el-form-item>
 							</el-col>
@@ -231,16 +231,17 @@
 				this.formData.oid = this.oid;
 				this.isEdit = true;
 				this.getDetailByObjectId();
-			};
+			}else{
+				this.requestDomainFromBizTable(
+						'/daq/materialPipe/getCutAndNotUse.do', {},
+						function (arr) {
+							that.domain.pipes = arr;
+						});	
+			}
 
 			this.requestDomainFromBizTable('/daq/privilege/getProjectList.do', {}, function (arr) {
 				that.domain.project = arr;
 			});
-			this.requestDomainFromBizTable(
-				'/daq/materialPipe/getCutAndNotUse.do', {},
-				function (arr) {
-					that.domain.pipes = arr;
-				});
 		},
 		methods: {
 			cancel: function (param) {
@@ -387,9 +388,11 @@
 				jasTools.ajax.post(url, {
 					oid: that.oid
 				}, function (data) {
-					for (var key in that.formData) {
-						that.formData[key] = data.rows[0][key];
-					}
+					that.formData=data.rows[0];
+					that.domain.pipes.push({
+						key:data.rows[0].pipeOid,
+						value:data.rows[0].pipeCode
+					});
 					that.projectChanged(data.rows[0].projectOid);
 					that.tendersChanged(data.rows[0].tendersOid);
 					that.isInputLength(data.rows[0].segmentsNum);

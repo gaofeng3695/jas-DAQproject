@@ -49,7 +49,7 @@
 						field: 'pipelineName'
 					},  {
 						name: "钢管编号",
-						field: "pipeOid"
+						field: "pipeCode"
 					}, {
 						name: '管径(mm)',
 						field: 'pipeDiameter'
@@ -59,23 +59,6 @@
 					}, {
 						name: '分割段数(段)',
 						field: 'segmentsNum'
-					}, {
-						name: '第一段长度(m)',
-						field: 'firstParagraphLength'
-					}, {
-						name: '第二段长度(m)',
-						field: 'secondParagraphLength'
-					},
-					 {
-						name: '第三段长度(m)',
-						field: 'thirdParagraphLength'
-					}, {
-						name: '第四段长度(m)',
-						field: 'fourthParagraphLength'
-					},
-					{
-						name: '第五段长度(m)',
-						field: 'fifthParagraphLength'
 					}
 				],
 				otherArr: [{
@@ -105,9 +88,25 @@
 					"/jdbc/commonData/cutWeld/getPage.do";
 				jasTools.ajax.post(url, this.params, function (data) {
 					that.detail = data.rows[0];
-
+                    that.isDetailLength(that.detail.segmentsNum);
 				});
 			},
+			isDetailLength: function (val) {
+				var that = this;
+				var indexs = ['firstParagraphLength', 'secondParagraphLength', 'thirdParagraphLength', 'fourthParagraphLength',
+					'fifthParagraphLength'
+				];
+				var num=['一','二','三','四','五'];
+
+				for (var i = 0; i < val; i++) {
+					var obj = {
+						name: "第"+num[i]+"段长度(m)",
+						field: indexs[i],
+					};
+					that.baseArr.push(obj);
+				}
+				
+			}
 		},
 	});
 </script>

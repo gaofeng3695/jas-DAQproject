@@ -53,7 +53,7 @@
 					projectOid: '',
 					tendersOid: '',
 					pipelineOid: '',
-					pipeOid: '',
+
 				},
 				fields: [ //
 					{
@@ -65,10 +65,6 @@
 					}, {
 						field: "pipelineOid",
 						name: '管线名称'
-					},
-					{
-						field: 'pipeOid',
-						name: "钢管编号"
 					}
 				],
 				fieldsConfig: {
@@ -87,10 +83,6 @@
 					},
 					pipelineOid: {
 						type: 'select'
-					},
-					pipeOid: {
-						type: 'select',
-						optionUrl: '/daq/materialPipe/getCutAndNotUse.do'
 					}
 				},
 				tableFields: [{
@@ -104,7 +96,7 @@
 						field: 'pipelineName'
 					}, {
 						name: "钢管编号",
-						field: "pipeOid"
+						field: "pipeCode"
 					}, {
 						name: '管径(mm)',
 						field: 'pipeDiameter'
