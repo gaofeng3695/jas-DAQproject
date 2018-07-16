@@ -35,7 +35,6 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 @CommonDeleteConfig(
 	scene = "/laySurveying/delete"
 )
-@JdbcEntity(name="daq_lay_surveying")
 @Point(
 	scopeFieldName="pipelineOid",
 	scopeType=ScopeType.CURRENT,
@@ -45,6 +44,7 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 	anchorOid="medianStakeOid",
 	deviation="relativeMileage"
 )
+@JdbcEntity(name="daq_lay_surveying")
 public class LaySurveying extends CommonJdbcEntity {
 
 	/**
@@ -130,7 +130,7 @@ public class LaySurveying extends CommonJdbcEntity {
 	/**
 	 * 审核状态 
 	 */
-	private Integer approveStatus; 
+	private Integer approveStatus = 0; 
 
 	/**
 	 * 空间数据状态 
@@ -141,8 +141,6 @@ public class LaySurveying extends CommonJdbcEntity {
 	 * 备注 
 	 */
 	private String remarks; 
-
-	private String geom; 
 
 	public String getProjectOid() {
 		return projectOid; 
@@ -321,15 +319,6 @@ public class LaySurveying extends CommonJdbcEntity {
 	public void setRemarks(String remarks) {
 		this.remarks = remarks; 
 		super.setField("remarks");
-	}
-
-	public String getGeom() {
-		return geom; 
-	}
-
-	public void setGeom(String geom) {
-		this.geom = geom; 
-		super.setField("geom");
 	}
 
 }
