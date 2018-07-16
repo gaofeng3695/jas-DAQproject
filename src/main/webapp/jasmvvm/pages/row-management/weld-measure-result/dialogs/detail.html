@@ -15,15 +15,16 @@
 
 <body>
 	<div id="app" v-cloak>
-		<jas-base-group-title name="基础数据"></jas-base-group-title>
-		<jas-detail-table :titles="baseArr" :detail="detail"></jas-detail-table>
-		<jas-base-group-title name="位置数据"></jas-base-group-title>
-		<jas-detail-table :titles="addressArr" :detail="detail"></jas-detail-table>
-		<jas-base-group-title name="焊口数据"></jas-base-group-title>
-		<jas-detail-table :titles="busArr" :detail="detail"></jas-detail-table>
-		<jas-base-group-title name="其他信息"></jas-base-group-title>
-		<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
-
+		<jas-dialog-wrapper>
+			<jas-base-group-title name="基础数据"></jas-base-group-title>
+			<jas-detail-table :titles="baseArr" :detail="detail"></jas-detail-table>
+			<jas-base-group-title name="位置数据"></jas-base-group-title>
+			<jas-detail-table :titles="addressArr" :detail="detail"></jas-detail-table>
+			<jas-base-group-title name="中线成果数据"></jas-base-group-title>
+			<jas-detail-table :titles="busArr" :detail="detail"></jas-detail-table>
+			<jas-base-group-title name="其他信息"></jas-base-group-title>
+			<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
+		</jas-dialog-wrapper>
 		<!--	<jas-base-group-title name="附件信息"></jas-base-group-title>
 		<jas-file-list :biz-id="oid"></jas-file-list>-->
 	</div>
@@ -53,24 +54,15 @@
 					}, {
 						name: "线路段名称",
 						field: "pipeSegmentOrCrossName"
+					},  {
+						name: "焊口编号",
+						field: "weldCode"
 					}, {
 						name: '施工单位',
 						field: 'constructUnitName'
 					}, {
 						name: '施工机组代号',
 						field: 'workUnitCode'
-					}, {
-						name: '施工日期',
-						field: 'constructDate'
-					}, {
-						name: '盖面人员',
-						field: 'coverName'
-					}, {
-						name: '填充人员',
-						field: 'padderName'
-					}, {
-						name: '打底人员',
-						field: 'renderName'
 					},
 					{
 						name: '监理单位',
@@ -79,6 +71,12 @@
 						name: '监理工程师',
 						field: 'supervisionEngineer'
 					}, {
+						name: '测量人',
+						field: 'surveyCrew'
+					}, {
+						name: '测量日期',
+						field: 'surveyDate'
+					} ,{
 						name: '采集人员',
 						field: 'collectionPerson'
 					}, {
@@ -86,56 +84,16 @@
 						field: 'collectionDate'
 					}
 				],
-
-				addressArr: [{
-					name: '桩号',
-					field: 'medianStakeCode'
-				}, {
-					name: '相对桩位置',
-					field: 'relativeMileage'
-				}],
+				addressArr: [],
 				busArr: [{
-						name: '焊口编号',
-						field: 'weldCode'
+						name: '地表高程',
+						field: 'surfaceeLevation'
 					}, {
-						name: '焊口类型',
-						field: 'weldTypeName'
+						name: '管顶高程',
+						field: 'pipeTopElevation'
 					}, {
-						name: '焊接方式',
-						field: 'weldMethodName'
-					}, {
-						name: '前管件类型',
-						field: 'frontPipeTypeName'
-					}, {
-						name: '前管件编号',
-						field: 'frontPipeCode'
-					}, {
-						name: '后管件类型',
-						field: 'backPipeTypeName'
-					}, {
-						name: '后管件编号',
-						field: 'backPipeCode'
-					},
-					{
-						name: '焊条批号',
-						field: 'weldRodBatchNum'
-					}, {
-						name: '焊丝批号',
-						field: 'weldWireBatchNum'
-					}, {
-						name: '焊接工艺规格',
-						field: 'weldProduceCode'
-					}, {
-						name: '外观质量检查',
-						field: 'surfaceCheck',
-					},
-					{
-						name: '是否金口',
-						field: 'isGoldeJoint',
-					}, {
-						name: '是否连头口',
-						field: 'isPipeHead',
-
+						name: '埋深',
+						field: 'buriedDepth'
 					}
 				],
 				otherArr: [{
@@ -151,6 +109,24 @@
 		created: function () {
 			var that = this;
 			var param = window.jasTools.base.getParamsInUrl(location.href);
+			var calculateType = localStorage.getItem("calculateType");
+			if (calculateType == 1) {
+				this.addressArr = [{
+					name: '桩号',
+					field: 'medianStakeCode'
+				}, {
+					name: '相对桩位置',
+					field: 'relativeMileage'
+				}];
+			} else {
+				this.addressArr = [{
+					name: '坐标X',
+					field: 'pointx'
+				}, {
+					name: '坐标Y',
+					field: 'pointy'
+				}];
+			}
 			if (param.oid) {
 				this.oid = param.oid;
 				this.params = param;
@@ -162,13 +138,10 @@
 			getDetailByObjectId: function () {
 				var that = this;
 				var url = jasTools.base.rootPath +
-					"/jdbc/commonData/constructionWeld/getPage.do";
+					"/jdbc/commonData/weldMeasuredResult/getPage.do";
 				jasTools.ajax.post(url, this.params, function (data) {
-
 					that.detail = data.rows[0];
-					that.detail.isGoldeJoint = data.rows[0].isGoldeJoint == 0 ? '是' : '否';
-					that.detail.isPipeHead = data.rows[0].isPipeHead == 0 ? '是' : '否';
-					that.detail.surfaceCheck = data.rows[0].surfaceCheck == 0 ? '合格' : '不合格';
+					
 				});
 			},
 		},
