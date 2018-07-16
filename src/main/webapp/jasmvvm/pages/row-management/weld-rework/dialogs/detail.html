@@ -19,7 +19,8 @@
 	<div id="app" v-cloak>
 		<jas-base-group-title name="基础数据"></jas-base-group-title>
 		<jas-detail-table :titles="baseArr" :detail="detail"></jas-detail-table>
-
+        <jas-base-group-title name="返修数据"></jas-base-group-title>
+		<jas-detail-table :titles="backArr" :detail="detail"></jas-detail-table>
 		<jas-base-group-title name="其他信息"></jas-base-group-title>
 		<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
 
@@ -51,10 +52,43 @@
 					field : 'pipelineName'
 				}, {
 					name : "线路段名称",
-					field : "pipeSegmentName"
-				}, {
+					field : "pipeSegmentOrCrossName"
+				},
+					{
+						name: '施工单位',
+						field: 'constructUnitName'
+					}, {
+						name: '施工机组代号',
+						field: 'workUnitName'
+					},{
+						name: '焊接日期',
+						field: 'weldDate'
+					},{
+						name: '打底人员',
+						field: 'padderName'
+					}, {
+						name: '盖面人员',
+						field: 'renderName'
+					},{
+						name: '填充人员',
+						field: 'coverName'
+					},{
+						name: '监理单位',
+						field: 'supervisionUnitName'
+					}, {
+						name: '监理工程师',
+						field: 'supervisionEngineer'
+					},{
+						name: '采集人员',
+						field: 'collectionPerson'
+					}, {
+						name: '采集日期',
+						field: 'collectionDate'
+					}],
+
+				backArr:[	{
 					name : '返修口编号',
-					field : 'weldOid'
+					field : 'weldCode'
 				}, {
 					name : '返修后焊口编号',
 					field : 'reworkWeldCode'
@@ -66,38 +100,8 @@
 					field : 'weldWireBatchNum'
 				}, {
 					name : '焊接工艺规程',
-					field : 'weldProduce'
-				}, {
-					name : '填充人员',
-					field : 'coverOid'
-				}, {
-					name : '打底人员',
-					field : 'padderOid'
-				}, {
-					name : '盖面人员',
-					field : 'renderOid'
-				}, {
-					name : '焊接日期',
-					field : 'weldDate'
-				}, {
-					name : '施工单位',
-					field : 'constructUnit'
-				}, {
-					name : '施工机组代号',
-					field : 'workUnitOid'
-				}, {
-					name : '监理单位',
-					field : 'supervisionUnit'
-				}, {
-					name : '监理工程师',
-					field : 'supervisionEngineer'
-				}, {
-					name : '采集人员',
-					field : 'collectionPerson'
-				}, {
-					name : '采集日期',
-					field : 'collectionDate'
-				} ],
+					field : 'weldProduceCode'
+				}],
 				otherArr : [ {
 					name : '备注',
 					field : 'remarks',

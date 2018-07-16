@@ -55,10 +55,8 @@
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item label="返修口编号">
-							<el-select v-model="topSearch.weldOid" clearable placeholder="请选择返修口编号" size="small">
-								<el-option v-for="item in domain.welds" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
+						<el-form-item label="焊口编号">
+						   <el-input v-model="topSearch.weldCode" clearable placeholder="请输入焊口编号" size="small"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
@@ -151,7 +149,14 @@
 						field: 'weldProduceCode'
 					}, {
 						name: '外观质量检查',
-						field: 'surfaceCheck'
+						field: 'surfaceCheck',	
+						formatter: function (row, column, cellvalue, index) {
+							if (cellvalue == '0') {
+								return '合格';
+							} else {
+								return '不合格';
+							}
+						}
 					}, {
 						name: '盖面人员',
 						field: 'coverName'
@@ -163,10 +168,24 @@
 						field: 'renderName'
 					}, {
 						name: '是否金口',
-						field: 'isGoldeJoint'
+						field: 'isGoldeJoint',
+						formatter: function (row, column, cellvalue, index) {
+							if (cellvalue == '0') {
+								return '是';
+							} else {
+								return '否';
+							}
+						}
 					}, {
 						name: '是否连头口',
-						field: 'isPipeHead'
+						field: 'isPipeHead',
+						formatter: function (row, column, cellvalue, index) {
+							if (cellvalue == '0') {
+								return '是';
+							} else {
+								return '否';
+							}
+						}
 					}, {
 						name: '施工日期',
 						field: 'constructDate'
@@ -308,7 +327,7 @@
 				this.topSearch.projectOid = '';
 				this.topSearch.pipelineOid = '';
 				this.topSearch.tendersOid = '';
-				this.topSearch.weldOid = '';
+				this.topSearch.weldCode = '';
 				this.topSearch.pipeSegmentOrCrossOid = '';
 
 				this.$refs.table.search();
