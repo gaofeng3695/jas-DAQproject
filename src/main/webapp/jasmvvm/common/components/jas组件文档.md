@@ -391,13 +391,15 @@
 
 |   配置项    |                          说明                          |  类型   |
 | :---------: | :----------------------------------------------------: | :-----: |
-|    type     |          字段类型，可选值[select,input,date]           | String  |
+|    type     |       字段类型，可选值[select,input,date,number]       | String  |
 |   options   |            下拉选的选项，[key:',value:''}]             |  Array  |
 |  optionUrl  |               下拉选的选项,后台请求接口                | String  |
 | domainName  |             下拉选的选项,阈值表的阈值名称              | String  |
 | childSelect |                  级联子级字段名的数组                  |  Array  |
 |  childUrl   | 级联子级的选项接口的数组，index需要与childSelect相对应 |  Array  |
 | isRequired  |                        是否必填                        | Boolean |
+|  precision  |           数字输入框，精度（3: 小数位为3位）           | Number  |
+|     max     |                   数字输入框，最大值                   | Number  |
 
 > 方法
 

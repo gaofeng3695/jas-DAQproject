@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Document</title>
+	<title>全自动超声波检测</title>
 	<link rel="stylesheet" href="./../../../../lib/font-awesome-4.7.0/css/font-awesome.css">
 	<link rel="stylesheet" href="./../../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
 	<link rel="stylesheet" href="./../../../../src/css/main.css">
@@ -22,11 +22,12 @@
 		<jas-dialog-wrapper>
 			<el-form ref="formData" :model="form" label-width="120px">
 
-				<jas-base-group-title name="射线检测基本信息"></jas-base-group-title>
+				<jas-base-group-title name="全自动超声波检测基本信息"></jas-base-group-title>
 				<jas-form-items ref="mainForm" :form="form" :fields="fields" :fields-config="fieldsConfig"></jas-form-items>
 
 
-				<jas-sub-form-group group-name="缺陷信息" :form-default="sonFormDefault" :form-list="form.raySubList" :fields="subFields" :fields-config="sonFieldsConfig"></jas-sub-form-group>
+				<jas-sub-form-group group-name="缺陷信息" :form-default="sonFormDefault" :form-list="form.faUltrasonicSubList" :fields="subFields"
+				  :fields-config="sonFieldsConfig"></jas-sub-form-group>
 
 				<jas-base-group-title name="其他信息"></jas-base-group-title>
 				<el-row>
@@ -84,14 +85,14 @@
 						field: "detectionType",
 						name: '检测类型'
 					}, {
-						field: "evaluationGrade",
-						name: '评定等级'
+						field: "detectionDispose",
+						name: '检测处置'
 					}, {
 						field: "evaluationResult",
 						name: '评定结果'
 					}, {
-						field: "detectionDispose",
-						name: '检测处置'
+						field: "detectionLength",
+						name: '检测长度(mm)'
 					}, {
 						field: "detectionUnit",
 						name: '检测单位'
@@ -114,17 +115,25 @@
 						field: "defectPosition",
 						name: '缺陷位置'
 					}, {
-						field: "defectProperties",
-						name: '缺陷性质'
+						field: "amplitudeRegion",
+						name: '振幅区域'
 					}, {
 						field: "defectSize",
-						name: '缺陷尺寸(mm/mm²/点)'
+						name: '缺陷长度(mm)'
+					}, {
+						field: "defectDepth",
+						name: '缺陷深度(mm)'
+					}, {
+						field: "height",
+						name: '自身高度(mm)'
 					}
 				],
 				sonFormDefault: {
 					defectPosition: '', // 缺陷位置
-					defectProperties: '', //缺陷性质
-					defectSize: '' // 缺陷尺寸(mm/mm²/点)
+					amplitudeRegion: '', //缺陷性质
+					defectSize: '', // 缺陷尺寸(mm/mm²/点)
+					defectDepth: '', // 缺陷尺寸(mm/mm²/点)
+					height: '', // 缺陷尺寸(mm/mm²/点)
 				},
 				fieldsConfig: {
 					projectOid: {
@@ -179,6 +188,11 @@
 							value: '不合格'
 						}],
 					},
+					detectionLength: {
+						type: 'number',
+						max: 100000000,
+						precision: 3,
+					},
 					detectionDispose: {
 						type: 'select',
 						options: [{
@@ -211,18 +225,27 @@
 					defectPosition: {
 						type: 'input',
 					},
-					defectProperties: {
-						type: 'select',
-						domainName: 'defect_properties_domain'
+					amplitudeRegion: {
+						type: 'input',
 					},
 					defectSize: {
 						type: 'number',
 						max: 100000000,
 						precision: 3,
 					},
+					defectDepth: {
+						type: 'number',
+						max: 100000000,
+						precision: 3,
+					},
+					height: {
+						type: 'number',
+						max: 100000000,
+						precision: 3,
+					},
 				},
 				form: {
-					raySubList: []
+					faUltrasonicSubList: []
 				},
 			}
 		},
@@ -265,10 +288,10 @@
 				var msg = "";
 				if (!this.isEdit) {
 					msg = "增加成功";
-					url = jasTools.base.rootPath + "/jdbc/commonData/detectionRay/save.do";
+					url = jasTools.base.rootPath + "/jdbc/commonData/detectionFaUltrasonic/save.do";
 				} else {
 					msg = "修改成功";
-					url = jasTools.base.rootPath + "/jdbc/commonData/detectionRay/update.do";
+					url = jasTools.base.rootPath + "/jdbc/commonData/detectionFaUltrasonic/update.do";
 				}
 
 				jasTools.ajax.post(url, that.form, function (data) {
@@ -285,13 +308,13 @@
 			},
 			getDetailByObjectId: function () {
 				var that = this;
-				var url = jasTools.base.rootPath + "/daq/detectionRay/get.do";
+				var url = jasTools.base.rootPath + "/daq/detectionFaUltrasonic/get.do";
 				jasTools.ajax.get(url, {
 					oid: that.oid
 				}, function (data) {
 					that.form = data.data;
 					that.$refs['mainForm'].triggerFatherSelectsChange();
-					that.form.raySubList.forEach(function (item) {
+					that.form.faUltrasonicSubList.forEach(function (item) {
 						item.operationFlag = 2;
 					});
 				});
