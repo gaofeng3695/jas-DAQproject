@@ -2,6 +2,11 @@ package cn.jasgroup.jasframework.acquisitiondata.weld.measuredresult.query.bo;
 
 import java.util.Date;
 
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 
 /**
@@ -162,7 +167,7 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 	/**
 	 * 审核状态
 	 */
-	private Integer approveStatus;
+	private Integer approveStatus = 0;
 
 	/**
 	 * 备注
@@ -329,6 +334,9 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 		this.surveyCrew = surveyCrew;
 	}
 
+
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+	@Temporal(TemporalType.TIMESTAMP)
 	public Date getSurveyDate() {
 		return surveyDate;
 	}
@@ -385,6 +393,8 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 		this.collectionPerson = collectionPerson;
 	}
 
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+	@Temporal(TemporalType.TIMESTAMP)
 	public Date getCollectionDate() {
 		return collectionDate;
 	}
