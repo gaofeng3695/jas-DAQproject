@@ -19,51 +19,11 @@
 
 <body>
 	<div id="app" v-cloak>
-
-
 		<jas-list-wrapper>
-			<el-form slot="search" :model="topSearch" label-width="110px">
-				<el-row>
-					<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
-						<el-form-item label="项目名称" prop="projectOid">
-							<el-select v-model="topSearch.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
-								<el-option v-for="item in domain.project" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
-						<el-form-item label="标段名称" prop="tendersOid">
-							<el-select v-model="topSearch.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
-								<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
-						<el-form-item label="管线名称" prop="pipelineOid">
-							<el-select v-model="topSearch.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged">
-								<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
-						<el-form-item label="线路段/穿跨越" prop="pipeSegmentOid">
-							<el-select v-model="topSearch.pipeSegmentOid" clearable placeholder="请选择线路段" size="small" @change="searchList">
-								<el-option v-for="item in domain.pipeSegment" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="24" :md="16" :lg="24" :xl="24">
-						<el-form-item style="float: right;">
-							<el-button size="small" type="primary" @click="searchList">查询</el-button>
-							<el-button size="small" @click="reset">重置</el-button>
-						</el-form-item>
-					</el-col>
-				</el-row>
-			</el-form>
+			<jas-search-for-list slot="search" :form="topSearch" :fields="fields" :fields-config="fieldsConfig" @search="searchList"></jas-search-for-list>
 			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" :search-path="searchPath"
 			  :add-url="addUrl" :detail-url="detailUrl" :delete-path="deletePath" :class-name="className" :template-code="templateCode"></jas-table-for-list>
 		</jas-list-wrapper>
-
 
 	</div>
 </body>
@@ -90,7 +50,47 @@
 					projectOid: '',
 					tendersOid: '',
 					pipelineOid: '',
-					pipeSegmentOid: '', //线路段
+					pipeSegmentOrCrossOid: '', //线路段
+				},
+				fields: [ //
+					{
+						field: "projectOid",
+						name: '项目名称'
+					}, {
+						field: "tendersOid",
+						name: '标段名称'
+					}, {
+						field: "pipelineOid",
+						name: '管线名称'
+					}, {
+						field: "pipeSegmentOrCrossOid",
+						name: '线路段/传跨越'
+					},
+				],
+				fieldsConfig: {
+					projectOid: {
+						type: 'select',
+						optionUrl: '/daq/privilege/getProjectList.do',
+						childSelect: ['tendersOid'],
+						childUrl: ['/daq/privilege/getTendersList.do'],
+						isRequired: true,
+					},
+					tendersOid: {
+						type: 'select',
+						childSelect: ['pipelineOid'],
+						childUrl: ['/daq/privilege/getPipelineListByTendersOid.do', '/daq/privilege/getSupervisionUnitByTendersOid.do'],
+						isRequired: true,
+					},
+					pipelineOid: {
+						type: 'select',
+						childSelect: ['pipeSegmentOrCrossOid'],
+						childUrl: ['/daq/privilege/getPipeSegmentOrCrossList.do'],
+						isRequired: true,
+					},
+					pipeSegmentOrCrossOid: {
+						type: 'select',
+						isRequired: true,
+					},
 				},
 				tableFields: [ //
 					{
@@ -153,12 +153,6 @@
 						field: 'collectionDate'
 					}
 				],
-				domain: {
-					project: [], //项目
-					tenders: [], //标段
-					pipeline: [], //管线
-					pipeSegment: [],
-				}
 			}
 		},
 
@@ -168,72 +162,9 @@
 			this.privilegeCode = param.privilegeCode;
 			this.templateCode = param.templateCode; //|| "stake-2";
 			this.className = param.className; // || 'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';
-			this.requestDomainFromBizTable('/daq/privilege/getProjectList.do', {}, function (arr) {
-				that.domain.project = arr;
-			});
 		},
 		methods: {
-			requestDomainFromBizTable: function (url, obj, cb) {
-				var that = this;
-				var url = jasTools.base.rootPath + url;
-				jasTools.ajax.post(url, obj, function (data) {
-					cb && cb(data.rows);
-				}, function () {
-					cb && cb([]);
-				});
-			},
-			projectChanged: function (val) {
-				var that = this;
-				if (val) {
-					this.requestDomainFromBizTable('/daq/privilege/getTendersList.do', {
-						projectOid: val
-					}, function (arr) {
-						that.domain.tenders = arr;
-					});
-				} else {
-					that.domain.tenders = [];
-					that.topSearch.tendersOid = '';
-				}
-				that.searchList();
-			},
-			tendersChanged: function (val) { //根据标段触发管线列表
-				var that = this;
-				if (val) {
-					this.requestDomainFromBizTable('/daq/privilege/getPipelineListByTendersOid.do', {
-						tendersOid: val
-					}, function (arr) {
-						that.domain.pipeline = arr;
-					});
-				} else {
-					that.domain.pipeline = [];
-					that.topSearch.pipelineOid = '';
-				}
-				that.searchList();
-
-			},
-			pipelineChanged: function (val) { //根据管线触发线路段/穿跨越
-				var that = this;
-				if (val) {
-					this.requestDomainFromBizTable('/daq/privilege/getPipeSegmentOrCrossList.do', {
-						pipelineOid: val
-					}, function (arr) {
-						that.domain.pipeSegment = arr;
-					});
-				} else {
-					that.domain.pipeSegment = [];
-					that.topSearch.pipeSegmentOid = '';
-				}
-				that.searchList();
-
-			},
 			searchList: function () {
-				this.$refs.table.search();
-			},
-			reset: function () {
-				this.topSearch.projectOid = '';
-				this.topSearch.pipelineOid = '';
-				this.topSearch.tendersOid = '';
-				this.topSearch.pipeSegmentOid = '';
 				this.$refs.table.search();
 			},
 		},
