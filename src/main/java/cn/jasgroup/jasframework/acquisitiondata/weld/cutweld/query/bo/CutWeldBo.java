@@ -53,6 +53,11 @@ public class CutWeldBo extends CommonBaseBo{
 	private String pipeOid; 
 
 	/**
+	 * 钢管编号
+	 */
+	private String pipeCode; 
+
+	/**
 	 * 管径(mm)
 	 */
 	private Double pipeDiameter; 
@@ -160,6 +165,14 @@ public class CutWeldBo extends CommonBaseBo{
 
 	public String getPipeOid() {
 		return pipeOid;
+	}
+
+	public String getPipeCode() {
+		return pipeCode;
+	}
+
+	public void setPipeCode(String pipeCode) {
+		this.pipeCode = pipeCode;
 	}
 
 	public void setPipeOid(String pipeOid) {

@@ -51,11 +51,12 @@ public class CutWeldQuery extends BaseJavaQuery{
 
 	@Override
 	public String getQuerySql() {
-		String sql = "SELECT cp.*,	pro.project_name,	pi.pipeline_name,	te.tenders_name FROM daq_cut_pipe cp "
-				+ "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = cp.project_oid "
-				+ "LEFT JOIN (SELECT oid, pipeline_name, active FROM daq_pipeline where active=1) pi ON pi.oid = cp.pipeline_oid "
-				+ "LEFT JOIN (SELECT oid, tenders_name, active FROM daq_tenders where active=1) te ON te.oid = cp.tenders_oid  "
-				+ "WHERE cp.active = 1 ";
+		String sql = "SELECT cp.*,	pro.project_name,	pi.pipeline_name,	te.tenders_name, mp.pipe_code FROM daq_cut_pipe cp "
+					+ "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = cp.project_oid "
+					+ "LEFT JOIN (SELECT oid, pipeline_name, active FROM daq_pipeline where active=1) pi ON pi.oid = cp.pipeline_oid "
+					+ "LEFT JOIN (SELECT oid, tenders_name, active FROM daq_tenders where active=1) te ON te.oid = cp.tenders_oid "
+					+ "LEFT JOIN (select oid, pipe_code, active from daq_material_pipe where active=1) mp on mp.oid = cp.pipe_oid "
+					+ "WHERE cp.active = 1 ";
 		sql += getConditionSql();
 		return sql;
 	}
