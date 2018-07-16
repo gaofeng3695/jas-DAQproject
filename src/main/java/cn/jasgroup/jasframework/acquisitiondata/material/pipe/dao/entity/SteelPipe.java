@@ -165,7 +165,7 @@ public class SteelPipe extends CommonJdbcEntity{
 	/** 
 	 * 是否热弯 
 	 */
-	private Integer isHotBend; 
+	private Integer isColdBend; 
 
 	/** 
 	 * 备注
@@ -429,13 +429,12 @@ public class SteelPipe extends CommonJdbcEntity{
 		super.setField("isUse");
 	}
 
-	public Integer getIsHotBend() {
-		return isHotBend; 
+	public Integer getIsColdBend() {
+		return isColdBend;
 	}
 
-	public void setIsHotBend(Integer isHotBend) {
-		this.isHotBend = isHotBend; 
-		super.setField("isHotBend");
+	public void setIsColdBend(Integer isColdBend) {
+		this.isColdBend = isColdBend;
 	}
 
 	public String getRemarks() {
