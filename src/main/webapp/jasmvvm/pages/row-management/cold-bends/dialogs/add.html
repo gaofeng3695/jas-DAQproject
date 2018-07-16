@@ -36,6 +36,7 @@
 
 <body>
 	<div id="app" v-cloak>
+		<jas-dialog-wrapper>
 		<div class="content">
 			<el-form ref="formData" :rules="rules" :model="formData" label-width="150px">
 				<jas-base-group-title name="基础数据"></jas-base-group-title>
@@ -70,7 +71,7 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="采集人员">
-							<el-input v-model="formData.collectionPerson" clearable placeholder="请输入中线桩编号" size="small"></el-input>
+							<el-input v-model="formData.collectionPerson" clearable placeholder="请输入采集人员" size="small"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
@@ -121,7 +122,7 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="制作日期">
-							<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入采集日期" v-model="formData.produceDate" size="small" style="width: 100%;">
+							<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入制作日期" v-model="formData.produceDate" size="small" style="width: 100%;">
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
@@ -216,6 +217,7 @@
 			<el-button size="small" type="primary" @click="submit('formData')">确 定
 			</el-button>
 		</div>
+			</jas-dialog-wrapper>
 	</div>
 </body>
 <script src="./../../../../lib/jquery/jquery-1.12.4.min.js"></script>

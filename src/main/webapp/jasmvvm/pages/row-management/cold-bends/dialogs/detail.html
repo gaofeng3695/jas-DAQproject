@@ -15,13 +15,14 @@
 
 <body>
 	<div id="app" v-cloak>
+	<jas-dialog-wrapper>
 		<jas-base-group-title name="基础数据"></jas-base-group-title>
 		<jas-detail-table :titles="baseArr" :detail="detail"></jas-detail-table>
 		<jas-base-group-title name="冷弯信息数据"></jas-base-group-title>
 		<jas-detail-table :titles="fieldsArr" :detail="detail"></jas-detail-table>
 		<jas-base-group-title name="其他信息"></jas-base-group-title>
 		<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
-
+</jas-dialog-wrapper>
 	<!--	<jas-base-group-title name="附件信息"></jas-base-group-title>
 		<jas-file-list :biz-id="oid"></jas-file-list>-->
 	</div>

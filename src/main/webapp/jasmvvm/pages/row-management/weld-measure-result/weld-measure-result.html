@@ -181,14 +181,7 @@
 						name: '测量日期',
 						field: 'surveyDate'
 					}
-				],
-				domain: {
-					project: [], //项目
-					tenders: [], //标段
-					pipeline: [], //管线
-					pipeSegment: [],
-					welds: [] //焊口编号
-				}
+				]
 			}
 		},
 
@@ -200,12 +193,7 @@
 			this.privilegeCode = param.privilegeCode;
 			this.templateCode = param.templateCode; //|| "stake-2";
 			this.className = param.className; // || 'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';
-			this.requestDomainFromBizTable(
-				'/daq/privilege/getProjectList.do', {},
-				function (
-					arr) {
-					that.domain.project = arr;
-				});
+		
 			if (type == 1) {
 				this.tableFields.splice(5, 0, {
 					name: '桩号',
@@ -228,90 +216,6 @@
 			}
 		},
 		methods: {
-			requestDomainFromBizTable: function (url, obj, cb) {
-				var that = this;
-				var url = jasTools.base.rootPath + url;
-				jasTools.ajax.post(url, obj, function (data) {
-					cb && cb(data.rows);
-				}, function () {
-					cb && cb([]);
-				});
-			},
-			projectChanged: function (val) {
-				var that = this;
-				if (val) {
-					this.requestDomainFromBizTable(
-						'/daq/privilege/getTendersList.do', {
-							projectOid: val
-						},
-						function (arr) {
-							that.domain.tenders = arr;
-						});
-				} else {
-					that.domain.tenders = [];
-					that.topSearch.tendersOid = '';
-					that.domain.pipeline = [];
-					that.topSearch.pipelineOid = '';
-					that.domain.pipeSegment = [];
-					that.topSearch.pipeSegmentOrCrossOid = '';
-					that.domain.welds = [];
-					that.topSearch.weldOid = '';
-				}
-			},
-			tendersChanged: function (val) { //根据标段触发管线列表
-				var that = this;
-				if (val) {
-					this
-						.requestDomainFromBizTable(
-							'/daq/privilege/getPipelineListByTendersOid.do', {
-								tendersOid: val
-							},
-							function (arr) {
-								that.domain.pipeline = arr;
-							});
-				} else {
-					that.domain.pipeline = [];
-					that.topSearch.pipelineOid = '';
-					that.domain.pipeSegment = [];
-					that.topSearch.pipeSegmentOrCrossOid = '';
-					that.domain.welds = [];
-					that.topSearch.weldOid = '';
-				}
-			},
-			pipelineChanged: function (val) { //根据管线触发线路段/穿跨越
-				var that = this;
-				if (val) {
-					this
-						.requestDomainFromBizTable(
-							'/daq/privilege/getPipeSegmentOrCrossList.do', {
-								pipelineOid: val
-							},
-							function (arr) {
-								that.domain.pipeSegment = arr;
-							});
-				} else {
-					that.domain.pipeSegment = [];
-					that.topSearch.pipeSegmentOrCrossOid = '';
-					that.domain.welds = [];
-					that.topSearch.weldOid = '';
-				}
-			},
-			pipeSegmentChanged: function (val) {
-				var that = this;
-				if (val) {
-					this
-						.requestDomainFromBizTable(
-							'/daq/weld/getWeldList.do', {
-								pipeSegmentOrCrossOid: val
-							},
-							function (arr) {
-								that.domain.welds = arr;
-							});
-				} else {
-					that.domain.welds = [];
-					that.topSearch.weldOid = '';
-				}
-			},
 			searchList: function () {
 				this.$refs.table.search();
 			},
@@ -319,7 +223,7 @@
 				this.topSearch.projectOid = '';
 				this.topSearch.pipelineOid = '';
 				this.topSearch.tendersOid = '';
-				this.topSearch.weldCode = '';
+				this.topSearch.weldOid = '';
 				this.topSearch.pipeSegmentOrCrossOid = '';
 
 				this.$refs.table.search();

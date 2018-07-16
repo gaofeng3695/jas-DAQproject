@@ -147,13 +147,13 @@
 					<el-row v-else>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="坐标X">
-								<el-input-number :precision="3" :step="1" :max="10000000" controls-position="right" v-model="formData.pointx" clearable placeholder="请输入相对桩位置"
+								<el-input-number :precision="3" :step="1" :max="10000000" controls-position="right" v-model="formData.pointx" clearable placeholder="请输入坐标X"
 								  size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="坐标Y">
-								<el-input-number :precision="3" :step="1" :max="10000000" controls-position="right" v-model="formData.pointy" clearable placeholder="请输入相对桩位置"
+								<el-input-number :precision="3" :step="1" :max="10000000" controls-position="right" v-model="formData.pointy" clearable placeholder="请输入坐标Y"
 								  size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
@@ -163,14 +163,14 @@
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="地表高程(m)">
 								<el-input-number :precision="2" :step="1" :max="1000000" controls-position="right" v-model="formData.surfaceeLevation" clearable
-								  placeholder="请输入相对桩位置" size="small"></el-input-number>
+								  placeholder="请输入地表高程(m)" size="small"></el-input-number>
 							</el-form-item>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="管顶高程(m)">
 								<el-input-number :precision="2" :step="1" :max="1000000" controls-position="right" v-model="formData.pipeTopElevation" clearable
-								  placeholder="请输入相对桩位置" size="small"></el-input-number>
+								  placeholder="请输入管顶高程(m)" size="small"></el-input-number>
 							</el-form-item>
 							<!--<el-input v-model="formData.weldType" placeholder="请输入焊口类型" size="small"></el-input>-->
 							</el-form-item>
@@ -178,7 +178,7 @@
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="埋深(m)">
 								<el-input-number :precision="2" :step="1" :max="1000000" controls-position="right" v-model="formData.buriedDepth" clearable
-								  placeholder="请输入相对桩位置" size="small"></el-input-number>
+								  placeholder="请输入埋深(m)" size="small"></el-input-number>
 							</el-form-item>
 							</el-form-item>
 						</el-col>
@@ -525,7 +525,7 @@
 					}
 					that.projectChanged(data.rows[0].projectOid);
 					that.tendersChanged(data.rows[0].tendersOid);
-					that.getSupervisionUnit(data.rows[0].tendersOid);
+				
 					that.pipelineChanged(data.rows[0].pipelineOid);
 					that.pipeSegmentChanged(data.rows[0].pipeSegmentOrCrossOid);
 				});
