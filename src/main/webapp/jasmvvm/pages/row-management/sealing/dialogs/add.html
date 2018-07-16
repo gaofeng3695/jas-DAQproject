@@ -36,6 +36,7 @@
 
 <body>
 	<div id="app" v-cloak>
+		<jas-dialog-wrapper>
 		<div class="content">
 			<el-form ref="formData" :rules="rules" :model="formData" label-width="150px">
 				<jas-base-group-title name="基础数据"></jas-base-group-title>
@@ -145,6 +146,7 @@
 						</el-form-item>
 					</el-col>
 				</el-row>
+					</jas-dialog-wrapper>
 				<!-- <el-row>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 						<el-form-item label="模板上传" prop="file">

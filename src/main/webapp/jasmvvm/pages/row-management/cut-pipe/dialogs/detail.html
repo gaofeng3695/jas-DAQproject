@@ -16,12 +16,11 @@
 <body>
 	<div id="app" v-cloak>
 		<jas-dialog-wrapper>
-		<jas-base-group-title name="基础数据"></jas-base-group-title>
-		<jas-detail-table :titles="baseArr" :detail="detail"></jas-detail-table>
-
-		<jas-base-group-title name="其他信息"></jas-base-group-title>
-		<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
-	</jas-dialog-wrapper>
+			<jas-base-group-title name="基础数据"></jas-base-group-title>
+			<jas-detail-table :titles="baseArr" :detail="detail"></jas-detail-table>
+			<jas-base-group-title name="其他信息"></jas-base-group-title>
+			<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
+		</jas-dialog-wrapper>
 		<!--	<jas-base-group-title name="附件信息"></jas-base-group-title>
 		<jas-file-list :biz-id="oid"></jas-file-list>-->
 	</div>
@@ -41,44 +40,26 @@
 				baseArr: [ //
 					{
 						name: '项目名称',
-						field: 'projectName',
-					},
-					{
+						field: 'projectName'
+					}, {
 						name: '标段名称',
-						field: 'tendersName',
-					},
-					{
-						name: '施工单位',
-						field: 'unitName',
-					},
-					{
-					name: '出厂编号',
-					field: 'manufacturerCode'
-				}, {
-					name: '生产厂家',
-					field: 'manufacturer'
-				}, {
-					name: '合格证编号',
-					field: 'certificationNum'
-				}, {
-					name: "公称直径(mm)",
-					field: "diameter"
-				}, {
-					name: "公称压力(mpa)",
-					field: "pressure"
-				}, {
-					name: '测试仪器',
-					field: 'testEquipment'
-				}, {
-					name: '仪器规格型号',
-					field: 'specandModel'
-				}, {
-					name: '实用绝缘电阻值(MΩ)',
-					field: 'resistanceVal'
-				}, {
-					name: '验收结论',
-					field: 'checkResults'
-				}
+						field: 'tendersName'
+					}, {
+						name: '管线名称',
+						field: 'pipelineName'
+					},  {
+						name: "钢管编号",
+						field: "pipeCode"
+					}, {
+						name: '管径(mm)',
+						field: 'pipeDiameter'
+					}, {
+						name: '壁厚(mm)',
+						field: 'wallThickness'
+					}, {
+						name: '分割段数(段)',
+						field: 'segmentsNum'
+					}
 				],
 				otherArr: [{
 					name: '备注',
@@ -103,13 +84,29 @@
 		methods: {
 			getDetailByObjectId: function () {
 				var that = this;
-				var url = jasTools.base.rootPath + "/jdbc/commonData/checkInsulatedJoint/getPage.do";
+				var url = jasTools.base.rootPath +
+					"/jdbc/commonData/cutWeld/getPage.do";
 				jasTools.ajax.post(url, this.params, function (data) {
-
 					that.detail = data.rows[0];
-
+                    that.isDetailLength(that.detail.segmentsNum);
 				});
 			},
+			isDetailLength: function (val) {
+				var that = this;
+				var indexs = ['firstParagraphLength', 'secondParagraphLength', 'thirdParagraphLength', 'fourthParagraphLength',
+					'fifthParagraphLength'
+				];
+				var num=['一','二','三','四','五'];
+
+				for (var i = 0; i < val; i++) {
+					var obj = {
+						name: "第"+num[i]+"段长度(m)",
+						field: indexs[i],
+					};
+					that.baseArr.push(obj);
+				}
+				
+			}
 		},
 	});
 </script>
