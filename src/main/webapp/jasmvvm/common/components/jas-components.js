@@ -517,6 +517,9 @@ Vue.component('jas-search-for-list', {
 		'	    			<template v-if="fieldsConfig[item.field].type == \'input\'">',
 		'	    				<el-input v-model="form[item.field]" :placeholder="\'请输入\'+item.name" size="small" clearable></el-input>',
 		'	    			</template>',
+		'	    			<template v-if="fieldsConfig[item.field].type == \'number\'">',
+		'							<el-input-number v-model="form[item.field]" :precision="fieldsConfig[item.field].precision" :step="1" :max="fieldsConfig[item.field].max" controls-position="right" clearable :placeholder="\'请输入\'+item.name" size="small"></el-input-number>',
+		'	    			</template>',
 		'	    			<template v-if="fieldsConfig[item.field].type == \'date\'">',
 		'	    				<el-date-picker clearable value-format="yyyy-MM-dd HH:mm:ss" type="date" :placeholder="\'请选择\'+item.name" v-model="form[item.field]" size="small" style="width: 100%;"></el-date-picker>',
 		'	    			</template>',
@@ -1091,8 +1094,11 @@ Vue.component('jas-form-items', {
 		'				<template v-if="fieldsConfig[item.field].type == \'input\'">',
 		'					<el-input v-model="form[item.field]" :placeholder="\'请输入\'+item.name" size="small" clearable></el-input>',
 		'				</template>',
+		'	    	<template v-if="fieldsConfig[item.field].type == \'number\'">',
+		'					<el-input-number v-model="form[item.field]" :precision="fieldsConfig[item.field].precision" :step="1" :max="fieldsConfig[item.field].max" controls-position="right" clearable :placeholder="\'请输入\'+item.name" size="small"></el-input-number>',
+		'	    	</template>',
 		'				<template v-if="fieldsConfig[item.field].type == \'date\'">',
-		'					<el-date-picker clearable value-format="yyyy-MM-dd HH:mm:ss" type="date" :placeholder="\'请选择\'+item.name" v-model="form[item.field]" size="small" style="width: 100%;"></el-date-picker>',
+		'					<el-date-picker clearable value-format="yyyy-MM-dd" type="date" :placeholder="\'请选择\'+item.name" v-model="form[item.field]" size="small" style="width: 100%;"></el-date-picker>',
 		'				</template>',
 		'			</el-form-item>',
 		'		</el-col>',
@@ -1271,6 +1277,9 @@ Vue.component('jas-sub-form-group', {
 		},
 		formList: {
 			type: Array,
+			default:function(){
+				return []
+			}
 		},
 		formDefault: {
 			type: Object,

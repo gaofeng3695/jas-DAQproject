@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Document</title>
+	<title>全自动超声波检测</title>
 	<link rel="stylesheet" href="./../../../../lib/font-awesome-4.7.0/css/font-awesome.css">
 	<link rel="stylesheet" href="./../../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
 	<link rel="stylesheet" href="./../../../../src/css/main.css">
@@ -18,10 +18,10 @@
 
 		<jas-dialog-wrapper>
 
-			<jas-base-group-title name="射线检测基本信息"></jas-base-group-title>
+			<jas-base-group-title name="全自动超声波检测基本信息"></jas-base-group-title>
 			<jas-detail-table :titles="fieldsArr" :detail="detail"></jas-detail-table>
 
-			<jas-sub-detail-group group-name="缺陷信息" :detail-list="detail.raySubList" :fields="subFieldsArr"></jas-sub-detail-group>
+			<jas-sub-detail-group group-name="缺陷信息" :detail-list="detail.faUltrasonicSubList" :fields="subFieldsArr"></jas-sub-detail-group>
 
 			<jas-base-group-title name="其他信息"></jas-base-group-title>
 			<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
@@ -50,72 +50,78 @@
 						field: "defectPosition",
 						name: '缺陷位置'
 					}, {
-						field: "defectPropertiesName",
-						name: '缺陷性质'
+						field: "amplitudeRegion",
+						name: '振幅区域'
 					}, {
 						field: "defectSize",
-						name: '缺陷尺寸(mm/mm²/点)'
+						name: '缺陷长度(mm)'
+					}, {
+						field: "defectDepth",
+						name: '缺陷深度(mm)'
+					}, {
+						field: "height",
+						name: '自身高度(mm)'
 					}
 				],
 				fieldsArr: [ //
 					{
-						field: "projectName",
-						name: '项目名称'
+						name: '项目名称',
+						field: 'projectName'
 					}, {
-						field: "tendersName",
-						name: '标段名称'
+						name: '标段名称',
+						field: 'tendersName'
 					}, {
-						field: "pipelineName",
-						name: '管线名称'
+						name: '管线名称',
+						field: 'pipelineName'
 					}, {
-						field: "pipeSegmentOrCrossName",
-						name: '线路段/传跨越'
+						name: "线路段/穿跨越名称",
+						field: "pipeSegmentOrCrossName"
 					}, {
-						field: "weldCode",
-						name: '焊口编号'
+						name: '焊口编号',
+						field: 'weldCode'
 					}, {
-						field: "detectionReportNum",
-						name: '检测报告编号'
+						name: '检测报告编号',
+						field: 'detectionReportNum'
 					}, {
-						field: "detectionDeta",
-						name: '检测日期'
+						name: '检测日期',
+						field: 'detectionDeta'
 					}, {
-						field: "detectionTypeName",
-						name: '检测类型'
+						name: '检测类型',
+						field: 'detectionTypeName'
 					}, {
-						field: "evaluationGradeName",
-						name: '评定等级'
-					}, {
-						field: "evaluationResult",
-						name: '评定结果',
-						formatter: function (row, column, cellValue, index) {
-							if (cellValue == 1) return '合格';
-							if (cellValue == 2) return '不合格';
-							return cellValue;
-						}
-					}, {
-						field: 'detectionDispose',
 						name: '检测处置',
+						field: 'detectionDispose',
 						formatter: function (row, column, cellValue, index) {
 							if (cellValue == 1) return '返修';
 							if (cellValue == 2) return '割口';
 							return cellValue;
 						}
 					}, {
-						field: "detectionUnitName",
-						name: '检测单位'
+						name: '评定结果',
+						field: 'evaluationResult',
+						formatter: function (row, column, cellValue, index) {
+							if (cellValue == 1) return '合格';
+							if (cellValue == 2) return '不合格';
+							return cellValue;
+						}
 					}, {
-						field: "detectionPerson",
-						name: '检测人员'
+						name: '检测单位',
+						field: 'detectionUnitName'
 					}, {
-						field: "supervisionUnitName",
-						name: '监理单位'
+						name: '检测人员',
+						field: 'detectionPerson'
 					}, {
-						field: "supervisionEngineer",
-						name: '监理工程师'
+						name: '审核人员',
+						field: 'auditor'
 					}, {
-						field: "collectionDate",
-						name: '采集日期'
+						name: '监理单位',
+						field: 'supervisionUnitName'
+					}, {
+						name: '监理工程师',
+						field: 'supervisionEngineer'
+					}, {
+						name: '采集日期',
+						field: 'collectionDate'
 					}
 				],
 				otherArr: [{
@@ -139,7 +145,7 @@
 		methods: {
 			getDetailByObjectId: function () {
 				var that = this;
-				var url = jasTools.base.rootPath + "/daq/detectionRay/get.do";
+				var url = jasTools.base.rootPath + "/daq/detectionFaUltrasonic/get.do";
 				jasTools.ajax.get(url, this.params, function (data) {
 					that.detail = data.data;
 				});

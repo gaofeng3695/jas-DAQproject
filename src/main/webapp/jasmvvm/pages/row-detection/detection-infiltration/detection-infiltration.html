@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>自定义表单配置</title>
+	<title></title>
 	<!-- <link rel="stylesheet" href="./libelement-ui/element-#0E2B4A/src/index.css"> -->
 	<link rel="stylesheet" href="./../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
 	<link rel="stylesheet" href="./../../../lib/font-awesome-4.7.0/css/font-awesome.min.css">
@@ -40,10 +40,10 @@
 			return {
 				className: '',
 				templateCode: '',
-				searchPath: '/jdbc/commonData/detectionRay/getPage.do',
-				deletePath: '/jdbc/commonData/detectionRay/delete.do',
-				addUrl: './pages/row-detection/detection-ray/dialogs/add.html',
-				detailUrl: './pages/row-detection/detection-ray/dialogs/detail.html',
+				searchPath: '/jdbc/commonData/detectionInfiltration/getPage.do',
+				deletePath: '/jdbc/commonData/detectionInfiltration/delete.do',
+				addUrl: './pages/row-detection/detection-infiltration/dialogs/add.html',
+				detailUrl: './pages/row-detection/detection-infiltration/dialogs/detail.html',
 				privilegeCode: '',
 				topSearch: {
 					projectOid: '',
@@ -89,7 +89,7 @@
 					pipeSegmentOrCrossOid: {
 						type: 'select',
 					},
-					weldCode: {
+					weldCode:{
 						type: 'input',
 					}
 				},
@@ -116,12 +116,6 @@
 						name: '检测日期',
 						field: 'detectionDeta'
 					}, {
-						name: '检测类型',
-						field: 'detectionTypeName'
-					}, {
-						name: '评定等级',
-						field: 'evaluationGradeName'
-					}, {
 						name: '评定结果',
 						field: 'evaluationResult',
 						formatter: function (row, column, cellValue, index) {
@@ -138,6 +132,9 @@
 							return cellValue;
 						}
 					}, {
+						name: '检测长度(mm)',
+						field: 'detectionLength'
+					},{
 						name: '检测单位',
 						field: 'detectionUnitName'
 					}, {
