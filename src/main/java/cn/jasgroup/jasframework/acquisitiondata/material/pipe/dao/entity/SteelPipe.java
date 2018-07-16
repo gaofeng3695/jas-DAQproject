@@ -410,7 +410,6 @@ public class SteelPipe extends CommonJdbcEntity{
 		super.setField("coatingFactory");
 	}
 
-	@UpdateDeleteSet
 	public Integer getIsCut() {
 		return isCut; 
 	}
