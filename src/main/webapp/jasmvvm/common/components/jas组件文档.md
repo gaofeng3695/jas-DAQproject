@@ -90,10 +90,10 @@
 
 > 属性
 
-|  参数  |                        说明                        | 类型  | 可选值 | 默认值 |
-| :----: | :------------------------------------------------: | :---: | :----: | :----: |
-| titles | 详情的各个项的数组，例[{name:'xxx', field :'xxx'}] | array |        |        |
-| detail |                      详情对象                      |  obj  |        |        |
+|  参数  |                             说明                             | 类型  | 可选值 | 默认值 |
+| :----: | :----------------------------------------------------------: | :---: | :----: | :----: |
+| titles | 详情的各个项的数组，例[{name:'xxx', field :'xxx'}]，新增formatter配置项详见element文档 | array |        |        |
+| detail |                           详情对象                           |  obj  |        |        |
 
 
 
@@ -124,10 +124,6 @@
 |  事件名称  |         说明         | 回调参数 |
 | :--------: | :------------------: | :------: |
 | paneresize | 调整分栏大小时的钩子 |          |
-
-
-
-
 
 > 插槽
 
@@ -196,6 +192,42 @@
 
 定义：业务相关的组件
 
+#### 搜索栏组件 jas-search-for-list 
+
+搜索栏组件
+
+> 代码
+
+```html
+<body>
+	<jas-search-for-list 
+		slot="search" 
+		:form="topSearch" 
+		:fields="fields" 
+		:fields-config="fieldsConfig" 
+		@search="searchList"
+	></jas-search-for-list>
+</body>
+<script>
+
+</script>
+```
+
+> 属性
+
+|     参数      |                        说明                        | 类型  | 可选值 | 默认值 |
+| :-----------: | :------------------------------------------------: | :---: | :----: | :----: |
+|    fields     | 搜索的各个项的数组，例[{name:'xxx', field :'xxx'}] | array |        |        |
+|     form      |                      请求对象                      |  obj  |        |        |
+| fields-config |       字段的类型配置，详见jas-form-items组件       |  obj  |        |        |
+
+
+> 事件
+
+| 事件名称 |                           说明                           |         回调参数         |
+| :------: | :------------------------------------------------------: | :----------------------: |
+| search | 触发搜索的钩子 |  |
+
 #### 列表组件 jas-table-for-list
 
 1. 列表组件，包含顶部操作按钮（新增，导入，导出），表格，分页控件
@@ -216,7 +248,7 @@
 
 |      参数      |                             说明                             |     类型     | 可选值 | 默认值 |
 | :------------: | :----------------------------------------------------------: | :----------: | :----: | :----: |
-|     fields     |      表格的各个项的数组，例[{name:'xxx', field :'xxx'}]      |    array     |        |        |
+|     fields     | 表格的各个项的数组，例[{name:'xxx', field :'xxx'}]，新增formatter配置项详见element文档 |    array     |        |        |
 |      form      |                      表格请求的传参对象                      |     obj      |        |        |
 |  search-path   |                      刷新列表的请求路径                      |    string    |        |        |
 |  delete-path   |                     删除某一项的请求路径                     |    string    |        |        |
@@ -237,8 +269,6 @@
 | 事件名称 |                           说明                           |         回调参数         |
 | :------: | :------------------------------------------------------: | :----------------------: |
 | locate  | 点击定位按钮的钩子 | itemObj |
-
-
 
 #### 文件上传 jas-file-upload 
 
@@ -334,3 +364,96 @@
 |     oids      | 选中的条目的oids数组，用于导出已选接口 |  array  |        |   []   |
 | template-code |         模板编号，用于导出接口         | string  |        |        |
 |  class-name   |     后台用的class类，用于导出接口      | string  |        |        |
+
+#### 表单项组件 jas-form-items  
+
+在新增编辑页面展示的表单项组件
+
+> 代码
+
+```html
+<body>
+	<jas-form-items ref="mainForm" :form="form" :fields="fields" :fields-config="fieldsConfig"></jas-form-items>
+</body>
+<script>
+	that.$refs['mainForm'].triggerFatherSelectsChange();
+</script>
+```
+> 属性
+
+|     参数     |                        说明                        | 类型  | 可选值 | 默认值 |
+| :----------: | :------------------------------------------------: | :---: | :----: | :----: |
+|   mainForm   |           需要发送给后台的表单value对象            |  obj  |        |        |
+|    fields    | 表单的各个项的数组，例[{name:'xxx', field :'xxx'}] | array |        |        |
+| fieldsConfig |              字段的类型配置，详见下表              |  obj  |        |        |
+
+> 配置
+
+|   配置项    |                          说明                          |  类型   |
+| :---------: | :----------------------------------------------------: | :-----: |
+|    type     |          字段类型，可选值[select,input,date]           | String  |
+|   options   |            下拉选的选项，[key:',value:''}]             |  Array  |
+|  optionUrl  |               下拉选的选项,后台请求接口                | String  |
+| domainName  |             下拉选的选项,阈值表的阈值名称              | String  |
+| childSelect |                  级联子级字段名的数组                  |  Array  |
+|  childUrl   | 级联子级的选项接口的数组，index需要与childSelect相对应 |  Array  |
+| isRequired  |                        是否必填                        | Boolean |
+
+> 方法
+
+|           方法名           |                        说明                        |              参数               |
+| :------------------------: | :------------------------------------------------: | :-----------------------------: |
+| triggerFatherSelectsChange | 常用于编辑页面，手动触发级联父级下拉选的change事件 | Function( field: String) (可选) |
+
+
+#### 子表单分组组件 jas-sub-form-group   
+
+子表单的分组组件，可对整组进行添加、删除操作，跟接口强关联
+
+> 代码
+
+```html
+<body>
+	<jas-sub-form-group 
+		group-name="缺陷信息" 
+         :form-default="sonFormDefault" 
+         :form-list="form.raySubList" 
+         :fields="subFields" 
+         :fields-config="sonFieldsConfig"
+	></jas-sub-form-group></jas-form-items>
+</body>
+<script>
+	that.$refs['mainForm'].triggerFatherSelectsChange();
+</script>
+```
+> 属性
+
+|     参数     |                        说明                        | 类型  | 可选值 | 默认值 |
+| :----------: | :------------------------------------------------: | :---: | :----: | :----: |
+|  form-list   |           需要发送给后台的表单value对象            | array |        |   []   |
+|    fields    | 表单的各个项的数组，例[{name:'xxx', field :'xxx'}] | array |        |        |
+| fieldsConfig |       字段的类型配置，详见jas-form-items组件       |  obj  |        |        |
+|  group-name  |                      分组名称                      |       |        |        |
+| form-default |           默认表单项对象，增加按钮会用到           |  obj  |        |        |
+
+#### 子表单详情组件 jas-sub-detail-group    
+
+> 用于展示子表的信息
+
+```html
+<body>
+	<jas-sub-detail-group 
+		group-name="缺陷信息" 
+		:detail-list="detail.raySubList" 
+		:fields="subFieldsArr"
+	></jas-sub-detail-group>
+</body>
+
+```
+> 属性
+
+|    参数     |                             说明                             | 类型  | 可选值 | 默认值 |
+| :---------: | :----------------------------------------------------------: | :---: | :----: | :----: |
+| detail-list |                   需要展示的表单value对象                    | array |        |   []   |
+|   fields    | 表单的各个项的数组，例[{name:'xxx', field :'xxx'}]，，新增formatter配置项详见element文档 | array |        |        |
+| group-name  |                           分组名称                           |       |        |        |
