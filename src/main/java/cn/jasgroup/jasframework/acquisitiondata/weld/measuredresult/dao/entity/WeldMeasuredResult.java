@@ -116,7 +116,12 @@ public class WeldMeasuredResult extends CommonJdbcEntity {
 	 * 测量日期 
 	 */
 	private Date surveyDate; 
-
+	
+	/**
+	 * 施工机组代号
+	 */
+	private String workUnitOid;
+	
 	/**
 	 * 施工单位 
 	 */
@@ -278,6 +283,14 @@ public class WeldMeasuredResult extends CommonJdbcEntity {
 	@Temporal(TemporalType.TIMESTAMP)
 	public Date getSurveyDate() {
 		return surveyDate; 
+	}
+
+	public String getWorkUnitOid() {
+		return workUnitOid;
+	}
+
+	public void setWorkUnitOid(String workUnitOid) {
+		this.workUnitOid = workUnitOid;
 	}
 
 	public void setSurveyDate(Date surveyDate) {

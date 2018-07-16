@@ -123,6 +123,16 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 	 * 测量日期
 	 */
 	private Date surveyDate;
+	
+	/**
+	 * 施工机组代号
+	 */
+	private String workUnitOid;
+	
+	/**
+	 * 施工机组代号
+	 */
+	private String workUnitName;
 
 	/**
 	 * 施工单位
@@ -343,6 +353,22 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 
 	public void setSurveyDate(Date surveyDate) {
 		this.surveyDate = surveyDate;
+	}
+
+	public String getWorkUnitOid() {
+		return workUnitOid;
+	}
+
+	public void setWorkUnitOid(String workUnitOid) {
+		this.workUnitOid = workUnitOid;
+	}
+
+	public String getWorkUnitName() {
+		return workUnitName;
+	}
+
+	public void setWorkUnitName(String workUnitName) {
+		this.workUnitName = workUnitName;
 	}
 
 	public String getConstructUnit() {

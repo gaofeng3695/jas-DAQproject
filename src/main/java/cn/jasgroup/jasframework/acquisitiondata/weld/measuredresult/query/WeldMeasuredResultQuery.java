@@ -52,7 +52,7 @@ public class WeldMeasuredResultQuery extends BaseJavaQuery{
 	@Override
 	public String getQuerySql() {
 		String sql ="SELECT wmr.*,pro.project_name, pi.pipeline_name, te.tenders_name, vpsc.name as pipe_segment_or_cross_name, cw.weld_code, "
-					+ "ms.median_stake_code, u.unit_name as construct_unit_name, pu.unit_name as supervision_unit_name "
+					+ "ms.median_stake_code, u.unit_name as construct_unit_name, pu.unit_name as supervision_unit_name, wu.work_unit_name "
 					+ "FROM daq_weld_measured_result wmr "
 					+ "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = wmr.project_oid "
 					+ "LEFT JOIN (SELECT oid, pipeline_name, active FROM daq_pipeline where active=1) pi ON pi.oid = wmr.pipeline_oid "
@@ -62,6 +62,7 @@ public class WeldMeasuredResultQuery extends BaseJavaQuery{
 					+ "LEFT JOIN (select oid, median_stake_code, active from daq_median_stake where active=1) ms ON ms.oid = wmr.median_stake_oid "
 					+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) pu on pu.oid = wmr.supervision_unit "
 					+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) u on u.oid = wmr.construct_unit "
+					+ "LEFT JOIN (select oid, work_unit_name, active from daq_work_unit where active=1) wu ON wu.oid = wmr.work_unit_oid "
 					+ "WHERE wmr.active = 1";
 		sql += getConditionSql();
 		return sql;

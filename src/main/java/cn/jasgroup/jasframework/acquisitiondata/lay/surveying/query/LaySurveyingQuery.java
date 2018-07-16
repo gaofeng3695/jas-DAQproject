@@ -50,11 +50,11 @@ public class LaySurveyingQuery extends BaseJavaQuery{
 
 	@Override
 	public String getQuerySql() {
-		String sql ="SELECT ls.*,pro.project_code, pi.pipeline_code, te.tenders_code, vpsc.name as pipe_segment_or_cross_name, ms.median_stake_code, "
+		String sql ="SELECT ls.*,pro.project_name, pi.pipeline_name, te.tenders_name, vpsc.name as pipe_segment_or_cross_name, ms.median_stake_code, "
 					+ "u.unit_name as construct_unit_name, pu.unit_name as supervision_unit_name FROM daq_lay_surveying ls "
-					+ "LEFT JOIN (SELECT oid, project_code, active FROM daq_project where active=1) pro ON pro.oid = ls.project_oid "
-					+ "LEFT JOIN (SELECT oid, pipeline_code, active FROM daq_pipeline where active=1) pi ON pi.oid = ls.pipeline_oid "
-					+ "LEFT JOIN (SELECT oid, tenders_code, active FROM daq_tenders where active=1) te ON te.oid = ls.tenders_oid "
+					+ "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = ls.project_oid "
+					+ "LEFT JOIN (SELECT oid, pipeline_name, active FROM daq_pipeline where active=1) pi ON pi.oid = ls.pipeline_oid "
+					+ "LEFT JOIN (SELECT oid, tenders_name, active FROM daq_tenders where active=1) te ON te.oid = ls.tenders_oid "
 					+ "LEFT JOIN (select * from v_daq_pipe_segment_cross) vpsc on vpsc.oid = ls.pipe_segment_or_cross_oid "
 					+ "LEFT JOIN (select oid, median_stake_code, active from daq_median_stake where active=1) ms ON ms.oid = ls.median_stake_oid "
 					+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) u on u.oid = ls.construct_unit "
