@@ -95,6 +95,7 @@
 					}, function (data) {
 						localStorage.setItem("token", data.token);
 						localStorage.setItem("user", JSON.stringify(data.user));
+						localStorage.setItem("calculateType",1);//1-显示桩和偏移量  2显示坐标
 						if (that.ruleForm.radio == '1') {
 							location.href = "./index.html";
 						} else {

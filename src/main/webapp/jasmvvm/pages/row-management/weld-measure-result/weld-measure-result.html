@@ -24,7 +24,9 @@
 <body>
 	<div id="app" v-cloak>
 		<jas-list-wrapper slot="mainPanel">
-			<el-form slot="search" :model="topSearch" label-width="100px">
+			<jas-search-for-list slot="search" :form="topSearch" :fields="fields" :fields-config="fieldsConfig" @search="searchList"></jas-search-for-list>
+
+			<!--<el-form slot="search" :model="topSearch" label-width="100px">
 				<el-row>
 					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
 						<el-form-item label="项目名称" prop="projectOid">
@@ -55,10 +57,8 @@
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item label="返修口编号">
-							<el-select v-model="topSearch.weldOid" clearable placeholder="请选择返修口编号" size="small">
-								<el-option v-for="item in domain.welds" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
+						<el-form-item label="焊口编号">
+						   <el-input v-model="topSearch.weldCode" clearable placeholder="请输入焊口编号" size="small"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
@@ -68,9 +68,10 @@
 						</el-form-item>
 					</el-col>
 				</el-row>
-			</el-form>
-			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" search-path="/jdbc/commonData/reworkWeld/getPage.do"
-			  :add-url="addUrl" :detail-url="detailUrl" delete-path="/jdbc/commonData/reworkWeld/delete.do" :class-name="className" :template-code="templateCode"></jas-table-for-list>
+			</el-form>-->
+			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" search-path="/jdbc/commonData/weldMeasuredResult/getPage.do"
+			  :add-url="addUrl" :detail-url="detailUrl" delete-path="/jdbc/commonData/weldMeasuredResult/delete.do" :class-name="className"
+			  :template-code="templateCode"></jas-table-for-list>
 		</jas-list-wrapper>
 
 
@@ -90,8 +91,8 @@
 			return {
 				className: '',
 				templateCode: '',
-				addUrl: './pages/row-management/weld-rework/dialogs/add.html',
-				detailUrl: './pages/row-management/weld-rework/dialogs/detail.html',
+				addUrl: './pages/row-management/weld-measure-result/dialogs/add.html',
+				detailUrl: './pages/row-management/weld-measure-result/dialogs/detail.html',
 				privilegeCode: '',
 				topSearch: {
 					projectOid: '',
@@ -99,6 +100,54 @@
 					pipelineOid: '',
 					pipeSegmentOrCrossOid: '', //线路段
 					weldOid: '',
+				},
+				fields: [ //
+					{
+						field: "projectOid",
+						name: '项目名称'
+					}, {
+						field: "tendersOid",
+						name: '标段名称'
+					}, {
+						field: "pipelineOid",
+						name: '管线名称'
+					}, {
+						field: "pipeSegmentOrCrossOid",
+						name: '线路段/传跨越'
+					},
+					{
+						field: 'weldOid',
+						name: "焊口编号"
+					}
+				],
+				fieldsConfig: {
+					projectOid: {
+						type: 'select',
+						optionUrl: '/daq/privilege/getProjectList.do',
+						childSelect: ['tendersOid'],
+						childUrl: ['/daq/privilege/getTendersList.do'],
+
+					},
+					tendersOid: {
+						type: 'select',
+						childSelect: ['pipelineOid'],
+						childUrl: ['/daq/privilege/getPipelineListByTendersOid.do', '/daq/privilege/getSupervisionUnitByTendersOid.do'],
+
+					},
+					pipelineOid: {
+						type: 'select',
+						childSelect: ['pipeSegmentOrCrossOid'],
+						childUrl: ['/daq/privilege/getPipeSegmentOrCrossList.do'],
+
+					},
+					pipeSegmentOrCrossOid: {
+						type: 'select',
+						childSelect: ['weldOid'],
+						childUrl: ['/daq/weld/getWeldList.do'],
+					},
+					weldOid: {
+						type: 'select',
+					}
 				},
 				tableFields: [{
 						name: '项目名称',
@@ -113,52 +162,24 @@
 						name: "线路段名称",
 						field: "pipeSegmentOrCrossName"
 					}, {
-						name: '返修口编号',
+						name: '焊口编号',
 						field: 'weldCode'
 					}, {
-						name: '返修后焊口编号',
-						field: 'reworkWeldCode'
+						name: '地表高程(m)',
+						field: 'surfaceeLevation'
 					}, {
-						name: '焊条批号',
-						field: 'weldRodBatchNum'
+						name: '管顶高程(m)',
+						field: 'pipeTopElevation'
 					}, {
-						name: '焊丝批号',
-						field: 'weldWireBatchNum'
+						name: '埋深(m)',
+						field: 'buriedDepth'
 					}, {
-						name: '焊接工艺规程',
-						field: 'weldProduceCode'
-					}, {
-						name: '填充人员',
-						field: 'coverName'
-					}, {
-						name: '打底人员',
-						field: 'padderName'
-					}, {
-						name: '盖面人员',
-						field: 'renderName'
-					}, {
-						name: '焊接日期',
-						field: 'weldDate'
+						name: '测量人',
+						field: 'surveyCrew'
 					},
 					{
-						name: '施工单位',
-						field: 'constructUnitName'
-					}, {
-						name: '施工机组代号',
-						field: 'workUnitName'
-					}, {
-						name: '监理单位',
-						field: 'supervisionUnitName'
-					}, {
-						name: '监理工程师',
-						field: 'supervisionEngineer'
-					},
-					{
-						name: '采集人员',
-						field: 'collectionPerson'
-					}, {
-						name: '采集日期',
-						field: 'collectionDate'
+						name: '测量日期',
+						field: 'surveyDate'
 					}
 				],
 				domain: {
@@ -166,13 +187,14 @@
 					tenders: [], //标段
 					pipeline: [], //管线
 					pipeSegment: [],
-					welds:[]//焊口编号
+					welds: [] //焊口编号
 				}
 			}
 		},
 
 		mounted: function () {
 			var that = this;
+			var type = localStorage.getItem("calculateType");
 			var param = window.jasTools.base
 				.getParamsInUrl(location.href);
 			this.privilegeCode = param.privilegeCode;
@@ -184,7 +206,26 @@
 					arr) {
 					that.domain.project = arr;
 				});
+			if (type == 1) {
+				this.tableFields.splice(5, 0, {
+					name: '桩号',
+					field: 'medianStakeCode'
+				});
+				this.tableFields.splice(5, 0, {
+					name: '相对桩位置',
+					field: 'relativeMileage'
+				});
+			} else {
+				this.tableFields.splice(5, 0, {
+					name: '坐标(X)',
+					field: 'pointx'
+				});
+				this.tableFields.splice(5, 0, {
+					name: '坐标(Y)',
+					field: 'pointy'
+				});
 
+			}
 		},
 		methods: {
 			requestDomainFromBizTable: function (url, obj, cb) {
@@ -278,7 +319,7 @@
 				this.topSearch.projectOid = '';
 				this.topSearch.pipelineOid = '';
 				this.topSearch.tendersOid = '';
-				this.topSearch.weldOid = '';
+				this.topSearch.weldCode = '';
 				this.topSearch.pipeSegmentOrCrossOid = '';
 
 				this.$refs.table.search();
