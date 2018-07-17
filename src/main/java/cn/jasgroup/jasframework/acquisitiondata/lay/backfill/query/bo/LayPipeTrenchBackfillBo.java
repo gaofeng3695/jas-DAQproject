@@ -119,6 +119,11 @@ public class LayPipeTrenchBackfillBo extends CommonBaseBo{
 	private String signType; 
 
 	/**
+	 * 埋地标识类型 
+	 */
+	private String signTypeName; 
+
+	/**
 	 * 标识长度(m) 
 	 */
 	private Double signLength; 
@@ -341,6 +346,14 @@ public class LayPipeTrenchBackfillBo extends CommonBaseBo{
 
 	public void setSignType(String signType) {
 		this.signType = signType;
+	}
+
+	public String getSignTypeName() {
+		return signTypeName;
+	}
+
+	public void setSignTypeName(String signTypeName) {
+		this.signTypeName = signTypeName;
 	}
 
 	public Double getSignLength() {

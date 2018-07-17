@@ -7,6 +7,13 @@ import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 
+/**
+  *<p>类描述：回填分页查询。</p>
+  * @author 葛建 。
+  * @version v1.0.0.1。
+  * @since JDK1.8。
+  *<p>创建日期：2018年7月17日 上午10:14:29。</p>
+ */
 @QueryConfig(scene = "/layPipeTrenchBackfill/getPage", 
 			 resultClass = LayPipeTrenchBackfillBo.class,
 			 queryBeforeProcess = {
@@ -42,8 +49,9 @@ public class LayPipeTrenchBackfillQuery extends BaseJavaQuery{
 
 	@Override
 	public String getQuerySql() {
-		String sql = "SELECT pro.project_name, pi.pipeline_name, te.tenders_name, vpsc.name as pipe_segment_or_cross_name,ms.median_stake_code AS start_median_stake_name,"
-					+ "dms.median_stake_code as end_median_stake_name,u.unit_name as construct_unit_name, pu.unit_name as supervision_unit_name, lptb.* "
+		String sql = "SELECT pro.project_name, pi.pipeline_name, te.tenders_name, vpsc.name as pipe_segment_or_cross_name,"
+					+ "ms.median_stake_code AS start_median_stake_name, dms.median_stake_code as end_median_stake_name,"
+					+ "u.unit_name as construct_unit_name, pu.unit_name as supervision_unit_name,d.code_name as sign_type_name, lptb.* "
 					+ "FROM daq_lay_pipe_trench_backfill lptb "
 					+ "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = lptb.project_oid "
 					+ "LEFT JOIN (SELECT oid, pipeline_name, active FROM daq_pipeline where active=1) pi ON pi.oid = lptb.pipeline_oid "
@@ -53,6 +61,7 @@ public class LayPipeTrenchBackfillQuery extends BaseJavaQuery{
 					+ "LEFT JOIN (select oid, median_stake_code, active from daq_median_stake where active=1) dms ON dms.oid = lptb.end_median_stake_oid "
 					+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) u on u.oid = lptb.construct_unit "
 					+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) pu on pu.oid = lptb.supervision_unit "
+					+ "LEFT JOIN (select code_id, code_name, active from sys_domain where active=1) d on d.code_id = lptb.sign_type "
 					+ "WHERE lptb.active = 1";
 		sql += getConditionSql();
 		return sql;
