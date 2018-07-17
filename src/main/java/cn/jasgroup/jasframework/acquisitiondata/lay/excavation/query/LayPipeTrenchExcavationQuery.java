@@ -7,6 +7,13 @@ import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 
+/**
+  *<p>类描述：管沟开挖分页查询。</p>
+  * @author 葛建 。
+  * @version v1.0.0.1。
+  * @since JDK1.8。
+  *<p>创建日期：2018年7月17日 上午10:43:09。</p>
+ */
 @QueryConfig(scene = "/layPipeTrenchExcavation/getPage", 
 			 resultClass = LayPipeTrenchExcavationBo.class,
 			 queryBeforeProcess = {
