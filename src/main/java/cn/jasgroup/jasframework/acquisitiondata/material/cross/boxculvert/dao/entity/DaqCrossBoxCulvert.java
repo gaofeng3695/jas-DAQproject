@@ -44,7 +44,13 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 	startAnchorOid = "startMedianStakeOid",
 	startDeviation = "startRelativeMileage",
 	endAnchorOid = "endMedianStakeOid",
-	endDeviation = "endRelativeMileage"
+	endDeviation = "endRelativeMileage",
+	startX = "startPointx",
+	startY = "startPointy",
+	startZ = "startPointz",
+	endX = "endPointx",
+	endY = "endPointy",
+	endZ = "endPointz"
 )
 @JdbcEntity(name="daq_cross_box_culvert")
 public class DaqCrossBoxCulvert extends CommonJdbcEntity {
