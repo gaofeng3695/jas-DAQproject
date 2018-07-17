@@ -218,7 +218,6 @@ public class LaySurveyingBo extends CommonBaseBo{
 		this.supervisionUnitName = supervisionUnitName;
 	}
 
-	private String geom; 
 
 	public String getProjectOid() {
 		return projectOid; 
@@ -374,14 +373,6 @@ public class LaySurveyingBo extends CommonBaseBo{
 
 	public void setRemarks(String remarks) {
 		this.remarks = remarks; 
-	}
-
-	public String getGeom() {
-		return geom; 
-	}
-
-	public void setGeom(String geom) {
-		this.geom = geom; 
 	}
 
 }
