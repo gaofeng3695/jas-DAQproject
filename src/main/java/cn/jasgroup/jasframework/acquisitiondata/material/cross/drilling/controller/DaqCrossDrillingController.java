@@ -15,12 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cn.jasgroup.framework.data.result.BaseResult;
 import cn.jasgroup.framework.data.result.SimpleResult;
-import cn.jasgroup.jasframework.acquisitiondata.material.cross.boxculvert.query.bo.DaqCrossBoxCulvertBo;
 import cn.jasgroup.jasframework.acquisitiondata.material.cross.drilling.query.bo.DaqCrossDrillingBo;
 import cn.jasgroup.jasframework.acquisitiondata.material.cross.drilling.service.DaqCrossDrillingService;
 
 /**
- * @description TODO
+ * @description 定向钻穿越
  * @author zhangyi
  * @date 2018年7月16日下午4:21:17
  * @version V1.0

@@ -5,7 +5,6 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Component;
 
 import cn.jasgroup.jasframework.acquisitiondata.material.cross.drilling.query.bo.DaqCrossDrillingBo;
-import cn.jasgroup.jasframework.acquisitiondata.material.cross.excavation.query.bo.DaqCrossExcavationBo;
 import cn.jasgroup.jasframework.dataaccess.base.BaseJdbcDao;
 
 /**
