@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<link rel="stylesheet" href="./../../../../lib/font-awesome-4.7.0/css/font-awesome.css">
+	<link rel="stylesheet" href="./../../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../../src/css/main.css">
+	<style>
+	</style>
+</head>
+
+<body>
+	<div id="app" v-cloak>
+
+		<jas-dialog-wrapper>
+
+			<jas-base-group-title name="基本信息"></jas-base-group-title>
+			<jas-detail-table :titles="fieldsArr" :detail="detail"></jas-detail-table>
+		  <jas-base-group-title name="位置信息"></jas-base-group-title>
+			<jas-detail-table :titles="addressFieldsArr" :detail="detail"></jas-detail-table>
+			<jas-base-group-title name="管沟开挖数据"></jas-base-group-title>
+			<jas-detail-table :titles="subFieldsArr" :detail="detail"></jas-detail-table>
+
+			<jas-base-group-title name="其他信息"></jas-base-group-title>
+			<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
+
+			<!--<jas-base-group-title name="附件信息"></jas-base-group-title>
+			<jas-file-list :biz-id="oid"></jas-file-list>-->
+		</jas-dialog-wrapper>
+
+
+	</div>
+</body>
+<script src="./../../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../../lib/vue/vue.js"></script>
+<script src="./../../../../lib/element-ui/v2.4.1/index.min.js"></script>
+
+<script src="./../../../../common/components/jas-components.js "></script>
+<script src="./../../../../common/js/jas-tools.js"></script>
+<script>
+	var app = new Vue({
+		el: "#app",
+		data: function () {
+			var that = this;
+			return {
+				addressFieldsArr: [{
+						name: '起始桩号',
+						field: 'startMedianStakeName'
+					}, {
+						name: '相对起始桩里程(m)',
+						field: 'startRelativeMileage'
+					}, {
+						name: '结束桩号',
+						field: 'endMedianStakeName'
+					}, {
+						name: '相对结束桩里程(m)',
+						field: 'endRelativeMileage'
+					},],
+				subFieldsArr: [  {
+						name: '土壤类别',
+						field: 'soilType'
+					}, {
+						name: '管沟深度(m)',
+						field: 'pipeTrenchDepth',
+					}, {
+						name: '沟底宽度(m)',
+						field: 'grooveWidth'
+					}, {
+						name: '放坡角度(°)',
+						field: 'slopeAngle'
+					}, {
+						name: '沟底长度(m)',
+						field: 'grooveHeight',
+					}, {
+						name: '设计转角(°)',
+						field: 'designCornerAngle'
+					}, {
+						name: '实际转角(°)',
+						field: 'actualCornerAngle'
+					}, {
+						name: '结论',
+						field: 'conclusion',
+					},{
+						name: '检查验收意见',
+						field: 'acceptanceOpinion',
+					}
+				],
+				fieldsArr: [ //
+					{
+						field: "projectName",
+						name: '项目名称'
+					}, {
+						field: "tendersName",
+						name: '标段名称'
+					}, {
+						field: "pipelineName",
+						name: '管线名称'
+					}, {
+						field: "pipeSegmentOrCrossName",
+						name: '线路段'
+					}, {
+						field: "constructUnitName",
+						name: '施工单位'
+					}, {
+						field: "constructDate",
+						name: '施工日期'
+					}, {
+						field: "collectionPerson",
+						name: '采集人员'
+					}, {
+						field: "collectionDate",
+						name: '采集日期'
+					}, {
+						field: "supervisionUnitName",
+						name: '监理单位'
+					}, {
+						field: "supervisionEngineer",
+						name: '监理工程师'
+					}
+				],
+				otherArr: [{
+					name: '备注',
+					field: 'remarks',
+				}],
+				detail: {},
+				oid: '',
+			}
+		},
+		created: function () {
+			var that = this;
+			var param = window.jasTools.base.getParamsInUrl(location.href);
+			if (param.oid) {
+				this.oid = param.oid;
+				this.params = param;
+				this.getDetailByObjectId();
+			};
+		},
+		methods: {
+			getDetailByObjectId: function () {
+				var that = this;
+				var url = jasTools.base.rootPath + "/jdbc/commonData/layPipeTrenchExcavation/getPage.do";
+				jasTools.ajax.post(url, this.params, function (data) {
+					that.detail = data.rows[0];
+				});
+			},
+		},
+	});
+</script>
+
+</html>

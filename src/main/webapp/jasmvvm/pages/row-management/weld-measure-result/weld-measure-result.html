@@ -165,6 +165,18 @@
 						name: '焊口编号',
 						field: 'weldCode'
 					}, {
+						name: '桩号',
+						field: 'medianStakeCode'
+					}, {
+						name: '坐标(X)',
+						field: 'pointx'
+					},{
+						name: '坐标(Y)',
+						field: 'pointy'
+					}, {
+						name: '相对桩位置',
+						field: 'relativeMileage'
+					}, {
 						name: '地表高程(m)',
 						field: 'surfaceeLevation'
 					}, {
@@ -193,27 +205,7 @@
 			this.privilegeCode = param.privilegeCode;
 			this.templateCode = param.templateCode; //|| "stake-2";
 			this.className = param.className; // || 'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';
-		
-			if (type == 1) {
-				this.tableFields.splice(5, 0, {
-					name: '桩号',
-					field: 'medianStakeCode'
-				});
-				this.tableFields.splice(5, 0, {
-					name: '相对桩位置',
-					field: 'relativeMileage'
-				});
-			} else {
-				this.tableFields.splice(5, 0, {
-					name: '坐标(X)',
-					field: 'pointx'
-				});
-				this.tableFields.splice(5, 0, {
-					name: '坐标(Y)',
-					field: 'pointy'
-				});
 
-			}
 		},
 		methods: {
 			searchList: function () {

@@ -84,7 +84,19 @@
 						field: 'collectionDate'
 					}
 				],
-				addressArr: [],
+				addressArr: [{
+					name: '桩号',
+					field: 'medianStakeCode'
+				}, {
+					name: '相对桩位置',
+					field: 'relativeMileage'
+				},{
+					name: '坐标X',
+					field: 'pointx'
+				}, {
+					name: '坐标Y',
+					field: 'pointy'
+				}],
 				busArr: [{
 						name: '地表高程',
 						field: 'surfaceeLevation'
@@ -109,24 +121,7 @@
 		created: function () {
 			var that = this;
 			var param = window.jasTools.base.getParamsInUrl(location.href);
-			var calculateType = localStorage.getItem("calculateType");
-			if (calculateType == 1) {
-				this.addressArr = [{
-					name: '桩号',
-					field: 'medianStakeCode'
-				}, {
-					name: '相对桩位置',
-					field: 'relativeMileage'
-				}];
-			} else {
-				this.addressArr = [{
-					name: '坐标X',
-					field: 'pointx'
-				}, {
-					name: '坐标Y',
-					field: 'pointy'
-				}];
-			}
+
 			if (param.oid) {
 				this.oid = param.oid;
 				this.params = param;
