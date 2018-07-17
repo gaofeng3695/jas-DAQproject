@@ -1,4 +1,4 @@
-package cn.jasgroup.jasframework.acquisitiondata.lay.surveying.query.bo;
+package cn.jasgroup.jasframework.acquisitiondata.lay.Insulation.query.bo;
 
 import java.util.Date;
 
@@ -10,14 +10,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 
 /**
- * 
-  *<p>类描述：测量放线Bo。</p>
+  *<p>类描述：保温Bo。</p>
   * @author 葛建 。
   * @version v1.0.0.1。
   * @since JDK1.8。
-  *<p>创建日期：2018年7月13日 下午2:46:13。</p>
+  *<p>创建日期：2018年7月17日 上午10:36:32。</p>
  */
-public class LaySurveyingBo extends CommonBaseBo{
+public class LayThermalInsulationBo extends CommonBaseBo{
 
 	/**
 	 * oid
@@ -65,47 +64,77 @@ public class LaySurveyingBo extends CommonBaseBo{
 	private String pipeSegmentOrCrossName; 
 
 	/**
-	 * 桩号 
+	 * 起始桩号 
 	 */
-	private String medianStakeOid; 
+	private String startMedianStakeOid; 
 	
 	/**
-	 * 桩编号
+	 * 起始桩编号
 	 */
-	private String medianStakeCode;
+	private String startMedianStakeName;
 
 	/**
-	 * 里程(m) 
+	 * 相对起始桩里程(m) 
 	 */
-	private Double relativeMileage; 
+	private Double startRelativeMileage; 
 
 	/**
-	 * 实测转角(°) 
+	 * 结束桩号 
 	 */
-	private Double measuredAngle; 
+	private String endMedianStakeOid; 
+	
+	/**
+	 * 终点桩编号
+	 */
+	private String endMedianStakeName;
 
 	/**
-	 * 图纸转角(°) 
+	 * 相对结束桩里程(m) 
 	 */
-	private Double drawingAngle; 
+	private Double endRelativeMileage; 
 
 	/**
-	 * 左侧放线宽度(m) 
+	 * 保温材料 
 	 */
-	private Double leftWidth; 
+	private String insulationMaterial; 
 
 	/**
-	 * 右侧放线宽度(m) 
+	 * 保温材料名称
 	 */
-	private Double rightWidth; 
+	private String insulationMaterialName; 
 
 	/**
-	 * 施工日期 
+	 * 保温层厚度(mm) 
 	 */
-	private Date constructDate; 
+	private Double insulationThickness; 
 
-	/** 
-	 * 施工单位
+	/**
+	 * 防护层结构 
+	 */
+	private String protectiveTape; 
+
+	/**
+	 * 防护层结构名称 
+	 */
+	private String protectiveTapeName; 
+
+	/**
+	 * 防护层厚度(mm) 
+	 */
+	private Double protectiveThickness; 
+
+	/**
+	 * 保温层生产厂家 
+	 */
+	private String manufacturer; 
+
+	/**
+	 * 具体地址 
+	 */
+	private String manufacturerAddress; 
+
+	/**
+	 * 施工单位 
 	 */
 	private String constructUnit; 
 
@@ -115,7 +144,12 @@ public class LaySurveyingBo extends CommonBaseBo{
 	private String constructUnitName; 
 
 	/**
-	 * 监理单位
+	 * 施工日期 
+	 */
+	private Date constructDate; 
+
+	/**
+	 * 监理单位 
 	 */
 	private String supervisionUnit; 
 
@@ -142,7 +176,7 @@ public class LaySurveyingBo extends CommonBaseBo{
 	/**
 	 * 审核状态 
 	 */
-	private Integer approveStatus; 
+	private Integer approveStatus = 0; 
 
 	/**
 	 * 空间数据状态 
@@ -160,6 +194,14 @@ public class LaySurveyingBo extends CommonBaseBo{
 
 	public void setOid(String oid) {
 		this.oid = oid;
+	}
+
+	public String getProjectOid() {
+		return projectOid; 
+	}
+
+	public void setProjectOid(String projectOid) {
+		this.projectOid = projectOid; 
 	}
 
 	public String getProjectName() {
@@ -194,12 +236,36 @@ public class LaySurveyingBo extends CommonBaseBo{
 		this.pipeSegmentOrCrossName = pipeSegmentOrCrossName;
 	}
 
-	public String getMedianStakeCode() {
-		return medianStakeCode;
+	public String getStartMedianStakeName() {
+		return startMedianStakeName;
 	}
 
-	public void setMedianStakeCode(String medianStakeCode) {
-		this.medianStakeCode = medianStakeCode;
+	public void setStartMedianStakeName(String startMedianStakeName) {
+		this.startMedianStakeName = startMedianStakeName;
+	}
+
+	public String getEndMedianStakeName() {
+		return endMedianStakeName;
+	}
+
+	public void setEndMedianStakeName(String endMedianStakeName) {
+		this.endMedianStakeName = endMedianStakeName;
+	}
+
+	public String getInsulationMaterialName() {
+		return insulationMaterialName;
+	}
+
+	public void setInsulationMaterialName(String insulationMaterialName) {
+		this.insulationMaterialName = insulationMaterialName;
+	}
+
+	public String getProtectiveTapeName() {
+		return protectiveTapeName;
+	}
+
+	public void setProtectiveTapeName(String protectiveTapeName) {
+		this.protectiveTapeName = protectiveTapeName;
 	}
 
 	public String getConstructUnitName() {
@@ -216,15 +282,6 @@ public class LaySurveyingBo extends CommonBaseBo{
 
 	public void setSupervisionUnitName(String supervisionUnitName) {
 		this.supervisionUnitName = supervisionUnitName;
-	}
-
-
-	public String getProjectOid() {
-		return projectOid; 
-	}
-
-	public void setProjectOid(String projectOid) {
-		this.projectOid = projectOid; 
 	}
 
 	public String getPipelineOid() {
@@ -251,52 +308,92 @@ public class LaySurveyingBo extends CommonBaseBo{
 		this.pipeSegmentOrCrossOid = pipeSegmentOrCrossOid; 
 	}
 
-	public String getMedianStakeOid() {
-		return medianStakeOid; 
+	public String getStartMedianStakeOid() {
+		return startMedianStakeOid; 
 	}
 
-	public void setMedianStakeOid(String medianStakeOid) {
-		this.medianStakeOid = medianStakeOid; 
+	public void setStartMedianStakeOid(String startMedianStakeOid) {
+		this.startMedianStakeOid = startMedianStakeOid; 
 	}
 
-	public Double getRelativeMileage() {
-		return relativeMileage; 
+	public Double getStartRelativeMileage() {
+		return startRelativeMileage; 
 	}
 
-	public void setRelativeMileage(Double relativeMileage) {
-		this.relativeMileage = relativeMileage; 
+	public void setStartRelativeMileage(Double startRelativeMileage) {
+		this.startRelativeMileage = startRelativeMileage; 
 	}
 
-	public Double getMeasuredAngle() {
-		return measuredAngle; 
+	public String getEndMedianStakeOid() {
+		return endMedianStakeOid; 
 	}
 
-	public void setMeasuredAngle(Double measuredAngle) {
-		this.measuredAngle = measuredAngle; 
+	public void setEndMedianStakeOid(String endMedianStakeOid) {
+		this.endMedianStakeOid = endMedianStakeOid; 
 	}
 
-	public Double getDrawingAngle() {
-		return drawingAngle; 
+	public Double getEndRelativeMileage() {
+		return endRelativeMileage; 
 	}
 
-	public void setDrawingAngle(Double drawingAngle) {
-		this.drawingAngle = drawingAngle; 
+	public void setEndRelativeMileage(Double endRelativeMileage) {
+		this.endRelativeMileage = endRelativeMileage; 
 	}
 
-	public Double getLeftWidth() {
-		return leftWidth; 
+	public String getInsulationMaterial() {
+		return insulationMaterial; 
 	}
 
-	public void setLeftWidth(Double leftWidth) {
-		this.leftWidth = leftWidth; 
+	public void setInsulationMaterial(String insulationMaterial) {
+		this.insulationMaterial = insulationMaterial; 
 	}
 
-	public Double getRightWidth() {
-		return rightWidth; 
+	public Double getInsulationThickness() {
+		return insulationThickness; 
 	}
 
-	public void setRightWidth(Double rightWidth) {
-		this.rightWidth = rightWidth; 
+	public void setInsulationThickness(Double insulationThickness) {
+		this.insulationThickness = insulationThickness; 
+	}
+
+	public String getProtectiveTape() {
+		return protectiveTape; 
+	}
+
+	public void setProtectiveTape(String protectiveTape) {
+		this.protectiveTape = protectiveTape; 
+	}
+
+	public Double getProtectiveThickness() {
+		return protectiveThickness; 
+	}
+
+	public void setProtectiveThickness(Double protectiveThickness) {
+		this.protectiveThickness = protectiveThickness; 
+	}
+
+	public String getManufacturer() {
+		return manufacturer; 
+	}
+
+	public void setManufacturer(String manufacturer) {
+		this.manufacturer = manufacturer; 
+	}
+
+	public String getManufacturerAddress() {
+		return manufacturerAddress; 
+	}
+
+	public void setManufacturerAddress(String manufacturerAddress) {
+		this.manufacturerAddress = manufacturerAddress; 
+	}
+
+	public String getConstructUnit() {
+		return constructUnit; 
+	}
+
+	public void setConstructUnit(String constructUnit) {
+		this.constructUnit = constructUnit; 
 	}
 
 	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
@@ -307,14 +404,6 @@ public class LaySurveyingBo extends CommonBaseBo{
 
 	public void setConstructDate(Date constructDate) {
 		this.constructDate = constructDate; 
-	}
-
-	public String getConstructUnit() {
-		return constructUnit; 
-	}
-
-	public void setConstructUnit(String constructUnit) {
-		this.constructUnit = constructUnit; 
 	}
 
 	public String getSupervisionUnit() {

@@ -1,26 +1,26 @@
-package cn.jasgroup.jasframework.acquisitiondata.lay.excavation.query;
+package cn.jasgroup.jasframework.acquisitiondata.lay.restoration.query;
 
 import org.apache.commons.lang.StringUtils;
 
-import cn.jasgroup.jasframework.acquisitiondata.lay.excavation.query.bo.LayPipeTrenchExcavationBo;
+import cn.jasgroup.jasframework.acquisitiondata.lay.restoration.query.bo.LayLandRestorationBo;
 import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 
 /**
-  *<p>类描述：管沟开挖分页查询。</p>
+  *<p>类描述：地貌恢复分页查询。</p>
   * @author 葛建 。
   * @version v1.0.0.1。
   * @since JDK1.8。
-  *<p>创建日期：2018年7月17日 上午10:43:09。</p>
+  *<p>创建日期：2018年7月17日 上午10:15:15。</p>
  */
-@QueryConfig(scene = "/layPipeTrenchExcavation/getPage", 
-			 resultClass = LayPipeTrenchExcavationBo.class,
+@QueryConfig(scene = "/layLandRestoration/getPage", 
+			 resultClass = LayLandRestorationBo.class,
 			 queryBeforeProcess = {
 				 @Process(service = "daqInjectService" , method = "injectDataAuthoritySql(dataAuthoritySql)")
 			 }
-)
-public class LayPipeTrenchExcavationQuery extends BaseJavaQuery{
+) 
+public class LayLandRestorationQuery extends BaseJavaQuery{
 
 	/**
 	 * 唯一标识
@@ -51,17 +51,17 @@ public class LayPipeTrenchExcavationQuery extends BaseJavaQuery{
 	public String getQuerySql() {
 		String sql = "SELECT pro.project_name, pi.pipeline_name, te.tenders_name, vpsc.name as pipe_segment_or_cross_name,"
 					+ "ms.median_stake_code AS start_median_stake_name,dms.median_stake_code as end_median_stake_name,"
-					+ "u.unit_name as construct_unit_name,lpte.*, pu.unit_name as supervision_unit_name "
-					+ "FROM daq_lay_pipe_trench_excavation lpte "
-					+ "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = lpte.project_oid "
-					+ "LEFT JOIN (SELECT oid, pipeline_name, active FROM daq_pipeline where active=1) pi ON pi.oid = lpte.pipeline_oid "
-					+ "LEFT JOIN (SELECT oid, tenders_name, active FROM daq_tenders where active=1) te ON te.oid = lpte.tenders_oid "
-					+ "LEFT JOIN (select * from v_daq_pipe_segment_cross) vpsc on vpsc.oid = lpte.pipe_segment_or_cross_oid "
-					+ "LEFT JOIN (select oid, median_stake_code, active from daq_median_stake where active=1) ms ON ms.oid = lpte.start_median_stake_oid "
-					+ "LEFT JOIN (select oid, median_stake_code, active from daq_median_stake where active=1) dms ON dms.oid = lpte.end_median_stake_oid "
-					+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) u on u.oid = lpte.construct_unit "
-					+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) pu on pu.oid = lpte.supervision_unit "
-					+ "WHERE lpte.active = 1";
+					+ "u.unit_name as construct_unit_name, pu.unit_name as supervision_unit_name, llr.* "
+					+ "FROM daq_lay_land_restoration llr "
+					+ "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = llr.project_oid "
+					+ "LEFT JOIN (SELECT oid, pipeline_name, active FROM daq_pipeline where active=1) pi ON pi.oid = llr.pipeline_oid "
+					+ "LEFT JOIN (SELECT oid, tenders_name, active FROM daq_tenders where active=1) te ON te.oid = llr.tenders_oid "
+					+ "LEFT JOIN (select * from v_daq_pipe_segment_cross) vpsc on vpsc.oid = llr.pipe_segment_or_cross_oid "
+					+ "LEFT JOIN (select oid, median_stake_code, active from daq_median_stake where active=1) ms ON ms.oid = llr.start_median_stake_oid "
+					+ "LEFT JOIN (select oid, median_stake_code, active from daq_median_stake where active=1) dms ON dms.oid = llr.end_median_stake_oid "
+					+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) u on u.oid = llr.construct_unit "
+					+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) pu on pu.oid = llr.supervision_unit "
+					+ "WHERE llr.active = 1";
 		sql += getConditionSql();
 		return sql;
 	}
@@ -69,25 +69,25 @@ public class LayPipeTrenchExcavationQuery extends BaseJavaQuery{
 	private String getConditionSql() {
 		String conditionSql ="";
 		if (StringUtils.isNotBlank(oid)) {
-			conditionSql += " and lpte.oid = :oid ";
+			conditionSql += " and llr.oid = :oid ";
 		}else {
 			if (StringUtils.isNotBlank(projectOid)) {
-				conditionSql += " and lpte.project_oid = :projectOid";
+				conditionSql += " and llr.project_oid = :projectOid";
 			}
 			if (StringUtils.isNotBlank(tendersOid)) {
-				conditionSql += " and lpte.tenders_oid = :tendersOid";
+				conditionSql += " and llr.tenders_oid = :tendersOid";
 			}
 			if (StringUtils.isNotBlank(pipelineOid)) {
-				conditionSql += " and lpte.pipeline_oid = :pipelineOid";
+				conditionSql += " and llr.pipeline_oid = :pipelineOid";
 			}
 			if (StringUtils.isNotBlank(pipeSegmentOrCrossOid)) {
-				conditionSql += " and lpte.pipe_segment_or_cross_oid = :pipeSegmentOrCrossOid";
+				conditionSql += " and llr.pipe_segment_or_cross_oid = :pipeSegmentOrCrossOid";
 			}
-			conditionSql += " order by lpte.create_datetime desc";
+			conditionSql += " order by llr.create_datetime desc";
 		}
 		return conditionSql;
 	}
-	
+
 	public String getOid() {
 		return oid;
 	}
@@ -127,5 +127,5 @@ public class LayPipeTrenchExcavationQuery extends BaseJavaQuery{
 	public void setPipeSegmentOrCrossOid(String pipeSegmentOrCrossOid) {
 		this.pipeSegmentOrCrossOid = pipeSegmentOrCrossOid;
 	}
-	
+
 }

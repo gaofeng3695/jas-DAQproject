@@ -1,4 +1,5 @@
-package cn.jasgroup.jasframework.acquisitiondata.lay.excavation.dao.entity;
+package cn.jasgroup.jasframework.acquisitiondata.lay.backfill.dao.entity;
+
 import java.util.Date;
 
 import javax.persistence.Temporal;
@@ -17,21 +18,20 @@ import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 
 /**
- * 
-  *<p>类描述：管沟开挖实体类。</p>
+  *<p>类描述：回填实体类。</p>
   * @author 葛建 。
   * @version v1.0.0.1。
   * @since JDK1.8。
-  *<p>创建日期：2018年7月13日 下午5:13:06。</p>
+  *<p>创建日期：2018年7月16日 下午5:15:46。</p>
  */
 @CommonSaveConfig(
-	scene = "/layPipeTrenchExcavation/save"
+	scene = "/layPipeTrenchBackfill/save"
 )
 @CommonUpdateConfig(
-	scene = "/layPipeTrenchExcavation/update"
+	scene = "/layPipeTrenchBackfill/update"
 )
 @CommonDeleteConfig(
-	scene = "/layPipeTrenchExcavation/delete"
+	scene = "/layPipeTrenchBackfill/delete"
 )
 @Line(
 	scopeFieldName="pipelineOid",
@@ -44,8 +44,8 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 	endAnchorOid="endMedianStakeOid",
 	endDeviation="endRelativeMileage"
 )
-@JdbcEntity(name="daq_lay_pipe_trench_excavation")
-public class LayPipeTrenchExcavation extends CommonJdbcEntity {
+@JdbcEntity(name="daq_lay_pipe_trench_backfill")
+public class LayPipeTrenchBackfill extends CommonJdbcEntity {
 
 	/**
 	 * 项目oid 
@@ -88,49 +88,39 @@ public class LayPipeTrenchExcavation extends CommonJdbcEntity {
 	private Double endRelativeMileage; 
 
 	/**
-	 * 土壤类别 
+	 * 回填长度(m) 
 	 */
-	private String soilType; 
+	private Double backfillLength; 
 
 	/**
-	 * 管沟深度(m) 
+	 * 细土回填厚度(mm) 
 	 */
-	private Double pipeTrenchDepth; 
+	private Double backfillThickness; 
 
 	/**
-	 * 沟底宽度(m) 
+	 * 一次回填厚度(mm) 
 	 */
-	private Double grooveWidth; 
+	private Double oneBackfillThickness; 
 
 	/**
-	 * 放坡角度(°) 
+	 * 二次回填厚度(mm) 
 	 */
-	private Double slopeAngle; 
+	private Double twoBackfillThickness; 
 
 	/**
-	 * 沟底长度(m) 
+	 * 埋地标识类型 
 	 */
-	private Double grooveHeight; 
+	private String signType; 
 
 	/**
-	 * 设计转角(°) 
+	 * 标识长度(m) 
 	 */
-	private Double designCornerAngle; 
+	private Double signLength; 
 
 	/**
-	 * 实际转角(°) 
+	 * 标识埋深(m) 
 	 */
-	private Double actualCornerAngle; 
-
-	/**
-	 * 结论 
-	 */
-	private Integer conclusion; 
-
-	/**
-	 * 检查验收意见 
-	 */
-	private String acceptanceOpinion; 
+	private Double signDepth; 
 
 	/**
 	 * 施工单位 
@@ -249,85 +239,67 @@ public class LayPipeTrenchExcavation extends CommonJdbcEntity {
 		super.setField("endRelativeMileage");
 	}
 
-	public String getSoilType() {
-		return soilType; 
+	public Double getBackfillLength() {
+		return backfillLength; 
 	}
 
-	public void setSoilType(String soilType) {
-		this.soilType = soilType; 
-		super.setField("soilType");
+	public void setBackfillLength(Double backfillLength) {
+		this.backfillLength = backfillLength; 
+		super.setField("backfillLength");
 	}
 
-	public Double getPipeTrenchDepth() {
-		return pipeTrenchDepth; 
+	public Double getBackfillThickness() {
+		return backfillThickness; 
 	}
 
-	public void setPipeTrenchDepth(Double pipeTrenchDepth) {
-		this.pipeTrenchDepth = pipeTrenchDepth; 
-		super.setField("pipeTrenchDepth");
+	public void setBackfillThickness(Double backfillThickness) {
+		this.backfillThickness = backfillThickness; 
+		super.setField("backfillThickness");
 	}
 
-	public Double getGrooveWidth() {
-		return grooveWidth; 
+	public Double getOneBackfillThickness() {
+		return oneBackfillThickness; 
 	}
 
-	public void setGrooveWidth(Double grooveWidth) {
-		this.grooveWidth = grooveWidth; 
-		super.setField("grooveWidth");
+	public void setOneBackfillThickness(Double oneBackfillThickness) {
+		this.oneBackfillThickness = oneBackfillThickness; 
+		super.setField("oneBackfillThickness");
 	}
 
-	public Double getSlopeAngle() {
-		return slopeAngle; 
+	public Double getTwoBackfillThickness() {
+		return twoBackfillThickness; 
 	}
 
-	public void setSlopeAngle(Double slopeAngle) {
-		this.slopeAngle = slopeAngle; 
-		super.setField("slopeAngle");
+	public void setTwoBackfillThickness(Double twoBackfillThickness) {
+		this.twoBackfillThickness = twoBackfillThickness; 
+		super.setField("twoBackfillThickness");
 	}
 
-	public Double getGrooveHeight() {
-		return grooveHeight; 
+	public String getSignType() {
+		return signType; 
 	}
 
-	public void setGrooveHeight(Double grooveHeight) {
-		this.grooveHeight = grooveHeight; 
-		super.setField("grooveHeight");
+	public void setSignType(String signType) {
+		this.signType = signType; 
+		super.setField("signType");
 	}
 
-	public Double getDesignCornerAngle() {
-		return designCornerAngle; 
+	public Double getSignLength() {
+		return signLength; 
 	}
 
-	public void setDesignCornerAngle(Double designCornerAngle) {
-		this.designCornerAngle = designCornerAngle; 
-		super.setField("designCornerAngle");
+	public void setSignLength(Double signLength) {
+		this.signLength = signLength; 
+		super.setField("signLength");
 	}
 
-	public Double getActualCornerAngle() {
-		return actualCornerAngle; 
+	public Double getSignDepth() {
+		return signDepth; 
 	}
 
-	public void setActualCornerAngle(Double actualCornerAngle) {
-		this.actualCornerAngle = actualCornerAngle; 
-		super.setField("actualCornerAngle");
-	}
-
-	public Integer getConclusion() {
-		return conclusion; 
-	}
-
-	public void setConclusion(Integer conclusion) {
-		this.conclusion = conclusion; 
-		super.setField("conclusion");
-	}
-
-	public String getAcceptanceOpinion() {
-		return acceptanceOpinion; 
-	}
-
-	public void setAcceptanceOpinion(String acceptanceOpinion) {
-		this.acceptanceOpinion = acceptanceOpinion; 
-		super.setField("acceptanceOpinion");
+	public void setSignDepth(Double signDepth) {
+		this.signDepth = signDepth; 
+		super.setField("signDepth");
 	}
 
 	public String getConstructUnit() {

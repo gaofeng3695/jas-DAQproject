@@ -1,4 +1,4 @@
-package cn.jasgroup.jasframework.acquisitiondata.lay.surveying.query.bo;
+package cn.jasgroup.jasframework.acquisitiondata.lay.restoration.query.bo;
 
 import java.util.Date;
 
@@ -10,15 +10,14 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 
 /**
- * 
-  *<p>类描述：测量放线Bo。</p>
+  *<p>类描述：地貌恢复Bo。</p>
   * @author 葛建 。
   * @version v1.0.0.1。
   * @since JDK1.8。
-  *<p>创建日期：2018年7月13日 下午2:46:13。</p>
+  *<p>创建日期：2018年7月17日 上午10:11:40。</p>
  */
-public class LaySurveyingBo extends CommonBaseBo{
-
+public class LayLandRestorationBo extends CommonBaseBo{
+	
 	/**
 	 * oid
 	 */
@@ -65,47 +64,52 @@ public class LaySurveyingBo extends CommonBaseBo{
 	private String pipeSegmentOrCrossName; 
 
 	/**
-	 * 桩号 
+	 * 起始桩号 
 	 */
-	private String medianStakeOid; 
+	private String startMedianStakeOid; 
 	
 	/**
-	 * 桩编号
+	 * 起始桩编号
 	 */
-	private String medianStakeCode;
+	private String startMedianStakeName;
 
 	/**
-	 * 里程(m) 
+	 * 相对起始桩里程(m) 
 	 */
-	private Double relativeMileage; 
+	private Double startRelativeMileage; 
 
 	/**
-	 * 实测转角(°) 
+	 * 结束桩号 
 	 */
-	private Double measuredAngle; 
+	private String endMedianStakeOid; 
+	
+	/**
+	 * 终点桩编号
+	 */
+	private String endMedianStakeName;
 
 	/**
-	 * 图纸转角(°) 
+	 * 相对结束桩里程(m) 
 	 */
-	private Double drawingAngle; 
+	private Double endRelativeMileage; 
 
 	/**
-	 * 左侧放线宽度(m) 
+	 * 证书编号 
 	 */
-	private Double leftWidth; 
+	private String certificateNum; 
 
 	/**
-	 * 右侧放线宽度(m) 
+	 * 长度(m) 
 	 */
-	private Double rightWidth; 
+	private Double length; 
 
 	/**
-	 * 施工日期 
+	 * 经过地区 
 	 */
-	private Date constructDate; 
+	private String region; 
 
-	/** 
-	 * 施工单位
+	/**
+	 * 施工单位 
 	 */
 	private String constructUnit; 
 
@@ -115,7 +119,12 @@ public class LaySurveyingBo extends CommonBaseBo{
 	private String constructUnitName; 
 
 	/**
-	 * 监理单位
+	 * 施工日期 
+	 */
+	private Date constructDate; 
+
+	/**
+	 * 监理单位 
 	 */
 	private String supervisionUnit; 
 
@@ -142,7 +151,7 @@ public class LaySurveyingBo extends CommonBaseBo{
 	/**
 	 * 审核状态 
 	 */
-	private Integer approveStatus; 
+	private Integer approveStatus = 0; 
 
 	/**
 	 * 空间数据状态 
@@ -152,7 +161,7 @@ public class LaySurveyingBo extends CommonBaseBo{
 	/**
 	 * 备注 
 	 */
-	private String remarks; 
+	private String remarks;
 
 	public String getOid() {
 		return oid;
@@ -160,6 +169,14 @@ public class LaySurveyingBo extends CommonBaseBo{
 
 	public void setOid(String oid) {
 		this.oid = oid;
+	}
+
+	public String getProjectOid() {
+		return projectOid;
+	}
+
+	public void setProjectOid(String projectOid) {
+		this.projectOid = projectOid;
 	}
 
 	public String getProjectName() {
@@ -194,12 +211,20 @@ public class LaySurveyingBo extends CommonBaseBo{
 		this.pipeSegmentOrCrossName = pipeSegmentOrCrossName;
 	}
 
-	public String getMedianStakeCode() {
-		return medianStakeCode;
+	public String getStartMedianStakeName() {
+		return startMedianStakeName;
 	}
 
-	public void setMedianStakeCode(String medianStakeCode) {
-		this.medianStakeCode = medianStakeCode;
+	public void setStartMedianStakeName(String startMedianStakeName) {
+		this.startMedianStakeName = startMedianStakeName;
+	}
+
+	public String getEndMedianStakeName() {
+		return endMedianStakeName;
+	}
+
+	public void setEndMedianStakeName(String endMedianStakeName) {
+		this.endMedianStakeName = endMedianStakeName;
 	}
 
 	public String getConstructUnitName() {
@@ -218,161 +243,160 @@ public class LaySurveyingBo extends CommonBaseBo{
 		this.supervisionUnitName = supervisionUnitName;
 	}
 
-
-	public String getProjectOid() {
-		return projectOid; 
-	}
-
-	public void setProjectOid(String projectOid) {
-		this.projectOid = projectOid; 
-	}
-
 	public String getPipelineOid() {
-		return pipelineOid; 
+		return pipelineOid;
 	}
 
 	public void setPipelineOid(String pipelineOid) {
-		this.pipelineOid = pipelineOid; 
+		this.pipelineOid = pipelineOid;
 	}
 
 	public String getTendersOid() {
-		return tendersOid; 
+		return tendersOid;
 	}
 
 	public void setTendersOid(String tendersOid) {
-		this.tendersOid = tendersOid; 
+		this.tendersOid = tendersOid;
 	}
 
 	public String getPipeSegmentOrCrossOid() {
-		return pipeSegmentOrCrossOid; 
+		return pipeSegmentOrCrossOid;
 	}
 
 	public void setPipeSegmentOrCrossOid(String pipeSegmentOrCrossOid) {
-		this.pipeSegmentOrCrossOid = pipeSegmentOrCrossOid; 
+		this.pipeSegmentOrCrossOid = pipeSegmentOrCrossOid;
 	}
 
-	public String getMedianStakeOid() {
-		return medianStakeOid; 
+	public String getStartMedianStakeOid() {
+		return startMedianStakeOid;
 	}
 
-	public void setMedianStakeOid(String medianStakeOid) {
-		this.medianStakeOid = medianStakeOid; 
+	public void setStartMedianStakeOid(String startMedianStakeOid) {
+		this.startMedianStakeOid = startMedianStakeOid;
 	}
 
-	public Double getRelativeMileage() {
-		return relativeMileage; 
+	public Double getStartRelativeMileage() {
+		return startRelativeMileage;
 	}
 
-	public void setRelativeMileage(Double relativeMileage) {
-		this.relativeMileage = relativeMileage; 
+	public void setStartRelativeMileage(Double startRelativeMileage) {
+		this.startRelativeMileage = startRelativeMileage;
 	}
 
-	public Double getMeasuredAngle() {
-		return measuredAngle; 
+	public String getEndMedianStakeOid() {
+		return endMedianStakeOid;
 	}
 
-	public void setMeasuredAngle(Double measuredAngle) {
-		this.measuredAngle = measuredAngle; 
+	public void setEndMedianStakeOid(String endMedianStakeOid) {
+		this.endMedianStakeOid = endMedianStakeOid;
 	}
 
-	public Double getDrawingAngle() {
-		return drawingAngle; 
+	public Double getEndRelativeMileage() {
+		return endRelativeMileage;
 	}
 
-	public void setDrawingAngle(Double drawingAngle) {
-		this.drawingAngle = drawingAngle; 
+	public void setEndRelativeMileage(Double endRelativeMileage) {
+		this.endRelativeMileage = endRelativeMileage;
 	}
 
-	public Double getLeftWidth() {
-		return leftWidth; 
+	public String getCertificateNum() {
+		return certificateNum;
 	}
 
-	public void setLeftWidth(Double leftWidth) {
-		this.leftWidth = leftWidth; 
+	public void setCertificateNum(String certificateNum) {
+		this.certificateNum = certificateNum;
 	}
 
-	public Double getRightWidth() {
-		return rightWidth; 
+	public Double getLength() {
+		return length;
 	}
 
-	public void setRightWidth(Double rightWidth) {
-		this.rightWidth = rightWidth; 
+	public void setLength(Double length) {
+		this.length = length;
+	}
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
+	}
+
+	public String getConstructUnit() {
+		return constructUnit;
+	}
+
+	public void setConstructUnit(String constructUnit) {
+		this.constructUnit = constructUnit;
 	}
 
 	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
 	@Temporal(TemporalType.TIMESTAMP)
 	public Date getConstructDate() {
-		return constructDate; 
+		return constructDate;
 	}
 
 	public void setConstructDate(Date constructDate) {
-		this.constructDate = constructDate; 
-	}
-
-	public String getConstructUnit() {
-		return constructUnit; 
-	}
-
-	public void setConstructUnit(String constructUnit) {
-		this.constructUnit = constructUnit; 
+		this.constructDate = constructDate;
 	}
 
 	public String getSupervisionUnit() {
-		return supervisionUnit; 
+		return supervisionUnit;
 	}
 
 	public void setSupervisionUnit(String supervisionUnit) {
-		this.supervisionUnit = supervisionUnit; 
+		this.supervisionUnit = supervisionUnit;
 	}
 
 	public String getSupervisionEngineer() {
-		return supervisionEngineer; 
+		return supervisionEngineer;
 	}
 
 	public void setSupervisionEngineer(String supervisionEngineer) {
-		this.supervisionEngineer = supervisionEngineer; 
+		this.supervisionEngineer = supervisionEngineer;
 	}
 
 	public String getCollectionPerson() {
-		return collectionPerson; 
+		return collectionPerson;
 	}
 
 	public void setCollectionPerson(String collectionPerson) {
-		this.collectionPerson = collectionPerson; 
+		this.collectionPerson = collectionPerson;
 	}
 
 	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
 	@Temporal(TemporalType.TIMESTAMP)
 	public Date getCollectionDate() {
-		return collectionDate; 
+		return collectionDate;
 	}
 
 	public void setCollectionDate(Date collectionDate) {
-		this.collectionDate = collectionDate; 
+		this.collectionDate = collectionDate;
 	}
 
 	public Integer getApproveStatus() {
-		return approveStatus; 
+		return approveStatus;
 	}
 
 	public void setApproveStatus(Integer approveStatus) {
-		this.approveStatus = approveStatus; 
+		this.approveStatus = approveStatus;
 	}
 
 	public String getGeoState() {
-		return geoState; 
+		return geoState;
 	}
 
 	public void setGeoState(String geoState) {
-		this.geoState = geoState; 
+		this.geoState = geoState;
 	}
 
 	public String getRemarks() {
-		return remarks; 
+		return remarks;
 	}
 
 	public void setRemarks(String remarks) {
-		this.remarks = remarks; 
-	}
-
+		this.remarks = remarks;
+	} 
+	
 }

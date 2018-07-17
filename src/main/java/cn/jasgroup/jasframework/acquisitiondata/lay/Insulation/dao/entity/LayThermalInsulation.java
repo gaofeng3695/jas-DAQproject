@@ -1,4 +1,4 @@
-package cn.jasgroup.jasframework.acquisitiondata.lay.excavation.dao.entity;
+package cn.jasgroup.jasframework.acquisitiondata.lay.Insulation.dao.entity;
 import java.util.Date;
 
 import javax.persistence.Temporal;
@@ -6,10 +6,6 @@ import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import cn.jasgroup.framework.spatial.annotation.Line;
-import cn.jasgroup.framework.spatial.support.enumeration.CalculateType;
-import cn.jasgroup.framework.spatial.support.enumeration.ScopeType;
-import cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.dao.entity.MedianStake;
 import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
@@ -17,35 +13,23 @@ import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 
 /**
- * 
-  *<p>类描述：管沟开挖实体类。</p>
+  *<p>类描述：保温实体类。</p>
   * @author 葛建 。
   * @version v1.0.0.1。
   * @since JDK1.8。
-  *<p>创建日期：2018年7月13日 下午5:13:06。</p>
+  *<p>创建日期：2018年7月17日 上午10:34:16。</p>
  */
 @CommonSaveConfig(
-	scene = "/layPipeTrenchExcavation/save"
+	scene = "/layThermalInsulation/save"
 )
 @CommonUpdateConfig(
-	scene = "/layPipeTrenchExcavation/update"
+	scene = "/layThermalInsulation/update"
 )
 @CommonDeleteConfig(
-	scene = "/layPipeTrenchExcavation/delete"
+	scene = "/layThermalInsulation/delete"
 )
-@Line(
-	scopeFieldName="pipelineOid",
-	scopeType=ScopeType.CURRENT,
-	geometryColumnName="geom",
-	calculateType=CalculateType.DoubleAnchorAndDeviation,
-	anchorClass=MedianStake.class,
-	startAnchorOid="startMedianStakeOid",
-	startDeviation="startRelativeMileage",
-	endAnchorOid="endMedianStakeOid",
-	endDeviation="endRelativeMileage"
-)
-@JdbcEntity(name="daq_lay_pipe_trench_excavation")
-public class LayPipeTrenchExcavation extends CommonJdbcEntity {
+@JdbcEntity(name="daq_lay_thermal_insulation")
+public class LayThermalInsulation extends CommonJdbcEntity {
 
 	/**
 	 * 项目oid 
@@ -88,49 +72,34 @@ public class LayPipeTrenchExcavation extends CommonJdbcEntity {
 	private Double endRelativeMileage; 
 
 	/**
-	 * 土壤类别 
+	 * 保温材料 
 	 */
-	private String soilType; 
+	private String insulationMaterial; 
 
 	/**
-	 * 管沟深度(m) 
+	 * 保温层厚度(mm) 
 	 */
-	private Double pipeTrenchDepth; 
+	private Double insulationThickness; 
 
 	/**
-	 * 沟底宽度(m) 
+	 * 防护层结构 
 	 */
-	private Double grooveWidth; 
+	private String protectiveTape; 
 
 	/**
-	 * 放坡角度(°) 
+	 * 防护层厚度(mm) 
 	 */
-	private Double slopeAngle; 
+	private Double protectiveThickness; 
 
 	/**
-	 * 沟底长度(m) 
+	 * 保温层生产厂家 
 	 */
-	private Double grooveHeight; 
+	private String manufacturer; 
 
 	/**
-	 * 设计转角(°) 
+	 * 具体地址 
 	 */
-	private Double designCornerAngle; 
-
-	/**
-	 * 实际转角(°) 
-	 */
-	private Double actualCornerAngle; 
-
-	/**
-	 * 结论 
-	 */
-	private Integer conclusion; 
-
-	/**
-	 * 检查验收意见 
-	 */
-	private String acceptanceOpinion; 
+	private String manufacturerAddress; 
 
 	/**
 	 * 施工单位 
@@ -249,85 +218,58 @@ public class LayPipeTrenchExcavation extends CommonJdbcEntity {
 		super.setField("endRelativeMileage");
 	}
 
-	public String getSoilType() {
-		return soilType; 
+	public String getInsulationMaterial() {
+		return insulationMaterial; 
 	}
 
-	public void setSoilType(String soilType) {
-		this.soilType = soilType; 
-		super.setField("soilType");
+	public void setInsulationMaterial(String insulationMaterial) {
+		this.insulationMaterial = insulationMaterial; 
+		super.setField("insulationMaterial");
 	}
 
-	public Double getPipeTrenchDepth() {
-		return pipeTrenchDepth; 
+	public Double getInsulationThickness() {
+		return insulationThickness; 
 	}
 
-	public void setPipeTrenchDepth(Double pipeTrenchDepth) {
-		this.pipeTrenchDepth = pipeTrenchDepth; 
-		super.setField("pipeTrenchDepth");
+	public void setInsulationThickness(Double insulationThickness) {
+		this.insulationThickness = insulationThickness; 
+		super.setField("insulationThickness");
 	}
 
-	public Double getGrooveWidth() {
-		return grooveWidth; 
+	public String getProtectiveTape() {
+		return protectiveTape; 
 	}
 
-	public void setGrooveWidth(Double grooveWidth) {
-		this.grooveWidth = grooveWidth; 
-		super.setField("grooveWidth");
+	public void setProtectiveTape(String protectiveTape) {
+		this.protectiveTape = protectiveTape; 
+		super.setField("protectiveTape");
 	}
 
-	public Double getSlopeAngle() {
-		return slopeAngle; 
+	public Double getProtectiveThickness() {
+		return protectiveThickness; 
 	}
 
-	public void setSlopeAngle(Double slopeAngle) {
-		this.slopeAngle = slopeAngle; 
-		super.setField("slopeAngle");
+	public void setProtectiveThickness(Double protectiveThickness) {
+		this.protectiveThickness = protectiveThickness; 
+		super.setField("protectiveThickness");
 	}
 
-	public Double getGrooveHeight() {
-		return grooveHeight; 
+	public String getManufacturer() {
+		return manufacturer; 
 	}
 
-	public void setGrooveHeight(Double grooveHeight) {
-		this.grooveHeight = grooveHeight; 
-		super.setField("grooveHeight");
+	public void setManufacturer(String manufacturer) {
+		this.manufacturer = manufacturer; 
+		super.setField("manufacturer");
 	}
 
-	public Double getDesignCornerAngle() {
-		return designCornerAngle; 
+	public String getManufacturerAddress() {
+		return manufacturerAddress; 
 	}
 
-	public void setDesignCornerAngle(Double designCornerAngle) {
-		this.designCornerAngle = designCornerAngle; 
-		super.setField("designCornerAngle");
-	}
-
-	public Double getActualCornerAngle() {
-		return actualCornerAngle; 
-	}
-
-	public void setActualCornerAngle(Double actualCornerAngle) {
-		this.actualCornerAngle = actualCornerAngle; 
-		super.setField("actualCornerAngle");
-	}
-
-	public Integer getConclusion() {
-		return conclusion; 
-	}
-
-	public void setConclusion(Integer conclusion) {
-		this.conclusion = conclusion; 
-		super.setField("conclusion");
-	}
-
-	public String getAcceptanceOpinion() {
-		return acceptanceOpinion; 
-	}
-
-	public void setAcceptanceOpinion(String acceptanceOpinion) {
-		this.acceptanceOpinion = acceptanceOpinion; 
-		super.setField("acceptanceOpinion");
+	public void setManufacturerAddress(String manufacturerAddress) {
+		this.manufacturerAddress = manufacturerAddress; 
+		super.setField("manufacturerAddress");
 	}
 
 	public String getConstructUnit() {

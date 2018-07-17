@@ -22,6 +22,11 @@ import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 			 }
 )
 public class LaySurveyingQuery extends BaseJavaQuery{
+	
+	/**
+	 * oid
+	 */
+	private String oid;
 
 	/**
 	 * 项目oid 
@@ -42,11 +47,6 @@ public class LaySurveyingQuery extends BaseJavaQuery{
 	 * 线路段/穿跨越 
 	 */
 	private String pipeSegmentOrCrossOid; 
-
-	/**
-	 * 桩号 
-	 */
-	private String medianStakeOid;
 
 	@Override
 	public String getQuerySql() {
@@ -81,12 +81,17 @@ public class LaySurveyingQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(pipeSegmentOrCrossOid)) {
 				conditionSql += " and ls.pipe_segment_or_cross_oid = :pipeSegmentOrCrossOid";
 			}
-			if (StringUtils.isNotBlank(medianStakeOid)) {
-				conditionSql += " and ls.median_stake_oid = :medianStakeOid";
-			}
 			conditionSql += " order by ls.create_datetime desc";
 		}
 		return conditionSql;
+	}
+
+	public String getOid() {
+		return oid;
+	}
+
+	public void setOid(String oid) {
+		this.oid = oid;
 	}
 
 	public String getProjectOid() {
@@ -120,13 +125,5 @@ public class LaySurveyingQuery extends BaseJavaQuery{
 	public void setPipeSegmentOrCrossOid(String pipeSegmentOrCrossOid) {
 		this.pipeSegmentOrCrossOid = pipeSegmentOrCrossOid;
 	}
-
-	public String getMedianStakeOid() {
-		return medianStakeOid;
-	}
-
-	public void setMedianStakeOid(String medianStakeOid) {
-		this.medianStakeOid = medianStakeOid;
-	} 
 
 }

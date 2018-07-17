@@ -1,4 +1,5 @@
-package cn.jasgroup.jasframework.acquisitiondata.lay.excavation.dao.entity;
+package cn.jasgroup.jasframework.acquisitiondata.lay.restoration.dao.entity;
+
 import java.util.Date;
 
 import javax.persistence.Temporal;
@@ -6,10 +7,6 @@ import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import cn.jasgroup.framework.spatial.annotation.Line;
-import cn.jasgroup.framework.spatial.support.enumeration.CalculateType;
-import cn.jasgroup.framework.spatial.support.enumeration.ScopeType;
-import cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.dao.entity.MedianStake;
 import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
@@ -17,35 +14,23 @@ import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 
 /**
- * 
-  *<p>类描述：管沟开挖实体类。</p>
+  *<p>类描述：地貌恢复实体类。</p>
   * @author 葛建 。
   * @version v1.0.0.1。
   * @since JDK1.8。
-  *<p>创建日期：2018年7月13日 下午5:13:06。</p>
+  *<p>创建日期：2018年7月17日 上午10:07:55。</p>
  */
 @CommonSaveConfig(
-	scene = "/layPipeTrenchExcavation/save"
+	scene = "/layLandRestoration/save"
 )
 @CommonUpdateConfig(
-	scene = "/layPipeTrenchExcavation/update"
+	scene = "/layLandRestoration/update"
 )
 @CommonDeleteConfig(
-	scene = "/layPipeTrenchExcavation/delete"
+	scene = "/layLandRestoration/delete"
 )
-@Line(
-	scopeFieldName="pipelineOid",
-	scopeType=ScopeType.CURRENT,
-	geometryColumnName="geom",
-	calculateType=CalculateType.DoubleAnchorAndDeviation,
-	anchorClass=MedianStake.class,
-	startAnchorOid="startMedianStakeOid",
-	startDeviation="startRelativeMileage",
-	endAnchorOid="endMedianStakeOid",
-	endDeviation="endRelativeMileage"
-)
-@JdbcEntity(name="daq_lay_pipe_trench_excavation")
-public class LayPipeTrenchExcavation extends CommonJdbcEntity {
+@JdbcEntity(name="daq_lay_land_restoration")
+public class LayLandRestoration extends CommonJdbcEntity {
 
 	/**
 	 * 项目oid 
@@ -88,49 +73,19 @@ public class LayPipeTrenchExcavation extends CommonJdbcEntity {
 	private Double endRelativeMileage; 
 
 	/**
-	 * 土壤类别 
+	 * 证书编号 
 	 */
-	private String soilType; 
+	private String certificateNum; 
 
 	/**
-	 * 管沟深度(m) 
+	 * 长度(m) 
 	 */
-	private Double pipeTrenchDepth; 
+	private Double length; 
 
 	/**
-	 * 沟底宽度(m) 
+	 * 经过地区 
 	 */
-	private Double grooveWidth; 
-
-	/**
-	 * 放坡角度(°) 
-	 */
-	private Double slopeAngle; 
-
-	/**
-	 * 沟底长度(m) 
-	 */
-	private Double grooveHeight; 
-
-	/**
-	 * 设计转角(°) 
-	 */
-	private Double designCornerAngle; 
-
-	/**
-	 * 实际转角(°) 
-	 */
-	private Double actualCornerAngle; 
-
-	/**
-	 * 结论 
-	 */
-	private Integer conclusion; 
-
-	/**
-	 * 检查验收意见 
-	 */
-	private String acceptanceOpinion; 
+	private String region; 
 
 	/**
 	 * 施工单位 
@@ -249,85 +204,31 @@ public class LayPipeTrenchExcavation extends CommonJdbcEntity {
 		super.setField("endRelativeMileage");
 	}
 
-	public String getSoilType() {
-		return soilType; 
+	public String getCertificateNum() {
+		return certificateNum; 
 	}
 
-	public void setSoilType(String soilType) {
-		this.soilType = soilType; 
-		super.setField("soilType");
+	public void setCertificateNum(String certificateNum) {
+		this.certificateNum = certificateNum; 
+		super.setField("certificateNum");
 	}
 
-	public Double getPipeTrenchDepth() {
-		return pipeTrenchDepth; 
+	public Double getLength() {
+		return length; 
 	}
 
-	public void setPipeTrenchDepth(Double pipeTrenchDepth) {
-		this.pipeTrenchDepth = pipeTrenchDepth; 
-		super.setField("pipeTrenchDepth");
+	public void setLength(Double length) {
+		this.length = length; 
+		super.setField("length");
 	}
 
-	public Double getGrooveWidth() {
-		return grooveWidth; 
+	public String getRegion() {
+		return region; 
 	}
 
-	public void setGrooveWidth(Double grooveWidth) {
-		this.grooveWidth = grooveWidth; 
-		super.setField("grooveWidth");
-	}
-
-	public Double getSlopeAngle() {
-		return slopeAngle; 
-	}
-
-	public void setSlopeAngle(Double slopeAngle) {
-		this.slopeAngle = slopeAngle; 
-		super.setField("slopeAngle");
-	}
-
-	public Double getGrooveHeight() {
-		return grooveHeight; 
-	}
-
-	public void setGrooveHeight(Double grooveHeight) {
-		this.grooveHeight = grooveHeight; 
-		super.setField("grooveHeight");
-	}
-
-	public Double getDesignCornerAngle() {
-		return designCornerAngle; 
-	}
-
-	public void setDesignCornerAngle(Double designCornerAngle) {
-		this.designCornerAngle = designCornerAngle; 
-		super.setField("designCornerAngle");
-	}
-
-	public Double getActualCornerAngle() {
-		return actualCornerAngle; 
-	}
-
-	public void setActualCornerAngle(Double actualCornerAngle) {
-		this.actualCornerAngle = actualCornerAngle; 
-		super.setField("actualCornerAngle");
-	}
-
-	public Integer getConclusion() {
-		return conclusion; 
-	}
-
-	public void setConclusion(Integer conclusion) {
-		this.conclusion = conclusion; 
-		super.setField("conclusion");
-	}
-
-	public String getAcceptanceOpinion() {
-		return acceptanceOpinion; 
-	}
-
-	public void setAcceptanceOpinion(String acceptanceOpinion) {
-		this.acceptanceOpinion = acceptanceOpinion; 
-		super.setField("acceptanceOpinion");
+	public void setRegion(String region) {
+		this.region = region; 
+		super.setField("region");
 	}
 
 	public String getConstructUnit() {
@@ -414,5 +315,4 @@ public class LayPipeTrenchExcavation extends CommonJdbcEntity {
 		this.remarks = remarks; 
 		super.setField("remarks");
 	}
-
 }
