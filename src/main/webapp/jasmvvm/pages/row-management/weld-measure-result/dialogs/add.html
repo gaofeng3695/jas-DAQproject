@@ -129,7 +129,7 @@
 						</el-col>
 					</el-row>
 					<jas-base-group-title name="位置数据"></jas-base-group-title>
-					<el-row v-if="isShowStation">
+					<el-row>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="桩号" prop="medianStakeOid" required>
 								<el-select v-model="formData.medianStakeOid" clearable placeholder="请选择桩号" size="small">
@@ -143,8 +143,7 @@
 								  placeholder="请输入相对桩位置" size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
-					</el-row>
-					<el-row v-else>
+					
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="坐标X">
 								<el-input-number :precision="3" :step="1" :max="10000000" controls-position="right" v-model="formData.pointx" clearable placeholder="请输入坐标X"
@@ -321,12 +320,7 @@
 			var that = this;
 			var param = window.jasTools.base.getParamsInUrl(location.href);
 			var userBo = JSON.parse(localStorage.getItem("user"));
-			var calculateType = localStorage.getItem("calculateType");
-			if (calculateType == 1) {
-				this.isShowStation = true;
-			} else {
-				this.isShowStation = false;
-			}
+	
 			that.formData.constructUnit = userBo.unitId;
 			that.domain.constructUnits.push({
 				key: userBo.unitId,
