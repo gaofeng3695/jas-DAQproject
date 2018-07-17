@@ -37,11 +37,12 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 )
 @CommonDeleteBatchConfig(
 	scene = "/crossExcavation/deleteBatch"
-	)
+)
 @Line(
 	geometryColumnName = "geom",
 	calculateType = CalculateType.DoubleAnchorAndDeviation,
 	anchorClass = MedianStake.class,
+	scopeFieldName = "pipelineOid",	
 	startAnchorOid = "startMedianStakeOid",
 	startDeviation = "startRelativeMileage",
 	endAnchorOid = "endMedianStakeOid",

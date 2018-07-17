@@ -38,8 +38,10 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 )
 @Line(
 	geometryColumnName = "geom",
+	geometryState="geoState",
 	calculateType = CalculateType.DoubleAnchorAndDeviation,
 	anchorClass = MedianStake.class,
+	scopeFieldName = "pipelineOid",
 	startAnchorOid = "startMedianStakeOid",
 	startDeviation = "startRelativeMileage",
 	endAnchorOid = "endMedianStakeOid",
