@@ -39,7 +39,7 @@ Vue.component('jas-file-upload', {
 	template: [
 		'<el-upload ref="upload" :accept="accept" :limit="limit" :auto-upload="false" :file-list="fileList" ',
 		':on-change="changeFiles" :on-success="fileUploaded" :on-remove="removeFile" ',
-		':on-exceed="uploaodNumberlimit" :action="uploadurl">',
+		':on-exceed="uploaodNumberlimit" :action="uploadurl" style="padding-bottom:10px;">',
 		'	<el-button slot="trigger" size="small" type="primary" plain>选取文件</el-button>',
 		'	<span style="padding-left: 10px;" class="el-upload__tip" slot="tip">{{"最多上传"+ limit +"个附件"}}</span>',
 		'</el-upload>',
@@ -504,7 +504,7 @@ Vue.component('jas-search-for-list', {
 		},
 	},
 	template: [
-		'<el-form :model="form" label-width="120px">',
+		'<el-form class="jas-search-for-list" :model="form" label-width="120px">',
 		'		<el-row>',
 		'	    <template v-for="item in fields">',
 		'	    	<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">',
@@ -516,6 +516,9 @@ Vue.component('jas-search-for-list', {
 		'	    			</template>',
 		'	    			<template v-if="fieldsConfig[item.field].type == \'input\'">',
 		'	    				<el-input v-model="form[item.field]" :placeholder="\'请输入\'+item.name" size="small" clearable></el-input>',
+		'	    			</template>',
+		'	    			<template v-if="fieldsConfig[item.field].type == \'number\'">',
+		'							<el-input-number v-model="form[item.field]" :precision="fieldsConfig[item.field].precision" :step="1" :max="fieldsConfig[item.field].max" controls-position="right" clearable :placeholder="\'请输入\'+item.name" size="small"></el-input-number>',
 		'	    			</template>',
 		'	    			<template v-if="fieldsConfig[item.field].type == \'number\'">',
 		'							<el-input-number v-model="form[item.field]" :precision="fieldsConfig[item.field].precision" :step="1" :max="fieldsConfig[item.field].max" controls-position="right" clearable :placeholder="\'请输入\'+item.name" size="small"></el-input-number>',
@@ -1085,20 +1088,20 @@ Vue.component('jas-form-items', {
 		'<el-row>',
 		'	<template v-for="item in fields">',
 		'		<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">',
-		'			<el-form-item :label="item.name"  :prop="item.field" :rules="fieldsConfig[item.field] && fieldsConfig[item.field].rules" style="margin-bottom: 15px ">',
+		'			<el-form-item :ref="item.field + 123" :label="item.name"  :prop="item.field" :rules="fieldsConfig[item.field] && fieldsConfig[item.field].rules" style="margin-bottom: 15px ">',
 		'				<template v-if="fieldsConfig[item.field].type == \'select\'">',
 		'					<el-select :ref="item.field" v-model="form[item.field]" clearable :placeholder="\'请选择\'+item.name" size="small" @visible-change="visibleChange($event,item.field)"  @change="fatherSelectChanged($event,item.field)">',
 		'						<el-option v-for="option in fieldsConfig[item.field].options" :key="option.key" :label="option.value" :value="option.key"></el-option>',
 		'					</el-select>',
 		'				</template>',
 		'				<template v-if="fieldsConfig[item.field].type == \'input\'">',
-		'					<el-input v-model="form[item.field]" :placeholder="\'请输入\'+item.name" size="small" clearable></el-input>',
+		'					<el-input @change="fieldChanged(item.field)" v-model="form[item.field]" :placeholder="\'请输入\'+item.name" size="small" clearable></el-input>',
 		'				</template>',
 		'	    	<template v-if="fieldsConfig[item.field].type == \'number\'">',
-		'					<el-input-number v-model="form[item.field]" :precision="fieldsConfig[item.field].precision" :step="1" :max="fieldsConfig[item.field].max" controls-position="right" clearable :placeholder="\'请输入\'+item.name" size="small"></el-input-number>',
+		'					<el-input-number @change="fieldChanged(item.field)" v-model="form[item.field]" :precision="fieldsConfig[item.field].precision" :step="1" :max="fieldsConfig[item.field].max" controls-position="right" clearable :placeholder="\'请输入\'+item.name" size="small"></el-input-number>',
 		'	    	</template>',
 		'				<template v-if="fieldsConfig[item.field].type == \'date\'">',
-		'					<el-date-picker clearable value-format="yyyy-MM-dd" type="date" :placeholder="\'请选择\'+item.name" v-model="form[item.field]" size="small" style="width: 100%;"></el-date-picker>',
+		'					<el-date-picker clearable value-format="yyyy-MM-dd" type="date" :placeholder="\'请选择\'+item.name" @change="fieldChanged(item.field)" v-model="form[item.field]" size="small" style="width: 100%;"></el-date-picker>',
 		'				</template>',
 		'			</el-form-item>',
 		'		</el-col>',
@@ -1231,8 +1234,14 @@ Vue.component('jas-form-items', {
 				var url = fieldConfig.childUrl[index] || fieldConfig.childUrl[0];
 				getAndSet(fatherField, form[fatherField], childField, url);
 			});
-
+			this.fieldChanged(fatherField)
 		},
+
+		fieldChanged: function (field) {
+			// console.log(this.$refs[field + 123][0].form)
+			this.$refs[field + 123][0].form.validateField(field);
+		},
+
 		requestDomainFromDomainTable: function (domainName, cb) {
 			var that = this;
 			var url = jasTools.base.rootPath + "/jasframework/sysdoman/getDoman.do";
@@ -1271,13 +1280,16 @@ Vue.component('jas-sub-form-group', {
 		},
 		fields: { // horizontal
 			type: Array,
+			default: function () {
+				return []
+			}
 		},
 		fieldsConfig: {
 			type: Object,
 		},
 		formList: {
 			type: Array,
-			default:function(){
+			default: function () {
 				return []
 			}
 		},

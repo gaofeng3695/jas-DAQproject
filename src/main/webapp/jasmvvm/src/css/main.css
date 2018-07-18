@@ -81,6 +81,10 @@ button {
     text-align: left;
 }
 
+.jas-search-for-list .el-form-item {
+    margin-bottom: 0px !important;
+}
+
 /* element样式修正--结束 */
 
 /* 分栏样式--开始 */
@@ -89,12 +93,14 @@ button {
     transition: all 0.3s;
 }
 
-.multipane.foo.layout-v{
-    height:100%;
+.multipane.foo.layout-v {
+    height: 100%;
 }
-.multipane.foo.layout-h{
-    height:100%;
+
+.multipane.foo.layout-h {
+    height: 100%;
 }
+
 .multipane.foo.layout-v .multipane-resizer {
     margin: 0;
     left: 0;
@@ -159,7 +165,6 @@ button {
 .multipane.foo.layout-v .multipane-resizer .resizertap:hover {
     opacity: 0.7;
 }
-
 
 /* 分栏样式--结束 */
 
