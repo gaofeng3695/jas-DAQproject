@@ -135,7 +135,7 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 		super.setField("pipelineOid");
 	}
 	
-	@Column(name="pipe_segment_or_crossOid")
+	@Column(name="pipe_segment_or_cross_oid")
 	public String getPipeSegmentOrCrossOid() {
 		return pipeSegmentOrCrossOid;
 	}
