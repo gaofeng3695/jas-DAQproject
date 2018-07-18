@@ -7,6 +7,10 @@ import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import cn.jasgroup.framework.spatial.annotation.Line;
+import cn.jasgroup.framework.spatial.support.enumeration.CalculateType;
+import cn.jasgroup.framework.spatial.support.enumeration.ScopeType;
+import cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.dao.entity.MedianStake;
 import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
@@ -28,6 +32,17 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 )
 @CommonDeleteConfig(
 	scene = "/layLandRestoration/delete"
+)
+@Line(
+	scopeFieldName="pipelineOid",
+	scopeType=ScopeType.CURRENT,
+	geometryColumnName="geom",
+	calculateType=CalculateType.DoubleAnchorAndDeviation,
+	anchorClass=MedianStake.class,
+	startAnchorOid="startMedianStakeOid",
+	startDeviation="startRelativeMileage",
+	endAnchorOid="endMedianStakeOid",
+	endDeviation="endRelativeMileage"
 )
 @JdbcEntity(name="daq_lay_land_restoration")
 public class LayLandRestoration extends CommonJdbcEntity {
