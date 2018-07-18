@@ -8,7 +8,7 @@ import cn.jasgroup.jasframework.dataaccess.base.BaseJdbcDao;
 public class ColdBendingPipeDao extends BaseJdbcDao{
 	
 	public void chanageOriginalPipeUseState(String pipeCode){
-		String sql = "update daq_material_pipe set is_cold_bend=1 where pipe_code=?";
+		String sql = "update daq_material_pipe set is_cold_bend=1 where oid=?";
 		this.update(sql, new Object[]{pipeCode});
 	}
 }
