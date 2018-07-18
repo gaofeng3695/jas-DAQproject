@@ -852,7 +852,7 @@ CREATE TABLE daq_material_pipe_cold_bending (
 	tenders_oid varchar(36),
 	pipeline_oid varchar(36),
 	pipe_segment_or_cross_oid varchar(36),
-	pipe_code varchar(50),
+	pipe_oid varchar(36),
 	pipe_cold_bending_code varchar(53),
 	certificate_num varchar(60),
 	pipe_bending_standards varchar(60),
@@ -887,7 +887,7 @@ comment on column daq_material_pipe_cold_bending.project_oid IS '项目oid';
 comment on column daq_material_pipe_cold_bending.tenders_oid IS '标段oid';
 comment on column daq_material_pipe_cold_bending.pipeline_oid IS '管线oid';
 comment on column daq_material_pipe_cold_bending.pipe_segment_or_cross_oid IS '线路段/穿跨越oid';
-comment on column daq_material_pipe_cold_bending.pipe_code IS '原材料钢管编号';
+comment on column daq_material_pipe_cold_bending.pipe_oid IS '原材料钢管oid';
 comment on column daq_material_pipe_cold_bending.pipe_cold_bending_code IS '冷弯管编号';
 comment on column daq_material_pipe_cold_bending.certificate_num IS '合格证编号';
 comment on column daq_material_pipe_cold_bending.pipe_bending_standards IS '管子弯曲设计标准';
