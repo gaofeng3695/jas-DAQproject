@@ -198,11 +198,11 @@ public class DaqPrivilegeController extends BaseController{
 		ListResult<Map<String,Object>> result = null;
 		try {
 			String pipeSegmentOrCrossOid = param.get("pipeSegmentOrCrossOid");
-			if(StringUtils.isBlank(param.get("pipeSegmentOrCrossOid"))){
+			if(StringUtils.isNotBlank(param.get("pipeSegmentOrCrossOid"))){
 				pipeSegmentOrCrossOid = param.get("pipeSegmentOrCrossOid");
-			}else if(StringUtils.isBlank(param.get("crossOid"))){
+			}else if(StringUtils.isNotBlank(param.get("crossOid"))){
 				pipeSegmentOrCrossOid = param.get("crossOid");
-			}else if(StringUtils.isBlank(param.get("pipeSegmentOid"))){
+			}else if(StringUtils.isNotBlank(param.get("pipeSegmentOid"))){
 				pipeSegmentOrCrossOid = param.get("pipeSegmentOid");
 			}else{
 				return new BaseResult(-1, "error", "oid不能为空！");
