@@ -36,7 +36,9 @@
 
 <body>
 	<div id="app" v-cloak>
-		<div class="content">
+
+
+		<jas-dialog-wrapper>
 			<el-form ref="formData" :rules="rules" :model="formData" label-width="100px">
 
 				<jas-base-group-title name="中线桩信息"></jas-base-group-title>
@@ -86,20 +88,6 @@
 							  placeholder="请输入Y坐标" size="small"></el-input-number>
 						</el-form-item>
 					</el-col>
-					<!-- <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="标石类型" prop="markStoneType">
-							<el-select v-model="formData.markStoneType" clearable placeholder="标石类型" size="small">
-								<el-option v-for="item in domain.markStone" :key="item.key" :label="item.value" :value="item.key">
-								</el-option>
-							</el-select>
-
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="标石概略位置" prop="markStoneLocation">
-							<el-input v-model="formData.markStoneLocation" clearable placeholder="请输入标石概略位置" size="small"></el-input>
-						</el-form-item>
-					</el-col> -->
 				</el-row>
 				<jas-base-group-title name="其他信息"></jas-base-group-title>
 				<el-row>
@@ -109,28 +97,20 @@
 						</el-form-item>
 					</el-col>
 				</el-row>
-				<!-- <el-row>
-					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-						<el-form-item label="模板上传" prop="file">
-						</el-form-item>
-					</el-col>
-				</el-row> -->
+
 
 				<jas-base-group-title name="附件信息"></jas-base-group-title>
 
 				<jas-file-upload ref="upload" @success="uploadSuccess"></jas-file-upload>
 			</el-form>
+			<div slot="footer" class="dialog-footer" style="text-align: center">
+				<el-button size="small" @click="cancel()">取 消</el-button>
+				<el-button size="small" type="primary" @click="submit('formData')">确 定</el-button>
+			</div>
+		</jas-dialog-wrapper>
 
 
 
-
-
-		</div>
-		<div slot="footer" class="dialog-footer" style="text-align: center">
-			<el-button size="small" @click="cancel()">取 消</el-button>
-			<el-button size="small" type="primary" @click="submit('formData')">确 定</el-button>
-		</div>
-	</div>
 </body>
 <script src="./../../../../lib/jquery/jquery-1.12.4.min.js"></script>
 <script src="./../../../../lib/vue/vue.js"></script>
