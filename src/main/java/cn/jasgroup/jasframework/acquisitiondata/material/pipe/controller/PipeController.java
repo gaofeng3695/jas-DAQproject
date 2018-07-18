@@ -5,8 +5,14 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import cn.jasgroup.framework.data.result.ListResult;
@@ -27,11 +33,16 @@ public class PipeController {
 	  * <p>创建日期:2018年7月10日 上午9:57:29。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	@RequestMapping("/getCutAndNotUse")
-	public Object getNotUseAndHasCut(){
+	@RequestMapping(value="/getCutAndNotUse", method = RequestMethod.POST)
+	@ResponseBody
+	public Object getNotUseAndHasCut(HttpServletRequest request,@RequestBody Map<String,String> param){
 		ListResult<Map<String, Object>> result= null;
 		try{
-			List<Map<String, Object>> rows = this.pipeService.getPipeList();
+			String type = param.get("type");
+			if(StringUtils.isBlank(type)){
+				type = "1";
+			}
+			List<Map<String, Object>> rows = this.pipeService.getPipeList(type);
 			result = new ListResult<>(1,"200","ok",rows);
 		}catch(Exception e){
 			result = new ListResult<>(-1,"400","error");

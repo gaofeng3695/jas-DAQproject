@@ -16,8 +16,8 @@ public class PipeService {
 	@Autowired
 	private PipeDao pipeDao;
 
-	public List<Map<String, Object>> getPipeList() {
-		return pipeDao.getPipeList();
+	public List<Map<String, Object>> getPipeList(String type) {
+		return pipeDao.getPipeList(type);
 	}
 	
 	
