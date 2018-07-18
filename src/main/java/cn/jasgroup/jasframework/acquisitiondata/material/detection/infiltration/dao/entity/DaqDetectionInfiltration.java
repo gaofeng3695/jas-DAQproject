@@ -9,8 +9,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import cn.jasgroup.jasframework.base.annotation.Cascade;
@@ -118,7 +116,7 @@ public class DaqDetectionInfiltration extends CommonJdbcEntity {
 	/**
 	 * 审核状态 
 	 */
-	private Integer approveStatus; 
+	private Integer approveStatus = 0; 
 
 	/**
 	 * 备注 

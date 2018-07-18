@@ -2,11 +2,6 @@ package cn.jasgroup.jasframework.acquisitiondata.material.detection.infiltration
 
 import javax.persistence.Transient;
 
-import cn.jasgroup.jasframework.base.annotation.CommonDeleteBatchConfig;
-import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
-import cn.jasgroup.jasframework.base.annotation.CommonGetConfig;
-import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
-import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
 import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
 import cn.jasgroup.jasframework.domain.utils.DomainUtil;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;

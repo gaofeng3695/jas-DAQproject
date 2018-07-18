@@ -7,12 +7,10 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import cn.jasgroup.jasframework.acquisitiondata.material.detection.infiltration.query.bo.DaqDetectionInfiltrationBo;
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.dao.DaqDetectionRayDao;
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.dao.DaqDetectionRaySubDao;
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.dao.entity.DaqDetectionRaySub;
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.query.bo.DaqDetectionRayBo;
-import cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.query.bo.DaqDetectionRaySubBo;
 import cn.jasgroup.jasframework.engine.jdbc.service.CommonDataJdbcService;
 
 /**
