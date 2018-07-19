@@ -1,4 +1,4 @@
-package cn.jasgroup.jasframework.acquisitiondata.cathodic.sacrifice.query.bo;
+package cn.jasgroup.jasframework.acquisitiondata.cathodic.protector.query.bo;
 
 import java.util.Date;
 
@@ -10,13 +10,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 
 /**
-  *<p>类描述：牺牲阳极Bo。</p>
+  *<p>类描述：绝缘接头保护器Bo。</p>
   * @author 葛建 。
   * @version v1.0.0.1。
   * @since JDK1.8。
-  *<p>创建日期：2018年7月18日 上午11:06:10。</p>
+  *<p>创建日期：2018年7月19日 下午5:09:22。</p>
  */
-public class CathodicSacrificeAnodeBo extends CommonBaseBo{
+public class CathodicInsulatedJointBo extends CommonBaseBo{
 	
 	/**
 	 * oid
@@ -64,19 +64,19 @@ public class CathodicSacrificeAnodeBo extends CommonBaseBo{
 	private String pipeSegmentName;
 
 	/**
-	 * 阳极编号 
+	 * 设备编号 
 	 */
-	private String anodeCode; 
+	private String equipmentCode; 
 
 	/**
-	 * 保护对象 
+	 * 名称 
 	 */
-	private String protectObject; 
+	private String equipmentName; 
 
 	/**
 	 * 桩号 
 	 */
-	private String medianStakeOid;
+	private String medianStakeOid; 
 
 	/**
 	 * 桩号编码
@@ -104,109 +104,9 @@ public class CathodicSacrificeAnodeBo extends CommonBaseBo{
 	private Double pointz; 
 
 	/**
-	 * 是否临时 
-	 */
-	private Integer isTemporary; 
-
-	/**
-	 * 设计寿命(年) 
-	 */
-	private Double designLife; 
-
-	/**
-	 * 牺牲阳极材料 
-	 */
-	private String anodeMaterial; 
-
-	/**
-	 * 牺牲阳极材料名称
-	 */
-	private String anodeMaterialName; 
-
-	/**
-	 * 牺牲阳极型号 
-	 */
-	private String anodeSpecification; 
-
-	/**
-	 * 牺牲阳极数量(支) 
-	 */
-	private Double andoeQuantity; 
-
-	/**
-	 * 牺牲阳极单重(kg) 
-	 */
-	private Double andoeWeight; 
-
-	/**
-	 * 牺牲阳极总重(kg) 
-	 */
-	private Double totalWeight; 
-
-	/**
-	 * 阳极间距(m) 
-	 */
-	private Double anodeDistance; 
-
-	/**
-	 * 与管道距离(m) 
-	 */
-	private Double pipeDistance; 
-
-	/**
-	 * 制造商 
-	 */
-	private String manufacture; 
-
-	/**
-	 * 埋设日期 
-	 */
-	private Date burialDate; 
-
-	/**
-	 * 阳极埋深(m) 
-	 */
-	private Double anodeBuriedDepth; 
-
-	/**
-	 * 铺设长度(m) 
-	 */
-	private Double layLength; 
-
-	/**
-	 * 填包料重量(kg) 
-	 */
-	private Double fillWeight; 
-
-	/**
-	 * 各接点质量及绝缘情况 
-	 */
-	private String insulationQuality; 
-
-	/**
-	 * 各接点质量及绝缘情况名称 
-	 */
-	private String insulationQualityName; 
-
-	/**
-	 * 检查片埋设情况 
-	 */
-	private Integer tabletsCondition; 
-
-	/**
-	 * 安装位置描述 
-	 */
-	private String installLocationDescription; 
-
-	/**
-	 * 结论 
-	 */
-	private Integer conclusion; 
-
-	/**
 	 * 施工单位 
 	 */
-	private String constructUnit;  
+	private String constructUnit; 
 
 	/**
 	 * 施工单位名称 
@@ -227,7 +127,6 @@ public class CathodicSacrificeAnodeBo extends CommonBaseBo{
 	 * 监理单位名称
 	 */
 	private String supervisionUnitName; 
-
 	/**
 	 * 监理工程师 
 	 */
@@ -251,7 +150,7 @@ public class CathodicSacrificeAnodeBo extends CommonBaseBo{
 	/**
 	 * 审核状态 
 	 */
-	private Integer approveStatus; 
+	private Integer approveStatus = 0; 
 
 	/**
 	 * 备注 
@@ -314,14 +213,6 @@ public class CathodicSacrificeAnodeBo extends CommonBaseBo{
 		this.medianStakeCode = medianStakeCode;
 	}
 
-	public String getAnodeMaterialName() {
-		return anodeMaterialName;
-	}
-
-	public void setAnodeMaterialName(String anodeMaterialName) {
-		this.anodeMaterialName = anodeMaterialName;
-	}
-
 	public String getConstructUnitName() {
 		return constructUnitName;
 	}
@@ -362,20 +253,20 @@ public class CathodicSacrificeAnodeBo extends CommonBaseBo{
 		this.pipeSegmentOid = pipeSegmentOid;
 	}
 
-	public String getAnodeCode() {
-		return anodeCode;
+	public String getEquipmentCode() {
+		return equipmentCode;
 	}
 
-	public void setAnodeCode(String anodeCode) {
-		this.anodeCode = anodeCode;
+	public void setEquipmentCode(String equipmentCode) {
+		this.equipmentCode = equipmentCode;
 	}
 
-	public String getProtectObject() {
-		return protectObject;
+	public String getEquipmentName() {
+		return equipmentName;
 	}
 
-	public void setProtectObject(String protectObject) {
-		this.protectObject = protectObject;
+	public void setEquipmentName(String equipmentName) {
+		this.equipmentName = equipmentName;
 	}
 
 	public String getMedianStakeOid() {
@@ -416,160 +307,6 @@ public class CathodicSacrificeAnodeBo extends CommonBaseBo{
 
 	public void setPointz(Double pointz) {
 		this.pointz = pointz;
-	}
-
-	public Integer getIsTemporary() {
-		return isTemporary;
-	}
-
-	public void setIsTemporary(Integer isTemporary) {
-		this.isTemporary = isTemporary;
-	}
-
-	public Double getDesignLife() {
-		return designLife;
-	}
-
-	public void setDesignLife(Double designLife) {
-		this.designLife = designLife;
-	}
-
-	public String getAnodeMaterial() {
-		return anodeMaterial;
-	}
-
-	public void setAnodeMaterial(String anodeMaterial) {
-		this.anodeMaterial = anodeMaterial;
-	}
-
-	public String getAnodeSpecification() {
-		return anodeSpecification;
-	}
-
-	public void setAnodeSpecification(String anodeSpecification) {
-		this.anodeSpecification = anodeSpecification;
-	}
-
-	public Double getAndoeQuantity() {
-		return andoeQuantity;
-	}
-
-	public void setAndoeQuantity(Double andoeQuantity) {
-		this.andoeQuantity = andoeQuantity;
-	}
-
-	public Double getAndoeWeight() {
-		return andoeWeight;
-	}
-
-	public void setAndoeWeight(Double andoeWeight) {
-		this.andoeWeight = andoeWeight;
-	}
-
-	public Double getTotalWeight() {
-		return totalWeight;
-	}
-
-	public void setTotalWeight(Double totalWeight) {
-		this.totalWeight = totalWeight;
-	}
-
-	public Double getAnodeDistance() {
-		return anodeDistance;
-	}
-
-	public void setAnodeDistance(Double anodeDistance) {
-		this.anodeDistance = anodeDistance;
-	}
-
-	public Double getPipeDistance() {
-		return pipeDistance;
-	}
-
-	public void setPipeDistance(Double pipeDistance) {
-		this.pipeDistance = pipeDistance;
-	}
-
-	public String getManufacture() {
-		return manufacture;
-	}
-
-	public void setManufacture(String manufacture) {
-		this.manufacture = manufacture;
-	}
-
-	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
-	@Temporal(TemporalType.TIMESTAMP)
-	public Date getBurialDate() {
-		return burialDate;
-	}
-
-	public void setBurialDate(Date burialDate) {
-		this.burialDate = burialDate;
-	}
-
-	public Double getAnodeBuriedDepth() {
-		return anodeBuriedDepth;
-	}
-
-	public void setAnodeBuriedDepth(Double anodeBuriedDepth) {
-		this.anodeBuriedDepth = anodeBuriedDepth;
-	}
-
-	public Double getLayLength() {
-		return layLength;
-	}
-
-	public void setLayLength(Double layLength) {
-		this.layLength = layLength;
-	}
-
-	public Double getFillWeight() {
-		return fillWeight;
-	}
-
-	public void setFillWeight(Double fillWeight) {
-		this.fillWeight = fillWeight;
-	}
-
-	public String getInsulationQuality() {
-		return insulationQuality;
-	}
-
-	public void setInsulationQuality(String insulationQuality) {
-		this.insulationQuality = insulationQuality;
-	}
-
-	public String getInsulationQualityName() {
-		return insulationQualityName;
-	}
-
-	public void setInsulationQualityName(String insulationQualityName) {
-		this.insulationQualityName = insulationQualityName;
-	}
-
-	public Integer getTabletsCondition() {
-		return tabletsCondition;
-	}
-
-	public void setTabletsCondition(Integer tabletsCondition) {
-		this.tabletsCondition = tabletsCondition;
-	}
-
-	public String getInstallLocationDescription() {
-		return installLocationDescription;
-	}
-
-	public void setInstallLocationDescription(String installLocationDescription) {
-		this.installLocationDescription = installLocationDescription;
-	}
-
-	public Integer getConclusion() {
-		return conclusion;
-	}
-
-	public void setConclusion(Integer conclusion) {
-		this.conclusion = conclusion;
 	}
 
 	public String getConstructUnit() {
@@ -647,5 +384,4 @@ public class CathodicSacrificeAnodeBo extends CommonBaseBo{
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
 	} 
-
 }

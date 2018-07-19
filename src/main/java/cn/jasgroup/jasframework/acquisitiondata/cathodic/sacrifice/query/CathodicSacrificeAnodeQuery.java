@@ -55,7 +55,7 @@ public class CathodicSacrificeAnodeQuery extends BaseJavaQuery{
 	@Override
 	public String getQuerySql() {
 		String sql = "SELECT pro.project_name, pi.pipeline_name, te.tenders_name,ps.pipe_segment_name, ms.median_stake_code,"
-					+ "d.code_name as anode_material_name, u.unit_name as construct_unit_name, pu.unit_name as supervision_unit_name, csa.* "
+					+ "d.code_name as anode_material_name,dm.code_name as insulation_quality_name, u.unit_name as construct_unit_name, pu.unit_name as supervision_unit_name, csa.* "
 					+ "FROM daq_cathodic_sacrifice_anode csa "
 					+ "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = csa.project_oid "
 					+ "LEFT JOIN (SELECT oid, pipeline_name, active FROM daq_pipeline where active=1) pi ON pi.oid = csa.pipeline_oid "
@@ -63,6 +63,7 @@ public class CathodicSacrificeAnodeQuery extends BaseJavaQuery{
 					+ "LEFT JOIN (select oid, pipe_segment_name, active from daq_pipe_segment where active=1) ps ON ps.oid = csa.pipe_segment_oid "
 					+ "LEFT JOIN (select oid, median_stake_code, active from daq_median_stake where active=1) ms ON ms.oid = csa.median_stake_oid "
 					+ "LEFT JOIN (select code_id, code_name, active from sys_domain where active=1) d on d.code_id = csa.anode_material "
+					+ "LEFT JOIN (select code_id, code_name, active from sys_domain where active=1) dm on dm.code_id = csa.insulation_quality "
 					+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) pu on pu.oid = csa.supervision_unit "
 					+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) u on u.oid = csa.construct_unit "
 					+ "WHERE csa.active = 1";
