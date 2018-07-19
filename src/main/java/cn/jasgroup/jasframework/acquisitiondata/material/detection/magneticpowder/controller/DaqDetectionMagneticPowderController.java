@@ -17,6 +17,7 @@ import cn.jasgroup.framework.data.result.BaseResult;
 import cn.jasgroup.framework.data.result.SimpleResult;
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.magneticpowder.query.bo.DaqDetectionMagneticPowderBo;
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.magneticpowder.service.DaqDetectionMagneticPowderService;
+import cn.jasgroup.jasframework.base.controller.BaseController;
 
 /**
  * @description 磁粉检测
@@ -28,7 +29,7 @@ import cn.jasgroup.jasframework.acquisitiondata.material.detection.magneticpowde
 
 @RestController
 @RequestMapping("/daq/detectionMagneticPowder")
-public class DaqDetectionMagneticPowderController {
+public class DaqDetectionMagneticPowderController extends BaseController{
 
 	@Autowired
 	private DaqDetectionMagneticPowderService magneticPowderService;

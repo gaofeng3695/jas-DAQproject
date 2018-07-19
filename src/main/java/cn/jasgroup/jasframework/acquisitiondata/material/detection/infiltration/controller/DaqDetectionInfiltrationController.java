@@ -17,6 +17,7 @@ import cn.jasgroup.framework.data.result.BaseResult;
 import cn.jasgroup.framework.data.result.SimpleResult;
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.infiltration.query.bo.DaqDetectionInfiltrationBo;
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.infiltration.service.DaqDetectionInfiltrationService;
+import cn.jasgroup.jasframework.base.controller.BaseController;
 
 /**
  * @description 渗透检测
@@ -28,7 +29,7 @@ import cn.jasgroup.jasframework.acquisitiondata.material.detection.infiltration.
 
 @RestController
 @RequestMapping("/daq/detectionInfiltration")
-public class DaqDetectionInfiltrationController {
+public class DaqDetectionInfiltrationController extends BaseController{
 
 	@Autowired
 	private DaqDetectionInfiltrationService infiltrationService;

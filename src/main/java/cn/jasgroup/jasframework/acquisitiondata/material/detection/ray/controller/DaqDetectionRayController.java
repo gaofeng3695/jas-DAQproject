@@ -17,6 +17,7 @@ import cn.jasgroup.framework.data.result.BaseResult;
 import cn.jasgroup.framework.data.result.SimpleResult;
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.query.bo.DaqDetectionRayBo;
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.service.DaqDetectionRayService;
+import cn.jasgroup.jasframework.base.controller.BaseController;
 
 /**
  * @description 射线检测
@@ -28,7 +29,7 @@ import cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.service.D
 
 @RestController
 @RequestMapping("/daq/detectionRay")
-public class DaqDetectionRayController {
+public class DaqDetectionRayController extends BaseController{
 
 	@Autowired
 	private DaqDetectionRayService rayService;

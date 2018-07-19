@@ -17,6 +17,7 @@ import cn.jasgroup.framework.data.result.BaseResult;
 import cn.jasgroup.framework.data.result.SimpleResult;
 import cn.jasgroup.jasframework.acquisitiondata.material.cross.pipejacking.query.bo.DaqCrossPipeJackingBo;
 import cn.jasgroup.jasframework.acquisitiondata.material.cross.pipejacking.service.DaqCrossPipeJackingService;
+import cn.jasgroup.jasframework.base.controller.BaseController;
 
 /**
  * @description 顶管穿跨越
@@ -28,7 +29,7 @@ import cn.jasgroup.jasframework.acquisitiondata.material.cross.pipejacking.servi
 
 @RestController
 @RequestMapping("/daq/crossPipeJacking")
-public class DaqCrossPipeJackingController {
+public class DaqCrossPipeJackingController extends BaseController{
 
 	@Autowired
 	private DaqCrossPipeJackingService pipeJackingService;
@@ -52,7 +53,7 @@ public class DaqCrossPipeJackingController {
 			if(StringUtils.isBlank(oid) || null == approveStatus){
 				result = new SimpleResult<Boolean>(-1, "400", "error");
 			}
-			Boolean b = this.pipeJackingService.approve(oid, approveStatus);
+			Boolean b = this.pipeJackingService.approve(paramMap);
 			if(b){
 				result = new SimpleResult<Boolean>(b);
 			}else{

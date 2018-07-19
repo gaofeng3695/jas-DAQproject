@@ -17,6 +17,7 @@ import cn.jasgroup.framework.data.result.BaseResult;
 import cn.jasgroup.framework.data.result.SimpleResult;
 import cn.jasgroup.jasframework.acquisitiondata.material.cross.drilling.query.bo.DaqCrossDrillingBo;
 import cn.jasgroup.jasframework.acquisitiondata.material.cross.drilling.service.DaqCrossDrillingService;
+import cn.jasgroup.jasframework.base.controller.BaseController;
 
 /**
  * @description 定向钻穿越
@@ -28,7 +29,7 @@ import cn.jasgroup.jasframework.acquisitiondata.material.cross.drilling.service.
 
 @RestController
 @RequestMapping("/daq/crossDrilling")
-public class DaqCrossDrillingController {
+public class DaqCrossDrillingController extends BaseController{
 
 	@Autowired
 	private DaqCrossDrillingService drillingService;
@@ -52,7 +53,7 @@ public class DaqCrossDrillingController {
 			if(StringUtils.isBlank(oid) || null == approveStatus){
 				result = new SimpleResult<Boolean>(-1, "400", "error");
 			}
-			Boolean b = this.drillingService.approve(oid, approveStatus);
+			Boolean b = this.drillingService.approve(paramMap);
 			if(b){
 				result = new SimpleResult<Boolean>(b);
 			}else{

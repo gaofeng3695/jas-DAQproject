@@ -17,6 +17,7 @@ import cn.jasgroup.framework.data.result.BaseResult;
 import cn.jasgroup.framework.data.result.SimpleResult;
 import cn.jasgroup.jasframework.acquisitiondata.material.cross.excavation.query.bo.DaqCrossExcavationBo;
 import cn.jasgroup.jasframework.acquisitiondata.material.cross.excavation.service.DaqCrossExcavationService;
+import cn.jasgroup.jasframework.base.controller.BaseController;
 
 /**
  * @description 开挖controller
@@ -28,7 +29,7 @@ import cn.jasgroup.jasframework.acquisitiondata.material.cross.excavation.servic
 
 @RestController
 @RequestMapping("/daq/crossExcavation")
-public class DaqCrossExcavationController {
+public class DaqCrossExcavationController extends BaseController{
 
 	@Autowired
 	private DaqCrossExcavationService excavationService;
@@ -52,7 +53,7 @@ public class DaqCrossExcavationController {
 			if(StringUtils.isBlank(oid) || null == approveStatus){
 				result = new SimpleResult<Boolean>(-1, "400", "error");
 			}
-			Boolean b = this.excavationService.approve(oid, approveStatus);
+			Boolean b = this.excavationService.approve(paramMap);
 			if(b){
 				result = new SimpleResult<Boolean>(b);
 			}else{

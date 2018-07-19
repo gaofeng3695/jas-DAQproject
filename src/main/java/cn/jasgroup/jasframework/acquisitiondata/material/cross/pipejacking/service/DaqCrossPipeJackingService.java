@@ -1,5 +1,7 @@
 package cn.jasgroup.jasframework.acquisitiondata.material.cross.pipejacking.service;
 
+import java.util.Map;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +36,9 @@ public class DaqCrossPipeJackingService extends CommonDataJdbcService {
 	 * <p>创建日期:2018年7月16日 下午3:04:23。</p>
 	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public Boolean approve(String oid, Integer approveStatus) {
+	public Boolean approve(Map<String, Object> paramMap) {
 		
-		return this.pipeJackingDao.approve(oid, approveStatus);
+		return this.pipeJackingDao.approve(paramMap);
 	}
 	
 	/**

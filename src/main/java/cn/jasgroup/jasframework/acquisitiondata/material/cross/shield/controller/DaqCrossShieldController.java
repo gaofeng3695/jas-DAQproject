@@ -17,6 +17,7 @@ import cn.jasgroup.framework.data.result.BaseResult;
 import cn.jasgroup.framework.data.result.SimpleResult;
 import cn.jasgroup.jasframework.acquisitiondata.material.cross.shield.query.bo.DaqCrossShieldBo;
 import cn.jasgroup.jasframework.acquisitiondata.material.cross.shield.service.DaqCrossShieldService;
+import cn.jasgroup.jasframework.base.controller.BaseController;
 
 /**
  * @description 盾构隧道穿越controller
@@ -28,7 +29,7 @@ import cn.jasgroup.jasframework.acquisitiondata.material.cross.shield.service.Da
 
 @RestController
 @RequestMapping("/daq/crossShield")
-public class DaqCrossShieldController {
+public class DaqCrossShieldController extends BaseController{
 
 	@Autowired
 	private DaqCrossShieldService shieldService;
@@ -52,7 +53,7 @@ public class DaqCrossShieldController {
 			if(StringUtils.isBlank(oid) || null == approveStatus){
 				result = new SimpleResult<Boolean>(-1, "400", "error");
 			}
-			Boolean b = this.shieldService.approve(oid, approveStatus);
+			Boolean b = this.shieldService.approve(paramMap);
 			if(b){
 				result = new SimpleResult<Boolean>(b);
 			}else{

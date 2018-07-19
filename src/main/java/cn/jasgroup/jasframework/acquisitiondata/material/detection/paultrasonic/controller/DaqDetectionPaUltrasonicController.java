@@ -17,6 +17,7 @@ import cn.jasgroup.framework.data.result.BaseResult;
 import cn.jasgroup.framework.data.result.SimpleResult;
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.paultrasonic.query.bo.DaqDetectionPaUltrasonicBo;
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.paultrasonic.service.DaqDetectionPaUltrasonicService;
+import cn.jasgroup.jasframework.base.controller.BaseController;
 
 /**
  * @description 相控阵超声波
@@ -28,7 +29,7 @@ import cn.jasgroup.jasframework.acquisitiondata.material.detection.paultrasonic.
 
 @RestController
 @RequestMapping("/daq/detectionPaUltrasonic")
-public class DaqDetectionPaUltrasonicController {
+public class DaqDetectionPaUltrasonicController extends BaseController{
 	
 	@Autowired
 	private DaqDetectionPaUltrasonicService paUltrasonicService;
