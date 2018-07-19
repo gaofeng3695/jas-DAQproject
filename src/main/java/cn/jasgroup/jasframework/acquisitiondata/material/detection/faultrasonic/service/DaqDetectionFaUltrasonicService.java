@@ -1,6 +1,7 @@
 package cn.jasgroup.jasframework.acquisitiondata.material.detection.faultrasonic.service;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -34,15 +35,14 @@ public class DaqDetectionFaUltrasonicService extends CommonDataJdbcService {
 	/**
 	 * <p>功能描述：审核。</p>
 	 * <p>张毅 </p>	
-	 * @param oid	数据id
-	 * @param approveStatus	审核状态
+	 * @param paramMap
 	 * @return
 	 * @since JDK1.8。
 	 * <p>创建日期:2018年7月11日 下午4:46:09。</p>
 	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public Boolean approve(String oid, Integer approveStatus){
-		return this.faUltrasonicDao.approve(oid, approveStatus);
+	public Boolean approve(Map<String, Object> paramMap){
+		return this.faUltrasonicDao.approve(paramMap);
 	}
 	
 	/**

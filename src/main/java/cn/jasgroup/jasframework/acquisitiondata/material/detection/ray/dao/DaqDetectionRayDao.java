@@ -1,11 +1,14 @@
 package cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.dao;
 
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.query.bo.DaqDetectionRayBo;
 import cn.jasgroup.jasframework.dataaccess.base.BaseJdbcDao;
+import cn.jasgroup.jasframework.dataaccess.base.BaseNamedParameterJdbcDao;
 
 /**
  * @description 射线检测dao
@@ -16,7 +19,7 @@ import cn.jasgroup.jasframework.dataaccess.base.BaseJdbcDao;
  */
 
 @Component
-public class DaqDetectionRayDao extends BaseJdbcDao{
+public class DaqDetectionRayDao extends BaseNamedParameterJdbcDao{
 
 	@Resource
 	private BaseJdbcDao baseJdbcDao;
@@ -24,19 +27,18 @@ public class DaqDetectionRayDao extends BaseJdbcDao{
 	/**
 	 * <p>功能描述：更改审核状态。</p>
 	 * <p>张毅 </p>	
-	 * @param oid 数据id
-	 * @param approveStatus	审核状态
+	 * @param paramMap
 	 * @return
 	 * @since JDK1.8。
 	 * <p>创建日期:2018年7月11日 下午4:39:08。</p>
 	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public Boolean approve(String oid, Integer approveStatus){
+	public Boolean approve(Map<String, Object> paramMap){
 		Boolean b = false;
-		String sql = "update daq_detection_ray set approve_status = ? where active=1"
-				+ " and oid =?";
+		String sql = "update daq_detection_ray set approve_status = :approveStatus where active=1"
+				+ " and oid in (:idList)";
 		
-		int count = this.baseJdbcDao.update(sql, new Object[]{approveStatus, oid});
+		int count = super.update(sql, paramMap);
 		if(count > 0){
 			b = true;
 		}

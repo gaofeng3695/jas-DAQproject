@@ -1,5 +1,6 @@
 package cn.jasgroup.jasframework.acquisitiondata.material.detection.magneticpowder.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,7 @@ import cn.jasgroup.framework.data.result.BaseResult;
 import cn.jasgroup.framework.data.result.SimpleResult;
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.magneticpowder.query.bo.DaqDetectionMagneticPowderBo;
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.magneticpowder.service.DaqDetectionMagneticPowderService;
+import cn.jasgroup.jasframework.base.controller.BaseController;
 
 /**
  * @description 磁粉检测
@@ -28,7 +30,7 @@ import cn.jasgroup.jasframework.acquisitiondata.material.detection.magneticpowde
 
 @RestController
 @RequestMapping("/daq/detectionMagneticPowder")
-public class DaqDetectionMagneticPowderController {
+public class DaqDetectionMagneticPowderController extends BaseController{
 
 	@Autowired
 	private DaqDetectionMagneticPowderService magneticPowderService;
@@ -43,16 +45,17 @@ public class DaqDetectionMagneticPowderController {
 	 * <p>创建日期:2018年7月11日 下午4:56:20。</p>
 	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
+	@SuppressWarnings("unchecked")
 	@PostMapping("/approve")
 	public Object approve(HttpServletRequest request , @RequestBody Map<String, Object> paramMap){
 		BaseResult result = null;
 		try {
-			String oid = (String) paramMap.get("oid");
+			List<String> idList = (List<String>) paramMap.get("idList");
 			Integer approveStatus = (Integer) paramMap.get("approveStatus");
-			if(StringUtils.isBlank(oid) || null == approveStatus){
+			if(null == idList || null == approveStatus){
 				result = new SimpleResult<Boolean>(-1, "400", "error");
 			}
-			Boolean b = this.magneticPowderService.approve(oid, approveStatus);
+			Boolean b = this.magneticPowderService.approve(paramMap);
 			if(b){
 				result = new SimpleResult<Boolean>(b);
 			}else{

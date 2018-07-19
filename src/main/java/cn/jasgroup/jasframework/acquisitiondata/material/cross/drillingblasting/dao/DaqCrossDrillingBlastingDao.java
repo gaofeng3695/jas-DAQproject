@@ -1,11 +1,14 @@
 package cn.jasgroup.jasframework.acquisitiondata.material.cross.drillingblasting.dao;
 
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
 import cn.jasgroup.jasframework.acquisitiondata.material.cross.drillingblasting.query.bo.DaqCrossDrillingBlastingBo;
 import cn.jasgroup.jasframework.dataaccess.base.BaseJdbcDao;
+import cn.jasgroup.jasframework.dataaccess.base.BaseNamedParameterJdbcDao;
 
 /**
  * @description 钻爆隧道穿越
@@ -16,7 +19,7 @@ import cn.jasgroup.jasframework.dataaccess.base.BaseJdbcDao;
  */
 
 @Component
-public class DaqCrossDrillingBlastingDao extends BaseJdbcDao {
+public class DaqCrossDrillingBlastingDao extends BaseNamedParameterJdbcDao {
 	
 	@Resource
 	private BaseJdbcDao baseJdbcDao;
@@ -24,19 +27,17 @@ public class DaqCrossDrillingBlastingDao extends BaseJdbcDao {
 	/**
 	 * <p>功能描述：数据审核。</p>
 	 * <p>张毅 </p>	
-	 * @param oid
-	 * @param approveStatus
+	 * @param paramMap
 	 * @return
 	 * @since JDK1.8。
 	 * <p>创建日期:2018年7月16日 下午3:05:51。</p>
 	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public Boolean approve(String oid, Integer approveStatus) {
+	public Boolean approve(Map<String, Object> paramMap) {
 		Boolean b = false;
-		String sql = "update daq_cross_drilling_blasting set approve_status = ? where active=1"
-				+ " and oid =?";
-		
-		int count = this.baseJdbcDao.update(sql, new Object[]{approveStatus, oid});
+		String sql = "update daq_cross_drilling_blasting set approve_status = :approveStatus where active=1"
+				+ " and oid in(:idList)";
+		int count = super.update(sql, paramMap);
 		if(count > 0){
 			b = true;
 		}
