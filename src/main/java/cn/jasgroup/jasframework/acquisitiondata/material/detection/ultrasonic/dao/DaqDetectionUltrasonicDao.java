@@ -1,11 +1,14 @@
 package cn.jasgroup.jasframework.acquisitiondata.material.detection.ultrasonic.dao;
 
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.ultrasonic.query.bo.DaqDetectionUltrasonicBo;
 import cn.jasgroup.jasframework.dataaccess.base.BaseJdbcDao;
+import cn.jasgroup.jasframework.dataaccess.base.BaseNamedParameterJdbcDao;
 
 /**
  * @description 超声波检测
@@ -16,7 +19,7 @@ import cn.jasgroup.jasframework.dataaccess.base.BaseJdbcDao;
  */
 
 @Component
-public class DaqDetectionUltrasonicDao extends BaseJdbcDao{
+public class DaqDetectionUltrasonicDao extends BaseNamedParameterJdbcDao{
 
 	@Resource
 	private BaseJdbcDao baseJdbcDao;
@@ -24,18 +27,17 @@ public class DaqDetectionUltrasonicDao extends BaseJdbcDao{
 	/**
 	 * <p>功能描述：更改审核状态。</p>
 	 * <p>张毅 </p>	
-	 * @param oid
-	 * @param approveStatus	审核状态
+	 * @param paramMap
 	 * @return
 	 * @since JDK1.8。
 	 * <p>创建日期:2018年7月11日 下午4:39:08。</p>
 	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public Boolean approve(String oid, Integer approveStatus){
+	public Boolean approve(Map<String, Object> paramMap){
 		Boolean b = false;
-		String sql = "update daq_detection_ultrasonic set approve_status = ? where active=1"
-				+ " and oid =?";
-		int count = this.baseJdbcDao.update(sql, new Object[]{approveStatus, oid});
+		String sql = "update daq_detection_ultrasonic set approve_status = :approveStatus where active=1"
+				+ " and oid in (:idList)";
+		int count = super.update(sql, paramMap);
 		if(count > 0){
 			b = true;
 		}

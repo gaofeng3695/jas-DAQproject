@@ -1,5 +1,6 @@
 package cn.jasgroup.jasframework.acquisitiondata.material.cross.drillingblasting.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,13 +45,14 @@ public class DaqCrossDrillingBlastingController extends BaseController{
 	 * <p>创建日期:2018年7月11日 下午4:56:20。</p>
 	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
+	@SuppressWarnings("unchecked")
 	@PostMapping("/approve")
 	public Object approve(HttpServletRequest request , @RequestBody Map<String, Object> paramMap){
 		BaseResult result = null;
 		try {
-			String oid = (String) paramMap.get("oid");
+			List<String> idList = (List<String>) paramMap.get("idList");
 			Integer approveStatus = (Integer) paramMap.get("approveStatus");
-			if(StringUtils.isBlank(oid) || null == approveStatus){
+			if(null == idList || null == approveStatus){
 				result = new SimpleResult<Boolean>(-1, "400", "error");
 			}
 			Boolean b = this.drillingBlastingService.approve(paramMap);
