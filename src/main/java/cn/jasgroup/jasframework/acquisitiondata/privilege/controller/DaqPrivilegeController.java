@@ -32,8 +32,6 @@ public class DaqPrivilegeController extends BaseController{
 	@Resource(name="daqPrivilegeService")
 	private DaqPrivilegeService daqPrivilegeService;
 	
-	@Autowired
-	private VariateInjectService variateInjectService;
 	/***
 	  * <p>功能描述：获取当前用户所在部门下的项目列表。</p>
 	  * <p> 雷凯。</p>	

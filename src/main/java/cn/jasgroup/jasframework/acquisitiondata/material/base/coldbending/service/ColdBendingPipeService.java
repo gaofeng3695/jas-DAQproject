@@ -1,5 +1,8 @@
 package cn.jasgroup.jasframework.acquisitiondata.material.base.coldbending.service;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,5 +67,17 @@ public class ColdBendingPipeService extends CommonDataHibernateService{
 	 */
 	public void chanageOriginalPipeUseState(ColdBendingPipe clodBendingPipe){
 		this.coldBendingPipeDao.chanageOriginalPipeUseState(clodBendingPipe.getPipeOid());
+	}
+	
+	/***
+	 * <p>功能描述：获取冷弯管下拉选列表。</p>
+	  * <p> 雷凯。</p>	
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年7月20日 下午3:13:45。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String,Object>> getList(){
+		return this.coldBendingPipeDao.getList();
 	}
 }

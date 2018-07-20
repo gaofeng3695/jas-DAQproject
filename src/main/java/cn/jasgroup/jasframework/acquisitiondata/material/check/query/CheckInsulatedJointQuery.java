@@ -5,6 +5,7 @@ import org.apache.commons.lang.StringUtils;
 import cn.jasgroup.jasframework.acquisitiondata.material.check.query.bo.CheckInsulatedJointBo;
 import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
+import cn.jasgroup.jasframework.base.annotation.Process;
 
 /**
  * 
@@ -13,8 +14,15 @@ import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
   * @version v1.0.0.1。
   * @since JDK1.8。
   *<p>创建日期：2018年7月6日 下午5:38:47。</p>
+  *{@link cn.jasgroup.jasframework.acquisitiondata.variate.DaqInjectService #injectDataAuthoritySql()}
  */
-@QueryConfig(scene = "/checkInsulatedJoint/getPage", resultClass = CheckInsulatedJointBo.class)
+@QueryConfig(
+		scene = "/checkInsulatedJoint/getPage", 
+		resultClass = CheckInsulatedJointBo.class,
+		queryBeforeProcess = {
+			 @Process(service = "daqInjectService" , method = "injectDataAuthoritySql(dataAuthoritySql)")
+		}
+	)
 public class CheckInsulatedJointQuery extends BaseJavaQuery {
 	
 	/**
@@ -30,7 +38,7 @@ public class CheckInsulatedJointQuery extends BaseJavaQuery {
 	/**
 	 *  监工单位oid
 	 */
-	private String constructionUnit; 
+	private String constructUnit; 
 
 	/**
 	 *  标段oid
@@ -46,7 +54,7 @@ public class CheckInsulatedJointQuery extends BaseJavaQuery {
 	public String getQuerySql() {
 		String sql ="select cij.*,pro.project_name, pi.unit_name,te.tenders_name from daq_check_insulated_joint cij "
 				+ " LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = cij.project_oid "
-				+ "LEFT JOIN (SELECT oid, unit_name, active FROM pri_unit where active=1) pi ON pi.oid = cij.construction_unit "
+				+ "LEFT JOIN (SELECT oid, unit_name, active FROM pri_unit where active=1) pi ON pi.oid = cij.construct_unit "
 				+ "LEFT JOIN (SELECT oid, tenders_name, active FROM daq_tenders where active=1) te ON te.oid = cij.tenders_oid "
 				+ "where cij.active=1 ";
 		sql += getConditionSql();
@@ -64,12 +72,13 @@ public class CheckInsulatedJointQuery extends BaseJavaQuery {
 			if (StringUtils.isNotBlank(tendersOid)) {
 				conditionSql += " and cij.tenders_oid = :tendersOid";
 			}
-			if (StringUtils.isNotBlank(constructionUnit)) {
-				conditionSql += " and cij.construction_unit = :constructionUnit";
+			if (StringUtils.isNotBlank(constructUnit)) {
+				conditionSql += " and cij.construct_unit = :constructUnit";
 			}
 			if (StringUtils.isNotBlank(manufacturerCode)) {
 				conditionSql += " and manufacturer_code like :manufacturerCode";
 			}
+			conditionSql += this.dataAuthoritySql;
 			conditionSql += " order by  cij.create_datetime desc";
 		}
 		return conditionSql;
@@ -91,12 +100,12 @@ public class CheckInsulatedJointQuery extends BaseJavaQuery {
 		this.projectOid = projectOid;
 	}
 
-	public String getConstructionUnit() {
-		return constructionUnit;
+	public String getConstructUnit() {
+		return constructUnit;
 	}
 
-	public void setConstructionUnit(String constructionUnit) {
-		this.constructionUnit = constructionUnit;
+	public void setConstructUnit(String constructUnit) {
+		this.constructUnit = constructUnit;
 	}
 
 	public String getTendersOid() {

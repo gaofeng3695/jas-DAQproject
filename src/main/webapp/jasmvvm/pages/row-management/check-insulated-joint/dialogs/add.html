@@ -56,9 +56,9 @@
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="施工单位" prop="constructionUnit" required>
-							<el-select v-model="formData.constructionUnit" clearable placeholder="请选择施工单位" size="small">
-								<el-option v-for="item in domain.constructionUnitArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+						<el-form-item label="施工单位" prop="constructUnit" required>
+							<el-select v-model="formData.constructUnit" clearable placeholder="请选择施工单位" size="small">
+								<el-option v-for="item in domain.constructUnitArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
@@ -158,7 +158,7 @@
 			var that = this;
 			return {
 				domain: {
-					constructionUnitArr: [],
+					constructUnitArr: [],
 					project: [], //项目
 					tenders: [], //标段
 				},
@@ -178,7 +178,7 @@
 						message: '标段名称为必填项',
 						trigger: 'change'
 					}],
-					constructionUnit: [{
+					constructUnit: [{
 						required: true,
 						message: '施工单位为必填项',
 						trigger: 'change'
@@ -187,7 +187,7 @@
 				formData: {
 					projectOid: "",
 					tendersOid: "",
-					constructionUnit: "",
+					constructUnit: "",
 					manufacturerCode: "",
 					certificationNum: "",
 					diameter: "",
@@ -222,6 +222,7 @@
 					arr) {
 					that.domain.project = arr;
 				});
+			this.tendersChanged("1");
 
 		},
 		methods: {
@@ -247,8 +248,8 @@
 				} else {
 					that.domain.tenders = [];
 					that.formData.tendersOid = '';
-					that.domain.constructionUnitArr = [];
-					that.formData.constructionUnit = '';
+					that.domain.constructUnitArr = [];
+					that.formData.constructUnit = '';
 				}
 			},
 			tendersChanged: function (val) { //根据标段触发管线列表
@@ -256,15 +257,14 @@
 				if (val) {
 					this
 						.requestDomainFromBizTable(
-							'/daq/privilege/getConstructionUnitByTendersOid.do', {
-								tendersOid: val
+							'/daq/privilege/getCurrentUnitId.do', {
 							},
 							function (arr) {
-								that.domain.constructionUnitArr = arr;
+								that.domain.constructUnitArr = arr;
 							});
 				} else {
-					that.domain.constructionUnitArr = [];
-					that.formData.constructionUnit = "";
+					that.domain.constructUnitArr = [];
+					that.formData.constructUnit = "";
 				}
 			},
 			cancel: function (param) {
