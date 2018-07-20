@@ -1197,7 +1197,7 @@ CREATE TABLE daq_check_pipe_cold_bending (
 	project_oid varchar(36),
 	tenders_oid varchar(36),
 	construct_unit varchar(36),
-	pipe_cold_bending_code varchar(50),
+	pipe_cold_bending_oid varchar(50),
 	certificate_num varchar(60),
 	pipe_length numeric(9,3),
 	pipe_diameter numeric(9,3),
@@ -1224,7 +1224,7 @@ comment on table daq_check_pipe_cold_bending IS '冷弯管检查及信息记录�
 comment on column daq_check_pipe_cold_bending.oid IS '主键';
 comment on column daq_check_pipe_cold_bending.project_oid IS '项目oid';
 comment on column daq_check_pipe_cold_bending.tenders_oid IS '标段oid';
-comment on column daq_check_pipe_cold_bending.pipe_cold_bending_code IS '冷弯管编号';
+comment on column daq_check_pipe_cold_bending.pipe_cold_bending_oid IS '冷弯管oid';
 comment on column daq_check_pipe_cold_bending.certificate_num IS '合格证编号';
 comment on column daq_check_pipe_cold_bending.pipe_length IS '弯管长度(m)';
 comment on column daq_check_pipe_cold_bending.pipe_diameter IS '管径(mm)';

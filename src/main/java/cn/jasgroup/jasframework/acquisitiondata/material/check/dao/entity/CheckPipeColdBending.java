@@ -58,7 +58,7 @@ public class CheckPipeColdBending extends CommonJdbcEntity{
 	/**
 	 * 冷弯管编号
 	 */
-	private String pipeColdBendingCode; 
+	private String pipeColdBendingOid; 
 
 	/**
 	 *  合格证编号
@@ -148,13 +148,12 @@ public class CheckPipeColdBending extends CommonJdbcEntity{
 		super.setField("tendersOid");
 	}
 
-	public String getPipeColdBendingCode() {
-		return pipeColdBendingCode; 
+	public String getPipeColdBendingOid() {
+		return pipeColdBendingOid;
 	}
 
-	public void setPipeColdBendingCode(String pipeColdBendingCode) {
-		this.pipeColdBendingCode = pipeColdBendingCode; 
-		super.setField("pipeColdBendingCode");
+	public void setPipeColdBendingOid(String pipeColdBendingOid) {
+		this.pipeColdBendingOid = pipeColdBendingOid;
 	}
 
 	public String getCertificateNum() {
