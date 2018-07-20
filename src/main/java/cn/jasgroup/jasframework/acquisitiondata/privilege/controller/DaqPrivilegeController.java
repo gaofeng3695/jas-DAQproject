@@ -46,10 +46,6 @@ public class DaqPrivilegeController extends BaseController{
 	public Object getProjectList(HttpServletRequest request,@RequestBody Map<String,String> param){
 		ListResult<Map<String,Object>> result = null;
 		try {
-			MapQuery mapQuery = new MapQuery();
-			
-			variateInjectService.injectValueForQuery(mapQuery);
-			String dd = mapQuery.getValueMap().get("privilege_strategy_sql").toString();
 			String pipeNetworkTypeCode = param.get("pipeNetworkTypeCode");
 			if(StringUtils.isBlank(pipeNetworkTypeCode)){
 				pipeNetworkTypeCode = "pipe_network_code_001";
