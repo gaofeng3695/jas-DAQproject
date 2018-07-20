@@ -27,7 +27,7 @@ public class CheckPipeColdBendingBo {
 	/**
 	 * 监工单位oid
 	 */
-	private String constructionUnit;
+	private String constructUnit;
 
 	/**
 	 * 监工单位名称
@@ -48,6 +48,11 @@ public class CheckPipeColdBendingBo {
 	 * 冷弯管编号
 	 */
 	private String pipeColdBendingCode; 
+	
+	/***
+	 * 冷弯管oid
+	 */
+	private String pipeColdBendingOid; 
 
 	/**
 	 *  合格证编号
@@ -143,12 +148,12 @@ public class CheckPipeColdBendingBo {
 		this.projectName = projectName;
 	}
 
-	public String getConstructionUnit() {
-		return constructionUnit;
+	public String getConstructUnit() {
+		return constructUnit;
 	}
 
-	public void setConstructionUnit(String constructionUnit) {
-		this.constructionUnit = constructionUnit;
+	public void setConstructUnit(String constructUnit) {
+		this.constructUnit = constructUnit;
 	}
 
 	public String getUnitName() {
@@ -297,4 +302,12 @@ public class CheckPipeColdBendingBo {
 		this.remarks = remarks;
 	}
 
+	public String getPipeColdBendingOid() {
+		return pipeColdBendingOid;
+	}
+
+	public void setPipeColdBendingOid(String pipeColdBendingOid) {
+		this.pipeColdBendingOid = pipeColdBendingOid;
+	}
+	
 }
