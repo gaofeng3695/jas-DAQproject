@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>全自动超声波检测</title>
+	<link rel="stylesheet" href="./../../../../lib/font-awesome-4.7.0/css/font-awesome.css">
+	<link rel="stylesheet" href="./../../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../../src/css/main.css">
+	<style>
+	</style>
+</head>
+
+<body>
+	<div id="app" v-cloak>
+
+		<jas-dialog-wrapper>
+
+			<jas-base-group-title name="全自动超声波检测基本信息"></jas-base-group-title>
+			<jas-detail-table :titles="fieldsArr" :detail="detail"></jas-detail-table>
+
+			<jas-sub-detail-group group-name="缺陷信息" :detail-list="detail.faUltrasonicSubList" :fields="subFieldsArr"></jas-sub-detail-group>
+
+			<jas-base-group-title name="其他信息"></jas-base-group-title>
+			<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
+
+			<jas-base-group-title name="附件信息"></jas-base-group-title>
+			<jas-file-list :biz-id="oid"></jas-file-list>
+		</jas-dialog-wrapper>
+
+
+	</div>
+</body>
+<script src="./../../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../../lib/vue/vue.js"></script>
+<script src="./../../../../lib/element-ui/v2.4.1/index.min.js"></script>
+
+<script src="./../../../../common/components/jas-components.js "></script>
+<script src="./../../../../common/js/jas-tools.js"></script>
+<script>
+	var app = new Vue({
+		el: "#app",
+		data: function () {
+			var that = this;
+			return {
+				subFieldsArr: [ //
+					{
+						field: "defectPosition",
+						name: '缺陷位置'
+					}, {
+						field: "amplitudeRegion",
+						name: '振幅区域'
+					}, {
+						field: "defectSize",
+						name: '缺陷长度(mm)'
+					}, {
+						field: "defectDepth",
+						name: '缺陷深度(mm)'
+					}, {
+						field: "height",
+						name: '自身高度(mm)'
+					}
+				],
+				fieldsArr: [ //
+					{
+						name: '项目名称',
+						field: 'projectName'
+					}, {
+						name: '标段名称',
+						field: 'tendersName'
+					}, {
+						name: '管线名称',
+						field: 'pipelineName'
+					}, {
+						name: "线路段/穿跨越名称",
+						field: "pipeSegmentOrCrossName"
+					}, {
+						name: '焊口编号',
+						field: 'weldCode'
+					}, {
+						name: '检测报告编号',
+						field: 'detectionReportNum'
+					}, {
+						name: '检测日期',
+						field: 'detectionDeta'
+					}, {
+						name: '检测类型',
+						field: 'detectionTypeName'
+					}, {
+						name: '检测处置',
+						field: 'detectionDispose',
+						formatter: function (row, column, cellValue, index) {
+							if (cellValue == 1) return '返修';
+							if (cellValue == 2) return '割口';
+							return cellValue;
+						}
+					}, {
+						name: '评定结果',
+						field: 'evaluationResult',
+						formatter: function (row, column, cellValue, index) {
+							if (cellValue == 1) return '合格';
+							if (cellValue == 2) return '不合格';
+							return cellValue;
+						}
+					}, {
+						name: '检测单位',
+						field: 'detectionUnitName'
+					}, {
+						name: '检测人员',
+						field: 'detectionPerson'
+					}, {
+						name: '审核人员',
+						field: 'auditor'
+					}, {
+						name: '监理单位',
+						field: 'supervisionUnitName'
+					}, {
+						name: '监理工程师',
+						field: 'supervisionEngineer'
+					}, {
+						name: '采集日期',
+						field: 'collectionDate'
+					}
+				],
+				otherArr: [{
+					name: '备注',
+					field: 'remarks',
+				}],
+				detail: {},
+				columnNum: 2,
+				oid: '',
+			}
+		},
+		created: function () {
+			var that = this;
+			var param = window.jasTools.base.getParamsInUrl(location.href);
+			if (param.oid) {
+				this.oid = param.oid;
+				this.params = param;
+				this.getDetailByObjectId();
+			};
+		},
+		methods: {
+			getDetailByObjectId: function () {
+				var that = this;
+				var url = jasTools.base.rootPath + "/daq/detectionFaUltrasonic/get.do";
+				jasTools.ajax.get(url, this.params, function (data) {
+					that.detail = data.data;
+				});
+			},
+		},
+	});
+</script>
+
+</html>

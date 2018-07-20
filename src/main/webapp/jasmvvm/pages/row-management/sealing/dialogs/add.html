@@ -36,11 +36,12 @@
 
 <body>
 	<div id="app" v-cloak>
+		<jas-dialog-wrapper>
 		<div class="content">
 			<el-form ref="formData" :rules="rules" :model="formData" label-width="150px">
 				<jas-base-group-title name="基础数据"></jas-base-group-title>
 				<el-row :gutter="10">
-								<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+								<!--<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="项目名称" prop="projectOid" required>
 							<el-select v-model="formData.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
 								<el-option v-for="item in domain.project" :key="item.key" :label="item.value" :value="item.key"> </el-option>
@@ -60,7 +61,7 @@
 								<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
-					</el-col>
+					</el-col>-->
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="封堵物编号" prop="closureCode" required>
 							<el-input v-model="formData.closureCode" clearable placeholder="请输入封堵物编号" size="small"></el-input>
@@ -87,24 +88,24 @@
 						<el-select v-model="formData.steelGrade" clearable :disabled="ischoose" placeholder="请选择钢管等级" size="small" >
 								<el-option v-for="item in domain.steelGrades" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
-							
-							
+
+
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="管道外壁直径(mm)">
 							<el-input-number :precision="3" :step="1" :max="1000" controls-position="right" v-model="formData.outsideDiameter" clearable placeholder="请输入管道外壁直径(mm)"
 							  size="small"></el-input-number>
-							  
-							
+
+
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="管道壁厚(mm)">
 							<el-input-number :precision="3" :step="1" :max="1000" controls-position="right" v-model="formData.wallThickness" clearable placeholder="请输入管道壁厚(mm)"
 							  size="small"></el-input-number>
-							  
-							
+
+
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
@@ -112,7 +113,7 @@
 						<el-select v-model="formData.connectionMethods" clearable placeholder="请选择连接方式" size="small">
 								<el-option v-for="item in domain.connectionMethodsArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
-						
+
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
@@ -145,6 +146,7 @@
 						</el-form-item>
 					</el-col>
 				</el-row>
+					</jas-dialog-wrapper>
 				<!-- <el-row>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 						<el-form-item label="模板上传" prop="file">
@@ -198,9 +200,9 @@
 					steelGrades:[],//钢管等级
 					connectionMethodsArr:[],
 					coatingMethodsArr:[],
-					project: [],
-					pipeline: [],
-					tenders: [],
+					// project: [],
+					// pipeline: [],
+					// tenders: [],
 					//监理单位
 				},
 				ischoose:false,
@@ -210,21 +212,7 @@
 						message: '封堵物编号为必填项',
 						trigger: 'change'
 					}],
-					projectOid: [{
-						required: true,
-						message: '项目名称为必填项',
-						trigger: 'change'
-					}],
-					tendersOid: [{
-						required: true,
-						message: '标段名称为必填项',
-						trigger: 'change'
-					}],
-					pipelineOid: [{
-						required: true,
-						message: '管线名称为必填项',
-						trigger: 'change'
-					}],
+
 					closureType: [{
 						required: true,
 						message: '封堵物类型为必填项',
@@ -232,9 +220,9 @@
 					}],
 				},
 				formData: {
-					projectOid: "",
-					tendersOid: "",
-					pipelineOid: "",
+					// projectOid: "",
+					// tendersOid: "",
+					// pipelineOid: "",
 					closureCode: '',
 					closureType: '',
 					material: '',
@@ -262,9 +250,9 @@
 			that.requestDomainFromCommonTable("coating_methods_domain", function (arr) {
 				that.domain.coatingMethodsArr = arr;
 			});
-			that.requestDomainFromBizTable('/daq/privilege/getProjectList.do', {}, function (arr) {
-				that.domain.project = arr;
-			});
+			// that.requestDomainFromBizTable('/daq/privilege/getProjectList.do', {}, function (arr) {
+			// 	that.domain.project = arr;
+			// });
 			if (param.oid) {
 				this.oid = param.oid;
 				this.formData.oid = this.oid;
@@ -337,7 +325,7 @@
 					that.domain.pipeline = [];
 					that.formData.pipelineOid = '';
 				}
-				
+
 			},
 			materialChanged:function(val){
 				if(val==0){

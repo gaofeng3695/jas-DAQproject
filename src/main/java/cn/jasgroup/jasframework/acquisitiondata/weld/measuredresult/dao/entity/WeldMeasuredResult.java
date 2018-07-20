@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import cn.jasgroup.framework.spatial.annotation.Point;
 import cn.jasgroup.framework.spatial.support.enumeration.CalculateType;
+import cn.jasgroup.framework.spatial.support.enumeration.ScopeType;
 import cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.dao.entity.MedianStake;
 import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
@@ -35,8 +36,10 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 @Point(
 	x="pointx",
 	y="pointy" ,
+	scopeFieldName="pipelineOid",
+	scopeType=ScopeType.CURRENT,
 	geometryColumnName="geom",
-	calculateType=CalculateType.Coordinates,
+	calculateType=CalculateType.SingleAnchorAndDeviation,
 	anchorClass=MedianStake.class,
 	anchorOid="medianStakeOid",
 	deviation="relativeMileage"
@@ -113,7 +116,12 @@ public class WeldMeasuredResult extends CommonJdbcEntity {
 	 * 测量日期 
 	 */
 	private Date surveyDate; 
-
+	
+	/**
+	 * 施工机组代号
+	 */
+	private String workUnitOid;
+	
 	/**
 	 * 施工单位 
 	 */
@@ -147,7 +155,7 @@ public class WeldMeasuredResult extends CommonJdbcEntity {
 	/**
 	 * 审核状态 
 	 */
-	private Integer approveStatus; 
+	private Integer approveStatus = 0; 
 
 	/**
 	 * 备注 
@@ -275,6 +283,14 @@ public class WeldMeasuredResult extends CommonJdbcEntity {
 	@Temporal(TemporalType.TIMESTAMP)
 	public Date getSurveyDate() {
 		return surveyDate; 
+	}
+
+	public String getWorkUnitOid() {
+		return workUnitOid;
+	}
+
+	public void setWorkUnitOid(String workUnitOid) {
+		this.workUnitOid = workUnitOid;
 	}
 
 	public void setSurveyDate(Date surveyDate) {

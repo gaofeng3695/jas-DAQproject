@@ -27,9 +27,9 @@ public class DaqPrivilegeService extends BaseService{
 	  * <p>创建日期:2018年7月3日 下午2:06:56。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public List<Map<String,Object>>getProject(){
+	public List<Map<String,Object>>getProject(String pipeNetworkTypeCode){
 		String unitOid = ThreadLocalHolder.getCurrentUser().getUnitId();
-		return this.daqPrivilegeDao.getProjectList(unitOid);
+		return this.daqPrivilegeDao.getProjectList(unitOid,pipeNetworkTypeCode);
 	}
 	/***
 	  * <p>功能描述：获取当前用户所在部门下的标段列表。</p>
@@ -118,5 +118,18 @@ public class DaqPrivilegeService extends BaseService{
 	public List<Map<String,Object>>getCrossList(String pipelineOid,String crossWay){
 		String unitOid = ThreadLocalHolder.getCurrentUser().getUnitId();
 		return this.daqPrivilegeDao.getCrossList(pipelineOid, crossWay, unitOid);
+	}
+	/***
+	  * <p>功能描述：根据管线oid获取当前用户所在部门及下级部门下的线路段列表。</p>
+	  * <p> 雷凯。</p>	
+	  * @param pipelineOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年7月11日 下午3:23:11。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String,Object>>getPipeSegmentList(String pipelineOid){
+		String unitOid = ThreadLocalHolder.getCurrentUser().getUnitId();
+		return this.daqPrivilegeDao.getPipeSegmentList(pipelineOid, unitOid);
 	}
 }

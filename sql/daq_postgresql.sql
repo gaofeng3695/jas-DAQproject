@@ -367,7 +367,7 @@ create index INDEX_DAQ_TENDERS_SCOPE_REF_SCOPE_OID_6 ON daq_tenders_scope_ref ( 
 /**********权限管理数据表begin***************/
 /**实施范围视图**/
 create or replace view v_daq_implement_scope as 
-	select tt.*,a.name as province_name from (select t.oid,null as parent_oid,t.project_name as name,-2 as type,'项目' as type_name,t.oid as project_oid,null as province from daq_project t where t.active=1
+	select tt.*,a.name as province_name from (select t.oid,null as parent_oid,t.project_name as name,-2 as type,'项目' as type_name,t.oid as project_oid,null as province from daq_project t where t.active=1 and t.pipe_network_type_code='pipe_network_code_001'
 	union all
 	select distinct t.oid,t.project_oid as parent_oid,t.tenders_name as name,-1 as type,'标段' as type_name,t.project_oid,null as province from daq_tenders_scope_ref r join daq_tenders t on r.tenders_oid=t.oid where t.active=1
 	union all
@@ -796,7 +796,7 @@ CREATE TABLE daq_material_pipe (
 	coating_factory varchar(70),
 	is_cut SMALLINT DEFAULT 0,
 	is_use SMALLINT DEFAULT 0,
-	is_hot_bend SMALLINT DEFAULT 0,
+	is_cold_bend SMALLINT DEFAULT 0,
 	remarks varchar(200),
 	create_user_id varchar(36),
 	create_user_name varchar(50),
@@ -836,7 +836,7 @@ comment on column daq_material_pipe.coating_certificate_num IS '防腐证书编�
 comment on column daq_material_pipe.coating_factory IS '防腐加工厂家';
 comment on column daq_material_pipe.is_cut IS '是否切管';
 comment on column daq_material_pipe.is_use IS '是否使用';
-comment on column daq_material_pipe.is_hot_bend IS '是否热弯';
+comment on column daq_material_pipe.is_cold_bend IS '是否冷弯';
 comment on column daq_material_pipe.remarks IS '备注';
 comment on column daq_material_pipe.create_user_id IS '创建人id';
 comment on column daq_material_pipe.create_user_name IS '创建人名称';
@@ -851,8 +851,8 @@ CREATE TABLE daq_material_pipe_cold_bending (
 	project_oid varchar(36),
 	tenders_oid varchar(36),
 	pipeline_oid varchar(36),
-	pipe_segment_oid varchar(36),
-	pipe_code varchar(50),
+	pipe_segment_or_cross_oid varchar(36),
+	pipe_oid varchar(36),
 	pipe_cold_bending_code varchar(53),
 	certificate_num varchar(60),
 	pipe_bending_standards varchar(60),
@@ -886,8 +886,8 @@ comment on column daq_material_pipe_cold_bending.oid IS '主键';
 comment on column daq_material_pipe_cold_bending.project_oid IS '项目oid';
 comment on column daq_material_pipe_cold_bending.tenders_oid IS '标段oid';
 comment on column daq_material_pipe_cold_bending.pipeline_oid IS '管线oid';
-comment on column daq_material_pipe_cold_bending.pipe_segment_oid IS '线路段oid';
-comment on column daq_material_pipe_cold_bending.pipe_code IS '原材料钢管编号';
+comment on column daq_material_pipe_cold_bending.pipe_segment_or_cross_oid IS '线路段/穿跨越oid';
+comment on column daq_material_pipe_cold_bending.pipe_oid IS '原材料钢管oid';
 comment on column daq_material_pipe_cold_bending.pipe_cold_bending_code IS '冷弯管编号';
 comment on column daq_material_pipe_cold_bending.certificate_num IS '合格证编号';
 comment on column daq_material_pipe_cold_bending.pipe_bending_standards IS '管子弯曲设计标准';
@@ -1382,7 +1382,7 @@ CREATE TABLE daq_construction_weld (
 	collection_person varchar(30),
 	collection_date timestamp(6),
 	approve_status SMALLINT default 0,
-	geo_state varchar(10),
+	geo_state varchar(10), 
 	remarks varchar(200),
 	create_user_id varchar(36),
 	create_user_name varchar(50),
@@ -1824,13 +1824,14 @@ CREATE TABLE daq_weld_measured_result (
 	buried_depth NUMERIC (9, 2),
 	survey_crew VARCHAR (20),
 	survey_date TIMESTAMP (6),
+	work_unit_oid VARCHAR (36),
 	construct_unit VARCHAR (36),
 	supervision_unit VARCHAR (38),
 	supervision_engineer VARCHAR (50),
 	collection_person VARCHAR (30),
 	collection_date TIMESTAMP (6),
 	geo_state varchar(10),
-	approve_status SMALLINT,
+	approve_status SMALLINT default 0,
 	remarks VARCHAR (200),
 	create_user_id VARCHAR (36),
 	create_user_name VARCHAR (50),
@@ -1856,6 +1857,7 @@ comment on column daq_weld_measured_result.pipe_top_elevation is '管顶高程(m
 comment on column daq_weld_measured_result.buried_depth is '埋深(m)';
 comment on column daq_weld_measured_result.survey_crew is '测量人';
 comment on column daq_weld_measured_result.survey_date is '测量日期';
+comment on column daq_weld_measured_result.work_unit_oid is '施工机组';
 comment on column daq_weld_measured_result.construct_unit is '施工单位';
 comment on column daq_weld_measured_result.supervision_unit is '监理单位';
 comment on column daq_weld_measured_result.supervision_engineer is '监理工程师';
@@ -2436,7 +2438,7 @@ CREATE TABLE daq_lay_surveying (
 	supervision_engineer VARCHAR (50),
 	collection_person VARCHAR (30),
 	collection_date TIMESTAMP (6),
-	approve_status SMALLINT,
+	approve_status SMALLINT default 0,
 	geo_state varchar(10),
 	remarks VARCHAR (200),
 	create_user_id VARCHAR (36),
@@ -2504,7 +2506,7 @@ CREATE TABLE daq_lay_pipe_trench_excavation (
 	supervision_engineer VARCHAR (50),
 	collection_person VARCHAR (30),
 	collection_date TIMESTAMP (6),
-	approve_status SMALLINT,
+	approve_status SMALLINT default 0,
 	geo_state varchar(10),
 	remarks VARCHAR (200),
 	create_user_id VARCHAR (36),
@@ -2577,7 +2579,7 @@ CREATE TABLE daq_lay_pipe_trench_backfill (
 	supervision_engineer VARCHAR (50),
 	collection_person VARCHAR (30),
 	collection_date TIMESTAMP (6),
-	approve_status SMALLINT,
+	approve_status SMALLINT default 0,
 	geo_state varchar(10),
 	remarks VARCHAR (200),
 	create_user_id VARCHAR (36),
@@ -2643,7 +2645,7 @@ CREATE TABLE daq_lay_land_restoration (
 	supervision_engineer VARCHAR (50),
 	collection_person VARCHAR (30),
 	collection_date TIMESTAMP (6),
-	approve_status SMALLINT,
+	approve_status SMALLINT default 0,
 	geo_state varchar(10),
 	remarks VARCHAR (200),
 	create_user_id VARCHAR (36),
@@ -2709,7 +2711,7 @@ CREATE TABLE daq_lay_thermal_insulation (
 	supervision_engineer VARCHAR (50),
 	collection_person VARCHAR (30),
 	collection_date TIMESTAMP (6),
-	approve_status SMALLINT,
+	approve_status SMALLINT default 0,
 	geo_state varchar(10),
 	remarks VARCHAR (200),
 	create_user_id VARCHAR (36),
@@ -2784,7 +2786,7 @@ CREATE TABLE daq_cross_excavation (
 	collection_person VARCHAR (30),
 	collection_date TIMESTAMP (6),
 	geo_state VARCHAR (10),
-	approve_status SMALLINT,
+	approve_status SMALLINT  default 0,
 	remarks VARCHAR (200),
 	create_user_id VARCHAR (36),
 	create_user_name VARCHAR (50),
@@ -2792,7 +2794,7 @@ CREATE TABLE daq_cross_excavation (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active SMALLINT NOT NULL  default 0
 );
 comment on table daq_cross_excavation is '开挖穿越表';
 comment on column daq_cross_excavation.oid is '主键';
@@ -2862,7 +2864,7 @@ CREATE TABLE daq_cross_pipe_jacking (
 	collection_person VARCHAR (30),
 	collection_date TIMESTAMP (6),
 	geo_state VARCHAR (10),
-	approve_status SMALLINT,
+	approve_status SMALLINT default 0,
 	remarks VARCHAR (200),
 	create_user_id VARCHAR (36),
 	create_user_name VARCHAR (50),
@@ -2870,7 +2872,7 @@ CREATE TABLE daq_cross_pipe_jacking (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active SMALLINT NOT NULL default 0
 );
 comment on table daq_cross_pipe_jacking is '顶管穿越表';
 comment on column daq_cross_pipe_jacking.oid is '主键';
@@ -2939,7 +2941,7 @@ CREATE TABLE daq_cross_box_culvert (
 	collection_person VARCHAR (30),
 	collection_date TIMESTAMP (6),
 	geo_state VARCHAR (10),
-	approve_status SMALLINT,
+	approve_status SMALLINT default 0,
 	remarks VARCHAR (200),
 	create_user_id VARCHAR (36),
 	create_user_name VARCHAR (50),
@@ -2947,7 +2949,7 @@ CREATE TABLE daq_cross_box_culvert (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active SMALLINT NOT NULL default 0
 );
 comment on table daq_cross_box_culvert is '箱涵穿越表';
 comment on column daq_cross_box_culvert.oid is '主键';
@@ -3018,7 +3020,7 @@ CREATE TABLE daq_cross_drilling (
 	collection_person VARCHAR (30),
 	collection_date TIMESTAMP (6),
 	geo_state VARCHAR (10),
-	approve_status SMALLINT,
+	approve_status SMALLINT default 0,
 	remarks VARCHAR (200),
 	create_user_id VARCHAR (36),
 	create_user_name VARCHAR (50),
@@ -3026,7 +3028,7 @@ CREATE TABLE daq_cross_drilling (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active SMALLINT NOT NULL default 0
 );
 comment on table daq_cross_drilling is '定向钻穿越表';
 comment on column daq_cross_drilling.oid is '主键';
@@ -3097,7 +3099,7 @@ CREATE TABLE daq_cross_shield (
 	collection_person VARCHAR (30),
 	collection_date TIMESTAMP (6),
 	geo_state VARCHAR (10),
-	approve_status SMALLINT,
+	approve_status SMALLINT default 0,
 	remarks VARCHAR (200),
 	create_user_id VARCHAR (36),
 	create_user_name VARCHAR (50),
@@ -3105,7 +3107,7 @@ CREATE TABLE daq_cross_shield (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active SMALLINT NOT NULL default 0
 );
 comment on table daq_cross_shield is '盾构隧道穿越表';
 comment on column daq_cross_shield.oid is '主键';
@@ -3177,7 +3179,7 @@ CREATE TABLE daq_cross_drilling_blasting (
 	collection_person VARCHAR (30),
 	collection_date TIMESTAMP (6),
 	geo_state VARCHAR (10),
-	approve_status SMALLINT,
+	approve_status SMALLINT default 0,
 	remarks VARCHAR (200),
 	create_user_id VARCHAR (36),
 	create_user_name VARCHAR (50),
@@ -3185,7 +3187,7 @@ CREATE TABLE daq_cross_drilling_blasting (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active SMALLINT NOT NULL default 0
 );
 comment on table daq_cross_drilling_blasting is '钻爆隧道穿越表';
 comment on column daq_cross_drilling_blasting.oid is '主键';
@@ -3258,7 +3260,7 @@ CREATE TABLE daq_cross_across (
 	collection_person VARCHAR (30),
 	collection_date TIMESTAMP (6),
 	geo_state VARCHAR (10),
-	approve_status SMALLINT,
+	approve_status SMALLINT default 0,
 	remarks VARCHAR (200),
 	create_user_id VARCHAR (36),
 	create_user_name VARCHAR (50),
@@ -3266,7 +3268,7 @@ CREATE TABLE daq_cross_across (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active SMALLINT NOT NULL default 0
 );
 comment on table daq_cross_across is '跨越表';
 comment on column daq_cross_across.oid is '主键';
@@ -3309,3 +3311,1236 @@ create index INDEX_daq_cross_across_CROSS_OID_8 ON daq_cross_across ( cross_oid 
 select AddGeometryColumn('public', 'daq_cross_across', 'geom', 4490, 'LINESTRING', 4);
 CREATE INDEX daq_cross_across_geom_idx ON public.daq_cross_across USING gist (geom);
 /**********管道穿跨越信息end***************/
+/**********管道阴保begin***************/
+CREATE TABLE daq_cathodic_isolating_piece (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_segment_oid VARCHAR (36),
+	isolating_piece_code VARCHAR (50),
+	isolating_piece_name VARCHAR (50),
+	median_stake_oid VARCHAR (36),
+	relative_mileage NUMERIC (8, 0),
+	pointx NUMERIC (9, 3),
+	pointy NUMERIC (9, 3),
+	pointz NUMERIC (9, 3),
+	start_pipe_fitting_num VARCHAR (50),
+	start_pipe_fitting_type VARCHAR (50),
+	end_pipe_fitting_num VARCHAR (50),
+	end_pipe_fitting_type VARCHAR (50),
+	construct_unit VARCHAR (36),
+	construct_date TIMESTAMP (6),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	approve_status SMALLINT default 0,
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL default 0
+);
+comment on table daq_cathodic_isolating_piece is '绝缘件表';
+comment on column daq_cathodic_isolating_piece.oid is '主键';
+comment on column daq_cathodic_isolating_piece.project_oid is '项目oid';
+comment on column daq_cathodic_isolating_piece.tenders_oid is '标段oid';
+comment on column daq_cathodic_isolating_piece.pipeline_oid is '管线oid';
+comment on column daq_cathodic_isolating_piece.pipe_segment_oid is '线路段oid';
+comment on column daq_cathodic_isolating_piece.isolating_piece_code is '绝缘件编号';
+comment on column daq_cathodic_isolating_piece.isolating_piece_name is '名称';
+comment on column daq_cathodic_isolating_piece.median_stake_oid is '桩号';
+comment on column daq_cathodic_isolating_piece.relative_mileage is '相对桩位置(m)';
+comment on column daq_cathodic_isolating_piece.pointx is 'X坐标';
+comment on column daq_cathodic_isolating_piece.pointy is 'Y坐标';
+comment on column daq_cathodic_isolating_piece.pointz is '高程(m)';
+comment on column daq_cathodic_isolating_piece.start_pipe_fitting_num is '前管件编号';
+comment on column daq_cathodic_isolating_piece.start_pipe_fitting_type is '前管件类型';
+comment on column daq_cathodic_isolating_piece.end_pipe_fitting_num is '后管件编号';
+comment on column daq_cathodic_isolating_piece.end_pipe_fitting_type is '后管件类型';
+comment on column daq_cathodic_isolating_piece.construct_unit is '施工单位';
+comment on column daq_cathodic_isolating_piece.construct_date is '施工日期';
+comment on column daq_cathodic_isolating_piece.supervision_unit is '监理单位';
+comment on column daq_cathodic_isolating_piece.supervision_engineer is '监理工程师';
+comment on column daq_cathodic_isolating_piece.collection_person is '采集人员';
+comment on column daq_cathodic_isolating_piece.collection_date is '采集日期';
+comment on column daq_cathodic_isolating_piece.geo_state is '空间数据状态';
+comment on column daq_cathodic_isolating_piece.approve_status is '审核状态';
+comment on column daq_cathodic_isolating_piece.remarks is '备注';
+comment on column daq_cathodic_isolating_piece.create_user_id is '创建人id';
+comment on column daq_cathodic_isolating_piece.create_user_name is '创建人名称';
+comment on column daq_cathodic_isolating_piece.create_datetime is '创建时间';
+comment on column daq_cathodic_isolating_piece.modify_user_id is '修改人id';
+comment on column daq_cathodic_isolating_piece.modify_user_name is '修改人名称';
+comment on column daq_cathodic_isolating_piece.modify_datetime is '修改时间';
+comment on column daq_cathodic_isolating_piece.active is '有效标志';
+create index INDEX_DAQ_CATHODIC_ISOLATING_PIECE_ISOLATING_PIECE_CODE_9 ON daq_cathodic_isolating_piece ( isolating_piece_code );
+create index INDEX_DAQ_CATHODIC_ISOLATING_PIECE_ISOLATING_PIECE_NAME_10 ON daq_cathodic_isolating_piece ( isolating_piece_name );
+
+select AddGeometryColumn('public', 'daq_cathodic_isolating_piece', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_cathodic_isolating_piece_geom_idx ON public.daq_cathodic_isolating_piece USING gist (geom);
+
+CREATE TABLE daq_cathodic_cable_protection (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_segment_oid VARCHAR (36),
+	cable_code VARCHAR (50),
+	cable_specification VARCHAR (30),
+	cable_tray_num VARCHAR (35),
+	cable_batche VARCHAR (50),
+	cable_struction VARCHAR (50),
+	cable_laying_method VARCHAR (50),
+	cable_length NUMERIC (10, 3),
+	cable_use VARCHAR (50),
+	test_stake_oid VARCHAR (36),
+	cable_protection_code VARCHAR (50),
+	auxiliary_anode_bed_oid VARCHAR (50),
+	sacrifice_anode_oid VARCHAR (50),
+	cable_layout_code VARCHAR (50),
+	median_stake_oid VARCHAR (36),
+	relative_mileage NUMERIC (8, 0),
+	construct_unit VARCHAR (36),
+	construct_date TIMESTAMP (6),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	approve_status SMALLINT default 0,
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL default 0
+);
+comment on table daq_cathodic_cable_protection is '阴保电缆表';
+comment on column daq_cathodic_cable_protection.oid is '主键';
+comment on column daq_cathodic_cable_protection.project_oid is '项目oid';
+comment on column daq_cathodic_cable_protection.tenders_oid is '标段oid';
+comment on column daq_cathodic_cable_protection.pipeline_oid is '管线oid';
+comment on column daq_cathodic_cable_protection.pipe_segment_oid is '线路段oid';
+comment on column daq_cathodic_cable_protection.cable_code is '阴保电缆编号';
+comment on column daq_cathodic_cable_protection.cable_specification is '电缆规格型号';
+comment on column daq_cathodic_cable_protection.cable_tray_num is '电缆盘号';
+comment on column daq_cathodic_cable_protection.cable_batche is '电缆批次';
+comment on column daq_cathodic_cable_protection.cable_struction is '电缆保护结构';
+comment on column daq_cathodic_cable_protection.cable_laying_method is '电缆敷设方式';
+comment on column daq_cathodic_cable_protection.cable_length is '电缆长度(m)';
+comment on column daq_cathodic_cable_protection.cable_use is '电缆用途';
+comment on column daq_cathodic_cable_protection.test_stake_oid is '测试桩号';
+comment on column daq_cathodic_cable_protection.cable_protection_code is '阴保电源编号';
+comment on column daq_cathodic_cable_protection.auxiliary_anode_bed_oid is '辅助阳极地床编号';
+comment on column daq_cathodic_cable_protection.sacrifice_anode_oid is '牺牲阳极编号';
+comment on column daq_cathodic_cable_protection.cable_layout_code is '电缆敷设图编号';
+comment on column daq_cathodic_cable_protection.median_stake_oid is '桩号';
+comment on column daq_cathodic_cable_protection.relative_mileage is '相对桩位置(m)';
+comment on column daq_cathodic_cable_protection.construct_unit is '施工单位';
+comment on column daq_cathodic_cable_protection.construct_date is '施工日期';
+comment on column daq_cathodic_cable_protection.supervision_unit is '监理单位';
+comment on column daq_cathodic_cable_protection.supervision_engineer is '监理工程师';
+comment on column daq_cathodic_cable_protection.collection_person is '采集人员';
+comment on column daq_cathodic_cable_protection.collection_date is '采集日期';
+comment on column daq_cathodic_cable_protection.geo_state is '空间数据状态';
+comment on column daq_cathodic_cable_protection.approve_status is '审核状态';
+comment on column daq_cathodic_cable_protection.remarks is '备注';
+comment on column daq_cathodic_cable_protection.create_user_id is '创建人id';
+comment on column daq_cathodic_cable_protection.create_user_name is '创建人名称';
+comment on column daq_cathodic_cable_protection.create_datetime is '创建时间';
+comment on column daq_cathodic_cable_protection.modify_user_id is '修改人id';
+comment on column daq_cathodic_cable_protection.modify_user_name is '修改人名称';
+comment on column daq_cathodic_cable_protection.modify_datetime is '修改时间';
+comment on column daq_cathodic_cable_protection.active is '有效标志';
+create index INDEX_DAQ_CATHODIC_CABLE_PROTECTION_CABLE_CODE_9 ON daq_cathodic_cable_protection ( cable_code );
+create index INDEX_DAQ_CATHODIC_CABLE_PROTECTION_CABLE_SPECIFICATION_10 ON daq_cathodic_cable_protection ( cable_specification );
+select AddGeometryColumn('public', 'daq_cathodic_cable_protection', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_cathodic_cable_protection_geom_idx ON public.daq_cathodic_cable_protection USING gist (geom);
+
+CREATE TABLE daq_cathodic_sacrifice_anode (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_segment_oid VARCHAR (36),
+	anode_code VARCHAR (50),
+	protect_object VARCHAR (40),
+	median_stake_oid VARCHAR (36),
+	relative_mileage NUMERIC (8, 0),
+	pointx NUMERIC (9, 3),
+	pointy NUMERIC (9, 3),
+	pointz NUMERIC (9, 3),
+	is_temporary SMALLINT,
+	design_life NUMERIC (2, 0),
+	anode_material VARCHAR (50),
+	anode_specification VARCHAR (50),
+	andoe_quantity NUMERIC (6, 0),
+	andoe_weight NUMERIC (6, 1),
+	total_weight NUMERIC (6, 1),
+	anode_distance NUMERIC (6, 2),
+	pipe_distance NUMERIC (6, 2),
+	manufacture VARCHAR (60),
+	burial_date TIMESTAMP (6),
+	anode_buried_depth NUMERIC (8, 3),
+	lay_length NUMERIC (8, 3),
+	fill_weight NUMERIC (7, 2),
+	insulation_quality VARCHAR (50),
+	tablets_condition SMALLINT,
+	install_location_description VARCHAR (200),
+	conclusion SMALLINT,
+	construct_unit VARCHAR (36),
+	construct_date TIMESTAMP (6),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	approve_status SMALLINT default 0,
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL default 0
+);
+comment on table daq_cathodic_sacrifice_anode is '牺牲阳极表';
+comment on column daq_cathodic_sacrifice_anode.oid is '主键';
+comment on column daq_cathodic_sacrifice_anode.project_oid is '项目oid';
+comment on column daq_cathodic_sacrifice_anode.tenders_oid is '标段oid';
+comment on column daq_cathodic_sacrifice_anode.pipeline_oid is '管线oid';
+comment on column daq_cathodic_sacrifice_anode.pipe_segment_oid is '线路段oid';
+comment on column daq_cathodic_sacrifice_anode.anode_code is '阳极编号';
+comment on column daq_cathodic_sacrifice_anode.protect_object is '保护对象';
+comment on column daq_cathodic_sacrifice_anode.median_stake_oid is '桩号';
+comment on column daq_cathodic_sacrifice_anode.relative_mileage is '相对桩位置(m)';
+comment on column daq_cathodic_sacrifice_anode.pointx is 'X坐标';
+comment on column daq_cathodic_sacrifice_anode.pointy is 'Y坐标';
+comment on column daq_cathodic_sacrifice_anode.pointz is '高程(m)';
+comment on column daq_cathodic_sacrifice_anode.is_temporary is '是否临时';
+comment on column daq_cathodic_sacrifice_anode.design_life is '设计寿命(年)';
+comment on column daq_cathodic_sacrifice_anode.anode_material is '牺牲阳极材料';
+comment on column daq_cathodic_sacrifice_anode.anode_specification is '牺牲阳极型号';
+comment on column daq_cathodic_sacrifice_anode.andoe_quantity is '牺牲阳极数量(支)';
+comment on column daq_cathodic_sacrifice_anode.andoe_weight is '牺牲阳极单重(kg)';
+comment on column daq_cathodic_sacrifice_anode.total_weight is '牺牲阳极总重(kg)';
+comment on column daq_cathodic_sacrifice_anode.anode_distance is '阳极间距(m)';
+comment on column daq_cathodic_sacrifice_anode.pipe_distance is '与管道距离(m)';
+comment on column daq_cathodic_sacrifice_anode.manufacture is '制造商';
+comment on column daq_cathodic_sacrifice_anode.burial_date is '埋设日期';
+comment on column daq_cathodic_sacrifice_anode.anode_buried_depth is '阳极埋深(m)';
+comment on column daq_cathodic_sacrifice_anode.lay_length is '铺设长度(m)';
+comment on column daq_cathodic_sacrifice_anode.fill_weight is '填包料重量(kg)';
+comment on column daq_cathodic_sacrifice_anode.insulation_quality is '各接点质量及绝缘情况';
+comment on column daq_cathodic_sacrifice_anode.tablets_condition is '检查片埋设情况';
+comment on column daq_cathodic_sacrifice_anode.install_location_description is '安装位置描述';
+comment on column daq_cathodic_sacrifice_anode.conclusion is '结论';
+comment on column daq_cathodic_sacrifice_anode.construct_unit is '施工单位';
+comment on column daq_cathodic_sacrifice_anode.construct_date is '施工日期';
+comment on column daq_cathodic_sacrifice_anode.supervision_unit is '监理单位';
+comment on column daq_cathodic_sacrifice_anode.supervision_engineer is '监理工程师';
+comment on column daq_cathodic_sacrifice_anode.collection_person is '采集人员';
+comment on column daq_cathodic_sacrifice_anode.collection_date is '采集日期';
+comment on column daq_cathodic_sacrifice_anode.geo_state is '空间数据状态';
+comment on column daq_cathodic_sacrifice_anode.approve_status is '审核状态';
+comment on column daq_cathodic_sacrifice_anode.remarks is '备注';
+comment on column daq_cathodic_sacrifice_anode.create_user_id is '创建人id';
+comment on column daq_cathodic_sacrifice_anode.create_user_name is '创建人名称';
+comment on column daq_cathodic_sacrifice_anode.create_datetime is '创建时间';
+comment on column daq_cathodic_sacrifice_anode.modify_user_id is '修改人id';
+comment on column daq_cathodic_sacrifice_anode.modify_user_name is '修改人名称';
+comment on column daq_cathodic_sacrifice_anode.modify_datetime is '修改时间';
+comment on column daq_cathodic_sacrifice_anode.active is '有效标志';
+create index INDEX_DAQ_CATHODIC_SACRIFICE_ANODE_ANODE_CODE_9 ON daq_cathodic_sacrifice_anode ( anode_code );
+select AddGeometryColumn('public', 'daq_cathodic_sacrifice_anode', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_cathodic_sacrifice_anode_geom_idx ON public.daq_cathodic_sacrifice_anode USING gist (geom);
+
+CREATE TABLE daq_cathodic_insulated_joint (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_segment_oid VARCHAR (36),
+	equipment_code VARCHAR (50),
+	equipment_name VARCHAR (50),
+	median_stake_oid VARCHAR (36),
+	relative_mileage NUMERIC (8, 0),
+	pointx NUMERIC (9, 3),
+	pointy NUMERIC (9, 3),
+	pointz NUMERIC (9, 3),
+	construct_unit VARCHAR (36),
+	construct_date TIMESTAMP (6),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	approve_status SMALLINT default 0,
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL default 0
+);
+comment on table daq_cathodic_insulated_joint is '绝缘接头保护器表';
+comment on column daq_cathodic_insulated_joint.oid is '主键';
+comment on column daq_cathodic_insulated_joint.project_oid is '项目oid';
+comment on column daq_cathodic_insulated_joint.tenders_oid is '标段oid';
+comment on column daq_cathodic_insulated_joint.pipeline_oid is '管线oid';
+comment on column daq_cathodic_insulated_joint.pipe_segment_oid is '线路段oid';
+comment on column daq_cathodic_insulated_joint.equipment_code is '设备编号';
+comment on column daq_cathodic_insulated_joint.equipment_name is '名称';
+comment on column daq_cathodic_insulated_joint.median_stake_oid is '桩号';
+comment on column daq_cathodic_insulated_joint.relative_mileage is '相对桩位置(m)';
+comment on column daq_cathodic_insulated_joint.pointx is 'X坐标';
+comment on column daq_cathodic_insulated_joint.pointy is 'Y坐标';
+comment on column daq_cathodic_insulated_joint.pointz is '高程(m)';
+comment on column daq_cathodic_insulated_joint.construct_unit is '施工单位';
+comment on column daq_cathodic_insulated_joint.construct_date is '施工日期';
+comment on column daq_cathodic_insulated_joint.supervision_unit is '监理单位';
+comment on column daq_cathodic_insulated_joint.supervision_engineer is '监理工程师';
+comment on column daq_cathodic_insulated_joint.collection_person is '采集人员';
+comment on column daq_cathodic_insulated_joint.collection_date is '采集日期';
+comment on column daq_cathodic_insulated_joint.geo_state is '空间数据状态';
+comment on column daq_cathodic_insulated_joint.approve_status is '审核状态';
+comment on column daq_cathodic_insulated_joint.remarks is '备注';
+comment on column daq_cathodic_insulated_joint.create_user_id is '创建人id';
+comment on column daq_cathodic_insulated_joint.create_user_name is '创建人名称';
+comment on column daq_cathodic_insulated_joint.create_datetime is '创建时间';
+comment on column daq_cathodic_insulated_joint.modify_user_id is '修改人id';
+comment on column daq_cathodic_insulated_joint.modify_user_name is '修改人名称';
+comment on column daq_cathodic_insulated_joint.modify_datetime is '修改时间';
+comment on column daq_cathodic_insulated_joint.active is '有效标志';
+create index INDEX_DAQ_CATHODIC_INSULATED_JOINT_EQUIPMENT_CODE_9 ON daq_cathodic_insulated_joint ( equipment_code );
+select AddGeometryColumn('public', 'daq_cathodic_insulated_joint', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_cathodic_insulated_joint_geom_idx ON public.daq_cathodic_insulated_joint USING gist (geom);
+
+CREATE TABLE daq_cathodic_solid_decoupler (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_segment_oid VARCHAR (36),
+	equipment_code VARCHAR (50),
+	equipment_name VARCHAR (50),
+	median_stake_oid VARCHAR (36),
+	relative_mileage NUMERIC (8, 0),
+	construct_unit VARCHAR (36),
+	construct_date TIMESTAMP (6),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	approve_status SMALLINT default 0,
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL default 0
+);
+
+comment on table daq_cathodic_solid_decoupler is '固态去耦合器表';
+comment on column daq_cathodic_solid_decoupler.oid is '主键';
+comment on column daq_cathodic_solid_decoupler.project_oid is '项目oid';
+comment on column daq_cathodic_solid_decoupler.tenders_oid is '标段oid';
+comment on column daq_cathodic_solid_decoupler.pipeline_oid is '管线oid';
+comment on column daq_cathodic_solid_decoupler.pipe_segment_oid is '线路段oid';
+comment on column daq_cathodic_solid_decoupler.equipment_code is '设备编号';
+comment on column daq_cathodic_solid_decoupler.equipment_name is '名称';
+comment on column daq_cathodic_solid_decoupler.median_stake_oid is '桩号';
+comment on column daq_cathodic_solid_decoupler.relative_mileage is '相对桩位置(m)';
+comment on column daq_cathodic_solid_decoupler.construct_unit is '施工单位';
+comment on column daq_cathodic_solid_decoupler.construct_date is '施工日期';
+comment on column daq_cathodic_solid_decoupler.supervision_unit is '监理单位';
+comment on column daq_cathodic_solid_decoupler.supervision_engineer is '监理工程师';
+comment on column daq_cathodic_solid_decoupler.collection_person is '采集人员';
+comment on column daq_cathodic_solid_decoupler.collection_date is '采集日期';
+comment on column daq_cathodic_solid_decoupler.geo_state is '空间数据状态';
+comment on column daq_cathodic_solid_decoupler.approve_status is '审核状态';
+comment on column daq_cathodic_solid_decoupler.remarks is '备注';
+comment on column daq_cathodic_solid_decoupler.create_user_id is '创建人id';
+comment on column daq_cathodic_solid_decoupler.create_user_name is '创建人名称';
+comment on column daq_cathodic_solid_decoupler.create_datetime is '创建时间';
+comment on column daq_cathodic_solid_decoupler.modify_user_id is '修改人id';
+comment on column daq_cathodic_solid_decoupler.modify_user_name is '修改人名称';
+comment on column daq_cathodic_solid_decoupler.modify_datetime is '修改时间';
+comment on column daq_cathodic_solid_decoupler.active is '有效标志';
+create index INDEX_DAQ_CATHODIC_SOLID_DECOUPLER_EQUIPMENT_CODE_9 ON daq_cathodic_solid_decoupler ( equipment_code );
+select AddGeometryColumn('public', 'daq_cathodic_solid_decoupler', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_cathodic_solid_decoupler_geom_idx ON public.daq_cathodic_solid_decoupler USING gist (geom);
+
+CREATE TABLE daq_cathodic_test_stake (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_segment_oid VARCHAR (36),
+	test_stake_code VARCHAR (50),
+	median_stake_oid VARCHAR (36),
+	relative_mileage NUMERIC (8, 0),
+	pointx NUMERIC (9, 3),
+	pointy NUMERIC (9, 3),
+	pointz NUMERIC (9, 3),
+	stake_structure VARCHAR (50),
+	install_location_description VARCHAR (200),
+	burial_date TIMESTAMP (6),
+	stake_function VARCHAR (450),
+	stake_top_height NUMERIC (9, 3),
+	stake_shape VARCHAR (200),
+	construct_unit VARCHAR (36),
+	construct_date TIMESTAMP (6),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	approve_status SMALLINT default 0,
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL default 0
+);
+comment on table daq_cathodic_test_stake is '测试桩表';
+comment on column daq_cathodic_test_stake.oid is '主键';
+comment on column daq_cathodic_test_stake.project_oid is '项目oid';
+comment on column daq_cathodic_test_stake.tenders_oid is '标段oid';
+comment on column daq_cathodic_test_stake.pipeline_oid is '管线oid';
+comment on column daq_cathodic_test_stake.pipe_segment_oid is '线路段oid';
+comment on column daq_cathodic_test_stake.test_stake_code is '测试桩编号';
+comment on column daq_cathodic_test_stake.median_stake_oid is '桩号';
+comment on column daq_cathodic_test_stake.relative_mileage is '相对桩位置(m)';
+comment on column daq_cathodic_test_stake.pointx is 'X坐标';
+comment on column daq_cathodic_test_stake.pointy is 'Y坐标';
+comment on column daq_cathodic_test_stake.pointz is '高程(m)';
+comment on column daq_cathodic_test_stake.stake_structure is '桩体结构';
+comment on column daq_cathodic_test_stake.install_location_description is '安装位置描述';
+comment on column daq_cathodic_test_stake.burial_date is '埋设日期';
+comment on column daq_cathodic_test_stake.stake_function is '桩功能';
+comment on column daq_cathodic_test_stake.stake_top_height is '桩顶高度(m)';
+comment on column daq_cathodic_test_stake.stake_shape is '桩体形状';
+comment on column daq_cathodic_test_stake.construct_unit is '施工单位';
+comment on column daq_cathodic_test_stake.construct_date is '施工日期';
+comment on column daq_cathodic_test_stake.supervision_unit is '监理单位';
+comment on column daq_cathodic_test_stake.supervision_engineer is '监理工程师';
+comment on column daq_cathodic_test_stake.collection_person is '采集人员';
+comment on column daq_cathodic_test_stake.collection_date is '采集日期';
+comment on column daq_cathodic_test_stake.geo_state is '空间数据状态';
+comment on column daq_cathodic_test_stake.approve_status is '审核状态';
+comment on column daq_cathodic_test_stake.remarks is '备注';
+comment on column daq_cathodic_test_stake.create_user_id is '创建人id';
+comment on column daq_cathodic_test_stake.create_user_name is '创建人名称';
+comment on column daq_cathodic_test_stake.create_datetime is '创建时间';
+comment on column daq_cathodic_test_stake.modify_user_id is '修改人id';
+comment on column daq_cathodic_test_stake.modify_user_name is '修改人名称';
+comment on column daq_cathodic_test_stake.modify_datetime is '修改时间';
+comment on column daq_cathodic_test_stake.active is '有效标志';
+create index INDEX_DAQ_CATHODIC_TEST_STAKE_TEST_STAKE_CODE_9 ON daq_cathodic_test_stake ( test_stake_code );
+select AddGeometryColumn('public', 'daq_cathodic_test_stake', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_cathodic_test_stake_geom_idx ON public.daq_cathodic_test_stake USING gist (geom);
+
+CREATE TABLE daq_cathodic_polarity_drainage (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_segment_oid VARCHAR (36),
+	equipment_code VARCHAR (50),
+	equipment_name VARCHAR (50),
+	factory_num VARCHAR (60),
+	median_stake_oid VARCHAR (36),
+	relative_mileage NUMERIC (8, 0),
+	pointx NUMERIC (9, 3),
+	pointy NUMERIC (9, 3),
+	protection_scope VARCHAR (50),
+	manufacturer VARCHAR (60),
+	discharge_flow NUMERIC (6, 0),
+	max_discharge_flow NUMERIC (6, 0),
+	avg_discharge_flow NUMERIC (6, 0),
+	min_discharge_flow NUMERIC (6, 0),
+	ground_bed_material VARCHAR (50),
+	manage_potential NUMERIC (6, 0),
+	ground_potential NUMERIC (6, 0),
+	service_date TIMESTAMP (6),
+	expiration_date TIMESTAMP (6),
+	product_date TIMESTAMP (6),
+	drainage_purpose VARCHAR (50),
+	drainage_type VARCHAR (35),
+	design_life SMALLINT,
+	avg_potential_undrain NUMERIC (6, 0),
+	avg_potential_drain NUMERIC (6, 0),
+	earthing_resistance NUMERIC (6, 0),
+	construct_unit VARCHAR (36),
+	construct_date TIMESTAMP (6),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	approve_status SMALLINT default 0,
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL default 0
+);
+
+comment on table daq_cathodic_polarity_drainage is '极性排流器表';
+comment on column daq_cathodic_polarity_drainage.oid is '主键';
+comment on column daq_cathodic_polarity_drainage.project_oid is '项目oid';
+comment on column daq_cathodic_polarity_drainage.tenders_oid is '标段oid';
+comment on column daq_cathodic_polarity_drainage.pipeline_oid is '管线oid';
+comment on column daq_cathodic_polarity_drainage.pipe_segment_oid is '线路段oid';
+comment on column daq_cathodic_polarity_drainage.equipment_code is '设备编号';
+comment on column daq_cathodic_polarity_drainage.equipment_name is '名称';
+comment on column daq_cathodic_polarity_drainage.factory_num is '出厂编号';
+comment on column daq_cathodic_polarity_drainage.median_stake_oid is '桩号';
+comment on column daq_cathodic_polarity_drainage.relative_mileage is '相对桩位置(m)';
+comment on column daq_cathodic_polarity_drainage.pointx is 'X坐标';
+comment on column daq_cathodic_polarity_drainage.pointy is 'Y坐标';
+comment on column daq_cathodic_polarity_drainage.protection_scope is '保护范围';
+comment on column daq_cathodic_polarity_drainage.manufacturer is '制造商';
+comment on column daq_cathodic_polarity_drainage.discharge_flow is '排流量(A)';
+comment on column daq_cathodic_polarity_drainage.max_discharge_flow is '最大排流量(A)';
+comment on column daq_cathodic_polarity_drainage.avg_discharge_flow is '平均排流量(A)';
+comment on column daq_cathodic_polarity_drainage.min_discharge_flow is '最小排流量(A)';
+comment on column daq_cathodic_polarity_drainage.ground_bed_material is '地床材料';
+comment on column daq_cathodic_polarity_drainage.manage_potential is '管地电位(V)';
+comment on column daq_cathodic_polarity_drainage.ground_potential is '地床接地电位(V)';
+comment on column daq_cathodic_polarity_drainage.service_date is '投用日期';
+comment on column daq_cathodic_polarity_drainage.expiration_date is '预计失效日期';
+comment on column daq_cathodic_polarity_drainage.product_date is '生产日期';
+comment on column daq_cathodic_polarity_drainage.drainage_purpose is '排流用途';
+comment on column daq_cathodic_polarity_drainage.drainage_type is '排流类型';
+comment on column daq_cathodic_polarity_drainage.design_life is '设计寿命(年)';
+comment on column daq_cathodic_polarity_drainage.avg_potential_undrain is '不排流时平均电位(V)';
+comment on column daq_cathodic_polarity_drainage.avg_potential_drain is '排流时平均电位(V)';
+comment on column daq_cathodic_polarity_drainage.earthing_resistance is '接地排流地床电阻(Ω)';
+comment on column daq_cathodic_polarity_drainage.construct_unit is '施工单位';
+comment on column daq_cathodic_polarity_drainage.construct_date is '施工日期';
+comment on column daq_cathodic_polarity_drainage.supervision_unit is '监理单位';
+comment on column daq_cathodic_polarity_drainage.supervision_engineer is '监理工程师';
+comment on column daq_cathodic_polarity_drainage.collection_person is '采集人员';
+comment on column daq_cathodic_polarity_drainage.collection_date is '采集日期';
+comment on column daq_cathodic_polarity_drainage.geo_state is '空间数据状态';
+comment on column daq_cathodic_polarity_drainage.approve_status is '审核状态';
+comment on column daq_cathodic_polarity_drainage.remarks is '备注';
+comment on column daq_cathodic_polarity_drainage.create_user_id is '创建人id';
+comment on column daq_cathodic_polarity_drainage.create_user_name is '创建人名称';
+comment on column daq_cathodic_polarity_drainage.create_datetime is '创建时间';
+comment on column daq_cathodic_polarity_drainage.modify_user_id is '修改人id';
+comment on column daq_cathodic_polarity_drainage.modify_user_name is '修改人名称';
+comment on column daq_cathodic_polarity_drainage.modify_datetime is '修改时间';
+comment on column daq_cathodic_polarity_drainage.active is '有效标志';
+create index INDEX_DAQ_CATHODIC_POLARITY_DRAINAGE_EQUIPMENT_CODE_9 ON daq_cathodic_polarity_drainage ( equipment_code );
+select AddGeometryColumn('public', 'daq_cathodic_polarity_drainage', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_cathodic_polarity_drainage_geom_idx ON public.daq_cathodic_polarity_drainage USING gist (geom);
+
+CREATE TABLE daq_cathodic_anode_bed (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_segment_oid VARCHAR (36),
+	ground_bed VARCHAR (50),
+	median_stake_oid VARCHAR (36),
+	relative_mileage NUMERIC (8, 0),
+	pointx NUMERIC (9, 3),
+	pointy NUMERIC (9, 3),
+	pointz NUMERIC (9, 3),
+	install_location_description VARCHAR (200),
+	buried_depth NUMERIC (8, 2),
+	is_temporary SMALLINT,
+	design_life SMALLINT,
+	backfill_material VARCHAR (50),
+	quantity SMALLINT,
+	burial_way VARCHAR (50),
+	total_weight NUMERIC (7, 1),
+	cable_length NUMERIC (7, 1),
+	protect_length NUMERIC (8, 2),
+	anode_material_type VARCHAR (50),
+	anode_material_spec VARCHAR (50),
+	anode_resistance NUMERIC (7, 1),
+	is_water_injection SMALLINT,
+	is_airbleed SMALLINT,
+	burial_date TIMESTAMP (6),
+	connection_power VARCHAR (35),
+	construct_unit VARCHAR (36),
+	construct_date TIMESTAMP (6),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	approve_status SMALLINT default 0,
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL default 0
+);
+
+comment on table daq_cathodic_anode_bed is '辅助阳极地床表';
+comment on column daq_cathodic_anode_bed.oid is '主键';
+comment on column daq_cathodic_anode_bed.project_oid is '项目oid';
+comment on column daq_cathodic_anode_bed.tenders_oid is '标段oid';
+comment on column daq_cathodic_anode_bed.pipeline_oid is '管线oid';
+comment on column daq_cathodic_anode_bed.pipe_segment_oid is '线路段oid';
+comment on column daq_cathodic_anode_bed.ground_bed is '地床编号';
+comment on column daq_cathodic_anode_bed.median_stake_oid is '桩号';
+comment on column daq_cathodic_anode_bed.relative_mileage is '相对桩位置(m)';
+comment on column daq_cathodic_anode_bed.pointx is 'X坐标';
+comment on column daq_cathodic_anode_bed.pointy is 'Y坐标';
+comment on column daq_cathodic_anode_bed.pointz is '高程(m)';
+comment on column daq_cathodic_anode_bed.install_location_description is '安装位置描述';
+comment on column daq_cathodic_anode_bed.buried_depth is '埋深(m)';
+comment on column daq_cathodic_anode_bed.is_temporary is '是否临时';
+comment on column daq_cathodic_anode_bed.design_life is '设计寿命(年)';
+comment on column daq_cathodic_anode_bed.backfill_material is '回填材料';
+comment on column daq_cathodic_anode_bed.quantity is '辅助阳极数量(个)';
+comment on column daq_cathodic_anode_bed.burial_way is '埋设方式';
+comment on column daq_cathodic_anode_bed.total_weight is '总重(kg)';
+comment on column daq_cathodic_anode_bed.cable_length is '电缆长度(m)';
+comment on column daq_cathodic_anode_bed.protect_length is '保护长度(m)';
+comment on column daq_cathodic_anode_bed.anode_material_type is '阳极材料类型';
+comment on column daq_cathodic_anode_bed.anode_material_spec is '阳极材料规格';
+comment on column daq_cathodic_anode_bed.anode_resistance is '阳极电阻(Ω)';
+comment on column daq_cathodic_anode_bed.is_water_injection is '是否有注水系统';
+comment on column daq_cathodic_anode_bed.is_airbleed is '是否有排气孔';
+comment on column daq_cathodic_anode_bed.burial_date is '埋设日期';
+comment on column daq_cathodic_anode_bed.connection_power is '地床连接阴保电源';
+comment on column daq_cathodic_anode_bed.construct_unit is '施工单位';
+comment on column daq_cathodic_anode_bed.construct_date is '施工日期';
+comment on column daq_cathodic_anode_bed.supervision_unit is '监理单位';
+comment on column daq_cathodic_anode_bed.supervision_engineer is '监理工程师';
+comment on column daq_cathodic_anode_bed.collection_person is '采集人员';
+comment on column daq_cathodic_anode_bed.collection_date is '采集日期';
+comment on column daq_cathodic_anode_bed.geo_state is '空间数据状态';
+comment on column daq_cathodic_anode_bed.approve_status is '审核状态';
+comment on column daq_cathodic_anode_bed.remarks is '备注';
+comment on column daq_cathodic_anode_bed.create_user_id is '创建人id';
+comment on column daq_cathodic_anode_bed.create_user_name is '创建人名称';
+comment on column daq_cathodic_anode_bed.create_datetime is '创建时间';
+comment on column daq_cathodic_anode_bed.modify_user_id is '修改人id';
+comment on column daq_cathodic_anode_bed.modify_user_name is '修改人名称';
+comment on column daq_cathodic_anode_bed.modify_datetime is '修改时间';
+comment on column daq_cathodic_anode_bed.active is '有效标志';
+create index INDEX_DAQ_CATHODIC_ANODE_BED_GROUND_BED_9 ON daq_cathodic_anode_bed ( ground_bed );
+select AddGeometryColumn('public', 'daq_cathodic_anode_bed', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_cathodic_anode_bed_geom_idx ON public.daq_cathodic_anode_bed USING gist (geom);
+
+CREATE TABLE daq_cathodic_electrical_parameter_test (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	test_stake_oid VARCHAR (36),
+	natural_potential NUMERIC (8, 2),
+	open_circuit_potential_one NUMERIC (8, 2),
+	open_circuit_potential_two NUMERIC (8, 2),
+	protective_potential NUMERIC (8, 2),
+	group_output_current NUMERIC (8, 2),
+	output_current_one NUMERIC (8, 2),
+	output_current_two NUMERIC (8, 2),
+	earthing_resistance_one NUMERIC (8, 2),
+	earthing_resistance_two NUMERIC (8, 2),
+	test_person VARCHAR (30),
+	test_date TIMESTAMP (6),
+	approve_status SMALLINT default 0,
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL default 0
+);
+comment on table daq_cathodic_electrical_parameter_test is '牺牲阳极电参数测试记录表';
+comment on column daq_cathodic_electrical_parameter_test.oid is '主键';
+comment on column daq_cathodic_electrical_parameter_test.test_stake_oid is '测试桩编号';
+comment on column daq_cathodic_electrical_parameter_test.natural_potential is '管道对地自然电位(V)';
+comment on column daq_cathodic_electrical_parameter_test.open_circuit_potential_one is '阳极1开路电位(V)';
+comment on column daq_cathodic_electrical_parameter_test.open_circuit_potential_two is '阳极2开路电位(V)';
+comment on column daq_cathodic_electrical_parameter_test.protective_potential is '管道对地保护电位(V)';
+comment on column daq_cathodic_electrical_parameter_test.group_output_current is '阳极组输出电流(mA)';
+comment on column daq_cathodic_electrical_parameter_test.output_current_one is '阳极1输出电流(mA)';
+comment on column daq_cathodic_electrical_parameter_test.output_current_two is '阳极2输出电流(mA)';
+comment on column daq_cathodic_electrical_parameter_test.earthing_resistance_one is '阳极1接地电阻(Ω)';
+comment on column daq_cathodic_electrical_parameter_test.earthing_resistance_two is '阳极2接地电阻(Ω)';
+comment on column daq_cathodic_electrical_parameter_test.test_person is '测试人';
+comment on column daq_cathodic_electrical_parameter_test.test_date is '测试时间';
+comment on column daq_cathodic_electrical_parameter_test.approve_status is '审核状态';
+comment on column daq_cathodic_electrical_parameter_test.remarks is '备注';
+comment on column daq_cathodic_electrical_parameter_test.create_user_id is '创建人id';
+comment on column daq_cathodic_electrical_parameter_test.create_user_name is '创建人名称';
+comment on column daq_cathodic_electrical_parameter_test.create_datetime is '创建时间';
+comment on column daq_cathodic_electrical_parameter_test.modify_user_id is '修改人id';
+comment on column daq_cathodic_electrical_parameter_test.modify_user_name is '修改人名称';
+comment on column daq_cathodic_electrical_parameter_test.modify_datetime is '修改时间';
+comment on column daq_cathodic_electrical_parameter_test.active is '有效标志';
+create index INDEX_DAQ_CATHODIC_ELECTRICAL_PARAMETER_TEST_TEST_STAKE_OID_5 ON daq_cathodic_electrical_parameter_test ( test_stake_oid );
+
+CREATE TABLE daq_cathodic_impressed_current_test (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	test_stake_oid VARCHAR (36),
+	test_region VARCHAR (50),
+	test_date TIMESTAMP (6),
+	currency_date TIMESTAMP (6),
+	polarization_date TIMESTAMP (6),
+	natural_potential NUMERIC (8, 2),
+	earthing_resistance NUMERIC (8, 2),
+	direct_current_voltage NUMERIC (8, 2),
+	standard_voltage NUMERIC (8, 2),
+	measured_voltage NUMERIC (8, 2),
+	standard_current NUMERIC (8, 2),
+	measured_current NUMERIC (8, 2),
+	approve_status SMALLINT default 0,
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL default 0
+);
+comment on table daq_cathodic_impressed_current_test is '外加电流电参数测试记录表';
+comment on column daq_cathodic_impressed_current_test.oid is '主键';
+comment on column daq_cathodic_impressed_current_test.test_stake_oid is '测试桩编号';
+comment on column daq_cathodic_impressed_current_test.test_region is '测试区段';
+comment on column daq_cathodic_impressed_current_test.test_date is '测试日期';
+comment on column daq_cathodic_impressed_current_test.currency_date is '通用日期';
+comment on column daq_cathodic_impressed_current_test.polarization_date is '极化时间';
+comment on column daq_cathodic_impressed_current_test.natural_potential is '投产前管道对地自然电位(V)';
+comment on column daq_cathodic_impressed_current_test.earthing_resistance is '投产前阳极地床接地电阻(Ω)';
+comment on column daq_cathodic_impressed_current_test.direct_current_voltage is '投产前直流电源电位/电压(V)';
+comment on column daq_cathodic_impressed_current_test.standard_voltage is '投产后管道保护标准电位(V)';
+comment on column daq_cathodic_impressed_current_test.measured_voltage is '投产后管道保护实测电位(V)';
+comment on column daq_cathodic_impressed_current_test.standard_current is '投产后管道保护标准电流(mA)';
+comment on column daq_cathodic_impressed_current_test.measured_current is '投产后管道保护实测电流(mA)';
+comment on column daq_cathodic_impressed_current_test.approve_status is '审核状态';
+comment on column daq_cathodic_impressed_current_test.remarks is '备注';
+comment on column daq_cathodic_impressed_current_test.create_user_id is '创建人id';
+comment on column daq_cathodic_impressed_current_test.create_user_name is '创建人名称';
+comment on column daq_cathodic_impressed_current_test.create_datetime is '创建时间';
+comment on column daq_cathodic_impressed_current_test.modify_user_id is '修改人id';
+comment on column daq_cathodic_impressed_current_test.modify_user_name is '修改人名称';
+comment on column daq_cathodic_impressed_current_test.modify_datetime is '修改时间';
+comment on column daq_cathodic_impressed_current_test.active is '有效标志';
+create index INDEX_DAQ_CATHODIC_IMPRESSED_CURRENT_TEST_TEST_STAKE_OID_5 ON daq_cathodic_impressed_current_test ( test_stake_oid );
+/**********管道阴保end***************/
+/**********管道附属物begin***************/
+CREATE TABLE daq_appendages_mark_stake (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_segment_or_cross_oid VARCHAR (36),
+	mark_stake_oid VARCHAR (36),
+	median_stake_oid VARCHAR (36),
+	relative_mileage NUMERIC (9, 3),
+	pointx NUMERIC (10, 3),
+	pointy NUMERIC (11, 3),
+	stake_structure VARCHAR (50),
+	burial_date TIMESTAMP (6),
+	stake_function VARCHAR (450),
+	burial_depth NUMERIC (7, 2),
+	construct_unit VARCHAR (36),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	approve_status SMALLINT DEFAULT 0,
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 0
+);
+
+comment on table daq_appendages_mark_stake is '标志桩表';
+comment on column daq_appendages_mark_stake.oid is '主键';
+comment on column daq_appendages_mark_stake.project_oid is '项目oid';
+comment on column daq_appendages_mark_stake.tenders_oid is '标段oid';
+comment on column daq_appendages_mark_stake.pipeline_oid is '管线oid';
+comment on column daq_appendages_mark_stake.pipe_segment_or_cross_oid is '线路段/穿跨越oid';
+comment on column daq_appendages_mark_stake.mark_stake_oid is '标志桩编号';
+comment on column daq_appendages_mark_stake.median_stake_oid is '桩号';
+comment on column daq_appendages_mark_stake.relative_mileage is '相对桩位置(m)';
+comment on column daq_appendages_mark_stake.pointx is '东坐标';
+comment on column daq_appendages_mark_stake.pointy is '北坐标';
+comment on column daq_appendages_mark_stake.stake_structure is '桩体结构';
+comment on column daq_appendages_mark_stake.burial_date is '埋设日期';
+comment on column daq_appendages_mark_stake.stake_function is '桩功能';
+comment on column daq_appendages_mark_stake.burial_depth is '埋深(m)';
+comment on column daq_appendages_mark_stake.construct_unit is '施工单位';
+comment on column daq_appendages_mark_stake.supervision_unit is '监理单位';
+comment on column daq_appendages_mark_stake.supervision_engineer is '监理工程师';
+comment on column daq_appendages_mark_stake.collection_person is '采集人员';
+comment on column daq_appendages_mark_stake.collection_date is '采集日期';
+comment on column daq_appendages_mark_stake.geo_state is '空间数据状态';
+comment on column daq_appendages_mark_stake.approve_status is '审核状态';
+comment on column daq_appendages_mark_stake.remarks is '备注';
+comment on column daq_appendages_mark_stake.create_user_id is '创建人id';
+comment on column daq_appendages_mark_stake.create_user_name is '创建人名称';
+comment on column daq_appendages_mark_stake.create_datetime is '创建时间';
+comment on column daq_appendages_mark_stake.modify_user_id is '修改人id';
+comment on column daq_appendages_mark_stake.modify_user_name is '修改人名称';
+comment on column daq_appendages_mark_stake.modify_datetime is '修改时间';
+comment on column daq_appendages_mark_stake.active is '有效标志';
+create index INDEX_DAQ_APPENDAGES_MARK_STAKE_MEDIAN_STAKE_OID_10 ON daq_appendages_mark_stake ( median_stake_oid );
+select AddGeometryColumn('public', 'daq_appendages_mark_stake', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_appendages_mark_stake_geom_idx ON public.daq_appendages_mark_stake USING gist (geom);
+
+CREATE TABLE daq_appendages_electronic_label (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_segment_or_cross_oid VARCHAR (36),
+	electronic_label_code VARCHAR (50),
+	product_num VARCHAR (60),
+	median_stake_oid VARCHAR (36),
+	pointx NUMERIC (10, 3),
+	pointy NUMERIC (11, 3),
+	pointz NUMERIC (7, 3),
+	burial_depth NUMERIC (7, 2),
+	feature_point_type VARCHAR (50),
+	burial_date TIMESTAMP (6),
+	construct_unit VARCHAR (36),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	approve_status SMALLINT DEFAULT 0,
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 0
+);
+comment on table daq_appendages_electronic_label is '电子标签表';
+comment on column daq_appendages_electronic_label.oid is '主键';
+comment on column daq_appendages_electronic_label.project_oid is '项目oid';
+comment on column daq_appendages_electronic_label.tenders_oid is '标段oid';
+comment on column daq_appendages_electronic_label.pipeline_oid is '管线oid';
+comment on column daq_appendages_electronic_label.pipe_segment_or_cross_oid is '线路段/穿跨越oid';
+comment on column daq_appendages_electronic_label.electronic_label_code is '电子标签编号';
+comment on column daq_appendages_electronic_label.product_num is '产品编号';
+comment on column daq_appendages_electronic_label.median_stake_oid is '桩号';
+comment on column daq_appendages_electronic_label.pointx is '坐标x';
+comment on column daq_appendages_electronic_label.pointy is '坐标Y';
+comment on column daq_appendages_electronic_label.pointz is '高程';
+comment on column daq_appendages_electronic_label.burial_depth is '埋深(m)';
+comment on column daq_appendages_electronic_label.feature_point_type is '特征点类型';
+comment on column daq_appendages_electronic_label.burial_date is '埋设日期';
+comment on column daq_appendages_electronic_label.construct_unit is '施工单位';
+comment on column daq_appendages_electronic_label.supervision_unit is '监理单位';
+comment on column daq_appendages_electronic_label.supervision_engineer is '监理工程师';
+comment on column daq_appendages_electronic_label.collection_person is '采集人员';
+comment on column daq_appendages_electronic_label.collection_date is '采集日期';
+comment on column daq_appendages_electronic_label.geo_state is '空间数据状态';
+comment on column daq_appendages_electronic_label.approve_status is '审核状态';
+comment on column daq_appendages_electronic_label.remarks is '备注';
+comment on column daq_appendages_electronic_label.create_user_id is '创建人id';
+comment on column daq_appendages_electronic_label.create_user_name is '创建人名称';
+comment on column daq_appendages_electronic_label.create_datetime is '创建时间';
+comment on column daq_appendages_electronic_label.modify_user_id is '修改人id';
+comment on column daq_appendages_electronic_label.modify_user_name is '修改人名称';
+comment on column daq_appendages_electronic_label.modify_datetime is '修改时间';
+comment on column daq_appendages_electronic_label.active is '有效标志';
+create index INDEX_DAQ_APPENDAGES_ELECTRONIC_LABEL_PRODUCT_NUM_10 ON daq_appendages_electronic_label ( product_num );
+select AddGeometryColumn('public', 'daq_appendages_electronic_label', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_appendages_electronic_label_geom_idx ON public.daq_appendages_electronic_label USING gist (geom);
+
+CREATE TABLE daq_appendages_hand_hole (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_segment_or_cross_oid VARCHAR (36),
+	hand_hole_code VARCHAR (50),
+	hand_hole_name VARCHAR (35),
+	hand_hole_type VARCHAR (50),
+	median_stake_oid VARCHAR (36),
+	relative_mileage NUMERIC (9, 3),
+	pointx NUMERIC (10, 3),
+	pointy NUMERIC (11, 3),
+	pointz NUMERIC (8, 3),
+	hand_hole_specifications VARCHAR (50),
+	base_install_situation VARCHAR (60),
+	circle_install_situation VARCHAR (60),
+	material_type VARCHAR (40),
+	stay_long NUMERIC (7, 2),
+	is_electronic_mark SMALLINT,
+	acceptance_results SMALLINT,
+	construct_unit VARCHAR (36),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	approve_status SMALLINT DEFAULT 0,
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 0
+);
+comment on table daq_appendages_hand_hole is '手孔表';
+comment on column daq_appendages_hand_hole.oid is '主键';
+comment on column daq_appendages_hand_hole.project_oid is '项目oid';
+comment on column daq_appendages_hand_hole.tenders_oid is '标段oid';
+comment on column daq_appendages_hand_hole.pipeline_oid is '管线oid';
+comment on column daq_appendages_hand_hole.pipe_segment_or_cross_oid is '线路段/穿跨越oid';
+comment on column daq_appendages_hand_hole.hand_hole_code is '孔编号';
+comment on column daq_appendages_hand_hole.hand_hole_name is '名称';
+comment on column daq_appendages_hand_hole.hand_hole_type is '类型';
+comment on column daq_appendages_hand_hole.median_stake_oid is '桩号';
+comment on column daq_appendages_hand_hole.relative_mileage is '相对桩位置(m)';
+comment on column daq_appendages_hand_hole.pointx is 'X坐标';
+comment on column daq_appendages_hand_hole.pointy is 'Y坐标';
+comment on column daq_appendages_hand_hole.pointz is '地表高程(m)';
+comment on column daq_appendages_hand_hole.hand_hole_specifications is '规格型号';
+comment on column daq_appendages_hand_hole.base_install_situation is '基础制造及安装情况';
+comment on column daq_appendages_hand_hole.circle_install_situation is '口圈及安装情况';
+comment on column daq_appendages_hand_hole.material_type is '材料类型';
+comment on column daq_appendages_hand_hole.stay_long is '光缆盘留长度(m)';
+comment on column daq_appendages_hand_hole.is_electronic_mark is '是否放置电子标识';
+comment on column daq_appendages_hand_hole.acceptance_results is '检查验收结果';
+comment on column daq_appendages_hand_hole.construct_unit is '施工单位';
+comment on column daq_appendages_hand_hole.supervision_unit is '监理单位';
+comment on column daq_appendages_hand_hole.supervision_engineer is '监理工程师';
+comment on column daq_appendages_hand_hole.collection_person is '采集人员';
+comment on column daq_appendages_hand_hole.collection_date is '采集日期';
+comment on column daq_appendages_hand_hole.geo_state is '空间数据状态';
+comment on column daq_appendages_hand_hole.approve_status is '审核状态';
+comment on column daq_appendages_hand_hole.remarks is '备注';
+comment on column daq_appendages_hand_hole.create_user_id is '创建人id';
+comment on column daq_appendages_hand_hole.create_user_name is '创建人名称';
+comment on column daq_appendages_hand_hole.create_datetime is '创建时间';
+comment on column daq_appendages_hand_hole.modify_user_id is '修改人id';
+comment on column daq_appendages_hand_hole.modify_user_name is '修改人名称';
+comment on column daq_appendages_hand_hole.modify_datetime is '修改时间';
+comment on column daq_appendages_hand_hole.active is '有效标志';
+create index INDEX_DAQ_APPENDAGES_HAND_HOLE_HAND_HOLE_NAME_10 ON daq_appendages_hand_hole ( hand_hole_name );
+select AddGeometryColumn('public', 'daq_appendages_hand_hole', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_appendages_hand_hole_geom_idx ON public.daq_appendages_hand_hole USING gist (geom);
+
+CREATE TABLE daq_appendages_obstacle (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_segment_or_cross_oid VARCHAR (36),
+	obstacle_code VARCHAR (45),
+	obstacle_name VARCHAR (45),
+	obstacle_type VARCHAR (50),
+	median_stake_oid VARCHAR (36),
+	relative_mileage NUMERIC (9, 3),
+	pointx NUMERIC (10, 3),
+	pointy NUMERIC (11, 3),
+	pointz NUMERIC (8, 3),
+	subordinate_unit VARCHAR (50),
+	address VARCHAR (75),
+	contacts VARCHAR (20),
+	telephone VARCHAR (15),
+	min_distance NUMERIC (7, 3),
+	is_through_pipeline SMALLINT,
+	construct_unit VARCHAR (36),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	approve_status SMALLINT DEFAULT 0,
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 0
+);
+comment on table daq_appendages_obstacle is '地下障碍物表';
+comment on column daq_appendages_obstacle.oid is '主键';
+comment on column daq_appendages_obstacle.project_oid is '项目oid';
+comment on column daq_appendages_obstacle.tenders_oid is '标段oid';
+comment on column daq_appendages_obstacle.pipeline_oid is '管线oid';
+comment on column daq_appendages_obstacle.pipe_segment_or_cross_oid is '线路段/穿跨越oid';
+comment on column daq_appendages_obstacle.obstacle_code is '障碍物编号';
+comment on column daq_appendages_obstacle.obstacle_name is '障碍物名称';
+comment on column daq_appendages_obstacle.obstacle_type is '障碍物类型';
+comment on column daq_appendages_obstacle.median_stake_oid is '桩号';
+comment on column daq_appendages_obstacle.relative_mileage is '相对桩位置(m)';
+comment on column daq_appendages_obstacle.pointx is 'X坐标';
+comment on column daq_appendages_obstacle.pointy is 'Y坐标';
+comment on column daq_appendages_obstacle.pointz is '高程(m)';
+comment on column daq_appendages_obstacle.subordinate_unit is '所属单位';
+comment on column daq_appendages_obstacle.address is '地址';
+comment on column daq_appendages_obstacle.contacts is '联系人';
+comment on column daq_appendages_obstacle.telephone is '电话';
+comment on column daq_appendages_obstacle.min_distance is '最小间距(m)';
+comment on column daq_appendages_obstacle.is_through_pipeline is '是否与管道交叉';
+comment on column daq_appendages_obstacle.construct_unit is '施工单位';
+comment on column daq_appendages_obstacle.supervision_unit is '监理单位';
+comment on column daq_appendages_obstacle.supervision_engineer is '监理工程师';
+comment on column daq_appendages_obstacle.collection_person is '采集人员';
+comment on column daq_appendages_obstacle.collection_date is '采集日期';
+comment on column daq_appendages_obstacle.geo_state is '空间数据状态';
+comment on column daq_appendages_obstacle.approve_status is '审核状态';
+comment on column daq_appendages_obstacle.remarks is '备注';
+comment on column daq_appendages_obstacle.create_user_id is '创建人id';
+comment on column daq_appendages_obstacle.create_user_name is '创建人名称';
+comment on column daq_appendages_obstacle.create_datetime is '创建时间';
+comment on column daq_appendages_obstacle.modify_user_id is '修改人id';
+comment on column daq_appendages_obstacle.modify_user_name is '修改人名称';
+comment on column daq_appendages_obstacle.modify_datetime is '修改时间';
+comment on column daq_appendages_obstacle.active is '有效标志';
+create index INDEX_DAQ_APPENDAGES_OBSTACLE_OBSTACLE_NAME_10 ON daq_appendages_obstacle ( obstacle_name );
+select AddGeometryColumn('public', 'daq_appendages_obstacle', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_appendages_obstacle_geom_idx ON public.daq_appendages_obstacle USING gist (geom);
+
+CREATE TABLE daq_appendages_hydraulic_protection (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_segment_or_cross_oid VARCHAR (36),
+	hydraulic_protection_code VARCHAR (45),
+	hydraulic_protection_type VARCHAR (45),
+	hydraulic_protection_name VARCHAR (45),
+	median_stake_oid VARCHAR (36),
+	relative_mileage NUMERIC (9, 3),
+	start_pointx NUMERIC (10, 3),
+	start_pointy NUMERIC (11, 3),
+	end_pointx NUMERIC (10, 3),
+	end_pointy NUMERIC (11, 3),
+	structure_size VARCHAR (45),
+	engineer_quatity NUMERIC (8, 3),
+	hydraulic_protection_material VARCHAR (50),
+	accept_date TIMESTAMP (6),
+	inspection_findings SMALLINT,
+	work_unit_oid VARCHAR (36),
+	construct_unit VARCHAR (36),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	approve_status SMALLINT DEFAULT 0,
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 0
+);
+comment on table daq_appendages_hydraulic_protection is '水工保护表';
+comment on column daq_appendages_hydraulic_protection.oid is '主键';
+comment on column daq_appendages_hydraulic_protection.project_oid is '项目oid';
+comment on column daq_appendages_hydraulic_protection.tenders_oid is '标段oid';
+comment on column daq_appendages_hydraulic_protection.pipeline_oid is '管线oid';
+comment on column daq_appendages_hydraulic_protection.pipe_segment_or_cross_oid is '线路段/穿跨越oid';
+comment on column daq_appendages_hydraulic_protection.hydraulic_protection_code is '水工保护名称';
+comment on column daq_appendages_hydraulic_protection.hydraulic_protection_type is '水工保护类型';
+comment on column daq_appendages_hydraulic_protection.hydraulic_protection_name is '水工保护编号';
+comment on column daq_appendages_hydraulic_protection.median_stake_oid is '桩号';
+comment on column daq_appendages_hydraulic_protection.relative_mileage is '相对桩位置(m)';
+comment on column daq_appendages_hydraulic_protection.start_pointx is '起点坐标X';
+comment on column daq_appendages_hydraulic_protection.start_pointy is '起点坐标Y';
+comment on column daq_appendages_hydraulic_protection.end_pointx is '终点坐标X';
+comment on column daq_appendages_hydraulic_protection.end_pointy is '终点坐标Y';
+comment on column daq_appendages_hydraulic_protection.structure_size is '结构尺寸';
+comment on column daq_appendages_hydraulic_protection.engineer_quatity is '工程量(m3)';
+comment on column daq_appendages_hydraulic_protection.hydraulic_protection_material is '水工保护材料';
+comment on column daq_appendages_hydraulic_protection.accept_date is '检查验收日期';
+comment on column daq_appendages_hydraulic_protection.inspection_findings is '检查结论';
+comment on column daq_appendages_hydraulic_protection.work_unit_oid is '施工机组代号';
+comment on column daq_appendages_hydraulic_protection.construct_unit is '施工单位';
+comment on column daq_appendages_hydraulic_protection.supervision_unit is '监理单位';
+comment on column daq_appendages_hydraulic_protection.supervision_engineer is '监理工程师';
+comment on column daq_appendages_hydraulic_protection.collection_person is '采集人员';
+comment on column daq_appendages_hydraulic_protection.collection_date is '采集日期';
+comment on column daq_appendages_hydraulic_protection.geo_state is '空间数据状态';
+comment on column daq_appendages_hydraulic_protection.approve_status is '审核状态';
+comment on column daq_appendages_hydraulic_protection.remarks is '备注';
+comment on column daq_appendages_hydraulic_protection.create_user_id is '创建人id';
+comment on column daq_appendages_hydraulic_protection.create_user_name is '创建人名称';
+comment on column daq_appendages_hydraulic_protection.create_datetime is '创建时间';
+comment on column daq_appendages_hydraulic_protection.modify_user_id is '修改人id';
+comment on column daq_appendages_hydraulic_protection.modify_user_name is '修改人名称';
+comment on column daq_appendages_hydraulic_protection.modify_datetime is '修改时间';
+comment on column daq_appendages_hydraulic_protection.active is '有效标志';
+create index INDEX_DAQ_APPENDAGES_HYDRAULIC_PROTECTION_HYDRAULIC_PROTECTION_CODE_9 ON daq_appendages_hydraulic_protection ( hydraulic_protection_code );
+select AddGeometryColumn('public', 'daq_appendages_hydraulic_protection', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_appendages_hydraulic_protection_geom_idx ON public.daq_appendages_hydraulic_protection USING gist (geom);
+
+CREATE TABLE daq_appendages_concomitant_road (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	concomitant_road_code VARCHAR (45),
+	concomitant_road_name VARCHAR (45),
+	concomitant_road_length NUMERIC (10, 2),
+	pavement_type VARCHAR (50),
+	road_width NUMERIC (7, 2),
+	commence_date TIMESTAMP (6),
+	completion_date TIMESTAMP (6),
+	construct_unit VARCHAR (36),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	approve_status SMALLINT,
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 0
+);
+comment on table daq_appendages_concomitant_road is '伴行道路表';
+comment on column daq_appendages_concomitant_road.oid is '主键';
+comment on column daq_appendages_concomitant_road.project_oid is '项目oid';
+comment on column daq_appendages_concomitant_road.tenders_oid is '标段oid';
+comment on column daq_appendages_concomitant_road.pipeline_oid is '管线oid';
+comment on column daq_appendages_concomitant_road.concomitant_road_code is '伴行道路编号';
+comment on column daq_appendages_concomitant_road.concomitant_road_name is '伴行道路名称';
+comment on column daq_appendages_concomitant_road.concomitant_road_length is '长度(m)';
+comment on column daq_appendages_concomitant_road.pavement_type is '路面类型';
+comment on column daq_appendages_concomitant_road.road_width is '路基宽度(mm)';
+comment on column daq_appendages_concomitant_road.commence_date is '开工日期';
+comment on column daq_appendages_concomitant_road.completion_date is '完工日期';
+comment on column daq_appendages_concomitant_road.construct_unit is '施工单位';
+comment on column daq_appendages_concomitant_road.supervision_unit is '监理单位';
+comment on column daq_appendages_concomitant_road.supervision_engineer is '监理工程师';
+comment on column daq_appendages_concomitant_road.collection_person is '采集人员';
+comment on column daq_appendages_concomitant_road.collection_date is '采集日期';
+comment on column daq_appendages_concomitant_road.geo_state is '空间数据状态';
+comment on column daq_appendages_concomitant_road.approve_status is '审核状态';
+comment on column daq_appendages_concomitant_road.remarks is '备注';
+comment on column daq_appendages_concomitant_road.create_user_id is '创建人id';
+comment on column daq_appendages_concomitant_road.create_user_name is '创建人名称';
+comment on column daq_appendages_concomitant_road.create_datetime is '创建时间';
+comment on column daq_appendages_concomitant_road.modify_user_id is '修改人id';
+comment on column daq_appendages_concomitant_road.modify_user_name is '修改人名称';
+comment on column daq_appendages_concomitant_road.modify_datetime is '修改时间';
+comment on column daq_appendages_concomitant_road.active is '有效标志';
+create index INDEX_DAQ_APPENDAGES_CONCOMITANT_ROAD_CONCOMITANT_ROAD_CODE_8 ON daq_appendages_concomitant_road ( concomitant_road_code );
+create index INDEX_DAQ_APPENDAGES_CONCOMITANT_ROAD_CONCOMITANT_ROAD_NAME_9 ON daq_appendages_concomitant_road ( concomitant_road_name );
+
+CREATE TABLE daq_appendages_casing_pipe (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_segment_or_cross_oid VARCHAR (36),
+	start_median_stake_oid VARCHAR (36),
+	start_relative_mileage NUMERIC (6, 0),
+	end_median_stake_oid VARCHAR (36),
+	end_relative_mileage NUMERIC (6, 0),
+	start_pointx NUMERIC (10, 3),
+	start_pointy NUMERIC (11, 3),
+	end_pointx NUMERIC (10, 3),
+	end_pointy NUMERIC (11, 3),
+	casing_pipe_type VARCHAR (50),
+	casing_pipe_length NUMERIC (9, 2),
+	casing_pipe_specifications VARCHAR (40),
+	construct_date TIMESTAMP (6),
+	construct_unit VARCHAR (36),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	approve_status SMALLINT DEFAULT 0,
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 0
+);
+comment on table daq_appendages_casing_pipe is '套管表';
+comment on column daq_appendages_casing_pipe.oid is '主键';
+comment on column daq_appendages_casing_pipe.project_oid is '项目oid';
+comment on column daq_appendages_casing_pipe.tenders_oid is '标段oid';
+comment on column daq_appendages_casing_pipe.pipeline_oid is '管线oid';
+comment on column daq_appendages_casing_pipe.pipe_segment_or_cross_oid is '线路段/穿跨越oid';
+comment on column daq_appendages_casing_pipe.start_median_stake_oid is '起始桩号';
+comment on column daq_appendages_casing_pipe.start_relative_mileage is '相对起始桩位置(m)';
+comment on column daq_appendages_casing_pipe.end_median_stake_oid is '结束桩号';
+comment on column daq_appendages_casing_pipe.end_relative_mileage is '相对结束桩位置(m)';
+comment on column daq_appendages_casing_pipe.start_pointx is '起点坐标X';
+comment on column daq_appendages_casing_pipe.start_pointy is '起点坐标Y';
+comment on column daq_appendages_casing_pipe.end_pointx is '终点坐标X';
+comment on column daq_appendages_casing_pipe.end_pointy is '终点坐标Y';
+comment on column daq_appendages_casing_pipe.casing_pipe_type is '套管类型';
+comment on column daq_appendages_casing_pipe.casing_pipe_length is '套管长度(m)';
+comment on column daq_appendages_casing_pipe.casing_pipe_specifications is '套管规格';
+comment on column daq_appendages_casing_pipe.construct_date is '施工日期';
+comment on column daq_appendages_casing_pipe.construct_unit is '施工单位';
+comment on column daq_appendages_casing_pipe.supervision_unit is '监理单位';
+comment on column daq_appendages_casing_pipe.supervision_engineer is '监理工程师';
+comment on column daq_appendages_casing_pipe.collection_person is '采集人员';
+comment on column daq_appendages_casing_pipe.collection_date is '采集日期';
+comment on column daq_appendages_casing_pipe.geo_state is '空间数据状态';
+comment on column daq_appendages_casing_pipe.approve_status is '审核状态';
+comment on column daq_appendages_casing_pipe.remarks is '备注';
+comment on column daq_appendages_casing_pipe.create_user_id is '创建人id';
+comment on column daq_appendages_casing_pipe.create_user_name is '创建人名称';
+comment on column daq_appendages_casing_pipe.create_datetime is '创建时间';
+comment on column daq_appendages_casing_pipe.modify_user_id is '修改人id';
+comment on column daq_appendages_casing_pipe.modify_user_name is '修改人名称';
+comment on column daq_appendages_casing_pipe.modify_datetime is '修改时间';
+comment on column daq_appendages_casing_pipe.active is '有效标志';
+select AddGeometryColumn('public', 'daq_appendages_casing_pipe', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_appendages_casing_pipe_geom_idx ON public.daq_appendages_casing_pipe USING gist (geom);
+/**********管道附属物end***************/
+/**********中低压begin***************/
+
+/**********中低压end***************/

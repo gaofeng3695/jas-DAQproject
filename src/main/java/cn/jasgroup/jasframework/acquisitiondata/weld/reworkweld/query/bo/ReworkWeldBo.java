@@ -62,12 +62,17 @@ public class ReworkWeldBo extends CommonBaseBo {
 	/**
 	 * 线路段/穿跨越名称
 	 */
-	private String name; 
+	private String pipeSegmentOrCrossName; 
 
 	/** 
-	 * 返修口编号
+	 * 返修口id
 	 */
 	private String weldOid; 
+	
+	/**
+	 * 返修口编号
+	 */
+	private String weldCode;
 
 	/**
 	 *  返修后焊口编号
@@ -89,20 +94,40 @@ public class ReworkWeldBo extends CommonBaseBo {
 	 */
 	private String weldProduce; 
 
+	/**
+	 *  焊接工艺规程编号
+	 */
+	private String weldProduceCode; 
+
 	/** 
 	 * 填充人员 
 	 */
 	private String coverOid; 
 
 	/** 
+	 * 填充人员名称 
+	 */
+	private String coverName; 
+
+	/** 
 	 * 打底人员
 	 */
-	private String padderOid; 
+	private String padderOid;
+
+	/** 
+	 * 打底人员名称 
+	 */
+	private String padderName; 
 
 	/** 
 	 * 盖面人员
 	 */
 	private String renderOid; 
+
+	/** 
+	 * 盖面人员名称 
+	 */
+	private String renderName; 
 
 	/**
 	 *  焊接日期
@@ -114,15 +139,30 @@ public class ReworkWeldBo extends CommonBaseBo {
 	 */
 	private String constructUnit; 
 
+	/** 
+	 * 施工单位名称
+	 */
+	private String constructUnitName; 
+
+	/**
+	 *  施工机组oid
+	 */
+	private String workUnitOid; 
+
 	/**
 	 *  施工机组代号
 	 */
-	private String workUnitOid; 
+	private String workUnitName; 
 
 	/**
 	 * 监理单位
 	 */
 	private String supervisionUnit; 
+
+	/**
+	 * 监理单位名称
+	 */
+	private String supervisionUnitName; 
 
 	/**
 	 *  监理工程师
@@ -154,6 +194,38 @@ public class ReworkWeldBo extends CommonBaseBo {
 
 	public String getProjectOid() {
 		return projectOid;
+	}
+
+	public String getWeldProduceCode() {
+		return weldProduceCode;
+	}
+
+	public void setWeldProduceCode(String weldProduceCode) {
+		this.weldProduceCode = weldProduceCode;
+	}
+
+	public String getCoverName() {
+		return coverName;
+	}
+
+	public void setCoverName(String coverName) {
+		this.coverName = coverName;
+	}
+
+	public String getPadderName() {
+		return padderName;
+	}
+
+	public void setPadderName(String padderName) {
+		this.padderName = padderName;
+	}
+
+	public String getRenderName() {
+		return renderName;
+	}
+
+	public void setRenderName(String renderName) {
+		this.renderName = renderName;
 	}
 
 	public void setProjectOid(String projectOid) {
@@ -208,12 +280,12 @@ public class ReworkWeldBo extends CommonBaseBo {
 		this.pipeSegmentOrCrossOid = pipeSegmentOrCrossOid;
 	}
 
-	public String getName() {
-		return name;
+	public String getPipeSegmentOrCrossName() {
+		return pipeSegmentOrCrossName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setPipeSegmentOrCrossName(String pipeSegmentOrCrossName) {
+		this.pipeSegmentOrCrossName = pipeSegmentOrCrossName;
 	}
 
 	public String getWeldOid() {
@@ -222,6 +294,14 @@ public class ReworkWeldBo extends CommonBaseBo {
 
 	public void setWeldOid(String weldOid) {
 		this.weldOid = weldOid;
+	}
+
+	public String getWeldCode() {
+		return weldCode;
+	}
+
+	public void setWeldCode(String weldCode) {
+		this.weldCode = weldCode;
 	}
 
 	public String getReworkWeldCode() {
@@ -298,6 +378,14 @@ public class ReworkWeldBo extends CommonBaseBo {
 		this.constructUnit = constructUnit;
 	}
 
+	public String getConstructUnitName() {
+		return constructUnitName;
+	}
+
+	public void setConstructUnitName(String constructUnitName) {
+		this.constructUnitName = constructUnitName;
+	}
+
 	public String getWorkUnitOid() {
 		return workUnitOid;
 	}
@@ -306,12 +394,28 @@ public class ReworkWeldBo extends CommonBaseBo {
 		this.workUnitOid = workUnitOid;
 	}
 
+	public String getWorkUnitName() {
+		return workUnitName;
+	}
+
+	public void setWorkUnitName(String workUnitName) {
+		this.workUnitName = workUnitName;
+	}
+
 	public String getSupervisionUnit() {
 		return supervisionUnit;
 	}
 
 	public void setSupervisionUnit(String supervisionUnit) {
 		this.supervisionUnit = supervisionUnit;
+	}
+
+	public String getSupervisionUnitName() {
+		return supervisionUnitName;
+	}
+
+	public void setSupervisionUnitName(String supervisionUnitName) {
+		this.supervisionUnitName = supervisionUnitName;
 	}
 
 	public String getSupervisionEngineer() {
@@ -346,6 +450,6 @@ public class ReworkWeldBo extends CommonBaseBo {
 
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
-	} 
+	}
 	
 }

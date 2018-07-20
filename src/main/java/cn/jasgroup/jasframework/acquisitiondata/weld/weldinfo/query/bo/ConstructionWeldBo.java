@@ -32,7 +32,7 @@ public class ConstructionWeldBo extends CommonBaseBo {
 	/**
 	 * 项目编号
 	 */
-	private String projectCode;
+	private String projectName;
 
 	/**
 	 * 管线oid
@@ -42,7 +42,7 @@ public class ConstructionWeldBo extends CommonBaseBo {
 	/**
 	 * 管线编号
 	 */
-	private String pipelineCode;
+	private String pipelineName;
 
 	/**
 	 * 标段oid
@@ -52,7 +52,7 @@ public class ConstructionWeldBo extends CommonBaseBo {
 	/**
 	 * 标段编号
 	 */
-	private String tendersCode;
+	private String tendersName;
 
 	/**
 	 * 线路段/穿跨越
@@ -108,6 +108,10 @@ public class ConstructionWeldBo extends CommonBaseBo {
 	 * 前管件类型
 	 */
 	private String frontPipeType;
+	/**
+	 * 前管件类型名称
+	 */
+	private String frontPipeTypeName;
 
 	/**
 	 * 前管件编号
@@ -118,6 +122,11 @@ public class ConstructionWeldBo extends CommonBaseBo {
 	 * 后管件类型
 	 */
 	private String backPipeType;
+	
+	/**
+	 * 后管件类型名称
+	 */
+	private String backPipeTypeName;
 
 	/**
 	 * 后管件编号
@@ -138,6 +147,11 @@ public class ConstructionWeldBo extends CommonBaseBo {
 	 * 焊接工艺规程
 	 */
 	private String weldProduce;
+
+	/**
+	 *  焊接工艺规程编号
+	 */
+	private String weldProduceCode; 
 
 	/**
 	 * 外观质量检查
@@ -164,20 +178,35 @@ public class ConstructionWeldBo extends CommonBaseBo {
 	 */
 	private String workUnitCode;
 
-	/**
-	 * 盖面人员
+	/** 
+	 * 填充人员 
 	 */
-	private String coverOid;
+	private String coverOid; 
 
-	/**
-	 * 填充人员
+	/** 
+	 * 填充人员名称 
+	 */
+	private String coverName; 
+
+	/** 
+	 * 打底人员
 	 */
 	private String padderOid;
 
-	/**
-	 * 打底人员
+	/** 
+	 * 打底人员名称 
 	 */
-	private String renderOid;
+	private String padderName; 
+
+	/** 
+	 * 盖面人员
+	 */
+	private String renderOid; 
+
+	/** 
+	 * 盖面人员名称 
+	 */
+	private String renderName; 
 
 	/**
 	 * 是否金口
@@ -250,12 +279,28 @@ public class ConstructionWeldBo extends CommonBaseBo {
 		this.projectOid = projectOid;
 	}
 
-	public String getProjectCode() {
-		return projectCode;
+	public String getProjectName() {
+		return projectName;
 	}
 
-	public void setProjectCode(String projectCode) {
-		this.projectCode = projectCode;
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public String getPipelineName() {
+		return pipelineName;
+	}
+
+	public void setPipelineName(String pipelineName) {
+		this.pipelineName = pipelineName;
+	}
+
+	public String getTendersName() {
+		return tendersName;
+	}
+
+	public void setTendersName(String tendersName) {
+		this.tendersName = tendersName;
 	}
 
 	public String getPipelineOid() {
@@ -266,28 +311,12 @@ public class ConstructionWeldBo extends CommonBaseBo {
 		this.pipelineOid = pipelineOid;
 	}
 
-	public String getPipelineCode() {
-		return pipelineCode;
-	}
-
-	public void setPipelineCode(String pipelineCode) {
-		this.pipelineCode = pipelineCode;
-	}
-
 	public String getTendersOid() {
 		return tendersOid;
 	}
 
 	public void setTendersOid(String tendersOid) {
 		this.tendersOid = tendersOid;
-	}
-
-	public String getTendersCode() {
-		return tendersCode;
-	}
-
-	public void setTendersCode(String tendersCode) {
-		this.tendersCode = tendersCode;
 	}
 
 	public String getPipeSegmentOrCrossOid() {
@@ -426,6 +455,14 @@ public class ConstructionWeldBo extends CommonBaseBo {
 		this.weldProduce = weldProduce;
 	}
 
+	public String getWeldProduceCode() {
+		return weldProduceCode;
+	}
+
+	public void setWeldProduceCode(String weldProduceCode) {
+		this.weldProduceCode = weldProduceCode;
+	}
+
 	public Integer getSurfaceCheck() {
 		return surfaceCheck;
 	}
@@ -472,6 +509,30 @@ public class ConstructionWeldBo extends CommonBaseBo {
 
 	public void setCoverOid(String coverOid) {
 		this.coverOid = coverOid;
+	}
+
+	public String getCoverName() {
+		return coverName;
+	}
+
+	public void setCoverName(String coverName) {
+		this.coverName = coverName;
+	}
+
+	public String getPadderName() {
+		return padderName;
+	}
+
+	public void setPadderName(String padderName) {
+		this.padderName = padderName;
+	}
+
+	public String getRenderName() {
+		return renderName;
+	}
+
+	public void setRenderName(String renderName) {
+		this.renderName = renderName;
 	}
 
 	public String getPadderOid() {
@@ -582,4 +643,20 @@ public class ConstructionWeldBo extends CommonBaseBo {
 		this.remarks = remarks;
 	}
 
+	public String getFrontPipeTypeName() {
+		return frontPipeTypeName;
+	}
+
+	public void setFrontPipeTypeName(String frontPipeTypeName) {
+		this.frontPipeTypeName = frontPipeTypeName;
+	}
+
+	public String getBackPipeTypeName() {
+		return backPipeTypeName;
+	}
+
+	public void setBackPipeTypeName(String backPipeTypeName) {
+		this.backPipeTypeName = backPipeTypeName;
+	}
+	
 }

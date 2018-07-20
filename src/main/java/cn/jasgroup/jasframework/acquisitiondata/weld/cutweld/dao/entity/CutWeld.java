@@ -1,6 +1,8 @@
 package cn.jasgroup.jasframework.acquisitiondata.weld.cutweld.dao.entity;
 
+import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
+import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
 import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
 import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
@@ -13,12 +15,28 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
   * @since JDK1.8。
   *<p>创建日期：2018年7月6日 下午5:35:47。</p>
   *{@link cn.jasgroup.jasframework.acquisitiondata.weld.cutweld.service.CutWeldService #savePipeAfterCut()}
+  *{@link cn.jasgroup.jasframework.acquisitiondata.weld.cutweld.service.CutWeldService #updatePipeAfterCut()}
+  *{@link cn.jasgroup.jasframework.acquisitiondata.weld.cutweld.service.CutWeldService #deletePipeAfterCut()}
  */
 @CommonSaveConfig(
 	scene = "/cutWeld/save",
 	afterAdvice = {
 			//将切管后的钢管信息保存到钢管表
 			@Process(service = "cutWeldService", method = "savePipeAfterCut()")
+	}
+)
+@CommonUpdateConfig(
+	scene = "/cutWeld/update",
+	afterAdvice = {
+			//将切管后的钢管信息保存到钢管表
+			@Process(service = "cutWeldService", method = "updatePipeAfterCut()")
+	}
+)
+@CommonDeleteConfig(
+	scene = "/cutWeld/delete",
+	beforeAdvice = {
+			//将切管后的钢管信息保存到钢管表
+			@Process(service = "cutWeldService", method = "deletePipeAfterCut()")
 	}
 )
 @JdbcEntity(name="daq_cut_pipe")
@@ -37,7 +55,7 @@ public class CutWeld extends CommonJdbcEntity{
 	/**
 	 * 标段oid
 	 */
-	private String tendersOid; 
+	private String tendersOid;
 
 	/**
 	 * 钢管编号
@@ -87,7 +105,7 @@ public class CutWeld extends CommonJdbcEntity{
 	/**
 	 * 审核状态
 	 */
-	private Integer approveStatus;
+	private Integer approveStatus = 0;
 	
 	/**
 	 * 备注 

@@ -50,8 +50,8 @@
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item label="线路段/穿跨越" prop="pipeSegmentOid">
-							<el-select v-model="topSearch.pipeSegmentOid" clearable placeholder="请选择线路段" size="small">
+						<el-form-item label="线路段/穿跨越" prop="pipeSegmentOrCrossOid">
+							<el-select v-model="topSearch.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small">
 								<el-option v-for="item in domain.pipeSegment" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
@@ -104,7 +104,7 @@
 					projectOid: '',
 					tendersOid: '',
 					pipelineOid: '',
-					pipeSegmentOid: '', //线路段
+					pipeSegmentOrCrossOid: '', //线路段
 					pipeColdBendingCode: '', //冷弯管编号
 					isUse: '',
 					"page": 1,
@@ -124,7 +124,7 @@
 					field: 'tendersName'
 				},{
 					name:"线路段名称",
-					field:"pipeSegmentName"
+					field:"pipeSegmentOrCrossName"
 				},{
 					name: '冷弯管编号',
 					field: 'pipeColdBendingCode'
@@ -238,7 +238,7 @@
 					that.domain.pipeline = [];
 					that.topSearch.pipelineOid = '';
 					that.domain.pipeSegment = [];
-					that.topSearch.pipeSegmentOid = '';
+					that.topSearch.pipeSegmentOrCrossOid = '';
 				}
 			},
 			tendersChanged: function (val) { //根据标段触发管线列表
@@ -256,7 +256,7 @@
 					that.domain.pipeline = [];
 					that.topSearch.pipelineOid = '';
 					that.domain.pipeSegment = [];
-					that.topSearch.pipeSegmentOid = '';
+					that.topSearch.pipeSegmentOrCrossOid = '';
 				}
 			},
 			pipelineChanged: function (val) { //根据管线触发线路段/穿跨越
@@ -272,7 +272,7 @@
 							});
 				} else {
 					that.domain.pipeSegment = [];
-					that.topSearch.pipeSegmentOid = '';
+					that.topSearch.pipeSegmentOrCrossOid = '';
 				}
 			},
 			searchList: function () {
@@ -282,7 +282,7 @@
 				this.topSearch.projectOid = '';
 				this.topSearch.pipelineOid = '';
 				this.topSearch.tendersOid = '';
-				this.topSearch.pipeSegmentOid = '';
+				this.topSearch.pipeSegmentOrCrossOid = '';
 				this.topSearch.pipeColdBendingCode = '';
 				this.topSearch.isUse='';
 				this.$refs.table.search();

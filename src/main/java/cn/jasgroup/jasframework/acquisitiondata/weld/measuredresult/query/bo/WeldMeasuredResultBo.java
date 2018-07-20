@@ -2,6 +2,11 @@ package cn.jasgroup.jasframework.acquisitiondata.weld.measuredresult.query.bo;
 
 import java.util.Date;
 
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 
 /**
@@ -27,7 +32,7 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 	/**
 	 * 项目编号
 	 */
-	private String projectCode;
+	private String projectName;
 
 	/**
 	 * 管线oid
@@ -37,7 +42,7 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 	/**
 	 * 管线编号
 	 */
-	private String pipelineCode;
+	private String pipelineName;
 
 	/**
 	 * 标段oid
@@ -47,7 +52,7 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 	/**
 	 * 标段编号
 	 */
-	private String tendersCode;
+	private String tendersName;
 
 	/**
 	 * 线路段/穿跨越
@@ -118,6 +123,16 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 	 * 测量日期
 	 */
 	private Date surveyDate;
+	
+	/**
+	 * 施工机组代号
+	 */
+	private String workUnitOid;
+	
+	/**
+	 * 施工机组代号
+	 */
+	private String workUnitName;
 
 	/**
 	 * 施工单位
@@ -162,7 +177,7 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 	/**
 	 * 审核状态
 	 */
-	private Integer approveStatus;
+	private Integer approveStatus = 0;
 
 	/**
 	 * 备注
@@ -185,12 +200,12 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 		this.projectOid = projectOid;
 	}
 
-	public String getProjectCode() {
-		return projectCode;
+	public String getProjectName() {
+		return projectName;
 	}
 
-	public void setProjectCode(String projectCode) {
-		this.projectCode = projectCode;
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
 	}
 
 	public String getPipelineOid() {
@@ -201,12 +216,12 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 		this.pipelineOid = pipelineOid;
 	}
 
-	public String getPipelineCode() {
-		return pipelineCode;
+	public String getPipelineName() {
+		return pipelineName;
 	}
 
-	public void setPipelineCode(String pipelineCode) {
-		this.pipelineCode = pipelineCode;
+	public void setPipelineName(String pipelineName) {
+		this.pipelineName = pipelineName;
 	}
 
 	public String getTendersOid() {
@@ -217,12 +232,12 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 		this.tendersOid = tendersOid;
 	}
 
-	public String getTendersCode() {
-		return tendersCode;
+	public String getTendersName() {
+		return tendersName;
 	}
 
-	public void setTendersCode(String tendersCode) {
-		this.tendersCode = tendersCode;
+	public void setTendersName(String tendersName) {
+		this.tendersName = tendersName;
 	}
 
 	public String getPipeSegmentOrCrossOid() {
@@ -329,12 +344,31 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 		this.surveyCrew = surveyCrew;
 	}
 
+
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+	@Temporal(TemporalType.TIMESTAMP)
 	public Date getSurveyDate() {
 		return surveyDate;
 	}
 
 	public void setSurveyDate(Date surveyDate) {
 		this.surveyDate = surveyDate;
+	}
+
+	public String getWorkUnitOid() {
+		return workUnitOid;
+	}
+
+	public void setWorkUnitOid(String workUnitOid) {
+		this.workUnitOid = workUnitOid;
+	}
+
+	public String getWorkUnitName() {
+		return workUnitName;
+	}
+
+	public void setWorkUnitName(String workUnitName) {
+		this.workUnitName = workUnitName;
 	}
 
 	public String getConstructUnit() {
@@ -385,6 +419,8 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 		this.collectionPerson = collectionPerson;
 	}
 
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+	@Temporal(TemporalType.TIMESTAMP)
 	public Date getCollectionDate() {
 		return collectionDate;
 	}

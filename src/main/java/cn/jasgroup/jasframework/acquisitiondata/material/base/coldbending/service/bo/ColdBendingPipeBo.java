@@ -26,11 +26,11 @@ public class ColdBendingPipeBo extends CommonBaseBo{
 	/** 管线名称 */
 	private String pipelineName; 
 
-	/** 线路段oid */
-	private String pipeSegmentOid;
+	/** 线路段/穿跨越oid */
+	private String pipeSegmentOrCrossOid;
 	
-	/** 线路段名称 */
-	private String pipeSegmentName; 
+	/** 线路段/穿跨越名称 */
+	private String pipeSegmentOrCrossName; 
 
 	/** 原材料钢管编号 */
 	private String pipeCode; 
@@ -152,20 +152,20 @@ public class ColdBendingPipeBo extends CommonBaseBo{
 		this.pipelineName = pipelineName;
 	}
 
-	public String getPipeSegmentOid() {
-		return pipeSegmentOid;
+	public String getPipeSegmentOrCrossOid() {
+		return pipeSegmentOrCrossOid;
 	}
 
-	public void setPipeSegmentOid(String pipeSegmentOid) {
-		this.pipeSegmentOid = pipeSegmentOid;
+	public void setPipeSegmentOrCrossOid(String pipeSegmentOrCrossOid) {
+		this.pipeSegmentOrCrossOid = pipeSegmentOrCrossOid;
 	}
 
-	public String getPipeSegmentName() {
-		return pipeSegmentName;
+	public String getPipeSegmentOrCrossName() {
+		return pipeSegmentOrCrossName;
 	}
 
-	public void setPipeSegmentName(String pipeSegmentName) {
-		this.pipeSegmentName = pipeSegmentName;
+	public void setPipeSegmentOrCrossName(String pipeSegmentOrCrossName) {
+		this.pipeSegmentOrCrossName = pipeSegmentOrCrossName;
 	}
 
 	public String getPipeCode() {

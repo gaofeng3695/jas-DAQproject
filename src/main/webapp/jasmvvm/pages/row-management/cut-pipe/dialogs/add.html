@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<link rel="stylesheet" href="./../../../../lib/font-awesome-4.7.0/css/font-awesome.css">
+	<link rel="stylesheet" href="./../../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../../src/css/main.css">
+	<style>
+		html,
+		body {
+			width: 100%;
+		}
+
+		#app {
+			width: 100%;
+			height: 100%;
+			position: relative;
+			overflow: hidden;
+		}
+
+		.content {
+			height: calc(100% - 40px);
+			overflow-y: auto;
+			overflow-x: hidden;
+		}
+
+		.el-form-item {
+			margin-bottom: 15px !important;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="app" v-cloak>
+		<jas-dialog-wrapper>
+			<div class="content">
+				<el-form ref="formData" :rules="rules" :model="formData" label-width="150px">
+					<jas-base-group-title name="基础数据"></jas-base-group-title>
+					<el-row :gutter="10">
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="项目名称" prop="projectOid" required>
+								<el-select v-model="formData.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
+									<el-option v-for="item in domain.project" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="标段名称" prop="tendersOid" required>
+								<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
+									<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="管线名称" prop="pipelineOid" required>
+								<el-select v-model="formData.pipelineOid" clearable placeholder="请选择管线名称" size="small">
+									<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="钢管编号" prop="pipeOid" required>
+								<el-select v-model="formData.pipeOid"  clearable :disabled="isEdit" placeholder="请选择钢管编号" size="small">
+									<el-option v-for="item in domain.pipes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="管径(mm)">
+								<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData.pipeDiameter" clearable
+								  placeholder="请输入管径(mm)" size="small"></el-input-number>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="壁厚(mm)">
+								<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData.wallThickness" clearable
+								  placeholder="请输入壁厚(mm)" size="small"></el-input-number>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="分割段数" prop="segmentsNum" required>
+								<el-input-number :precision="0" :min="1" :step="1" :max="5" controls-position="right" v-model="formData.segmentsNum" clearable
+								  placeholder="请输入分割段数" size="small" @change="isInputLength"></el-input-number>
+							</el-form-item>
+						</el-col>
+						<template v-for="item in segmentArrs">
+							<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+								<el-form-item :label="item.label" :prop="item.key" required>
+									<el-input-number :precision="3" :step="1" :min="0" :max="1000000" controls-position="right" v-model="formData[item.key]" clearable
+									  :placeholder="item.placeholder" size="small"></el-input-number>
+								</el-form-item>
+							</el-col>
+						</template>
+						<!--<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="第一段长度(m)" prop="firstParagraphLength" required>
+								<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData.firstParagraphLength" clearable
+								  placeholder="请输入第一段长度(m)" size="small"></el-input-number>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+								<el-form-item label="第二段长度(m)" prop="secondParagraphLength" required>
+								<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData.secondParagraphLength" clearable
+								  placeholder="请输入第二段长度(m)" size="small"></el-input-number>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+								<el-form-item label="第三段长度(m)" prop="thirdParagraphLength" required>
+								<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData.thirdParagraphLength" clearable
+								  placeholder="请输入第三段长度(m)" size="small"></el-input-number>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+								<el-form-item label="第四段长度(m)" prop="fourthParagraphLength" required>
+								<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData.fourthParagraphLength" clearable
+								  placeholder="请输入第四段长度(m)" size="small"></el-input-number>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+								<el-form-item label="第五段长度(m)" prop="fifthParagraphLength" required>
+								<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData.fifthParagraphLength" clearable
+								  placeholder="请输入第五段长度(m)" size="small"></el-input-number>
+							</el-form-item>
+						</el-col>-->
+					</el-row>
+					<jas-base-group-title name="其他信息"></jas-base-group-title>
+					<el-row>
+						<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+							<el-form-item label="备注" prop="remarks">
+								<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"></el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<!-- <el-row>
+					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+						<el-form-item label="模板上传" prop="file">
+						</el-form-item>
+					</el-col>
+				</el-row> -->
+					<!--<jas-base-group-title name="附件信息"></jas-base-group-title>
+
+				<jas-file-upload ref="upload" @success="uploadSuccess"></jas-file-upload>-->
+				</el-form>
+			</div>
+			<div slot="footer" class="dialog-footer" style="text-align: center">
+				<el-button size="small" @click="cancel()">取 消</el-button>
+				<el-button size="small" type="primary" @click="submit('formData')">确 定
+				</el-button>
+			</div>
+		</jas-dialog-wrapper>
+	</div>
+</body>
+<script src="./../../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../../lib/vue/vue.js"></script>
+<script src="./../../../../lib/element-ui/v2.4.1/index.min.js"></script>
+<script src="./../../../../common/components/jas-components.js "></script>
+<script src="./../../../../common/js/jas-tools.js"></script>
+<!--<script src="js/ajaxFileUpload.js"></script>-->
+<script>
+	var app = new Vue({
+		el: "#app",
+		data: function () {
+			var that = this;
+			return {
+				isEdit: false,
+				segmentArrs: [{
+					label: "第一段长度(m)",
+					key: "firstParagraphLength",
+					placeholder: "请输入第一段长度(m)"
+				}], //表示分割几段
+				domain: {
+					project: [],
+					pipeline: [],
+					tenders: [],
+					pipes: []
+				},
+				rules: {
+					projectOid: [{
+						required: true,
+						message: '项目名称为必填项',
+						trigger: 'change'
+					}],
+					tendersOid: [{
+						required: true,
+						message: '标段名称为必填项',
+						trigger: 'change'
+					}],
+					pipelineOid: [{
+						required: true,
+						message: '管线名称为必填项',
+						trigger: 'change'
+					}],
+					pipeOid: [{
+						required: true,
+						message: '钢管编号必填项',
+						trigger: 'change'
+					}],
+					segmentsNum: [{
+						required: true,
+						message: '分割段数为必填项',
+						trigger: 'change'
+					}],
+					firstParagraphLength: [{
+						required: true,
+						message: '第一段长度为必填项',
+						trigger: 'change'
+					}]
+				},
+				formData: {
+					projectOid: "",
+					pipelineOid: "",
+					tendersOid: "",
+					segmentsNum: "",
+					wallThickness:"",
+					remarks: ""
+				},
+
+			}
+		},
+		mounted: function () {
+			var that = this;
+			var param = window.jasTools.base.getParamsInUrl(location.href);
+
+			if (param.oid) {
+				this.oid = param.oid;
+				this.formData.oid = this.oid;
+				this.isEdit = true;
+				this.getDetailByObjectId();
+			}else{
+				this.requestDomainFromBizTable(
+						'/daq/materialPipe/getCutAndNotUse.do', {},
+						function (arr) {
+							that.domain.pipes = arr;
+						});	
+			}
+
+			this.requestDomainFromBizTable('/daq/privilege/getProjectList.do', {}, function (arr) {
+				that.domain.project = arr;
+			});
+		},
+		methods: {
+			cancel: function (param) {
+				window.parent.jasTools.dialog.close(param);
+			},
+			requestDomainFromBizTable: function (url, obj, cb) {
+				var that = this;
+				var url = jasTools.base.rootPath + url;
+				jasTools.ajax.post(url, obj, function (data) {
+					cb && cb(data.rows);
+				}, function () {
+					cb && cb([]);
+				});
+			},
+			projectChanged: function (val) {
+				var that = this;
+				if (val) {
+					this.requestDomainFromBizTable(
+						'/daq/privilege/getTendersList.do', {
+							projectOid: val
+						},
+						function (arr) {
+							that.domain.tenders = arr;
+						});
+				} else {
+					that.domain.tenders = [];
+					that.formData.tendersOid = '';
+					that.domain.pipeline = [];
+					that.formData.pipelineOid = '';
+
+				}
+
+			},
+
+			tendersChanged: function (val) { //根据标段触发管线列表
+				var that = this;
+				if (val) {
+					this.requestDomainFromBizTable(
+						'/daq/privilege/getPipelineListByTendersOid.do', {
+							tendersOid: val
+						},
+						function (arr) {
+							that.domain.pipeline = arr;
+						});
+				} else {
+					that.domain.pipeline = [];
+					that.formData.pipelineOid = '';
+
+				}
+
+			},
+			isInputLength: function (val) {
+				var that = this;
+				var indexs = ['firstParagraphLength', 'secondParagraphLength', 'thirdParagraphLength', 'fourthParagraphLength',
+					'fifthParagraphLength'
+				];
+				var num=['一','二','三','四','五'];
+				that.segmentArrs=[];
+				for (var i = 0; i < val; i++) {
+					var obj = {
+						label: "第"+num[i]+"段长度(m)",
+						key: indexs[i],
+						placeholder: "请输入第"+num[i]+"段长度(m)"
+					};
+					if(!that.rules[indexs[i]]){
+						that.rules[indexs[i]]={
+							required: true,
+						    message: '第'+num[i]+'段长度为必填项',
+					        trigger: 'change'	
+						};
+					}
+					that.segmentArrs.push(obj);
+				}
+				// alert("长度")
+				// secondParagraphLength: [{
+				// 		required: true,
+				// 		message: '第二段长度为必填项',
+				// 		trigger: 'change'
+				// 	}],
+				// 	thirdParagraphLength: [{
+				// 		required: true,
+				// 		message: '第三段长度为必填项',
+				// 		trigger: 'change'
+				// 	}],
+				// 	fourthParagraphLength: [{
+				// 		required: true,
+				// 		message: '第四段长度为必填项',
+				// 		trigger: 'change'
+				// 	}],
+
+				// 	fifthParagraphLength: [{
+				// 		required: true,
+				// 		message: '第五段长度为必填项',
+				// 		trigger: 'change'
+				// 	}]
+			},
+			submit: function (formName) {
+				var that = this;
+				this.$refs[formName].validate(function (valid) {
+					if (valid) {
+						that.save();
+					}
+				});
+			},
+
+			save: function () {
+				var that = this;
+				var msg = "";
+				if (!this.isEdit) {
+					msg = "增加成功";
+					url = jasTools.base.rootPath +
+						"/jdbc/commonData/cutWeld/save.do";
+				} else {
+					msg = "修改成功";
+					delete that.formData.isUse;
+					url = jasTools.base.rootPath +
+						"/jdbc/commonData/cutWeld/update.do";
+				}
+
+				jasTools.ajax.post(url, that.formData, function (data) {
+					top.Vue.prototype.$message({
+						type: 'success',
+						message: !this.isEdit ? '保存成功' : '修改成功'
+					});
+					that.cancel(1);
+				});
+
+			},
+			// uploadSuccess: function () {
+			// 	top.Vue.prototype.$message({firstParagraphLength:"",
+				// 	secondParagraphLength:"",
+					// 	thirdParagraphLength:"",
+					// 	fourthParagraphLength:"",
+					// 	fifthParagraphLength:"",
+			// 		type: 'success',
+			// 		message: !this.isEdit ? '保存成功' : '修改成功'
+			// 	});
+			
+			// 	this.cancel(1);
+			// },
+			getDetailByObjectId: function () {
+				var that = this;
+				var url = jasTools.base.rootPath + "/jdbc/commonData/cutWeld/getPage.do";
+				jasTools.ajax.post(url, {
+					oid: that.oid
+				}, function (data) {
+					that.formData=data.rows[0];
+					that.domain.pipes.push({
+						key:data.rows[0].pipeOid,
+						value:data.rows[0].pipeCode
+					});
+					that.projectChanged(data.rows[0].projectOid);
+					that.tendersChanged(data.rows[0].tendersOid);
+					that.isInputLength(data.rows[0].segmentsNum);
+
+				});
+			},
+		},
+	});
+</script>
+
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>detection-magnetic-powder</title>
+	<!-- <link rel="stylesheet" href="./libelement-ui/element-#0E2B4A/src/index.css"> -->
+	<link rel="stylesheet" href="./../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../lib/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="./../../../src/css/main.css">
+
+</head>
+
+<body>
+	<div id="app" v-cloak>
+		<jas-list-wrapper>
+			<jas-search-for-list slot="search" :form="topSearch" :fields="fields" :fields-config="fieldsConfig" @search="searchList"></jas-search-for-list>
+			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" :search-path="searchPath"
+			  :add-url="addUrl" :detail-url="detailUrl" :delete-path="deletePath" :class-name="className" :template-code="templateCode"></jas-table-for-list>
+		</jas-list-wrapper>
+
+	</div>
+</body>
+
+<script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../lib/vue/vue.js"></script>
+<script src="./../../../lib/element-ui/v2.4.1/index.min.js"></script>
+<script src="./../../../common/components/jas-components.js"></script>
+<script src="./../../../common/js/jas-tools.js"></script>
+<script>
+	var vm = new Vue({
+		el: '#app',
+		data: function () {
+			return {
+				className: '',
+				templateCode: '',
+				searchPath: '/jdbc/commonData/detectionMagneticPowder/getPage.do',
+				deletePath: '/jdbc/commonData/detectionMagneticPowder/delete.do',
+				addUrl: './pages/row-detection/detection-magnetic-powder/dialogs/add.html',
+				detailUrl: './pages/row-detection/detection-magnetic-powder/dialogs/detail.html',
+				privilegeCode: '',
+				topSearch: {
+					projectOid: '',
+					tendersOid: '',
+					pipelineOid: '',
+					pipeSegmentOrCrossOid: '', //线路段
+				},
+				fields: [ //
+					{
+						field: "projectOid",
+						name: '项目名称'
+					}, {
+						field: "tendersOid",
+						name: '标段名称'
+					}, {
+						field: "pipelineOid",
+						name: '管线名称'
+					}, {
+						field: "pipeSegmentOrCrossOid",
+						name: '线路段/传跨越'
+					}, {
+						name: '焊口编号',
+						field: 'weldCode'
+					}
+				],
+				fieldsConfig: {
+					projectOid: {
+						type: 'select',
+						optionUrl: '/daq/privilege/getProjectList.do',
+						childSelect: ['tendersOid'],
+						childUrl: ['/daq/privilege/getTendersList.do'],
+					},
+					tendersOid: {
+						type: 'select',
+						childSelect: ['pipelineOid'],
+						childUrl: ['/daq/privilege/getPipelineListByTendersOid.do', '/daq/privilege/getSupervisionUnitByTendersOid.do'],
+					},
+					pipelineOid: {
+						type: 'select',
+						childSelect: ['pipeSegmentOrCrossOid'],
+						childUrl: ['/daq/privilege/getPipeSegmentOrCrossList.do'],
+					},
+					pipeSegmentOrCrossOid: {
+						type: 'select',
+					},
+					weldCode:{
+						type: 'input',
+					}
+				},
+				tableFields: [ //
+					{
+						name: '项目名称',
+						field: 'projectName'
+					}, {
+						name: '标段名称',
+						field: 'tendersName'
+					}, {
+						name: '管线名称',
+						field: 'pipelineName'
+					}, {
+						name: "线路段/穿跨越名称",
+						field: "pipeSegmentOrCrossName"
+					}, {
+						name: '焊口编号',
+						field: 'weldCode'
+					}, {
+						name: '检测报告编号',
+						field: 'detectionReportNum'
+					}, {
+						name: '检测日期',
+						field: 'detectionDeta'
+					}, {
+						name: '评定结果',
+						field: 'evaluationResult',
+						formatter: function (row, column, cellValue, index) {
+							if (cellValue == 1) return '合格';
+							if (cellValue == 2) return '不合格';
+							return cellValue;
+						}
+					}, {
+						name: '检测处置',
+						field: 'detectionDispose',
+						formatter: function (row, column, cellValue, index) {
+							if (cellValue == 1) return '返修';
+							if (cellValue == 2) return '割口';
+							return cellValue;
+						}
+					}, {
+						name: '检测长度(mm)',
+						field: 'detectionLength'
+					},{
+						name: '检测单位',
+						field: 'detectionUnitName'
+					}, {
+						name: '检测人员',
+						field: 'detectionPerson'
+					}, {
+						name: '监理单位',
+						field: 'supervisionUnitName'
+					}, {
+						name: '监理工程师',
+						field: 'supervisionEngineer'
+					}, {
+						name: '采集日期',
+						field: 'collectionDate'
+					}
+				],
+			}
+		},
+
+		mounted: function () {
+			var that = this;
+			var param = window.jasTools.base.getParamsInUrl(location.href);
+			this.privilegeCode = param.privilegeCode;
+			this.templateCode = param.templateCode; //|| "stake-2";
+			this.className = param.className; // || 'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';
+		},
+		methods: {
+			searchList: function () {
+				this.$refs.table.search();
+			},
+		},
+	});
+</script>
+
+</html>

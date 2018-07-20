@@ -44,7 +44,7 @@ public class ColdBendingPipeQuery extends BaseJavaQuery{
 	/**
 	 * 线路段oid
 	 */
-	private String pipeSegmentOid;
+	private String pipeSegmentOrCrossOid;
 	
 	/**
 	 * 冷弯管编号
@@ -58,15 +58,16 @@ public class ColdBendingPipeQuery extends BaseJavaQuery{
 	
 	@Override
 	public String getSql() {
-		String sql = "select t.oid,p.project_name,l.pipeline_name,s.tenders_name,t.oid,t.project_oid,t.tenders_oid,t.pipeline_oid,t.pipe_segment_oid,t.pipe_code,t.certificate_num,t.pipe_cold_bending_code,t.pipe_bending_standards,t.bending_radius,t.bending_angle,t.curve_length,t.straight_pipe_length,t.pipe_length,t.ellipticity,t.wall_thickness_redurate,t.pipe_diameter,t.wall_thickness,t.produce_date,t.construct_unit,t.supervision_unit,t.supervision_engineer,t.collection_person,t.collection_date,t.remarks,case when t.is_use=1 then '是' else '否' end as is_use,v.name as pipe_segment_name"
-				+ ",t.create_user_id,t.create_user_name,t.create_datetime,t.modify_user_id,t.modify_user_name,t.modify_datetime,u.unit_name as construct_unit_name,uu.unit_name as supervision_unit_name "
+		String sql = "select t.oid,p.project_name,l.pipeline_name,s.tenders_name,t.oid,t.project_oid,t.tenders_oid,t.pipeline_oid,t.pipe_segment_or_cross_oid,t.pipe_oid,t.certificate_num,t.pipe_cold_bending_code,t.pipe_bending_standards,t.bending_radius,t.bending_angle,t.curve_length,t.straight_pipe_length,t.pipe_length,t.ellipticity,t.wall_thickness_redurate,t.pipe_diameter,t.wall_thickness,t.produce_date,t.construct_unit,t.supervision_unit,t.supervision_engineer,t.collection_person,t.collection_date,t.remarks,case when t.is_use=1 then '是' else '否' end as is_use,v.name as pipe_segment_or_cross_name"
+				+ ",t.create_user_id,t.create_user_name,t.create_datetime,t.modify_user_id,t.modify_user_name,t.modify_datetime,u.unit_name as construct_unit_name,uu.unit_name as supervision_unit_name,pp.pipe_code "
 				+ "from daq_material_pipe_cold_bending t "
 				+ "left join (select oid,project_name from daq_project) p on p.oid=t.project_oid "
 				+ "left join (select oid,pipeline_name from daq_pipeline) l on l.oid=t.pipeline_oid "
 				+ "left join (select oid,tenders_name from daq_tenders) s on s.oid=t.tenders_oid "
-				+ "left join v_daq_pipe_segment_cross v on v.oid = t.pipe_segment_oid "
+				+ "left join v_daq_pipe_segment_cross v on v.oid = t.pipe_segment_or_cross_oid "
 				+ "left join(select oid,unit_name from pri_unit) u on t.construct_unit = u.oid "
 				+ "left join(select oid,unit_name from pri_unit) uu on t.supervision_unit = uu.oid "
+				+ "left join(select oid,pipe_code from daq_material_pipe) pp on t.oid = pp.oid "
 				+ "where t.active=1";
 		if(StringUtils.isNotBlank(oid)){
 			sql += " and t.oid = :oid";
@@ -80,13 +81,13 @@ public class ColdBendingPipeQuery extends BaseJavaQuery{
 			if(StringUtils.isNotBlank(tendersOid)){
 				sql += " and t.tenders_oid = :tendersOid";
 			}
-			if(StringUtils.isNotBlank(pipeSegmentOid)){
-				sql += " and t.pipe_segment_oid = :pipeSegmentOid";
+			if(StringUtils.isNotBlank(pipeSegmentOrCrossOid)){
+				sql += " and t.pipe_segment_or_cross_oid = :pipeSegmentOrCrossOid";
 			}
 			if(StringUtils.isNotBlank(pipeColdBendingCode)){
 				sql +=" and t.pipe_cold_bending_code like :pipeColdBendingCode";
 			}
-			if(StringUtils.isNotBlank(String.valueOf(isUse))){
+			if(null!=isUse){
 				sql +=" and t.is_use=:isUse";
 			}
 			sql +=  this.dataAuthoritySql;
@@ -119,11 +120,14 @@ public class ColdBendingPipeQuery extends BaseJavaQuery{
 	public void setPipelineOid(String pipelineOid) {
 		this.pipelineOid = pipelineOid;
 	}
-	public String getPipeSegmentOid() {
-		return pipeSegmentOid;
+
+
+	public String getPipeSegmentOrCrossOid() {
+		return pipeSegmentOrCrossOid;
 	}
-	public void setPipeSegmentOid(String pipeSegmentOid) {
-		this.pipeSegmentOid = pipeSegmentOid;
+
+	public void setPipeSegmentOrCrossOid(String pipeSegmentOrCrossOid) {
+		this.pipeSegmentOrCrossOid = pipeSegmentOrCrossOid;
 	}
 
 	public String getPipeColdBendingCode() {

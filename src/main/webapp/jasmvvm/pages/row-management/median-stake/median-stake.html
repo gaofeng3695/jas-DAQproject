@@ -57,7 +57,7 @@
 						</el-col>
 					</el-row>
 				</el-form>
-				<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" search-path="/jdbc/commonData/medianStake/getPage.do"
+				<jas-table-for-list ref="table" slot="list" :self-btns="['locate']"  :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" search-path="/jdbc/commonData/medianStake/getPage.do"
 				  :add-url="addUrl" :detail-url="detailUrl" delete-path="/daq/medianStake/delete.do" @locate="locate" :class-name="className"
 				  :template-code="templateCode"></jas-table-for-list>
 			</jas-list-wrapper>

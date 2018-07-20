@@ -41,10 +41,10 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 	private String pipelineOid; 
 
 	/** 线路段oid */
-	private String pipeSegmentOid; 
+	private String pipeSegmentOrCrossOid; 
 
 	/** 原材料钢管编号 */
-	private String pipeCode; 
+	private String pipeOid; 
 
 	/** 冷弯管编号 */
 	private String pipeColdBendingCode; 
@@ -135,24 +135,24 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 		super.setField("pipelineOid");
 	}
 	
-	@Column(name="pipe_segment_oid")
-	public String getPipeSegmentOid() {
-		return pipeSegmentOid;
+	@Column(name="pipe_segment_or_cross_oid")
+	public String getPipeSegmentOrCrossOid() {
+		return pipeSegmentOrCrossOid;
 	}
 
-	public void setPipeSegmentOid(String pipeSegmentOid) {
-		this.pipeSegmentOid = pipeSegmentOid;
-		super.setField("pipeSegmentOid");
+	public void setPipeSegmentOrCrossOid(String pipeSegmentOrCrossOid) {
+		this.pipeSegmentOrCrossOid = pipeSegmentOrCrossOid;
+		super.setField("pipeSegmentOrCrossOid");
 	}
 	
-	@Column(name="pipe_code")
-	public String getPipeCode() {
-		return pipeCode;
+	@Column(name="pipe_oid")
+	public String getPipeOid() {
+		return pipeOid;
 	}
 
-	public void setPipeCode(String pipeCode) {
-		this.pipeCode = pipeCode;
-		super.setField("pipeCode");
+	public void setPipeOid(String pipeOid) {
+		this.pipeOid = pipeOid;
+		super.setField("pipeOid");
 	}
 	
 	@Column(name="pipe_cold_bending_code")

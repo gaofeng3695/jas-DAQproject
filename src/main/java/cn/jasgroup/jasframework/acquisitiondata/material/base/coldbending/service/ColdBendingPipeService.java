@@ -63,6 +63,6 @@ public class ColdBendingPipeService extends CommonDataHibernateService{
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public void chanageOriginalPipeUseState(ColdBendingPipe clodBendingPipe){
-		this.coldBendingPipeDao.chanageOriginalPipeUseState(clodBendingPipe.getPipeCode());
+		this.coldBendingPipeDao.chanageOriginalPipeUseState(clodBendingPipe.getPipeOid());
 	}
 }

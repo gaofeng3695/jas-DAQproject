@@ -20,14 +20,15 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 	  * <p>创建日期:2018年7月3日 下午1:59:46。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public List<Map<String,Object>> getProjectList(String unitOid){
+	public List<Map<String,Object>> getProjectList(String unitOid,String pipeNetworkTypeCode){
 		String sql = "with recursive pri_unit_temp(oid,parent_id) as ("
 				+ "select t.oid,t.parent_id from pri_unit t where t.oid=? and t.active=1 "
 				+ "union all "
 				+ "select t.oid,t.parent_id from pri_unit t inner join pri_unit_temp b on t.parent_id=b.oid and t.active=1 "
 				+ ")"
-				+ "select distinct p.oid as key,p.project_name as value from daq_implement_scope_ref s left join (select oid,project_name from daq_project where active=1) p on s.project_oid=p.oid where s.unit_oid in (select oid from pri_unit_temp)";
-		return this.queryForList(sql, new Object[]{unitOid});
+				+ "select distinct p.oid as key,p.project_name as value from daq_implement_scope_ref s left join (select oid,project_name,pipe_network_type_code from daq_project where active=1) p on s.project_oid=p.oid where s.unit_oid in (select oid from pri_unit_temp) "
+				+ "and p.pipe_network_type_code=?";
+		return this.queryForList(sql, new Object[]{unitOid,pipeNetworkTypeCode});
 	}
 	
 	/***
@@ -149,9 +150,29 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 				+ "union all "
 				+ "select t.oid,t.parent_id from pri_unit t inner join pri_unit_temp b on t.parent_id=b.oid and t.active=1 "
 				+ ")"
-				+ "select distinct c.oid as key,c.cross_code as value,c.cross_length as length from daq_cross c left join daq_implement_scope_ref t on t.scope_oid=c.oid where t.unit_oid in (select oid from pri_unit_temp) ";
+				+ "select distinct c.oid as key,c.cross_name as value,c.cross_length as length from daq_cross c left join daq_implement_scope_ref t on t.scope_oid=c.oid where t.unit_oid in (select oid from pri_unit_temp) ";
 			sql += " and t.pipeline_oid='"+pipelineOid+"'";
 			sql +="  and c.cross_way_code='"+crossWay+"'";
 		return this.queryForList(sql, null);
+	}
+	/***
+	  * <p>功能描述：根据管线oid获取当前用户所在部门及下级部门下的线路段列表。</p>
+	  * <p> 雷凯。</p>	
+	  * @param pipelineOid
+	  * @param unitOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年7月11日 下午3:22:00。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String,Object>> getPipeSegmentList(String pipelineOid,String unitOid){
+		String sql = "with recursive pri_unit_temp(oid,parent_id) as ("
+				+ "select t.oid,t.parent_id from pri_unit t where t.oid='"+unitOid+"' and t.active=1 "
+				+ "union all "
+				+ "select t.oid,t.parent_id from pri_unit t inner join pri_unit_temp b on t.parent_id=b.oid and t.active=1 "
+				+ ")"
+				+ "select distinct s.oid as key,s.pipe_segment_code as value from daq_pipe_segment s left join daq_implement_scope_ref t on t.scope_oid=s.oid where t.unit_oid in (select oid from pri_unit_temp)";
+			sql += " and t.pipeline_oid='"+pipelineOid+"'";
+			return this.queryForList(sql, null);
 	}
 }

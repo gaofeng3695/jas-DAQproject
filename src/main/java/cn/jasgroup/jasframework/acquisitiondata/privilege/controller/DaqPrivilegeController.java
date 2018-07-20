@@ -9,12 +9,15 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import cn.jasgroup.framework.automation.query.MapQuery;
+import cn.jasgroup.framework.automation.service.VariateInjectService;
 import cn.jasgroup.framework.data.result.BaseResult;
 import cn.jasgroup.framework.data.result.ListResult;
 import cn.jasgroup.jasframework.acquisitiondata.privilege.service.DaqPrivilegeService;
@@ -29,6 +32,8 @@ public class DaqPrivilegeController extends BaseController{
 	@Resource(name="daqPrivilegeService")
 	private DaqPrivilegeService daqPrivilegeService;
 	
+	@Autowired
+	private VariateInjectService variateInjectService;
 	/***
 	  * <p>功能描述：获取当前用户所在部门下的项目列表。</p>
 	  * <p> 雷凯。</p>	
@@ -38,10 +43,14 @@ public class DaqPrivilegeController extends BaseController{
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	@RequestMapping(value="getProjectList")
-	public Object getProjectList(HttpServletRequest request){
+	public Object getProjectList(HttpServletRequest request,@RequestBody Map<String,String> param){
 		ListResult<Map<String,Object>> result = null;
 		try {
-			List<Map<String,Object>> rows = this.daqPrivilegeService.getProject();
+			String pipeNetworkTypeCode = param.get("pipeNetworkTypeCode");
+			if(StringUtils.isBlank(pipeNetworkTypeCode)){
+				pipeNetworkTypeCode = "pipe_network_code_001";
+			}
+			List<Map<String,Object>> rows = this.daqPrivilegeService.getProject(pipeNetworkTypeCode);
 			result = new ListResult<>(1, "200", "ok", rows);
 		} catch (Exception e) {
 			result = new ListResult<>(-1, "400", "error");			
@@ -185,7 +194,13 @@ public class DaqPrivilegeController extends BaseController{
 		ListResult<Map<String,Object>> result = null;
 		try {
 			String pipeSegmentOrCrossOid = param.get("pipeSegmentOrCrossOid");
-			if(StringUtils.isBlank(pipeSegmentOrCrossOid)){
+			if(StringUtils.isNotBlank(param.get("pipeSegmentOrCrossOid"))){
+				pipeSegmentOrCrossOid = param.get("pipeSegmentOrCrossOid");
+			}else if(StringUtils.isNotBlank(param.get("crossOid"))){
+				pipeSegmentOrCrossOid = param.get("crossOid");
+			}else if(StringUtils.isNotBlank(param.get("pipeSegmentOid"))){
+				pipeSegmentOrCrossOid = param.get("pipeSegmentOid");
+			}else{
 				return new BaseResult(-1, "error", "oid不能为空！");
 			}
 			List<Map<String,Object>> rows = this.daqPrivilegeService.getMedianStakeList(pipeSegmentOrCrossOid);
@@ -241,6 +256,30 @@ public class DaqPrivilegeController extends BaseController{
 			String pipelineOid = param.get("pipelineOid");
 			String crossWay = param.get("crossWay");
 			List<Map<String,Object>> rows = this.daqPrivilegeService.getCrossList(pipelineOid,crossWay);
+			result = new ListResult<>(1, "200", "ok", rows);
+		} catch (Exception e) {
+			result = new ListResult<>(-1, "400", "error");
+			e.printStackTrace();
+		}
+		return result;
+	}
+	/***
+	 * <p>功能描述：根据管线oid获取当前用户所在部门及下级部门下的线路段列表。</p>
+	 * <p> 雷凯。</p>	
+	 * @param request
+	 * @param param
+	 * @return
+	 * @since JDK1.8。
+	 * <p>创建日期:2018年7月10日 下午6:18:12。</p>
+	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="/getPipeSegmentList",method = RequestMethod.POST)
+	@ResponseBody
+	public Object getPipeSegmentList(HttpServletRequest request,@RequestBody Map<String,String> param){
+		ListResult<Map<String,Object>> result = null;
+		try {
+			String pipelineOid = param.get("pipelineOid");
+			List<Map<String,Object>> rows = this.daqPrivilegeService.getPipeSegmentList(pipelineOid);
 			result = new ListResult<>(1, "200", "ok", rows);
 		} catch (Exception e) {
 			result = new ListResult<>(-1, "400", "error");
