@@ -102,7 +102,7 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getSupervisionUnitByTendersOid(String tendersOid){
-		String sql = "select t.oid as key,t.unit_name as value from pri_unit t left join daq_implement_scope_ref i on t.oid = i.unit_oid where i.tenders_oid=? and t.hierarchy like 'Unit.0001.0004%' and t.active=1";
+		String sql = "select distinct t.oid as key,t.unit_name as value from pri_unit t left join daq_implement_scope_ref i on t.oid = i.unit_oid where i.tenders_oid=? and t.hierarchy like 'Unit.0001.0004%' and t.active=1";
 		return this.queryForList(sql, new Object[]{tendersOid});
 	}
 	/***
@@ -115,7 +115,7 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getConstructionUnitByTendersOid(String tendersOid){
-		String sql = "select t.oid as key,t.unit_name as value from pri_unit t left join daq_implement_scope_ref i on t.oid = i.unit_oid where i.tenders_oid=? and t.hierarchy like 'Unit.0001.0005%' and t.active=1";
+		String sql = "select distinct t.oid as key,t.unit_name as value from pri_unit t left join daq_implement_scope_ref i on t.oid = i.unit_oid where i.tenders_oid=? and t.hierarchy like 'Unit.0001.0005%' and t.active=1";
 		return this.queryForList(sql, new Object[]{tendersOid});
 	}
 	

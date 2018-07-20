@@ -1056,7 +1056,7 @@ CREATE TABLE daq_check_coating_pipe (
 	oid varchar(36) NOT NULL,
 	project_oid varchar(36),
 	tenders_oid varchar(36),
-	construction_unit varchar(36),
+	construct_unit varchar(36),
 	pipe_code varchar(50),
 	groove_check varchar(5),
 	pipe_end_proring_check varchar(5),
@@ -1080,7 +1080,6 @@ comment on table daq_check_coating_pipe IS '防腐管检查及信息记录表';
 comment on column daq_check_coating_pipe.oid IS '主键';
 comment on column daq_check_coating_pipe.project_oid IS '项目oid';
 comment on column daq_check_coating_pipe.tenders_oid IS '标段oid';
-comment on column daq_check_coating_pipe.construction_unit IS '施工单位';
 comment on column daq_check_coating_pipe.pipe_code IS '钢管编号';
 comment on column daq_check_coating_pipe.groove_check IS '坡口检查';
 comment on column daq_check_coating_pipe.pipe_end_proring_check IS '管端保护圈';
@@ -1089,6 +1088,7 @@ comment on column daq_check_coating_pipe.diameter_check IS '管径偏差+0.2mm�
 comment on column daq_check_coating_pipe.coating_io_ends_check IS '防腐层端部内外涂层';
 comment on column daq_check_coating_pipe.excess_weld_metal IS '管端焊缝余高（0mm）';
 comment on column daq_check_coating_pipe.ovality IS '椭圆度<0.6%D';
+comment on column daq_check_coating_pipe.construct_unit IS '施工单位';
 comment on column daq_check_coating_pipe.checked_by IS '检查人';
 comment on column daq_check_coating_pipe.checked_date IS '检查日期';
 comment on column daq_check_coating_pipe.remarks IS '备注';
@@ -1104,7 +1104,7 @@ CREATE TABLE daq_check_hot_bends (
 	oid varchar(36) NOT NULL,
 	project_oid varchar(36),
 	tenders_oid varchar(36),
-	construction_unit varchar(36),
+	construct_unit varchar(36),
 	hot_bends_code varchar(50),
 	weld_position varchar(5),
 	pipe_length varchar(5),
@@ -1127,7 +1127,6 @@ comment on table daq_check_hot_bends IS '热煨弯管检查信息记录表';
 comment on column daq_check_hot_bends.oid IS '主键';
 comment on column daq_check_hot_bends.project_oid IS '项目oid';
 comment on column daq_check_hot_bends.tenders_oid IS '标段oid';
-comment on column daq_check_hot_bends.construction_unit IS '施工单位';
 comment on column daq_check_hot_bends.hot_bends_code IS '弯管编号';
 comment on column daq_check_hot_bends.weld_position IS '纵焊缝位置';
 comment on column daq_check_hot_bends.pipe_length IS '直管段长度';
@@ -1135,6 +1134,7 @@ comment on column daq_check_hot_bends.ovality IS '椭圆度<0.6%D';
 comment on column daq_check_hot_bends.groove_check IS '坡口检查';
 comment on column daq_check_hot_bends.coating_io_face_check IS '防腐层内外表面质量';
 comment on column daq_check_hot_bends.coating_io_ends_check IS '防腐层端部内外涂层';
+comment on column daq_check_hot_bends.construct_unit IS '施工单位';
 comment on column daq_check_hot_bends.checked_by IS '检查人';
 comment on column daq_check_hot_bends.checked_date IS '检查日期';
 comment on column daq_check_hot_bends.remarks IS '备注';
@@ -1150,7 +1150,7 @@ CREATE TABLE daq_check_insulated_joint (
 	oid varchar(36) NOT NULL,
 	project_oid varchar(36),
 	tenders_oid varchar(36),
-	construction_unit varchar(36),
+	construct_unit varchar(36),
 	manufacturer_code varchar(36),
 	certification_num varchar(60),
 	diameter numeric(9,3),
@@ -1173,7 +1173,6 @@ comment on table daq_check_insulated_joint IS '绝缘接头检查及信息记录
 comment on column daq_check_insulated_joint.oid IS '主键';
 comment on column daq_check_insulated_joint.project_oid IS '项目oid';
 comment on column daq_check_insulated_joint.tenders_oid IS '标段oid';
-comment on column daq_check_insulated_joint.construction_unit IS '施工单位';
 comment on column daq_check_insulated_joint.manufacturer_code IS '出厂编号';
 comment on column daq_check_insulated_joint.certification_num IS '合格证编号';
 comment on column daq_check_insulated_joint.diameter IS '公称直径(mm)';
@@ -1183,6 +1182,7 @@ comment on column daq_check_insulated_joint.test_equipment IS '测试仪器';
 comment on column daq_check_insulated_joint.specand_model IS '仪器规格型号';
 comment on column daq_check_insulated_joint.resistance_val IS '实测绝缘电阻值(MΩ)';
 comment on column daq_check_insulated_joint.check_results IS '验收结论';
+comment on column daq_check_insulated_joint.construct_unit IS '施工单位';
 comment on column daq_check_insulated_joint.remarks IS '备注';
 comment on column daq_check_insulated_joint.create_user_id IS '创建人id';
 comment on column daq_check_insulated_joint.create_user_name IS '创建人名称';
@@ -1196,7 +1196,7 @@ CREATE TABLE daq_check_pipe_cold_bending (
 	oid varchar(36) NOT NULL,
 	project_oid varchar(36),
 	tenders_oid varchar(36),
-	construction_unit varchar(36),
+	construct_unit varchar(36),
 	pipe_cold_bending_code varchar(50),
 	certificate_num varchar(60),
 	pipe_length numeric(9,3),
@@ -1224,7 +1224,6 @@ comment on table daq_check_pipe_cold_bending IS '冷弯管检查及信息记录�
 comment on column daq_check_pipe_cold_bending.oid IS '主键';
 comment on column daq_check_pipe_cold_bending.project_oid IS '项目oid';
 comment on column daq_check_pipe_cold_bending.tenders_oid IS '标段oid';
-comment on column daq_check_pipe_cold_bending.construction_unit IS '施工单位';
 comment on column daq_check_pipe_cold_bending.pipe_cold_bending_code IS '冷弯管编号';
 comment on column daq_check_pipe_cold_bending.certificate_num IS '合格证编号';
 comment on column daq_check_pipe_cold_bending.pipe_length IS '弯管长度(m)';
@@ -1237,6 +1236,7 @@ comment on column daq_check_pipe_cold_bending.ovality IS '椭圆度<0.6%D';
 comment on column daq_check_pipe_cold_bending.groove_check IS '坡口检查';
 comment on column daq_check_pipe_cold_bending.coating_io_face_check IS '防腐层内外表面质量';
 comment on column daq_check_pipe_cold_bending.coating_io_ends_check IS '防腐层端部内外涂层';
+comment on column daq_check_pipe_cold_bending.construct_unit IS '施工单位';
 comment on column daq_check_pipe_cold_bending.checked_by IS '检查人';
 comment on column daq_check_pipe_cold_bending.checked_date IS '检查日期';
 comment on column daq_check_pipe_cold_bending.remarks IS '备注';
@@ -1252,7 +1252,7 @@ CREATE TABLE daq_check_reducer (
 	oid varchar(36) NOT NULL,
 	project_oid varchar(36),
 	tenders_oid varchar(36),
-	construction_unit varchar(36),
+	construct_unit varchar(36),
 	reducer_code varchar(36),
 	ovality varchar(5),
 	groove_check varchar(5),
@@ -1273,12 +1273,12 @@ comment on table daq_check_reducer IS '大小头检查及信息记录表';
 comment on column daq_check_reducer.oid IS '主键';
 comment on column daq_check_reducer.project_oid IS '项目oid';
 comment on column daq_check_reducer.tenders_oid IS '标段oid';
-comment on column daq_check_reducer.construction_unit IS '施工单位';
 comment on column daq_check_reducer.reducer_code IS '大小头编号';
 comment on column daq_check_reducer.ovality IS '椭圆度<0.6%D';
 comment on column daq_check_reducer.groove_check IS '坡口检查';
 comment on column daq_check_reducer.coating_io_face_check IS '防腐层内外表面质量';
 comment on column daq_check_reducer.coating_io_ends_check IS '防腐层端部内外涂层';
+comment on column daq_check_reducer.construct_unit IS '施工单位';
 comment on column daq_check_reducer.checked_by IS '检查人';
 comment on column daq_check_reducer.checked_date IS '检查日期';
 comment on column daq_check_reducer.remarks IS '备注';
@@ -1294,7 +1294,7 @@ CREATE TABLE daq_check_tee (
 	oid varchar(36) NOT NULL,
 	project_oid varchar(36),
 	tenders_oid varchar(36),
-	construction_unit varchar(36),
+	construct_unit varchar(36),
 	tee_code varchar(36),
 	pipe_wall_thickness numeric(9,3),
 	branch_wall_thickness numeric(9,3),
@@ -1317,7 +1317,6 @@ comment on table daq_check_tee IS '三通检查及信息记录表';
 comment on column daq_check_tee.oid IS '主键';
 comment on column daq_check_tee.project_oid IS '项目oid';
 comment on column daq_check_tee.tenders_oid IS '标段oid';
-comment on column daq_check_tee.construction_unit IS '施工单位';
 comment on column daq_check_tee.tee_code IS '三通编号';
 comment on column daq_check_tee.pipe_wall_thickness IS '管端壁厚(mm)';
 comment on column daq_check_tee.branch_wall_thickness IS '拔制端壁厚（mm）';
@@ -1325,6 +1324,7 @@ comment on column daq_check_tee.ovality IS '椭圆度<0.6%D';
 comment on column daq_check_tee.groove_check IS '坡口检查';
 comment on column daq_check_tee.coating_io_face_check IS '防腐层内外表面质量';
 comment on column daq_check_tee.coating_io_ends_check IS '防腐层端部内外涂层';
+comment on column daq_check_tee.construct_unit IS '施工单位';
 comment on column daq_check_tee.checked_by IS '检查人';
 comment on column daq_check_tee.checked_date IS '检查日期';
 comment on column daq_check_tee.remarks IS '备注';
