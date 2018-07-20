@@ -34,7 +34,7 @@ import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 )
 @UniqueConstraints(
 	strategys ={
-		@UniqueConstraintStrategy(columnNames={"pipeColdBendingCode"})
+		@UniqueConstraintStrategy(columnNames={"certificateNum"})
 	}
 )
 @JdbcEntity(name="daq_check_pipe_cold_bending")

@@ -63,8 +63,11 @@
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="冷弯管编号" prop="pipeColdBendingCode" required>
-							<el-input v-model="formData.pipeColdBendingCode" clearable placeholder="请输入冷弯管" size="small"></el-input>
+						<el-form-item label="冷弯管编号" prop="pipeColdBendingOid" required>
+							<!-- <el-input v-model="formData.pipeColdBendingCode" clearable placeholder="请输入冷弯管" size="small"></el-input> -->
+							<el-select v-model="formData.pipeColdBendingOid" clearable placeholder="请输入冷弯管 " size="small">
+								<el-option v-for="item in domain.pipeColdBendingOidArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
@@ -205,9 +208,10 @@
 					constructUnitArr: [],
 					project: [], //项目
 					tenders: [], //标段
+					pipeColdBendingOidArr:[]
 				},
 				rules: {
-					pipeColdBendingCode: [{
+					pipeColdBendingOid: [{
 						required: true,
 						message: '冷弯管编号为必填项',
 						trigger: 'change'
@@ -237,7 +241,7 @@
 					projectOid:"",
 					tendersOid:"",
 					constructUnit:"",
-					"pipeColdBendingCode": "",
+					"pipeColdBendingOid": "",
 					"certificateNum": "",
 					"productionUnit": "",
 					"pipeLength": "",
@@ -276,7 +280,7 @@
 					arr) {
 					that.domain.project = arr;
 				});
-			this.tendersChanged("1");
+			this.getConstructUnit();
 		},
 		methods: {
 			requestDomainFromBizTable: function (url, obj, cb) {
@@ -310,14 +314,15 @@
 				if (val) {
 					this
 						.requestDomainFromBizTable(
-							'/daq/privilege/getCurrentUnitId.do', {
+							'/daq/clodBendingPipe/getList.do', {
+								tendersOid:val
 							},
 							function (arr) {
-								that.domain.constructUnitArr = arr;
+								that.domain.pipeColdBendingOidArr = arr;
 							});
 				} else {
-					that.domain.constructUnitArr = [];
-					that.formData.constructUnit = '';
+					that.domain.pipeColdBendingOidArr = [];
+					that.topSearch.pipeColdBendingOid = '';
 				}
 			},
 			cancel: function (param) {
@@ -373,7 +378,17 @@
 					that.tendersChanged(data.rows[0].tendersOid);
 				});
 				
-			},
+			},getConstructUnit: function(){
+				var that = this;
+				this.requestDomainFromBizTable(
+					'/daq/privilege/getCurrentUnitId.do', {
+					},
+					function (arr) {
+						that.domain.constructUnitArr = arr;
+					}
+				);
+				
+			}
 		},
 	});
 </script>

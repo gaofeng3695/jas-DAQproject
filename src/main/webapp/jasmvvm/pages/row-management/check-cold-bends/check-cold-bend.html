@@ -49,7 +49,10 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
 						<el-form-item label="冷弯管编号">
-							<el-input v-model="topSearch.pipeColdBendingCode" clearable placeholder="请输入冷弯管编号" size="small"></el-input>
+							<!-- <el-input v-model="topSearch.pipeColdBendingCode" clearable placeholder="请输入冷弯管编号" size="small"></el-input> -->
+							<el-select v-model="topSearch.pipeColdBendingOid" clearable placeholder="请输入冷弯管 " size="small">
+								<el-option v-for="item in domain.pipeColdBendingOidArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -83,7 +86,7 @@
 				detailUrl: './pages/row-management/check-cold-bends/dialogs/detail.html',
 				privilegeCode: '',
 				topSearch: {
-					pipeColdBendingCode: "",
+					pipeColdBendingOid: "",
 					projectOid: "",
 					tendersOid: "",
 					constructUnit: ""
@@ -186,6 +189,7 @@
 					constructUnitArr: [],
 					project: [], //项目
 					tenders: [], //标段
+					pipeColdBendingOidArr:[]
 				}
 			}
 		},
@@ -202,7 +206,7 @@
 					arr) {
 					that.domain.project = arr;
 				});
-			this.tendersChanged("1");
+			this.getConstructUnit();
 		},
 		methods: {
 			requestDomainFromBizTable: function (url, obj, cb) {
@@ -227,30 +231,43 @@
 				} else {
 					that.domain.tenders = [];
 					that.topSearch.tendersOid = '';
-					that.domain.constructUnitArr = [];
-					that.topSearch.constructUnit = '';
+					that.domain.pipeColdBendingOidArr = [];
+					that.topSearch.pipeColdBendingOid = '';
 				}
 			},
 			tendersChanged: function (val) { //根据标段触发管线列表
 				var that = this;
 				if (val) {
-					this
-						.requestDomainFromBizTable(
-							'/daq/privilege/getCurrentUnitId.do', {
+					this.requestDomainFromBizTable(
+							'/daq/clodBendingPipe/getList.do', {
+								tendersOid:val
 							},
 							function (arr) {
-								that.domain.constructUnitArr = arr;
+								console.log(arr);
+								that.domain.pipeColdBendingOidArr = arr;
+								console.log(that.domain.pipeColdBendingOidArr);
 							});
 				} else {
-					that.domain.constructUnitArr = [];
-					that.topSearch.constructUnit = '';
+					that.domain.pipeColdBendingOidArr = [];
+					that.topSearch.pipeColdBendingOid = '';
 				}
+			},
+			getConstructUnit: function(){
+				var that = this;
+				this.requestDomainFromBizTable(
+					'/daq/privilege/getCurrentUnitId.do', {
+					},
+					function (arr) {
+						that.domain.constructUnitArr = arr;
+					}
+				);
+				
 			},
 			searchList: function () {
 				this.$refs.table.search();
 			},
 			reset: function () {
-				this.topSearch.pipeColdBendingCode = '';
+				this.topSearch.pipeColdBendingOid = '';
 				this.topSearch.constructUnit = '';
 				this.topSearch.projectOid = '';
 				this.topSearch.tendersOid = '';

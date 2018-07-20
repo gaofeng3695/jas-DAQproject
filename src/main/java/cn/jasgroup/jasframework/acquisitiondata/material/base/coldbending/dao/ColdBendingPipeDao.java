@@ -23,8 +23,8 @@ public class ColdBendingPipeDao extends BaseJdbcDao{
 	  * <p>创建日期:2018年7月20日 下午3:12:41。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public List<Map<String,Object>>getList(){
-		String sql = "select t.oid as key,t.pipe_cold_bending_code as value from daq_material_pipe_cold_bending t where t.active=1";
-		return this.queryForList(sql, null);
+	public List<Map<String,Object>>getList(String tendersOid){
+		String sql = "select t.oid as key,t.pipe_cold_bending_code as value from daq_material_pipe_cold_bending t where t.active=1 and t.tenders_oid=?";
+		return this.queryForList(sql, new Object[]{tendersOid});
 	}
 }

@@ -56,7 +56,7 @@ public class CheckPipeColdBendingQuery extends BaseJavaQuery {
 				+ "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = cpcb.project_oid "
 				+ "LEFT JOIN (SELECT oid, unit_name, active FROM pri_unit where active=1) pi ON pi.oid = cpcb.construct_unit "
 				+ "LEFT JOIN (SELECT oid, tenders_name, active FROM daq_tenders where active=1) te ON te.oid = cpcb.tenders_oid "
-				+ "left join (select oid, pipe_cold_bending_code from daq_material_pipe_cold_bending ) on cp.oid = cpcb.pipe_cold_bending_oid "
+				+ "left join (select oid, pipe_cold_bending_code from daq_material_pipe_cold_bending ) cp on cp.oid = cpcb.pipe_cold_bending_oid "
 				+ "where cpcb.active=1 ";
 		sql += getConditionSql();
 		return sql;

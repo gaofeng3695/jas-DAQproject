@@ -18,6 +18,7 @@ import cn.jasgroup.framework.data.result.SimpleResult;
 import cn.jasgroup.jasframework.acquisitiondata.material.base.coldbending.dao.entity.ColdBendingPipe;
 import cn.jasgroup.jasframework.acquisitiondata.material.base.coldbending.service.ColdBendingPipeService;
 import cn.jasgroup.jasframework.base.controller.BaseController;
+import cn.jasgroup.jasopengis.util.StringUtil;
 
 @RestController
 @RequestMapping("daq/clodBendingPipe")
@@ -105,10 +106,14 @@ public class ColdBendingPipeController extends BaseController{
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	@RequestMapping(value="getList",method = RequestMethod.POST)
-	public Object getList(HttpServletRequest request){
+	public Object getList(HttpServletRequest request,@RequestBody Map<String,String> param){
 		ListResult<Map<String,Object>> result = null;
 		try {
-			List<Map<String, Object>> rows = this.coldBendingPipeService.getList();
+			String tendersOid = param.get("tendersOid");
+			if(StringUtil.isBlank(tendersOid)){
+				return new BaseResult(-1, "400", "tendersOid not is null");
+			}
+			List<Map<String, Object>> rows = this.coldBendingPipeService.getList(tendersOid);
 			result = new ListResult<>(1, "200", "ok", rows);
 		} catch (Exception e) {
 			result = new ListResult<>(-1, "400", "error");
