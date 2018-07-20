@@ -3489,7 +3489,7 @@ CREATE TABLE daq_cathodic_sacrifice_anode (
 	pipe_distance NUMERIC (6, 2),
 	manufacture VARCHAR (60),
 	burial_date TIMESTAMP (6),
-	anode_buried__depth NUMERIC (8, 3),
+	anode_buried_depth NUMERIC (8, 3),
 	lay_length NUMERIC (8, 3),
 	fill_weight NUMERIC (7, 2),
 	insulation_quality VARCHAR (50),
@@ -3537,7 +3537,7 @@ comment on column daq_cathodic_sacrifice_anode.anode_distance is '阳极间距(m
 comment on column daq_cathodic_sacrifice_anode.pipe_distance is '与管道距离(m)';
 comment on column daq_cathodic_sacrifice_anode.manufacture is '制造商';
 comment on column daq_cathodic_sacrifice_anode.burial_date is '埋设日期';
-comment on column daq_cathodic_sacrifice_anode.anode_buried__depth is '阳极埋深(m)';
+comment on column daq_cathodic_sacrifice_anode.anode_buried_depth is '阳极埋深(m)';
 comment on column daq_cathodic_sacrifice_anode.lay_length is '铺设长度(m)';
 comment on column daq_cathodic_sacrifice_anode.fill_weight is '填包料重量(kg)';
 comment on column daq_cathodic_sacrifice_anode.insulation_quality is '各接点质量及绝缘情况';
