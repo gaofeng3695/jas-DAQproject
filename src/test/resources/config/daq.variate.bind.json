@@ -3,7 +3,6 @@
 		"current_unit_id"
 	],
 	"baseQuery": [
-		"current_unit_id",
-		"privilege_strategy_sql"
+		"current_unit_id"
 	]
 }

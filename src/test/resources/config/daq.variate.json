@@ -5,12 +5,5 @@
 			"service": "daqInjectService",
 			"method":"injectCurrentUnitId()"
 		}
-	},
-	{
-		"name": "privilege_strategy_sql",
-		"script":{
-			"service": "daqInjectService",
-			"method":"privilegeStrategySql()"
-		}
 	}
 ]
