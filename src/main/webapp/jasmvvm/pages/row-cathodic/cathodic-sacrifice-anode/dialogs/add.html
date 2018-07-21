@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<link rel="stylesheet" href="./../../../../lib/font-awesome-4.7.0/css/font-awesome.css">
+	<link rel="stylesheet" href="./../../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../../src/css/main.css">
+	<style>
+		html,
+		body {
+			width: 100%;
+		}
+
+		#app {
+			width: 100%;
+			height: 100%;
+			position: relative;
+			overflow: hidden;
+		}
+
+		.content {
+			height: calc(100% - 40px);
+			overflow-y: auto;
+			overflow-x: hidden;
+		}
+
+		.el-form-item {
+			margin-bottom: 15px !important;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="app" v-cloak>
+		<jas-dialog-wrapper>
+			<div class="content">
+				<el-form ref="formData" :rules="rules" :model="formData" label-width="160px">
+					<jas-base-group-title name="基础数据"></jas-base-group-title>
+					<el-row :gutter="10">
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="项目名称" prop="projectOid" required>
+								<el-select v-model="formData.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
+									<el-option v-for="item in domain.project" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="标段名称" prop="tendersOid" required>
+								<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
+									<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="管线名称" prop="pipelineOid" required>
+								<el-select v-model="formData.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged">
+									<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="线路段名称" prop="pipeSegmentOid" required>
+								<el-select v-model="formData.pipeSegmentOid" clearable placeholder="请选择线路段" size="small" @change="pipeSegmentChanged">
+									<el-option v-for="item in domain.pipeSegment" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="施工单位" prop="constructUnit" required>
+								<el-select v-model="formData.constructUnit" disabled placeholder="请选择施工单位" size="small">
+									<el-option v-for="item in domain.constructUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="施工日期">
+								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入施工日期" v-model="formData.constructDate" size="small"
+								  style="width: 100%;">
+								</el-date-picker>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="监理单位" prop="supervisionUnit" required>
+								<el-select v-model="formData.supervisionUnit" clearable placeholder="请选择监理单位" size="small">
+									<el-option v-for="item in domain.supervisionUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="监理工程师">
+								<el-input v-model="formData.supervisionEngineer" clearable placeholder="请输入监理工程师" size="small"></el-input>
+							</el-form-item>
+						</el-col>
+
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="采集人员">
+								<el-input v-model="formData.collectionPerson" clearable placeholder="请输入采集人员" size="small"></el-input>
+							</el-form-item>
+						</el-col>
+
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="采集日期">
+								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入采集日期" v-model="formData.collectionDate" size="small"
+								  style="width: 100%;">
+								</el-date-picker>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<jas-base-group-title name="位置数据"></jas-base-group-title>
+					<el-row>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="桩号" prop="medianStakeOid" required>
+								<el-select v-model="formData.medianStakeOid" clearable placeholder="请选择桩号" size="small">
+									<el-option v-for="item in domain.medianStakes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="相对桩位置(m)" prop="relativeMileage" required>
+								<el-input-number :precision="0" :step="1" :max="100000000" controls-position="right" v-model="formData.relativeMileage" clearable
+								  placeholder="请输入相对桩位置" size="small"></el-input-number>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="X坐标">
+								<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData.pointx" clearable placeholder="请输入X坐标"
+								  size="small"></el-input-number>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="Y坐标">
+								<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData.pointy" clearable placeholder="请输入Y坐标"
+								  size="small"></el-input-number>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="高程(m)">
+								<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData.pointz" clearable placeholder="请输入高程(m)"
+								  size="small"></el-input-number>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<jas-base-group-title name="牺牲阳极数据"></jas-base-group-title>
+					<jas-form-items ref="mainForm" :form="formData" :fields="fields" :fields-config="fieldsConfig"></jas-form-items>
+					<jas-base-group-title name="其他信息"></jas-base-group-title>
+					<el-row>
+						<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+							<el-form-item label="备注" prop="remarks">
+								<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"></el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<!-- <el-row>
+					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+						<el-form-item label="模板上传" prop="file">
+						</el-form-item>
+					</el-col>
+				</el-row> -->
+					<jas-base-group-title name="附件信息"></jas-base-group-title>
+
+					<jas-file-upload ref="upload" @success="uploadSuccess"></jas-file-upload>
+				</el-form>
+
+
+
+
+
+			</div>
+			<div slot="footer" class="dialog-footer" style="text-align: center">
+				<el-button size="small" @click="cancel()">取 消</el-button>
+				<el-button size="small" type="primary" @click="submit('formData')">确 定
+				</el-button>
+			</div>
+		</jas-dialog-wrapper>
+	</div>
+</body>
+<script src="./../../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../../lib/vue/vue.js"></script>
+<script src="./../../../../lib/element-ui/v2.4.1/index.min.js"></script>
+<script src="./../../../../common/components/jas-components.js "></script>
+<script src="./../../../../common/js/jas-tools.js"></script>
+<!--<script src="js/ajaxFileUpload.js"></script>-->
+<script>
+	var app = new Vue({
+		el: "#app",
+		data: function () {
+			var that = this;
+			return {
+				domain: {
+					project: [],
+					pipeline: [],
+					tenders: [],
+					pipeSegment: [],
+					supervisionUnits: [], //监理单位
+					constructUnits: [], //施工单位
+					medianStakes: [], //桩号
+				},
+				rules: {
+					projectOid: [{
+						required: true,
+						message: '项目名称为必填项',
+						trigger: 'change'
+					}],
+					tendersOid: [{
+						required: true,
+						message: '标段名称为必填项',
+						trigger: 'change'
+					}],
+					pipelineOid: [{
+						required: true,
+						message: '管线名称为必填项',
+						trigger: 'change'
+					}],
+					pipeSegmentOid: [{
+						required: true,
+						message: '线路段必填项',
+						trigger: 'change'
+					}],
+					constructUnit: [{
+						required: true,
+						message: '施工单位为必填项',
+						trigger: 'change'
+					}],
+
+					supervisionUnit: [{
+						required: true,
+						message: '监理单位为必填项',
+						trigger: 'change'
+					}],
+
+					anodeCode: [{
+						required: true,
+						message: '阳极编号为必填项',
+						trigger: 'change'
+					}],
+					medianStakeOid: [{
+						required: true,
+						message: '桩号为必填项',
+						trigger: 'change'
+					}],
+					relativeMileage: [{
+						required: true,
+						message: '相对桩位置为必填项',
+						trigger: 'change'
+					}],
+				},
+				fields: [{
+						name: "阳极编号",
+						field: "anodeCode"
+					}, {
+						name: '保护对象',
+						field: 'protectObject'
+					}, {
+						name: '是否临时',
+						field: 'isTemporary'
+					}, {
+						name: '设计寿命(年)',
+						field: 'designLife'
+					}, {
+						name: '牺牲阳极材料',
+						field: 'anodeMaterial'
+					}, {
+						name: '牺牲阳极型号',
+						field: 'anodeSpecification',
+					}, {
+						name: '牺牲阳极数量(支)',
+						field: 'andoeQuantity',
+					},
+					{
+						name: '牺牲阳极单重(kg)',
+						field: 'andoeWeight',
+					}, {
+						name: '牺牲阳极总重(kg)',
+						field: 'totalWeight'
+					}, {
+						name: '阳极间距(m)',
+						field: 'anodeDistance'
+					}, {
+						name: '与管道距离(m)',
+						field: 'pipeDistance',
+					}, {
+						name: '制造商',
+						field: 'manufacture',
+					}, {
+						name: '埋设日期',
+						field: 'burialDate',
+					},
+					{
+						name: '阳极埋深(m)',
+						field: 'anodeBuriedDepth',
+					},
+					{
+						name: '铺设长度(m)',
+						field: 'layLength',
+					},
+					{
+						name: '填包料重量(kg)',
+						field: 'fillWeight',
+					},
+					{
+						name: '各接点质量及绝缘情况',
+						field: 'insulationQuality',
+					},
+					{
+						name: '检查片埋设情况',
+						field: 'tabletsCondition',
+					},
+					{
+						name: '安装位置描述',
+						field: 'installLocationDescription',
+					},
+					{
+						name: '结论',
+						field: 'conclusion',
+					}
+				],
+				fieldsConfig: {
+					anodeCode: {
+						type: 'input',
+						isRequired: true
+					},
+					protectObject: {
+						type: 'input',
+					},
+					isTemporary: {
+						type: 'select',
+						options: [{
+							key: 0,
+							value: '是'
+						}, {
+							key: 1,
+							value: '否'
+						}]
+					},
+					designLife: {
+						type: 'number',
+						max: 100,
+						precision: 0,
+					},
+					anodeMaterial: {
+						type: 'select',
+						domainName: 'anode_specification_domain'
+					},
+					anodeSpecification: {
+						type: 'input',
+					},
+					andoeQuantity: {
+						type: 'number',
+						max: 1000000,
+						precision: 0
+					},
+					andoeWeight: {
+						type: 'number',
+						max: 100000,
+						precision: 1
+					},
+					totalWeight: {
+						type: 'number',
+						max: 100000,
+						precision: 1
+					},
+					anodeDistance: {
+						type: 'number',
+						max: 10000,
+						precision: 2
+					},
+					pipeDistance: {
+						type: 'number',
+						max: 10000,
+						precision: 2
+					},
+					manufacture: {
+						type: "input",
+					},
+					burialDate: {
+						type: 'date',
+					},
+					anodeBuriedDepth: {
+						type: 'number',
+						max: 100000,
+						precision: 3
+					},
+					layLength: {
+						type: 'number',
+						max: 100000,
+						precision: 3
+					},
+					fillWeight: {
+						type: 'number',
+						max: 100000,
+						precision: 2
+					},
+					insulationQuality: {
+						type: 'select',
+						domainName: 'insulation_quality_domain'
+					},
+					tabletsCondition: {
+						type: 'select',
+						options: [{
+							key: 0,
+							value: '符合设计要求'
+						}, {
+							key: 1,
+							value: '不符合设计要求'
+						}]
+					},
+					installLocationDescription: {
+						type: 'input',
+					},
+					conclusion: {
+						type: 'select',
+						options: [{
+							key: 0,
+							value: '合格'
+						}, {
+							key: 1,
+							value: '不合格'
+						}]
+					},
+				},
+				formData: {}
+			}
+		},
+
+		mounted: function () {
+			var that = this;
+			var param = window.jasTools.base.getParamsInUrl(location.href);
+			var userBo = JSON.parse(localStorage.getItem("user"));
+			that.formData.constructUnit = userBo.unitId;
+			that.domain.constructUnits.push({
+				key: userBo.unitId,
+				value: userBo.unitName
+			});
+			if (param.oid) {
+				this.oid = param.oid;
+				this.formData.oid = this.oid;
+				this.isEdit = true;
+				this.getDetailByObjectId();
+				this.$refs.upload.requestFile(this.oid);
+
+			};
+
+			this.requestDomainFromBizTable('/daq/privilege/getProjectList.do', {}, function (arr) {
+				that.domain.project = arr;
+			});
+			this.requestDomainFromDomainTable('pipe_fitting_type_domain', function (arr) {
+				that.domain.pipeTypes = arr;
+			}); //查询管件类型
+		},
+		methods: {
+			cancel: function (param) {
+				window.parent.jasTools.dialog.close(param);
+			},
+			requestDomainFromDomainTable: function (domainName, cb) {
+				var that = this;
+				var url = jasTools.base.rootPath +
+					"/jasframework/sysdoman/getDoman.do";
+				jasTools.ajax.get(url, {
+					"domainName": domainName
+				}, function (data) {
+					var aDomain = data.map(function (item) {
+						return {
+							key: item.codeId,
+							value: item.codeName,
+						}
+					});
+					cb && cb(aDomain);
+				});
+			},
+			requestDomainFromBizTable: function (url, obj, cb) {
+				var that = this;
+				var url = jasTools.base.rootPath + url;
+				jasTools.ajax.post(url, obj, function (data) {
+					cb && cb(data.rows);
+				}, function () {
+					cb && cb([]);
+				});
+			},
+			projectChanged: function (val) {
+				var that = this;
+				if (val) {
+					this.requestDomainFromBizTable(
+						'/daq/privilege/getTendersList.do', {
+							projectOid: val
+						},
+						function (arr) {
+							that.domain.tenders = arr;
+						});
+				} else {
+					that.domain.tenders = [];
+					that.formData.tendersOid = '';
+					that.domain.pipeline = [];
+					that.formData.pipelineOid = '';
+					that.domain.pipeSegment = [];
+					that.formData.pipeSegmentOid = '';
+					that.domain.supervisionUnits = [];
+					that.formData.supervisionUnit = '';
+				}
+
+			},
+
+			tendersChanged: function (val) { //根据标段触发管线列表
+				var that = this;
+				if (val) {
+					this.requestDomainFromBizTable(
+						'/daq/privilege/getPipelineListByTendersOid.do', {
+							tendersOid: val
+						},
+						function (arr) {
+							that.domain.pipeline = arr;
+						});
+				} else {
+					that.domain.pipeline = [];
+					that.formData.pipelineOid = '';
+					that.domain.pipeSegment = [];
+					that.formData.pipeSegmentOid = '';
+				}
+				that.getSupervisionUnit(val); //根据标段获取监理单位
+			},
+			getSupervisionUnit: function (val) {
+				var that = this;
+				if (val) {
+					this.requestDomainFromBizTable(
+						'/daq/privilege/getSupervisionUnitByTendersOid.do', {
+							tendersOid: val
+						},
+						function (arr) {
+							that.domain.supervisionUnits = arr;
+						});
+				} else {
+					that.domain.supervisionUnits = [];
+					that.formData.supervisionUnit = '';
+				}
+			},
+			pipelineChanged: function (val) { //根据管线触发线路段/穿跨越
+				var that = this;
+				if (val) {
+					this.requestDomainFromBizTable(
+						'/daq/privilege/getPipeSegmentOrCrossList.do', {
+							pipelineOid: val
+						},
+						function (arr) {
+							that.domain.pipeSegment = arr;
+						});
+				} else {
+					that.domain.pipeSegment = [];
+					that.formData.pipeSegmentOid = '';
+				}
+			},
+			pipeSegmentChanged: function (val) {
+				var that = this;
+				if (val) {
+					this.requestDomainFromBizTable(
+						'/daq/privilege/getMedianStakeList.do', {
+							pipeSegmentOrCrossOid: val
+						},
+						function (arr) {
+							that.domain.medianStakes = arr;
+						});
+				} else {
+					that.domain.medianStakes = [];
+					that.formData.medianStakeOid = '';
+				}
+			}, //获取桩号
+
+			submit: function (formName) {
+				var that = this;
+				this.$refs[formName].validate(function (valid) {
+					if (valid) {
+						that.save();
+					}
+				});
+			},
+
+			save: function () {
+				var that = this;
+				var msg = "";
+				if (!this.isEdit) {
+					msg = "增加成功";
+					url = jasTools.base.rootPath +
+						"/jdbc/commonData/cathodicSacrificeAnode/save.do";
+				} else {
+					msg = "修改成功";
+					url = jasTools.base.rootPath +
+						"/jdbc/commonData/cathodicSacrificeAnode/update.do";
+				}
+				jasTools.ajax.post(url, that.formData, function (data) {
+					that.$refs.upload.uploadFile(data.data || that.oid);
+				});
+
+			},
+			uploadSuccess: function () {
+				top.Vue.prototype.$message({
+					type: 'success',
+					message: !this.isEdit ? '保存成功' : '修改成功'
+				});
+				this.cancel(1);
+			},
+			getDetailByObjectId: function () {
+				var that = this;
+				var url = jasTools.base.rootPath + "/jdbc/commonData/cathodicSacrificeAnode/getPage.do";
+				jasTools.ajax.post(url, {
+					oid: that.oid
+				}, function (data) {
+
+					that.formData = data.rows[0];
+
+					that.projectChanged(data.rows[0].projectOid);
+					that.tendersChanged(data.rows[0].tendersOid);
+					that.getSupervisionUnit(data.rows[0].tendersOid);
+					that.pipelineChanged(data.rows[0].pipelineOid);
+					that.pipeSegmentChanged(data.rows[0].pipeSegmentOid);
+
+				});
+			},
+		},
+	});
+</script>
+
+</html>
