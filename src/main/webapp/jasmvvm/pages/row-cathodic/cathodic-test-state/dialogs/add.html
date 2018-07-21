@@ -147,6 +147,11 @@
 					</el-row>
 					<jas-base-group-title name="测试桩数据"></jas-base-group-title>
 					<jas-form-items ref="mainForm" :form="formData" :fields="fields" :fields-config="fieldsConfig"></jas-form-items>
+					<el-form-item label="桩功能">
+						<el-select multiple v-model="formData.stakeFunction" clearable placeholder="请选择桩功能" size="small">
+							<el-option v-for="item in domain.stakeFunctionArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+						</el-select>
+					</el-form-item>
 					<jas-base-group-title name="其他信息"></jas-base-group-title>
 					<el-row>
 						<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -188,6 +193,7 @@
 					supervisionUnits: [], //监理单位
 					constructUnits: [], //施工单位
 					medianStakes: [], //桩号
+					stakeFunctionArr: [], //桩功能
 				},
 				rules: {
 					projectOid: [{
@@ -246,9 +252,6 @@
 					name: '埋设日期',
 					field: 'burialDate'
 				}, {
-					name: '桩功能',
-					field: 'stakeFunction'
-				}, {
 					name: '桩顶高度(m)',
 					field: 'stakeTopHeight',
 				}, {
@@ -269,10 +272,6 @@
 					},
 					burialDate: {
 						type: 'date'
-					},
-					stakeFunction: {
-						type: 'select',
-						domainName: 'test_stake_function_domain'
 					},
 					stakeTopHeight: {
 						type: 'number',
@@ -305,6 +304,9 @@
 			};
 			this.requestDomainFromBizTable('/daq/privilege/getProjectList.do', {}, function (arr) {
 				that.domain.project = arr;
+			});
+			this.requestDomainFromDomainTable('test_stake_function_domain', function (arr) {
+				that.domain.stakeFunctionArr = arr;
 			});
 		},
 		methods: {
@@ -435,6 +437,15 @@
 			save: function () {
 				var that = this;
 				var msg = "";
+				if (that.formData.stakeFunction.length > 0) {
+					var s = '';
+					that.formData.stakeFunction.forEach(function (item) {
+						s += item + ",";
+					});
+					that.formData.stakeFunction = s.substring(0, s.length - 1);
+				} else {
+					that.formData.stakeFunction = '';
+				}
 				if (!this.isEdit) {
 					msg = "增加成功";
 					url = jasTools.base.rootPath +
@@ -464,6 +475,11 @@
 				}, function (data) {
 
 					that.formData = data.rows[0];
+					if (that.formData.stakeFunction.length == 0) {
+						that.formData.stakeFunction = [];
+					} else {
+						that.formData.stakeFunction = that.formData.stakeFunction.split(",");
+					}
 
 					that.projectChanged(data.rows[0].projectOid);
 					that.tendersChanged(data.rows[0].tendersOid);
