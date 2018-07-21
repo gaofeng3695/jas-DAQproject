@@ -231,7 +231,7 @@ public class CathodicSacrificeAnode extends CommonJdbcEntity {
 	/**
 	 * 审核状态 
 	 */
-	private Integer approveStatus; 
+	private Integer approveStatus = 0; 
 
 	/**
 	 * 备注 
