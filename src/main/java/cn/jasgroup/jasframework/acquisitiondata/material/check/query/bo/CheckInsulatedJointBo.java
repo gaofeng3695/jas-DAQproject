@@ -20,7 +20,7 @@ public class CheckInsulatedJointBo {
 	/**
 	 * 监工单位oid
 	 */
-	private String constructionUnit;
+	private String constructUnit;
 
 	/**
 	 * 监工单位名称
@@ -111,12 +111,12 @@ public class CheckInsulatedJointBo {
 		this.projectName = projectName;
 	}
 
-	public String getConstructionUnit() {
-		return constructionUnit;
+	public String getConstructUnit() {
+		return constructUnit;
 	}
 
-	public void setConstructionUnit(String constructionUnit) {
-		this.constructionUnit = constructionUnit;
+	public void setConstructUnit(String constructUnit) {
+		this.constructUnit = constructUnit;
 	}
 
 	public String getUnitName() {
