@@ -54,9 +54,9 @@ public class CathodicTestStakeQuery extends BaseJavaQuery{
 
 	@Override
 	public String getQuerySql() {
-		String sql = "SELECT pro.project_name, pi.pipeline_name, te.tenders_name,ps.pipe_segment_name, ms.median_stake_code,"
+		String sql = "select dd.* from (SELECT pro.project_name, pi.pipeline_name, te.tenders_name,ps.pipe_segment_name, ms.median_stake_code,"
 					+ "u.unit_name as construct_unit_name, pu.unit_name as supervision_unit_name, d.code_name as stake_structure_name,"
-					+ "dm.code_name as stake_function_name,cts.* FROM daq_cathodic_test_stake cts "
+					+ "array_to_string(array_agg(dm.code_name),',') as stake_function_name,cts.* FROM daq_cathodic_test_stake cts "
 					+ "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = cts.project_oid "
 					+ "LEFT JOIN (SELECT oid, pipeline_name, active FROM daq_pipeline where active=1) pi ON pi.oid = cts.pipeline_oid "
 					+ "LEFT JOIN (SELECT oid, tenders_name, active FROM daq_tenders where active=1) te ON te.oid = cts.tenders_oid "
@@ -65,9 +65,10 @@ public class CathodicTestStakeQuery extends BaseJavaQuery{
 					+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) pu on pu.oid = cts.supervision_unit "
 					+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) u on u.oid = cts.construct_unit "
 					+ "LEFT JOIN (SELECT code_id, code_name, active FROM sys_domain where active=1) d ON d.code_id = cts.stake_structure "
-					+ "LEFT JOIN (SELECT code_id, code_name, active FROM sys_domain where active=1) dm ON dm.code_id = cts.stake_function "
+					+ "left join (SELECT code_id, code_name, active FROM sys_domain where active=1) dm ON cts.stake_function like '%'|| dm.code_id ||'%' "
 					+ "WHERE cts.active = 1";
 		sql += getConditionSql();
+		sql += ") dd";
 		return sql;
 	}
 
@@ -91,6 +92,7 @@ public class CathodicTestStakeQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(testStakeCode)) {
 				conditionSql += " and cts.test_stack_code like :testStakeCode";
 			}
+			conditionSql += " group BY cts.oid,pro.project_name,pi.pipeline_name,te.tenders_name,ps.pipe_segment_name,ms.median_stake_code,u.unit_name,pu.unit_name,d.code_name ";
 			conditionSql += " order by cts.create_datetime desc";
 		}
 		return conditionSql;
