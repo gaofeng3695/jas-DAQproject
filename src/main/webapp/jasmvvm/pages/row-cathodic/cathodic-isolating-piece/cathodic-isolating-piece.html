@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>自定义表单配置</title>
+	<!-- <link rel="stylesheet" href="./libelement-ui/element-#0E2B4A/src/index.css"> -->
+	<link rel="stylesheet" href="./../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../lib/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="./../../../src/css/main.css">
+	<style>
+		.el-form-item {
+			margin-bottom: 0px;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="app" v-cloak>
+		<jas-list-wrapper>
+			<jas-search-for-list slot="search" :form="topSearch" :fields="fields" :fields-config="fieldsConfig" @search="searchList"></jas-search-for-list>
+			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" :search-path="searchPath"
+			  :add-url="addUrl" :detail-url="detailUrl" :delete-path="deletePath" :class-name="className" :template-code="templateCode"></jas-table-for-list>
+		</jas-list-wrapper>
+
+	</div>
+</body>
+
+<script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../lib/vue/vue.js"></script>
+<script src="./../../../lib/element-ui/v2.4.1/index.min.js"></script>
+<script src="./../../../common/components/jas-components.js"></script>
+<script src="./../../../common/js/jas-tools.js"></script>
+<script>
+	var vm = new Vue({
+		el: '#app',
+		data: function () {
+			return {
+				className: '',
+				templateCode: '',
+				searchPath: '/jdbc/commonData/cathodicIsolatingPiece/getPage.do',
+				deletePath: '/jdbc/commonData/cathodicIsolatingPiece/delete.do',
+				addUrl: './pages/row-cathodic/cathodic-isolating-piece/dialogs/add.html',
+				detailUrl: './pages/row-cathodic/cathodic-isolating-piece/dialogs/detail.html',
+				privilegeCode: '',
+				topSearch: {
+					projectOid: '',
+					tendersOid: '',
+					pipelineOid: '',
+					pipeSegmentOid: '', //线路段
+					isolatingPieceCode:''
+				},
+				fields: [ //
+					{
+						field: "projectOid",
+						name: '项目名称'
+					}, {
+						field: "tendersOid",
+						name: '标段名称'
+					}, {
+						field: "pipelineOid",
+						name: '管线名称'
+					}, {
+						field: "pipeSegmentOid",
+						name:'线路段'
+					},{
+						field:"isolatingPieceCode",
+						name:"绝缘件编号"
+					}
+				],
+				fieldsConfig: {
+					projectOid: {
+						type: 'select',
+						optionUrl: '/daq/privilege/getProjectList.do',
+						childSelect: ['tendersOid'],
+						childUrl: ['/daq/privilege/getTendersList.do'],
+					},
+					tendersOid: {
+						type: 'select',
+						childSelect: ['pipelineOid'],
+						childUrl: ['/daq/privilege/getPipelineListByTendersOid.do'],
+					},
+					pipelineOid: {
+						type: 'select',
+						childSelect: ['pipeSegmentOid'],
+						childUrl: ['/daq/privilege/getPipeSegmentOrCrossList.do'],
+					},
+					pipeSegmentOid: {
+						type: 'select',
+					},
+					isolatingPieceCode:{
+						type:"input"
+					}
+				},
+				tableFields: [ //
+					{
+						name: '项目名称',
+						field: 'projectName'
+					}, {
+						name: '标段名称',
+						field: 'tendersName'
+					}, {
+						name: '管线名称',
+						field: 'pipelineName'
+					}, {
+						name: "线路段名称",
+						field: "pipeSegmentName"
+					},{
+						name: "绝缘件编号",
+						field: "isolatingPieceCode"
+					},  {
+						name: '名称',
+						field: 'isolatingPieceName'
+					}, {
+						name: '桩号',
+						field: 'medianStakeCode'
+					}, {
+						name: '相对桩位置(m)',
+						field: 'relativeMileage'
+					}, {
+						name: 'X坐标',
+						field: 'pointx'
+					}, {
+						name: 'Y坐标',
+						field: 'pointy'
+					}, {
+						name: '高程(m)',
+						field: 'pointz',
+					}, {
+						name: '前管件编号',
+						field: 'startPipeFittingNum'
+					}, {
+						name: '前管件类型',
+						field: 'startPipeFittingTypeName'
+					}, {
+						name: '后管件编号',
+						field: 'endPipeFittingNum',
+					}, {
+						name: '后管件类型',
+						field: 'endPipeFittingTypeName',
+					},{
+						name: '施工单位',
+						field: 'constructUnitName'
+					}, {
+						name: '施工日期',
+						field: 'constructDate'
+					},{
+						name: '监理单位',
+						field: 'supervisionUnitName'
+					}, {
+						name: '监理工程师',
+						field: 'supervisionEngineer'
+					}, {
+						name: '数据采集人',
+						field: 'collectionPerson'
+					}, {
+						name: '采集日期',
+						field: 'collectionDate'
+					}
+				],
+			}
+		},
+
+		mounted: function () {
+			var that = this;
+			var param = window.jasTools.base.getParamsInUrl(location.href);
+			this.privilegeCode = param.privilegeCode;
+			this.templateCode = param.templateCode; //|| "stake-2";
+			this.className = param.className; // || 'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';
+		},
+		methods: {
+			searchList: function () {
+				this.$refs.table.search();
+			},
+		},
+	});
+</script>
+
+</html>
