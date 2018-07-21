@@ -97,11 +97,6 @@ public class DaqCrossBoxCulvert extends CommonJdbcEntity {
 	private String startMedianStakeOid;
 	
 	/**
-	 * 起始桩号 
-	 */
-	private String startMedianStakeCode; 
-
-	/**
 	 * 相对起始桩位置(m) 
 	 */
 	private Double startRelativeMileage; 
@@ -111,11 +106,6 @@ public class DaqCrossBoxCulvert extends CommonJdbcEntity {
 	 */
 	private String endMedianStakeOid;
 	
-	/**
-	 * 结束桩号 
-	 */
-	private String endMedianStakeCode; 
-
 	/**
 	 * 相对结束桩位置(m) 
 	 */
@@ -459,22 +449,6 @@ public class DaqCrossBoxCulvert extends CommonJdbcEntity {
 	public void setGeom(String geom) {
 		this.geom = geom; 
 		super.setField("geom");
-	}
-
-	public String getStartMedianStakeCode() {
-		return startMedianStakeCode;
-	}
-
-	public void setStartMedianStakeCode(String startMedianStakeCode) {
-		this.startMedianStakeCode = startMedianStakeCode;
-	}
-
-	public String getEndMedianStakeCode() {
-		return endMedianStakeCode;
-	}
-
-	public void setEndMedianStakeCode(String endMedianStakeCode) {
-		this.endMedianStakeCode = endMedianStakeCode;
 	}
 
 }
