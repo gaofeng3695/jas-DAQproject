@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<link rel="stylesheet" href="./../../../../lib/font-awesome-4.7.0/css/font-awesome.css">
+	<link rel="stylesheet" href="./../../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../../src/css/main.css">
+
+</head>
+
+<body>
+	<div id="app" v-cloak>
+
+		<jas-dialog-wrapper>
+			<el-form ref="formData" :model="form" label-width="150px">
+
+				<jas-form-items-group ref="mainForm" :form="form" :fields-config="fieldsConfig" :names-group="['基本信息','位置信息','穿越信息']" :fields-group="[fields,fields2,fields3]"></jas-form-items-group>
+
+
+				<!-- <jas-base-group-title name="基本信息"></jas-base-group-title>
+				<jas-form-items ref="mainForm" :form="form" :fields="fields" :fields-config="fieldsConfig"></jas-form-items>
+				<jas-base-group-title name="位置信息"></jas-base-group-title>
+				<jas-form-items ref="mainForm2" :form="form" :fields="fields2" :fields-config="fieldsConfig"></jas-form-items>
+				<jas-base-group-title name="穿越信息"></jas-base-group-title>
+				<jas-form-items ref="mainForm3" :form="form" :fields="fields3" :fields-config="fieldsConfig"></jas-form-items> -->
+
+
+				<jas-base-group-title name="其他信息"></jas-base-group-title>
+				<el-row>
+					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+						<el-form-item label="备注" prop="remarks">
+							<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="form.remarks"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<jas-base-group-title name="附件信息"></jas-base-group-title>
+				<jas-file-upload ref="upload" @success="uploadSuccess"></jas-file-upload>
+			</el-form>
+			<div slot="footer">
+				<el-button size="small" @click="cancel()">取 消</el-button>
+				<el-button size="small" type="primary" @click="submit('formData')">确 定</el-button>
+			</div>
+		</jas-dialog-wrapper>
+
+	</div>
+</body>
+<script src="./../../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../../lib/vue/vue.js"></script>
+<script src="./../../../../lib/element-ui/v2.4.1/index.min.js"></script>
+<script src="./../../../../common/components/jas-components.js "></script>
+<script src="./../../../../common/js/jas-tools.js"></script>
+<script src="./../cross-config.js"></script>
+
+
+<script>
+	var app = new Vue({
+		el: "#app",
+		data: function () {
+			var that = this;
+			return {
+				fields: [],
+				fields2: [],
+				fields3: [],
+				fieldsConfig: crossConfig.fieldsConfig,
+				form: {},
+			}
+		},
+		created: function () {
+			var that = this;
+			var param = window.jasTools.base.getParamsInUrl(location.href);
+			this.templateCode = param.templateCode;
+
+			var fields = crossConfig[this.templateCode].addFields1;
+			var fields2 = crossConfig[this.templateCode].addFields2;
+			var fields3 = crossConfig[this.templateCode].addFields3;
+			this.fields = crossConfig.methods.formatFields(fields, crossConfig.fieldsConfig,this.templateCode);
+			this.fields2 = crossConfig.methods.formatFields(fields2, crossConfig.fieldsConfig,this.templateCode);
+			this.fields3 = crossConfig.methods.formatFields(fields3, crossConfig.fieldsConfig,this.templateCode);
+			this.form = crossConfig.methods.formatForm(fields.concat(fields2).concat(fields3));
+		},
+		mounted: function () {
+			var that = this;
+			var param = window.jasTools.base.getParamsInUrl(location.href);
+			var userBo = JSON.parse(localStorage.getItem("user"));
+			that.form.constructUnit = userBo.unitId;
+			that.fieldsConfig.constructUnit.options = [{
+				key: userBo.unitId,
+				value: userBo.unitName
+			}];
+			if (param.oid) {
+				this.oid = param.oid;
+				this.form.oid = this.oid;
+				this.isEdit = true;
+				this.getDetailByObjectId();
+				this.$refs.upload.requestFile(this.oid);
+			};
+		},
+		methods: {
+			cancel: function (param) {
+				window.parent.jasTools.dialog.close(param);
+			},
+			submit: function (formName) {
+				var that = this;
+				this.$refs[formName].validate(function (valid) {
+					if (valid) {
+						that.save();
+					}
+				});
+			},
+			save: function () {
+				var that = this;
+				var msg = "";
+				if (!this.isEdit) {
+					msg = "增加成功";
+					url = jasTools.base.rootPath + "/jdbc/commonData/" + this.templateCode + "/save.do";
+				} else {
+					msg = "修改成功";
+					url = jasTools.base.rootPath + "/jdbc/commonData/" + this.templateCode + "/update.do";
+				}
+
+				jasTools.ajax.post(url, that.form, function (data) {
+					that.$refs.upload.uploadFile(data.data || that.oid);
+				});
+
+			},
+			uploadSuccess: function () {
+				top.Vue.prototype.$message({
+					type: 'success',
+					message: !this.isEdit ? '保存成功' : '修改成功'
+				});
+				this.cancel(1);
+			},
+			getDetailByObjectId: function () {
+				var that = this;
+				var url = jasTools.base.rootPath + "/daq/" + this.templateCode + "/get.do";
+				jasTools.ajax.get(url, {
+					oid: that.oid
+				}, function (data) {
+					that.form = data.data;
+					that.$refs['mainForm'].triggerFatherSelectsChange();
+				});
+			},
+		},
+	});
+</script>
+
+</html>
