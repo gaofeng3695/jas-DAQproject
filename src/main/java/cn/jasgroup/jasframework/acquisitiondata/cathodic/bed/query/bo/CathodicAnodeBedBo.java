@@ -2,6 +2,11 @@ package cn.jasgroup.jasframework.acquisitiondata.cathodic.bed.query.bo;
 
 import java.util.Date;
 
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 
 /**
@@ -507,6 +512,8 @@ public class CathodicAnodeBedBo extends CommonBaseBo{
 		this.isAirbleed = isAirbleed;
 	}
 
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+	@Temporal(TemporalType.TIMESTAMP)
 	public Date getBurialDate() {
 		return burialDate;
 	}
@@ -539,6 +546,8 @@ public class CathodicAnodeBedBo extends CommonBaseBo{
 		this.constructUnitName = constructUnitName;
 	}
 
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+	@Temporal(TemporalType.TIMESTAMP)
 	public Date getConstructDate() {
 		return constructDate;
 	}
@@ -579,6 +588,8 @@ public class CathodicAnodeBedBo extends CommonBaseBo{
 		this.collectionPerson = collectionPerson;
 	}
 
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+	@Temporal(TemporalType.TIMESTAMP)
 	public Date getCollectionDate() {
 		return collectionDate;
 	}
