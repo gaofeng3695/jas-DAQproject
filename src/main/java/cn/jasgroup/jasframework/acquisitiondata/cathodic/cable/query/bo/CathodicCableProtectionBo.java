@@ -124,6 +124,11 @@ public class CathodicCableProtectionBo extends CommonBaseBo{
 	private String testStakeOid; 
 
 	/**
+	 * 测试桩号 
+	 */
+	private String testStakeCode; 
+
+	/**
 	 * 阴保电源编号 
 	 */
 	private String cableProtectionCode; 
@@ -134,9 +139,19 @@ public class CathodicCableProtectionBo extends CommonBaseBo{
 	private String auxiliaryAnodeBedOid; 
 
 	/**
+	 * 辅助阳极地床编号 
+	 */
+	private String groundBed; 
+
+	/**
 	 * 牺牲阳极编号 
 	 */
 	private String sacrificeAnodeOid; 
+
+	/**
+	 * 牺牲阳极编号 
+	 */
+	private String anodeCode; 
 
 	/**
 	 * 电缆敷设图编号 
@@ -315,6 +330,30 @@ public class CathodicCableProtectionBo extends CommonBaseBo{
 
 	public void setCableBatche(String cableBatche) {
 		this.cableBatche = cableBatche;
+	}
+
+	public String getTestStakeCode() {
+		return testStakeCode;
+	}
+
+	public void setTestStakeCode(String testStakeCode) {
+		this.testStakeCode = testStakeCode;
+	}
+
+	public String getGroundBed() {
+		return groundBed;
+	}
+
+	public void setGroundBed(String groundBed) {
+		this.groundBed = groundBed;
+	}
+
+	public String getAnodeCode() {
+		return anodeCode;
+	}
+
+	public void setAnodeCode(String anodeCode) {
+		this.anodeCode = anodeCode;
 	}
 
 	public String getCableStruction() {
