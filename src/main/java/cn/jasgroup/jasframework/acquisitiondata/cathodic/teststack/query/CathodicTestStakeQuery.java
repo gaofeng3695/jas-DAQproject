@@ -64,8 +64,8 @@ public class CathodicTestStakeQuery extends BaseJavaQuery{
 					+ "LEFT JOIN (select oid, median_stake_code, active from daq_median_stake where active=1) ms ON ms.oid = cts.median_stake_oid "
 					+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) pu on pu.oid = cts.supervision_unit "
 					+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) u on u.oid = cts.construct_unit "
-					+ "LEFT JOIN (SELECT code_id, code_name, active FROM sys_domain where active=1) d ON d.code_name = cts.stake_structure "
-					+ "LEFT JOIN (SELECT code_id, code_name, active FROM sys_domain where active=1) dm ON dm.code_name = cts.stake_function "
+					+ "LEFT JOIN (SELECT code_id, code_name, active FROM sys_domain where active=1) d ON d.code_id = cts.stake_structure "
+					+ "LEFT JOIN (SELECT code_id, code_name, active FROM sys_domain where active=1) dm ON dm.code_id = cts.stake_function "
 					+ "WHERE cts.active = 1";
 		sql += getConditionSql();
 		return sql;
