@@ -205,6 +205,20 @@
 					}, {
 						name: '采集日期',
 						field: 'collectionDate'
+					}, {
+						name: '审核状态',
+						field: 'approveStatus',
+						formatter: function (a, b, c, d) {
+							if (c == 0) {
+								return '未提交';
+							}
+							if (c == 1) {
+								return '审核中';
+							}
+							if (c == 2) {
+								return '通过'
+							}
+						}
 					}
 				],
 			}

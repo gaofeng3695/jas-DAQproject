@@ -121,34 +121,34 @@
 						field: 'cableBatche'
 					}, {
 						name: '电缆保护结构',
-						field: 'cableStruction'
+						field: 'cableStructionName'
 					}, {
 						name: '电缆敷设方式',
-						field: 'cableLayingMethod'
+						field: 'cableLayingMethodName'
 					}, {
 						name: '电缆长度(m)',
 						field: 'cableLength',
 					}, {
 						name: '电缆用途',
-						field: 'cableUse'
+						field: 'cableUseName'
 					}, {
 						name: '测试桩号',
-						field: 'testStakeOid'
+						field: 'testStakeCode'
 					}, {
 						name: '阴保电源编号',
 						field: 'cableProtectionCode',
 					}, {
 						name: '辅助阳极地床编号',
-						field: 'auxiliaryAnodeBedOid',
+						field: 'groundBed',
 					}, {
 						name: '牺牲阳极编号',
-						field: 'sacrificeAnodeOid'
+						field: 'anodeCode'
 					}, {
 						name: '电缆敷设图编号',
 						field: 'cableLayoutCode'
 					}, {
 						name: '桩号',
-						field: 'medianStakeName',
+						field: 'medianStakeCode',
 					}, {
 						name: '相对桩位置(m)',
 						field: 'relativeMileage',
@@ -170,6 +170,20 @@
 					}, {
 						name: '采集日期',
 						field: 'collectionDate'
+					}, {
+						name: '审核状态',
+						field: 'approveStatus',
+						formatter: function (a, b, c, d) {
+							if (c == 0) {
+								return '未提交';
+							}
+							if (c == 1) {
+								return '审核中';
+							}
+							if (c == 2) {
+								return '通过'
+							}
+						}
 					}
 				],
 			}

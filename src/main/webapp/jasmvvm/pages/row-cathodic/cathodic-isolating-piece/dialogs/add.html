@@ -134,13 +134,13 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="Y坐标">
-								<el-input-number :precision="0" :step="1" :max="1000000" controls-position="right" v-model="formData.pointy" clearable placeholder="请输入Y坐标"
+								<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData.pointy" clearable placeholder="请输入Y坐标"
 								  size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="高程(m)">
-								<el-input-number :precision="0" :step="1" :max="1000000" controls-position="right" v-model="formData.pointz" clearable placeholder="请输入高程(m)"
+								<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData.pointz" clearable placeholder="请输入高程(m)"
 								  size="small"></el-input-number>
 							</el-form-item>
 						</el-col>

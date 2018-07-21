@@ -153,6 +153,10 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="电缆敷设图编号">
+								<el-input v-model="formData.cableLayoutCode" clearable placeholder="请输入电缆敷设图编号" size="small"></el-input>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="电缆敷设方式">
 								<el-select v-model="formData.cableLayingMethod" clearable placeholder="请选择电缆敷设方式" size="small">
 									<el-option v-for="item in domain.cableLayingMethods" :key="item.key" :label="item.value" :value="item.key"> </el-option>
@@ -175,7 +179,10 @@
 						<template v-if="isSelected.isShow">
 							<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 								<el-form-item :label="isSelected.name">
-									<el-input v-model="formData[isSelected.key]" clearable :placeholder="isSelected.placeholder" size="small"></el-input>
+									<el-select v-model="formData[isSelected.key]" clearable :placeholder="isSelected.placeholder" size="small">
+										<el-option v-for="item in  isSelected.options" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+									</el-select>
+									<!--<el-select v-model="formData[isSelected.key]" clearable :placeholder="isSelected.placeholder" size="small"></el-input>-->
 							</el-col>
 						</template>
 
@@ -301,7 +308,8 @@
 					isShow: false,
 					key: '',
 					name: '',
-					placeholder: ''
+					placeholder: '',
+					options: []
 				},
 				formData: {}
 			}
@@ -503,29 +511,37 @@
 				});
 			},
 			isShow: function (val) {
+				var that = this;
+				var url = jasTools.base.rootPath + "/daq/cathodicCableProtection/queryForSelect.do";
+				jasTools.ajax.post(url, {
+					codeId: val,
+					pipeSegmentOid: that.formData.pipeSegmentOid
+				}, function (data) {
+					that.isSelected.options = data.rows;
+				});
 				if (val == 'cable_use_code_001') {
-					this.isSelected.isShow = true;
-					this.isSelected.key = 'testStakeOid';
-					this.isSelected.name = '测试桩号';
-					this.isSelected.placeholder = '请输入测试桩号';
+					that.isSelected.isShow = true;
+					that.isSelected.key = 'testStakeOid';
+					that.isSelected.name = '测试桩号';
+					that.isSelected.placeholder = '请输入测试桩号';
 				}
 				if (val == 'cable_use_code_002') {
-					this.isSelected.isShow = true;
-					this.isSelected.key = 'sacrificeAnodeOid';
-					this.isSelected.name = '牺牲阳极编号';
-					this.isSelected.placeholder = '请输入牺牲阳极编号';
+					that.isSelected.isShow = true;
+					that.isSelected.key = 'sacrificeAnodeOid';
+					that.isSelected.name = '牺牲阳极编号';
+					that.isSelected.placeholder = '请输入牺牲阳极编号';
 				}
 				if (val == 'cable_use_code_003') {
-					this.isSelected.isShow = true;
-					this.isSelected.key = 'cableProtectionCode';
-					this.isSelected.name = '阴保电源编号';
-					this.isSelected.placeholder = '请输入阴保电源编号';
+					that.isSelected.isShow = true;
+					that.isSelected.key = 'cableProtectionCode';
+					that.isSelected.name = '阴保电源编号';
+					that.isSelected.placeholder = '请输入阴保电源编号';
 				}
 				if (val == 'cable_use_code_004') {
-					this.isSelected.isShow = true;
-					this.isSelected.key = 'auxiliaryAnodeBedOid';
-					this.isSelected.name = '辅助阳极地床编号';
-					this.isSelected.placeholder = '请输入辅助阳极地床编号';
+					that.isSelected.isShow = true;
+					that.isSelected.key = 'auxiliaryAnodeBedOid';
+					that.isSelected.name = '辅助阳极地床编号';
+					that.isSelected.placeholder = '请输入辅助阳极地床编号';
 				}
 			}
 		},

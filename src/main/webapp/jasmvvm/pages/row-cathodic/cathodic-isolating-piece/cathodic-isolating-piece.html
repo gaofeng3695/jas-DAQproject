@@ -50,7 +50,7 @@
 					tendersOid: '',
 					pipelineOid: '',
 					pipeSegmentOid: '', //线路段
-					isolatingPieceCode:''
+					isolatingPieceCode: ''
 				},
 				fields: [ //
 					{
@@ -64,10 +64,10 @@
 						name: '管线名称'
 					}, {
 						field: "pipeSegmentOid",
-						name:'线路段'
-					},{
-						field:"isolatingPieceCode",
-						name:"绝缘件编号"
+						name: '线路段'
+					}, {
+						field: "isolatingPieceCode",
+						name: "绝缘件编号"
 					}
 				],
 				fieldsConfig: {
@@ -90,8 +90,8 @@
 					pipeSegmentOid: {
 						type: 'select',
 					},
-					isolatingPieceCode:{
-						type:"input"
+					isolatingPieceCode: {
+						type: "input"
 					}
 				},
 				tableFields: [ //
@@ -107,10 +107,10 @@
 					}, {
 						name: "线路段名称",
 						field: "pipeSegmentName"
-					},{
+					}, {
 						name: "绝缘件编号",
 						field: "isolatingPieceCode"
-					},  {
+					}, {
 						name: '名称',
 						field: 'isolatingPieceName'
 					}, {
@@ -140,13 +140,13 @@
 					}, {
 						name: '后管件类型',
 						field: 'endPipeFittingTypeName',
-					},{
+					}, {
 						name: '施工单位',
 						field: 'constructUnitName'
 					}, {
 						name: '施工日期',
 						field: 'constructDate'
-					},{
+					}, {
 						name: '监理单位',
 						field: 'supervisionUnitName'
 					}, {
@@ -158,6 +158,20 @@
 					}, {
 						name: '采集日期',
 						field: 'collectionDate'
+					}, {
+						name: '审核状态',
+						field: 'approveStatus',
+						formatter: function (a, b, c, d) {
+							if (c == 0) {
+								return '未提交';
+							}
+							if (c == 1) {
+								return '审核中';
+							}
+							if (c == 2) {
+								return '通过'
+							}
+						},
 					}
 				],
 			}
