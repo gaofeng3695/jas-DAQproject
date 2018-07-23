@@ -23,7 +23,16 @@ public class DataApproveController extends BaseController{
 	@Resource(name="dataApproveService")
 	private DataApproveService dataApproveService;
 	
-	
+	/**
+	  * <p>功能描述：保存业务流程审批记录。</p>
+	  * <p> 雷凯。</p>	
+	  * @param request
+	  * @param param
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年7月23日 下午1:50:01。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value="save", method = RequestMethod.POST)
 	@ResponseBody
