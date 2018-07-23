@@ -124,12 +124,22 @@ public class DaqAppendagesMarkStakeBo extends CommonBaseBo {
 	/**
 	 * 施工单位 
 	 */
-	private String constructUnit; 
+	private String constructUnit;
+	
+	/**
+	 * 施工单位name 
+	 */
+	private String constructUnitName; 
 
 	/**
 	 * 监理单位 
 	 */
-	private String supervisionUnit; 
+	private String supervisionUnit;
+	
+	/**
+	 * 监理单位name 
+	 */
+	private String supervisionUnitName; 
 
 	/**
 	 * 监理工程师 
@@ -380,6 +390,22 @@ public class DaqAppendagesMarkStakeBo extends CommonBaseBo {
 
 	public void setStakeFunctionName(String stakeFunctionName) {
 		this.stakeFunctionName = stakeFunctionName;
+	}
+
+	public String getConstructUnitName() {
+		return constructUnitName;
+	}
+
+	public void setConstructUnitName(String constructUnitName) {
+		this.constructUnitName = constructUnitName;
+	}
+
+	public String getSupervisionUnitName() {
+		return supervisionUnitName;
+	}
+
+	public void setSupervisionUnitName(String supervisionUnitName) {
+		this.supervisionUnitName = supervisionUnitName;
 	}
 	
 }
