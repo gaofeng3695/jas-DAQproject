@@ -37,7 +37,7 @@ public class DaqAppendagesMarkStakeQuery extends BaseJavaQuery {
 	@Override
 	public String getSql() {
 		String sql =  "select t.*,"
-				+ " d1.code_name as detectionTypeName,"
+				+ " d1.code_name as stakeStructureName,"
 				+ " ss.stakeFunctionName,"
 				+ "	p.project_name,"
 				+ "	l.pipeline_name,"
