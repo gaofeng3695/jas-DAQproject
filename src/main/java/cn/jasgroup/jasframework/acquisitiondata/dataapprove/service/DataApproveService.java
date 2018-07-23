@@ -20,6 +20,18 @@ public class DataApproveService extends CommonDataHibernateService{
 	@Resource
 	private DataApproveDao dataApproveDao;
 	
+	/***
+	 * <p>功能描述：保存业务流程审批记录。</p>
+	  * <p> 雷凯。</p>	
+	  * @param businessOids
+	  * @param className
+	  * @param functionCode
+	  * @param approveOpinion
+	  * @param approveStatus
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年7月23日 下午1:49:54。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
 	public void saveData(List<String> businessOids,String className,String functionCode,String approveOpinion,String approveStatus){
 		for(String businessOid : businessOids){
 			DataApprove approve = new DataApprove();
