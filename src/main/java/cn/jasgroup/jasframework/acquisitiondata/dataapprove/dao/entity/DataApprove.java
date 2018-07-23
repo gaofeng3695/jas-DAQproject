@@ -5,6 +5,7 @@ import javax.persistence.Transient;
 
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
 import cn.jasgroup.jasframework.base.annotation.Process;
+import cn.jasgroup.jasframework.engine.hibernate.entity.CommonHibernateEntity;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 
 /***
@@ -17,13 +18,12 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
   *{@link cn.jasgroup.jasframework.acquisitiondata.dataapprove.service.DataApproveService #changeBusinessApproveStatus()}
  */
 @CommonSaveConfig(
-		scene = "/dataApprove/save",
 		beforeAdvice={
 				@Process(service = "dataApproveService", method = "changeBusinessApproveStatus()")
 			}
 	)
 @Entity(name="daq_data_approve")
-public class DataApprove extends CommonJdbcEntity {
+public class DataApprove extends CommonHibernateEntity {
 
 	/**
 	 * 业务oid 
