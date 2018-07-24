@@ -37,13 +37,6 @@ public class DataApproveQuery extends BaseJavaQuery{
 		}else{
 			sql +=" and t.business_oid='' order by t.create_datetime desc";
 		}
-		String tableName=null;
-		try {
-			tableName = ModelFacade.getTableName(Class.forName("cn.jasgroup.jasframework.acquisitiondata.material.base.coldbending.dao.entity.ColdBendingPipe"));
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		return sql;
 	}
 	

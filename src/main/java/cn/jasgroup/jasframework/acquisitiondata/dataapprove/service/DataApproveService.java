@@ -60,9 +60,9 @@ public class DataApproveService extends CommonDataHibernateService{
 			dataApproveDao.changeBusinessApproveStatus(null,functionCode, businessOid, approveStatus);
 		}else if(StringUtils.isNotBlank(dataApprove.getClassName())){
 			try {
-				String tableName = ModelFacade.getTableName(Class.forName(dataApprove.getClassName()));
+				String tableName = ModelFacade.getTableName(dataApprove.getClassName());
 				dataApproveDao.changeBusinessApproveStatus(tableName, null, businessOid, approveStatus);
-			} catch (ClassNotFoundException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
