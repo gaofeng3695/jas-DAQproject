@@ -370,3 +370,26 @@ button {
 }
 
 /* 附件展示--结束 */
+
+/* jas-approve-dialog--开始 */
+
+.jas-approve-dialog .el-tabs__content {
+    width: 100%;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+}
+
+.jas-approve-dialog .el-tab-pane {
+    height: 100%;
+}
+
+.jas-approve-dialog .el-tabs__nav-wrap {
+    margin: 0 20px;
+}
+
+.jas-approve-dialog .el-form-item {
+    margin-bottom: 10px;
+}
+
+/* jas-approve-dialog--结束 */
