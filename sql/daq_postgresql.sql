@@ -1047,9 +1047,9 @@ ALTER TABLE daq_material_reducer ADD PRIMARY KEY (oid);
 CREATE INDEX index_daq_material_tee_tee_code_5 ON daq_material_tee USING btree (tee_code);
 ALTER TABLE daq_material_tee ADD PRIMARY KEY (oid);
 
-create or replace view v_daq_pipe_segment_cross as  select s.oid,s.pipe_segment_name as name,s.start_stake_oid,s.end_stake_oid,1 as type from daq_pipe_segment s where s.active=1
+create or replace view v_daq_pipe_segment_cross as  select s.oid,s.pipe_segment_name as name,s.start_stake_oid,s.end_stake_oid,1 as type,s.pipe_segment_code AS code from daq_pipe_segment s where s.active=1
 union all
-select s.oid,s.cross_name as name,s.start_stake_oid,s.end_stake_oid, 2 as type from daq_cross s where s.active=1
+select s.oid,s.cross_name as name,s.start_stake_oid,s.end_stake_oid, 2 as type,s.cross_code AS code from daq_cross s where s.active=1
 /**********线路物资基本信息end***************/
 /**********线路物资检查信息begin***************/
 CREATE TABLE daq_check_coating_pipe (
