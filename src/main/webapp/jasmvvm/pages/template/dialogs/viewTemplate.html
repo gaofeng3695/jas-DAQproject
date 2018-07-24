@@ -9,12 +9,12 @@
   <link rel="stylesheet" href="./../../../lib/font-awesome-4.7.0/css/font-awesome.css">
   <link rel="stylesheet" href="./../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
   <link rel="stylesheet" href="./../../../src/css/main.css">
-
 </head>
 
 <body>
   <div id="app" v-cloak>
-    <jas-dialog-wrapper>
+
+    <jas-approve-dialog :type="approveType" :oid="bizId" :class-name="className" :function-code="menuCode">
       <div>
         <template v-for="group in formAttr">
           <jas-base-group-title :name="group.groupName" v-show="group.groupName"></jas-base-group-title>
@@ -25,11 +25,7 @@
           <jas-file-list :biz-id="bizId"></jas-file-list>
         </template>
       </div>
-      <div slot="footer">
-        <!-- <el-button size="small" @click="cancel()">取 消</el-button> -->
-      </div>
-    </jas-dialog-wrapper>
-
+    </jas-approve-dialog>
   </div>
 </body>
 <script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
@@ -42,6 +38,11 @@
     el: "#app",
     data: function () {
       return {
+        approveType: 0,
+        className: '',
+        loading: false,
+        tableData: [],
+        remarks: '',
         bizId: '',
         formData: {},
         formAttr: [],
@@ -56,11 +57,13 @@
       var that = this;
       var param = window.jasTools.base.getParamsInUrl(location.href);
       this.menuCode = param.menuCode;
+      this.approveType = +param.approveType;
       delete param.menuCode;
       this.isQuery = param;
       this.requestFieldsConfig();
     },
     methods: {
+
       _formatFieldsByGroup: function (aFields) { // 将字段进行分组格式化
         var map = {};
         var dest = [];

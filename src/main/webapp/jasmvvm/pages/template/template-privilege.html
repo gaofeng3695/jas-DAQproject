@@ -125,6 +125,10 @@
 					<el-button :size="item.size" v-if="privilege.join('').indexOf(item.id)>-1" :type="item.type" :plain="item.plain" :icon="item.icon"
 					  @click="item.functionName">{{item.title}}</el-button>
 				</template>
+				<el-button size="small" plain type="primary" icon="fa fa-plus" v-if="isApprove&&privilege.join('').indexOf('bt_report')>-1"
+				  :disabled="reportRows.length==0" @click="upcall">上报</el-button>
+				<el-button size="small" plain type="primary" icon="fa fa-plus" v-if="isApprove&&privilege.join('').indexOf('bt_approve')>-1"
+				  :disabled="approveRows.length==0" @click="approve">审核</el-button>
 
 
 				<jas-import-export-btns :is-import="privilege.join('').indexOf('bt_import')>-1" :is-export="privilege.join('').indexOf('bt_export')>-1"
@@ -148,8 +152,10 @@
 						<el-button @click="locateRow(scope.row)" v-if="privilege.indexOf('bt_position')>-1" type="text" size="small">定位</el-button>
 						<el-button @click="scopeRow(scope.row)" v-if="privilege.indexOf('bt_tenders_scope')>-1" type="text" size="small">范围</el-button>
 						<el-button @click="viewRow(scope.row)" v-if="privilege.indexOf('bt_select')>-1" type="text" size="small">查看</el-button>
-						<el-button @click="editRow(scope.row)" v-if="privilege.indexOf('bt_update')>-1" type="text" size="small">编辑</el-button>
-						<el-button @click="delRow(scope.row)" v-if="privilege.indexOf('bt_delete')>-1" type="text" size="small">删除</el-button>
+						<el-button @click="editRow(scope.row)" v-if="privilege.indexOf('bt_update')>-1" type="text" :disabled="frozenBtn(scope.row)"
+						  size="small">编辑</el-button>
+						<el-button @click="delRow(scope.row)" v-if="privilege.indexOf('bt_delete')>-1" type="text" :disabled="frozenBtn(scope.row)"
+						  size="small">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -178,6 +184,7 @@
 				},
 				templateCode: "",
 				className: '',
+				isApprove: '',
 				privilege: [], //权限数组 bt_add,bt_update,bt_delete,bt_select,bt_export,bt_import,bt_position
 				btnxs: 12,
 				btnlg: 6,
@@ -189,6 +196,7 @@
 				searchData: [],
 				btns: [],
 				oids: [],
+				rows: [],
 				tableData: [], //表格数据
 				tableColumn: [], //表示列
 				tableColumns: [], //排序过渡列
@@ -207,13 +215,26 @@
 				isShowSearch: false,
 			}
 		},
+		computed: {
+			reportRows: function () {
+				var that = this;
+				return this.rows.filter(function (row) {
+					return !that.frozenBtn(row);
+				});
+			},
+			approveRows: function () {
+				var that = this;
+				return this.rows.filter(function (row) {
+					return row.approve_status == '待审核';
+				});
+			},
+		},
 		mounted: function () {
 			var param = window.jasTools.base.getParamsInUrl(location.href);
 			this.menuCode = param.menuCode;
-
-			this.templateCode = param.templateCode || "stake-2";
-			this.className = param.className ||
-				'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';
+			this.isApprove = param.isApprove;
+			this.templateCode = param.templateCode;
+			this.className = param.className;
 			//进行后台数据的请求
 			if (param.privilegeCode) {
 				this._requestPrivilege(param.privilegeCode); //请求权限
@@ -223,7 +244,75 @@
 			}
 		},
 		methods: { //方法的写法
+			frozenBtn: function (row) {
+				if (row.approve_status > 0 || row.approve_status == '审核通过' || row.approve_status == '待审核') {
+					return true;
+				}
+				return false;
+			},
+			upcall: function () {
+				var that = this;
+				var oids = this.reportRows.map(function (item) {
+					return item.oid;
+				});
+				if (oids.length === 0) return;
+				var url = jasTools.base.rootPath + '/daq/dataApprove/save.do';
+				jasTools.ajax.post(url, {
+					businessOid: oids,
+					approveStatus: 1, //status 2 通过 -1 驳回
+					className: this.className,
+					functionCode: this.menuCode,
+				}, function (data) {
+					top.Vue.prototype.$message({
+						type: 'success',
+						message: '上报成功'
+					});
+					that.refresh();
+				});
+			},
+			approve: function () {
+				var that = this;
+				var oids = this.approveRows.map(function (item) {
+					return item.oid;
+				});
+				if (oids.length === 0) {
+					return;
+				} else if (oids.length === 1) {
+					var src = './pages/template/dialogs/viewTemplate.html?menuCode=' + that.menuCode;
+					src += '&approveType=2';
+					var url = jasTools.base.setParamsToUrl(src, this.approveRows[0]);
+					top.jasTools.dialog.show({
+						width: '60%',
+						height: '80%',
+						title: '审核',
+						src: url,
+						cbForClose: function (param) {
+							if (param == 'success') {
+								that.refresh();
+							}
+						}
+					});
+				} else {
+					var src = './pages/template/dialogs/approveTemplate.html?menuCode=' + that.menuCode;
+					var url = jasTools.base.setParamsToUrl(src, {
+						oids: oids.join(',')
+					});
+					top.jasTools.dialog.show({
+						width: '600px',
+						height: '400px',
+						title: '批量审核',
+						src: url,
+						cbForClose: function (param) {
+							if (param == 'success') {
+								that.refresh();
+							}
+						}
+					});
+				}
+
+			},
 			handleSelectionChange: function (val) {
+				this.rows = val;
 				this.oids = val.map(function (item) {
 					return item.oid;
 				});
@@ -464,6 +553,9 @@
 			viewRow: function (row) {
 				var that = this;
 				var src = './pages/template/dialogs/viewTemplate.html?menuCode=' + that.menuCode;
+				if (this.isApprove) {
+					src += '&approveType=1';
+				}
 				for (var key in row) {
 					src += "&" + key + '=' + row[key];
 				}
