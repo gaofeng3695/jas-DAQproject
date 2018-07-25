@@ -64,7 +64,7 @@ public class DaqAppendagesMarkStakeBo extends CommonBaseBo {
 	/**
 	 * 标志桩编号 
 	 */
-	private String markStakeOid; 
+	private String markStakeCode; 
 
 	/**
 	 * 桩号id 
@@ -238,12 +238,12 @@ public class DaqAppendagesMarkStakeBo extends CommonBaseBo {
 		this.pipeSegmentOrCrossName = pipeSegmentOrCrossName;
 	}
 
-	public String getMarkStakeOid() {
-		return markStakeOid;
+	public String getMarkStakeCode() {
+		return markStakeCode;
 	}
 
-	public void setMarkStakeOid(String markStakeOid) {
-		this.markStakeOid = markStakeOid;
+	public void setMarkStakeCode(String markStakeCode) {
+		this.markStakeCode = markStakeCode;
 	}
 
 	public String getMedianStakeOid() {

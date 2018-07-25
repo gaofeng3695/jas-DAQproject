@@ -28,7 +28,7 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 
 @UniqueConstraints(
     strategys ={
-        @UniqueConstraintStrategy(columnNames={"markStakeOid"},name="标志桩编号"),
+        @UniqueConstraintStrategy(columnNames={"markStakeCode"},name="标志桩编号"),
     }
 )
 @CommonSaveConfig(
@@ -80,7 +80,7 @@ public class DaqAppendagesMarkStake extends CommonJdbcEntity {
 	/**
 	 * 标志桩编号 
 	 */
-	private String markStakeOid; 
+	private String markStakeCode; 
 
 	/**
 	 * 桩号 
@@ -200,13 +200,13 @@ public class DaqAppendagesMarkStake extends CommonJdbcEntity {
 		super.setField("pipeSegmentOrCrossOid");
 	}
 
-	public String getMarkStakeOid() {
-		return markStakeOid; 
+	public String getMarkStakeCode() {
+		return markStakeCode; 
 	}
 
-	public void setMarkStakeOid(String markStakeOid) {
-		this.markStakeOid = markStakeOid; 
-		super.setField("markStakeOid");
+	public void setMarkStakeCode(String markStakeCode) {
+		this.markStakeCode = markStakeCode; 
+		super.setField("markStakeCode");
 	}
 
 	public String getMedianStakeOid() {
