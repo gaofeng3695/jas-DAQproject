@@ -708,9 +708,9 @@ Vue.component('jas-table-for-list', {
 			} else if (oids.length === 1) {
 
 				var src = jasTools.base.setParamsToUrl(this.detailUrl, {
-					approveType :2,
-					className :this._className,
-					menuCode :this._templateCode || '',
+					approveType: 2,
+					className: this._className,
+					menuCode: this._templateCode || '',
 				});
 				var url = jasTools.base.setParamsToUrl(src, this.approveRows[0]);
 				top.jasTools.dialog.show({
@@ -726,9 +726,9 @@ Vue.component('jas-table-for-list', {
 				});
 			} else {
 				var src = jasTools.base.setParamsToUrl('./pages/template/dialogs/approveTemplate.html', {
-					approveType :2,
-					className :this._className,
-					menuCode :this._templateCode || '',
+					approveType: 2,
+					className: this._className,
+					menuCode: this._templateCode || '',
 				});
 				var url = jasTools.base.setParamsToUrl(src, {
 					oids: oids.join(',')
@@ -1211,7 +1211,7 @@ Vue.component('jas-form-items', {
 		'					<el-input @change="fieldChanged(item.field)" v-model="form[item.field]" :placeholder="\'请输入\'+item.name" size="small" clearable></el-input>',
 		'				</template>',
 		'	    	<template v-if="fieldsConfig[item.field].type == \'number\'">',
-		'					<el-input-number @change="fieldChanged(item.field)" v-model="form[item.field]" :precision="fieldsConfig[item.field].precision || 3" :step="1" :max="fieldsConfig[item.field].max || 999999" controls-position="right" clearable :placeholder="\'请输入\'+item.name" size="small"></el-input-number>',
+		'					<el-input-number @change="fieldChanged(item.field)" v-model="form[item.field]" :precision="precision(fieldsConfig[item.field].precision)" :step="1" :max="fieldsConfig[item.field].max || 999999" controls-position="right" clearable :placeholder="\'请输入\'+item.name" size="small"></el-input-number>',
 		'	    	</template>',
 		'				<template v-if="fieldsConfig[item.field].type == \'date\'">',
 		'					<el-date-picker clearable value-format="yyyy-MM-dd" type="date" :placeholder="\'请选择\'+item.name" @change="fieldChanged(item.field)" v-model="form[item.field]" size="small" style="width: 100%;"></el-date-picker>',
@@ -1222,6 +1222,11 @@ Vue.component('jas-form-items', {
 		'</el-row>',
 	].join(''),
 	methods: {
+		precision: function (value) {
+			if (value == 0) return 0;
+			if (!value) return 3;
+			return value;
+		},
 		triggerFatherSelectsChange: function (fatherSelectList) {
 			var that = this;
 			var SelectList = fatherSelectList || that.fatherSelectList;
