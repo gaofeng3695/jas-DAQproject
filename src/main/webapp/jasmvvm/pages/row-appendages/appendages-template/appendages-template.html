@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>自定义表单配置</title>
+	<!-- <link rel="stylesheet" href="./libelement-ui/element-#0E2B4A/src/index.css"> -->
+	<link rel="stylesheet" href="./../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../lib/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="./../../../src/css/main.css">
+
+</head>
+
+<body>
+	<div id="app" v-cloak>
+
+		<jas-two-panel-resizer layout="horizontal" length="40%" @paneresize="paneresize">
+			<div slot="closePanel" id="jasMap" class="jasmap"></div>
+			<jas-list-wrapper slot="mainPanel">
+				<jas-search-for-list slot="search" :form="topSearch" :fields="fields" :fields-config="fieldsConfig" @search="searchList"></jas-search-for-list>
+				<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" :search-path="searchPath"
+				  :add-url="addUrl" :detail-url="detailUrl" :delete-path="deletePath" :class-name="className" :template-code="templateCode"
+				  @locate="locate"></jas-table-for-list>
+			</jas-list-wrapper>
+
+		</jas-two-panel-resizer>
+
+	</div>
+</body>
+
+<script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../lib/vue/vue.js"></script>
+<script src="./../../../lib/element-ui/v2.4.1/index.min.js"></script>
+<script src="./../../../lib/vue-multipane/vue-multipane.js"></script>
+<script src="./../../../common/components/jas-components.js"></script>
+<script src="./../../../common/js/jas-tools.js"></script>
+
+<script id="mapApi" src="./../../map/mapjs/mapjs4ol.js"></script>
+<script src="./appendages-config.js"></script>
+<script>
+	var vm = new Vue({
+		el: '#app',
+		data: function () {
+			return {
+				className: '',
+				templateCode: '',
+				searchPath: '',
+				deletePath: '',
+				upcallPath: '',
+				addUrl: './pages/row-appendages/appendages-template/dialogs/add.html',
+				detailUrl: './pages/row-appendages/appendages-template/dialogs/detail.html',
+				privilegeCode: '',
+				topSearch: {},
+				fields: [],
+				fieldsConfig: crossConfig.fieldsConfig,
+				tableFields: [],
+			}
+		},
+		created: function () {
+			var that = this;
+			var param = window.jasTools.base.getParamsInUrl(location.href);
+			this.privilegeCode = param.privilegeCode;
+			this.templateCode = param.templateCode; // 模块名称
+			this.className = param.className;
+
+			this.addUrl = './pages/row-appendages/appendages-template/dialogs/add.html?templateCode=' + this.templateCode;
+			this.detailUrl = './pages/row-appendages/appendages-template/dialogs/detail.html?templateCode=' + this.templateCode;
+
+			this.searchPath = '/jdbc/commonData/' + this.templateCode + '/getPage.do';
+			this.deletePath = '/jdbc/commonData/' + this.templateCode + '/delete.do';
+
+			this.fields = crossConfig.methods.formatFields(crossConfig[this.templateCode].searchFields, crossConfig.fieldsConfig,
+				this.templateCode);
+			this.tableFields = crossConfig.methods.formatFields(crossConfig[this.templateCode].tableFields, crossConfig.fieldsConfig,
+				this.templateCode);
+			this.topSearch = crossConfig.methods.formatForm(crossConfig[this.templateCode].searchFields);
+
+		},
+		mounted: function () {
+
+		},
+		methods: {
+			searchList: function () {
+				this.$refs.table.search();
+			},
+			locate: function (row) {
+				this.jasMap.flashGraphic(row.oid, 'daq_median_stake');
+			},
+			paneresize: function () {
+				this.jasMap.resizeMap();
+			},
+			locate: function (item) {
+				console.log(item)
+			},
+			initJasMap: function () {
+				var onCenterStakeLayerClicked = function (e) {
+					//业务逻辑
+				};
+				this.jasMap = new JasMap({
+					onMapLoaded: function (e) {
+						//
+						// this.logMapInfo();
+					},
+					onLayerAdded: function (e) {
+						var layerId = e.data.layerId;
+						if (layerId === "centerlinestake") {
+							//添加单个图层的点击事件
+							this.addLayerClickEventListener(layerId, onCenterStakeLayerClicked);
+						}
+					}
+				});
+			},
+
+		},
+	});
+</script>
+
+</html>
