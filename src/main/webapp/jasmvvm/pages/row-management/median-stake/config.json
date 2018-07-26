@@ -2,8 +2,8 @@
   "description":"地图应用配置",
   "basePath":"",
   "resources":[
-    { "type":"css","url":"./../../map/lib/openlayer_v4.6.4/css/ol.css"},
-    { "type":"js","url":"./../../map/lib/openlayer_v4.6.4/build/ol.js" },
+    { "type":"css","url":"./../../map/lib/openlayer_v5.0.2/css/ol.css"},
+    { "type":"js","url":"./../../map/lib/openlayer_v5.0.2/build/ol.js" },
     { "type":"css","url":"./../../map/lib/jquery-easyui/1.5.2/themes/icon.css"},
     { "type":"css","url":"./../../map/lib/jquery-easyui/1.5.2/themes/default/easyui.css"},
 

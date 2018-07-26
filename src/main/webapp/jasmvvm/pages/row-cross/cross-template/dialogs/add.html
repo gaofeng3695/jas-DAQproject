@@ -72,14 +72,14 @@
 		created: function () {
 			var that = this;
 			var param = window.jasTools.base.getParamsInUrl(location.href);
-			this.templateCode = param.templateCode;
+			this.pageCode = param.pageCode;
 
-			var fields = crossConfig[this.templateCode].addFields1;
-			var fields2 = crossConfig[this.templateCode].addFields2;
-			var fields3 = crossConfig[this.templateCode].addFields3;
-			this.fields = crossConfig.methods.formatFields(fields, crossConfig.fieldsConfig,this.templateCode);
-			this.fields2 = crossConfig.methods.formatFields(fields2, crossConfig.fieldsConfig,this.templateCode);
-			this.fields3 = crossConfig.methods.formatFields(fields3, crossConfig.fieldsConfig,this.templateCode);
+			var fields = crossConfig[this.pageCode].addFields1;
+			var fields2 = crossConfig[this.pageCode].addFields2;
+			var fields3 = crossConfig[this.pageCode].addFields3;
+			this.fields = crossConfig.methods.formatFields(fields, crossConfig.fieldsConfig,this.pageCode);
+			this.fields2 = crossConfig.methods.formatFields(fields2, crossConfig.fieldsConfig,this.pageCode);
+			this.fields3 = crossConfig.methods.formatFields(fields3, crossConfig.fieldsConfig,this.pageCode);
 			this.form = crossConfig.methods.formatForm(fields.concat(fields2).concat(fields3));
 		},
 		mounted: function () {
@@ -116,10 +116,10 @@
 				var msg = "";
 				if (!this.isEdit) {
 					msg = "增加成功";
-					url = jasTools.base.rootPath + "/jdbc/commonData/" + this.templateCode + "/save.do";
+					url = jasTools.base.rootPath + "/jdbc/commonData/" + this.pageCode + "/save.do";
 				} else {
 					msg = "修改成功";
-					url = jasTools.base.rootPath + "/jdbc/commonData/" + this.templateCode + "/update.do";
+					url = jasTools.base.rootPath + "/jdbc/commonData/" + this.pageCode + "/update.do";
 				}
 
 				jasTools.ajax.post(url, that.form, function (data) {
@@ -136,7 +136,7 @@
 			},
 			getDetailByObjectId: function () {
 				var that = this;
-				var url = jasTools.base.rootPath + "/daq/" + this.templateCode + "/get.do";
+				var url = jasTools.base.rootPath + "/daq/" + this.pageCode + "/get.do";
 				jasTools.ajax.get(url, {
 					oid: that.oid
 				}, function (data) {

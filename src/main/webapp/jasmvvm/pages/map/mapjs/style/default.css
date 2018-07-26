@@ -1,5 +1,6 @@
-html,body { height:100%;width:100%;padding:0;margin:0 auto;overflow: auto;}
+html,body { height:100%;width:100%;padding:0;margin:0 auto;overflow: hidden;}
 .jasmap{background-color: #fff;height:100%;width:100%;position: relative; }
+i{color: red;}
 .jasmap .tooltip {  position: relative;  background: rgba(0, 0, 0, 0.5);  border-radius: 4px;  color: white;  padding: 4px 8px;  opacity: 0.7;  white-space: nowrap; display: block  }
 .jasmap .tooltip-measure { opacity: 1;  font-weight: bold;  }
 .jasmap .tooltip-static { background-color: #ffcc33;color: black;border: 1px solid white; display: block }
@@ -13,9 +14,6 @@ html,body { height:100%;width:100%;padding:0;margin:0 auto;overflow: auto;}
 .ol-custom-overviewmap.ol-overviewmap-box {  border: 2px solid red;  }
 .ol-custom-overviewmap:not(.ol-collapsed) button{  bottom: auto;  left: auto;  right: 1px;  top: 1px;  }
 .ol-rotate {  top: 170px;  right: 0;  }
-
-/********/
-.jasMap{ position: relative; }
 
 .map-module-basemaptoolsbar{position: absolute;top:0;left:0;}
 .map-module-basemaptoolsbar ul{list-style: none;}
@@ -50,13 +48,16 @@ html,body { height:100%;width:100%;padding:0;margin:0 auto;overflow: auto;}
 .map-module-basemapsgallary ul li div.selected{ border: solid 2px blue;}
 .map-module-basemapsgallary ul div.listItem img{ width:100px;height:60px;cursor: pointer;}
 
-.map-popup {  position: absolute;  background-color: white;  -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));  filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));  padding: 5px;  border-radius: 10px;  border: 1px solid #cccccc;  bottom: 12px;  left: -50px;  min-width: 280px;  }
+.map-popup {  position: absolute;  background-color: white;  -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));  filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));  padding: 5px;  border-radius: 10px;  border: 1px solid #cccccc;  bottom: 12px;  left: -50px;  min-width: 280px; width: 250px;height:150px; }
 .map-popup:after, .map-popup:before {  top: 100%;  border: solid transparent;  content: " ";  height: 0;  width: 0;  position: absolute;  pointer-events: none;  }
 .map-popup:after {  border-top-color: white;  border-width: 10px;  left: 48px;  margin-left: -10px;  }
 .map-popup:before {  border-top-color: #cccccc;  border-width: 11px;  left: 48px;  margin-left: -11px;  }
-.map-popup #popup-title {   margin-top: 0;     padding: 2px; background-color: #00bbee }
+.map-popup #popup-title {   margin-top: 0; padding: 2px; background-color: #00bbee }
 .map-popup #popup-content { margin: -10px 0 -10px 0; }
+.map-popup #popup-content .popup-content-body { margin: 10px;overflow-y: auto }
 .map-popup #popup-title p{   margin: 0 auto; }
 .map-popup hr{   margin: 2px; }
 .map-popup-closer {  text-decoration: none;  position: absolute;  top: 2px;  right: 8px;  }
 .map-popup-closer:after {  content: "✖";  }
+.map-module-positiondemo{}
+.map-module-positiondemo input[type=text]{width:230px;}
