@@ -12,6 +12,41 @@ Vue.component('jas-base-group-title', {
 	].join(''),
 });
 
+Vue.component('jas-base-el-multi-select', { //:ref="item.field"
+	props: {
+		value: {},
+		options: {
+			type: Array
+		},
+		item: {
+			type: Object //{field,name}
+		}
+	},
+	computed: {
+		_value: {
+			get: function () {
+				return this.value ? this.value.split(',') : [];
+			},
+			set: function (newVal) {
+				this.$emit('input', newVal.join(','));
+			}
+		}
+	},
+	template: [
+		'<el-select multiple v-model="_value" clearable :placeholder="\'请选择\'+item.name" size="small" @visible-change="visibleChange($event,item.field)"  @change="fatherSelectChanged($event,item.field)">',
+		'	<el-option v-for="option in options" :key="option.key" :label="option.value" :value="option.key"></el-option>',
+		'</el-select>',
+	].join(''),
+	methods: {
+		visibleChange: function ($event) {
+			this.$emit('visible-change', $event);
+		},
+		fatherSelectChanged: function ($event) {
+			this.$emit('change', $event);
+		},
+	}
+});
+
 Vue.component('jas-file-upload', {
 	props: {
 		limit: {
@@ -949,9 +984,7 @@ Vue.component('jas-file-list', {
 });
 
 Vue.component('jas-dialog-wrapper', {
-	props: {
-
-	},
+	props: {},
 	data: function () {
 		return {
 
@@ -1207,6 +1240,9 @@ Vue.component('jas-form-items', {
 		'						<el-option v-for="option in fieldsConfig[item.field].options" :key="option.key" :label="option.value" :value="option.key"></el-option>',
 		'					</el-select>',
 		'				</template>',
+		'				<template v-if="fieldsConfig[item.field].type == \'multiSelect\'">',
+		'				  <jas-base-el-multi-select :ref="item.field" v-model="form[item.field]" :item="item" :options="fieldsConfig[item.field].options" @visible-change="visibleChange($event,item.field)" @change="fatherSelectChanged($event,item.field)"></jas-base-el-multi-select>',
+		'				</template>',
 		'				<template v-if="fieldsConfig[item.field].type == \'input\'">',
 		'					<el-input @change="fieldChanged(item.field)" v-model="form[item.field]" :placeholder="\'请输入\'+item.name" size="small" clearable></el-input>',
 		'				</template>',
@@ -1341,7 +1377,6 @@ Vue.component('jas-form-items', {
 					var fieldConfig = that.fieldsConfig[childField];
 					if (fieldConfig.requestParams) {
 						obj = jasTools.base.extend(obj, fieldConfig.requestParams);
-						console.log(obj)
 					}
 					obj[fatherField] = fatherValue;
 					jasTools.ajax.post(jasTools.base.rootPath + "/" + requestUrl, obj, function (data) {
@@ -1431,6 +1466,9 @@ Vue.component('jas-form-items-group', {
 		'					<el-select :ref="item.field" v-model="form[item.field]" clearable :placeholder="\'请选择\'+item.name" size="small" @visible-change="visibleChange($event,item.field)"  @change="fatherSelectChanged($event,item.field)">',
 		'						<el-option v-for="option in fieldsConfig[item.field].options" :key="option.key" :label="option.value" :value="option.key"></el-option>',
 		'					</el-select>',
+		'				</template>',
+		'				<template v-if="fieldsConfig[item.field].type == \'multiSelect\'">',
+		'				  <jas-base-el-multi-select :ref="item.field" v-model="form[item.field]" :item="item" :options="fieldsConfig[item.field].options" @visible-change="visibleChange($event,item.field)" @change="fatherSelectChanged($event,item.field)"></jas-base-el-multi-select>',
 		'				</template>',
 		'				<template v-if="fieldsConfig[item.field].type == \'input\'">',
 		'					<el-input @change="fieldChanged(item.field)" v-model="form[item.field]" :placeholder="\'请输入\'+item.name" size="small" clearable></el-input>',
@@ -1718,7 +1756,6 @@ Vue.component('jas-sub-detail-group', {
 	].join(''),
 	methods: {},
 });
-
 
 Vue.component('jas-approve-dialog', {
 	props: {
