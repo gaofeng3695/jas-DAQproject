@@ -8,14 +8,16 @@ var Constants = {
     "events": {
         "ErrorEvent": "ErrorEvent",//
         "MapLoadedEvent": "MapLoadedEvent",
+        "StylesLoadedEvent": "StylesLoadedEvent",
         "MapResizedEvent": "MapResizedEvent",
         "BaseMapLayersLoaded": "BaseMapLayersLoaded",
         "OptionalLayersLoaded": "OptionalLayersLoaded",
         "ModulesLoadedEvent": "ModulesLoaded",
         "ModuleStartupEvent": "ModuleStartupEvent",
         "ModuleInitEvent": "ModuleInitEvent",
-        "OptionalLayerAddedEvent": "OptionalLayerAddedEvent",
         "ModuleStateChanged": "ModuleStateChanged",
+        "OptionalLayerAddedEvent": "OptionalLayerAddedEvent",
+        "OptionalLayerRemovedEvent": "OptionalLayerRemovedEvent",
         "ConfigLoadedEvent": "ConfigLoaded"
     },
     "strings": {
@@ -50,6 +52,7 @@ var Constants = {
         "layerSetNotFound": "没有找到对应的layerSet",
         "repeatIdError": "重复ID",
         "hasNoIdError": "ID不存在",
+        "hasNoLabelPropertyError": "图层没有包含标注所需要的属性字段，请检查图层的outFields配置",
         "hasNoStyleError": "样式不存在",
         "hasNoProj4js": "自定义投影需要引入proj4.js",
         "hasNoConfigDataError":"配置不存在"
@@ -101,6 +104,7 @@ var JasMap = null ,M = null;
         var apiDefaults = {
             appScriptId:"mapApi",
             appConfigPath:"config.json",
+            sphereRadius:6378137.0,//4490、4326、3857
             appName:"",
             dpi:window.screen.deviceXDPI ?window.screen.deviceXDPI :96 ,
             duration:500,
@@ -159,9 +163,6 @@ var JasMap = null ,M = null;
         _this.map = null;
         _this.apiConfig = null;
         _this.mapConfig = null;
-        /**
-         *
-         */
         _this.logMapInfo = function(){
             var view = _this.map.getView();
             var info = {};
@@ -182,7 +183,6 @@ var JasMap = null ,M = null;
         };
         _this.startPanMode = function(){
             mapManager.active(MapManager.NAVIGATOR);
-            //需要设置导航状态
 
         };
         _this.levelUp = function(){
@@ -265,7 +265,7 @@ var JasMap = null ,M = null;
             }
         };
         _this.hideZoomSlider = function(){
-            console.info("开发中...");
+            //console.info("开发中...");
         };
         /*********信息获取类********/
         _this.getLayerById = function(layerId){
@@ -276,6 +276,13 @@ var JasMap = null ,M = null;
                 if(id === layerId)
                     return layer;
             }
+        };
+        _this.getLayerVisible = function(layerId){
+            var layer = _this.getLayerById(layerId);
+            if(layer){
+                return layer.getVisible();
+            }
+            return false;
         };
         _this.getMapLevel = function(){
             return _this.map.getView().getZoom();
@@ -293,25 +300,47 @@ var JasMap = null ,M = null;
             return _this.map.getView().get("extent");
         };
         _this.getFeatures = function(featureId ,layerId ,attributes){
+            var result = [];
             var layer = _this.getLayerById(layerId ? layerId : apiDefaults.drawLayerId);
             var source = layer && layer.getSource();
-            var result = [];
-            if(source){
-                if(featureId){
-                    var ft = source.getFeatureById(featureId);
-                    ft && result.push(ft);
-                }else{
-                    var features = source.getFeatures();
-                    for(var i = 0 ; i < features.length ; i++){
-                        var feature = features[i];
-                        var flg = true ;
-                        for(var key in attributes){
-                            if(feature.get(key) != attributes[key])
-                                flg = false;
-                        }
-                        flg && result.push(feature);
-                    }
+            if(!source) {
+                return result ;
+            }
+            if(featureId){
+                var ft = source.getFeatureById(featureId);
+                if(ft){
+                    result.push(ft);
                 }
+            }else{
+                var features = source.getFeatures();
+                for(var i = 0 ; i < features.length ; i++){
+                    var feature = features[i];
+                    var flg = true ;
+                    for(var key in attributes){
+                        if(feature.get(key) !== attributes[key])
+                            flg = false;
+                    }
+                    flg && result.push(feature);
+                }
+            }
+            return result;
+        };
+        _this.queryFeatures = function(featureId ,layerId ,attributes){
+            var result = [];
+            var layer = _this.getLayerById(layerId ? layerId : apiDefaults.drawLayerId);
+            var source = layer && layer.getSource();
+            if( source.getUrl()){//查询
+                var url = source.getUrl().split('?')[0];
+                commonUtil.simpleAjaxLoader({
+                    async: false,
+                    url:url + "?featureId=" + featureId,
+                    onSuccess:function(e){
+                        var data = JSON.parse(e);
+                        if(data){
+                            result = new ol.format.GeoJSON().readFeatures(data);//先只处理GeoJSON格式数据
+                        }
+                    }
+                });
             }
             return result;
         };
@@ -367,29 +396,34 @@ var JasMap = null ,M = null;
             mapManager.clearAllOverlays();
             //
         };
-        _this.addGraphics = function(layerId, geoJSON, style){
+        _this.addFeatures = function(layerId,features,center){
             var layer = _this.getLayerById(layerId);
             var vectorSource = layer && layer.getSource();
             if(layer && vectorSource){
-                var features = new ol.format.GeoJSON().readFeatures(geoJSON);
                 vectorSource.addFeatures(features);
             }
+            if(center === true){
+
+            }
+        };
+        _this.addGraphics = function(layerId, geoJSON, center){
+            var features = new ol.format.GeoJSON().readFeatures(geoJSON);
+            _this.addFeatures(layerId,features,center);
         };
         _this.addPictureGraphic  = function(x, y ,options){
             var defaults = {
-                url:"classpath:images/location.png",
+                url: commonUtil.getApiRootPath("basepath:images/location.png"),
                 width:24,
                 height:24,
+                center:false,
                 offset:[0,0],
                 anchor:[0.5,1],
                 attributes:null,
                 layerId:apiDefaults.drawLayerId
             };
             var params = commonUtil.extend(defaults,options);
-            var layer = _this.getLayerById(params.layerId);
-            var vectorSource = layer && layer.getSource();
-            if(!layer || !vectorSource) return ;
-            if(isNaN(x) || isNaN(y)) return;
+            var features = [];
+             if(isNaN(x) || isNaN(y)) return;
             var feature = new ol.Feature({
                 geometry : new ol.geom.Point([x ,y]),
                 properties : params.attributes,
@@ -406,10 +440,12 @@ var JasMap = null ,M = null;
                 })
             });
             feature.setStyle(style);
-            vectorSource.addFeature(feature);
+            features.push(feature);
+            _this.addFeatures(params.layerId,features,params.center);
         };
         _this.addPointGraphic = function(x,y,options){
             var defaults = {
+                center:false,
                 radius:10,
                 offset:[0,0],
                 fillColor:[42,42,42,1],
@@ -420,10 +456,8 @@ var JasMap = null ,M = null;
                 layerId:apiDefaults.drawLayerId
             };
             var params = commonUtil.extend(defaults,options);
-            var layer = _this.getLayerById(params.layerId);
-            var vectorSource = layer && layer.getSource();
-            if(layer && vectorSource && isNaN(x) && isNaN(y)){
-                var feature = new ol.Feature({
+            if( isNaN(x) && isNaN(y)){
+                var features = [new ol.Feature({
                     geometry : new ol.geom.Point([ x ,y]),
                     properties : params.attributes,
                     name :  '',
@@ -436,22 +470,21 @@ var JasMap = null ,M = null;
                             stroke: new ol.style.Stroke({ color: params.borderColor, width: params.borderWidth})
                         })
                     })
-                });
-                vectorSource.addFeature(feature);
+                })];
+                _this.addFeatures(params.layerId,features,params.center);
             }
         };
         _this.addLineGraphic = function(path,options){
             var defaults = {
+                center:false,
                 color:[186,218,37,1],
                 width:1,
                 attributes:null,
                 layerId:apiDefaults.drawLayerId
             };
             var params = commonUtil.extend(defaults,options);
-            var layer = _this.getLayerById(params.layerId);
-            var vectorSource = layer && layer.getSource();
-            if(layer && vectorSource && path){
-                var feature = new ol.Feature({
+            if( path){
+                var features = [new ol.Feature({
                     geometry : new ol.geom.LineString(path),
                     properties : params.attributes,
                     name : '',
@@ -461,12 +494,13 @@ var JasMap = null ,M = null;
                             width: params.width
                         })
                     })
-                });
-                vectorSource.addFeature(feature);
+                })];
+                _this.addFeatures(params.layerId,features,params.center);
             }
         };
         _this.addPolygonGraphic = function(ring,options){
             var defaults = {
+                center:false,
                 fillColor:[42,42,42,1],
                 borderColor:[186,218,37,1],
                 width:1,
@@ -474,10 +508,8 @@ var JasMap = null ,M = null;
                 layerId:apiDefaults.drawLayerId
             };
             var params = commonUtil.extend(defaults,options);
-            var layer = _this.getLayerById(params.layerId);
-            var vectorSource = layer && layer.getSource();
-            if(layer && vectorSource && ring){
-                var feature = new ol.Feature({
+            if( ring){
+                var features = [new ol.Feature({
                     geometry : new ol.geom.Polygon(ring),
                     properties : params.attributes,
                     name : '',
@@ -488,10 +520,11 @@ var JasMap = null ,M = null;
                         }),
                         fill:new ol.style.Fill({ color: params.fillColor })
                     })
-                });
-                vectorSource.addFeature(feature);
+                })];
+                _this.addFeatures(params.layerId,features,params.center);
             }
         };
+
         _this.removeGraphics = function(layerId , featureIds){
             var layer = _this.getLayerById(layerId);
             var source = layer && layer.getSource();
@@ -661,16 +694,16 @@ var JasMap = null ,M = null;
             }
         };
         _this.addMapLoadedEventListener = function(func){
-            _this.addMapEvent("postrender",func);
+            return _this.addMapEvent("postrender",func);
         };
         _this.addZoomEventListener = function(func){// ?
-            _this.addMapEvent("moveend",func);
+            return _this.addMapEvent("moveend",func);
         };
         _this.addExtentEventListener = function(func){//?
-            _this.addMapEvent("moveend",func);
+            return _this.addMapEvent("moveend",func);
         };
-        _this.addMouseMoveEventListener = function(func){//?
-            _this.addMapEvent("moveend",func);
+        _this.addMouseMoveEventListener = function(func){
+            return _this.addMapEvent("pointermove",func);
         };
         _this.addLayerClickEventListener = function(layerId , func){
             var layer = _this.getLayerById(layerId);
@@ -679,27 +712,7 @@ var JasMap = null ,M = null;
                 return ;
             }
             if(layer && typeof func === "function"){
-                var interaction = new ol.interaction.Select({
-                    condition: ol.events.condition.click,
-                    layers:[layer]
-                });
-                interaction.on("select",function(e){
-                    var features = e.selected;
-                    var result = [];
-                    for(var i = 0 ; i < features.length ; i++){
-                        var feature = features[i];
-                        var id = feature.getId();
-                        var attributes = feature.getProperties();
-                        result.push({ id:id ,attributes:attributes });
-                    }
-                    if(result .length > 0){
-                        var pixel = e.mapBrowserEvent.pixel;
-                        var coordinate = e.mapBrowserEvent.coordinate;
-                        func({features:result ,pixel:pixel ,coordinate:coordinate});
-                    }
-                });
-                _this.map.addInteraction(interaction);
-                return interaction;
+                return mapManager.addClickLayer(layerId,layer,func);
             }
         };
         _this.addLayerVisibilityChangeEventListener = function(layerId , func){
@@ -723,6 +736,7 @@ var JasMap = null ,M = null;
             }else if(interactions instanceof  ol.interaction.Interaction){
                 _this.map.removeInteraction(interactions);
             }
+            interactions = null;
         };
         _this.addInteractions = function(interactions){
             if(interactions instanceof  ol.Collection){
@@ -754,25 +768,23 @@ var JasMap = null ,M = null;
                 "center":true,
                 "scale":20000 // 与map lods参数或底图的比例尺设置相关
             };
-            layerId = layerId ? layerId : apiDefaults.drawLayerId;
+            layerId = layerId ? layerId.trim() : apiDefaults.drawLayerId;
+            var targetLayer = _this.getLayerById(layerId);
             var params = commonUtil.extend(defaults,options);
             var features = [];
-            if(typeof target === "string") {
-                if (target.indexOf(".") < 0) {
-                    target = layerId + "." + target;//geotools
-                }
-                features = _this.getFeatures(target, layerId);
+            //显示图层
+            if(targetLayer && !targetLayer.getVisible()){
+                _this.layerVisibleSwitch(layerId,true);
             }
-            else if(typeof target === "object")
-                features = _this.getFeatures(null,layerId ,target);
-
             var prepareFlashStyle = function(){
                 if(features && features.length > 0){
+                    var layerStyle = targetLayer.getStyle();
                     for(var i = 0 ; i < features .length ; i++) {
                         var f1 = features[i];
-                        var fStyle1 =  f1.getStyle();
+                        var fStyle1 =  f1.getStyle ? f1.getStyle():null;
+                        var boldStyle = styleManager.getBoldStyle(fStyle1,layerStyle,f1);
                         f1.set("preSymbol",fStyle1);
-                        f1.set("boldSymbol",styleManager.getBoldStyle(fStyle1));
+                        f1.set("boldSymbol",boldStyle);
                     }
                     return true;
                 }
@@ -794,12 +806,30 @@ var JasMap = null ,M = null;
                 //取得多个要素的分布范围
                 var feature0 = features[0];
                 if(!feature0) return false ;
-                var extent = feature0.getGeometry().getExtent();
+                var extent = feature0.getGeometry().getExtent();//要素的分布范围
                 for(var i = 1 ; i < features.length ; i++){
                     var featureI = features[i];
                     featureI && ( extent = ol.extent.extend(extent,featureI.getGeometry().getExtent()));
                 }
-                _this.zoomExtent.apply(_this,extent);
+                //分布与图层显示范围判定？
+                if(extent[0] === extent[2] && extent[1]===extent[3]){
+                    var maxReso = targetLayer.getMaxResolution();
+                    var minReso = targetLayer.getMinResolution();
+                    var defaultReso = commonUtil.scaleToResolution(apiDefaults.defaultZoomScale);
+                    if(maxReso < defaultReso){
+                        defaultReso = maxReso;
+                    }else if(maxReso === defaultReso){
+                        defaultReso = maxReso / 2;
+                    }else if(minReso === defaultReso){
+                        defaultReso = minReso * 2;
+                    }else if(minReso > defaultReso){
+                        defaultReso = minReso;
+                    }
+                    _this.centerAt(extent[0],extent[1]);
+                    _this.setResolution(defaultReso);
+                }else{
+                    _this.zoomExtent.apply(_this,extent);
+                }
                 return true ;
             };
             var doFlash = function(){
@@ -815,7 +845,48 @@ var JasMap = null ,M = null;
                     }
                 },params.delay);
             };
-            prepareFlashStyle() && doPosition() && doFlash();
+            if(targetLayer && targetLayer.getSource() && targetLayer.getSource().getUrl()){
+                if(typeof target === "string") {//主键查询
+                    if (target.indexOf(".") < 0) {
+                        target = layerId + "." + target;//geotools
+                    }
+                    features = _this.queryFeatures(target, layerId);
+                }else if(typeof target === "object")//属性查询
+                    features = _this.queryFeatures(null,layerId ,target);
+                //
+                if(features.length > 0){
+                    //layer once
+                    targetLayer.once("render",function(e){
+                        //var featuresArr = e.target.getSource().getFeatures();
+                        if(typeof target === "string") {
+                            if (target.indexOf(".") < 0) {
+                                target = layerId + "." + target;
+                            }
+                            features = _this.getFeatures(target, layerId);
+                        }else if(typeof target === "object")//属性对象
+                            features = _this.getFeatures(null,layerId ,target);
+                        prepareFlashStyle() && doFlash();
+                    });
+                    doPosition();
+                }else{
+                    eventManager.publishInfo(_this.Strings.featureNotFound);
+                }
+            }else{
+                if(typeof target === "string") {//主键查询
+                    if (target.indexOf(".") < 0) {
+                        target = layerId + "." + target;//geotools
+                    }
+                    features = _this.getFeatures(target, layerId);
+                }else if(typeof target === "object")//属性查询
+                    features = _this.getFeatures(null,layerId ,target);
+                //
+                if(features.length > 0){
+                    prepareFlashStyle()&& doPosition() && doFlash();
+                }else{
+                    eventManager.publishInfo(_this.Strings.featureNotFound);
+                }
+            }
+
         };
         _this.switchBaseMap = function(layerId){
             var layer = _this.getLayerById(layerId);
@@ -1004,6 +1075,25 @@ var JasMap = null ,M = null;
                 eventManager.publishEvent( _this.Events .MapLoadedEvent ,null, 10);
 
             };
+            var addLayerFlashEffect = function(layers){
+                _class.flashSelectInteracting = new ol.interaction.Select({
+                    style:function(feature){
+                        var style = feature.getStyle();
+                        var lStyle = null;
+                        if(!style){
+                            var fId = feature.getId();
+                            var layerId = fId .substring(0,fId.indexOf("."));
+                            var layer = _this.getLayerById(layerId);
+                            layer && ( lStyle = layer.getStyle());
+                        }
+                        return styleManager.getBoldStyle(style,lStyle,feature);
+                    },
+                    condition: ol.events.condition.pointerMove,
+                    layers:layers
+                });
+                _this.map.addInteraction(_class.flashSelectInteracting);
+            };
+
             var onConfigLoaded = function(e){
                 _this.apiConfig = e.data;
                 _this.mapConfig = e.data.map;
@@ -1030,12 +1120,8 @@ var JasMap = null ,M = null;
 
             };
             var onOptionLayersLoaded = function(e){
-                var layers = e.data.layers;
-                _class.flashSelect = new ol.interaction.Select({
-                    condition: ol.events.condition.pointerMove,
-                    layers:layers
-                });
-                _this.map.addInteraction(_class.flashSelect);
+                var layers = e.data.flashLayers;
+                addLayerFlashEffect(layers);
             };
             //---量测模型---
             var currentDrawFeature = null;
@@ -1047,7 +1133,7 @@ var JasMap = null ,M = null;
             var onGeometryChange = null;
             var onMeasureDrawEnd = null;
             var onMeasureDrawStart = null;
-
+            //
             var addMouseEventHandler = function(){
                 onMouseMove = _this.map.on('pointermove', function(evt) {
                     if (evt.dragging) return;
@@ -1109,7 +1195,7 @@ var JasMap = null ,M = null;
                 measureTipOverlay = null;
                 currentDrawFeature = null;
             };
-
+            //
             _class.measureInit = function(callback,options){
                 clearMeasureState();
                 addMeasureTipOverlay();
@@ -1135,21 +1221,18 @@ var JasMap = null ,M = null;
                         var geom = evt.target;
                         var output;
                         var coordinates;
-                        var wgs84Sphere= new ol.Sphere(6378137);
+                        var sphereMetricOptions = {
+                            projection:_this.map.getView().getProjection(),
+                            radius:apiDefaults.sphereRadius
+                        };
                         if (geom instanceof ol.geom.Polygon) {
-                            coordinates = geom.getLinearRing(0).getCoordinates();
-                            var area = Math.abs(wgs84Sphere.geodesicArea(coordinates));
+                            //coordinates = geom.getLinearRing(0).getCoordinates();
+                            //var area = Math.abs(wgs84Sphere.geodesicArea(coordinates));
+                            var area = Math.abs(ol.sphere.getArea(geom ,sphereMetricOptions));
                             output = measureParams.labelStyleFunc(area);
                             tooltipCoord = geom.getInteriorPoint().getCoordinates();
                         } else if (geom instanceof ol.geom.LineString) {
-                            var length = 0.0 ;
-                            coordinates = geom.getCoordinates();
-                            var prePoint = coordinates[0];
-                            for(var i = 1 ; i < coordinates.length ; i++){
-                                var curPoint = coordinates[i];
-                                length += wgs84Sphere.haversineDistance(prePoint,curPoint);
-                                prePoint = curPoint;
-                            }
+                            length = Math.abs(ol.sphere.getLength(geom,sphereMetricOptions));
                             output = measureParams.labelStyleFunc(length);
                             tooltipCoord = geom.getLastCoordinate();
                         }
@@ -1160,10 +1243,65 @@ var JasMap = null ,M = null;
             };
             _class.drawInteracting = null;
             _class.editInteracting = null;
-            _class.flashSelect = null;//图层高亮
-            //-----------------------
+            _class.snapInteracting = null;
 
-            //--infowindow--
+            //-------地图交互-------
+            var clickListenedLayers = {};
+            _class.flashSelectInteracting = null;//鼠标经过图层高亮
+            _class.clickInteracting = null;//图层点击交互对象
+            _class.addClickLayer = function(layerId ,layer ,callback){
+                if(!clickListenedLayers[layerId]){
+                    clickListenedLayers[layerId] = {
+                        layer:layer,
+                        callback:callback
+                    };
+                }
+                var interaction =  _class.clickInteracting;
+                if(interaction){
+                    _this.removeInteractions(mapManager.clickInteracting);
+                    interaction = null;
+                }
+                interaction = new ol.interaction.Select({
+                    condition: ol.events.condition.click,
+                    layers:_class.getClickLayers()
+                });
+                interaction.on("select",function(e){
+                    var features = e.selected;
+                    var pixel = e.mapBrowserEvent.pixel;
+                    var coordinate = e.mapBrowserEvent.coordinate;
+                    for(var i = 0 ; i < features.length ;i++){
+                        var feature = features[i];
+                        var layerId = e.target.getLayer(feature).get("id");
+                        var featureId = feature.getId();
+                        var id = featureId.substring(featureId.indexOf(".") + 1);
+                        var attributes = feature.getProperties();
+                        attributes.id = id;
+                        var ly = clickListenedLayers[layerId];
+                        if(ly && ly.callback){
+                            ly.callback({layerId:layerId,attributes:attributes ,pixel:pixel ,coordinate:coordinate});
+                        }
+                    }
+                });
+                _this.map.addInteraction(interaction);
+                return interaction;
+            };
+            _class.removeClickLayer = function(layerId){
+                if(clickListenedLayers[layerId]){
+                    delete clickListenedLayers[layerId];
+                }
+            };
+            _class.getClickLayers = function(){
+                var layers = [];
+                for(var key in clickListenedLayers ){
+                    var v = clickListenedLayers[key];
+                    if(v && v.layer){
+                        layers.push(v.layer);
+                    }
+                }
+                return layers ;
+            };
+            //------
+            //--infoWindow--
             var infoWindowOverlay = null;
             var popupElement = null;
             var titleContainer = null;
@@ -1171,7 +1309,7 @@ var JasMap = null ,M = null;
             var contentContainer = null;
             var contentElement = null;
             var titleCloser = null;
-            _class.updateInfoWindow = function(x,y,content,title){
+            _class.updateInfoWindow = function(x,y,content,title,width,height){
                 if(!infoWindowOverlay){
                     popupElement = document.createElement("div");
                     popupElement.className = "map-popup";
@@ -1192,11 +1330,13 @@ var JasMap = null ,M = null;
                     contentContainer = document.createElement("div");
                     contentContainer.id ="popup-content";
                     contentElement= document.createElement("div");
+                    contentElement.className = "popup-content-body";
                     contentContainer.appendChild(contentElement);
                     //
                     popupElement.appendChild(titleContainer);
                     popupElement.appendChild(href);
                     popupElement.appendChild(contentContainer);
+
                     infoWindowOverlay = new ol.Overlay({
                         element: popupElement ,
                         autoPan: true,
@@ -1213,16 +1353,19 @@ var JasMap = null ,M = null;
                     };
                 }
                 titleElement.innerHTML = title ? title : "信息窗口";
-
+                if(width && height){
+                    popupElement.style.width = width + "px" ;
+                    popupElement.style.height = height + "px";
+                }
                 if(content instanceof Node){
                     contentElement.innerHTML="";
                     contentElement.appendChild(content)  ;
-                }else if(content instanceof String){
+                }else  {
                     contentElement.innerHTML = content ? content :"无";
                 }
                 infoWindowOverlay.setPosition([ x, y ]);
             };
-
+            //------
             _class.defineProjection = function(epsgString){
                 if(epsgString === "EPSG:4326" || epsgString === "EPSG:3857"){
                     return epsgString;
@@ -1259,11 +1402,11 @@ var JasMap = null ,M = null;
                 eventManager.registerEvent( _this.Events .ConfigLoadedEvent ,onConfigLoaded);
                 eventManager.registerEvent( _this.Events .MapLoadedEvent ,onMapLoaded);
                 eventManager.registerEvent( _this.Events .OptionalLayersLoaded ,onOptionLayersLoaded);
-
             };
             _class.active = function(state,vectorLayer,param ){
                 _this.removeEventListener(_class.drawInteracting);
                 _this.removeEventListener(_class.editInteracting);
+                _this.removeEventListener(_class.snapInteracting);
                 switch(state){
                     case MapManager.DRAW:
                         var geometryFunction = null;
@@ -1299,10 +1442,18 @@ var JasMap = null ,M = null;
                                     onDrawStart.apply(this,arguments);
                                 }
                             });
-                            _this.map.addInteraction(_class.drawInteracting);
+                            //_this.map.addInteraction(_class.drawInteracting);
+                            _class.editInteracting = new ol.interaction.Modify({
+                                source: vectorLayer.getSource()
+                            });
+                            _class.snapInteracting = new ol.interaction.Snap({
+                                source: vectorLayer.getSource()
+                            });
+                            var interactions = new ol.Collection([ _class.editInteracting, _class.snapInteracting  ,_class.drawInteracting]);
+                            _this.addInteractions( interactions);
                         }
                         break;
-                    case MapManager.EDITOR://编辑不能指定图层？
+                    case MapManager.EDITOR:
                         var select = new ol.interaction.Select({
                             wrapX: false
                         });
@@ -1317,6 +1468,7 @@ var JasMap = null ,M = null;
                     default:
                 }
             };
+            //
         }
         function StyleManager(){
             var _class = this;
@@ -1333,14 +1485,26 @@ var JasMap = null ,M = null;
                 fill_color:"rgb(255,204,51,0.7)",
                 fill_opacity:1
             };
+            var olDefaultStyle = null;
             var onMapLoaded = function(e){
                 if(typeof mapStyleTemplates !== "undefined"){
                     _class.mapStyleTemplates = mapStyleTemplates;
                 }
+                olDefaultStyle = new ol.style.Style({
+                    fill : new ol.style.Fill({
+                        color:"rgba(255,255,255,0.4)"
+                    }),
+                    stroke :new ol.style.Stroke({
+                        color:"rgba(255,255,255,0.4)"
+                    }),
+                    image:new ol.style.Circle()
+                });
             };
+            var mapStyleResources = [];
             _class.mapStyleTemplates = {};
             _class.drawStyle = function(param){
-                var styleParam = commonUtil.extend({},defaultStyle,param);
+                var defaultStyleClone = commonUtil.extend({},defaultStyle);
+                var styleParam = commonUtil.extend({},defaultStyleClone,param);
                 var style = {
                     fill: new ol.style.Fill({
                         color: styleParam.fill_color
@@ -1376,11 +1540,18 @@ var JasMap = null ,M = null;
             _class.parse = function(styleParam){
                 if( !styleParam ) return ;
                 if(typeof styleParam ==="string"){
-                    if( _class.mapStyleTemplates[styleParam]){
-                        return _class.mapStyleTemplates[styleParam]
+                    var targetStyle =  _class.mapStyleTemplates[styleParam];
+                    if( targetStyle){
+                        if(targetStyle.image && targetStyle.image  ){
+                            var src =  targetStyle.image.getSrc();
+                            var url = commonUtil.getApiRootPath(src);
+                            targetStyle.image.setSrc(url);
+                        }
+                        return targetStyle
                     }else{
                         eventManager.publishInfo(_this.Strings.hasNoStyleError + ",style=" + styleParam);
                     }
+                    return null;
                 }else if(typeof styleParam ==="object"){
                     var style = {
                         fill: new ol.style.Fill({
@@ -1418,8 +1589,19 @@ var JasMap = null ,M = null;
             _class.startup =  function(){
                 eventManager.registerEvent( _this.Events .MapLoadedEvent ,onMapLoaded);
             };
-            _class.getBoldStyle = function(s){
-                var style = s ? s.clone():ol.style.Style.default_[0].clone();
+            _class.getBoldStyle = function(s ,lStyle,feature){
+                var style = s && s.clone();
+                if(!style){
+                    if( lStyle && typeof lStyle === "function"){
+                        lStyle =  lStyle(feature);
+                    }
+                    if( lStyle){
+                        if(lStyle instanceof Array)
+                            style = lStyle[0].clone();
+                        else
+                            style = lStyle.clone();
+                    }
+                }
                 if(style.getFill()){
                     var fill = style.getFill();
                     fill.setColor(apiDefaults.defaultHighlightColor);
@@ -1428,6 +1610,7 @@ var JasMap = null ,M = null;
                     var stroke = style.getStroke();
                     var width = stroke.getWidth() + 2;
                     stroke.setWidth(width);
+                    stroke.setColor(apiDefaults.defaultHighlightColor);
                 }
                 if(style.getImage()){
                     var image = style.getImage();
@@ -1440,7 +1623,8 @@ var JasMap = null ,M = null;
                 if(!_class.mapStyleTemplates[name]){
                     _class.mapStyleTemplates[name] = style;
                 }
-            }
+            };
+
         }
         function LayerManager(){
             var _class = this;
@@ -1473,8 +1657,13 @@ var JasMap = null ,M = null;
                 'tilerow': '{y}'
             };
 
+            var createDefaultLoader = function(){
+
+            };
             var parseLayerConfig = function(config){
                 try {
+                    var minResolution =config.minResolution ? config.minResolution :(config.minScale ? commonUtil.scaleToResolution(config.minScale):undefined) ;
+                    var maxResolution =config.maxResolution ? config.maxResolution :(config.maxScale ? commonUtil.scaleToResolution(config.maxScale):undefined ) ;
                     var sourceConfig = {
                         url:"",
                         format:"GeoJSON",
@@ -1489,13 +1678,13 @@ var JasMap = null ,M = null;
                         maxResolution:undefined
                     },{//配置必选
                         id:config.id,
-                        type:config.type,
-                        source:config.source,
+                        type:config.type ? config.type :"Vector",
+                        source:config.source ? config.source :"Vector",
                         opacity:config.opacity,
                         visible:config.visible,
                         zIndex:config.index,
-                        minResolution:config.minResolution,
-                        maxResolution:config.maxResolution
+                        minResolution:minResolution,
+                        maxResolution:maxResolution
                         //style:config.style
                     });//
                     if(config.url){
@@ -1507,6 +1696,8 @@ var JasMap = null ,M = null;
                         }else if(config.format === "WKT"){
                             sourceConfig.format = new ol.format.WKT();
                         }
+                    }else{
+                        sourceConfig.format = new ol.format.GeoJSON();
                     }
                     if(config.strategy){
                         if(config.strategy === "all"){
@@ -1525,10 +1716,19 @@ var JasMap = null ,M = null;
                     if(config.params){
                         sourceConfig.params = config.params;
                     }
+                    var loader = null;
                     if(config.loader){
-                        var loader = null;
+                        if(!sourceConfig.url ){
+                            sourceConfig.url = commonUtil.getDefaultLayerQueryUrl(config.id);
+                        }
+                        if(config.where){
+                            sourceConfig.url = commonUtil.appendUrl( sourceConfig.url ,"where", config.where);
+                        }
                         if("jas" === config.loader){
                             var strategy = config.strategy;
+                            if(config.outFields){
+                                sourceConfig.url = commonUtil.appendUrl( sourceConfig.url ,"outFields", config.outFields);
+                            }
                             loader = function(extent, resolution, projection) {
                                 var proj = projection.getCode();
                                 var source = this;
@@ -1542,6 +1742,7 @@ var JasMap = null ,M = null;
                                     url = commonUtil.appendUrl(url,"outSR", inSR);
                                 }
                                 url = commonUtil.appendUrl(url,"outputFormat",config.format);
+                                //添加token参数
                                 var token = localStorage.getItem(_this.Keys.token);
                                 if(token ){
                                     url = commonUtil.appendUrl(url,_this.Keys.token,token);
@@ -1561,9 +1762,41 @@ var JasMap = null ,M = null;
                         }
                         sourceConfig.loader = loader;
                     }
+
                     if(config.style){
                         layerConfig.style = styleManager.parse(config.style);
                     }
+                    if( config.labelStyle && config.labelStyle .indexOf(":") > 0){
+                        var strs = config.labelStyle.split(":");
+                        var labelStyleStr = strs[0];
+                        var fieldName = strs[1];
+                        var template = strs[2];// ...
+                        var labelStyle = styleManager.parse(labelStyleStr);
+                        if(fieldName && config.outFields && !commonUtil.hasValue(fieldName,config.outFields.split(",")) ){
+                            eventManager.publishError(_this.Strings.hasNoLabelPropertyError + ",layerId=" + config.id + ",缺少属性" + fieldName);
+                        }
+                        if(labelStyle){
+                            var styles = [];
+                            var textStyle = labelStyle.getText();
+                            if(layerConfig.style ){
+                                layerConfig.style.setText(textStyle);
+                                styles.push(layerConfig.style);
+                            }else{
+                                styles.push( labelStyle );
+                            }
+                            var labelStyleFunction = function(feature){
+                                if(typeof feature !== "undefined") {
+                                    //格式化标注 ？
+                                    var text = feature.get && feature.get(fieldName);
+                                    text && textStyle.setText(text);
+                                }
+                                return styles;
+                            };
+                            layerConfig.style = labelStyleFunction;
+                        }
+
+                    }
+
                     if(layerConfig.source.toUpperCase() ==="WMTS"){
                         var tileGrid = commonUtil.extend({},defaultGridSet,config.tileGrid);
                         delete config.tileGrid;
@@ -1617,6 +1850,9 @@ var JasMap = null ,M = null;
                             wrapX: true
                         }
                     };
+                    if(layerConfig.type.toUpperCase() ==="VECTOR"){
+                        layerConfig.declutter = config.declutter === true ? true : false;
+                    }
                     return {
                         layerConfig:layerConfig,
                         sourceConfig:sourceConfig
@@ -1659,7 +1895,7 @@ var JasMap = null ,M = null;
                         _class.optionalLayers.push(layer);
                         _this.addLayer(layer);
                     }
-                    eventManager.publishEvent(_this.Events.OptionalLayersLoaded ,{"layers":_flashLayers})
+                    eventManager.publishEvent(_this.Events.OptionalLayersLoaded ,{"flashLayers":_flashLayers,"layers":_class.optionalLayers})
                 }
             };
             var parseLayerConfigs = function(){
@@ -1849,7 +2085,7 @@ var JasMap = null ,M = null;
                     console.error(e);
                 }
                 if(msg){
-                    console.error(msg);
+                    //console.error(msg);
                 }
                 _class.publishEvent( _this.Events .ErrorEvent , { message:msg , type:"error"});
             };
@@ -2040,7 +2276,7 @@ var JasMap = null ,M = null;
             };
             var onModuleLoaded = function(e){
                 var module = e.data.target;
-                module.startup();
+                module.startup && module.startup();
             };
             var setModuleContainer = function(container){
                 if(container==="map"){
@@ -2050,6 +2286,17 @@ var JasMap = null ,M = null;
                 }else if(container.indexOf("#") >=0 ){
                     var domId = container.substring(1);
                     return document.getElementById(domId);
+                }
+                return null;
+            };
+            var require = function(){
+                var length = arguments.length ;
+                if(length === 1 && typeof  arguments[0] === "function"){
+                    var module = arguments[0].apply(_this);
+                    //这先只处理样式模版
+                    for(var k in module){
+                        styleManager.addMapStyle(k,module[k]);
+                    }
                 }
                 return null;
             };
@@ -2074,7 +2321,6 @@ var JasMap = null ,M = null;
                         if(conf.template && conf.template.indexOf(".html") >= 0){
                             //开发中
                         }
-
                         conf.style && ( module.style = conf.style );
                         ( conf.moduleSet && conf.moduleSet.length > 0 ) && ( module.moduleSet = conf.moduleSet );
                         module.container = setModuleContainer( conf.container );
@@ -2084,7 +2330,7 @@ var JasMap = null ,M = null;
                             _class.loadedModules.push(module);
                         }
                     }catch(e){
-                        module.destroy && typeof module.destroy === "function" && module.destroy();
+                        module && module.destroy && typeof module.destroy === "function" && module.destroy();
                         eventManager.publishError( _this.Strings.moduleCreateError +" ,moduleId=" + module.id ,e);
                     }
                 }
@@ -2094,6 +2340,7 @@ var JasMap = null ,M = null;
                 eventManager.registerEvent( _this.Events .ConfigLoadedEvent ,onConfigLoaded);
                 eventManager.registerEvent( _this.Events .MapLoadedEvent ,onMapLoaded);
                 eventManager.registerEvent( _this.Events .ModuleInitEvent ,onModuleLoaded);
+                JasMap.require = require;
             };
             _class.getModuleById = function(id){
                 for(var i = 0 ; i < _class.loadedModules.length ; i++){
@@ -2107,6 +2354,13 @@ var JasMap = null ,M = null;
         function ConfigManager(apiOptions){
             var _class = this;
             var apiScript = null;
+            var _config = null;
+            var parseConfig = function(){
+                var appName = _config.appName ;
+                if(appName){
+                    document.title = appName;
+                }
+            };
             _class.startup = function(){
                 apiScript = document.getElementById(apiOptions.appScriptId);
                 basePath = getBasePath();
@@ -2114,19 +2368,22 @@ var JasMap = null ,M = null;
                 if(configPath) {
                     //加载配置
                     loadConfig(configPath,function(conf){
-                        //加载依赖
                         if (conf.resources && conf.resources.length > 0) {
                             eventManager.time( _this.Strings.dependenceLoading);
                             loadResources(conf.resources, function(type){
-                                if (type==="dojo" && conf.dojoConfig) { // loadResources之前定义
-                                    global.dojoConfig = conf.dojoConfig;
-                                }
+                                // if (type==="dojo" && conf.dojoConfig) { // loadResources之前定义
+                                //     global.dojoConfig = conf.dojoConfig;
+                                // }else if(type === "style"){
+                                //
+                                // }
                             }, function(){
                                 console.info("资源加载完成：",arguments[0]);
                             }, function () {
+                                _config = conf;
+                                parseConfig();
                                 eventManager.timeEnd( _this.Strings.dependenceLoading);
                                 eventManager.publishEvent( _this.Events .ConfigLoadedEvent,conf);
-                            },conf.async );
+                            });
                         }else{
                             eventManager.publishEvent( _this.Events .ConfigLoadedEvent,conf);
                         }
@@ -2139,6 +2396,7 @@ var JasMap = null ,M = null;
                 eventManager.time( _this.Strings.configLoading);
                 commonUtil.simpleAjaxLoader({
                     url:url,
+                    method:'get',
                     onSuccess:function (responseText) {
                         eventManager.timeEnd(  _this.Strings.configLoading);
                         var conf = {};
@@ -2165,7 +2423,7 @@ var JasMap = null ,M = null;
                     }
                 });
             }
-            function loadResources( ress, onOneBeginLoad, onOneLoad, onLoad, async){
+            function loadResources( ress, onOneBeginLoad, onOneLoad, onLoad){
                 var loaded = [];
                 var relys = {};
                 function _onOneLoad(url){
@@ -2207,7 +2465,8 @@ var JasMap = null ,M = null;
                 }
                 if(type === 'css'){
                     loadCss(url);
-                }else if(type==="js"){
+                    //}else if(type==="js"){
+                }else{
                     loadJs(url);
                 }
                 function createElement(config) {
@@ -2263,12 +2522,12 @@ var JasMap = null ,M = null;
                 }
             }
             function getMapConfigPath(){
-                if(apiScript){
-                    var path = apiScript.getAttribute("dataaccess-config");
-                    if(path)
-                        return path;
-                }
-                return "config.json";
+                // if(apiScript){
+                //     var path = apiScript.getAttribute("dataaccess-config");
+                //     if(path)
+                //         return path;
+                // }
+                return commonUtil.getApiRootPath(apiDefaults.appConfigPath);
             }
             function getBasePath(){
                 if(apiScript){
@@ -2307,7 +2566,7 @@ var JasMap = null ,M = null;
                     }
                 }
             };
-            _class.extend = function( ) {
+            _class.extend = function() {
                 //var destination = JSON.parse(JSON.stringify(target));
                 var isObjFunc = function(name) {
                     var toString = Object.prototype.toString;
@@ -2342,8 +2601,8 @@ var JasMap = null ,M = null;
             };
             _class.getApiRootPath = function(url){
                 var result = url;
-                if(url.indexOf("classpath:") === 0){
-                    result = basePath + url.replace("classpath:","");
+                if(url.indexOf("basepath:") === 0){
+                    result = basePath + url.replace("basepath:","").trim();
                 }
                 return result.trim();
             };
@@ -2355,10 +2614,10 @@ var JasMap = null ,M = null;
                     xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
                 }
                 var url = options.url;
-                var method = options.method ? options.method : "GET";
+                var method = options.method ? options.method : "POST";
                 var onSuccess = options.onSuccess ;
                 var onError = options.onError ;
-
+                var async = options.async === false ? false :true ;
                 xmlHttp.onreadystatechange = function(){
                     if(arguments[0] && arguments[0].target){
                         xmlHttp = arguments[0].target;
@@ -2376,7 +2635,7 @@ var JasMap = null ,M = null;
                         }
                     }
                 };
-                xmlHttp.open(method,url,true);
+                xmlHttp.open(method,url,async);
                 //xmlHttp.setRequestHeader("Content-type","application/json");
                 xmlHttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
                 xmlHttp.send();
@@ -2384,12 +2643,21 @@ var JasMap = null ,M = null;
             _class.scaleToResolution = function(scale){
                 var espg = _this.map.getView().getProjection().getCode();
                 if(espg==="EPSG:4490" || espg==="EPSG:4326"){
-                    //1:scale = 1 : (96 * 2 * Math.PI * 6378137 * resolution / 360 / 0.0254)
                     return   ( scale * 360 * 0.0254 ) /( 96 * 2 * Math.PI * 6378137);
                 }else {
                     //(espg==="EPSG:3857")
                     //1:scale = 1 : (96 * Resolution / 0.0254)
                     return  scale * 0.0254 / apiDefaults.dpi;
+                }
+            };
+            _class.resolutionToScale = function(reso){
+                var espg = _this.map.getView().getProjection().getCode();
+                if(espg==="EPSG:4490" || espg==="EPSG:4326"){
+                    return  reso * apiDefaults.dpi * 2 * Math.PI * 6378137/(360 * 0.0254);
+                }else {
+                    //(espg==="EPSG:3857")
+                    //1:scale = 1 : (96 * Resolution / 0.0254)
+                    return  reso * apiDefaults.dpi / 0.0254;
                 }
             };
             _class.appendUrl = function(url, fieldName , fieldValue){
@@ -2401,8 +2669,22 @@ var JasMap = null ,M = null;
                 }
                 url += (fieldName + "=" + fieldValue);
                 return url ;
+            };
+            _class.getDefaultLayerQueryUrl = function(layerId){
+                return  "/jasgis/" + layerId +"/query.do";
+            };
+            _class.hasValue = function(target,obj){
+                for(var key in obj){
+                    var value = obj[key];
+                    if(value === target){
+                        return true;
+                    }
+                }
+                return false;
             }
+
         }
+        //
         apiInit();
     };
 })(window);

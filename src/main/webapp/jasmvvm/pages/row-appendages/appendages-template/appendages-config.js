@@ -7,7 +7,7 @@ var crossConfig = {
       'pipelineOid',
       'pipeSegmentOrCrossOid',
       'medianStakeOid',
-      'markStakeOid',
+      'markStakeCode',
     ],
     tableFields: [ //
 
@@ -23,7 +23,7 @@ var crossConfig = {
       "pipeSegmentOrCrossName", //: "穿跨越A",
 
 
-      "markStakeOid", //: "test-1",
+      "markStakeCode", //: "test-1",
       // "medianStakeOid", //: "5b295ca5-fcf1-42c7-bc87-0be4fd98c65c",
       "medianStakeCode", //: "median_stake_004",
       "relativeMileage", //: -0.5,
@@ -58,7 +58,7 @@ var crossConfig = {
       'collectionDate',
     ],
     addFields2: [ //
-      "markStakeOid", //: "test-1",
+      "markStakeCode", //: "test-1",
       "medianStakeOid", //: "5b295ca5-fcf1-42c7-bc87-0be4fd98c65c",
       // "medianStakeCode", //: "median_stake_004",
       "relativeMileage", //: -0.5,
@@ -89,7 +89,7 @@ var crossConfig = {
       'approveStatus'
     ],
     detailFields2: [ //
-      "markStakeOid", //: "test-1",
+      "markStakeCode", //: "test-1",
       // "medianStakeOid",//: "5b295ca5-fcf1-42c7-bc87-0be4fd98c65c",
       "medianStakeCode", //: "median_stake_004",
       "relativeMileage", //: -0.5,
@@ -757,7 +757,7 @@ var crossConfig = {
     },
 
     // 1111
-    markStakeOid: {
+    markStakeCode: {
       name: '标志桩编号',
       type: 'input',
       isRequired: true
@@ -864,21 +864,21 @@ var crossConfig = {
     }, //: "SK-median_stake_004-2",
     "handHoleName": {
       type: 'select',
-      name: '名称',
+      name: '孔名称',
       domainName: 'hand_hole_name_domain',
       isRequired: true
     }, //: "hand_hole_name_code_001",
     "handHoleNameCodeName": {
-      name: '名称',
+      name: '孔名称',
     }, //: "接续手孔",
     "handHoleType": {
-      name: '类型',
+      name: '孔类型',
       type: 'select',
       domainName: 'hand_hole_type_domain',
       isRequired: true
     }, //: "hand_hole_type_code_002",
     "handHoleTypeName": {
-      name: '类型',
+      name: '孔类型',
     }, //: "分歧手孔",
     "handHoleSpecifications": {
       name: '规格型号',

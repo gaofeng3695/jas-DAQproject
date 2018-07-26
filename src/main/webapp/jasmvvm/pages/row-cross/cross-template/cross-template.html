@@ -70,18 +70,20 @@
 			var param = window.jasTools.base.getParamsInUrl(location.href);
 			this.privilegeCode = param.privilegeCode;
 			this.templateCode = param.templateCode;
+			this.pageCode = param.pageCode;
 			this.className = param.className;
-			this.addUrl = './pages/row-cross/cross-template/dialogs/add.html?templateCode=' + this.templateCode;
-			this.detailUrl = './pages/row-cross/cross-template/dialogs/detail.html?templateCode=' + this.templateCode;
+			this.addUrl = './pages/row-cross/cross-template/dialogs/add.html?pageCode=' + this.pageCode;
+			this.detailUrl = './pages/row-cross/cross-template/dialogs/detail.html?pageCode=' + this.pageCode;
 
-			this.searchPath = '/jdbc/commonData/' + this.templateCode + '/getPage.do';
-			this.deletePath = '/jdbc/commonData/' + this.templateCode + '/delete.do';
-			this.upcallPath = '/daq/' + this.templateCode + '/approve.do';
+			this.searchPath = '/jdbc/commonData/' + this.pageCode + '/getPage.do';
+			this.deletePath = '/jdbc/commonData/' + this.pageCode + '/delete.do';
+			this.upcallPath = '/daq/' + this.pageCode + '/approve.do';
 
-			this.fields = crossConfig.methods.formatFields(crossConfig[this.templateCode].searchFields, crossConfig.fieldsConfig,
-				this.templateCode);
-			this.tableFields = crossConfig.methods.formatFields(crossConfig[this.templateCode].tableFields, crossConfig.fieldsConfig,
-				this.templateCode);
+			this.fields = crossConfig.methods.formatFields(crossConfig[this.pageCode].searchFields, crossConfig.fieldsConfig,
+				this.pageCode);
+			this.tableFields = crossConfig.methods.formatFields(crossConfig[this.pageCode].tableFields, crossConfig.fieldsConfig,
+				this.pageCode);
+				this.initJasMap();
 
 		},
 		mounted: function () {
@@ -105,6 +107,7 @@
 					//业务逻辑
 				};
 				this.jasMap = new JasMap({
+					appConfigPath:'./../../map/config.json',
 					onMapLoaded: function (e) {
 						//
 						// this.logMapInfo();

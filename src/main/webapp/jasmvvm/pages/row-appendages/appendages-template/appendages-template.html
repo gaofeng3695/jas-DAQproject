@@ -62,21 +62,23 @@
 			var that = this;
 			var param = window.jasTools.base.getParamsInUrl(location.href);
 			this.privilegeCode = param.privilegeCode;
-			this.templateCode = param.templateCode; // 模块名称
+			this.templateCode = param.templateCode;
+			this.pageCode = param.pageCode; // 模块名称
 			this.className = param.className;
 
-			this.addUrl = './pages/row-appendages/appendages-template/dialogs/add.html?templateCode=' + this.templateCode;
-			this.detailUrl = './pages/row-appendages/appendages-template/dialogs/detail.html?templateCode=' + this.templateCode;
+			this.addUrl = './pages/row-appendages/appendages-template/dialogs/add.html?pageCode=' + this.pageCode;
+			this.detailUrl = './pages/row-appendages/appendages-template/dialogs/detail.html?pageCode=' + this.pageCode;
 
-			this.searchPath = '/jdbc/commonData/' + this.templateCode + '/getPage.do';
-			this.deletePath = '/jdbc/commonData/' + this.templateCode + '/delete.do';
+			this.searchPath = '/jdbc/commonData/' + this.pageCode + '/getPage.do';
+			this.deletePath = '/jdbc/commonData/' + this.pageCode + '/delete.do';
 
-			this.fields = crossConfig.methods.formatFields(crossConfig[this.templateCode].searchFields, crossConfig.fieldsConfig,
-				this.templateCode);
-			this.tableFields = crossConfig.methods.formatFields(crossConfig[this.templateCode].tableFields, crossConfig.fieldsConfig,
-				this.templateCode);
-			this.topSearch = crossConfig.methods.formatForm(crossConfig[this.templateCode].searchFields);
+			this.fields = crossConfig.methods.formatFields(crossConfig[this.pageCode].searchFields, crossConfig.fieldsConfig,
+				this.pageCode);
+			this.tableFields = crossConfig.methods.formatFields(crossConfig[this.pageCode].tableFields, crossConfig.fieldsConfig,
+				this.pageCode);
+			this.topSearch = crossConfig.methods.formatForm(crossConfig[this.pageCode].searchFields);
 
+			// this.initJasMap();
 		},
 		mounted: function () {
 
@@ -99,6 +101,7 @@
 					//业务逻辑
 				};
 				this.jasMap = new JasMap({
+					appConfigPath: './../../map/config.json',
 					onMapLoaded: function (e) {
 						//
 						// this.logMapInfo();

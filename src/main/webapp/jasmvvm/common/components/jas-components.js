@@ -621,7 +621,6 @@ Vue.component('jas-table-for-list', {
 		templateCode: {},
 		className: {},
 	},
-
 	data: function () {
 		return {
 			headStyle: {
@@ -629,6 +628,7 @@ Vue.component('jas-table-for-list', {
 			},
 			_templateCode: '',
 			_className: '',
+			_classNameQuery: '',
 			isApprove: '',
 			privilege: [], //权限数组 bt_add,bt_update,bt_delete,bt_select,bt_export,bt_import,bt_position
 			tableData: [],
@@ -661,7 +661,7 @@ Vue.component('jas-table-for-list', {
 		'	<el-button size="small" plain type="primary" icon="fa fa-plus" v-if="isApprove&&isHasPrivilege(' + "'bt_report'" + ')"  :disabled="reportRows.length==0" @click="upcall">上报</el-button>',
 		'	<el-button size="small" plain type="primary" icon="fa fa-plus" v-if="isApprove&&isHasPrivilege(' + "'bt_approve'" + ')" :disabled="approveRows.length==0" @click="approve">审核</el-button>',
 		'<jas-import-export-btns :is-import="isHasPrivilege(' + "'bt_import'" + ')" :is-export="isHasPrivilege(' + "'bt_export'" + ')" ',
-		'		:form="form" :oids="oids" :template-code="_templateCode" :class-name="_className"></jas-import-export-btns>',
+		'		:form="form" :oids="oids" :template-code="_templateCode" :class-name="_classNameQuery"></jas-import-export-btns>',
 		'	<el-button class="fr" size="small" icon="el-icon-refresh" @click="refresh"></el-button>',
 		'</div>',
 		'<div class="is-grown">',
@@ -698,7 +698,9 @@ Vue.component('jas-table-for-list', {
 		var param = window.jasTools.base.getParamsInUrl(location.href);
 		this.isApprove = param.isApprove;
 		this._className = this.className || param.className;
+		this._classNameQuery = this.classNameQuery || param.classNameQuery;
 		this._templateCode = this.templateCode || param.templateCode;
+		this.functionCode = param.menuCode;
 	},
 	mounted: function () {
 		this._requestPrivilege(this.privilegeCode);
@@ -723,7 +725,7 @@ Vue.component('jas-table-for-list', {
 				businessOid: oids,
 				approveStatus: 1, //status 2 通过 -1 驳回
 				className: this._className,
-				functionCode: this._templateCode,
+				functionCode: this.functionCode,
 			}, function (data) {
 				top.Vue.prototype.$message({
 					type: 'success',
@@ -737,7 +739,6 @@ Vue.component('jas-table-for-list', {
 			var oids = this.approveRows.map(function (item) {
 				return item.oid;
 			});
-			console.log(that._templateCode)
 			if (oids.length === 0) {
 				return;
 			} else if (oids.length === 1) {
@@ -745,7 +746,7 @@ Vue.component('jas-table-for-list', {
 				var src = jasTools.base.setParamsToUrl(this.detailUrl, {
 					approveType: 2,
 					className: this._className,
-					menuCode: this._templateCode || '',
+					menuCode: this.functionCode || '',
 				});
 				var url = jasTools.base.setParamsToUrl(src, this.approveRows[0]);
 				top.jasTools.dialog.show({
@@ -763,7 +764,7 @@ Vue.component('jas-table-for-list', {
 				var src = jasTools.base.setParamsToUrl('./pages/template/dialogs/approveTemplate.html', {
 					approveType: 2,
 					className: this._className,
-					menuCode: this._templateCode || '',
+					menuCode: this.functionCode || '',
 				});
 				var url = jasTools.base.setParamsToUrl(src, {
 					oids: oids.join(',')
@@ -1846,7 +1847,7 @@ Vue.component('jas-approve-dialog', {
 		this._oid = param.oid || this.oid;
 		this._type = param.approveType || this.type;
 		this._className = param.className || this.className;
-		this._functionCode = param.menuCode || this.functionCode;
+		this._functionCode = param.menuCode || this.menuCode;
 	},
 	mounted: function () {
 
