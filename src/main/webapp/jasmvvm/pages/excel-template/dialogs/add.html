@@ -144,9 +144,9 @@
 				this.uploadurl = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") +
 					"&businessId=" + this.oid + "&businessType=excelTemplate";
 				this.isEdit = true;
-				this.tableFormData.excelTemplateName = param.excelTemplateName;
-				this.tableFormData.excelTemplateCode = param.excelTemplateCode;
-				this.tableFormData.remark = param.remark;
+				this.tableFormData.excelTemplateName = decodeURI(param.excelTemplateName);
+				this.tableFormData.excelTemplateCode = decodeURI(param.excelTemplateCode);
+				this.tableFormData.remark = decodeURI(param.remark);
 				// this.getDetailByObjectId();
 				this.requestFiles();
 			};

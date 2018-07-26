@@ -64,7 +64,7 @@ public class DaqAppendagesMarkStakeBo extends CommonBaseBo {
 	/**
 	 * 标志桩编号 
 	 */
-	private String markStakeOid; 
+	private String markStakeCode; 
 
 	/**
 	 * 桩号id 
@@ -124,12 +124,22 @@ public class DaqAppendagesMarkStakeBo extends CommonBaseBo {
 	/**
 	 * 施工单位 
 	 */
-	private String constructUnit; 
+	private String constructUnit;
+	
+	/**
+	 * 施工单位name 
+	 */
+	private String constructUnitName; 
 
 	/**
 	 * 监理单位 
 	 */
-	private String supervisionUnit; 
+	private String supervisionUnit;
+	
+	/**
+	 * 监理单位name 
+	 */
+	private String supervisionUnitName; 
 
 	/**
 	 * 监理工程师 
@@ -228,12 +238,12 @@ public class DaqAppendagesMarkStakeBo extends CommonBaseBo {
 		this.pipeSegmentOrCrossName = pipeSegmentOrCrossName;
 	}
 
-	public String getMarkStakeOid() {
-		return markStakeOid;
+	public String getMarkStakeCode() {
+		return markStakeCode;
 	}
 
-	public void setMarkStakeOid(String markStakeOid) {
-		this.markStakeOid = markStakeOid;
+	public void setMarkStakeCode(String markStakeCode) {
+		this.markStakeCode = markStakeCode;
 	}
 
 	public String getMedianStakeOid() {
@@ -380,6 +390,22 @@ public class DaqAppendagesMarkStakeBo extends CommonBaseBo {
 
 	public void setStakeFunctionName(String stakeFunctionName) {
 		this.stakeFunctionName = stakeFunctionName;
+	}
+
+	public String getConstructUnitName() {
+		return constructUnitName;
+	}
+
+	public void setConstructUnitName(String constructUnitName) {
+		this.constructUnitName = constructUnitName;
+	}
+
+	public String getSupervisionUnitName() {
+		return supervisionUnitName;
+	}
+
+	public void setSupervisionUnitName(String supervisionUnitName) {
+		this.supervisionUnitName = supervisionUnitName;
 	}
 	
 }

@@ -91,6 +91,16 @@
 				},
 				tableFields: [ //
 					{
+						name: '审核状态',
+						field: 'approveStatus',
+						formatter: function (a, b, value) {
+							// if (value == 0) return '未上报';
+							if (value == 1) return '审核中';
+							if (value == 2) return '通过';
+							if (value == -1) return '驳回';
+							return '未上报';
+						}
+					}, {
 						name: '项目名称',
 						field: 'projectName'
 					}, {

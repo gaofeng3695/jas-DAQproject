@@ -326,14 +326,23 @@ Vue.component('jas-search-for-list', {
 		}
 	},
 	mounted: function () {
-		var nFields = this.fields.length;
-		this.btnSize.sm = 24 - (12 * nFields) % 24;
-		this.btnSize.md = 24 - (8 * nFields) % 24;
-		this.btnSize.lg = 24 - (6 * nFields) % 24;
-		this.btnSize.xl = 24 - (6 * nFields) % 24;
+		this.setFieldsPattern();
 		this.resetFieldsConfig(this.fields, this.fieldsConfig);
 	},
+	watch: {
+		fields: function () {
+			this.setFieldsPattern();
+			this.resetFieldsConfig(this.fields, this.fieldsConfig);
+		}
+	},
 	methods: {
+		setFieldsPattern: function () {
+			var nFields = this.fields.length;
+			this.btnSize.sm = 24 - (12 * nFields) % 24;
+			this.btnSize.md = 24 - (8 * nFields) % 24;
+			this.btnSize.lg = 24 - (6 * nFields) % 24;
+			this.btnSize.xl = 24 - (6 * nFields) % 24;
+		},
 		search: function () {
 			this.$emit('search', this.fields);
 		},
@@ -378,15 +387,6 @@ Vue.component('jas-search-for-list', {
 						that.fatherSelectList.push(field);
 					}
 
-					/* 设置验证规则 */
-					// if (config.isRequired) {
-
-					// 	config.rules = [{
-					// 		required: true,
-					// 		message: fieldNameArr[fieldIndex] + '为必填项',
-					// 		trigger: 'change'
-					// 	}]
-					// }
 					/* 请求阈值 */
 					if (config.domainName) {
 						(function (field, config) {
@@ -592,6 +592,9 @@ Vue.component('jas-table-for-list', {
 			headStyle: {
 				'background-color': '#f5f7fa ',
 			},
+			_templateCode: '',
+			_className: '',
+			isApprove: '',
 			privilege: [], //权限数组 bt_add,bt_update,bt_delete,bt_select,bt_export,bt_import,bt_position
 			tableData: [],
 			currentPage: 1,
@@ -599,22 +602,35 @@ Vue.component('jas-table-for-list', {
 			total: 0,
 			pageSize: 10,
 			oids: [],
+			rows: [],
 		}
 	},
 	computed: {
-
+		reportRows: function () {
+			var that = this;
+			return this.rows.filter(function (row) {
+				return !that.frozenBtn(row);
+			});
+		},
+		approveRows: function () {
+			var that = this;
+			return this.rows.filter(function (row) {
+				return (row.approve_status == '待审核' || row.approveStatus == 1);
+			});
+		},
 	},
 	template: [
 		'<div  class="jas-flex-box is-vertical is-grown">',
 		'<div style="padding: 15px 0;">',
 		'	<el-button size="small" plain type="primary" icon="fa fa-plus" v-if="isHasPrivilege(' + "'bt_add'" + ')"  @click="add">增加</el-button>',
-		'	<el-button size="small" plain type="primary" icon="fa fa-plus" :disabled="oids.length==0" @click="upcall">上报</el-button>',
+		'	<el-button size="small" plain type="primary" icon="fa fa-plus" v-if="isApprove&&isHasPrivilege(' + "'bt_report'" + ')"  :disabled="reportRows.length==0" @click="upcall">上报</el-button>',
+		'	<el-button size="small" plain type="primary" icon="fa fa-plus" v-if="isApprove&&isHasPrivilege(' + "'bt_approve'" + ')" :disabled="approveRows.length==0" @click="approve">审核</el-button>',
 		'<jas-import-export-btns :is-import="isHasPrivilege(' + "'bt_import'" + ')" :is-export="isHasPrivilege(' + "'bt_export'" + ')" ',
-		'		:form="form" :oids="oids" :template-code="templateCode" :class-name="className"></jas-import-export-btns>',
+		'		:form="form" :oids="oids" :template-code="_templateCode" :class-name="_className"></jas-import-export-btns>',
 		'	<el-button class="fr" size="small" icon="el-icon-refresh" @click="refresh"></el-button>',
 		'</div>',
 		'<div class="is-grown">',
-		'	<el-table @selection-change="handleSelectionChange"  v-loading="loading" height="100%" :data="tableData" border :header-cell-style="headStyle" style="width: 100%">',
+		'	<el-table @selection-change="handleSelectionChange"  v-loading="loading" height="100%" :data="tableData" border :header-cell-style="headStyle" style="width: 100%" stripe>',
 		'    <el-table-column type="selection" width="55" align="center" fixed></el-table-column>',
 		'		<el-table-column label="序号" type="index" align="center" width="50" fixed>',
 		'		</el-table-column>',
@@ -623,9 +639,9 @@ Vue.component('jas-table-for-list', {
 		'		<el-table-column label="操作" align="center" width="180" fixed="right">',
 		'			<template slot-scope="scope">',
 		'				<el-button @click="locate(scope.row)"  v-if="isHasPrivilege(' + "'bt_position'" + ')" type="text" size="small">定位</el-button>',
-		'				<el-button @click="preview(scope.row)" v-if="isHasPrivilege(' + "'bt_select'" + ')" type="text" size="small">查看</el-button>',
-		'				<el-button @click="edit(scope.row)" v-if="isHasPrivilege(' + "'bt_update'" + ')"  type="text" size="small">编辑</el-button>',
-		'				<el-button @click="deleteItem(scope.row)" v-if="isHasPrivilege(' + "'bt_delete'" + ')"   type="text" size="small">删除</el-button>',
+		'				<el-button @click="preview(scope.row)"  v-if="isHasPrivilege(' + "'bt_select'" + ')" type="text" size="small">查看</el-button>',
+		'				<el-button @click="edit(scope.row)"  :disabled="frozenBtn(scope.row)" v-if="isHasPrivilege(' + "'bt_update'" + ')"  type="text" size="small">编辑</el-button>',
+		'				<el-button @click="deleteItem(scope.row)" :disabled="frozenBtn(scope.row)" v-if="isHasPrivilege(' + "'bt_delete'" + ')"   type="text" size="small">删除</el-button>',
 		'			</template>',
 		'		</el-table-column>',
 		'	</el-table>',
@@ -643,17 +659,36 @@ Vue.component('jas-table-for-list', {
 			// this.search();
 		}
 	},
+	created: function () {
+		var param = window.jasTools.base.getParamsInUrl(location.href);
+		this.isApprove = param.isApprove;
+		this._className = this.className || param.className;
+		this._templateCode = this.templateCode || param.templateCode;
+	},
 	mounted: function () {
 		this._requestPrivilege(this.privilegeCode);
 		this.search();
 	},
 	methods: {
+		frozenBtn: function (row) {
+			if (row.approveStatus > 0) {
+				return true;
+			}
+			return false;
+		},
 		upcall: function () {
+
 			var that = this;
-			var url = jasTools.base.rootPath + this.upcallPath;
+			var oids = this.reportRows.map(function (item) {
+				return item.oid;
+			});
+			if (oids.length === 0) return;
+			var url = jasTools.base.rootPath + '/daq/dataApprove/save.do';
 			jasTools.ajax.post(url, {
-				idList: this.oids,
-				approveStatus: 1
+				businessOid: oids,
+				approveStatus: 1, //status 2 通过 -1 驳回
+				className: this._className,
+				functionCode: this._templateCode,
 			}, function (data) {
 				top.Vue.prototype.$message({
 					type: 'success',
@@ -662,10 +697,60 @@ Vue.component('jas-table-for-list', {
 				that.refresh();
 			});
 		},
+		approve: function () {
+			var that = this;
+			var oids = this.approveRows.map(function (item) {
+				return item.oid;
+			});
+			console.log(that._templateCode)
+			if (oids.length === 0) {
+				return;
+			} else if (oids.length === 1) {
+
+				var src = jasTools.base.setParamsToUrl(this.detailUrl, {
+					approveType: 2,
+					className: this._className,
+					menuCode: this._templateCode || '',
+				});
+				var url = jasTools.base.setParamsToUrl(src, this.approveRows[0]);
+				top.jasTools.dialog.show({
+					width: '60%',
+					height: '80%',
+					title: '审核',
+					src: url,
+					cbForClose: function (param) {
+						if (param == 'success') {
+							that.refresh();
+						}
+					}
+				});
+			} else {
+				var src = jasTools.base.setParamsToUrl('./pages/template/dialogs/approveTemplate.html', {
+					approveType: 2,
+					className: this._className,
+					menuCode: this._templateCode || '',
+				});
+				var url = jasTools.base.setParamsToUrl(src, {
+					oids: oids.join(',')
+				});
+				top.jasTools.dialog.show({
+					width: '600px',
+					height: '400px',
+					title: '批量审核',
+					src: url,
+					cbForClose: function (param) {
+						if (param == 'success') {
+							that.refresh();
+						}
+					}
+				});
+			}
+		},
 		handleSelectionChange: function (val) {
 			this.oids = val.map(function (item) {
 				return item.oid;
 			});
+			this.rows = val;
 		},
 		locate: function (item) {
 			this.$emit('locate', item)
@@ -715,7 +800,13 @@ Vue.component('jas-table-for-list', {
 		preview: function (row) {
 			var that = this;
 			if (!this.detailUrl) return;
-			var url = jasTools.base.setParamsToUrl(this.detailUrl, row)
+			var url = this.detailUrl;
+			if (this.isApprove) {
+				url = jasTools.base.setParamsToUrl(this.detailUrl, {
+					approveType: 1
+				});
+			}
+			url = jasTools.base.setParamsToUrl(url, row);
 			top.jasTools.dialog.show({
 				width: '60%',
 				height: '80%',
@@ -1120,7 +1211,7 @@ Vue.component('jas-form-items', {
 		'					<el-input @change="fieldChanged(item.field)" v-model="form[item.field]" :placeholder="\'请输入\'+item.name" size="small" clearable></el-input>',
 		'				</template>',
 		'	    	<template v-if="fieldsConfig[item.field].type == \'number\'">',
-		'					<el-input-number @change="fieldChanged(item.field)" v-model="form[item.field]" :precision="fieldsConfig[item.field].precision || 3" :step="1" :max="fieldsConfig[item.field].max || 999999" controls-position="right" clearable :placeholder="\'请输入\'+item.name" size="small"></el-input-number>',
+		'					<el-input-number @change="fieldChanged(item.field)" v-model="form[item.field]" :precision="precision(fieldsConfig[item.field].precision)" :step="1" :max="fieldsConfig[item.field].max || 999999" controls-position="right" clearable :placeholder="\'请输入\'+item.name" size="small"></el-input-number>',
 		'	    	</template>',
 		'				<template v-if="fieldsConfig[item.field].type == \'date\'">',
 		'					<el-date-picker clearable value-format="yyyy-MM-dd" type="date" :placeholder="\'请选择\'+item.name" @change="fieldChanged(item.field)" v-model="form[item.field]" size="small" style="width: 100%;"></el-date-picker>',
@@ -1131,6 +1222,11 @@ Vue.component('jas-form-items', {
 		'</el-row>',
 	].join(''),
 	methods: {
+		precision: function (value) {
+			if (value == 0) return 0;
+			if (!value) return 3;
+			return value;
+		},
 		triggerFatherSelectsChange: function (fatherSelectList) {
 			var that = this;
 			var SelectList = fatherSelectList || that.fatherSelectList;
@@ -1621,4 +1717,150 @@ Vue.component('jas-sub-detail-group', {
 		'</div>',
 	].join(''),
 	methods: {},
+});
+
+
+Vue.component('jas-approve-dialog', {
+	props: {
+		oid: {
+			type: String
+		},
+		type: {
+			type: Number, // 0 无审批功能 1 查看审批  2 审核审批
+			default: 0
+		},
+		className: {
+			type: String
+		},
+		functionCode: {
+			type: String
+		},
+	},
+	data: function () {
+		return {
+			total: 0,
+			_oid: this.oid,
+			_type: 0,
+			_className: this.className,
+			_functionCode: this.functionCode,
+			searchform: {
+				page: 1,
+				rows: 10,
+			},
+			headStyle: {
+				'background-color': '#f5f7fa ',
+			},
+			activeName: 'first',
+			tableData: [],
+			searchform: {
+				page: 1,
+				rows: 10,
+			},
+			loading: false,
+			remarks: '',
+		}
+	},
+	template: [
+		'				<jas-dialog-wrapper v-if="_type==0">',
+		'					<slot></slot>',
+		'				</jas-dialog-wrapper>',
+		'<el-tabs v-else class="jas-approve-dialog jas-flex-box is-vertical" v-model="activeName" @tab-click="handleClick" >',
+		'  <el-tab-pane label="详情信息" name="first">',
+		'    <div style="height: 100%;overflow: auto;">',
+		'				<jas-dialog-wrapper>',
+		'					<div><slot></slot></div>',
+		'					<div v-if="_type==2" slot="footer">',
+		'						<div>',
+		'							<div>',
+		'								<el-form label-width="80px">',
+		'									<el-form-item label="审批意见">',
+		'										<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="remarks"></el-input>',
+		'									</el-form-item>',
+		'								</el-form>',
+		'							</div>',
+		'							<div>',
+		'								<el-button size="small" @click="close">取 消</el-button>',
+		'								<el-button size="small" type="warning" @click="requestApprove(-1)">驳 回</el-button>',
+		'								<el-button size="small" type="primary" @click="requestApprove(2)">通 过</el-button>',
+		'							</div>',
+		'						</div>',
+		'					</div>',
+		'				</jas-dialog-wrapper>',
+		'			</div>',
+		'  </el-tab-pane>',
+		'  <el-tab-pane label="审核信息" name="second">',
+		'    <div class="jas-flex-box is-vertical" style="margin: 0 20px;">',
+		'      <el-table class="is-grown" v-loading="loading" :data="tableData" height="100" style="width: 100%;" :header-cell-style="headStyle" border stripe>',
+		'        <el-table-column type="index" label="序号" width="50" align="center" fixed></el-table-column>',
+		'        <el-table-column prop="approveStatus" :formatter="formatter" label="操作类型" width="120" align="center"></el-table-column>',
+		'        <el-table-column prop="approveOpinion" label="审批意见" align="center"></el-table-column>',
+		'        <el-table-column prop="createDatetime" label="操作时间" width="160" align="center"></el-table-column>',
+		'        <el-table-column prop="createUserName" label="操作人员" width="160" align="center"></el-table-column>',
+		'      </el-table>',
+		'      <el-pagination style="text-align: right;margin-top:15px" @size-change="handleSizeChange" @current-change="handleCurrentChange" ',
+		'        :current-page="searchform.page" :page-sizes="[10,20,50,100]" :page-size="searchform.rows" layout="total, sizes, prev, pager, next, jumper" :total="total">',
+		'      </el-pagination>',
+		'    </div>',
+		'  </el-tab-pane>',
+		'</el-tabs>',
+	].join(''),
+	created: function () {
+		var param = window.jasTools.base.getParamsInUrl(location.href);
+		this._oid = param.oid || this.oid;
+		this._type = param.approveType || this.type;
+		this._className = param.className || this.className;
+		this._functionCode = param.menuCode || this.functionCode;
+	},
+	mounted: function () {
+
+	},
+	methods: {
+		formatter: function (a, b, c) {
+			if (c == 1) return '上报';
+			if (c == 2) return '通过';
+			if (c == -1) return '驳回';
+		},
+		handleClick: function (vm) {
+			if (vm.name === 'second') {
+				this.requestTableList();
+			}
+		},
+		handleSizeChange: function (val) {
+			this.searchform.rows = val;
+			this.requestTableList();
+		},
+		handleCurrentChange: function (val) {
+			this.searchform.page = val;
+			this.requestTableList();
+		},
+		requestTableList: function () {
+			var that = this;
+			var url = jasTools.base.rootPath + '/jdbc/commonData/dataApprove/getPage.do';
+			jasTools.ajax.post(url, {
+				businessOid: this._oid
+			}, function (data) {
+				that.tableData = data.rows;
+			});
+		},
+		requestApprove: function (status) {
+			var that = this;
+			var url = jasTools.base.rootPath + '/daq/dataApprove/save.do';
+			jasTools.ajax.post(url, {
+				businessOid: [this._oid],
+				approveOpinion: this.remarks,
+				approveStatus: status, //status 2 通过 -1 驳回
+				className: this._className,
+				functionCode: this._functionCode,
+			}, function (data) {
+				top.Vue.prototype.$message({
+					type: 'success',
+					message: '审核成功'
+				});
+				top.jasTools.dialog.close('success');
+			});
+		},
+		close: function () {
+			top.jasTools.dialog.close();
+		},
+	}
 });

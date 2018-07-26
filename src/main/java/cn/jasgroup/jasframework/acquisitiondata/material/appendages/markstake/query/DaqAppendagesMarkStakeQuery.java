@@ -31,13 +31,13 @@ public class DaqAppendagesMarkStakeQuery extends BaseJavaQuery {
 	private String pipelineOid;
 	private String tendersOid;
 	private String pipeSegmentOrCrossOid;
-	private String markStakeOid;
+	private String markStakeCode;
 	private String medianStakeOid;
 	
 	@Override
 	public String getSql() {
 		String sql =  "select t.*,"
-				+ " d1.code_name as detectionTypeName,"
+				+ " d1.code_name as stakeStructureName,"
 				+ " ss.stakeFunctionName,"
 				+ "	p.project_name,"
 				+ "	l.pipeline_name,"
@@ -74,8 +74,8 @@ public class DaqAppendagesMarkStakeQuery extends BaseJavaQuery {
 		if(StringUtils.isNotBlank(pipeSegmentOrCrossOid)){
 			sql += " and t.pipe_segment_or_cross_oid = :pipeSegmentOrCrossOid ";
 		}
-		if(StringUtils.isNotBlank(markStakeOid)){
-			sql += " and t.mark_stake_oid like :markStakeOid ";
+		if(StringUtils.isNotBlank(markStakeCode)){
+			sql += " and t.mark_stake_oid like :markStakeCode ";
 		}
 		if(StringUtils.isNotBlank(medianStakeOid)){
 			sql += " and t.median_stake_oid = :medianStakeOid ";
@@ -127,15 +127,15 @@ public class DaqAppendagesMarkStakeQuery extends BaseJavaQuery {
 		this.pipeSegmentOrCrossOid = pipeSegmentOrCrossOid;
 	}
 
-	public String getMarkStakeOid() {
-		if(StringUtils.isNotBlank(markStakeOid)){
-			return "%"+markStakeOid+"%";
+	public String getMarkStakeCode() {
+		if(StringUtils.isNotBlank(markStakeCode)){
+			return "%"+markStakeCode+"%";
 		}
-		return markStakeOid;
+		return markStakeCode;
 	}
 
-	public void setMarkStakeOid(String markStakeOid) {
-		this.markStakeOid = markStakeOid;
+	public void setMarkStakeCode(String markStakeCode) {
+		this.markStakeCode = markStakeCode;
 	}
 
 	public String getMedianStakeOid() {
