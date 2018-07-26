@@ -74,7 +74,7 @@
 								<div class="el-upload__text">将文件拖到此处，或
 									<em>点击上传</em>
 								</div>
-								<div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+								<div class="el-upload__tip" slot="tip">只能上传Excel模板文件，最多同时上传一个</div>
 							</el-upload>
 						</el-form-item>
 					</el-col>
@@ -144,9 +144,9 @@
 				this.uploadurl = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") +
 					"&businessId=" + this.oid + "&businessType=excelTemplate";
 				this.isEdit = true;
-				this.tableFormData.excelTemplateName = param.excelTemplateName;
-				this.tableFormData.excelTemplateCode = param.excelTemplateCode;
-				this.tableFormData.remark = param.remark;
+				this.tableFormData.excelTemplateName = decodeURI(param.excelTemplateName);
+				this.tableFormData.excelTemplateCode = decodeURI(param.excelTemplateCode);
+				this.tableFormData.remark = decodeURI(param.remark);
 				// this.getDetailByObjectId();
 				this.requestFiles();
 			};

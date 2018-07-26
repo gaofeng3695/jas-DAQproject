@@ -15,13 +15,15 @@
 
 <body>
 	<div id="app" v-cloak>
-		<jas-base-group-title name="中线桩信息"></jas-base-group-title>
-		<jas-detail-table :titles="fieldsArr" :detail="detail"></jas-detail-table>
-		<jas-base-group-title name="其他信息"></jas-base-group-title>
-		<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
+		<jas-dialog-wrapper>
+			<jas-base-group-title name="中线桩信息"></jas-base-group-title>
+			<jas-detail-table :titles="fieldsArr" :detail="detail"></jas-detail-table>
+			<jas-base-group-title name="其他信息"></jas-base-group-title>
+			<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
 
-		<jas-base-group-title name="附件信息"></jas-base-group-title>
-		<jas-file-list :biz-id="oid"></jas-file-list>
+			<jas-base-group-title name="附件信息"></jas-base-group-title>
+			<jas-file-list :biz-id="oid"></jas-file-list>
+		</jas-dialog-wrapper>
 	</div>
 </body>
 <script src="./../../../../lib/jquery/jquery-1.12.4.min.js"></script>
@@ -65,14 +67,6 @@
 						name: 'Y坐标',
 						field: 'pointy',
 					},
-					{
-						name: '标石类型',
-						field: 'markStoneTypeName',
-					},
-					{
-						name: '标石概略位置',
-						field: 'markStoneLocation',
-					},
 				],
 				otherArr: [{
 					name: '备注',
@@ -80,10 +74,9 @@
 				}],
 				detail: {},
 				columnNum: 2,
-				oid:'',
+				oid: '',
 			}
 		},
-
 		created: function () {
 			var that = this;
 			var param = window.jasTools.base.getParamsInUrl(location.href);
@@ -92,7 +85,6 @@
 				this.params = param;
 				this.getDetailByObjectId();
 			};
-
 		},
 		methods: {
 			getDetailByObjectId: function () {
@@ -102,10 +94,6 @@
 					that.detail = data.data;
 				});
 			},
-
-
-
-
 		},
 	});
 </script>

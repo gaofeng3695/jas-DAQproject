@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>自定义表单配置</title>
+	<!-- <link rel="stylesheet" href="./libelement-ui/element-#0E2B4A/src/index.css"> -->
+	<link rel="stylesheet" href="./../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../lib/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="./../../../src/css/main.css">
+
+</head>
+
+<body>
+	<div id="app" v-cloak>
+
+		<jas-two-panel-resizer layout="horizontal" length="40%" @paneresize="paneresize">
+			<div slot="closePanel" id="jasMap" class="jasmap"></div>
+			<jas-list-wrapper slot="mainPanel">
+				<jas-search-for-list slot="search" :form="topSearch" :fields="fields" :fields-config="fieldsConfig" @search="searchList"></jas-search-for-list>
+				<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" :search-path="searchPath"
+				  :add-url="addUrl" :detail-url="detailUrl" :delete-path="deletePath" :class-name="className" :template-code="templateCode"
+				  @locate="locate"></jas-table-for-list>
+			</jas-list-wrapper>
+
+		</jas-two-panel-resizer>
+
+	</div>
+</body>
+
+<script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../lib/vue/vue.js"></script>
+<script src="./../../../lib/element-ui/v2.4.1/index.min.js"></script>
+<script src="./../../../lib/vue-multipane/vue-multipane.js"></script>
+<script src="./../../../common/components/jas-components.js"></script>
+<script src="./../../../common/js/jas-tools.js"></script>
+
+<script id="mapApi" src="./../../map/mapjs/mapjs4ol.js"></script>
+<script>
+	var vm = new Vue({
+		el: '#app',
+		data: function () {
+			return {
+				className: '',
+				templateCode: '',
+				searchPath: '/jdbc/commonData/crossExcavation/getPage.do',
+				deletePath: '/jdbc/commonData/crossExcavation/delete.do',
+				addUrl: './pages/row-cross/cross-excavation/dialogs/add.html',
+				detailUrl: './pages/row-cross/cross-excavation/dialogs/detail.html',
+				privilegeCode: '',
+				topSearch: {
+					projectOid: '',
+					tendersOid: '',
+					pipelineOid: '',
+					crossOid: '', //线路段
+					startMedianStakeOid: '',
+					endMedianStakeOid: '',
+				},
+				fields: [ //
+					{
+						field: "projectOid",
+						name: '项目名称'
+					}, {
+						field: "tendersOid",
+						name: '标段名称'
+					}, {
+						field: "pipelineOid",
+						name: '管线名称'
+					}, {
+						field: "crossOid",
+						name: '穿跨越'
+					}, {
+						name: '起始桩号',
+						field: 'startMedianStakeOid'
+					}, {
+						name: '结束桩号',
+						field: 'endMedianStakeOid'
+					}
+				],
+				fieldsConfig: {
+					projectOid: {
+						type: 'select',
+						optionUrl: '/daq/privilege/getProjectList.do',
+						childSelect: ['tendersOid'],
+						childUrl: ['/daq/privilege/getTendersList.do'],
+					},
+					tendersOid: {
+						type: 'select',
+						childSelect: ['pipelineOid'],
+						childUrl: ['/daq/privilege/getPipelineListByTendersOid.do', '/daq/privilege/getSupervisionUnitByTendersOid.do'],
+					},
+					pipelineOid: {
+						type: 'select',
+						childSelect: ['crossOid'],
+						childUrl: ['/daq/privilege/getCrossList.do'],
+					},
+					crossOid: {
+						type: 'select',
+						childSelect: ['startMedianStakeOid', 'endMedianStakeOid'],
+						childUrl: ['/daq/privilege/getMedianStakeList.do', '/daq/privilege/getMedianStakeList.do'],
+						requestParams: {
+							crossWay: 'cross_way_code01'
+						}
+					},
+					startMedianStakeOid: {
+						type: 'select',
+					},
+					endMedianStakeOid: {
+						type: 'select',
+					}
+				},
+				tableFields: [ //
+					{
+						name: '项目名称',
+						field: 'projectName'
+					}, {
+						name: '标段名称',
+						field: 'tendersName'
+					}, {
+						name: '管线名称',
+						field: 'pipelineName'
+					}, {
+						name: "穿跨越名称",
+						field: "crossName"
+					}, {
+						field: 'crossingDepartment',
+						name: '穿越物管理单位',
+					}, {
+						field: 'crossLength',
+						name: '穿越长度(m)',
+					}, {
+						field: 'crossMaxLength',
+						name: '穿越最大深度(m)',
+					}, {
+						field: 'startMedianStakeCode',
+						name: '起始桩号',
+					}, {
+						field: 'startRelativeMileage',
+						name: '相对起始桩位置(m)',
+					}, {
+						field: 'endMedianStakeCode',
+						name: '结束桩号',
+					}, {
+						field: 'endRelativeMileage',
+						name: '相对结束桩位置(m)',
+					}, {
+						field: 'startPointx',
+						name: '起始点X坐标',
+					}, {
+						field: 'startPointy',
+						name: '起始点Y坐标',
+					}, {
+						field: 'startPointz',
+						name: '起始点高程(m)',
+					}, {
+						field: 'endPointx',
+						name: '结束点X坐标',
+					}, {
+						field: 'endPointy',
+						name: '结束点Y坐标',
+					}, {
+						field: 'endPointz',
+						name: '结束点高程(m)',
+					}, {
+						field: 'steadyTubeMeasures',
+						name: '稳管措施',
+					}, {
+						field: 'commencementDate',
+						name: '开工日期',
+					}, {
+						field: 'completionDate',
+						name: '完工日期',
+					}, {
+						field: 'constructUnitName',
+						name: '施工单位',
+					}, {
+						field: 'supervisionUnitName',
+						name: '监理单位',
+					}, {
+						field: 'supervisionEngineer',
+						name: '监理工程师',
+					}, {
+						field: 'collectionPerson',
+						name: '采集人员',
+					}, {
+						field: 'collectionDate',
+						name: '采集日期',
+					}, {
+						field: 'approveStatus',
+						name: '审核状态',
+						formatter: function (a, b, value, c) {
+							if (value == -1) return '驳回';
+							if (value == 0) return '未提交';
+							if (value == 1) return '审核中';
+							if (value == 2) return '通过';
+							return value;
+						}
+					},
+				],
+			}
+		},
+		created: function () {
+			// this.initJasMap();
+		},
+		mounted: function () {
+			var that = this;
+			var param = window.jasTools.base.getParamsInUrl(location.href);
+			this.privilegeCode = param.privilegeCode;
+			this.templateCode = param.templateCode; //|| "stake-2";
+			this.className = param.className; // || 'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';
+		},
+		methods: {
+			searchList: function () {
+				this.$refs.table.search();
+			},
+			locate: function (row) {
+				this.jasMap.flashGraphic(row.oid, 'daq_median_stake');
+			},
+			paneresize: function () {
+				this.jasMap.resizeMap();
+			},
+			locate: function (item) {
+				console.log(item)
+			},
+			initJasMap: function () {
+				var onCenterStakeLayerClicked = function (e) {
+					//业务逻辑
+				};
+				this.jasMap = new JasMap({
+					onMapLoaded: function (e) {
+						//
+						// this.logMapInfo();
+					},
+					onLayerAdded: function (e) {
+						var layerId = e.data.layerId;
+						if (layerId === "centerlinestake") {
+							//添加单个图层的点击事件
+							this.addLayerClickEventListener(layerId, onCenterStakeLayerClicked);
+						}
+					}
+				});
+			},
+
+		},
+	});
+</script>
+
+</html>

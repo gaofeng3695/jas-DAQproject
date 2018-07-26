@@ -23,6 +23,7 @@
 					<el-step title="字段配置"></el-step>
 					<el-step title="UI类型"></el-step>
 					<el-step title="分组排序"></el-step>
+					<el-step title="唯一性验证"></el-step>
 				</el-steps>
 			</div>
 			<div class="is-grown">
@@ -239,13 +240,10 @@
 
 								<el-table-column label="UI类型" align="center" min-width="140px">
 									<template slot-scope="scope">
-										<!-- <el-cascader expand-trigger="hover" :options="options" v-model="scope.row.uiType"></el-cascader> -->
-
 										<el-select size="small" v-model="scope.row.uiType" placeholder="请选择UI类型">
 											<el-option label="无" value=""></el-option>
 											<el-option v-for="option in uiTypeOption" :label="option.name" :value="option.id" :key="option.id"></el-option>
 										</el-select>
-
 									</template>
 								</el-table-column>
 								<el-table-column label="必填" align="center" width="80px">
@@ -296,7 +294,7 @@
 									<template slot-scope="scope">
 										<el-select size="small" v-model="scope.row.childFieldArr" multiple placeholder="" v-show="isSqlSelect(scope.row.uiType)">
 											<!-- <el-option label="无" value=""></el-option> -->
-											<el-option v-for="option in filterTable"v-show="isSqlSelect(option.uiType)" :label="option.fieldNameCn" :value="option.fieldName"></el-option>
+											<el-option v-for="option in filterTable" v-show="isSqlSelect(option.uiType)" :label="option.fieldNameCn" :value="option.fieldName"></el-option>
 										</el-select>
 									</template>
 								</el-table-column>
@@ -393,24 +391,69 @@
 								</el-tab-pane>
 							</el-tabs>
 						</div>
+						<div class="content-wrap" v-loading="isLoadingFieldInfo" v-show="indexPage===4">
+							<div class="jas-flex-box is-vertical">
+								<div style="padding-bottom:10px;">
+									<el-button plain type="primary" @click="addUniqueField" size="small">新增</el-button>
+								</div>
+								<div style="height: 0;" class="is-grown">
+									<el-table :data="uniqueFileds" border :header-cell-style="headStyle" height="100%" style="width: 100%">
+										<el-table-column label="序号" type="index" align="center" width="50" fixed></el-table-column>
+
+										<el-table-column label="字段名称" align="center" min-width="120" width="200" prop="uniqueField" fixed>
+											<template slot-scope="scope">
+												<el-select size="small" v-model="scope.row.uniqueField" placeholder="请选择唯一性字段">
+													<el-option v-for="option in uniqueFieldOption" :label="option.name" :value="option.id" :key="option.id"></el-option>
+												</el-select>
+											</template>
+										</el-table-column>
+										<el-table-column label="关联字段" align="center" min-width="120" prop="uniqueCondition">
+											<template slot-scope="scope">
+												<el-select size="small" v-model="scope.row.formatUniqueCondition" multiple placeholder="关联限制字段">
+													<el-option v-for="option in uniqueFieldOption" :label="option.name" :value="option.id" :key="option.id"></el-option>
+												</el-select>
+											</template>
+
+										</el-table-column>
+										<el-table-column label="验证信息" align="center" min-width="120" prop="uniqueFieldMessage">
+											<template slot-scope="scope">
+												<el-input v-model="scope.row.uniqueFieldMessage" clearable placeholder="请输入验证提示信息" size="small"></el-input>
+											</template>
+										</el-table-column>
+										<el-table-column label="操作" align="center" width="120">
+											<template slot-scope="scope">
+												<el-button @click="deleteUniqueItem(scope.row)" type="text" size="small">删除</el-button>
+											</template>
+										</el-table-column>
+									</el-table>
+								</div>
+
+							</div>
+
+						</div>
 					</div>
 					<div class="btn-wrap">
 						<div v-if="indexPage==0">
 							<!-- <el-button @click="close">上一步</el-button> -->
-							<el-button type="primary" @click="saveFunctionResource(1,$event)">保存并关闭</el-button>
-							<el-button type="primary" @click="saveFunctionResource(0,$event)">下一步</el-button>
+							<el-button size="small" type="primary" @click="saveFunctionResource(1,$event)">保存并关闭</el-button>
+							<el-button size="small" type="primary" @click="saveFunctionResource(0,$event)">下一步</el-button>
 						</div>
 						<div v-if="indexPage==1">
-							<el-button @click="--indexPage">上一步</el-button>
-							<el-button type="primary" @click="goToUiTable">下一步</el-button>
+							<el-button size="small" @click="--indexPage">上一步</el-button>
+							<el-button size="small" type="primary" @click="goToUiTable">下一步</el-button>
 						</div>
 						<div v-if="indexPage==2">
-							<el-button @click="--indexPage">上一步</el-button>
-							<el-button type="primary" @click="goToSort">下一步</el-button>
+							<el-button size="small" @click="--indexPage">上一步</el-button>
+							<el-button size="small" type="primary" @click="goToSort">下一步</el-button>
 						</div>
 						<div v-if="indexPage==3">
-							<el-button @click="--indexPage">上一步</el-button>
-							<el-button type="primary" @click="saveFieldConfig">完 成</el-button>
+							<el-button size="small" type="primary" @click="saveFieldConfig(1)">保存并关闭</el-button>
+							<el-button size="small" @click="--indexPage">上一步</el-button>
+							<el-button size="small" type="primary" @click="saveFieldConfig(0)">下一步</el-button>
+						</div>
+						<div v-if="indexPage==4">
+							<el-button size="small" @click="--indexPage">上一步</el-button>
+							<el-button size="small" type="primary" @click="saveUnique">完成</el-button>
 						</div>
 					</div>
 				</div>

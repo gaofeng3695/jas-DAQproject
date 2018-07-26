@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>自定义表单配置</title>
+	<!-- <link rel="stylesheet" href="./libelement-ui/element-#0E2B4A/src/index.css"> -->
+	<link rel="stylesheet" href="./../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../lib/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="./../../../src/css/main.css">
+	<style>
+		.el-form-item {
+			margin-bottom: 0px;
+		}
+
+		.jasmap {
+			overflow: hidden;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="app" v-cloak>
+		<jas-list-wrapper slot="mainPanel">
+			<jas-search-for-list slot="search" :form="topSearch" :fields="fields" :fields-config="fieldsConfig" @search="searchList"></jas-search-for-list>
+
+			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" search-path="/jdbc/commonData/cutWeld/getPage.do"
+			  :add-url="addUrl" :detail-url="detailUrl" delete-path="/jdbc/commonData/cutWeld/delete.do" :class-name="className"
+			  :template-code="templateCode"></jas-table-for-list>
+		</jas-list-wrapper>
+	</div>
+</body>
+
+<script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../lib/vue/vue.js"></script>
+<script src="./../../../lib/vue-multipane/vue-multipane.js"></script>
+<script src="./../../../lib/element-ui/v2.4.1/index.min.js"></script>
+<script src="./../../../common/components/jas-components.js"></script>
+<script src="./../../../common/js/jas-tools.js"></script>
+<script>
+	var vm = new Vue({
+		el: '#app',
+		data: function () {
+			return {
+				className: '',
+				templateCode: '',
+				addUrl: './pages/row-management/cut-pipe/dialogs/add.html',
+				detailUrl: './pages/row-management/cut-pipe/dialogs/detail.html',
+				privilegeCode: '',
+				topSearch: {
+					projectOid: '',
+					tendersOid: '',
+					pipelineOid: '',
+
+				},
+				fields: [ //
+					{
+						field: "projectOid",
+						name: '项目名称'
+					}, {
+						field: "tendersOid",
+						name: '标段名称'
+					}, {
+						field: "pipelineOid",
+						name: '管线名称'
+					}
+				],
+				fieldsConfig: {
+					projectOid: {
+						type: 'select',
+						optionUrl: '/daq/privilege/getProjectList.do',
+						childSelect: ['tendersOid'],
+						childUrl: ['/daq/privilege/getTendersList.do'],
+
+					},
+					tendersOid: {
+						type: 'select',
+						childSelect: ['pipelineOid'],
+						childUrl: ['/daq/privilege/getPipelineListByTendersOid.do'],
+
+					},
+					pipelineOid: {
+						type: 'select'
+					}
+				},
+				tableFields: [{
+						name: '项目名称',
+						field: 'projectName'
+					}, {
+						name: '标段名称',
+						field: 'tendersName'
+					}, {
+						name: '管线名称',
+						field: 'pipelineName'
+					}, {
+						name: "钢管编号",
+						field: "pipeCode"
+					}, {
+						name: '管径(mm)',
+						field: 'pipeDiameter'
+					}, {
+						name: '壁厚(mm)',
+						field: 'wallThickness'
+					}, {
+						name: '分割段数(段)',
+						field: 'segmentsNum'
+					}, {
+						name: '第一段长度(m)',
+						field: 'firstParagraphLength'
+					}, {
+						name: '第二段长度(m)',
+						field: 'secondParagraphLength'
+					},
+					 {
+						name: '第三段长度(m)',
+						field: 'thirdParagraphLength'
+					}, {
+						name: '第四段长度(m)',
+						field: 'fourthParagraphLength'
+					},
+					{
+						name: '第五段长度(m)',
+						field: 'fifthParagraphLength'
+					}
+				]
+			}
+		},
+
+		mounted: function () {
+			var that = this;
+
+			var param = window.jasTools.base
+				.getParamsInUrl(location.href);
+			this.privilegeCode = param.privilegeCode;
+			this.templateCode = param.templateCode; //|| "stake-2";
+			this.className = param.className; // || 'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';
+
+		},
+		methods: {
+			searchList: function () {
+				this.$refs.table.search();
+			},
+			reset: function () {
+				this.topSearch.projectOid = '';
+				this.topSearch.pipelineOid = '';
+				this.topSearch.tendersOid = '';
+				this.topSearch.pipeOid = '';
+				this.$refs.table.search();
+			},
+		},
+	});
+</script>
+
+</html>

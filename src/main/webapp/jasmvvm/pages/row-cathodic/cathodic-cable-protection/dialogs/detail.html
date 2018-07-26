@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<link rel="stylesheet" href="./../../../../lib/font-awesome-4.7.0/css/font-awesome.css">
+	<link rel="stylesheet" href="./../../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../../src/css/main.css">
+	<style>
+	</style>
+</head>
+
+<body>
+	<div id="app" v-cloak>
+		<jas-dialog-wrapper>
+			<jas-base-group-title name="基础数据"></jas-base-group-title>
+			<jas-detail-table :titles="baseArr" :detail="detail"></jas-detail-table>
+			<jas-base-group-title name="位置数据"></jas-base-group-title>
+			<jas-detail-table :titles="addressArr" :detail="detail"></jas-detail-table>
+			<jas-base-group-title name="阴极保护数据"></jas-base-group-title>
+			<jas-detail-table :titles="businessArr" :detail="detail"></jas-detail-table>
+			<jas-base-group-title name="其他信息"></jas-base-group-title>
+			<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
+			<jas-base-group-title name="附件信息"></jas-base-group-title>
+			<jas-file-list :biz-id="oid"></jas-file-list>
+		</jas-dialog-wrapper>
+
+	</div>
+</body>
+<script src="./../../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../../lib/vue/vue.js"></script>
+<script src="./../../../../lib/element-ui/v2.4.1/index.min.js"></script>
+<script src="./../../../../common/components/jas-components.js "></script>
+<script src="./../../../../common/js/jas-tools.js"></script>
+<!--<script src="js/ajaxFileUpload.js"></script>-->
+<script>
+	var app = new Vue({
+		el: "#app",
+		data: function () {
+			var that = this;
+			return {
+				baseArr: [ //
+					{
+						name: '项目名称',
+						field: 'projectName'
+					}, {
+						name: '标段名称',
+						field: 'tendersName'
+					}, {
+						name: '管线名称',
+						field: 'pipelineName'
+					}, {
+						name: "线路段名称",
+						field: "pipeSegmentName"
+					}, {
+						name: '施工单位',
+						field: 'constructUnitName'
+					}, {
+						name: '施工日期',
+						field: 'constructDate'
+					},
+					{
+						name: '监理单位',
+						field: 'supervisionUnitName'
+					}, {
+						name: '监理工程师',
+						field: 'supervisionEngineer'
+					}, {
+						name: '采集人员',
+						field: 'collectionPerson'
+					}, {
+						name: '采集日期',
+						field: 'collectionDate'
+					}
+				],
+
+				addressArr: [{
+					name: '桩号',
+					field: 'medianStakeCode'
+				}, {
+					name: '相对桩位置(m)',
+					field: 'relativeMileage'
+				}],
+				businessArr: [{
+						name: "阴保电缆编号",
+						field: "cableCode"
+					}, {
+						name: '电缆规格型号',
+						field: 'cableSpecification'
+					}, {
+						name: '电缆盘号',
+						field: 'cableTrayNum'
+					}, {
+						name: '电缆批次',
+						field: 'cableBatche'
+					}, {
+						name: '电缆保护结构',
+						field: 'cableStruction'
+					}, {
+						name: '电缆敷设方式',
+						field: 'cableLayingMethod'
+					}, {
+						name: '电缆长度(m)',
+						field: 'cableLength',
+					}, {
+						name: '电缆用途',
+						field: 'cableUse'
+					},
+					//  {
+					// 	name: '测试桩号',
+					// 	field: 'testStakeOid'
+					// }, {
+					// 	name: '阴保电源编号',
+					// 	field: 'cableProtectionCode',
+					// }, {
+					// 	name: '辅助阳极地床编号',
+					// 	field: 'auxiliaryAnodeBedOid',
+					// }, {
+					// 	name: '牺牲阳极编号',
+					// 	field: 'sacrificeAnodeOid'
+					// },
+					{
+						name: '电缆敷设图编号',
+						field: 'cableLayoutCode'
+					}
+				],
+				otherArr: [{
+					name: '备注',
+					field: 'remarks',
+				}],
+				detail: {},
+				columnNum: 2,
+				oid: '',
+			}
+		},
+
+		created: function () {
+			var that = this;
+			var param = window.jasTools.base.getParamsInUrl(location.href);
+			if (param.oid) {
+				this.oid = param.oid;
+				this.params = param;
+				this.getDetailByObjectId();
+			};
+
+		},
+		methods: {
+			getDetailByObjectId: function () {
+				var that = this;
+				var url = jasTools.base.rootPath +
+					"/jdbc/commonData/cathodicCableProtection/getPage.do";
+				jasTools.ajax.post(url, {oid:that.oid}, function (data) {
+					var cableUse = [{
+						id: 'cable_use_code_001',
+						name: '测试桩号',
+						field: 'testStakeOid'
+					}, {
+						id: 'cable_use_code_002',
+						name: '牺牲阳极编号',
+						field: 'sacrificeAnodeOid'
+					}, {
+						id: 'cable_use_code_003',
+						name: '阴保电源编号',
+						field: 'cableProtectionCode',
+					}, {
+						id: 'cable_use_code_004',
+						name: '辅助阳极地床编号',
+						field: 'auxiliaryAnodeBedOid',
+					}];
+					that.detail = data.rows[0];
+					cableUse.forEach(function (item) {
+						if (item.id == that.detail.cableUse) {
+							that.businessArr.push({
+								name: item.name,
+								field: item.field
+							});
+						}
+					});
+				});
+			},
+		},
+	});
+</script>
+
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>自定义表单配置</title>
+	<!-- <link rel="stylesheet" href="./libelement-ui/element-#0E2B4A/src/index.css"> -->
+	<link rel="stylesheet" href="./../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../lib/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="./../../../src/css/main.css">
+	<style>
+		.el-form-item {
+			margin-bottom: 0px;
+		}
+
+		.jasmap {
+			overflow: hidden;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="app" v-cloak>
+		<jas-list-wrapper slot="mainPanel">
+			<jas-search-for-list slot="search" :form="topSearch" :fields="fields" :fields-config="fieldsConfig" @search="searchList"></jas-search-for-list>
+
+			<!--<el-form slot="search" :model="topSearch" label-width="100px">
+				<el-row>
+					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+						<el-form-item label="项目名称" prop="projectOid">
+							<el-select v-model="topSearch.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
+								<el-option v-for="item in domain.project" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+						<el-form-item label="标段名称" prop="tendersOid">
+							<el-select v-model="topSearch.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
+								<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+						<el-form-item label="管线名称" prop="pipelineOid">
+							<el-select v-model="topSearch.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged">
+								<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+						<el-form-item label="线路段/穿跨越" prop="pipeSegmentOrCrossOid">
+							<el-select v-model="topSearch.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small" @change="pipeSegmentChanged">
+								<el-option v-for="item in domain.pipeSegment" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+						<el-form-item label="焊口编号">
+						   <el-input v-model="topSearch.weldCode" clearable placeholder="请输入焊口编号" size="small"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+						<el-form-item style="float: right;">
+							<el-button size="small" type="primary" @click="searchList">查询</el-button>
+							<el-button size="small" @click="reset">重置</el-button>
+						</el-form-item>
+					</el-col>
+				</el-row>
+			</el-form>-->
+			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" search-path="/jdbc/commonData/weldMeasuredResult/getPage.do"
+			  :add-url="addUrl" :detail-url="detailUrl" delete-path="/jdbc/commonData/weldMeasuredResult/delete.do" :class-name="className"
+			  :template-code="templateCode"></jas-table-for-list>
+		</jas-list-wrapper>
+
+
+	</div>
+</body>
+
+<script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../lib/vue/vue.js"></script>
+<script src="./../../../lib/vue-multipane/vue-multipane.js"></script>
+<script src="./../../../lib/element-ui/v2.4.1/index.min.js"></script>
+<script src="./../../../common/components/jas-components.js"></script>
+<script src="./../../../common/js/jas-tools.js"></script>
+<script>
+	var vm = new Vue({
+		el: '#app',
+		data: function () {
+			return {
+				className: '',
+				templateCode: '',
+				addUrl: './pages/row-management/weld-measure-result/dialogs/add.html',
+				detailUrl: './pages/row-management/weld-measure-result/dialogs/detail.html',
+				privilegeCode: '',
+				topSearch: {
+					projectOid: '',
+					tendersOid: '',
+					pipelineOid: '',
+					pipeSegmentOrCrossOid: '', //线路段
+					weldOid: '',
+				},
+				fields: [ //
+					{
+						field: "projectOid",
+						name: '项目名称'
+					}, {
+						field: "tendersOid",
+						name: '标段名称'
+					}, {
+						field: "pipelineOid",
+						name: '管线名称'
+					}, {
+						field: "pipeSegmentOrCrossOid",
+						name: '线路段/传跨越'
+					},
+					{
+						field: 'weldOid',
+						name: "焊口编号"
+					}
+				],
+				fieldsConfig: {
+					projectOid: {
+						type: 'select',
+						optionUrl: '/daq/privilege/getProjectList.do',
+						childSelect: ['tendersOid'],
+						childUrl: ['/daq/privilege/getTendersList.do'],
+
+					},
+					tendersOid: {
+						type: 'select',
+						childSelect: ['pipelineOid'],
+						childUrl: ['/daq/privilege/getPipelineListByTendersOid.do', '/daq/privilege/getSupervisionUnitByTendersOid.do'],
+
+					},
+					pipelineOid: {
+						type: 'select',
+						childSelect: ['pipeSegmentOrCrossOid'],
+						childUrl: ['/daq/privilege/getPipeSegmentOrCrossList.do'],
+
+					},
+					pipeSegmentOrCrossOid: {
+						type: 'select',
+						childSelect: ['weldOid'],
+						childUrl: ['/daq/weld/getWeldList.do'],
+					},
+					weldOid: {
+						type: 'select',
+					}
+				},
+				tableFields: [{
+						name: '项目名称',
+						field: 'projectName'
+					}, {
+						name: '标段名称',
+						field: 'tendersName'
+					}, {
+						name: '管线名称',
+						field: 'pipelineName'
+					}, {
+						name: "线路段名称",
+						field: "pipeSegmentOrCrossName"
+					}, {
+						name: '焊口编号',
+						field: 'weldCode'
+					}, {
+						name: '桩号',
+						field: 'medianStakeCode'
+					}, {
+						name: '坐标(X)',
+						field: 'pointx'
+					},{
+						name: '坐标(Y)',
+						field: 'pointy'
+					}, {
+						name: '相对桩位置',
+						field: 'relativeMileage'
+					}, {
+						name: '地表高程(m)',
+						field: 'surfaceeLevation'
+					}, {
+						name: '管顶高程(m)',
+						field: 'pipeTopElevation'
+					}, {
+						name: '埋深(m)',
+						field: 'buriedDepth'
+					}, {
+						name: '测量人',
+						field: 'surveyCrew'
+					},
+					{
+						name: '测量日期',
+						field: 'surveyDate'
+					}
+				]
+			}
+		},
+
+		mounted: function () {
+			var that = this;
+			var type = localStorage.getItem("calculateType");
+			var param = window.jasTools.base
+				.getParamsInUrl(location.href);
+			this.privilegeCode = param.privilegeCode;
+			this.templateCode = param.templateCode; //|| "stake-2";
+			this.className = param.className; // || 'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';
+
+		},
+		methods: {
+			searchList: function () {
+				this.$refs.table.search();
+			},
+			reset: function () {
+				this.topSearch.projectOid = '';
+				this.topSearch.pipelineOid = '';
+				this.topSearch.tendersOid = '';
+				this.topSearch.weldOid = '';
+				this.topSearch.pipeSegmentOrCrossOid = '';
+
+				this.$refs.table.search();
+			},
+		},
+	});
+</script>
+
+</html>

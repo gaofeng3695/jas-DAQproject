@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>相控阵超声波检测</title>
+	<link rel="stylesheet" href="./../../../../lib/font-awesome-4.7.0/css/font-awesome.css">
+	<link rel="stylesheet" href="./../../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../../src/css/main.css">
+	<style>
+		.el-form-item {
+			margin-bottom: 15px !important;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="app" v-cloak>
+
+		<jas-dialog-wrapper>
+			<el-form ref="formData" :model="form" label-width="120px">
+
+				<jas-base-group-title name="相控阵超声波检测基本信息"></jas-base-group-title>
+				<jas-form-items ref="mainForm" :form="form" :fields="fields" :fields-config="fieldsConfig"></jas-form-items>
+
+
+				<jas-sub-form-group group-name="缺陷信息" :form-default="sonFormDefault" :form-list="form.paUltrasonicSubList" :fields="subFields"
+				  :fields-config="sonFieldsConfig"></jas-sub-form-group>
+
+				<jas-base-group-title name="其他信息"></jas-base-group-title>
+				<el-row>
+					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+						<el-form-item label="备注" prop="remarks">
+							<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="form.remarks"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<jas-base-group-title name="附件信息"></jas-base-group-title>
+				<jas-file-upload ref="upload" @success="uploadSuccess"></jas-file-upload>
+			</el-form>
+			<div slot="footer">
+				<el-button size="small" @click="cancel()">取 消</el-button>
+				<el-button size="small" type="primary" @click="submit('formData')">确 定</el-button>
+			</div>
+		</jas-dialog-wrapper>
+
+	</div>
+</body>
+<script src="./../../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../../lib/vue/vue.js"></script>
+<script src="./../../../../lib/element-ui/v2.4.1/index.min.js"></script>
+<script src="./../../../../common/components/jas-components.js "></script>
+<script src="./../../../../common/js/jas-tools.js"></script>
+<script>
+	var app = new Vue({
+		el: "#app",
+		data: function () {
+			var that = this;
+			return {
+				fields: [ //
+					{
+						field: "projectOid",
+						name: '项目名称'
+					}, {
+						field: "tendersOid",
+						name: '标段名称'
+					}, {
+						field: "pipelineOid",
+						name: '管线名称'
+					}, {
+						field: "pipeSegmentOrCrossOid",
+						name: '线路段/传跨越'
+					}, {
+						field: "weldCode",
+						name: '焊口编号'
+					}, {
+						field: "detectionReportNum",
+						name: '检测报告编号'
+					}, {
+						field: "detectionDeta",
+						name: '检测日期'
+					}, {
+						field: "detectionType",
+						name: '检测类型'
+					}, {
+						field: "detectionDispose",
+						name: '检测处置'
+					}, {
+						field: "evaluationResult",
+						name: '评定结果'
+					}, {
+						field: "detectionLength",
+						name: '检测长度(mm)'
+					}, {
+						field: "detectionUnit",
+						name: '检测单位'
+					}, {
+						field: "detectionPerson",
+						name: '检测人员'
+					}, {
+						field: "supervisionUnit",
+						name: '监理单位'
+					}, {
+						field: "supervisionEngineer",
+						name: '监理工程师'
+					}, {
+						field: "collectionDate",
+						name: '采集日期'
+					}
+				],
+				subFields: [ //
+					{
+						field: "defectPosition",
+						name: '缺陷位置'
+					}, {
+						field: "amplitudeRegion",
+						name: '振幅区域'
+					}, {
+						field: "defectSize",
+						name: '缺陷长度(mm)'
+					}, {
+						field: "defectDepth",
+						name: '缺陷深度(mm)'
+					}, {
+						field: "height",
+						name: '自身高度(mm)'
+					}
+				],
+				sonFormDefault: {
+					defectPosition: '', // 缺陷位置
+					amplitudeRegion: '', //缺陷性质
+					defectSize: '', // 缺陷尺寸(mm/mm²/点)
+					defectDepth: '', // 缺陷尺寸(mm/mm²/点)
+					height: '', // 缺陷尺寸(mm/mm²/点)
+				},
+				fieldsConfig: {
+					projectOid: {
+						type: 'select',
+						optionUrl: '/daq/privilege/getProjectList.do',
+						childSelect: ['tendersOid'],
+						childUrl: ['/daq/privilege/getTendersList.do'],
+						isRequired: true,
+					},
+					tendersOid: {
+						type: 'select',
+						childSelect: ['pipelineOid', 'supervisionUnit'],
+						childUrl: ['/daq/privilege/getPipelineListByTendersOid.do', '/daq/privilege/getSupervisionUnitByTendersOid.do'],
+						isRequired: true,
+					},
+					pipelineOid: {
+						type: 'select',
+						childSelect: ['pipeSegmentOrCrossOid'],
+						childUrl: ['/daq/privilege/getPipeSegmentOrCrossList.do'],
+						isRequired: true,
+					},
+					pipeSegmentOrCrossOid: {
+						type: 'select',
+						isRequired: true,
+					},
+					weldCode: {
+						type: 'input',
+						isRequired: true,
+					},
+					detectionReportNum: {
+						type: 'input',
+					},
+					detectionDeta: {
+						type: 'date',
+						isRequired: true,
+					},
+					detectionType: {
+						type: 'select',
+						domainName: 'detection_type_domain',
+					},
+					evaluationGrade: {
+						type: 'select',
+						domainName: 'evaluation_grade_domain',
+					},
+					evaluationResult: {
+						type: 'select',
+						options: [{
+							key: '1',
+							value: '合格'
+						}, {
+							key: '2',
+							value: '不合格'
+						}],
+					},
+					detectionLength: {
+						type: 'number',
+						max: 100000000,
+						precision: 3,
+					},
+					detectionDispose: {
+						type: 'select',
+						options: [{
+							key: '1',
+							value: '返修'
+						}, {
+							key: '2',
+							value: '割口'
+						}],
+					},
+					detectionUnit: {
+						type: 'select',
+						options: [],
+						isRequired: true
+					},
+					detectionPerson: {
+						type: 'input',
+					},
+					supervisionUnit: {
+						type: 'select',
+					},
+					supervisionEngineer: {
+						type: 'input',
+					},
+					collectionDate: {
+						type: 'date',
+					}
+				},
+				sonFieldsConfig: {
+					defectPosition: {
+						type: 'input',
+					},
+					amplitudeRegion: {
+						type: 'input',
+					},
+					defectSize: {
+						type: 'number',
+						max: 100000000,
+						precision: 3,
+					},
+					defectDepth: {
+						type: 'number',
+						max: 100000000,
+						precision: 3,
+					},
+					height: {
+						type: 'number',
+						max: 100000000,
+						precision: 3,
+					},
+				},
+				form: {
+					projectOid: '', // '项目名称'
+					tendersOid: '', // '标段名称'
+					pipelineOid: '', // '管线名称'
+					pipeSegmentOrCrossOid: '', // '线路段/传跨越'
+					weldCode: '', // '焊口编号'
+					detectionReportNum: '', // '检测报告编号'
+					detectionDeta: '', // '检测日期'
+					detectionType: '', // '检测类型'
+					detectionDispose: '', // '检测处置'
+					evaluationResult: '', // '评定结果'
+					detectionLength: '', // '检测长度(mm)'
+					detectionUnit: '', // '检测单位'
+					detectionPerson: '', // '检测人员'
+					supervisionUnit: '', // '监理单位'
+					supervisionEngineer: '', // '监理工程师'
+					collectionDate: '', // '采集日期'
+					remarks: '',
+					paUltrasonicSubList: []
+				},
+			}
+		},
+
+		mounted: function () {
+			var that = this;
+			var param = window.jasTools.base.getParamsInUrl(location.href);
+			var userBo = JSON.parse(localStorage.getItem("user"));
+			that.form.detectionUnit = userBo.unitId;
+			that.fieldsConfig.detectionUnit.options = [{
+				key: userBo.unitId,
+				value: userBo.unitName
+			}];
+			if (param.oid) {
+				this.oid = param.oid;
+				this.form.oid = this.oid;
+				this.isEdit = true;
+				this.getDetailByObjectId();
+				this.$refs.upload.requestFile(this.oid);
+			};
+
+
+
+		},
+		methods: {
+			cancel: function (param) {
+				window.parent.jasTools.dialog.close(param);
+			},
+			submit: function (formName) {
+				var that = this;
+				this.$refs[formName].validate(function (valid) {
+					if (valid) {
+						that.save();
+					}
+				});
+			},
+
+			save: function () {
+				var that = this;
+				var msg = "";
+				if (!this.isEdit) {
+					msg = "增加成功";
+					url = jasTools.base.rootPath + "/jdbc/commonData/detectionPaUltrasonic/save.do";
+				} else {
+					msg = "修改成功";
+					url = jasTools.base.rootPath + "/jdbc/commonData/detectionPaUltrasonic/update.do";
+				}
+
+				jasTools.ajax.post(url, that.form, function (data) {
+					that.$refs.upload.uploadFile(data.data || that.oid);
+				});
+
+			},
+			uploadSuccess: function () {
+				top.Vue.prototype.$message({
+					type: 'success',
+					message: !this.isEdit ? '保存成功' : '修改成功'
+				});
+				this.cancel(1);
+			},
+			getDetailByObjectId: function () {
+				var that = this;
+				var url = jasTools.base.rootPath + "/daq/detectionPaUltrasonic/get.do";
+				jasTools.ajax.get(url, {
+					oid: that.oid
+				}, function (data) {
+					that.form = data.data;
+					that.$refs['mainForm'].triggerFatherSelectsChange();
+					that.form.paUltrasonicSubList.forEach(function (item) {
+						item.operationFlag = 2;
+					});
+				});
+			},
+		},
+	});
+</script>
+
+</html>

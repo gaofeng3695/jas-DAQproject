@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<link rel="stylesheet" href="./../../lib/font-awesome-4.7.0/css/font-awesome.css">
+	<link rel="stylesheet" href="./../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../src/css/main.css">
+	<style>
+		.el-form-item {
+			margin-bottom: 0px;
+		}
+
+		.search-wrap {
+			padding-bottom: 10px;
+			border-bottom: 1px solid #e4e7ed;
+		}
+
+		.table-wrapper {
+			padding: 15px;
+			height: 100%;
+			box-sizing: border-box;
+		}
+
+		.el-range-editor {
+			width: 100% !important;
+		}
+
+		.el-checkbox-group {
+			height: 41px;
+		}
+
+		.el-input__icon,
+		.el-range__close-icon {
+			/* width: auto !important; */
+		}
+
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+			-webkit-appearance: none !important;
+			margin: 0;
+		}
+
+		.height {
+			height: 41px;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="app" v-cloak>
+
+		<jas-list-wrapper>
+			<jas-search-for-list slot="search" :form="topSearch" :fields="searchFields" :fields-config="searchFieldsConfig" @search="searchList"></jas-search-for-list>
+			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" :search-path="searchPath"
+			  :add-url="addUrl" :detail-url="detailUrl" :delete-path="deletePath" :class-name="className" :template-code="templateCode"></jas-table-for-list>
+		</jas-list-wrapper>
+
+	</div>
+</body>
+<script src="./../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../lib/vue/vue.js"></script>
+<script src="./../../lib/element-ui/v2.4.1/index.min.js"></script>
+<script src="./../../common/components/jas-components.js "></script>
+<script src="./../../common/js/jas-tools.js"></script>
+<script src="js/userDefinedFunction.js"></script>
+
+<script>
+	var app = new Vue({
+		el: "#app",
+		data: function () {
+			return {
+
+				className: '',
+				templateCode: '',
+				searchPath: "/map/commonData/" + this.menuCode + "/getPage.do",
+				deletePath: '/map/commonData/' + this.menuCode + '/delete.do',
+				addUrl: './pages/template/dialogs/addTemplate.html',
+				detailUrl: './pages/template/dialogs/viewTemplate.html',
+				privilegeCode: '',
+				topSearch: {},
+				searchFields: [],
+				searchFieldsConfig: {},
+				tableFields: [],
+
+			}
+		},
+		mounted: function () {
+			var param = window.jasTools.base.getParamsInUrl(location.href);
+			this.menuCode = param.menuCode;
+			this.templateCode = param.templateCode || "stake-2";
+			this.className = param.className ||
+				'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';
+			//进行后台数据的请求
+			this.requestFieldsConfig(); //根据选中的是那个功能的id 进行页面的绘制
+
+
+
+		},
+		methods: { //方法的写法
+			searchList: function () {
+				this.$refs.table.search();
+			},
+
+			requestFieldsConfig: function () {
+				var that = this;
+				var url = jasTools.base.rootPath + "/functionConfiguration/getDetailByCode.do"
+				jasTools.ajax.get(url, {
+					functionCode: that.menuCode
+				}, function (data) {
+					if (data.data.functionFieldsBoList.length == 0) {
+						window.top.Vue.prototype.$message({
+							message: '请给此功能配置相应的字段',
+							type: 'warning'
+						});
+						that.loading = false;
+						return;
+					}
+					// that.getSearchFieldAndList(data.data);
+					console.log(data.data);
+					var fields0 = that._switchToCamelCase(data.data.functionFieldsBoList);
+					var fields = that._getFieldsByType(fields0);
+					that.searchFields = that._formartFieldList(fields.search);
+					that.tableFields = that._formartFieldList(fields.table);
+					that.searchFieldsConfig = that._formartFieldConfig(fields.search);
+					that.topSearch = that._formartForm(fields.search);
+				});
+			},
+			_getFieldsByType: function (fields) { // type 'search','table'
+				var obj = {
+					search: [],
+					table: [],
+				};
+				fields.forEach(function (item) {
+					if (item.ifQuery != 0) obj.search.push(item);
+					if (item.ifList != 0) obj.table.push(item);
+				});
+				obj.search.sort(function (a, b) {
+					return a.queryIndex - b.queryIndex;
+				});
+				obj.table.sort(function (a, b) {
+					return a.listIndex - b.listIndex;
+				});
+				return obj;
+			},
+			_switchToCamelCase: function (fields) {
+				return fields.map(function (item) {
+					item.fieldName = jasTools.base.switchToCamelCase(item.fieldName);
+					item.childField = jasTools.base.switchToCamelCase(item.childField);
+					return item;
+				})
+			},
+			_formartForm: function (fields) {
+				var obj = {};
+				fields.map(function (item) {
+					obj[item.fieldName] = '';
+				});
+				return obj;
+			},
+			_formartFieldList: function (fields) {
+				return fields.map(function (item) {
+					return {
+						name: item.fieldNameCn,
+						field: item.fieldName,
+					}
+				});
+			},
+			_formartFieldConfig: function (fields) {
+				var that = this;
+				var obj = {};
+				fields.forEach(function (item) {
+					obj[item.fieldName] = {
+						type: that._getFieldUiType(item),
+						options: item.domainList,
+						childSelect: item.childField && item.childField.split(','),
+						childUrl: item.requestPath && item.requestPath.split(','),
+						isRequired: '',
+						precision: '',
+						max: item.max,
+						min: item.min
+					};
+				});
+				console.log('_________',obj)
+				return obj;
+			},
+			_getFieldUiType: function (field) {
+				if (field.uiType == "UT_11" || field.uiType == "UT_12") {
+					return 'select';
+				} else if (field.uiType == "UT_14") {
+					return 'number';
+				} else if (field.uiType == "UT_02" || field.uiType == "UT_03" || field.uiType == "UT_04") {
+					return 'date';
+				} else {
+					return 'input';
+				}
+			},
+			requestTableList: function () {
+				var that = this;
+				that.loading = true;
+				$.ajax({
+					type: "POST",
+					url: jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/getPage.do?token=" + localStorage.getItem(
+						"token"),
+					dataType: "json",
+					contentType: "application/json",
+					data: JSON.stringify(that.searchform),
+					async: true,
+					success: function (data) {
+						setTimeout(function () {
+							that.loading = false;
+						}, 300)
+						if (data.status == 1) {
+							that.tableData = data.rows;
+							that.total = data.total;
+						} else {
+							window.top.Vue.prototype.$message({
+								message: '服务异常，请稍候尝试',
+								type: 'error'
+							});
+						}
+					}
+				});
+			},
+
+			clickFunction: function (row, name) {
+				definedFunction[name](row);
+			},
+			locateRow: function (row) {
+				var that = this;
+				alert('定位');
+			},
+			scopeRow: function (row) {
+				var that = this;
+				var src = './pages/template/dialogs/tenders-scope.html';
+				top.jasTools.dialog.show({
+					title: '范围选择',
+					width: that.config.view.width,
+					height: that.config.view.height,
+					src: jasTools.base.setParamsToUrl(src, row),
+				});
+			},
+			viewRow: function (row) {
+				var that = this;
+				var src = './pages/template/dialogs/viewTemplate.html?menuCode=' + that.menuCode;
+				for (var key in row) {
+					src += "&" + key + '=' + row[key];
+				}
+				top.jasTools.dialog.show({
+					title: '查看',
+					width: that.config.view.width,
+					height: that.config.view.height,
+					src: src,
+					cbForClose: function () {
+
+					}
+				});
+			},
+
+			delRow: function (row) {
+				var that = this;
+				window.top.Vue.prototype.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
+					type: 'warning',
+					callback: function (action) {
+						if (action === 'confirm') {
+							that.delRowToServer(row);
+						} else {
+							top.Vue.prototype.$message({
+								type: 'info',
+								message: '已取消删除'
+							});
+						}
+					}
+				});
+			},
+
+			delRowToServer: function (row) {
+				var that = this;
+				$.ajax({
+					type: "POST",
+					url: jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/delete.do?token=" + localStorage.getItem(
+						"token"),
+					dataType: "json",
+					contentType: "application/json",
+					data: JSON.stringify(row),
+					success: function (data) {
+						if (data.status == 1) {
+							top.Vue.prototype.$message({
+								type: 'success',
+								message: '删除成功'
+							});
+							that.refresh();
+						} else {
+							top.Vue.prototype.$message({
+								type: 'info',
+								message: '服务异常，请稍候尝试'
+							});
+						}
+					}
+				});
+			},
+
+
+			getUiType: function () {
+				var that = this;
+				for (key in that.searchTable) {
+					that.searchUi.forEach(function (item) {
+						if (key == item.id) {
+							if (item.type == "UT_01" && that.searchTable[key]) {
+								that.searchform[key] = "%" + that.searchTable[key] + "%";
+								return;
+							}
+							if (item.type == "UT_14") {
+								if (Number(that.searchTable[key].max) > 0) {
+									that.searchform[key] = [Number(that.searchTable[key].min), Number(that.searchTable[key].max)];
+									return;
+								} else {
+									delete that.searchform[key];
+									return;
+								}
+
+							}
+							if (item.type == "UT_07" || item.type == "UT_08") {
+								if (that.searchTable[key].length != 0) {
+									that.searchform[key] = that.searchTable[key];
+									return;
+								} else {
+									delete that.searchform[key];
+									return;
+								}
+							}
+							if (that.searchTable[key]) {
+								that.searchform[key] = that.searchTable[key];
+								return;
+							} else {
+								delete that.searchform[key];
+								return;
+							}
+						}
+					});
+				}
+				that.requestTableList();
+			}
+		}
+	});
+</script>
+
+</html>

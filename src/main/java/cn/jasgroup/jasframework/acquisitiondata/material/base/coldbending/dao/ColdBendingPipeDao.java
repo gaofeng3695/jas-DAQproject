@@ -1,0 +1,30 @@
+package cn.jasgroup.jasframework.acquisitiondata.material.base.coldbending.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Repository;
+
+import cn.jasgroup.jasframework.dataaccess.base.BaseJdbcDao;
+
+@Repository
+public class ColdBendingPipeDao extends BaseJdbcDao{
+	
+	public void chanageOriginalPipeUseState(String pipeCode){
+		String sql = "update daq_material_pipe set is_cold_bend=1 where oid=?";
+		this.update(sql, new Object[]{pipeCode});
+	}
+	
+	/***
+	  * <p>功能描述：获取冷弯管下拉选列表。</p>
+	  * <p> 雷凯。</p>	
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年7月20日 下午3:12:41。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String,Object>>getList(String tendersOid){
+		String sql = "select t.oid as key,t.pipe_cold_bending_code as value from daq_material_pipe_cold_bending t where t.active=1 and t.tenders_oid=?";
+		return this.queryForList(sql, new Object[]{tendersOid});
+	}
+}

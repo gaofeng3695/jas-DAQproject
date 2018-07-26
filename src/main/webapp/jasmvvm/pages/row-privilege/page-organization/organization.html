@@ -11,75 +11,10 @@
 	<link rel="stylesheet" href="./../../../lib/font-awesome-4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="./../../../src/css/main.css">
 	<style>
-		/* 分栏样式 */
-
-		.multipane:not(.is-resizing) .resizepanel {
-			transition: width 0.3s;
-		}
-
 		.resizepanel {
 			overflow-x: hidden;
 			overflow-y: auto;
 		}
-
-		.multipane.foo.layout-v .multipane-resizer {
-			margin: 0;
-			left: 0;
-			/* reset default styling */
-			width: 10px;
-			background: #f1f1f1;
-		}
-
-		.multipane.foo.layout-h .multipane-resizer {
-			margin: 0;
-			top: 0;
-			/* reset default styling */
-			height: 10px;
-			background: #f1f1f1;
-		}
-
-		.multipane-resizer {
-			margin: 0;
-			left: 0;
-			position: relative;
-		}
-
-		.multipane.foo.layout-v .multipane-resizer .resizertap {
-			width: 100%;
-			height: 40px;
-			background: #409EFF;
-			opacity: 0.5;
-			color: #fff;
-			top: 50%;
-			left: 0;
-			position: absolute;
-			margin-top: -20px;
-			cursor: pointer;
-			line-height: 40px;
-			text-align: center;
-		}
-
-		.multipane.foo.layout-v .multipane-resizer .resizertap:hover {
-			opacity: 0.7;
-		}
-
-		/* .multipane.foo.layout-v .multipane-resizer:before {
-			display: block;
-			content: "";
-			width: 3px;
-			height: 40px;
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			margin-top: -20px;
-			margin-left: -2.5px;
-			border-right: 1px solid #ccc;
-			border-left: 1px solid #ccc;
-		}
-
-		.multipane.foo.layout-v .multipane-resizer:hover:before {
-			border-color: #999;
-		} */
 
 		.orgtitle {
 			height: 40px;
@@ -120,10 +55,8 @@
 <body>
 	<div id="app" v-cloak v-loading="loading.allLoading">
 
-		<multipane @paneresizestart="panelMoving = true" @paneresizestop="panelMoving = false" class="foo" layout="vertical" style="height: 100%;">
-			<div class="resizepanel jas-flex-box is-vertical" v-loading="panelMoving" :style="[{ width: panelShowed ?'300px' : '0px',maxWidth: '50%' }]" element-loading-spinner="11"
-			  element-loading-background="rgba(0, 0, 0, 0)">
-				<!-- <div class="orgtitle">组织机构管理</div> -->
+		<jas-two-panel-resizer layout="vertical" length="300px">
+			<template slot="closePanel">
 				<div class="filterwrap">
 					<el-input prefix-icon="el-icon-search" size="small" placeholder="输入关键字进行过滤" v-model="filterText">
 					</el-input>
@@ -133,39 +66,32 @@
 					<el-button type="text" @click="editNode" :disabled="!currentNodeId">修改</el-button>
 					<el-button type="text" @click="deleteNode" :disabled="!currentNodeId">删除</el-button>
 				</div>
-				<el-tree class="is-grown" ref="orgtree" :data="orgnData" node-key="id" :props="defaultProps" :default-expanded-keys="[currentNodeId]" highlight-current
-				  @node-click="clicknode" :expand-on-click-node="false" :filter-node-method="filterNode"></el-tree>
+				<el-tree class="is-grown" ref="orgtree" :data="orgnData" node-key="id" :props="defaultProps" :default-expanded-keys="[currentNodeId]"
+				  highlight-current @node-click="clicknode" :expand-on-click-node="false" :filter-node-method="filterNode"></el-tree>
+			</template>
+			<div class="content" slot="mainPanel">
+				<el-tabs v-model="activeName" class="jas-flex-box" style="height:100%;overflow: auto">
+					<el-tab-pane label="部门详情" name="details">
+						<div v-loading="loading.orgDetail">
+							<jas-detail-table :titles="detailTitle" :detail="detail" />
+						</div>
+					</el-tab-pane>
+					<el-tab-pane label="实施范围" name="scale">
+						<div v-loading="loading.scopeTree">
+							<!-- <div style="text-align: right;"> -->
+							<div style="border-bottom: 1px solid #ececec;padding:0 0 10px;">
+								<el-button size="small" type="primary" @click="requestSaveScope">保存</el-button>
+							</div>
+							<el-tree ref="tree" :data="scopeData.treeData" show-checkbox node-key="id" :default-expanded-keys="scopeData.expandedKeys"
+							  :default-checked-keys="scopeData.checkedKeys" :props="scopeData.defaultProps">
+							</el-tree>
+						</div>
+					</el-tab-pane>
+				</el-tabs>
 			</div>
-			<multipane-resizer>
-				<div class="resizertap" @click="panelShowed=!panelShowed">
-					<i v-show="panelShowed" class="fa fa-angle-left"></i>
-					<i v-show="!panelShowed" class="fa fa-angle-right"></i>
-				</div>
-			</multipane-resizer>
-			<div v-loading="panelMoving" :style="{ flexGrow: 1 }" style="width:0%;" element-loading-spinner="11" element-loading-background="rgba(0, 0, 0, 0)">
-				<div class="content">
-					<el-tabs v-model="activeName" class="jas-flex-box" style="height:100%;overflow: auto">
-						<el-tab-pane label="部门详情" name="details">
-							<div v-loading="loading.orgDetail">
-								<jas-detail-table :titles="detailTitle" :column-num="1" :detail="detail" />
-							</div>
-						</el-tab-pane>
-						<el-tab-pane label="实施范围" name="scale">
-							<div v-loading="loading.scopeTree">
-								<!-- <div style="text-align: right;"> -->
-								<div style="border-bottom: 1px solid #ececec;padding:0 0 10px;">
-									<el-button size="small" type="primary" @click="requestSaveScope">保存</el-button>
-								</div>
-								<el-tree ref="tree" :data="scopeData.treeData" show-checkbox node-key="id" :default-expanded-keys="scopeData.expandedKeys"
-								  :default-checked-keys="scopeData.checkedKeys" :props="scopeData.defaultProps">
-								</el-tree>
-							</div>
-						</el-tab-pane>
-					</el-tabs>
-				</div>
+		</jas-two-panel-resizer>
 
-			</div>
-		</multipane>
+
 
 
 	</div>
@@ -312,6 +238,7 @@
 						scopeOid: item.id,
 						projectOid: item.attributes.projectOid,
 						pipelineOid: item.attributes.pipelineOid,
+						tendersOid: item.attributes.tendersOid,
 						scopeType: item.attributes.type
 					};
 				});

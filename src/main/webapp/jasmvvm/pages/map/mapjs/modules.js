@@ -1,3 +1,9 @@
+/**
+ * Created by kc on 2018/1/19.
+ * @description jasopengis webgis 地图控件
+ * @version jasopengis-v-1.0.0
+ * @lastUpdate 2018/06/04
+ */
 /****地图基本控件****/
 var BaseMapModule = function(){
     this.mapApi = null;//
@@ -53,7 +59,9 @@ var BaseMapToolsBar = function(options){
             }
         });
     };
-
+    var onMapResized = function(e){
+        _self.resetLayout();//
+    };
     _self.moduleClass = "map-module-basemaptoolsbar";
     _self.template =
         "<div class='"+_self.moduleClass +"' style='display:none;'>" +
@@ -151,9 +159,10 @@ var BaseMapToolsBar = function(options){
     };
     _self.startup = function(){
         _self.addToolsItemClickListener();
-        _self.resetLayout();//
         _self.show(true);
         _self.mapApi.subscribe(_self.mapApi.Events.ModuleStateChanged ,onModuleStateChanged );
+        _self.mapApi.subscribe(_self.mapApi.Events.MapResizedEvent ,onMapResized );
+        _self.resetLayout();//
         return this;
     };
     _self.domCreate = function(){
@@ -221,13 +230,15 @@ var LayerListTree = function(options){
     };
 
     var onLayerAdded = function(e){
-        var layerNode = _self.$tree.tree("find",e.layer.id);
-        if(layerNode && e.layer.visible === true){
+        var layerId = e.data.layerId;
+        var layer = _self.mapApi.getLayerById(layerId);
+        var layerNode = _self.$tree.tree("find",layerId);
+        if(layerNode && layer.visible === true){
             _self.$tree.tree("check",layerNode.target);
         }else if( !layerNode ){
             var node = {
-                "id": e.layer.id,
-                "text": e.layer.label ? e.layer.label : e.layer.id,
+                "id": layer.id,
+                "text":layer.label ? layer.label : layer.id,
                 "checked":true
             };
             var unGrouped = _self.$tree.tree("find", _self.unGroupeId);
@@ -480,13 +491,18 @@ var DrawBox = function(options){
         width:300,
         height:400,
         types:[
-           {"text":"取消","value":"","icon":"classpath:images/plot/point.png"},
+           {"text":"删除","value":"Delete","icon":"classpath:images/plot/delete.png"},
            {"text":"点","value":"Point","icon":"classpath:images/plot/point.png"},
            {"text":"图标","value":"Picture","icon":"classpath:images/plot/bitmap.png"},
            {"text":"圆","value":"Circle","icon":"classpath:images/plot/circle.png"},
            {"text":"线","value":"LineString","icon":"classpath:images/plot/polyline.png"},
            {"text":"矩形","value":"Box","icon":"classpath:images/plot/rect.png"},
            {"text":"面","value":"Polygon","icon":"classpath:images/plot/polygon.png"}
+        ],
+        pictureData:[
+            {"label":"政府大楼","icon":"classpath:images/plot/pic_government.png"},
+            {"label":"学校","icon":"classpath:images/plot/pic_school.png"},
+            {"label":"汽车","icon":"classpath:images/plot/pic_vehicle.gif"}
         ]
     };
     var params = $.extend(defaults,options);
@@ -531,12 +547,12 @@ var DrawBox = function(options){
                 "<td class='title'><label class='style_title'>图标：</label></td>" +
                 "<td>" +
                     "<select name='picture' class='style_input' >" +
-                        "<option value='../mapjs/images/plot/pic_vehicle.gif'>政府大楼</option>" +
-                        "<option value=''>学校</option>" +
-                        "<option value=''>汽车</option>" +
+                        "<option value=''>无</option>" +
                     "</select>"+
                 "</td>" +
-                "<td><img src='../mapjs/images/plot/pic_vehicle.gif'></td>" +
+                "<td>" +
+                    "<img src=''>" +
+                "</td>" +
             "</tr>" +
             "<tr>" +
                 "<td class='title'><label class='style_title'>高度：</label></td>" +
@@ -550,12 +566,12 @@ var DrawBox = function(options){
             "</tr>" +
             "<tr>" +
                 "<td  class='title'><label class='style_title'>X偏移：</label></td>" +
-                "<td><input name='offset_x' class='style_input ' type='number' min='1' value='8' step='1'></td>" +
+                "<td><input name='offset_x' class='style_input ' type='number' min='0' value='0' step='1'></td>" +
                 "<td><label>像素</label></td>" +
             "</tr>" +
             "<tr>" +
                 "<td  class='title'><label class='style_title'>Y偏移：</label></td>" +
-                "<td><input name='offset_y' class='style_input ' type='number' min='1' value='8' step='1'></td>" +
+                "<td><input name='offset_y' class='style_input ' type='number' min='0' value='0' step='1'></td>" +
                 "<td><label>像素</label></td>" +
             "</tr>" +
         "</table>" +
@@ -686,6 +702,26 @@ var DrawBox = function(options){
             doAction(cls);
         });
     };
+    var initPictureControlls = function($tab){
+        var $firstTR = $tab.find("table tr").eq(0);
+        if(params.pictureData.length > 0){
+            var $selector = $firstTR.find("select");
+            $selector.empty();
+            for(var i = 0 ; i < params.pictureData.length;i++){
+                var obj = params.pictureData[i];
+                var url = _self.mapApi.commonUtil.getApiRootPath(obj .icon);
+                $selector.append("<option value='"+ url +"'>"+ obj.label +"</option>");
+            }
+            $selector.change(function(e){
+                var url = $(this).val();
+                $("td",$firstTR).last().find("img").attr("src",url);
+            });
+            var $firstOption = $selector.find("option").first();
+            $firstOption.attr("selected",true);
+            $("td",$firstTR).last().find("img").attr("src",$firstOption.attr("value"));
+
+        }
+    };
     var activeDrawStyle = function() {
         var type = _self.currentDrawType.toLowerCase();
         var $tools = $(".tools",_self.dom);
@@ -698,6 +734,10 @@ var DrawBox = function(options){
         if (!tab[0]) {
             $styles.append(templates[type]);//
             //添加后要监听相关事件
+            if(type === "picture"){
+                tab = $("." + type, $styles);
+                initPictureControlls(tab);
+            }
         }
         var timeout = setTimeout(function(e){
             $styles.children("div.style").not("."+type).hide();
@@ -706,7 +746,7 @@ var DrawBox = function(options){
         },10 );
     };
     var activeDrawTool = function(t){
-        var type = ( t === undefined ?_self.currentDrawType:t );
+        var type = ( t === undefined ?_self.currentDrawType : t );
         _self.currentDrawSymbol = getDrawSymbol(type);
         _self.currentDrawAttributes = getDrawAttributes(type);
         _self.mapApi.drawGraphic(type,{
@@ -744,13 +784,14 @@ var DrawBox = function(options){
         var btns = $('.buttons' ,_self.dom);
         if(result === true){
             //设置按钮状态。。。
+
         }
     };
     var doSave = function(e){
 
     };
     var doCancel = function(){
-
+        _self.open(false);
     };
     var doApply = function(){
         activeDrawTool();
@@ -785,7 +826,7 @@ var DrawBox = function(options){
         "</div>" +
         "<div class='buttons'>" +
             "<input dataaccess-class='apply' value='应用' type='button' >" +
-            "<input dataaccess-class='save' value='保存' type='button' >" +
+            //"<input dataaccess-class='save' value='保存' type='button' >" +
             "<input dataaccess-class='cancel' value='取消' type='button' >" +
         "</div>" +
     "</div>";
@@ -800,7 +841,7 @@ var DrawBox = function(options){
     };
     _self.open = function(flg){
         if(flg === false ) {
-            $(_self.dom).dialog('closed');
+            $(_self.dom).dialog('close');
         }else{
             $(_self.dom).dialog('open');
         }
@@ -822,7 +863,7 @@ var DrawBox = function(options){
             },
             onClose:function(){
                 _self.refreshState("closed");
-                activeDrawTool("");
+                _self.mapApi.startPanMode();
             }
         });
         activeDrawStyle(_self.currentDrawType);

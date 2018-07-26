@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>自定义表单配置</title>
+	<!-- <link rel="stylesheet" href="./libelement-ui/element-#0E2B4A/src/index.css"> -->
+	<link rel="stylesheet" href="./../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../lib/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="./../../../src/css/main.css">
+	<style>
+		.el-form-item {
+			margin-bottom: 0px;
+		}
+
+		.jasmap {
+			overflow: hidden;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="app" v-cloak>
+		<jas-list-wrapper>
+			<el-form slot="search" :model="topSearch" label-width="100px">
+				<el-row>
+					<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+						<el-form-item label="项目名称" prop="projectOid">
+							<el-select v-model="topSearch.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
+								<el-option v-for="item in domain.project" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+						<el-form-item label="标段名称" prop="tendersOid">
+							<el-select v-model="topSearch.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
+								<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+						<el-form-item label="施工单位" prop="constructUnit">
+							<el-select v-model="topSearch.constructUnit" clearable placeholder="请选择施工单位" size="small">
+								<el-option v-for="item in domain.constructUnitArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+						<el-form-item label="冷弯管编号">
+							<!-- <el-input v-model="topSearch.pipeColdBendingCode" clearable placeholder="请输入冷弯管编号" size="small"></el-input> -->
+							<el-select v-model="topSearch.pipeColdBendingOid" clearable placeholder="请输入冷弯管 " size="small">
+								<el-option v-for="item in domain.pipeColdBendingOidArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+						<el-form-item style="float: right;">
+							<el-button size="small" type="primary" @click="searchList">查询</el-button>
+							<el-button size="small" @click="reset">重置</el-button>
+						</el-form-item>
+					</el-col>
+				</el-row>
+			</el-form>
+			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" search-path="/jdbc/commonData/checkPipeColdBending/getPage.do"
+			  :add-url="addUrl" :detail-url="detailUrl" delete-path="/jdbc/commonData/checkPipeColdBending/delete.do" :class-name="className"
+			  :template-code="templateCode"></jas-table-for-list>
+		</jas-list-wrapper>
+	</div>
+</body>
+<script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../lib/vue/vue.js"></script>
+<script src="./../../../lib/vue-multipane/vue-multipane.js"></script>
+<script src="./../../../lib/element-ui/v2.4.1/index.min.js"></script>
+<script src="./../../../common/components/jas-components.js"></script>
+<script src="./../../../common/js/jas-tools.js"></script>
+<script>
+	var vm = new Vue({
+		el: '#app',
+		data: function () {
+			return {
+				className: '',
+				templateCode: '',
+				addUrl: './pages/row-management/check-cold-bends/dialogs/add.html',
+				detailUrl: './pages/row-management/check-cold-bends/dialogs/detail.html',
+				privilegeCode: '',
+				topSearch: {
+					pipeColdBendingOid: "",
+					projectOid: "",
+					tendersOid: "",
+					constructUnit: ""
+				},
+				tableFields: [{
+					name: '项目名称',
+					field: 'projectName'
+				}, {
+					name: '标段名称',
+					field: 'tendersName'
+				}, {
+					name: '施工单位',
+					field: 'unitName'
+				}, {
+					name: '冷弯管编号',
+					field: 'pipeColdBendingCode'
+				}, {
+					name: '合格编号',
+					field: 'certificateNum'
+				}, {
+					name: '弯制单位',
+					field: 'productionUnit'
+				}, {
+					name: "弯道长度(m)",
+					field: "pipeLength"
+				}, {
+					name: "弯制角度(°)",
+					field: "bendAngle"
+				}, {
+					name: '管径(mm)',
+					field: 'pipeDiameter'
+				}, {
+					name: '壁厚(mm)',
+					field: 'wallThickness'
+				}, {
+					name: '纵焊缝位置',
+					field: 'weldPosition',
+					formatter: function (row, column, cellvalue, index) {
+						if (cellvalue == '0') {
+							return '合格';
+						} else {
+							return '不合格';
+						}
+					}
+				}, {
+					name: '椭圆度<0.6%D',
+					field: 'ovality',
+					formatter: function (row, column, cellvalue, index) {
+						if (cellvalue == '0') {
+							return '合格';
+						} else {
+							return '不合格';
+						}
+					}
+				}, {
+					name: '坡口检查',
+					field: 'grooveCheck',
+					formatter: function (row, column, cellvalue, index) {
+						if (cellvalue == '0') {
+							return '合格';
+						} else {
+							return '不合格';
+						}
+					}
+				}, {
+					name: '防腐层内外表面质量',
+					field: 'coatingIoFaceCheck',
+					formatter: function (row, column, cellvalue, index) {
+						if (cellvalue == '0') {
+							return '合格';
+						} else {
+							return '不合格';
+						}
+					}
+				}, {
+					name: '防腐层端部内外涂层',
+					field: 'coatingIoEndsCheck',
+					formatter: function (row, column, cellvalue, index) {
+						if (cellvalue == '0') {
+							return '合格';
+						} else {
+							return '不合格';
+						}
+					}
+				}, {
+					name: '检查人',
+					field: 'checkedBy'
+				}, {
+					name: '检查日期',
+					field: 'checkedDate'
+				}],
+				domain: {
+					isPass: [{
+						key: '0',
+						value: '合格'
+					}, {
+						key: '1',
+						value: '不合格'
+					}],
+					constructUnitArr: [],
+					project: [], //项目
+					tenders: [], //标段
+					pipeColdBendingOidArr:[]
+				}
+			}
+		},
+		mounted: function () {
+			var that = this;
+			var param = window.jasTools.base
+				.getParamsInUrl(location.href);
+			this.privilegeCode = param.privilegeCode;
+			this.templateCode = param.templateCode; //|| "stake-2";
+			this.className = param.className; // || 'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';
+			this.requestDomainFromBizTable(
+				'/daq/privilege/getProjectList.do', {},
+				function (
+					arr) {
+					that.domain.project = arr;
+				});
+			this.getConstructUnit();
+		},
+		methods: {
+			requestDomainFromBizTable: function (url, obj, cb) {
+				var that = this;
+				var url = jasTools.base.rootPath + url;
+				jasTools.ajax.post(url, obj, function (data) {
+					cb && cb(data.rows);
+				}, function () {
+					cb && cb([]);
+				});
+			},
+			projectChanged: function (val) {
+				var that = this;
+				if (val) {
+					this.requestDomainFromBizTable(
+						'/daq/privilege/getTendersList.do', {
+							projectOid: val
+						},
+						function (arr) {
+							that.domain.tenders = arr;
+						});
+				} else {
+					that.domain.tenders = [];
+					that.topSearch.tendersOid = '';
+					that.domain.pipeColdBendingOidArr = [];
+					that.topSearch.pipeColdBendingOid = '';
+				}
+			},
+			tendersChanged: function (val) { //根据标段触发管线列表
+				var that = this;
+				if (val) {
+					this.requestDomainFromBizTable(
+							'/daq/clodBendingPipe/getList.do', {
+								tendersOid:val
+							},
+							function (arr) {
+								console.log(arr);
+								that.domain.pipeColdBendingOidArr = arr;
+								console.log(that.domain.pipeColdBendingOidArr);
+							});
+				} else {
+					that.domain.pipeColdBendingOidArr = [];
+					that.topSearch.pipeColdBendingOid = '';
+				}
+			},
+			getConstructUnit: function(){
+				var that = this;
+				this.requestDomainFromBizTable(
+					'/daq/privilege/getCurrentUnitId.do', {
+					},
+					function (arr) {
+						that.domain.constructUnitArr = arr;
+					}
+				);
+				
+			},
+			searchList: function () {
+				this.$refs.table.search();
+			},
+			reset: function () {
+				this.topSearch.pipeColdBendingOid = '';
+				this.topSearch.constructUnit = '';
+				this.topSearch.projectOid = '';
+				this.topSearch.tendersOid = '';
+				this.$refs.table.search();
+			}
+		},
+	});
+</script>
+
+</html>

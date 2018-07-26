@@ -1,0 +1,7 @@
+[
+	{
+		"conditionExpression":"className == 'cn.jasgroup.framework.automation.query.MapQuery'",
+		"service": "daqInjectService",
+		"method":"privilegeStrategySql()"
+	}
+]

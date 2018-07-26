@@ -1,11 +1,10 @@
-html,body,.jasmap{ height:100%;width:100%;padding:0;margin:0 auto;overflow: auto;}
-
-
-.tooltip {  position: relative;  background: rgba(0, 0, 0, 0.5);  border-radius: 4px;  color: white;  padding: 4px 8px;  opacity: 0.7;  white-space: nowrap;  }
-.tooltip-measure { opacity: 1;  font-weight: bold;  }
-.tooltip-static { background-color: #ffcc33;color: black;border: 1px solid white;  }
-.tooltip-measure:before, .tooltip-static:before {  border-top: 6px solid rgba(0, 0, 0, 0.5);  border-right: 6px solid transparent;  border-left: 6px solid transparent;  content: "";  position: absolute;  bottom: -6px;  margin-left: -7px;  left: 50%;  }
-.tooltip-static:before {  border-top-color: #ffcc33;  }
+html,body { height:100%;width:100%;padding:0;margin:0 auto;overflow: auto;}
+.jasmap{background-color: #fff;height:100%;width:100%;position: relative; }
+.jasmap .tooltip {  position: relative;  background: rgba(0, 0, 0, 0.5);  border-radius: 4px;  color: white;  padding: 4px 8px;  opacity: 0.7;  white-space: nowrap; display: block  }
+.jasmap .tooltip-measure { opacity: 1;  font-weight: bold;  }
+.jasmap .tooltip-static { background-color: #ffcc33;color: black;border: 1px solid white; display: block }
+.jasmap .tooltip-measure:before, .tooltip-static:before {  border-top: 6px solid rgba(0, 0, 0, 0.5);  border-right: 6px solid transparent;  border-left: 6px solid transparent;  content: "";  position: absolute;  bottom: -6px;  margin-left: -7px;  left: 50%;  }
+.jasmap .tooltip-static:before {  border-top-color: #ffcc33;  }
 
 .ol-custom-overviewmap,
 .ol-custom-overviewmap.ol-uncollapsible {  bottom: 0;  left: auto;  right: 0;  top: auto;}
@@ -50,3 +49,14 @@ html,body,.jasmap{ height:100%;width:100%;padding:0;margin:0 auto;overflow: auto
 .map-module-basemapsgallary ul li div.listItem:hover{ border: solid 2px blue;}
 .map-module-basemapsgallary ul li div.selected{ border: solid 2px blue;}
 .map-module-basemapsgallary ul div.listItem img{ width:100px;height:60px;cursor: pointer;}
+
+.map-popup {  position: absolute;  background-color: white;  -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));  filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));  padding: 5px;  border-radius: 10px;  border: 1px solid #cccccc;  bottom: 12px;  left: -50px;  min-width: 280px;  }
+.map-popup:after, .map-popup:before {  top: 100%;  border: solid transparent;  content: " ";  height: 0;  width: 0;  position: absolute;  pointer-events: none;  }
+.map-popup:after {  border-top-color: white;  border-width: 10px;  left: 48px;  margin-left: -10px;  }
+.map-popup:before {  border-top-color: #cccccc;  border-width: 11px;  left: 48px;  margin-left: -11px;  }
+.map-popup #popup-title {   margin-top: 0;     padding: 2px; background-color: #00bbee }
+.map-popup #popup-content { margin: -10px 0 -10px 0; }
+.map-popup #popup-title p{   margin: 0 auto; }
+.map-popup hr{   margin: 2px; }
+.map-popup-closer {  text-decoration: none;  position: absolute;  top: 2px;  right: 8px;  }
+.map-popup-closer:after {  content: "✖";  }
