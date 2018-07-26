@@ -39,7 +39,8 @@ public class DaqAppendagesHydraulicProtectionQuery extends BaseJavaQuery{
 	@Override
 	public String getSql() {
 		String sql =  "select t.*,"
-				+ " d1.code_name as hydraulicProtectionType,"
+				+ " d1.code_name as hydraulicProtectionTypeName,"
+				+ " d2.code_name as hydraulicProtectionMaterialName,"
 				+ "	p.project_name,"
 				+ "	l.pipeline_name,"
 				+ "	dt.tenders_name,"
@@ -51,6 +52,7 @@ public class DaqAppendagesHydraulicProtectionQuery extends BaseJavaQuery{
 				+ "	u2.unit_name as supervisionUnitName"				
 				+ " from daq_appendages_hydraulic_protection t "
 				+ " left join sys_domain d1 on d1.code_id = t.hydraulic_protection_type"				
+				+ " left join sys_domain d2 on d2.code_id = t.hydraulic_protection_material"				
 				+ " left join daq_project p on p.oid=t.project_oid "
 				+ " left join daq_pipeline l on l.oid=t.pipeline_oid "
 				+ " left join daq_tenders dt on dt.oid=t.tenders_oid "
