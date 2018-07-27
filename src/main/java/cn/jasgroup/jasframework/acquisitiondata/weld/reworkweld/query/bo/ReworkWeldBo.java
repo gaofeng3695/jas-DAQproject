@@ -179,6 +179,11 @@ public class ReworkWeldBo extends CommonBaseBo {
 	 */
 	private Date collectionDate; 
 
+	/**
+	 * 审核状态
+	 */
+	private Integer approveStatus;
+	
 	/** 
 	 * 备注
 	 */
@@ -442,6 +447,14 @@ public class ReworkWeldBo extends CommonBaseBo {
 
 	public void setCollectionDate(Date collectionDate) {
 		this.collectionDate = collectionDate;
+	}
+
+	public Integer getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(Integer approveStatus) {
+		this.approveStatus = approveStatus;
 	}
 
 	public String getRemarks() {

@@ -134,6 +134,11 @@ public class ReworkWeld extends CommonJdbcEntity{
 	 * 采集日期
 	 */
 	private Date collectionDate; 
+	
+	/**
+	 * 审核状态
+	 */
+	private Integer approveStatus = 0;
 
 	/** 
 	 * 备注
@@ -313,6 +318,14 @@ public class ReworkWeld extends CommonJdbcEntity{
 	public void setCollectionDate(Date collectionDate) {
 		this.collectionDate = collectionDate; 
 		super.setField("collectionDate");
+	}
+
+	public Integer getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(Integer approveStatus) {
+		this.approveStatus = approveStatus;
 	}
 
 	public String getRemarks() {
