@@ -443,7 +443,12 @@
 				}
 			},
 			pipeCodeChanged: function (val) {
-				this.formData.pipeColdBendingCode = val + "-LW";
+				var that = this;
+				let obj = {};
+				obj = that.domain.pipeCodes.find((item)=>{//这里的userList就是上面遍历的数据源
+					return item.key === val;//筛选出匹配数据
+				});
+				this.formData.pipeColdBendingCode = obj.value + "-LW";
 			},
 			submit: function (formName) {
 				var that = this;
