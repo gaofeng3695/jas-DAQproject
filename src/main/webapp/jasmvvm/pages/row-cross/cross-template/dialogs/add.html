@@ -65,7 +65,7 @@
 				fields: [],
 				fields2: [],
 				fields3: [],
-				fieldsConfig: crossConfig.fieldsConfig,
+				fieldsConfig: [],
 				form: {},
 			}
 		},
@@ -74,12 +74,14 @@
 			var param = window.jasTools.base.getParamsInUrl(location.href);
 			this.pageCode = param.pageCode;
 
+			this.fieldsConfig = crossConfig.methods.resetConfig(crossConfig.fieldsConfig, this.pageCode);
+
 			var fields = crossConfig[this.pageCode].addFields1;
 			var fields2 = crossConfig[this.pageCode].addFields2;
 			var fields3 = crossConfig[this.pageCode].addFields3;
-			this.fields = crossConfig.methods.formatFields(fields, crossConfig.fieldsConfig,this.pageCode);
-			this.fields2 = crossConfig.methods.formatFields(fields2, crossConfig.fieldsConfig,this.pageCode);
-			this.fields3 = crossConfig.methods.formatFields(fields3, crossConfig.fieldsConfig,this.pageCode);
+			this.fields = crossConfig.methods.formatFields(fields, crossConfig.fieldsConfig, this.pageCode);
+			this.fields2 = crossConfig.methods.formatFields(fields2, crossConfig.fieldsConfig, this.pageCode);
+			this.fields3 = crossConfig.methods.formatFields(fields3, crossConfig.fieldsConfig, this.pageCode);
 			this.form = crossConfig.methods.formatForm(fields.concat(fields2).concat(fields3));
 		},
 		mounted: function () {
