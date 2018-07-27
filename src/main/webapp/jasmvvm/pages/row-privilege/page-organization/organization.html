@@ -63,8 +63,8 @@
 				</div>
 				<div class="orgtool">
 					<el-button type="text" @click="addNode">新增</el-button>
-					<el-button type="text" @click="editNode" :disabled="!currentNodeId">修改</el-button>
-					<el-button type="text" @click="deleteNode" :disabled="!currentNodeId">删除</el-button>
+					<el-button type="text" @click="editNode" :disabled="!currentNodeId || isFixed">修改</el-button>
+					<el-button type="text" @click="deleteNode" :disabled="!currentNodeId || isFixed">删除</el-button>
 				</div>
 				<el-tree class="is-grown" ref="orgtree" :data="orgnData" node-key="id" :props="defaultProps" :default-expanded-keys="[currentNodeId]"
 				  highlight-current @node-click="clicknode" :expand-on-click-node="false" :filter-node-method="filterNode"></el-tree>
@@ -77,7 +77,7 @@
 						</div>
 					</el-tab-pane>
 					<el-tab-pane label="实施范围" name="scale">
-						<div v-loading="loading.scopeTree">
+						<div v-loading="loading.scopeTree" v-show="!isFixed">
 							<!-- <div style="text-align: right;"> -->
 							<div style="border-bottom: 1px solid #ececec;padding:0 0 10px;">
 								<el-button size="small" type="primary" @click="requestSaveScope">保存</el-button>
@@ -163,6 +163,19 @@
 					label: 'text',
 					orgnData: 'orgnData'
 				},
+
+			}
+		},
+		computed: {
+			isFixed: function () {
+				var arr = [
+					'e8109332-8a6e-4d16-8e73-549154818205',
+					'8432ae89-470e-4fb9-a351-f0f48eff5548',
+					'46b894cd-714c-4af8-8cf1-f3ea2db01a62',
+					'b7e5ff3c-8e3a-4bd7-89d0-d45189f8c2a6',
+					'29248863-3583-4b64-915c-c1472e87fba7',
+				];
+				return (arr.indexOf(this.currentNodeId) > -1);
 
 			}
 		},

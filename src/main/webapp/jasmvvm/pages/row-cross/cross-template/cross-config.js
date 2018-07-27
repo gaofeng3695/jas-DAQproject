@@ -946,6 +946,21 @@ var crossConfig = {
       obj.remarks = '';
       return obj;
     },
+    resetConfig: function (config, pageCode) {
+      var map = {
+        crossExcavation: 'cross_way_code01', //	开挖
+        crossPipeJacking: 'cross_way_code02', //	顶管
+        crossDrilling: 'cross_way_code03', //	定向钻
+        crossDrillingBlasting: 'cross_way_code04', //	钻爆隧道
+        crossAcross: 'cross_way_code05', //	跨越
+        crossShield: 'cross_way_code06', //	盾构
+        crossBoxCulvert: 'cross_way_code07', //	箱涵
+      };
+      if (config.crossOid.requestParams) {
+        config.crossOid.requestParams.crossWay = map[pageCode];
+      }
+      return config;
+    },
   },
   url: [
     '/jasmvvm/pages/row-cross/cross-template/cross-template.html?privilegeCode=P-daq-hq-001006001&pageCode=crossExcavation&isApprove=1&className=cn.jasgroup.jasframework.acquisitiondata.material.cross.excavation.dao.entity.DaqCrossExcavation&classNameQuery=cn.jasgroup.jasframework.acquisitiondata.material.cross.excavation.query.DaqCrossExcavationQuery&templateCode=',
