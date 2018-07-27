@@ -3,6 +3,9 @@ package cn.jasgroup.jasframework.acquisitiondata.basedata.workunit.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,9 +22,12 @@ public class WorkUnitController {
 	private WorkUnitService workUnitService;
 	
 	@RequestMapping("getWorkUnitList")
-	public Object getWorkUnitList(@RequestBody  Map<String, String> param){
+	public Object getWorkUnitList(HttpServletRequest request,@RequestBody  Map<String, String> param){
 		String projectOid = param.get("projectOid");
 		String types = param.get("types");
+		if(StringUtils.isBlank(types)){
+			types = request.getParameter("types");
+		}
 		ListResult<Map<String, Object>> result= null;
 		try{
 			List<Map<String, Object>> rows = this.workUnitService.getListByCondition(projectOid, types);
