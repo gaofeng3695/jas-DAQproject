@@ -665,11 +665,11 @@ Vue.component('jas-table-for-list', {
 		'	<el-button class="fr" size="small" icon="el-icon-refresh" @click="refresh"></el-button>',
 		'</div>',
 		'<div class="is-grown">',
-		'	<el-table @selection-change="handleSelectionChange"  v-loading="loading" height="100%" :data="tableData" border :header-cell-style="headStyle" style="width: 100%" stripe>',
+		'	<el-table @selection-change="handleSelectionChange" @row-dblclick="preview" v-loading="loading" height="100%" :data="tableData" border :header-cell-style="headStyle" style="width: 100%" stripe>',
 		'    <el-table-column type="selection" width="55" align="center" fixed></el-table-column>',
 		'		<el-table-column label="序号" type="index" align="center" width="50" fixed>',
 		'		</el-table-column>',
-		'		<el-table-column v-for="item,index in fields" :key="item.oid" :fixed="index=== 0?true:false" :label="item.name" :prop="item.field" :formatter="item.formatter" align="center">',
+		'		<el-table-column v-for="item,index in fields" :key="item.oid" :fixed="index=== 0?true:false" :label="item.name" :prop="item.field" :formatter="item.formatter" min-width="130px" show-overflow-tooltip align="center">',
 		'		</el-table-column>',
 		'		<el-table-column label="操作" align="center" width="180" fixed="right">',
 		'			<template slot-scope="scope">',
@@ -1794,7 +1794,9 @@ Vue.component('jas-approve-dialog', {
 				page: 1,
 				rows: 10,
 			},
-			loading: false,
+			loading: {
+				table: false
+			},
 			remarks: '',
 		}
 	},
@@ -1828,7 +1830,7 @@ Vue.component('jas-approve-dialog', {
 		'  </el-tab-pane>',
 		'  <el-tab-pane label="审核信息" name="second">',
 		'    <div class="jas-flex-box is-vertical" style="margin: 0 20px;">',
-		'      <el-table class="is-grown" v-loading="loading" :data="tableData" height="100" style="width: 100%;" :header-cell-style="headStyle" border stripe>',
+		'      <el-table v-loading="loading.table" class="is-grown" :data="tableData" height="100" style="width: 100%;" :header-cell-style="headStyle" border stripe>',
 		'        <el-table-column type="index" label="序号" width="50" align="center" fixed></el-table-column>',
 		'        <el-table-column prop="approveStatus" :formatter="formatter" label="操作类型" width="120" align="center"></el-table-column>',
 		'        <el-table-column prop="approveOpinion" label="审批意见" align="center"></el-table-column>',
@@ -1873,11 +1875,16 @@ Vue.component('jas-approve-dialog', {
 		},
 		requestTableList: function () {
 			var that = this;
+			that.loading.table = true;
 			var url = jasTools.base.rootPath + '/jdbc/commonData/dataApprove/getPage.do';
 			jasTools.ajax.post(url, {
 				businessOid: this._oid
 			}, function (data) {
+				setTimeout(function () {
+					that.loading.table = false;
+				}, 300)
 				that.tableData = data.rows;
+				that.total = data.total;
 			});
 		},
 		requestApprove: function (status) {

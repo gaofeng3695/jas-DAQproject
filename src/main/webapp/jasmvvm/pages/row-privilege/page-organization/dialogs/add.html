@@ -42,7 +42,8 @@
 
 <body>
 	<div id="app" v-cloak>
-		<div class="content">
+
+		<jas-dialog-wrapper>
 			<el-form ref="tableFormData" :rules="rules" :model="tableFormData" label-width="120px">
 				<el-row :gutter="10">
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
@@ -73,7 +74,7 @@
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="顺序编号" prop="orderNum">
 							<!-- <el-input v-model="tableFormData.orderNum" clearable placeholder="请输入顺序编号" size="small"></el-input> -->
-							<el-input-number v-model="tableFormData.orderNum" size="small" :precision="1"  clearable placeholder="请输入顺序编号" controls-position="right"
+							<el-input-number v-model="tableFormData.orderNum" size="small" :precision="1" clearable placeholder="请输入顺序编号" controls-position="right"
 							  :min="1" :max="100"></el-input-number>
 						</el-form-item>
 					</el-col>
@@ -98,11 +99,13 @@
 					</el-col>
 				</el-row>
 			</el-form>
-		</div>
-		<div class="dialog-footer" style="text-align: center">
-			<el-button size="small" @click="cancel()">取 消</el-button>
-			<el-button size="small" type="primary" @click="submit('tableFormData')">确 定</el-button>
-		</div>
+			<div slot="footer" >
+				<el-button size="small" @click="cancel()">取 消</el-button>
+				<el-button size="small" type="primary" @click="submit('tableFormData')">确 定</el-button>
+			</div>
+		</jas-dialog-wrapper>
+
+
 	</div>
 </body>
 <script src="./../../../../lib/jquery/jquery-1.12.4.min.js"></script>
@@ -215,7 +218,7 @@
 					msg = "修改成功";
 					url = jasTools.base.rootPath + "/jasframework/privilege/unit/updateUnit.do";
 				}
-				if(!that.tableFormData.parentId){
+				if (!that.tableFormData.parentId) {
 					that.tableFormData.parentId = 'f4b587f5-4f84-4e51-9ae7-529a7f16b2f6';
 				}
 				jasTools.ajax.post(url, that.tableFormData, function (data) {
