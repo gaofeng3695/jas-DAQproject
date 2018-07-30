@@ -16,8 +16,9 @@
 <body>
 	<div id="app" v-cloak>
 
-		<jas-dialog-wrapper>
-
+	
+				<jas-approve-dialog>
+	<div>
 			<jas-base-group-title name="基本信息"></jas-base-group-title>
 			<jas-detail-table :titles="fieldsArr" :detail="detail"></jas-detail-table>
 		  <jas-base-group-title name="位置信息"></jas-base-group-title>
@@ -30,7 +31,9 @@
 
 			<!--<jas-base-group-title name="附件信息"></jas-base-group-title>
 			<jas-file-list :biz-id="oid"></jas-file-list>-->
-		</jas-dialog-wrapper>
+			
+			</div>
+		</jas-approve-dialog>
 
 
 	</div>
@@ -120,6 +123,9 @@
 					}, {
 						field: "supervisionEngineer",
 						name: '监理工程师'
+					},{
+						name: '审核状态',
+						field: 'approveStatus'
 					}
 				],
 				otherArr: [{
@@ -145,6 +151,18 @@
 				var url = jasTools.base.rootPath + "/jdbc/commonData/layPipeTrenchExcavation/getPage.do";
 				jasTools.ajax.post(url, this.params, function (data) {
 					that.detail = data.rows[0];
+					if(that.detail.approveStatus==-1){
+						that.detail.approveStatus= '驳回';
+					}
+					if(that.detail.approveStatus==0){
+						that.detail.approveStatus= '未提交';
+					}
+					if(that.detail.approveStatus==1){
+						that.detail.approveStatus= '审核中';
+					}
+					if(that.detail.approveStatus==2){
+						that.detail.approveStatus= '通过';
+					}
 				});
 			},
 		},

@@ -95,7 +95,21 @@
 					}
 				},
 				tableFields: [ //
-					{
+				               {
+									field : 'approveStatus',
+									name : '审核状态',
+									formatter : function(a, b, value, c) {
+										if (value == -1)
+											return '驳回';
+										if (value == 0)
+											return '未提交';
+										if (value == 1)
+											return '审核中';
+										if (value == 2)
+											return '通过';
+										return value;
+									}
+								},{
 						name: '项目名称',
 						field: 'projectName'
 					}, {
@@ -138,20 +152,6 @@
 					}, {
 						name: '采集日期',
 						field: 'collectionDate'
-					}, {
-						name: '审核状态',
-						field: 'approveStatus',
-						formatter: function (a, b, c, d) {
-							if (c == 0) {
-								return '未提交';
-							}
-							if (c == 1) {
-								return '审核中';
-							}
-							if (c == 2) {
-								return '通过'
-							}
-						}
 					}
 				],
 			}
