@@ -104,6 +104,8 @@ var JasMap = null ,M = null;
         var apiDefaults = {
             appScriptId:"mapApi",
             appConfigPath:"config.json",
+            projectPathName:"",
+            layersVisible:null,
             sphereRadius:6378137.0,//4490、4326、3857
             appName:"",
             dpi:window.screen.deviceXDPI ?window.screen.deviceXDPI :96 ,
@@ -147,18 +149,19 @@ var JasMap = null ,M = null;
         var styleManager = new StyleManager();//图层样式管理器
 
         var apiInit = function(){
-            eventManager.registerEvent( _this.Events .ConfigLoadedEvent ,apiDefaults.onConfigLoaded);
-            eventManager.registerEvent( _this.Events .MapLoadedEvent ,apiDefaults.onMapLoaded);
-            eventManager.registerEvent( _this.Events .ErrorEvent ,apiDefaults.onError);
-            eventManager.registerEvent( _this.Events .ModuleStartupEvent ,apiDefaults.onModuleStartup);
-            eventManager.registerEvent( _this.Events .OptionalLayerAddedEvent ,apiDefaults.onLayerAdded);
-            eventManager.registerEvent( _this.Events .MapResizedEvent ,apiDefaults.onMapResized);
             eventManager.startup();
             styleManager.startup();
             mapManager.startup();
             moduleManager.startup();
             layerManager.startup();
             configManager.startup();//这里配置加载最后启动
+
+             _this.subscribe( _this.Events .ConfigLoadedEvent ,apiDefaults.onConfigLoaded);
+             _this.subscribe( _this.Events .MapLoadedEvent ,apiDefaults.onMapLoaded);
+             _this.subscribe( _this.Events .ErrorEvent ,apiDefaults.onError);
+             _this.subscribe( _this.Events .ModuleStartupEvent ,apiDefaults.onModuleStartup);
+             _this.subscribe( _this.Events .OptionalLayerAddedEvent ,apiDefaults.onLayerAdded);
+             _this.subscribe( _this.Events .MapResizedEvent ,apiDefaults.onMapResized);
         };//
         _this.map = null;
         _this.apiConfig = null;
@@ -403,7 +406,7 @@ var JasMap = null ,M = null;
                 vectorSource.addFeatures(features);
             }
             if(center === true){
-
+                _this.flashGraphic(features);
             }
         };
         _this.addGraphics = function(layerId, geoJSON, center){
@@ -524,7 +527,7 @@ var JasMap = null ,M = null;
                 _this.addFeatures(params.layerId,features,params.center);
             }
         };
-
+        //
         _this.removeGraphics = function(layerId , featureIds){
             var layer = _this.getLayerById(layerId);
             var source = layer && layer.getSource();
@@ -768,11 +771,11 @@ var JasMap = null ,M = null;
                 "center":true,
                 "scale":20000 // 与map lods参数或底图的比例尺设置相关
             };
+            var params = commonUtil.extend(defaults,options);
             layerId = layerId ? layerId.trim() : apiDefaults.drawLayerId;
             var targetLayer = _this.getLayerById(layerId);
-            var params = commonUtil.extend(defaults,options);
             var features = [];
-            //显示图层
+            //
             if(targetLayer && !targetLayer.getVisible()){
                 _this.layerVisibleSwitch(layerId,true);
             }
@@ -848,23 +851,22 @@ var JasMap = null ,M = null;
             if(targetLayer && targetLayer.getSource() && targetLayer.getSource().getUrl()){
                 if(typeof target === "string") {//主键查询
                     if (target.indexOf(".") < 0) {
-                        target = layerId + "." + target;//geotools
+                        target = layerId + "." + target;//geotools主键方案"表名.主键"
                     }
                     features = _this.queryFeatures(target, layerId);
-                }else if(typeof target === "object")//属性查询
+                }else if(typeof target === "object"){
                     features = _this.queryFeatures(null,layerId ,target);
-                //
+                }
                 if(features.length > 0){
-                    //layer once
                     targetLayer.once("render",function(e){
-                        //var featuresArr = e.target.getSource().getFeatures();
                         if(typeof target === "string") {
                             if (target.indexOf(".") < 0) {
                                 target = layerId + "." + target;
                             }
                             features = _this.getFeatures(target, layerId);
-                        }else if(typeof target === "object")//属性对象
+                        }else if(typeof target === "object"){
                             features = _this.getFeatures(null,layerId ,target);
+                        }
                         prepareFlashStyle() && doFlash();
                     });
                     doPosition();
@@ -872,21 +874,23 @@ var JasMap = null ,M = null;
                     eventManager.publishInfo(_this.Strings.featureNotFound);
                 }
             }else{
-                if(typeof target === "string") {//主键查询
+                //如果是数组,认为是要素数组
+                if(Array.isArray(target)){
+                    features = target;
+                }else if(typeof target === "string") {//如果是字符串，则按主键处理
                     if (target.indexOf(".") < 0) {
                         target = layerId + "." + target;//geotools
                     }
                     features = _this.getFeatures(target, layerId);
-                }else if(typeof target === "object")//属性查询
+                }else if(typeof target === "object"){
                     features = _this.getFeatures(null,layerId ,target);
-                //
+                }
                 if(features.length > 0){
-                    prepareFlashStyle()&& doPosition() && doFlash();
+                    prepareFlashStyle() && doPosition() && doFlash();
                 }else{
                     eventManager.publishInfo(_this.Strings.featureNotFound);
                 }
             }
-
         };
         _this.switchBaseMap = function(layerId){
             var layer = _this.getLayerById(layerId);
@@ -1122,6 +1126,13 @@ var JasMap = null ,M = null;
             var onOptionLayersLoaded = function(e){
                 var layers = e.data.flashLayers;
                 addLayerFlashEffect(layers);
+
+            };
+            var onLayerAdded = function(e){
+                var layerId = e.data.layerId;
+                if(layerManager.initLayersVisible && layerManager.initLayersVisible[layerId] !== undefined){
+                    _this.layerVisibleSwitch(layerId,layerManager.initLayersVisible[layerId]);
+                }
             };
             //---量测模型---
             var currentDrawFeature = null;
@@ -1365,7 +1376,6 @@ var JasMap = null ,M = null;
                 }
                 infoWindowOverlay.setPosition([ x, y ]);
             };
-            //------
             _class.defineProjection = function(epsgString){
                 if(epsgString === "EPSG:4326" || epsgString === "EPSG:3857"){
                     return epsgString;
@@ -1399,9 +1409,10 @@ var JasMap = null ,M = null;
                 collection.clear();
             };
             _class.startup = function(){
-                eventManager.registerEvent( _this.Events .ConfigLoadedEvent ,onConfigLoaded);
-                eventManager.registerEvent( _this.Events .MapLoadedEvent ,onMapLoaded);
-                eventManager.registerEvent( _this.Events .OptionalLayersLoaded ,onOptionLayersLoaded);
+                 _this.subscribe( _this.Events .ConfigLoadedEvent ,onConfigLoaded);
+                 _this.subscribe( _this.Events .MapLoadedEvent ,onMapLoaded);
+                 _this.subscribe( _this.Events .OptionalLayersLoaded ,onOptionLayersLoaded);
+                 _this.subscribe( _this.Events .OptionalLayerAddedEvent , onLayerAdded);
             };
             _class.active = function(state,vectorLayer,param ){
                 _this.removeEventListener(_class.drawInteracting);
@@ -1413,6 +1424,10 @@ var JasMap = null ,M = null;
                         var drawType = param.drawType ;
                         var onDrawEnd = param.onDrawEnd;
                         var onDrawStart = param.onDrawStart;
+                        if("Delete"===drawType){
+
+                            break;
+                        }
                         if( drawType && vectorLayer ) {
                             var style = styleManager.drawStyle(param.style);
                             if(drawType === "Box"){
@@ -1468,7 +1483,6 @@ var JasMap = null ,M = null;
                     default:
                 }
             };
-            //
         }
         function StyleManager(){
             var _class = this;
@@ -1587,7 +1601,7 @@ var JasMap = null ,M = null;
 
             };
             _class.startup =  function(){
-                eventManager.registerEvent( _this.Events .MapLoadedEvent ,onMapLoaded);
+                 _this.subscribe( _this.Events .MapLoadedEvent ,onMapLoaded);
             };
             _class.getBoldStyle = function(s ,lStyle,feature){
                 var style = s && s.clone();
@@ -1632,7 +1646,6 @@ var JasMap = null ,M = null;
             var _optionalLayerConfig = null;
             var _baseMapLayerConfig = null;
             var _flashLayers = [];
-
             var defaultGridSet = {
                 "tileSize":[256,256],
                 "origin":[-180.0,90.0],
@@ -1656,7 +1669,6 @@ var JasMap = null ,M = null;
                 'tilecol': '{x}',
                 'tilerow': '{y}'
             };
-
             var createDefaultLoader = function(){
 
             };
@@ -1860,7 +1872,7 @@ var JasMap = null ,M = null;
                 } catch (e) {
                     eventManager.publishError(_this.Strings.parseLayerConfigError + "layerId=" + config.id ,e);
                 }
-            };
+            };2
             var createBaseMapLayers = function(){
                 if(_baseMapLayerConfig) {
                     var baseMapLayers = _baseMapLayerConfig.baseMapLayers;
@@ -1927,9 +1939,13 @@ var JasMap = null ,M = null;
 
             _class.optionalLayers = [];
             _class.baseMapLayers = [];
+            _class.initLayersVisible = null;
             _class.startup = function(){
-                eventManager.registerEvent( _this.Events .ConfigLoadedEvent ,onConfigLoaded);
-                eventManager.registerEvent( _this.Events .ModulesLoadedEvent ,onModulesLoaded);
+                if(apiDefaults.layersVisible){
+                    _class.initLayersVisible = apiDefaults.layersVisible;
+                }
+                _this.subscribe( _this.Events .ConfigLoadedEvent ,onConfigLoaded);
+                _this.subscribe( _this.Events .ModulesLoadedEvent ,onModulesLoaded);
             };
             _class.createLayer = function(params){
                 var config = parseLayerConfig(params);
@@ -2108,7 +2124,8 @@ var JasMap = null ,M = null;
              * @param listener Function
              */
             _class.registerEvent = function(eventType,onListenerFunc){
-                _eventObject.addEvent(eventType,onListenerFunc);
+                if(typeof onListenerFunc === "function")
+                    _eventObject.addEvent(eventType,onListenerFunc);
             };
             _class.destroyEventHandler = function(handler){
                 if(Array.isArray(handler)){
@@ -2337,9 +2354,9 @@ var JasMap = null ,M = null;
                 //return deferred.promise();
             };
             _class.startup = function(){
-                eventManager.registerEvent( _this.Events .ConfigLoadedEvent ,onConfigLoaded);
-                eventManager.registerEvent( _this.Events .MapLoadedEvent ,onMapLoaded);
-                eventManager.registerEvent( _this.Events .ModuleInitEvent ,onModuleLoaded);
+                 _this.subscribe( _this.Events .ConfigLoadedEvent ,onConfigLoaded);
+                 _this.subscribe( _this.Events .MapLoadedEvent ,onMapLoaded);
+                 _this.subscribe( _this.Events .ModuleInitEvent ,onModuleLoaded);
                 JasMap.require = require;
             };
             _class.getModuleById = function(id){
@@ -2426,7 +2443,7 @@ var JasMap = null ,M = null;
             function loadResources( ress, onOneBeginLoad, onOneLoad, onLoad){
                 var loaded = [];
                 var relys = {};
-                function _onOneLoad(url){
+                function _onOneLoad(url,id){
                     if(loaded.indexOf(url) > -1){
                         return;
                     }
@@ -2434,8 +2451,8 @@ var JasMap = null ,M = null;
                     if(onOneLoad){
                         onOneLoad(url, loaded.length);
                     }
-                    if(relys[url]){
-                        var arrs = relys[url];
+                    if(relys[id]){
+                        var arrs = relys[id];
                         for(var i = 0 ; i < arrs.length; i++ ){
                             if(arrs[i].url){
                                 loadResource(arrs[i].type, arrs[i].url, onOneBeginLoad, _onOneLoad);
@@ -2449,17 +2466,21 @@ var JasMap = null ,M = null;
                     }
                 }
                 for(var i = 0; i < ress.length; i ++){
-                    if(ress[i].relyOn){
-                        if(!relys[ress[i].relyOn]){
-                            relys[ress[i].relyOn] = [];
+                    var re = ress[i];
+                    //如果配置了依赖，先加入数组，不加载
+                    if(re.relyOn){
+                        if(!relys[re.relyOn]){
+                            relys[re.relyOn] = [];
                         }
-                        relys[ress[i].relyOn].push(ress[i]);
-                    } else if(ress[i].url){
-                        loadResource(ress[i].type, ress[i].url, onOneBeginLoad, _onOneLoad);
+                        relys[re.relyOn].push(re);
+                    } else if(re.url){
+                        //被依赖的必须要有Id
+                        loadResource(re.type, re.url, onOneBeginLoad, _onOneLoad,re.id);
                     }
                 }
             }
-            function loadResource(type, url, onBeginLoad, onLoad){
+            function loadResource(type, url, onBeginLoad, onLoad,id){
+                url = commonUtil.getApiRootPath(url);
                 if(onBeginLoad){
                     onBeginLoad(type);
                 }
@@ -2512,7 +2533,7 @@ var JasMap = null ,M = null;
                 }
                 function elementLoaded(url){
                     if(onLoad){
-                        onLoad(url);
+                        onLoad(url,id);
                     }
                 }
                 function elementReadyStateChanged(url){
@@ -2532,6 +2553,8 @@ var JasMap = null ,M = null;
             function getBasePath(){
                 if(apiScript){
                     var path = apiScript.getAttribute("src");
+                    var base = document.location.pathname;
+                    path = commonUtil.subUrl(base,path);
                     var index = path.indexOf("mapjs4ol.js");
                     if(index >= 0){
                         return path.substring(0,index);
@@ -2602,10 +2625,20 @@ var JasMap = null ,M = null;
             _class.getApiRootPath = function(url){
                 var result = url;
                 if(url.indexOf("basepath:") === 0){
-                    result = basePath + url.replace("basepath:","").trim();
+                    url = url.replace("basepath:","").trim();
+                    //result = basePath + url;
+                    result = commonUtil.subUrl(basePath, url);
                 }
                 return result.trim();
             };
+            _class.subUrl =function(path ,url){
+                path = path.substring(0,path.lastIndexOf("/"));
+                while(url.indexOf("../") === 0){
+                    url = url.substring(3);
+                    path = path.substring(0,path.lastIndexOf("/"));
+                }
+                return path + "/" + url;
+            };;
             _class.simpleAjaxLoader = function(options){
                 var xmlHttp = null;
                 if (window.XMLHttpRequest) {// IE7+, Firefox, Chrome, Opera, Safari 代码
@@ -2671,7 +2704,17 @@ var JasMap = null ,M = null;
                 return url ;
             };
             _class.getDefaultLayerQueryUrl = function(layerId){
-                return  "/jasgis/" + layerId +"/query.do";
+                var projectPath = apiDefaults.projectPathName;
+                if(!projectPath){
+                    var pathname = document.location.pathname;
+                    if(pathname.lastIndexOf("/") === 0){
+                        projectPath = "";//路径没有项目名称
+                    }else{
+                        pathname = pathname.substring(1);
+                        projectPath = pathname.substring(0,pathname.indexOf("/"));
+                    }
+                }
+                return  document.location.origin + "/" + projectPath + "/jasgis/" + layerId +"/query.do";
             };
             _class.hasValue = function(target,obj){
                 for(var key in obj){
@@ -2682,9 +2725,8 @@ var JasMap = null ,M = null;
                 }
                 return false;
             }
-
         }
-        //
+
         apiInit();
     };
 })(window);

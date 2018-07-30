@@ -1055,8 +1055,11 @@ var CoorsPosition = function(options){
             var id = new Date().getTime() + "";
             _self.mapApi.clearMapGraphics();
             //_self.mapApi.centerAt(x,y);
-            _self.mapApi.addPictureGraphic(x,y,{ attributes:{ id: id}});
-            _self.mapApi.flashGraphic(id);
+            _self.mapApi.addPictureGraphic(x,y,{
+                center:true,
+                attributes:{ id: id}
+            });
+            //_self.mapApi.flashGraphic(id);
         }
     };
     _self.pointMoveListener = null;
