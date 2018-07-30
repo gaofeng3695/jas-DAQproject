@@ -160,9 +160,9 @@ $(document).ready(function(){
 		idField:'oid',
 		nowrap:true,
 		columns:[[{field:'ck',title:getLanguageValue('ck'),checkbox:true},   
-			  {field:'roleName',title:getLanguageValue('role.roleName'),align:"center",width:200},   
-			  {field:'unitName',title:getLanguageValue('role.unitName'),align:"center",width:200}, 
-			  {field:'roleType',title:getLanguageValue('role.roleType'),align:"center",width:150,
+			  {field:'roleName',title:getLanguageValue('role.roleName'),align:"center",width:"20%"},   
+			  {field:'unitName',title:getLanguageValue('role.unitName'),align:"center",width:"20%"}, 
+			  {field:'roleType',title:getLanguageValue('role.roleType'),align:"center",width:"20%",
 					formatter: function(value,row,index){
 						if (value == "2"){
 							return "protect";
@@ -172,8 +172,8 @@ $(document).ready(function(){
 							return "-";
 						}
 					}},
-			  {field:'description',title:getLanguageValue('role.description'),align:"center",width:200},
-			  {field:'operate',title:getLanguageValue('role.operation'),align:"center",width:150,formatter: function(value,row,index){
+			  {field:'description',title:getLanguageValue('role.description'),align:"center",width:"20%"},
+			  {field:'operate',title:getLanguageValue('role.operation'),align:"center",width:"15%",formatter: function(value,row,index){
 					var opt = '<p class="table-operate"><a href="#" title ='+getLanguageValue('role.viewBtn')+' onclick="showInfo(\'' + row.oid+'\')">\
 									<span class="fa fa-eye"></span>\
 							   </a><a href="#" title ='+getLanguageValue('role.updateBtn')+' onclick="editRole(\'' + row.oid+'\')">\
