@@ -98,7 +98,12 @@ public class ColdBendingPipeBo extends CommonBaseBo{
 	private Date collectionDate; 
 
 	/** 是否使用 */
-	private String isUse; 
+	private String isUse;
+	
+	/***
+	 * 审核状态
+	 */
+	private Integer approveStatus; 
 
 	/** 备注 */
 	private String remarks;
@@ -359,5 +364,15 @@ public class ColdBendingPipeBo extends CommonBaseBo{
 	public void setSupervisionUnitName(String supervisionUnitName) {
 		this.supervisionUnitName = supervisionUnitName;
 	}
+
+	public Integer getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(Integer approveStatus) {
+		this.approveStatus = approveStatus;
+	}
+	
+	
 	
 }
