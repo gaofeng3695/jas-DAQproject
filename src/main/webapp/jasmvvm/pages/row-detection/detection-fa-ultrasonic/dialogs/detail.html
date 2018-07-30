@@ -16,19 +16,21 @@
 <body>
 	<div id="app" v-cloak>
 
-		<jas-dialog-wrapper>
 
-			<jas-base-group-title name="全自动超声波检测基本信息"></jas-base-group-title>
-			<jas-detail-table :titles="fieldsArr" :detail="detail"></jas-detail-table>
+		<jas-approve-dialog>
+			<div>
+				<jas-base-group-title name="全自动超声波检测基本信息"></jas-base-group-title>
+				<jas-detail-table :titles="fieldsArr" :detail="detail"></jas-detail-table>
 
-			<jas-sub-detail-group group-name="缺陷信息" :detail-list="detail.faUltrasonicSubList" :fields="subFieldsArr"></jas-sub-detail-group>
+				<jas-sub-detail-group group-name="缺陷信息" :detail-list="detail.faUltrasonicSubList" :fields="subFieldsArr"></jas-sub-detail-group>
 
-			<jas-base-group-title name="其他信息"></jas-base-group-title>
-			<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
+				<jas-base-group-title name="其他信息"></jas-base-group-title>
+				<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
 
-			<jas-base-group-title name="附件信息"></jas-base-group-title>
-			<jas-file-list :biz-id="oid"></jas-file-list>
-		</jas-dialog-wrapper>
+				<jas-base-group-title name="附件信息"></jas-base-group-title>
+				<jas-file-list :biz-id="oid"></jas-file-list>
+			</div>
+		</jas-approve-dialog>
 
 
 	</div>
@@ -122,7 +124,17 @@
 					}, {
 						name: '采集日期',
 						field: 'collectionDate'
-					}
+					}, {
+						field: 'approveStatus',
+						name: '审核状态',
+						formatter: function (a, b, value, c) {
+							if (value == -1) return '驳回';
+							// if (value == 0) return '未上报';
+							if (value == 1) return '审核中';
+							if (value == 2) return '通过';
+							return '未上报';
+						}
+					},
 				],
 				otherArr: [{
 					name: '备注',

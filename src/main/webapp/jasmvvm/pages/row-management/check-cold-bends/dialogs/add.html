@@ -56,17 +56,17 @@
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="施工单位" prop="constructUnit" required>
-							<el-select v-model="formData.constructUnit" clearable placeholder="请选择施工单位" size="small">
-								<el-option v-for="item in domain.constructUnitArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="冷弯管编号" prop="pipeColdBendingOid" required>
 							<!-- <el-input v-model="formData.pipeColdBendingCode" clearable placeholder="请输入冷弯管" size="small"></el-input> -->
 							<el-select v-model="formData.pipeColdBendingOid" clearable placeholder="请输入冷弯管 " size="small">
 								<el-option v-for="item in domain.pipeColdBendingOidArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="施工单位" prop="constructUnit" required>
+							<el-select v-model="formData.constructUnit" clearable placeholder="请选择施工单位" size="small">
+								<el-option v-for="item in domain.constructUnitArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>

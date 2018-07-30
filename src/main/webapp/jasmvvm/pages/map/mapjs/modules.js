@@ -87,7 +87,7 @@ var BaseMapToolsBar = function(options){
             if(it.type === "module"){
                 var module = _self.mapApi.getModuleById(it.target);
                 if(module === null){
-                    _self.mapApi.publish(_self.mapApi.Events.ErrorEvent , { message:_self.mapApi.Strings.moduleNotFound , type:"error"});
+                    _self.mapApi.publish(_self.mapApi.Events.ErrorEvent , { message:_self.mapApi.Strings.moduleNotFound + ",id=" + it.target, type:"error"});
                     continue;
                 }
                 it.icon = module.icon;
@@ -232,27 +232,28 @@ var LayerListTree = function(options){
     var onLayerAdded = function(e){
         var layerId = e.data.layerId;
         var layer = _self.mapApi.getLayerById(layerId);
+        var layerVisible = _self.mapApi.getLayerVisible(layerId);
         var layerNode = _self.$tree.tree("find",layerId);
-        if(layerNode && layer.visible === true){
+        if(layerNode && layerVisible){
             _self.$tree.tree("check",layerNode.target);
         }else if( !layerNode ){
-            var node = {
-                "id": layer.id,
-                "text":layer.label ? layer.label : layer.id,
-                "checked":true
-            };
-            var unGrouped = _self.$tree.tree("find", _self.unGroupeId);
-            if(unGrouped){
-                var unGroupSet = {
-                    "id":_self.unGroupedId,
-                    "text":"未分组",
-                    "checked":true,
-                    "children":[ node ]
-                };
-                self.$tree.tree("append",{ data:[unGroupSet] });
-            }else{
-                //self.$tree.tree("append",{ parent:unGrouped,dataaccess:[node] });
-            }
+            // var node = {
+            //     "id": layer.id,
+            //     "text":layer.label ? layer.label : layer.id,
+            //     "checked":true
+            // };
+            // var unGrouped = _self.$tree.tree("find", _self.unGroupeId);
+            // if(unGrouped){
+            //     var unGroupSet = {
+            //         "id":_self.unGroupedId,
+            //         "text":"未分组",
+            //         "checked":true,
+            //         "children":[ node ]
+            //     };
+            //     self.$tree.tree("append",{ data:[unGroupSet] });
+            // }else{
+            //     //self.$tree.tree("append",{ parent:unGrouped,dataaccess:[node] });
+            // }
         }
     };
     var onLayersConfigChanged = function(newLayers,newConfig){
@@ -488,21 +489,21 @@ var DrawBox = function(options){
     var defaults = {
         defaultDrawType:"Point",
         title:"标绘",
-        width:300,
+        width:330,
         height:400,
         types:[
-           {"text":"删除","value":"Delete","icon":"classpath:images/plot/delete.png"},
-           {"text":"点","value":"Point","icon":"classpath:images/plot/point.png"},
-           {"text":"图标","value":"Picture","icon":"classpath:images/plot/bitmap.png"},
-           {"text":"圆","value":"Circle","icon":"classpath:images/plot/circle.png"},
-           {"text":"线","value":"LineString","icon":"classpath:images/plot/polyline.png"},
-           {"text":"矩形","value":"Box","icon":"classpath:images/plot/rect.png"},
-           {"text":"面","value":"Polygon","icon":"classpath:images/plot/polygon.png"}
+           {"text":"删除","value":"Delete","icon":"basepath:images/plot/delete.png"},
+           {"text":"点","value":"Point","icon":"basepath:images/plot/point.png"},
+           {"text":"图标","value":"Picture","icon":"basepath:images/plot/bitmap.png"},
+           {"text":"圆","value":"Circle","icon":"basepath:images/plot/circle.png"},
+           {"text":"线","value":"LineString","icon":"basepath:images/plot/polyline.png"},
+           {"text":"矩形","value":"Box","icon":"basepath:images/plot/rect.png"},
+           {"text":"面","value":"Polygon","icon":"basepath:images/plot/polygon.png"}
         ],
         pictureData:[
-            {"label":"政府大楼","icon":"classpath:images/plot/pic_government.png"},
-            {"label":"学校","icon":"classpath:images/plot/pic_school.png"},
-            {"label":"汽车","icon":"classpath:images/plot/pic_vehicle.gif"}
+            {"label":"政府大楼","icon":"basepath:images/plot/pic_government.png"},
+            {"label":"学校","icon":"basepath:images/plot/pic_school.png"},
+            {"label":"汽车","icon":"basepath:images/plot/pic_vehicle.gif"}
         ]
     };
     var params = $.extend(defaults,options);
@@ -591,7 +592,7 @@ var DrawBox = function(options){
             "<tr>" +
                 "<td class='title'><label class='style_title'>线透明度：</label></td>" +
                 "<td><input name='border_opacity' class='style_input ' type='range' min='0' value='1' max='1' step='0.1'></td>" +
-                "<td><label>像素</label></td>" +
+                "<td></td>" +
             "</tr>" +
             "<tr>" +
                 "<td class='title'><label class='style_title'>填充颜色：</label></td>" +
@@ -620,7 +621,7 @@ var DrawBox = function(options){
             "<tr>" +
                 "<td  class='title'><label class='style_title'>线透明度：</label></td>" +
                 "<td><input name='border_opacity' class='style_input ' type='range' min='0' value='1' max='1' step='0.1'></td>" +
-                "<td><label>像素</label></td>" +
+                "<td></td>" +
             "</tr>" +
         "</table>" +
     "</div>";
@@ -1009,26 +1010,41 @@ var CoorsPosition = function(options){
     var _self = this;
     var defaults = {
         "centerAtLevel":5,
+        "defaultX":116.39,
+        "defaultY":39.91,
         "title":"坐标定位",
         "width" : 250,
-        "height" : 150
+        "height" : 200,
+        "precision":6
     };
     var params = $.extend(defaults,options);
     _self.moduleClass = "map-module-coorsposition";
     _self.template =
         "<div class='"+ _self.moduleClass +"'>" +
         "<table>" +
-        "<tr><td colspan='2'><label>--请输入地理坐标--</label></td></tr>" +
-        "<tr><td><span>经度：</span></td><td><input id='p_x' type='number' value='116.39'><i>*</i></td></tr>" +
-        "<tr><td><span>纬度：</span></td><td><input id='p_y' type='number' value='39.91'><i>*</i></td></tr>" +
+        "<tr><td colspan='2'><label>--当前位置--</label></td></tr>" +
+        "<tr><td colspan='2'><label id='currentPosition'>0,0</label></td></tr>" +
+        "<tr><td colspan='2'><label>--输入坐标--</label></td></tr>" +
+        "<tr><td><span>经度：</span></td><td><input id='p_x' type='number' value=''><i>*</i></td></tr>" +
+        "<tr><td><span>纬度：</span></td><td><input id='p_y' type='number' value=''><i>*</i></td></tr>" +
         "<tr>" +
-        "<td align='center' colspan='2'><input class='qbt' type='button' value='定位' ><input class='cbt' type='button' value='清空'></td>" +
+        "<td align='center' colspan='2'>" +
+            "<input class='qbt' type='button' value='定位' >" +
+            "<input class='reset' type='button' value='重置'>" +
+            "<input class='cbt' type='button' value='清空'>" +
+        "</td>" +
         "</tr>" +
         "</table>" +
         "</div>";
+    _self.$currentCoordinate = null;
     _self.doClear = function(){
         $("#p_x",_self.dom).val('');
         $("#p_y",_self.dom).val('');
+        _self.mapApi.clearMapGraphics();
+    };
+    _self.doReset = function(){
+        $("#p_x",_self.dom).val(params.defaultX);
+        $("#p_y",_self.dom).val(params.defaultY);
         _self.mapApi.clearMapGraphics();
     };
     _self.doPosition = function(){
@@ -1039,9 +1055,21 @@ var CoorsPosition = function(options){
             var id = new Date().getTime() + "";
             _self.mapApi.clearMapGraphics();
             //_self.mapApi.centerAt(x,y);
-            _self.mapApi.addPictureGraphic(x,y,{ attributes:{ id: id}});
-            _self.mapApi.flashGraphic(id);
+            _self.mapApi.addPictureGraphic(x,y,{
+                center:true,
+                attributes:{ id: id}
+            });
+            //_self.mapApi.flashGraphic(id);
         }
+    };
+    _self.pointMoveListener = null;
+    _self.refreshCurrentCoors = function(x,y){
+        var fixedX = x.toFixed(params.precision) ;
+        var fixedY = y.toFixed(params.precision) ;
+        _self.$currentCoordinate.text(fixedX + "," + fixedY);
+    };
+    _self.destroy = function(){
+        _self.mapApi.removeEventListener(_self.pointMoveListener);
     };
     _self.startup = function(){
         $('input.qbt',_self.dom).click(function(e){
@@ -1050,6 +1078,15 @@ var CoorsPosition = function(options){
         $('input.cbt',_self.dom).click(function(e){
             _self.doClear();
         });
+        $('input.reset',_self.dom).click(function(e){
+            _self.doReset();
+        });
+        _self.$currentCoordinate = $("#currentPosition",_self.dom);
+
+        _self.pointMoveListener = _self.mapApi.addMouseMoveEventListener(function(e){
+            _self.refreshCurrentCoors(e.coordinate[0],e.coordinate[1]);
+        });
+        _self.doReset();
     };
     //打开或关闭module
     _self.open = function(flg){
@@ -1175,7 +1212,7 @@ var MapPrint = function(){
 
     };
 };
-/*****/
+/** 地图控件-量测**/
 var MeasureBox = function(){
     var _class = this;
     /**
@@ -1278,6 +1315,389 @@ var MeasureBox = function(){
         });
         map.addOverlay(measureTooltip);
     }
+};
+/**
+ *
+ * @param options
+ * @constructor
+ */
+var CircleQuery = function(options){
+    var _self = this;
+    var defaults = {
+        "centerAtLevel":5,
+        "title":"圆查询",
+        "width" : 550,
+        "height" : 400
+    };
+    var params = $.extend(defaults,options);
+    _self.moduleClass = "map-module-circlequery";
+    _self.template =
+        "<div class='"+ _self.moduleClass +"'>" +
+        "<table>" +
+        "<tr><td colspan='2'><label>--请输入必要的参数--</label></td></tr>" +
+        "<tr>" +
+            "<td><span>服务地址：</span></td>" +
+            "<td><input id='serviceUrl' type='text' value=''><i>*</i></td>" +
+        "</tr>" +
+        "<tr>" +
+            "<td><span>几何对象：</span></td>" +
+            "<td><input id='geometry' type='text' value=''>" +
+                "<input id='draw' type='button' value='绘制'><i>*</i>" +
+            "</td>" +
+        "</tr>" +
+        "<tr>" +
+            "<td><span>参数对象：</span></td>" +
+            "<td><textarea id='params' cols='50' rows='15'  value=''></textarea><i>*</i></td>" +
+        "</tr>" +
+        "<tr>" +
+            "<td align='center' colspan='2'>" +
+                "<input class='qbt' type='button' value='查询' >" +
+                "<input class='cbt' type='button' value='重置'>" +
+            "</td>" +
+        "</tr>" +
+        "</table>" +
+        "</div>";
+    /**
+     *
+     */
+    _self.doClear = function(){
+        var queryBody = {
+            "buffer":1,
+            "geometryType":"POLYGON",
+            "maxCount":-1,
+            "returnCountOnly":true,
+            "layerDefinitions":[{
+                "srsname":"pd_pipesegment"
+            },{
+                "srsname":"pd_centerlinestake",
+                "outFields":"oid,stakenumber"
+            }]
+        };
+        _self.$serviceUrlInput.val('/jasgis/query.do');
+        _self.$paramsInput.val(JSON.stringify(queryBody));
+    };
+    /**
+     *
+     */
+    _self.doQuery = function(){
+        var params =  (_self.$paramsInput.text());
+        var serviceUrl = (_self.$serviceUrlInput.val());
+    };
+    _self.doDraw = function(){
+        _self.mapApi.drawGraphic('Circle',{
+            onDrawEnd:function(e){
+                _self.mapApi.startPanMode();
+                var geom = e.feature.getGeometry();
+                var wkt = new ol.format.WKT().writeGeometry(geom);
+                _self.$geomInput.val(wkt);
+            }
+        } );
+    };
+    //
+    _self.$serviceUrlInput = null;
+    _self.$paramsInput = null;
+    _self.$geomInput = null;
+    _self.$qbtBtn = null;
+    _self.$cbtBtn = null;
+    _self.$drawBtn = null;
+    //
+    _self.startup = function(){
+        _self.$qbtBtn = $('input.qbt',_self.dom).click(function(e){
+            _self.doQuery();
+        });
+        _self.$cbtBtn = $('input.cbt',_self.dom).click(function(e){
+            _self.doClear();
+        });
+        _self.$drawBtn = $("#draw",_self.dom).click(function(e){
+            _self.doDraw();
+        });
+        _self.$serviceUrlInput = $("#serviceUrl",_self.dom);
+        _self.$paramsInput = $("#params",_self.dom);
+        _self.$geomInput = $("#geometry",_self.dom);
 
+        _self.doClear();
+    };
+    //打开或关闭module
+    _self.open = function(flg){
+        if(flg === false ) {
+            _self.mapApi.hideZoomSlider(true);
+            $(_self.dom).dialog('closed');
+        }else{
+            _self.mapApi.hideZoomSlider(false);
+            $(_self.dom).dialog('open');
+        }
+        //_self.refreshState();
+    };
+    _self.refreshState = function(state){
+        _self.state = state;
+        _self.mapApi.publish(_self.mapApi.Events.ModuleStateChanged , { "module":_self } );
+    };
+    _self.domCreate = function(){
+        $(_self.container).append( _self.template);
+        _self.dom = $("." + _self.moduleClass ,_self.container)[0];
+        var options = {
+            title : params.title,
+            width : params.width,
+            height : params.height,
+            closed : true,
+            modal :false,
+            onOpen:function(){
+                _self.refreshState("open");
+            },
+            onClose:function(){
+                _self.refreshState("closed");
+            }
+        };
+        $(_self.dom).dialog(options);
+    };
+};
+/**
+ *
+ * @param options
+ * @constructor
+ */
+var PolygonQuery = function(options){
+    var _self = this;
+    var defaults = {
+        "centerAtLevel":5,
+        "title":"面查询",
+        "width" : 550,
+        "height" : 400
+    };
+    var params = $.extend(defaults,options);
+    _self.moduleClass = "map-module-polygonquery";
+    _self.template =
+        "<div class='"+ _self.moduleClass +"'>" +
+        "<table>" +
+        "<tr><td colspan='2'><label>--请输入必要的参数--</label></td></tr>" +
+        "<tr>" +
+        "<td><span>服务地址：</span></td>" +
+        "<td><input id='serviceUrl' type='text' value=''><i>*</i></td>" +
+        "</tr>" +
+        "<tr valign='middle'>" +
+        "<td><span>几何对象：</span></td>" +
+        "<td  ><textarea  id='geometry' cols='50' rows='5'  ></textarea><i>*</i></td>" +
+        "<td><input id='draw' type='button' value='标绘'></td>" +
+        "</td>" +
+        "</tr>" +
+        "<tr>" +
+        "<td><span>参数对象：</span></td>" +
+        "<td><textarea id='params' cols='50' rows='5'></textarea><i>*</i></td>" +
+        "</tr>" +
+        "<tr>" +
+        "<td><span>查询结果：</span></td>" +
+        "<td><textarea id='result' cols='50' rows='7'></textarea></td>" +
+        "</tr>" +
+        "<tr>" +
+        "<td align='center' colspan='2'>" +
+        "<input class='qbt' type='button' value='查询' >" +
+        "<input class='cbt' type='button' value='重置'>" +
+        "<input class='add' type='button' value='绘制'>" +
+        "</td>" +
+        "</tr>" +
+        "</table>" +
+        "</div>";
+    /**
+     *
+     */
+    _self.doClear = function(){
+        var queryBody = {
+            "buffer":0,
+            "bufferUnit":"degree",
+            "geometryType":"POLYGON",
+            "maxCount":-1,
+            "returnCountOnly":true,
+            "layerDefinitions":[{
+                "srsname":"pd_pipesegment"
+            },{
+                "srsname":"pd_centerlinestake",
+                "outFields":"oid,stakenumber"
+            }]
+        };
+        _self.$serviceUrlInput.val('/jasgis/query.do');
+        _self.$paramsInput.val(JSON.stringify(queryBody));
+        _self.$resultText.val("");
+        _self.$geomText.val("");
+    };
+    /**
+     *
+     */
+    _self.doQuery = function(){
+        var params =  JSON.parse(_self.$paramsInput.val());
+        var serviceUrl = (_self.$serviceUrlInput.val());
+        params.geometry =  _self.$geomText.val();
+        $.ajax({
+            url:serviceUrl,
+            type:"post",
+            data: JSON.stringify(params),
+            dataType:"json",
+            contentType:"application/json",
+            success:function(e){
+                _self.$resultText.val(JSON.stringify(e));
+            },
+            error:function(a,b,c){
+                console.error(a);
+            }
+        });
+    };
+    _self.doDraw = function(){
+        _self.mapApi.drawGraphic('Polygon',{
+            onDrawEnd:function(e){
+                _self.mapApi.startPanMode();
+                var geom = e.feature.getGeometry();
+                var wkt = new ol.format.WKT().writeGeometry(geom);
+                _self.$geomText.val(wkt);
+            }
+        } );
+    };
+    _self.doAddGraphic = function(){
 
+    };
+    //
+    _self.$serviceUrlInput = null;
+    _self.$paramsInput = null;
+    _self.$geomText = null;
+    _self.$resultText = null;
+    _self.$qbtBtn = null;
+    _self.$cbtBtn = null;
+    _self.$drawBtn = null;
+    _self.$addBtn = null;
+    //
+    _self.startup = function(){
+        _self.$qbtBtn = $('input.qbt',_self.dom).click(function(e){
+            _self.doQuery();
+        });
+        _self.$cbtBtn = $('input.cbt',_self.dom).click(function(e){
+            _self.doClear();
+        });
+        _self.$drawBtn = $("#draw",_self.dom).click(function(e){
+            _self.doDraw();
+        });
+        _self.$addBtn = $("#add",_self.dom).click(function(e){
+            _self.doAddGraphic();
+        });
+        _self.$serviceUrlInput = $("#serviceUrl",_self.dom);
+        _self.$paramsInput = $("#params",_self.dom);
+        _self.$geomText = $("#geometry",_self.dom);
+        _self.$resultText = $("#result",_self.dom);
+
+        _self.doClear();
+    };
+    //打开或关闭module
+    _self.open = function(flg){
+        if(flg === false ) {
+            _self.mapApi.hideZoomSlider(true);
+            $(_self.dom).dialog('closed');
+        }else{
+            _self.mapApi.hideZoomSlider(false);
+            $(_self.dom).dialog('open');
+        }
+        //_self.refreshState();
+    };
+    _self.refreshState = function(state){
+        _self.state = state;
+        _self.mapApi.publish(_self.mapApi.Events.ModuleStateChanged , { "module":_self } );
+    };
+    _self.domCreate = function(){
+        $(_self.container).append( _self.template);
+        _self.dom = $("." + _self.moduleClass ,_self.container)[0];
+        var options = {
+            title : params.title,
+            width : params.width,
+            height : params.height,
+            closed : true,
+            modal :false,
+            onOpen:function(){
+                _self.refreshState("open");
+            },
+            onClose:function(){
+                _self.refreshState("closed");
+            }
+        };
+        $(_self.dom).dialog(options);
+    };
+};
+/**
+ *
+ * @param options
+ * @constructor
+ */
+var PositionDemo = function(options){
+    var _self = this;
+    var defaults = {
+        "centerAtLevel":5,
+        "title":"数据定位",
+        "width" : 350,
+        "height" : 200
+    };
+    var params = $.extend(defaults,options);
+    _self.moduleClass = "map-module-positiondemo";
+    _self.template =
+        "<div class='"+ _self.moduleClass +"'>" +
+        "<table>" +
+        "<tr><td colspan='2'><label>--请输入必要的参数--</label></td></tr>" +
+        "<tr><td><span>图层ID：</span></td><td><input id='layerId' type='text' value=''><i>*</i></td></tr>" +
+        "<tr><td><span>属性值：</span></td><td><input id='fieldValue' type='text' value=''><i>*</i></td></tr>" +
+        "<tr><td><span>字段名称：</span></td><td><input id='fieldName' type='text' value=''><i>*</i></td></tr>" +
+        "<tr>" +
+        "<td align='center' colspan='2'><input class='qbt' type='button' value='定位' ><input class='cbt' type='button' value='重置'></td>" +
+        "</tr>" +
+        "</table>" +
+        "</div>";
+    _self.doClear = function(){
+        $("#layerId",_self.dom).val('pd_centerlinestake');
+        $("#fieldValue",_self.dom).val('0002a765-cbe0-4bec-8af2-b16e29acc089');
+        $("#fieldName",_self.dom).val('oid');
+    };
+    _self.doPosition = function(){
+        //这里的坐标一般是经纬度坐标，要转化成和底图坐标系的坐标值
+        var layerId =  ($("#layerId",_self.dom).val());
+        var fieldValue =  ($("#fieldValue",_self.dom).val());
+        var fieldName =  ($("#fieldName",_self.dom).val());
+        if( layerId !== '' && fieldValue !== ''){
+            _self.mapApi.flashGraphic(fieldValue,layerId );
+        }
+    };
+    _self.startup = function(){
+        $('input.qbt',_self.dom).click(function(e){
+            _self.doPosition();
+        });
+        $('input.cbt',_self.dom).click(function(e){
+            _self.doClear();
+        });
+        _self.doClear();
+    };
+    //打开或关闭module
+    _self.open = function(flg){
+        if(flg === false ) {
+            _self.mapApi.hideZoomSlider(true);
+            $(_self.dom).dialog('closed');
+        }else{
+            _self.mapApi.hideZoomSlider(false);
+            $(_self.dom).dialog('open');
+        }
+        //_self.refreshState();
+    };
+    _self.refreshState = function(state){
+        _self.state = state;
+        _self.mapApi.publish(_self.mapApi.Events.ModuleStateChanged , { "module":_self } );
+    };
+    _self.domCreate = function(){
+        $(_self.container).append( _self.template);
+        _self.dom = $("." + _self.moduleClass ,_self.container)[0];
+        var options = {
+            title : params.title,
+            width : params.width,
+            height : params.height,
+            closed : true,
+            modal :false,
+            onOpen:function(){
+                _self.refreshState("open");
+            },
+            onClose:function(){
+                _self.refreshState("closed");
+            }
+        };
+        $(_self.dom).dialog(options);
+    };
 };

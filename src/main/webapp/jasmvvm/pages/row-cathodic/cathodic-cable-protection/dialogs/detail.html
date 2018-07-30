@@ -15,7 +15,8 @@
 
 <body>
 	<div id="app" v-cloak>
-		<jas-dialog-wrapper>
+		<jas-approve-dialog>
+		<div>
 			<jas-base-group-title name="基础数据"></jas-base-group-title>
 			<jas-detail-table :titles="baseArr" :detail="detail"></jas-detail-table>
 			<jas-base-group-title name="位置数据"></jas-base-group-title>
@@ -26,7 +27,8 @@
 			<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
 			<jas-base-group-title name="附件信息"></jas-base-group-title>
 			<jas-file-list :biz-id="oid"></jas-file-list>
-		</jas-dialog-wrapper>
+			</div>
+		</jas-approve-dialog>
 
 	</div>
 </body>
@@ -74,6 +76,9 @@
 					}, {
 						name: '采集日期',
 						field: 'collectionDate'
+					},{
+						name: '审核状态',
+						field: 'approveStatus'
 					}
 				],
 
@@ -98,16 +103,16 @@
 						field: 'cableBatche'
 					}, {
 						name: '电缆保护结构',
-						field: 'cableStruction'
+						field: 'cableStructionName'
 					}, {
 						name: '电缆敷设方式',
-						field: 'cableLayingMethod'
+						field: 'cableLayingMethodName'
 					}, {
 						name: '电缆长度(m)',
 						field: 'cableLength',
 					}, {
 						name: '电缆用途',
-						field: 'cableUse'
+						field: 'cableUseName'
 					},
 					//  {
 					// 	name: '测试桩号',
@@ -156,7 +161,7 @@
 					var cableUse = [{
 						id: 'cable_use_code_001',
 						name: '测试桩号',
-						field: 'testStakeOid'
+						field: 'testStakeCode'
 					}, {
 						id: 'cable_use_code_002',
 						name: '牺牲阳极编号',
@@ -179,6 +184,18 @@
 							});
 						}
 					});
+					if(that.detail.approveStatus==-1){
+						that.detail.approveStatus= '驳回';
+					}
+					if(that.detail.approveStatus==0){
+						that.detail.approveStatus= '未提交';
+					}
+					if(that.detail.approveStatus==1){
+						that.detail.approveStatus= '审核中';
+					}
+					if(that.detail.approveStatus==2){
+						that.detail.approveStatus= '通过';
+					}
 				});
 			},
 		},

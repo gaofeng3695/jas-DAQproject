@@ -9,6 +9,7 @@ var crossConfig = {
       'endMedianStakeOid',
     ],
     tableFields: [ //
+      'approveStatus',
       'projectName',
       'tendersName',
       'pipelineName',
@@ -34,7 +35,6 @@ var crossConfig = {
       'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
-      'approveStatus',
     ],
     addFields1: [ //
       "projectOid",
@@ -48,6 +48,7 @@ var crossConfig = {
       'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
+
     ],
     addFields2: [ //
       'startMedianStakeOid',
@@ -110,6 +111,7 @@ var crossConfig = {
       'endMedianStakeOid',
     ],
     tableFields: [ //
+      'approveStatus',
       'projectName',
       'tendersName',
       'pipelineName',
@@ -134,7 +136,7 @@ var crossConfig = {
       'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
-      'approveStatus',
+
     ],
     addFields1: [ //
       "projectOid",
@@ -208,6 +210,7 @@ var crossConfig = {
       'endMedianStakeOid',
     ],
     tableFields: [ //
+      'approveStatus',
       'projectName',
       'tendersName',
       'pipelineName',
@@ -232,7 +235,7 @@ var crossConfig = {
       'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
-      'approveStatus',
+
     ],
     addFields1: [ //
       "projectOid",
@@ -306,6 +309,7 @@ var crossConfig = {
       'endMedianStakeOid',
     ],
     tableFields: [ //
+      'approveStatus',
       'projectName',
       'tendersName',
       'pipelineName',
@@ -332,7 +336,7 @@ var crossConfig = {
       'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
-      'approveStatus',
+
     ],
     addFields1: [ //
       "projectOid",
@@ -410,6 +414,7 @@ var crossConfig = {
       'endMedianStakeOid',
     ],
     tableFields: [ //
+      'approveStatus',
       'projectName',
       'tendersName',
       'pipelineName',
@@ -434,7 +439,7 @@ var crossConfig = {
       'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
-      'approveStatus',
+
     ],
     addFields1: [ //
       "projectOid",
@@ -508,6 +513,7 @@ var crossConfig = {
       'endMedianStakeOid',
     ],
     tableFields: [ //
+      'approveStatus',
       'projectName',
       'tendersName',
       'pipelineName',
@@ -535,7 +541,7 @@ var crossConfig = {
       'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
-      'approveStatus',
+
     ],
     addFields1: [ //
       "projectOid",
@@ -615,6 +621,7 @@ var crossConfig = {
       'endMedianStakeOid',
     ],
     tableFields: [ //
+      'approveStatus',
       'projectName',
       'tendersName',
       'pipelineName',
@@ -640,7 +647,7 @@ var crossConfig = {
       'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
-      'approveStatus',
+
     ],
     addFields1: [ //
       "projectOid",
@@ -893,10 +900,10 @@ var crossConfig = {
       name: '审核状态',
       formatter: function (a, b, value, c) {
         if (value == -1) return '驳回';
-        if (value == 0) return '未提交';
+        // if (value == 0) return '未上报';
         if (value == 1) return '审核中';
         if (value == 2) return '通过';
-        return value;
+        return '未上报';
       }
     },
     steadyTubeMeasures: {
@@ -939,5 +946,29 @@ var crossConfig = {
       obj.remarks = '';
       return obj;
     },
-  }
+    resetConfig: function (config, pageCode) {
+      var map = {
+        crossExcavation: 'cross_way_code01', //	开挖
+        crossPipeJacking: 'cross_way_code02', //	顶管
+        crossDrilling: 'cross_way_code03', //	定向钻
+        crossDrillingBlasting: 'cross_way_code04', //	钻爆隧道
+        crossAcross: 'cross_way_code05', //	跨越
+        crossShield: 'cross_way_code06', //	盾构
+        crossBoxCulvert: 'cross_way_code07', //	箱涵
+      };
+      if (config.crossOid.requestParams) {
+        config.crossOid.requestParams.crossWay = map[pageCode];
+      }
+      return config;
+    },
+  },
+  url: [
+    '/jasmvvm/pages/row-cross/cross-template/cross-template.html?privilegeCode=P-daq-hq-001006001&pageCode=crossExcavation&isApprove=1&className=cn.jasgroup.jasframework.acquisitiondata.material.cross.excavation.dao.entity.DaqCrossExcavation&classNameQuery=cn.jasgroup.jasframework.acquisitiondata.material.cross.excavation.query.DaqCrossExcavationQuery&templateCode=',
+    '/jasmvvm/pages/row-cross/cross-template/cross-template.html?privilegeCode=P-daq-hq-001006002&pageCode=crossPipeJacking&isApprove=1&className=cn.jasgroup.jasframework.acquisitiondata.material.cross.pipejacking.dao.entity.DaqCrossPipeJacking&classNameQuery=cn.jasgroup.jasframework.acquisitiondata.material.cross.pipejacking.query.DaqCrossPipeJackingQuery&templateCode=',
+    '/jasmvvm/pages/row-cross/cross-template/cross-template.html?privilegeCode=P-daq-hq-001006003&pageCode=crossBoxCulvert&isApprove=1&className=cn.jasgroup.jasframework.acquisitiondata.material.cross.boxculvert.dao.entity.DaqCrossBoxCulvert&classNameQuery=cn.jasgroup.jasframework.acquisitiondata.material.cross.boxculvert.query.DaqCrossBoxCulvertQuery&templateCode=',
+    '/jasmvvm/pages/row-cross/cross-template/cross-template.html?privilegeCode=P-daq-hq-001006004&pageCode=crossDrilling&isApprove=1&className=cn.jasgroup.jasframework.acquisitiondata.material.cross.drilling.dao.entity.DaqCrossDrilling&classNameQuery=cn.jasgroup.jasframework.acquisitiondata.material.cross.drilling.query.DaqCrossDrillingQuery&templateCode=',
+    '/jasmvvm/pages/row-cross/cross-template/cross-template.html?privilegeCode=P-daq-hq-001006005&pageCode=crossShield&isApprove=1&className=cn.jasgroup.jasframework.acquisitiondata.material.cross.shield.dao.entity.DaqCrossShield&classNameQuery=cn.jasgroup.jasframework.acquisitiondata.material.cross.shield.query.DaqCrossShieldQuery&templateCode=',
+    '/jasmvvm/pages/row-cross/cross-template/cross-template.html?privilegeCode=P-daq-hq-001006006&pageCode=crossDrillingBlasting&isApprove=1&className=cn.jasgroup.jasframework.acquisitiondata.material.cross.drillingblasting.dao.entity.DaqCrossDrillingBlasting&classNameQuery=cn.jasgroup.jasframework.acquisitiondata.material.cross.drillingblasting.query.DaqCrossDrillingBlastingQuery&templateCode=',
+    '/jasmvvm/pages/row-cross/cross-template/cross-template.html?privilegeCode=P-daq-hq-001006007&pageCode=crossAcross&isApprove=1&className=cn.jasgroup.jasframework.acquisitiondata.material.cross.across.dao.entity.DaqCrossAcross&classNameQuery=cn.jasgroup.jasframework.acquisitiondata.material.cross.across.query.DaqCrossAcrossQuery&templateCode=',
+  ]
 };

@@ -547,6 +547,7 @@ CREATE TABLE daq_material_closure (
 	pipeline_oid varchar(36),
 	tenders_oid varchar(36),
 	is_use SMALLINT DEFAULT 0,
+	construct_unit varchar(36),
 	remarks varchar(200),
 	create_user_id varchar(36),
 	create_user_name varchar(50),
@@ -572,6 +573,7 @@ comment on column daq_material_closure.project_oid IS '项目oid';
 comment on column daq_material_closure.pipeline_oid IS '管线oid';
 comment on column daq_material_closure.tenders_oid IS '标段oid';
 comment on column daq_material_closure.is_use IS '是否使用';
+comment on column daq_material_closure.construct_unit IS '施工单位';
 comment on column daq_material_closure.remarks IS '备注';
 comment on column daq_material_closure.create_user_id IS '创建人id';
 comment on column daq_material_closure.create_user_name IS '创建人名称';
@@ -597,6 +599,7 @@ CREATE TABLE daq_material_flange (
 	pipeline_oid varchar(36),
 	tenders_oid varchar(36),
 	is_use SMALLINT DEFAULT 0,
+	construct_unit varchar(36),
 	remarks varchar(200),
 	create_user_id varchar(36),
 	create_user_name varchar(50),
@@ -622,6 +625,7 @@ comment on column daq_material_flange.project_oid IS '项目oid';
 comment on column daq_material_flange.pipeline_oid IS '管线oid';
 comment on column daq_material_flange.tenders_oid IS '标段oid';
 comment on column daq_material_flange.is_use IS '是否使用';
+comment on column daq_material_flange.construct_unit IS '施工单位';
 comment on column daq_material_flange.remarks IS '备注';
 comment on column daq_material_flange.create_user_id IS '创建人id';
 comment on column daq_material_flange.create_user_name IS '创建人名称';
@@ -666,6 +670,7 @@ CREATE TABLE daq_material_hot_bends (
 	coating_certificate_num varchar(60),
 	coating_factory varchar(70),
 	is_use SMALLINT DEFAULT 0,
+	construct_unit varchar(36),
 	remarks varchar(200),
 	create_user_id varchar(36),
 	create_user_name varchar(50),
@@ -709,6 +714,7 @@ comment on column daq_material_hot_bends.coating_date IS '防腐日期';
 comment on column daq_material_hot_bends.coating_certificate_num IS '防腐证书编号';
 comment on column daq_material_hot_bends.coating_factory IS '防腐加工厂家';
 comment on column daq_material_hot_bends.is_use IS '是否使用';
+comment on column daq_material_hot_bends.construct_unit IS '施工单位';
 comment on column daq_material_hot_bends.remarks IS '备注';
 comment on column daq_material_hot_bends.create_user_id IS '创建人id';
 comment on column daq_material_hot_bends.create_user_name IS '创建人名称';
@@ -731,6 +737,7 @@ CREATE TABLE daq_material_insulated_joint (
 	pipeline_oid varchar(36),
 	tenders_oid varchar(36),
 	is_use SMALLINT DEFAULT 0,
+	construct_unit varchar(36),
 	remarks varchar(200),
 	create_user_id varchar(36),
 	create_user_name varchar(50),
@@ -753,6 +760,7 @@ comment on column daq_material_insulated_joint.project_oid IS '项目oid';
 comment on column daq_material_insulated_joint.pipeline_oid IS '管线oid';
 comment on column daq_material_insulated_joint.tenders_oid IS '标段oid';
 comment on column daq_material_insulated_joint.is_use IS '是否使用';
+comment on column daq_material_insulated_joint.construct_unit IS '施工单位';
 comment on column daq_material_insulated_joint.remarks IS '备注';
 comment on column daq_material_insulated_joint.create_user_id IS '创建人id';
 comment on column daq_material_insulated_joint.create_user_name IS '创建人名称';
@@ -793,6 +801,7 @@ CREATE TABLE daq_material_pipe (
 	is_cut SMALLINT DEFAULT 0,
 	is_use SMALLINT DEFAULT 0,
 	is_cold_bend SMALLINT DEFAULT 0,
+	construct_unit varchar(36),
 	remarks varchar(200),
 	create_user_id varchar(36),
 	create_user_name varchar(50),
@@ -833,6 +842,7 @@ comment on column daq_material_pipe.coating_factory IS '防腐加工厂家';
 comment on column daq_material_pipe.is_cut IS '是否切管';
 comment on column daq_material_pipe.is_use IS '是否使用';
 comment on column daq_material_pipe.is_cold_bend IS '是否冷弯';
+comment on column daq_material_pipe.construct_unit IS '施工单位';
 comment on column daq_material_pipe.remarks IS '备注';
 comment on column daq_material_pipe.create_user_id IS '创建人id';
 comment on column daq_material_pipe.create_user_name IS '创建人名称';
@@ -868,6 +878,7 @@ CREATE TABLE daq_material_pipe_cold_bending (
 	collection_person varchar(30),
 	collection_date timestamp(6),
 	is_use SMALLINT DEFAULT 0,
+	approve_status SMALLINT DEFAULT 0,
 	remarks varchar(200),
 	create_user_id varchar(36),
 	create_user_name varchar(50),
@@ -903,6 +914,7 @@ comment on column daq_material_pipe_cold_bending.supervision_engineer IS '监理
 comment on column daq_material_pipe_cold_bending.collection_person IS '采集人员';
 comment on column daq_material_pipe_cold_bending.collection_date IS '采集时间';
 comment on column daq_material_pipe_cold_bending.is_use IS '是否使用';
+comment on column daq_material_pipe_cold_bending.approve_status IS '审核状态';
 comment on column daq_material_pipe_cold_bending.remarks IS '备注';
 comment on column daq_material_pipe_cold_bending.create_user_id IS '创建人id';
 comment on column daq_material_pipe_cold_bending.create_user_name IS '创建人名称';
@@ -930,6 +942,7 @@ CREATE TABLE daq_material_reducer (
 	pipeline_oid varchar(36),
 	tenders_oid varchar(36),
 	is_use SMALLINT DEFAULT 0,
+	construct_unit varchar(36),
 	remarks varchar(200),
 	create_user_id varchar(36),
 	create_user_name varchar(50),
@@ -957,6 +970,7 @@ comment on column daq_material_reducer.project_oid IS '项目oid';
 comment on column daq_material_reducer.pipeline_oid IS '管线oid';
 comment on column daq_material_reducer.tenders_oid IS '标段oid';
 comment on column daq_material_reducer.is_use IS '是否使用';
+comment on column daq_material_reducer.construct_unit IS '施工单位';
 comment on column daq_material_reducer.remarks IS '备注';
 comment on column daq_material_reducer.create_user_id IS '创建人id';
 comment on column daq_material_reducer.create_user_name IS '创建人名称';
@@ -987,6 +1001,7 @@ CREATE TABLE daq_material_tee (
 	pipeline_oid varchar(36),
 	tenders_oid varchar(36),
 	is_use SMALLINT DEFAULT 0,
+	construct_unit varchar(36),
 	remarks varchar(200),
 	create_user_id varchar(36),
 	create_user_name varchar(50),
@@ -1017,6 +1032,7 @@ comment on column daq_material_tee.project_oid IS '项目oid';
 comment on column daq_material_tee.pipeline_oid IS '管线oid';
 comment on column daq_material_tee.tenders_oid IS '标段oid';
 comment on column daq_material_tee.is_use IS '是否使用';
+comment on column daq_material_tee.construct_unit IS '施工单位';
 comment on column daq_material_tee.remarks IS '备注';
 comment on column daq_material_tee.create_user_id IS '创建人id';
 comment on column daq_material_tee.create_user_name IS '创建人名称';

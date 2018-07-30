@@ -61,7 +61,7 @@ public class ReworkWeldQuery extends BaseJavaQuery {
 					+ "wrw.weld_rod_batch_num,wrw.weld_wire_batch_num, wrw.weld_produce, wps.weld_produce_code, wrw.cover_oid, wp.personnel_name as cover_name, "
 					+ "wrw.padder_oid, wpe.personnel_name as padder_name,wrw.render_oid, wper.personnel_name as render_name, wrw.weld_date,"
 					+ "wrw.construct_unit, u.unit_name as construct_unit_name,wrw.work_unit_oid, wu.work_unit_name, wrw.supervision_unit,"
-					+ "pu.unit_name as supervision_unit_name, wrw.supervision_engineer,wrw.collection_person,wrw.collection_date,wrw.remarks,"
+					+ "pu.unit_name as supervision_unit_name, wrw.supervision_engineer,wrw.collection_person,wrw.collection_date, wrw.approve_status, wrw.remarks,"
 					+ "wrw.create_user_id,wrw.create_user_name,wrw.create_datetime,wrw.modify_user_id,wrw.modify_user_name,	wrw.modify_datetime,wrw.active"
 					+ " FROM daq_weld_rework_weld wrw "
 					+ "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = wrw.project_oid  "

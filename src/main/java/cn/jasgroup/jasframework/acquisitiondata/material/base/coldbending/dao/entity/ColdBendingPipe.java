@@ -102,6 +102,11 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 
 	/** 是否使用 */
 	private Integer isUse = 0; 
+	
+	/**
+	 *审核状态 
+	 */
+	private Integer approveStatus = 0; 
 
 	/** 备注 */
 	private String remarks;
@@ -356,4 +361,15 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 		this.remarks = remarks;
 		super.setField("remarks");
 	}
+
+	@Column(name="approve_status")
+	public Integer getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(Integer approveStatus) {
+		this.approveStatus = approveStatus;
+	}
+	
+	
 }
