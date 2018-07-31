@@ -111,6 +111,21 @@ public class CutWeld extends CommonJdbcEntity{
 	 * 备注 
 	 */
 	private String remarks; 
+	
+	/**
+	 * 施工单位 
+	 */
+	private String constructUnit; 
+
+	/**
+	 * 监理单位 
+	 */
+	private String supervisionUnit; 
+
+	/**
+	 * 监理工程师 
+	 */
+	private String supervisionEngineer; 
 
 	public String getProjectOid() {
 		return projectOid; 
@@ -236,6 +251,33 @@ public class CutWeld extends CommonJdbcEntity{
 	public void setRemarks(String remarks) {
 		this.remarks = remarks; 
 		super.setField("remarks");
+	}
+	
+	public String getConstructUnit() {
+		return constructUnit; 
+	}
+
+	public void setConstructUnit(String constructUnit) {
+		this.constructUnit = constructUnit; 
+		super.setField("constructUnit");
+	}
+
+	public String getSupervisionUnit() {
+		return supervisionUnit; 
+	}
+
+	public void setSupervisionUnit(String supervisionUnit) {
+		this.supervisionUnit = supervisionUnit; 
+		super.setField("supervisionUnit");
+	}
+
+	public String getSupervisionEngineer() {
+		return supervisionEngineer; 
+	}
+
+	public void setSupervisionEngineer(String supervisionEngineer) {
+		this.supervisionEngineer = supervisionEngineer; 
+		super.setField("supervisionEngineer");
 	}
 
 }

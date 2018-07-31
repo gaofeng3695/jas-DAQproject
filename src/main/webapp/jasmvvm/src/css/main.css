@@ -405,3 +405,6 @@ button {
 }
 
 /* jas-approve-dialog--结束 */
+.el-table td, .el-table th {
+	padding:8px 0;
+}

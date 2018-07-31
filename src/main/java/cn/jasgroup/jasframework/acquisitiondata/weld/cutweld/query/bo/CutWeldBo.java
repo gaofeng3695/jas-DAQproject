@@ -106,6 +106,31 @@ public class CutWeldBo extends CommonBaseBo{
 	 * 备注 
 	 */
 	private String remarks;
+	
+	/**
+	 * 施工单位
+	 */
+	private String constructUnit;
+
+	/**
+	 * 施工单位名称
+	 */
+	private String constructUnitName;
+
+	/**
+	 * 监理单位
+	 */
+	private String supervisionUnit;
+
+	/**
+	 * 监理单位名称
+	 */
+	private String supervisionUnitName;
+
+	/**
+	 * 监理工程师
+	 */
+	private String supervisionEngineer;
 
 	public String getOid() {
 		return oid;
@@ -257,6 +282,46 @@ public class CutWeldBo extends CommonBaseBo{
 
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
+	}
+
+	public String getConstructUnit() {
+		return constructUnit;
+	}
+
+	public void setConstructUnit(String constructUnit) {
+		this.constructUnit = constructUnit;
+	}
+
+	public String getConstructUnitName() {
+		return constructUnitName;
+	}
+
+	public void setConstructUnitName(String constructUnitName) {
+		this.constructUnitName = constructUnitName;
+	}
+
+	public String getSupervisionUnit() {
+		return supervisionUnit;
+	}
+
+	public void setSupervisionUnit(String supervisionUnit) {
+		this.supervisionUnit = supervisionUnit;
+	}
+
+	public String getSupervisionUnitName() {
+		return supervisionUnitName;
+	}
+
+	public void setSupervisionUnitName(String supervisionUnitName) {
+		this.supervisionUnitName = supervisionUnitName;
+	}
+
+	public String getSupervisionEngineer() {
+		return supervisionEngineer;
+	}
+
+	public void setSupervisionEngineer(String supervisionEngineer) {
+		this.supervisionEngineer = supervisionEngineer;
 	} 
 	
 }

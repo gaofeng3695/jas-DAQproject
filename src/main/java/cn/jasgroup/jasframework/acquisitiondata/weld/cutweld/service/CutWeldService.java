@@ -95,7 +95,7 @@ public class CutWeldService {
 				e.printStackTrace();
 			}
 			cutedPipe.setOid(UUID.randomUUID().toString());
-			cutedPipe.setPipeCode(pipe.getPipeCode() + i);
+			cutedPipe.setPipeCode(pipe.getPipeCode() +"-"+(i+1));
 			setLengthAndWeight(cutedPipe,cutWeld,i,pipe);
 			cutedPipe.setIsCut(0);
 			cutedPipe.setIsUse(0);
