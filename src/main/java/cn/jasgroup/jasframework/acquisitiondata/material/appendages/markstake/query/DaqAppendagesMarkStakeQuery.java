@@ -47,11 +47,11 @@ public class DaqAppendagesMarkStakeQuery extends BaseJavaQuery {
 				+ "	u1.unit_name as constructUnitName,"
 				+ "	u2.unit_name as supervisionUnitName"				
 				+ " from daq_appendages_mark_stake t "
-				+ " left join sys_domain d1 on d1.code_id = t.stake_structure"				
+				+ " left join (select code_id,code_name from sys_domain) d1 on d1.code_id = t.stake_structure"				
 				+ " left join (select t.oid,string_agg(d2.code_name, ',') as stakeFunctionName" 
 				+ " from (select oid,regexp_split_to_table(t.stake_function, E',+')as stake_function "
 				+ " from daq_appendages_mark_stake t where t.active=1) t"
-				+ " left join sys_domain d2 on d2.code_id = t.stake_function group by t.oid) As ss"
+				+ " left join (select code_id,code_name from sys_domain) d2 on d2.code_id = t.stake_function group by t.oid) As ss"
 				+ " on ss.oid = t.oid"
 				+ " left join (select oid,project_name from daq_project) p on p.oid=t.project_oid "
 				+ " left join (select oid,pipeline_name from daq_pipeline) l on l.oid=t.pipeline_oid "
@@ -59,8 +59,8 @@ public class DaqAppendagesMarkStakeQuery extends BaseJavaQuery {
 				+ " left join (select m.oid,m.median_stake_code from daq_median_stake m where active=1) ms"
 				+ " on ms.oid=t.median_stake_oid "
 				+ " left join v_daq_pipe_segment_cross v on v.oid=t.pipe_segment_or_cross_oid "
-				+ " left join pri_unit u1 on u1.oid=t.construct_unit "
-				+ " left join pri_unit u2 on u2.oid=t.supervision_unit "				
+				+ " left join (select oid,unit_name from pri_unit) u1 on u1.oid=t.construct_unit "
+				+ " left join (select oid,unit_name from pri_unit) u2 on u2.oid=t.supervision_unit "				
 				+ " where t.active = 1";
 		if(StringUtils.isNotBlank(projectOid)){
 			sql += " and t.project_oid = :projectOid ";
