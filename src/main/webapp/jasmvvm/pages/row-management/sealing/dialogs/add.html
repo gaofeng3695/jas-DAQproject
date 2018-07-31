@@ -37,11 +37,11 @@
 <body>
 	<div id="app" v-cloak>
 		<jas-dialog-wrapper>
-		<div class="content">
-			<el-form ref="formData" :rules="rules" :model="formData" label-width="150px">
-				<jas-base-group-title name="基础数据"></jas-base-group-title>
-				<el-row :gutter="10">
-								<!--<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+			<div class="content">
+				<el-form ref="formData" :rules="rules" :model="formData" label-width="150px">
+					<jas-base-group-title name="基础数据"></jas-base-group-title>
+					<el-row :gutter="10">
+						<!--<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="项目名称" prop="projectOid" required>
 							<el-select v-model="formData.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
 								<el-option v-for="item in domain.project" :key="item.key" :label="item.value" :value="item.key"> </el-option>
@@ -62,101 +62,101 @@
 							</el-select>
 						</el-form-item>
 					</el-col>-->
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="封堵物编号" prop="closureCode" required>
-							<el-input v-model="formData.closureCode" clearable placeholder="请输入封堵物编号" size="small"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="封堵物类型" prop="closureType" required>
-							<el-select v-model="formData.closureType" clearable placeholder="请选择封堵物类型" size="small">
-								<el-option v-for="item in domain.closureTypes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="材质" prop="material">
-							<el-select v-model="formData.material" clearable placeholder="请选择材质" size="small" @change="materialChanged">
-								<el-option v-for="item in domain.materials" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="封堵物编号" prop="closureCode" required>
+								<el-input v-model="formData.closureCode" clearable placeholder="请输入封堵物编号" size="small"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="封堵物类型" prop="closureType" required>
+								<el-select v-model="formData.closureType" clearable placeholder="请选择封堵物类型" size="small">
+									<el-option v-for="item in domain.closureTypes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="材质" prop="material">
+								<el-select v-model="formData.material" clearable placeholder="请选择材质" size="small" @change="materialChanged">
+									<el-option v-for="item in domain.materials" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
 
 
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="钢管等级">
-						<el-select v-model="formData.steelGrade" clearable :disabled="ischoose" placeholder="请选择钢管等级" size="small" >
-								<el-option v-for="item in domain.steelGrades" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="钢管等级">
+								<el-select v-model="formData.steelGrade" clearable :disabled="ischoose" placeholder="请选择钢管等级" size="small">
+									<el-option v-for="item in domain.steelGrades" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
 
 
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="管道外壁直径(mm)">
-							<el-input-number :precision="3" :step="1" :max="1000" controls-position="right" v-model="formData.outsideDiameter" clearable placeholder="请输入管道外壁直径(mm)"
-							  size="small"></el-input-number>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="管道外壁直径(mm)">
+								<el-input-number :precision="3" :step="1" :max="1000" controls-position="right" v-model="formData.outsideDiameter" clearable
+								  placeholder="请输入管道外壁直径(mm)" size="small"></el-input-number>
 
 
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="管道壁厚(mm)">
-							<el-input-number :precision="3" :step="1" :max="1000" controls-position="right" v-model="formData.wallThickness" clearable placeholder="请输入管道壁厚(mm)"
-							  size="small"></el-input-number>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="管道壁厚(mm)">
+								<el-input-number :precision="3" :step="1" :max="1000" controls-position="right" v-model="formData.wallThickness" clearable
+								  placeholder="请输入管道壁厚(mm)" size="small"></el-input-number>
 
 
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="连接方式">
-						<el-select v-model="formData.connectionMethods" clearable placeholder="请选择连接方式" size="small">
-								<el-option v-for="item in domain.connectionMethodsArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="连接方式">
+								<el-select v-model="formData.connectionMethods" clearable placeholder="请选择连接方式" size="small">
+									<el-option v-for="item in domain.connectionMethodsArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
 
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="防腐方式">
-						<el-select v-model="formData.coatingMethods" clearable placeholder="请选择防腐方式" size="small">
-								<el-option v-for="item in domain.coatingMethodsArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="生产厂家">
-							<el-input v-model="formData.manufacturer" clearable placeholder="请输入生产厂家" size="small"></el-input>
-						</el-form-item>
-					</el-col>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="防腐方式">
+								<el-select v-model="formData.coatingMethods" clearable placeholder="请选择防腐方式" size="small">
+									<el-option v-for="item in domain.coatingMethodsArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="生产厂家">
+								<el-input v-model="formData.manufacturer" clearable placeholder="请输入生产厂家" size="small"></el-input>
+							</el-form-item>
+						</el-col>
 
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="生产日期">
-							<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入生产日期" v-model="formData.manufacturerDate" size="small"
-							  style="width: 100%;">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="生产日期">
+								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入生产日期" v-model="formData.manufacturerDate" size="small"
+								  style="width: 100%;">
+								</el-date-picker>
+							</el-form-item>
+						</el-col>
 
-				</el-row>
-				<jas-base-group-title name="其他信息"></jas-base-group-title>
-				<el-row>
-					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-						<el-form-item label="备注" prop="remarks">
-							<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"></el-input>
-						</el-form-item>
-					</el-col>
-				</el-row>
-					</jas-dialog-wrapper>
-				<!-- <el-row>
+					</el-row>
+					<jas-base-group-title name="其他信息"></jas-base-group-title>
+					<el-row>
+						<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+							<el-form-item label="备注" prop="remarks">
+								<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"></el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+		</jas-dialog-wrapper>
+		<!-- <el-row>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 						<el-form-item label="模板上传" prop="file">
 						</el-form-item>
 					</el-col>
 				</el-row> -->
-				<!--<jas-base-group-title name="附件信息"></jas-base-group-title>
+		<jas-base-group-title name="附件信息"></jas-base-group-title>
 
-				<jas-file-upload ref="upload" @success="uploadSuccess"></jas-file-upload>-->
-			</el-form>
+		<jas-file-upload ref="upload" @success="uploadSuccess"></jas-file-upload>
+		</el-form>
 
 
 
@@ -197,15 +197,15 @@
 						key: '1',
 						value: '其他'
 					}], //材质
-					steelGrades:[],//钢管等级
-					connectionMethodsArr:[],
-					coatingMethodsArr:[],
+					steelGrades: [], //钢管等级
+					connectionMethodsArr: [],
+					coatingMethodsArr: [],
 					// project: [],
 					// pipeline: [],
 					// tenders: [],
 					//监理单位
 				},
-				ischoose:false,
+				ischoose: false,
 				rules: {
 					closureCode: [{
 						required: true,
@@ -233,7 +233,7 @@
 					coatingMethods: '',
 					manufacturer: '',
 					manufacturerDate: '',
-					isUse:0,
+					isUse: 0,
 					remarks: ""
 				}
 			}
@@ -261,7 +261,7 @@
 
 				this.isEdit = true;
 				this.getDetailByObjectId();
-				// this.$refs.upload.requestFile(this.oid);
+				this.$refs.upload.requestFile(this.oid);
 			};
 
 
@@ -279,7 +279,7 @@
 					cb && cb([]);
 				});
 			},
-			requestDomainFromCommonTable: function (domainName,cb) {
+			requestDomainFromCommonTable: function (domainName, cb) {
 				var that = this;
 				var url = jasTools.base.rootPath + "/jasframework/sysdoman/getDoman.do";
 				jasTools.ajax.get(url, {
@@ -327,12 +327,12 @@
 				}
 
 			},
-			materialChanged:function(val){
-				if(val==0){
-					this.ischoose=false;
-				}else{
-					this.ischoose=true;
-					this.formData.steelGrade="";
+			materialChanged: function (val) {
+				if (val == 0) {
+					this.ischoose = false;
+				} else {
+					this.ischoose = true;
+					this.formData.steelGrade = "";
 				}
 			},
 			submit: function (formName) {
@@ -358,15 +358,17 @@
 				}
 
 				jasTools.ajax.post(url, that.formData, function (data) {
-					top.Vue.prototype.$message({
-						type: 'success',
-						message: !this.isEdit ? '保存成功' : '修改成功'
-					});
-					that.cancel(1);
+					that.$refs.upload.uploadFile(data.data || that.oid);
 				});
 
 			},
-
+			uploadSuccess: function () {
+				top.Vue.prototype.$message({
+					type: 'success',
+					message: !this.isEdit ? '保存成功' : '修改成功'
+				});
+				this.cancel(1);
+			},
 			getDetailByObjectId: function () {
 				var that = this;
 				var url = jasTools.base.rootPath + "/jdbc/commonData/closure/getPage.do";

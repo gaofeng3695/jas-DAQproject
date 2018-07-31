@@ -65,12 +65,16 @@
 
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="钢管编号" prop="pipeOid" required>
-								<el-select v-model="formData.pipeOid"  clearable :disabled="isEdit" placeholder="请选择钢管编号" size="small">
+								<el-select v-model="formData.pipeOid" clearable :disabled="isEdit" placeholder="请选择钢管编号" size="small" @change="changePipe">
 									<el-option v-for="item in domain.pipes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
-
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="管长(m)">
+								<el-input v-model="formData.pipeLength" disabled size="small"></el-input>
+							</el-form-item>
+						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="管径(mm)">
 								<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData.pipeDiameter" clearable
@@ -86,47 +90,18 @@
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="分割段数" prop="segmentsNum" required>
 								<el-input-number :precision="0" :min="1" :step="1" :max="5" controls-position="right" v-model="formData.segmentsNum" clearable
-								  placeholder="请输入分割段数" size="small" @change="isInputLength"></el-input-number>
+								  placeholder="请输入分割段数" size="small" @change="resetSegmentFields"></el-input-number>
 							</el-form-item>
 						</el-col>
-						<template v-for="item in segmentArrs">
+						<template v-for="item,index in segmentArrs">
 							<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 								<el-form-item :label="item.label" :prop="item.key" required>
-									<el-input-number :precision="3" :step="1" :min="0" :max="1000000" controls-position="right" v-model="formData[item.key]" clearable
-									  :placeholder="item.placeholder" size="small"></el-input-number>
+									<el-input-number :precision="3" :step="1" :min="0" :max="formData.pipeLength || 1" controls-position="right" v-model="formData[item.key]"
+									  clearable :placeholder="item.placeholder" size="small" :disabled="index== segmentArrs.length -1" @change="setLastSegmentPipeLength(index)"></el-input-number>
 								</el-form-item>
 							</el-col>
 						</template>
-						<!--<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="第一段长度(m)" prop="firstParagraphLength" required>
-								<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData.firstParagraphLength" clearable
-								  placeholder="请输入第一段长度(m)" size="small"></el-input-number>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-								<el-form-item label="第二段长度(m)" prop="secondParagraphLength" required>
-								<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData.secondParagraphLength" clearable
-								  placeholder="请输入第二段长度(m)" size="small"></el-input-number>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-								<el-form-item label="第三段长度(m)" prop="thirdParagraphLength" required>
-								<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData.thirdParagraphLength" clearable
-								  placeholder="请输入第三段长度(m)" size="small"></el-input-number>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-								<el-form-item label="第四段长度(m)" prop="fourthParagraphLength" required>
-								<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData.fourthParagraphLength" clearable
-								  placeholder="请输入第四段长度(m)" size="small"></el-input-number>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-								<el-form-item label="第五段长度(m)" prop="fifthParagraphLength" required>
-								<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData.fifthParagraphLength" clearable
-								  placeholder="请输入第五段长度(m)" size="small"></el-input-number>
-							</el-form-item>
-						</el-col>-->
+
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="施工单位">
 								<el-select v-model="formData.constructUnit" disabled placeholder="请选择施工单位" size="small">
@@ -155,15 +130,9 @@
 							</el-form-item>
 						</el-col>
 					</el-row>
-					<!-- <el-row>
-					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-						<el-form-item label="模板上传" prop="file">
-						</el-form-item>
-					</el-col>
-				</el-row> -->
-					<!--<jas-base-group-title name="附件信息"></jas-base-group-title>
 
-				<jas-file-upload ref="upload" @success="uploadSuccess"></jas-file-upload>-->
+					<jas-base-group-title name="附件信息"></jas-base-group-title>
+					<jas-file-upload ref="upload" @success="uploadSuccess"></jas-file-upload>
 				</el-form>
 			</div>
 			<div slot="footer" class="dialog-footer" style="text-align: center">
@@ -197,8 +166,8 @@
 					pipeline: [],
 					tenders: [],
 					pipes: [],
-					supervisionUnits:[],
-					constructUnits:[]
+					supervisionUnits: [],
+					constructUnits: []
 				},
 				rules: {
 					projectOid: [{
@@ -233,18 +202,35 @@
 					}]
 				},
 				formData: {
+					pipeLength: '',
 					projectOid: "",
 					pipelineOid: "",
 					tendersOid: "",
 					segmentsNum: "",
-					wallThickness:"",
+					wallThickness: "",
+					pipeDiameter: "",
 					constructUnit: "",
 					supervisionUnit: "",
 					supervisionEngineer: "",
+					firstParagraphLength: '',
+					secondParagraphLength: '',
+					thirdParagraphLength: '',
+					fourthParagraphLength: '',
+					fifthParagraphLength: '',
 					remarks: ""
 				},
 
 			}
+		},
+		computed: {
+			pipeOid: function () {
+				return this.formData.pipeOid;
+			},
+		},
+		watch: {
+			pipeOid: function (newval) {
+
+			},
 		},
 		mounted: function () {
 			var that = this;
@@ -260,12 +246,12 @@
 				this.formData.oid = this.oid;
 				this.isEdit = true;
 				this.getDetailByObjectId();
-			}else{
-				this.requestDomainFromBizTable(
-						'/daq/materialPipe/getCutAndNotUse.do', {},
-						function (arr) {
-							that.domain.pipes = arr;
-						});	
+				this.$refs.upload.requestFile(this.oid);
+
+			} else {
+				this.requestDomainFromBizTable('/daq/materialPipe/getCutAndNotUse.do', {}, function (arr) {
+					that.domain.pipes = arr;
+				});
 			}
 
 			this.requestDomainFromBizTable('/daq/privilege/getProjectList.do', {}, function (arr) {
@@ -273,6 +259,99 @@
 			});
 		},
 		methods: {
+			changePipe: function () {
+				this.resetPipeData();
+				this.setPipeLength(this.formData.pipeOid);
+				this.resetSegmentFields(1);
+			},
+			validSegmentFields: function () {
+				var num = this.formData.segmentsNum;
+				var names = this.indexs;
+				var total = 0;
+				for (var i = 0; i < num - 1; i++) {
+					if (this.formData[names[i]] == 0) {
+						top.Vue.prototype.$message({
+							type: 'error',
+							message: '切管长度不可为 0'
+						});
+						return false;
+					}
+					total += this.formData[names[i]];
+				}
+				if (total > this.formData.pipeLength) {
+					top.Vue.prototype.$message({
+						type: 'error',
+						message: '切管长度之和不可超过管线长度'
+					});
+					return false;
+				}
+				return true;
+			},
+			resetSegmentFields: function (val) {
+				var that = this;
+				var indexs = ['firstParagraphLength', 'secondParagraphLength', 'thirdParagraphLength', 'fourthParagraphLength',
+					'fifthParagraphLength'
+				];
+				this.indexs = indexs;
+				var num = ['一', '二', '三', '四', '五'];
+				that.segmentArrs = [];
+				for (var i = 0; i < val; i++) {
+					var obj = {
+						label: "第" + num[i] + "段长度(m)",
+						key: indexs[i],
+						placeholder: "请输入第" + num[i] + "段长度(m)"
+					};
+					that.formData[indexs[i]] = 0;
+					if (i === val - 1) {
+						that.formData[indexs[i]] = that.formData.pipeLength;
+					}
+					if (!that.rules[indexs[i]]) {
+						that.rules[indexs[i]] = {
+							required: true,
+							message: '第' + num[i] + '段长度为必填项',
+							trigger: 'change'
+						};
+					}
+					that.segmentArrs.push(obj);
+				}
+			},
+			resetPipeData: function () {
+				var that = this;
+				that.formData.pipeLength = '';
+				that.formData.wallThickness = '';
+				that.formData.pipeDiameter = '';
+
+				that.formData.segmentsNum = 1;
+				that.formData.firstParagraphLength = '';
+				that.formData.secondParagraphLength = '';
+				that.formData.thirdParagraphLength = '';
+				that.formData.fourthParagraphLength = '';
+				that.formData.fifthParagraphLength = '';
+				that.resetSegmentFields(1);
+			},
+			setLastSegmentPipeLength: function (index) {
+				var num = this.formData.segmentsNum;
+				var names = this.indexs;
+				if (index === num - 1) return;
+				this.formData[names[num - 1]] = this.formData.pipeLength;
+				for (var i = 0; i < num - 1; i++) {
+					this.formData[names[num - 1]] = this.formData[names[num - 1]] - this.formData[names[i]];
+				}
+			},
+			setPipeLength: function (pipeId) { // pipeid = pipeId
+				if (!pipeId) {
+					this.formData.pipeLength = '';
+				} else {
+					var arr = this.domain.pipes.filter(function (item) {
+						return item.key === pipeId;
+					});
+					if (arr.length > 0) {
+						this.formData.pipeLength = arr[0].length;
+					} else {
+						this.formData.pipeLength = '';
+					}
+				}
+			},
 			cancel: function (param) {
 				window.parent.jasTools.dialog.close(param);
 			},
@@ -300,16 +379,12 @@
 					that.formData.tendersOid = '';
 					that.domain.pipeline = [];
 					that.formData.pipelineOid = '';
-
 				}
-
 			},
-
 			tendersChanged: function (val) { //根据标段触发管线列表
 				var that = this;
 				if (val) {
-					this.requestDomainFromBizTable(
-						'/daq/privilege/getPipelineListByTendersOid.do', {
+					this.requestDomainFromBizTable('/daq/privilege/getPipelineListByTendersOid.do', {
 							tendersOid: val
 						},
 						function (arr) {
@@ -337,55 +412,10 @@
 					that.formData.supervisionUnit = '';
 				}
 			},
-			isInputLength: function (val) {
-				var that = this;
-				var indexs = ['firstParagraphLength', 'secondParagraphLength', 'thirdParagraphLength', 'fourthParagraphLength',
-					'fifthParagraphLength'
-				];
-				var num=['一','二','三','四','五'];
-				that.segmentArrs=[];
-				for (var i = 0; i < val; i++) {
-					var obj = {
-						label: "第"+num[i]+"段长度(m)",
-						key: indexs[i],
-						placeholder: "请输入第"+num[i]+"段长度(m)"
-					};
-					if(!that.rules[indexs[i]]){
-						that.rules[indexs[i]]={
-							required: true,
-						    message: '第'+num[i]+'段长度为必填项',
-					        trigger: 'change'	
-						};
-					}
-					that.segmentArrs.push(obj);
-				}
-				// alert("长度")
-				// secondParagraphLength: [{
-				// 		required: true,
-				// 		message: '第二段长度为必填项',
-				// 		trigger: 'change'
-				// 	}],
-				// 	thirdParagraphLength: [{
-				// 		required: true,
-				// 		message: '第三段长度为必填项',
-				// 		trigger: 'change'
-				// 	}],
-				// 	fourthParagraphLength: [{
-				// 		required: true,
-				// 		message: '第四段长度为必填项',
-				// 		trigger: 'change'
-				// 	}],
-
-				// 	fifthParagraphLength: [{
-				// 		required: true,
-				// 		message: '第五段长度为必填项',
-				// 		trigger: 'change'
-				// 	}]
-			},
 			submit: function (formName) {
 				var that = this;
 				this.$refs[formName].validate(function (valid) {
-					if (valid) {
+					if (valid && that.validSegmentFields()) {
 						that.save();
 					}
 				});
@@ -393,53 +423,58 @@
 
 			save: function () {
 				var that = this;
-				var msg = "";
 				if (!this.isEdit) {
-					msg = "增加成功";
-					url = jasTools.base.rootPath +
-						"/jdbc/commonData/cutWeld/save.do";
+					var url = jasTools.base.rootPath + "/jdbc/commonData/cutWeld/save.do";
 				} else {
-					msg = "修改成功";
 					delete that.formData.isUse;
-					url = jasTools.base.rootPath +
-						"/jdbc/commonData/cutWeld/update.do";
+					var url = jasTools.base.rootPath + "/jdbc/commonData/cutWeld/update.do";
 				}
 
 				jasTools.ajax.post(url, that.formData, function (data) {
-					top.Vue.prototype.$message({
-						type: 'success',
-						message: !this.isEdit ? '保存成功' : '修改成功'
-					});
-					that.cancel(1);
+					that.$refs.upload.uploadFile(data.data || that.oid);
 				});
 
 			},
-			// uploadSuccess: function () {
-			// 	top.Vue.prototype.$message({firstParagraphLength:"",
-				// 	secondParagraphLength:"",
-					// 	thirdParagraphLength:"",
-					// 	fourthParagraphLength:"",
-					// 	fifthParagraphLength:"",
-			// 		type: 'success',
-			// 		message: !this.isEdit ? '保存成功' : '修改成功'
-			// 	});
-			
-			// 	this.cancel(1);
-			// },
+			uploadSuccess: function () {
+				top.Vue.prototype.$message({
+					type: 'success',
+					message: !this.isEdit ? '保存成功' : '修改成功'
+				});
+				this.cancel(1);
+			},
+
+			getPipeLengthById: function (pipeOid) {
+				var that = this;
+				var url = jasTools.base.rootPath + "/jdbc/commonData/steelPipe/get.do";
+				jasTools.ajax.get(url, {
+					oid: pipeOid
+				}, function (data) {
+					that.formData.pipeLength = data.data.pipeLength;
+				});
+			},
 			getDetailByObjectId: function () {
 				var that = this;
 				var url = jasTools.base.rootPath + "/jdbc/commonData/cutWeld/getPage.do";
 				jasTools.ajax.post(url, {
 					oid: that.oid
 				}, function (data) {
-					that.formData=data.rows[0];
+					data.rows[0].pipeLength = '';
+					data.rows[0].firstParagraphLength = data.rows[0].firstParagraphLength || '';
+					data.rows[0].secondParagraphLength = data.rows[0].secondParagraphLength || '';
+					data.rows[0].thirdParagraphLength = data.rows[0].thirdParagraphLength || '';
+					data.rows[0].fourthParagraphLength = data.rows[0].fourthParagraphLength || '';
+					data.rows[0].fifthParagraphLength = data.rows[0].fifthParagraphLength || '';
+					that.resetSegmentFields(data.rows[0].segmentsNum);
+					that.getPipeLengthById(data.rows[0].pipeOid);
+
+					that.formData = data.rows[0];
 					that.domain.pipes.push({
-						key:data.rows[0].pipeOid,
-						value:data.rows[0].pipeCode
-					});
+						key: data.rows[0].pipeOid,
+						value: data.rows[0].pipeCode
+					}); //"678be0f2-3b5f-49f7-95b5-cc5efb2e0c74"
+
 					that.projectChanged(data.rows[0].projectOid);
 					that.tendersChanged(data.rows[0].tendersOid);
-					that.isInputLength(data.rows[0].segmentsNum);
 
 				});
 			},

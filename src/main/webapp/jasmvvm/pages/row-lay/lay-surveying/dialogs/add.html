@@ -54,7 +54,7 @@
 					</el-col>
 
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="施工单位" >
+						<el-form-item label="施工单位">
 							<el-select v-model="form.constructUnit" disabled placeholder="请选择施工单位" size="small">
 								<el-option v-for="item in domain.constructUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
@@ -62,13 +62,13 @@
 					</el-col>
 
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="施工日期" >
+						<el-form-item label="施工日期">
 							<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入施工日期" v-model="form.constructDate" size="small" style="width: 100%;">
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="监理单位" >
+						<el-form-item label="监理单位">
 							<el-select v-model="form.supervisionUnit" clearable placeholder="请选择监理单位" size="small">
 								<el-option v-for="item in domain.supervisionUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
@@ -115,8 +115,8 @@
 						</el-form-item>
 					</el-col>
 				</el-row>
-				<!--<jas-base-group-title name="附件信息"></jas-base-group-title>
-				<jas-file-upload ref="upload" @success="uploadSuccess"></jas-file-upload>-->
+				<jas-base-group-title name="附件信息"></jas-base-group-title>
+				<jas-file-upload ref="upload" @success="uploadSuccess"></jas-file-upload>
 			</el-form>
 			<div slot="footer">
 				<el-button size="small" @click="cancel()">取 消</el-button>
@@ -189,7 +189,8 @@
 						precision: 3,
 					},
 				},
-				domain: {project:[],
+				domain: {
+					project: [],
 					pipeline: [],
 					tenders: [],
 					pipeSegment: [],
@@ -218,13 +219,13 @@
 						message: '线路段/穿跨越为必填项',
 						trigger: 'change'
 					}],
-				
+
 					medianStakeOid: [{
 						required: true,
 						message: '桩号为必填项',
 						trigger: 'change'
 					}],
-				
+
 				},
 				form: {
 
@@ -246,6 +247,7 @@
 				this.form.oid = this.oid;
 				this.isEdit = true;
 				this.getDetailByObjectId();
+				this.$refs.upload.requestFile(this.oid);
 			};
 
 			this.requestDomainFromBizTable('/daq/privilege/getProjectList.do', {}, function (arr) {
@@ -373,21 +375,18 @@
 				}
 
 				jasTools.ajax.post(url, that.form, function (data) {
-					top.Vue.prototype.$message({
-						type: 'success',
-						message: msg
-					});
-					that.cancel(1);
+					that.$refs.upload.uploadFile(data.data || that.oid);
+
 				});
 
 			},
-			// uploadSuccess: function () {
-			// 	top.Vue.prototype.$message({
-			// 		type: 'success',
-			// 		message: !this.isEdit ? '保存成功' : '修改成功'
-			// 	});
-			// 	this.cancel(1);
-			// },
+			uploadSuccess: function () {
+				top.Vue.prototype.$message({
+					type: 'success',
+					message: !this.isEdit ? '保存成功' : '修改成功'
+				});
+				this.cancel(1);
+			},
 			getDetailByObjectId: function () {
 				var that = this;
 				var url = jasTools.base.rootPath + "/jdbc/commonData/laySurveying/getPage.do";

@@ -16,17 +16,17 @@
 <body>
 	<div id="app" v-cloak>
 		<jas-approve-dialog>
-		<div>
-			<jas-base-group-title name="基础数据"></jas-base-group-title>
-			<jas-detail-table :titles="baseArr" :detail="detail"></jas-detail-table>
-			<jas-base-group-title name="位置数据"></jas-base-group-title>
-			<jas-detail-table :titles="addressArr" :detail="detail"></jas-detail-table>
-            <jas-base-group-title name="牺牲阳极数据"></jas-base-group-title>
-			<jas-detail-table :titles="busData" :detail="detail"></jas-detail-table>
-			<jas-base-group-title name="其他信息"></jas-base-group-title>
-			<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
-			<jas-base-group-title name="附件信息"></jas-base-group-title>
-			<jas-file-list :biz-id="oid"></jas-file-list>
+			<div>
+				<jas-base-group-title name="基础数据"></jas-base-group-title>
+				<jas-detail-table :titles="baseArr" :detail="detail"></jas-detail-table>
+				<jas-base-group-title name="位置数据"></jas-base-group-title>
+				<jas-detail-table :titles="addressArr" :detail="detail"></jas-detail-table>
+				<jas-base-group-title name="牺牲阳极数据"></jas-base-group-title>
+				<jas-detail-table :titles="busData" :detail="detail"></jas-detail-table>
+				<jas-base-group-title name="其他信息"></jas-base-group-title>
+				<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
+				<jas-base-group-title name="附件信息"></jas-base-group-title>
+				<jas-file-list :biz-id="oid"></jas-file-list>
 			</div>
 		</jas-approve-dialog>
 
@@ -60,7 +60,7 @@
 					}, {
 						name: '施工单位',
 						field: 'constructUnitName'
-					},  {
+					}, {
 						name: '施工日期',
 						field: 'constructDate'
 					},
@@ -76,29 +76,29 @@
 					}, {
 						name: '采集日期',
 						field: 'collectionDate'
-					},{
+					}, {
 						name: '审核状态',
 						field: 'approveStatus'
 					}
 				],
 
 				addressArr: [{
-						name: '桩号',
-						field: 'medianStakeCode'
-					}, {
-						name: '相对桩位置(m)',
-						field: 'relativeMileage'
-					}, {
-						name: 'X坐标',
-						field: 'pointx'
-					}, {
-						name: 'Y坐标',
-						field: 'pointy'
-					}, {
-						name: '高程(m)',
-						field: 'pointz',
-					}],
-					busData:[{
+					name: '桩号',
+					field: 'medianStakeCode'
+				}, {
+					name: '相对桩位置(m)',
+					field: 'relativeMileage'
+				}, {
+					name: 'X坐标',
+					field: 'pointx'
+				}, {
+					name: 'Y坐标',
+					field: 'pointy'
+				}, {
+					name: '高程(m)',
+					field: 'pointz',
+				}],
+				busData: [{
 						name: "阳极编号",
 						field: "anodeCode"
 					}, {
@@ -166,7 +166,8 @@
 					{
 						name: '结论',
 						field: 'conclusion',
-					}],
+					}
+				],
 				otherArr: [{
 					name: '备注',
 					field: 'remarks',
@@ -192,22 +193,24 @@
 				var that = this;
 				var url = jasTools.base.rootPath +
 					"/jdbc/commonData/cathodicSacrificeAnode/getPage.do";
-				jasTools.ajax.post(url, {oid:that.oid}, function (data) {
+				jasTools.ajax.post(url, {
+					oid: that.oid
+				}, function (data) {
 					that.detail = data.rows[0];
-					that.detail.conclusion=that.detail.conclusion==0?'合格':'不合格';
-					that.detail.tabletsCondition=that.detail.tabletsCondition==0?'符合设计要求':'不符合设计要求';
-					that.detail.isTemporary=that.detail.isTemporary==0?'是':'否';
-					if(that.detail.approveStatus==-1){
-						that.detail.approveStatus= '驳回';
+					that.detail.conclusion = that.detail.conclusion == 0 ? '合格' : '不合格';
+					that.detail.tabletsCondition = that.detail.tabletsCondition == 0 ? '符合设计要求' : '不符合设计要求';
+					that.detail.isTemporary = that.detail.isTemporary == 0 ? '是' : '否';
+					if (that.detail.approveStatus == -1) {
+						that.detail.approveStatus = '驳回';
 					}
-					if(that.detail.approveStatus==0){
-						that.detail.approveStatus= '未提交';
+					if (that.detail.approveStatus == 0) {
+						that.detail.approveStatus = '未提交';
 					}
-					if(that.detail.approveStatus==1){
-						that.detail.approveStatus= '审核中';
+					if (that.detail.approveStatus == 1) {
+						that.detail.approveStatus = '审核中';
 					}
-					if(that.detail.approveStatus==2){
-						that.detail.approveStatus= '通过';
+					if (that.detail.approveStatus == 2) {
+						that.detail.approveStatus = '通过';
 					}
 				});
 			},
