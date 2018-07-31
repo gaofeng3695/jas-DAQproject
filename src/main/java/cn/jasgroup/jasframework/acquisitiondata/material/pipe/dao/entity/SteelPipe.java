@@ -7,8 +7,8 @@ import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import cn.jasgroup.jasframework.base.annotation.CommonGetConfig;
 import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
-import cn.jasgroup.jasframework.base.annotation.UpdateDeleteSet;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 
 /**
@@ -19,6 +19,9 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
   * @since JDK1.8。
   *<p>创建日期：2018年7月10日 上午9:11:18。</p>
  */
+@CommonGetConfig(
+	scene = "/steelPipe/get"
+)
 @JdbcEntity(name="daq_material_pipe")
 public class SteelPipe extends CommonJdbcEntity{
 
