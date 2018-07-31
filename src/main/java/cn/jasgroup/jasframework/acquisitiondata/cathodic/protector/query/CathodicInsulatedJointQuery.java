@@ -90,6 +90,7 @@ public class CathodicInsulatedJointQuery extends BaseJavaQuery{
 			}
 			conditionSql += " order by cij.create_datetime desc";
 		}
+		conditionSql += this.dataAuthoritySql;
 		return conditionSql;
 	}
 

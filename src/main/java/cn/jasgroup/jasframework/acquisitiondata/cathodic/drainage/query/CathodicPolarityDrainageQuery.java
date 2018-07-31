@@ -91,6 +91,7 @@ public class CathodicPolarityDrainageQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(equipmentCode)) {
 				conditionSql += " and cpd.equipment_code like :equipmentCode";
 			}
+			conditionSql += this.dataAuthoritySql;
 			conditionSql += " order by cpd.create_datetime desc";
 		}
 		return conditionSql;

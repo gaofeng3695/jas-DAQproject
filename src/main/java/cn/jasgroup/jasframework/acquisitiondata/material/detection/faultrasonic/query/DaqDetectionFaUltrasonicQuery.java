@@ -44,7 +44,7 @@ public class DaqDetectionFaUltrasonicQuery extends BaseJavaQuery {
 				+ "	v.name as pipeSegmentOrCrossName,"
 				+ "	u1.unit_name as detectionUnitName,"
 				+ "	u2.unit_name as supervisionUnitName"				
-				+ " from daq_detection_fa_ultrasonic t "
+				+ " from (select *,detection_unit as construct_unit from daq_detection_fa_ultrasonic) t "
 				+ " left join sys_domain d1 on d1.code_id = t.detection_type"				
 				+ " left join daq_project p on p.oid=t.project_oid "
 				+ " left join daq_pipeline l on l.oid=t.pipeline_oid "
@@ -71,6 +71,7 @@ public class DaqDetectionFaUltrasonicQuery extends BaseJavaQuery {
 		if (null != oids && oids.size() > 0) {
 			sql += " and oid in (:oids) ";
 		}
+		sql += this.dataAuthoritySql;
 		sql +=" order by t.create_datetime desc";
 		return sql;
 	}

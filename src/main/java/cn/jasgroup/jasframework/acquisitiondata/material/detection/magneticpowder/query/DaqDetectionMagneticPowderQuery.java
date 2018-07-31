@@ -43,7 +43,7 @@ public class DaqDetectionMagneticPowderQuery extends BaseJavaQuery{
 				+ "	v.name as pipeSegmentOrCrossName,"
 				+ "	u1.unit_name as detectionUnitName,"
 				+ "	u2.unit_name as supervisionUnitName"				
-				+ " from daq_detection_magnetic_powder t "
+				+ " from (select *,detection_unit as construct_unit from daq_detection_magnetic_powder) t "
 				+ " left join daq_project p on p.oid=t.project_oid "
 				+ " left join daq_pipeline l on l.oid=t.pipeline_oid "
 				+ " left join daq_tenders dt on dt.oid=t.tenders_oid "
@@ -69,6 +69,7 @@ public class DaqDetectionMagneticPowderQuery extends BaseJavaQuery{
 		if (null != oids && oids.size() > 0) {
 			sql += " and oid in (:oids) ";
 		}
+		sql += this.dataAuthoritySql;
 		sql +=" order by t.create_datetime desc";
 		return sql;
 	}

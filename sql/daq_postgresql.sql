@@ -3942,6 +3942,8 @@ create index INDEX_DAQ_CATHODIC_ANODE_BED_GROUND_BED_9 ON daq_cathodic_anode_bed
 
 CREATE TABLE daq_cathodic_electrical_parameter_test (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
 	test_stake_oid VARCHAR (36),
 	natural_potential NUMERIC (8, 2),
 	open_circuit_potential_one NUMERIC (8, 2),
@@ -3953,6 +3955,8 @@ CREATE TABLE daq_cathodic_electrical_parameter_test (
 	earthing_resistance_one NUMERIC (8, 2),
 	earthing_resistance_two NUMERIC (8, 2),
 	construct_unit VARCHAR (36),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
 	test_person VARCHAR (30),
 	test_date TIMESTAMP (6),
 	approve_status SMALLINT default 0,
@@ -3967,6 +3971,8 @@ CREATE TABLE daq_cathodic_electrical_parameter_test (
 );
 comment on table daq_cathodic_electrical_parameter_test is '牺牲阳极电参数测试记录表';
 comment on column daq_cathodic_electrical_parameter_test.oid is '主键';
+comment on column daq_cathodic_electrical_parameter_test.project_oid is '项目oid';
+comment on column daq_cathodic_electrical_parameter_test.tenders_oid is '标段oid';
 comment on column daq_cathodic_electrical_parameter_test.test_stake_oid is '测试桩编号';
 comment on column daq_cathodic_electrical_parameter_test.natural_potential is '管道对地自然电位(V)';
 comment on column daq_cathodic_electrical_parameter_test.open_circuit_potential_one is '阳极1开路电位(V)';
@@ -3978,6 +3984,8 @@ comment on column daq_cathodic_electrical_parameter_test.output_current_two is '
 comment on column daq_cathodic_electrical_parameter_test.earthing_resistance_one is '阳极1接地电阻(Ω)';
 comment on column daq_cathodic_electrical_parameter_test.earthing_resistance_two is '阳极2接地电阻(Ω)';
 comment on column daq_cathodic_electrical_parameter_test.construct_unit is '施工单位';
+comment on column daq_cathodic_electrical_parameter_test.supervision_unit is '监理单位';
+comment on column daq_cathodic_electrical_parameter_test.supervision_engineer is '监理工程师';
 comment on column daq_cathodic_electrical_parameter_test.test_person is '测试人';
 comment on column daq_cathodic_electrical_parameter_test.test_date is '测试时间';
 comment on column daq_cathodic_electrical_parameter_test.approve_status is '审核状态';
@@ -3993,6 +4001,8 @@ create index INDEX_DAQ_CATHODIC_ELECTRICAL_PARAMETER_TEST_TEST_STAKE_OID_5 ON da
 
 CREATE TABLE daq_cathodic_impressed_current_test (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
 	test_stake_oid VARCHAR (36),
 	test_region VARCHAR (50),
 	test_date TIMESTAMP (6),
@@ -4007,6 +4017,8 @@ CREATE TABLE daq_cathodic_impressed_current_test (
 	measured_current NUMERIC (8, 2),
 	approve_status SMALLINT default 0,
 	construct_unit VARCHAR (36),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
 	remarks VARCHAR (200),
 	create_user_id VARCHAR (36),
 	create_user_name VARCHAR (50),
@@ -4018,6 +4030,8 @@ CREATE TABLE daq_cathodic_impressed_current_test (
 );
 comment on table daq_cathodic_impressed_current_test is '外加电流电参数测试记录表';
 comment on column daq_cathodic_impressed_current_test.oid is '主键';
+comment on column daq_cathodic_impressed_current_test.project_oid is '项目oid';
+comment on column daq_cathodic_impressed_current_test.tenders_oid is '标段oid';
 comment on column daq_cathodic_impressed_current_test.test_stake_oid is '测试桩编号';
 comment on column daq_cathodic_impressed_current_test.test_region is '测试区段';
 comment on column daq_cathodic_impressed_current_test.test_date is '测试日期';
@@ -4032,6 +4046,8 @@ comment on column daq_cathodic_impressed_current_test.standard_current is '投�
 comment on column daq_cathodic_impressed_current_test.measured_current is '投产后管道保护实测电流(mA)';
 comment on column daq_cathodic_impressed_current_test.approve_status is '审核状态';
 comment on column daq_cathodic_impressed_current_test.construct_unit is '施工单位';
+comment on column daq_cathodic_impressed_current_test.supervision_unit is '监理单位';
+comment on column daq_cathodic_impressed_current_test.supervision_engineer is '监理工程师';
 comment on column daq_cathodic_impressed_current_test.remarks is '备注';
 comment on column daq_cathodic_impressed_current_test.create_user_id is '创建人id';
 comment on column daq_cathodic_impressed_current_test.create_user_name is '创建人名称';
