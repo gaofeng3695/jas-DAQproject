@@ -36,174 +36,174 @@
 
 <body>
 	<div id="app" v-cloak>
-	<jas-dialog-wrapper>
-		<div class="content">
-			<el-form ref="formData" :rules="rules" :model="formData" label-width="150px">
-				<jas-base-group-title name="基础数据"></jas-base-group-title>
-				<el-row :gutter="10">
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="项目名称" prop="projectOid" required>
-							<el-select v-model="formData.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
-								<el-option v-for="item in domain.project" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="标段名称" prop="tendersOid" required>
-							<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
-								<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="管线名称" prop="pipelineOid" required>
-							<el-select v-model="formData.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged">
-								<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="线路段/穿跨越" prop="pipeSegmentOrCrossOid" required>
-							<el-select v-model="formData.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small" @change="pipeSegmentChanged">
-								<el-option v-for="item in domain.pipeSegment" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
+		<jas-dialog-wrapper>
+			<div class="content">
+				<el-form ref="formData" :rules="rules" :model="formData" label-width="150px">
+					<jas-base-group-title name="基础数据"></jas-base-group-title>
+					<el-row :gutter="10">
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="项目名称" prop="projectOid" required>
+								<el-select v-model="formData.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
+									<el-option v-for="item in domain.project" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="标段名称" prop="tendersOid" required>
+								<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
+									<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="管线名称" prop="pipelineOid" required>
+								<el-select v-model="formData.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged">
+									<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="线路段/穿跨越" prop="pipeSegmentOrCrossOid" required>
+								<el-select v-model="formData.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small" @change="pipeSegmentChanged">
+									<el-option v-for="item in domain.pipeSegment" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
 
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="施工单位" prop="constructUnit" required>
-							<el-select v-model="formData.constructUnit" disabled placeholder="请选择施工单位" size="small">
-								<el-option v-for="item in domain.constructUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="施工机组代号" prop="workUnitOid" required>
-							<el-select v-model="formData.workUnitOid" placeholder="请选择施工机组代号" size="small" @change="workUnitChange">
-								<el-option v-for="item in domain.workUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="焊接日期">
-							<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入焊接日期" v-model="formData.weldDate" size="small" style="width: 100%;">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="打底人员">
-							<el-select v-model="formData.padderOid" clearable placeholder="请选择打底人员" size="small">
-								<el-option v-for="item in domain.persons" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="填充人员">
-							<el-select v-model="formData.coverOid" clearable placeholder="请选择填充人员" size="small">
-								<el-option v-for="item in domain.persons" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="施工单位" prop="constructUnit" required>
+								<el-select v-model="formData.constructUnit" disabled placeholder="请选择施工单位" size="small">
+									<el-option v-for="item in domain.constructUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="施工机组代号" prop="workUnitOid" required>
+								<el-select v-model="formData.workUnitOid" placeholder="请选择施工机组代号" size="small" @change="workUnitChange">
+									<el-option v-for="item in domain.workUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="焊接日期">
+								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入焊接日期" v-model="formData.weldDate" size="small" style="width: 100%;">
+								</el-date-picker>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="打底人员">
+								<el-select v-model="formData.padderOid" clearable placeholder="请选择打底人员" size="small">
+									<el-option v-for="item in domain.persons" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="填充人员">
+								<el-select v-model="formData.coverOid" clearable placeholder="请选择填充人员" size="small">
+									<el-option v-for="item in domain.persons" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
 
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="盖面人员">
-							<el-select v-model="formData.renderOid" clearable placeholder="请选择盖面人员" size="small">
-								<el-option v-for="item in domain.persons" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="盖面人员">
+								<el-select v-model="formData.renderOid" clearable placeholder="请选择盖面人员" size="small">
+									<el-option v-for="item in domain.persons" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
 
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="监理单位" prop="supervisionUnit" required>
-							<el-select v-model="formData.supervisionUnit" clearable placeholder="请选择监理单位" size="small">
-								<el-option v-for="item in domain.supervisionUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="监理工程师">
-							<el-input v-model="formData.supervisionEngineer" clearable placeholder="请输入监理工程师" size="small"></el-input>
-						</el-form-item>
-					</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="监理单位" prop="supervisionUnit" required>
+								<el-select v-model="formData.supervisionUnit" clearable placeholder="请选择监理单位" size="small">
+									<el-option v-for="item in domain.supervisionUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="监理工程师">
+								<el-input v-model="formData.supervisionEngineer" clearable placeholder="请输入监理工程师" size="small"></el-input>
+							</el-form-item>
+						</el-col>
 
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="采集人员">
-							<el-input v-model="formData.collectionPerson" clearable placeholder="请输入采集人员" size="small"></el-input>
-						</el-form-item>
-					</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="采集人员">
+								<el-input v-model="formData.collectionPerson" clearable placeholder="请输入采集人员" size="small"></el-input>
+							</el-form-item>
+						</el-col>
 
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="采集日期">
-							<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入采集日期" v-model="formData.collectionDate" size="small"
-							  style="width: 100%;">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<jas-base-group-title name="返修数据"></jas-base-group-title>
-				<el-row>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="返修口编号" prop="weldOid" required>
-							<el-select v-model="formData.weldOid" clearable placeholder="请选择返修口编号" size="small" @change="weldChanged">
-								<el-option v-for="item in domain.welds" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="返修后焊口编号" prop="reworkWeldCode" required>
-							<el-input v-model="formData.reworkWeldCode" disabled placeholder="请输入返修后焊口编号" size="small"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="焊条批号">
-							<el-input v-model="formData.weldRodBatchNum" clearable placeholder="请输入焊条批号" size="small"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="焊丝批号">
-							<el-input v-model="formData.weldWireBatchNum" clearable placeholder="请输入焊丝批号" size="small"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="焊接工艺规格" prop="weldProduce" required>
-							<el-select v-model="formData.weldProduce" clearable placeholder="请选择焊接工艺规格" size="small" >
-								<el-option v-for="item in domain.weldProduces" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-							<!--<el-input v-model="formData.weldProduce" clearable placeholder="请输入焊接工艺规格" size="small"></el-input>-->
-						</el-form-item>
-					</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="采集日期">
+								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入采集日期" v-model="formData.collectionDate" size="small"
+								  style="width: 100%;">
+								</el-date-picker>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<jas-base-group-title name="返修数据"></jas-base-group-title>
+					<el-row>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="返修口编号" prop="weldOid" required>
+								<el-select v-model="formData.weldOid" clearable placeholder="请选择返修口编号" size="small" @change="weldChanged">
+									<el-option v-for="item in domain.welds" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="返修后焊口编号" prop="reworkWeldCode" required>
+								<el-input v-model="formData.reworkWeldCode" disabled placeholder="请输入返修后焊口编号" size="small"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="焊条批号">
+								<el-input v-model="formData.weldRodBatchNum" clearable placeholder="请输入焊条批号" size="small"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="焊丝批号">
+								<el-input v-model="formData.weldWireBatchNum" clearable placeholder="请输入焊丝批号" size="small"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="焊接工艺规格" prop="weldProduce" required>
+								<el-select v-model="formData.weldProduce" clearable placeholder="请选择焊接工艺规格" size="small">
+									<el-option v-for="item in domain.weldProduces" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+								<!--<el-input v-model="formData.weldProduce" clearable placeholder="请输入焊接工艺规格" size="small"></el-input>-->
+							</el-form-item>
+						</el-col>
 
-				</el-row>
-				<jas-base-group-title name="其他信息"></jas-base-group-title>
-				<el-row>
-					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-						<el-form-item label="备注" prop="remarks">
-							<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"></el-input>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<!-- <el-row>
+					</el-row>
+					<jas-base-group-title name="其他信息"></jas-base-group-title>
+					<el-row>
+						<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+							<el-form-item label="备注" prop="remarks">
+								<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"></el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<!-- <el-row>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 						<el-form-item label="模板上传" prop="file">
 						</el-form-item>
 					</el-col>
 				</el-row> -->
-				<!--<jas-base-group-title name="附件信息"></jas-base-group-title>
+					<jas-base-group-title name="附件信息"></jas-base-group-title>
+					<jas-file-upload ref="upload" @success="uploadSuccess"></jas-file-upload>
 
-				<jas-file-upload ref="upload" @success="uploadSuccess"></jas-file-upload>-->
-			</el-form>
-
-
+				</el-form>
 
 
 
-		</div>
-		<div slot="footer" class="dialog-footer" style="text-align: center">
-			<el-button size="small" @click="cancel()">取 消</el-button>
-			<el-button size="small" type="primary" @click="submit('formData')">确 定
-			</el-button>
-		</div>
-	</jas-dialog-wrapper>
+
+
+			</div>
+			<div slot="footer" class="dialog-footer" style="text-align: center">
+				<el-button size="small" @click="cancel()">取 消</el-button>
+				<el-button size="small" type="primary" @click="submit('formData')">确 定
+				</el-button>
+			</div>
+		</jas-dialog-wrapper>
 	</div>
 </body>
 <script src="./../../../../lib/jquery/jquery-1.12.4.min.js"></script>
@@ -293,21 +293,21 @@
 					tendersOid: "",
 					pipelineOid: "",
 					pipeSegmentOrCrossOid: "",
-					constructUnit:'',
-					workUnitOid:"",
-					weldDate:"",
+					constructUnit: '',
+					workUnitOid: "",
+					weldDate: "",
 					coverOid: "",
-				      padderOid: "",
-				      renderOid: "",
-				      supervisionUnit:"",
-				      supervisionEngineer:"",
-				      collectionPerson:"",
-				      collectionDate:"",
-				      weldOid:"",
-				      reworkWeldCode:"",
-				      weldRodBatchNum:"",
-				      weldWireBatchNum:"",
-				      weldProduce:"",
+					padderOid: "",
+					renderOid: "",
+					supervisionUnit: "",
+					supervisionEngineer: "",
+					collectionPerson: "",
+					collectionDate: "",
+					weldOid: "",
+					reworkWeldCode: "",
+					weldRodBatchNum: "",
+					weldWireBatchNum: "",
+					weldProduce: "",
 					remarks: ""
 				}
 			}
@@ -330,7 +330,7 @@
 
 				this.isEdit = true;
 				this.getDetailByObjectId();
-				// this.$refs.upload.requestFile(this.oid);
+				this.$refs.upload.requestFile(this.oid);
 			};
 
 			this.requestDomainFromBizTable('/daq/privilege/getProjectList.do', {}, function (arr) {
@@ -507,7 +507,7 @@
 						.requestDomainFromBizTable(
 							'/daq/workPerson/getWorkPersonList.do', {
 								workUnitOid: val,
-								"types":"personnel_type_code_005,personnel_type_code_001"
+								"types": "personnel_type_code_005,personnel_type_code_001"
 							},
 							function (arr) {
 								that.domain.persons = arr;
@@ -543,21 +543,17 @@
 				}
 
 				jasTools.ajax.post(url, that.formData, function (data) {
-					top.Vue.prototype.$message({
-						type: 'success',
-						message: !this.isEdit ? '保存成功' : '修改成功'
-					});
-					that.cancel(1);
+					that.$refs.upload.uploadFile(data.data || that.oid);
 				});
 
 			},
-			// uploadSuccess: function () {
-			// 	top.Vue.prototype.$message({
-			// 		type: 'success',
-			// 		message: !this.isEdit ? '保存成功' : '修改成功'
-			// 	});
-			// 	this.cancel(1);
-			// },
+			uploadSuccess: function () {
+				top.Vue.prototype.$message({
+					type: 'success',
+					message: !this.isEdit ? '保存成功' : '修改成功'
+				});
+				this.cancel(1);
+			},
 			getDetailByObjectId: function () {
 				var that = this;
 				var url = jasTools.base.rootPath + "/jdbc/commonData/reworkWeld/getPage.do";

@@ -144,10 +144,10 @@
 								  size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
-						</el-row>
-						<jas-base-group-title name="绝缘件数据"></jas-base-group-title>
-						<el-row>
-												<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+					</el-row>
+					<jas-base-group-title name="绝缘件数据"></jas-base-group-title>
+					<el-row>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="绝缘件编号" prop="isolatingPieceCode" required>
 								<el-input v-model="formData.isolatingPieceCode" clearable placeholder="请输入绝缘件编号" size="small"></el-input>
 							</el-form-item>
@@ -172,14 +172,14 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="后管件类型">
-								<el-select v-model="formData.endPipeFittingType" clearable placeholder="请选择后管件类型" size="small" >
+								<el-select v-model="formData.endPipeFittingType" clearable placeholder="请选择后管件类型" size="small">
 									<el-option v-for="item in domain.pipeTypes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 								<!--<el-input v-model="formData.backPipeType" placeholder="请输入后管件类型" size="small"></el-input>-->
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="后管件编号" >
+							<el-form-item label="后管件编号">
 								<el-input v-model="formData.endPipeFittingNum" placeholder="请输入后管件编号" size="small"></el-input>
 								<!--<el-select v-model="formData.endPipeFittingNum" clearable placeholder="请选择后管件编号" size="small">
 									<el-option v-for="item in domain.endPipeFittingNums" :key="item.key" :label="item.value" :value="item.key"> </el-option>
@@ -282,8 +282,7 @@
 					}],
 
 				},
-				formData: {
-				}
+				formData: {}
 			}
 		},
 
@@ -467,7 +466,7 @@
 					oid: that.oid
 				}, function (data) {
 
-						that.formData = data.rows[0];
+					that.formData = data.rows[0];
 
 					that.projectChanged(data.rows[0].projectOid);
 					that.tendersChanged(data.rows[0].tendersOid);

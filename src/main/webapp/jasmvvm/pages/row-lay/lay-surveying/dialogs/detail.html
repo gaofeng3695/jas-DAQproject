@@ -17,20 +17,20 @@
 	<div id="app" v-cloak>
 
 		<jas-approve-dialog>
-<div>
-			<jas-base-group-title name="基本信息"></jas-base-group-title>
-			<jas-detail-table :titles="fieldsArr" :detail="detail"></jas-detail-table>
-		<jas-base-group-title name="位置信息"></jas-base-group-title>
-			<jas-detail-table :titles="addressFieldsArr" :detail="detail"></jas-detail-table>
-			<jas-base-group-title name="测量放线数据"></jas-base-group-title>
-			<jas-detail-table :titles="subFieldsArr" :detail="detail"></jas-detail-table>
+			<div>
+				<jas-base-group-title name="基本信息"></jas-base-group-title>
+				<jas-detail-table :titles="fieldsArr" :detail="detail"></jas-detail-table>
+				<jas-base-group-title name="位置信息"></jas-base-group-title>
+				<jas-detail-table :titles="addressFieldsArr" :detail="detail"></jas-detail-table>
+				<jas-base-group-title name="测量放线数据"></jas-base-group-title>
+				<jas-detail-table :titles="subFieldsArr" :detail="detail"></jas-detail-table>
 
-			<jas-base-group-title name="其他信息"></jas-base-group-title>
-			<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
+				<jas-base-group-title name="其他信息"></jas-base-group-title>
+				<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
 
-			<!--<jas-base-group-title name="附件信息"></jas-base-group-title>
-			<jas-file-list :biz-id="oid"></jas-file-list>-->
-		</div>
+				<jas-base-group-title name="附件信息"></jas-base-group-title>
+				<jas-file-list :biz-id="oid"></jas-file-list>
+			</div>
 		</jas-approve-dialog>
 
 
@@ -52,10 +52,10 @@
 					field: "medianStakeCode",
 					name: "桩号"
 				}],
-				subFieldsArr: [ {
-								field:"relativeMileage",
-								name:'里程'
-							},
+				subFieldsArr: [{
+						field: "relativeMileage",
+						name: '里程'
+					},
 					{
 						field: "measuredAngle",
 						name: '实测转角(°)'
@@ -101,7 +101,7 @@
 					}, {
 						field: "supervisionEngineer",
 						name: '监理工程师'
-					},{
+					}, {
 						name: '审核状态',
 						field: 'approveStatus'
 					}
@@ -129,17 +129,17 @@
 				var url = jasTools.base.rootPath + "/jdbc/commonData/laySurveying/getPage.do";
 				jasTools.ajax.post(url, this.params, function (data) {
 					that.detail = data.rows[0];
-					if(that.detail.approveStatus==-1){
-						that.detail.approveStatus= '驳回';
+					if (that.detail.approveStatus == -1) {
+						that.detail.approveStatus = '驳回';
 					}
-					if(that.detail.approveStatus==0){
-						that.detail.approveStatus= '未提交';
+					if (that.detail.approveStatus == 0) {
+						that.detail.approveStatus = '未提交';
 					}
-					if(that.detail.approveStatus==1){
-						that.detail.approveStatus= '审核中';
+					if (that.detail.approveStatus == 1) {
+						that.detail.approveStatus = '审核中';
 					}
-					if(that.detail.approveStatus==2){
-						that.detail.approveStatus= '通过';
+					if (that.detail.approveStatus == 2) {
+						that.detail.approveStatus = '通过';
 					}
 				});
 			},

@@ -37,112 +37,112 @@
 <body>
 	<div id="app" v-cloak>
 		<jas-dialog-wrapper>
-		<div class="content">
-			<el-form ref="formData" :rules="rules" :model="formData" label-width="150px">
-				<jas-base-group-title name="基础数据"></jas-base-group-title>
-				<el-row :gutter="10">
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="项目名称" prop="projectOid" required>
-							<el-select v-model="formData.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
-								<el-option v-for="item in domain.project" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="标段名称" prop="tendersOid" required>
-							<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
-								<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="施工单位" prop="constructUnit" required>
-							<el-select v-model="formData.constructUnit" clearable placeholder="请选择施工单位" size="small">
-								<el-option v-for="item in domain.constructUnitArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="出厂编号" prop="manufacturerCode" required>
-							<el-input v-model="formData.manufacturerCode" clearable placeholder="请输入出厂编号" size="small"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="生产厂家">
-							<el-input v-model="formData.manufacturer" clearable placeholder="请输入生产厂家" size="small"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="合格证编号">
-							<el-input v-model="formData.certificationNum" clearable placeholder="请输入合格证编号" size="small"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="公称直径(mm)">
-						<el-input-number :precision="3" :step="1" :max="100000" controls-position="right" v-model="formData.diameter" clearable placeholder="请输入公称直径(mm)"
-							  size="small"></el-input-number>
-							  
-						<!-- 	<el-input v-model="formData.diameter" clearable placeholder="请输入公称直径(mm)" size="small"></el-input> -->
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="公称压力(mpa)">
-						<el-input-number :precision="3" :step="1" :max="100000" controls-position="right" v-model="formData.pressure" clearable placeholder="请输入公称压力(mpa)"
-							  size="small"></el-input-number>
-						
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="测试仪器">
-							<el-input v-model="formData.testEquipment" clearable placeholder="请输入测试仪器" size="small"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="仪器规格型号">
-							<el-input v-model="formData.specandModel" clearable placeholder="请输入仪器规格型号" size="small"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="实用绝缘电阻值(MΩ)">
-							<el-input v-model="formData.resistanceVal" clearable placeholder="请输入实用绝缘电阻值(MΩ)" size="small"></el-input>
-						</el-form-item>
-					</el-col>
+			<div class="content">
+				<el-form ref="formData" :rules="rules" :model="formData" label-width="150px">
+					<jas-base-group-title name="基础数据"></jas-base-group-title>
+					<el-row :gutter="10">
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="项目名称" prop="projectOid" required>
+								<el-select v-model="formData.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
+									<el-option v-for="item in domain.project" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="标段名称" prop="tendersOid" required>
+								<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
+									<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="施工单位" prop="constructUnit" required>
+								<el-select v-model="formData.constructUnit" clearable placeholder="请选择施工单位" size="small">
+									<el-option v-for="item in domain.constructUnitArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="出厂编号" prop="manufacturerCode" required>
+								<el-input v-model="formData.manufacturerCode" clearable placeholder="请输入出厂编号" size="small"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="生产厂家">
+								<el-input v-model="formData.manufacturer" clearable placeholder="请输入生产厂家" size="small"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="合格证编号">
+								<el-input v-model="formData.certificationNum" clearable placeholder="请输入合格证编号" size="small"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="公称直径(mm)">
+								<el-input-number :precision="3" :step="1" :max="100000" controls-position="right" v-model="formData.diameter" clearable placeholder="请输入公称直径(mm)"
+								  size="small"></el-input-number>
 
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="验收结论">
-							<el-input v-model="formData.checkResults" clearable placeholder="请输入验收结论" size="small"></el-input>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<jas-base-group-title name="其他信息"></jas-base-group-title>
-				<el-row>
-					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-						<el-form-item label="备注" prop="remarks">
-							<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"></el-input>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<!-- <el-row>
+								<!-- 	<el-input v-model="formData.diameter" clearable placeholder="请输入公称直径(mm)" size="small"></el-input> -->
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="公称压力(mpa)">
+								<el-input-number :precision="3" :step="1" :max="100000" controls-position="right" v-model="formData.pressure" clearable placeholder="请输入公称压力(mpa)"
+								  size="small"></el-input-number>
+
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="测试仪器">
+								<el-input v-model="formData.testEquipment" clearable placeholder="请输入测试仪器" size="small"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="仪器规格型号">
+								<el-input v-model="formData.specandModel" clearable placeholder="请输入仪器规格型号" size="small"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="实用绝缘电阻值(MΩ)">
+								<el-input v-model="formData.resistanceVal" clearable placeholder="请输入实用绝缘电阻值(MΩ)" size="small"></el-input>
+							</el-form-item>
+						</el-col>
+
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="验收结论">
+								<el-input v-model="formData.checkResults" clearable placeholder="请输入验收结论" size="small"></el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<jas-base-group-title name="其他信息"></jas-base-group-title>
+					<el-row>
+						<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+							<el-form-item label="备注" prop="remarks">
+								<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"></el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<!-- <el-row>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 						<el-form-item label="模板上传" prop="file">
 						</el-form-item>
 					</el-col>
 				</el-row> -->
-				<!--<jas-base-group-title name="附件信息"></jas-base-group-title>
+					<jas-base-group-title name="附件信息"></jas-base-group-title>
 
-				<jas-file-upload ref="upload" @success="uploadSuccess"></jas-file-upload>-->
-			</el-form>
-
-
+					<jas-file-upload ref="upload" @success="uploadSuccess"></jas-file-upload>
+				</el-form>
 
 
 
-		</div>
-		<div slot="footer" class="dialog-footer" style="text-align: center">
-			<el-button size="small" @click="cancel()">取 消</el-button>
-			<el-button size="small" type="primary" @click="submit('formData')">确 定 </el-button>
-		</div>
-			</jas-dialog-wrapper>
+
+
+			</div>
+			<div slot="footer" class="dialog-footer" style="text-align: center">
+				<el-button size="small" @click="cancel()">取 消</el-button>
+				<el-button size="small" type="primary" @click="submit('formData')">确 定 </el-button>
+			</div>
+		</jas-dialog-wrapper>
 	</div>
 </body>
 <script src="./../../../../lib/jquery/jquery-1.12.4.min.js"></script>
@@ -214,7 +214,7 @@
 
 				this.isEdit = true;
 				this.getDetailByObjectId();
-				// this.$refs.upload.requestFile(this.oid);
+				this.$refs.upload.requestFile(this.oid);
 			};
 			this.requestDomainFromBizTable(
 				'/daq/privilege/getProjectList.do', {},
@@ -257,8 +257,7 @@
 				if (val) {
 					this
 						.requestDomainFromBizTable(
-							'/daq/privilege/getCurrentUnitId.do', {
-							},
+							'/daq/privilege/getCurrentUnitId.do', {},
 							function (arr) {
 								that.domain.constructUnitArr = arr;
 							});
@@ -293,21 +292,18 @@
 				}
 
 				jasTools.ajax.post(url, that.formData, function (data) {
-					top.Vue.prototype.$message({
-						type: 'success',
-						message: !this.isEdit ? '保存成功' : '修改成功'
-					});
-					that.cancel(1);
+					that.$refs.upload.uploadFile(data.data || that.oid);
+
 				});
 
 			},
-			// uploadSuccess: function () {
-			// 	top.Vue.prototype.$message({
-			// 		type: 'success',
-			// 		message: !this.isEdit ? '保存成功' : '修改成功'
-			// 	});
-			// 	this.cancel(1);
-			// },
+			uploadSuccess: function () {
+				top.Vue.prototype.$message({
+					type: 'success',
+					message: !this.isEdit ? '保存成功' : '修改成功'
+				});
+				this.cancel(1);
+			},
 			getDetailByObjectId: function () {
 				var that = this;
 				var url = jasTools.base.rootPath +

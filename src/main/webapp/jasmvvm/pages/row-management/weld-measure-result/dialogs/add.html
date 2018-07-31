@@ -143,7 +143,7 @@
 								  placeholder="请输入相对桩位置" size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
-					
+
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="坐标X">
 								<el-input-number :precision="3" :step="1" :max="10000000" controls-position="right" v-model="formData.pointx" clearable placeholder="请输入坐标X"
@@ -196,9 +196,8 @@
 						</el-form-item>
 					</el-col>
 				</el-row> -->
-					<!--<jas-base-group-title name="附件信息"></jas-base-group-title>
-
-				<jas-file-upload ref="upload" @success="uploadSuccess"></jas-file-upload>-->
+					<jas-base-group-title name="附件信息"></jas-base-group-title>
+					<jas-file-upload ref="upload" @success="uploadSuccess"></jas-file-upload>
 				</el-form>
 			</div>
 			<div slot="footer" class="dialog-footer" style="text-align: center">
@@ -320,7 +319,7 @@
 			var that = this;
 			var param = window.jasTools.base.getParamsInUrl(location.href);
 			var userBo = JSON.parse(localStorage.getItem("user"));
-	
+
 			that.formData.constructUnit = userBo.unitId;
 			that.domain.constructUnits.push({
 				key: userBo.unitId,
@@ -331,6 +330,8 @@
 				this.formData.oid = this.oid;
 				this.isEdit = true;
 				this.getDetailByObjectId();
+				this.$refs.upload.requestFile(this.oid);
+
 			};
 
 			this.requestDomainFromBizTable('/daq/privilege/getProjectList.do', {}, function (arr) {
@@ -493,21 +494,17 @@
 				}
 
 				jasTools.ajax.post(url, that.formData, function (data) {
-					top.Vue.prototype.$message({
-						type: 'success',
-						message: !this.isEdit ? '保存成功' : '修改成功'
-					});
-					that.cancel(1);
+					that.$refs.upload.uploadFile(data.data || that.oid);
 				});
 
 			},
-			// uploadSuccess: function () {
-			// 	top.Vue.prototype.$message({
-			// 		type: 'success',
-			// 		message: !this.isEdit ? '保存成功' : '修改成功'
-			// 	});
-			// 	this.cancel(1);
-			// },
+			uploadSuccess: function () {
+				top.Vue.prototype.$message({
+					type: 'success',
+					message: !this.isEdit ? '保存成功' : '修改成功'
+				});
+				this.cancel(1);
+			},
 			getDetailByObjectId: function () {
 				var that = this;
 				var url = jasTools.base.rootPath + "/jdbc/commonData/weldMeasuredResult/getPage.do";
@@ -519,7 +516,7 @@
 					}
 					that.projectChanged(data.rows[0].projectOid);
 					that.tendersChanged(data.rows[0].tendersOid);
-				
+
 					that.pipelineChanged(data.rows[0].pipelineOid);
 					that.pipeSegmentChanged(data.rows[0].pipeSegmentOrCrossOid);
 				});
