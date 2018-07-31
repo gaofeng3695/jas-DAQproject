@@ -53,13 +53,13 @@ public class DaqAppendagesHydraulicProtectionQuery extends BaseJavaQuery{
 				+ " from daq_appendages_hydraulic_protection t "
 				+ " left join sys_domain d1 on d1.code_id = t.hydraulic_protection_type"				
 				+ " left join sys_domain d2 on d2.code_id = t.hydraulic_protection_material"				
-				+ " left join daq_project p on p.oid=t.project_oid "
-				+ " left join daq_pipeline l on l.oid=t.pipeline_oid "
-				+ " left join daq_tenders dt on dt.oid=t.tenders_oid "
+				+ " left join (select oid,project_name from daq_project) p on p.oid=t.project_oid "
+				+ " left join (select oid,pipeline_name from daq_pipeline) l on l.oid=t.pipeline_oid "
+				+ " left join (select oid,tenders_name from daq_tenders) dt on dt.oid=t.tenders_oid "
 				+ " left join (select m.oid,m.median_stake_code from daq_median_stake m where active=1) ms"
 				+ " on ms.oid=t.median_stake_oid "
 				+ " left join v_daq_pipe_segment_cross v on v.oid=t.pipe_segment_or_cross_oid "
-				+ " left join daq_work_unit wu on wu.oid=t.work_unit_oid "				
+				+ " left join (select oid,work_unit_name,work_unit_code from daq_work_unit) wu on wu.oid=t.work_unit_oid "				
 				+ " left join pri_unit u1 on u1.oid=t.construct_unit "
 				+ " left join pri_unit u2 on u2.oid=t.supervision_unit "				
 				+ " where t.active = 1";
@@ -90,6 +90,7 @@ public class DaqAppendagesHydraulicProtectionQuery extends BaseJavaQuery{
 		if (null != oids && oids.size() > 0) {
 			sql += " and oid in (:oids) ";
 		}
+		sql += this.dataAuthoritySql;
 		sql +=" order by t.create_datetime desc";
 		return sql;
 	}

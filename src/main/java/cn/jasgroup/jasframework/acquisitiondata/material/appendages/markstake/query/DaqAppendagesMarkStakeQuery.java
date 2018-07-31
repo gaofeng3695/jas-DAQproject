@@ -53,9 +53,9 @@ public class DaqAppendagesMarkStakeQuery extends BaseJavaQuery {
 				+ " from daq_appendages_mark_stake t where t.active=1) t"
 				+ " left join sys_domain d2 on d2.code_id = t.stake_function group by t.oid) As ss"
 				+ " on ss.oid = t.oid"
-				+ " left join daq_project p on p.oid=t.project_oid "
-				+ " left join daq_pipeline l on l.oid=t.pipeline_oid "
-				+ " left join daq_tenders dt on dt.oid=t.tenders_oid "
+				+ " left join (select oid,project_name from daq_project) p on p.oid=t.project_oid "
+				+ " left join (select oid,pipeline_name from daq_pipeline) l on l.oid=t.pipeline_oid "
+				+ " left join (select oid,tenders_name from daq_tenders) dt on dt.oid=t.tenders_oid "
 				+ " left join (select m.oid,m.median_stake_code from daq_median_stake m where active=1) ms"
 				+ " on ms.oid=t.median_stake_oid "
 				+ " left join v_daq_pipe_segment_cross v on v.oid=t.pipe_segment_or_cross_oid "
@@ -83,6 +83,7 @@ public class DaqAppendagesMarkStakeQuery extends BaseJavaQuery {
 		if (null != oids && oids.size() > 0) {
 			sql += " and oid in (:oids) ";
 		}
+		sql += this.dataAuthoritySql;
 		sql +=" order by t.create_datetime desc";
 		return sql;
 	}

@@ -87,6 +87,7 @@ public class DaqAppendagesHandHoleQuery extends BaseJavaQuery {
 		if (null != oids && oids.size() > 0) {
 			sql += " and oid in (:oids) ";
 		}
+		sql += this.dataAuthoritySql;
 		sql +=" order by t.create_datetime desc";
 		return sql;
 	}

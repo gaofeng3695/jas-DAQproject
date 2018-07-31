@@ -85,6 +85,7 @@ public class LayLandRestorationQuery extends BaseJavaQuery{
 			}
 			conditionSql += " order by llr.create_datetime desc";
 		}
+		conditionSql += this.dataAuthoritySql;
 		return conditionSql;
 	}
 
