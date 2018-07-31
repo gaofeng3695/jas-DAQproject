@@ -1781,6 +1781,9 @@ CREATE TABLE daq_cut_pipe (
 	fourth_paragraph_length numeric(9,3),
 	fifth_paragraph_length numeric(9,3),
 	approve_status SMALLINT default 0,
+	construct_unit VARCHAR (36),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
 	remarks varchar(200),
 	create_user_id varchar(36),
 	create_user_name varchar(50),
@@ -1805,6 +1808,9 @@ comment on column daq_cut_pipe.third_paragraph_length IS '第三段长度(m)';
 comment on column daq_cut_pipe.fourth_paragraph_length IS '第四段长度(m)';
 comment on column daq_cut_pipe.fifth_paragraph_length IS '第五段长度(m)';
 comment on column daq_cut_pipe.approve_status IS '审核状态';
+comment on column daq_cut_pipe.construct_unit IS '施工单位';
+comment on column daq_cut_pipe.supervision_unit IS '监理单位';
+comment on column daq_cut_pipe.supervision_engineer IS '监理工程师';
 comment on column daq_cut_pipe.remarks IS '备注';
 comment on column daq_cut_pipe.create_user_id IS '创建人id';
 comment on column daq_cut_pipe.create_user_name IS '创建人名称';

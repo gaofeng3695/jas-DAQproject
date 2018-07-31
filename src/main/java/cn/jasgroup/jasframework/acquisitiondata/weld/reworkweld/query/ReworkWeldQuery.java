@@ -101,6 +101,7 @@ public class ReworkWeldQuery extends BaseJavaQuery {
 			if (StringUtils.isNotBlank(weldOid)) {
 				conditionSql += " and wrw.weld_oid = :weldOid";
 			}
+			conditionSql +=  this.dataAuthoritySql;
 			conditionSql += " order by wrw.create_datetime desc";
 		}
 		return conditionSql;

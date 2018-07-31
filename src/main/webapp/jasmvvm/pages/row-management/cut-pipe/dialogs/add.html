@@ -127,6 +127,25 @@
 								  placeholder="请输入第五段长度(m)" size="small"></el-input-number>
 							</el-form-item>
 						</el-col>-->
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="施工单位">
+								<el-select v-model="formData.constructUnit" disabled placeholder="请选择施工单位" size="small">
+									<el-option v-for="item in domain.constructUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="监理单位" prop="supervisionUnit" required>
+								<el-select v-model="formData.supervisionUnit" clearable placeholder="请选择监理单位" size="small">
+									<el-option v-for="item in domain.supervisionUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="监理工程师">
+								<el-input v-model="formData.supervisionEngineer" clearable placeholder="请输入监理工程师" size="small"></el-input>
+							</el-form-item>
+						</el-col>
 					</el-row>
 					<jas-base-group-title name="其他信息"></jas-base-group-title>
 					<el-row>
@@ -177,7 +196,9 @@
 					project: [],
 					pipeline: [],
 					tenders: [],
-					pipes: []
+					pipes: [],
+					supervisionUnits:[],
+					constructUnits:[]
 				},
 				rules: {
 					projectOid: [{
@@ -217,6 +238,9 @@
 					tendersOid: "",
 					segmentsNum: "",
 					wallThickness:"",
+					constructUnit: "",
+					supervisionUnit: "",
+					supervisionEngineer: "",
 					remarks: ""
 				},
 
@@ -225,7 +249,12 @@
 		mounted: function () {
 			var that = this;
 			var param = window.jasTools.base.getParamsInUrl(location.href);
-
+			var userBo = JSON.parse(localStorage.getItem("user"));
+			that.formData.constructUnit = userBo.unitId;
+			that.domain.constructUnits.push({
+				key: userBo.unitId,
+				value: userBo.unitName
+			});
 			if (param.oid) {
 				this.oid = param.oid;
 				this.formData.oid = this.oid;
@@ -291,7 +320,22 @@
 					that.formData.pipelineOid = '';
 
 				}
-
+				that.getSupervisionUnit(val); //根据标段获取监理单位
+			},
+			getSupervisionUnit: function (val) {
+				var that = this;
+				if (val) {
+					this.requestDomainFromBizTable(
+						'/daq/privilege/getSupervisionUnitByTendersOid.do', {
+							tendersOid: val
+						},
+						function (arr) {
+							that.domain.supervisionUnits = arr;
+						});
+				} else {
+					that.domain.supervisionUnits = [];
+					that.formData.supervisionUnit = '';
+				}
 			},
 			isInputLength: function (val) {
 				var that = this;
