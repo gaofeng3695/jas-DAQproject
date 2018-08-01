@@ -11,30 +11,38 @@ import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
 import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
+import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.UniqueConstraintStrategy;
 import cn.jasgroup.jasframework.base.annotation.UniqueConstraints;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 
 /**
  * 
-  *<p>类描述：焊口返修实体。</p>
+  *<p>类描述：焊口返修实体。
+  *{@link cn.jasgroup.jasframework.acquisitiondata.weld.reworkweld.service.ReworkWeldService #changeGeomColumn()}</p>
   * @author 葛建 。
   * @version v1.0.0.1。
   * @since JDK1.8。
   *<p>创建日期：2018年7月6日 下午5:35:16。</p>
  */
 @CommonSaveConfig(
-	scene = "/reworkWeld/save"
+	scene = "/reworkWeld/save",
+			afterAdvice={
+					@Process(service = "reworkWeldService", method = "changeGeomColumn()")
+				}
 )
 @CommonUpdateConfig(
-	scene = "/reworkWeld/update"
+	scene = "/reworkWeld/update",
+			afterAdvice={
+					@Process(service = "reworkWeldService", method = "changeGeomColumn()")
+				}
 )
 @CommonDeleteConfig(
 	scene = "/reworkWeld/delete"
 )
 @UniqueConstraints(
 	strategys ={
-		@UniqueConstraintStrategy(columnNames={"reworkWeldCode"})
+		@UniqueConstraintStrategy(columnNames={"pipeSegmentOrCrossOid","reworkWeldCode"})
 	}
 )
 @JdbcEntity(name="daq_weld_rework_weld")
