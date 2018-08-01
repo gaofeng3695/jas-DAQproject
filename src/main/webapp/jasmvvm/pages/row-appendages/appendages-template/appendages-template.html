@@ -16,7 +16,7 @@
 <body>
 	<div id="app" v-cloak>
 
-		<jas-two-panel-resizer layout="horizontal" length="40%" @paneresize="paneresize">
+		<jas-two-panel-resizer ref="resizer" layout="horizontal" length="40%" @paneresize="paneresize">
 			<div slot="closePanel" id="jasMap" class="jasmap"></div>
 			<jas-list-wrapper slot="mainPanel">
 				<jas-search-for-list slot="search" :form="topSearch" :fields="fields" :fields-config="fieldsConfig" @search="searchList"></jas-search-for-list>
@@ -60,10 +60,19 @@
 		},
 		created: function () {
 			var that = this;
+			var tableNameMap = {
+				appendagesMarkStake: 'daq_appendages_mark_stake',
+				appendagesElectronicLabel: 'daq_appendages_electronic_label',
+				appendagesHandHole: 'daq_appendages_hand_hole',
+				appendagesObstacle: 'daq_appendages_obstacle',
+				appendagesHydraulicProtection: 'daq_appendages_hydraulic_protection',
+				appendagesCasingPipe: 'daq_appendages_casing_pipe',
+			};
 			var param = window.jasTools.base.getParamsInUrl(location.href);
 			this.privilegeCode = param.privilegeCode;
 			this.templateCode = param.templateCode;
-			this.pageCode = param.pageCode; // 模块名称
+			this.tableName = tableNameMap[param.pageCode];
+			this.pageCode = param.pageCode;
 			this.className = param.className;
 
 			this.addUrl = './pages/row-appendages/appendages-template/dialogs/add.html?pageCode=' + this.pageCode;
@@ -88,20 +97,31 @@
 				this.$refs.table.search();
 			},
 			locate: function (row) {
-				this.jasMap.flashGraphic(row.oid, 'daq_median_stake');
+				var that = this;
+				if (!this.$refs.resizer.panelShowed) {
+					this.$refs.resizer.panelShowed = true;
+					setTimeout(function () {
+						that.jasMap.flashGraphic(row.oid, that.tableName);
+					}, 300);
+				} else {
+					this.jasMap.flashGraphic(row.oid, this.tableName);
+				}
 			},
 			paneresize: function () {
 				this.jasMap.resizeMap();
 			},
-			locate: function (item) {
-				console.log(item)
-			},
+
 			initJasMap: function () {
 				var onCenterStakeLayerClicked = function (e) {
 					//业务逻辑
 				};
+				var layersVisible = {
+					daq_median_stake: true,
+				};
+				layersVisible[this.tableName] = true;
 				this.jasMap = new JasMap({
 					appConfigPath: './../../map/config.json',
+					layersVisible: layersVisible,
 					onMapLoaded: function (e) {
 						//
 						// this.logMapInfo();
