@@ -15,16 +15,16 @@
 
 <body>
 	<div id="app" v-cloak>
-			<jas-approve-dialog>
-	<div>
-			<jas-base-group-title name="基础数据"></jas-base-group-title>
-			<jas-detail-table :titles="baseArr" :detail="detail"></jas-detail-table>
-			<jas-base-group-title name="其他信息"></jas-base-group-title>
-			<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
+		<jas-approve-dialog>
+			<div>
+				<jas-base-group-title name="基础数据"></jas-base-group-title>
+				<jas-detail-table :titles="baseArr" :detail="detail"></jas-detail-table>
+				<jas-base-group-title name="其他信息"></jas-base-group-title>
+				<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
+				<jas-base-group-title name="附件信息"></jas-base-group-title>
+				<jas-file-list :biz-id="oid"></jas-file-list>
 			</div>
 		</jas-approve-dialog>
-		<!--	<jas-base-group-title name="附件信息"></jas-base-group-title>
-		<jas-file-list :biz-id="oid"></jas-file-list>-->
 	</div>
 </body>
 <script src="./../../../../lib/jquery/jquery-1.12.4.min.js"></script>
@@ -49,7 +49,7 @@
 					}, {
 						name: '管线名称',
 						field: 'pipelineName'
-					},  {
+					}, {
 						name: "钢管编号",
 						field: "pipeCode"
 					}, {
@@ -80,6 +80,7 @@
 				this.oid = param.oid;
 				this.params = param;
 				this.getDetailByObjectId();
+
 			};
 
 		},
@@ -90,19 +91,19 @@
 					"/jdbc/commonData/cutWeld/getPage.do";
 				jasTools.ajax.post(url, this.params, function (data) {
 					that.detail = data.rows[0];
-					if(that.detail.approveStatus==-1){
-						that.detail.approveStatus= '驳回';
+					if (that.detail.approveStatus == -1) {
+						that.detail.approveStatus = '驳回';
 					}
-					if(that.detail.approveStatus==0){
-						that.detail.approveStatus= '未提交';
+					if (that.detail.approveStatus == 0) {
+						that.detail.approveStatus = '未提交';
 					}
-					if(that.detail.approveStatus==1){
-						that.detail.approveStatus= '审核中';
+					if (that.detail.approveStatus == 1) {
+						that.detail.approveStatus = '审核中';
 					}
-					if(that.detail.approveStatus==2){
-						that.detail.approveStatus= '通过';
+					if (that.detail.approveStatus == 2) {
+						that.detail.approveStatus = '通过';
 					}
-                    that.isDetailLength(that.detail.segmentsNum);
+					that.isDetailLength(that.detail.segmentsNum);
 				});
 			},
 			isDetailLength: function (val) {
@@ -110,21 +111,21 @@
 				var indexs = ['firstParagraphLength', 'secondParagraphLength', 'thirdParagraphLength', 'fourthParagraphLength',
 					'fifthParagraphLength'
 				];
-				var num=['一','二','三','四','五'];
+				var num = ['一', '二', '三', '四', '五'];
 
 				for (var i = 0; i < val; i++) {
 					var obj = {
-						name: "第"+num[i]+"段长度(m)",
+						name: "第" + num[i] + "段长度(m)",
 						field: indexs[i],
 					};
 					that.baseArr.push(obj);
 				}
-				
+
 				that.baseArr.push({
-						name: '审核状态',
-						field: 'approveStatus'
-					})
-				
+					name: '审核状态',
+					field: 'approveStatus'
+				})
+
 			}
 		},
 	});

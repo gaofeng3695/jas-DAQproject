@@ -96,6 +96,7 @@ public class CathodicIsolatingPieceQuery extends BaseJavaQuery {
 			if (StringUtils.isNotBlank(isolatingPieceCode)) {
 				conditionSql += " and cip.isolating_piece_code like :isolatingPieceCode";
 			}
+			conditionSql += this.dataAuthoritySql;
 			conditionSql += " order by cip.create_datetime desc";
 		}
 		return conditionSql;

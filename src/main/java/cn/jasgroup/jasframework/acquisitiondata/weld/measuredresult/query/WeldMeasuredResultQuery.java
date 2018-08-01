@@ -93,6 +93,7 @@ public class WeldMeasuredResultQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(weldOid)) {
 				conditionSql += " and wmr.weld_oid = :weldOid";
 			}
+			conditionSql += this.dataAuthoritySql;
 			conditionSql += " order by wmr.create_datetime desc";
 		}
 		return conditionSql;
