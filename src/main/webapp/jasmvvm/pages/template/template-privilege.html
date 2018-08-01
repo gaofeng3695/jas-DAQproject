@@ -436,7 +436,7 @@
 						name: '查询',
 						id: "query",
 						click: function () { //此时通过参数的形式，进行方法的传递
-							that.getUiType();
+							that.formatFormAndSearch();
 
 						}
 					}, {
@@ -636,14 +636,20 @@
 				this.searchform.page = val;
 				this.requestTableList();
 			},
-			selectChange: function (item) { //根据配置文件 是否立即触发
+			selectChange: function (item) { // 选择类型的控件触发的change事件
 				var that = this;
 				if (item.childField && item.requestPath) {
-					that.setChildSelectOption(item.id, item.childField, item.requestPath, function () {
-						that.getUiType();
+					var aRequestPath = item.requestPath.split(',');
+					item.childField.split(',').forEach(function (childFieldItem, index, arr) {
+						var url = aRequestPath[index] || aRequestPath[0];
+						that.setChildSelectOption(item.id, childFieldItem, url, function () {
+							if (index === arr.length - 1) {
+								that.formatFormAndSearch();
+							}
+						});
 					});
 				} else {
-					that.getUiType();
+					that.formatFormAndSearch();
 				}
 			},
 			setChildSelectOption: function (fatherField, childField, requestPath, fn) {
@@ -710,7 +716,7 @@
 				}
 				return false
 			},
-			getUiType: function () {
+			formatFormAndSearch: function () {
 				var that = this;
 				for (key in that.searchTable) {
 					that.searchUi.forEach(function (item) {
