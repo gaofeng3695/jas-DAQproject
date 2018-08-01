@@ -332,11 +332,12 @@ var JasMap = null ,M = null;
             var result = [];
             var layer = _this.getLayerById(layerId ? layerId : apiDefaults.drawLayerId);
             var source = layer && layer.getSource();
-            if( source.getUrl()){//查询
-                var url = source.getUrl().split('?')[0];
+            if( source && source.getUrl()){//查询
+                var url = source.getUrl();
+                url = commonUtil.appendUrl(url,"featureId",featureId);
                 commonUtil.simpleAjaxLoader({
                     async: false,
-                    url:url + "?featureId=" + featureId,
+                    url:url ,
                     onSuccess:function(e){
                         var data = JSON.parse(e);
                         if(data){
@@ -1097,7 +1098,6 @@ var JasMap = null ,M = null;
                 });
                 _this.map.addInteraction(_class.flashSelectInteracting);
             };
-
             var onConfigLoaded = function(e){
                 _this.apiConfig = e.data;
                 _this.mapConfig = e.data.map;
@@ -1734,13 +1734,19 @@ var JasMap = null ,M = null;
                             sourceConfig.url = commonUtil.getDefaultLayerQueryUrl(config.id);
                         }
                         if(config.where){
-                            sourceConfig.url = commonUtil.appendUrl( sourceConfig.url ,"where", config.where);
+                            var encodeUrl = config.where.replace("=", '%3D');
+                            sourceConfig.url = commonUtil.appendUrl( sourceConfig.url ,"where", encodeUrl);
+                        }
+                        if(config.outFields){
+                            sourceConfig.url = commonUtil.appendUrl( sourceConfig.url ,"outFields", config.outFields);
+                        }
+                        //添加token参数
+                        var token = localStorage.getItem(_this.Keys.token);
+                        if(token ){
+                            sourceConfig.url  = commonUtil.appendUrl(sourceConfig.url ,_this.Keys.token,token);
                         }
                         if("jas" === config.loader){
                             var strategy = config.strategy;
-                            if(config.outFields){
-                                sourceConfig.url = commonUtil.appendUrl( sourceConfig.url ,"outFields", config.outFields);
-                            }
                             loader = function(extent, resolution, projection) {
                                 var proj = projection.getCode();
                                 var source = this;
@@ -1752,12 +1758,6 @@ var JasMap = null ,M = null;
                                     var inSR = proj.split(":")[1];
                                     url = commonUtil.appendUrl(url,"inSR", inSR);
                                     url = commonUtil.appendUrl(url,"outSR", inSR);
-                                }
-                                url = commonUtil.appendUrl(url,"outputFormat",config.format);
-                                //添加token参数
-                                var token = localStorage.getItem(_this.Keys.token);
-                                if(token ){
-                                    url = commonUtil.appendUrl(url,_this.Keys.token,token);
                                 }
                                 commonUtil.simpleAjaxLoader({
                                     url: url ,
@@ -1872,7 +1872,7 @@ var JasMap = null ,M = null;
                 } catch (e) {
                     eventManager.publishError(_this.Strings.parseLayerConfigError + "layerId=" + config.id ,e);
                 }
-            };2
+            };
             var createBaseMapLayers = function(){
                 if(_baseMapLayerConfig) {
                     var baseMapLayers = _baseMapLayerConfig.baseMapLayers;
@@ -2726,7 +2726,6 @@ var JasMap = null ,M = null;
                 return false;
             }
         }
-
         apiInit();
     };
 })(window);
