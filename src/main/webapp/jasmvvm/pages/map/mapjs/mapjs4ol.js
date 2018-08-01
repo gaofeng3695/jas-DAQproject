@@ -872,7 +872,7 @@ var JasMap = null ,M = null;
                     });
                     doPosition();
                 }else{
-                    eventManager.publishInfo(_this.Strings.featureNotFound);
+                    eventManager.publishError(_this.Strings.featureNotFound);
                 }
             }else{
                 //如果是数组,认为是要素数组
@@ -889,7 +889,7 @@ var JasMap = null ,M = null;
                 if(features.length > 0){
                     prepareFlashStyle() && doPosition() && doFlash();
                 }else{
-                    eventManager.publishInfo(_this.Strings.featureNotFound);
+                    eventManager.publishError(_this.Strings.featureNotFound);
                 }
             }
         };
@@ -1514,7 +1514,6 @@ var JasMap = null ,M = null;
                     image:new ol.style.Circle()
                 });
             };
-            var mapStyleResources = [];
             _class.mapStyleTemplates = {};
             _class.drawStyle = function(param){
                 var defaultStyleClone = commonUtil.extend({},defaultStyle);
@@ -1633,9 +1632,19 @@ var JasMap = null ,M = null;
                 }
                 return style;
             };
+            _class.addMapStyles = function(module,pre){
+                for(var k in module){
+                    var keyName = pre ? pre + "_" + k : k;
+                    _class.addMapStyle(keyName,module[k]);
+                }
+            };
             _class.addMapStyle = function(name,style){
-                if(!_class.mapStyleTemplates[name]){
-                    _class.mapStyleTemplates[name] = style;
+                if(style instanceof ol.style.Style === false){
+                    _class.addMapStyles(style,name);
+                }else if(style instanceof  ol.style.Style){
+                    if(!_class.mapStyleTemplates[name]   ){
+                        _class.mapStyleTemplates[name] = style;
+                    }
                 }
             };
 
@@ -2308,12 +2317,13 @@ var JasMap = null ,M = null;
             };
             var require = function(){
                 var length = arguments.length ;
-                if(length === 1 && typeof  arguments[0] === "function"){
+                if(length !== 1 ){
+
+                }
+                if(typeof  arguments[0] === "function"){
                     var module = arguments[0].apply(_this);
                     //这先只处理样式模版
-                    for(var k in module){
-                        styleManager.addMapStyle(k,module[k]);
-                    }
+                    styleManager.addMapStyles(module);
                 }
                 return null;
             };
