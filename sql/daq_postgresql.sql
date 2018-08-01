@@ -4657,4 +4657,7 @@ CREATE INDEX daq_appendages_hydraulic_protection_geom_idx ON public.daq_appendag
 
 select AddGeometryColumn('public', 'daq_appendages_casing_pipe', 'geom', 4490, 'POINT', 4);
 CREATE INDEX daq_appendages_casing_pipe_geom_idx ON public.daq_appendages_casing_pipe USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_weld_rework_weld', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_weld_rework_weld_idx ON public.daq_weld_rework_weld USING gist (geom);
 /*********空间数据相关end*********/
