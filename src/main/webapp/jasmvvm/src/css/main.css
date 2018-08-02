@@ -61,6 +61,10 @@ button {
 
 /* element样式修正--开始 */
 
+.el-cascader {
+    width: 100%;
+}
+
 .el-cascader-menu__item--extensible:after {
     right: 6px;
 }
@@ -405,6 +409,8 @@ button {
 }
 
 /* jas-approve-dialog--结束 */
-.el-table td, .el-table th {
-	padding:8px 0;
+
+.el-table td,
+.el-table th {
+    padding: 8px 0;
 }

@@ -116,12 +116,10 @@
 				} else {
 					this.jasMap.flashGraphic(row.oid, this.tableName);
 				}
-
 			},
 			paneresize: function () {
 				this.jasMap.resizeMap();
 			},
-
 			initJasMap: function () {
 				var onCenterStakeLayerClicked = function (e) {
 					//业务逻辑
@@ -133,10 +131,7 @@
 				this.jasMap = new JasMap({
 					layersVisible: layersVisible,
 					appConfigPath: './../../map/config.json',
-					onMapLoaded: function (e) {
-						//
-						// this.logMapInfo();
-					},
+					onMapLoaded: function (e) {},
 					onError: function (e) {
 						console.error(e.data.message);
 						top.Vue.prototype.$message({
