@@ -78,9 +78,9 @@ public class CheckInsulatedJointQuery extends BaseJavaQuery {
 			if (StringUtils.isNotBlank(manufacturerCode)) {
 				conditionSql += " and manufacturer_code like :manufacturerCode";
 			}
-			conditionSql += this.dataAuthoritySql;
-			conditionSql += " order by  cij.create_datetime desc";
 		}
+		conditionSql += this.dataAuthoritySql;
+		conditionSql += " order by  cij.create_datetime desc";
 		return conditionSql;
 	}
 
