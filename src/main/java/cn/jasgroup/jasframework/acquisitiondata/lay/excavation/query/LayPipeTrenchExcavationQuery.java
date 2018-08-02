@@ -83,8 +83,8 @@ public class LayPipeTrenchExcavationQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(pipeSegmentOrCrossOid)) {
 				conditionSql += " and lpte.pipe_segment_or_cross_oid = :pipeSegmentOrCrossOid";
 			}
+			conditionSql += this.dataAuthoritySql;
 		}
-		conditionSql += this.dataAuthoritySql;
 		conditionSql += " order by lpte.create_datetime desc";
 		return conditionSql;
 	}

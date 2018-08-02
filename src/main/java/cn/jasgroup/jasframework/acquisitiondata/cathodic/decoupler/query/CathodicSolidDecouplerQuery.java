@@ -88,8 +88,8 @@ public class CathodicSolidDecouplerQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(equipmentCode)) {
 				conditionSql += " and csd.equipment_code like :equipmentCode";
 			}
+			conditionSql += this.dataAuthoritySql;
 		}
-		conditionSql += this.dataAuthoritySql;
 		conditionSql += " order by csd.create_datetime desc";
 		return conditionSql;
 	}

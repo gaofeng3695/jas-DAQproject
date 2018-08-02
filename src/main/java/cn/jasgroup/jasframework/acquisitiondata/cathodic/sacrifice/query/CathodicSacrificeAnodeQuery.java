@@ -91,8 +91,8 @@ public class CathodicSacrificeAnodeQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(anodeCode)) {
 				conditionSql += " and csa.anode_code like :anodeCode";
 			}
+			conditionSql += this.dataAuthoritySql;
 		}
-		conditionSql += this.dataAuthoritySql;
 		conditionSql += " order by csa.create_datetime desc";
 		return conditionSql;
 	}

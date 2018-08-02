@@ -81,8 +81,8 @@ public class LaySurveyingQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(pipeSegmentOrCrossOid)) {
 				conditionSql += " and ls.pipe_segment_or_cross_oid = :pipeSegmentOrCrossOid";
 			}
+			conditionSql += this.dataAuthoritySql;
 		}
-		conditionSql += this.dataAuthoritySql;
 		conditionSql += " order by ls.create_datetime desc";
 		return conditionSql;
 	}
