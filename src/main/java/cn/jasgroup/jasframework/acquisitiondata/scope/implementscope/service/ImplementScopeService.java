@@ -65,6 +65,7 @@ public class ImplementScopeService extends BaseService{
 		List<TreeItem> itemList = new ArrayList<TreeItem>();
 		for(Map<String,Object> obj : dataList){
 			String parentOid = obj.get("parent_oid")!=null?obj.get("parent_oid").toString():"";
+			String this_tendersOid = obj.get("tenders_oid")!=null?obj.get("tenders_oid").toString():null;
 			String type = obj.get("type")!=null?obj.get("type").toString():"";
 			if(parentOid.equals(parentId) && type.equals("-1")){
 				TreeItem item = new TreeItem();
@@ -73,16 +74,16 @@ public class ImplementScopeService extends BaseService{
 				Map<String,String> attributes = new HashMap<>();
 				attributes.put("type", type);
 				item.setAttributes(attributes);
-				item.setChildren(getProjectChildren(obj.get("oid").toString(),item.getId(),dataList,dataRefList));
+				item.setChildren(getProjectChildren(obj.get("oid").toString(),obj.get("oid").toString(),dataList,dataRefList));
 				itemList.add(item);
-			}else if(parentOid.equals(parentId) && type.equals("0")){
+			}else if(parentOid.equals(parentId) && type.equals("0") && this_tendersOid!=null && tendersOid.equals(this_tendersOid)){
 				TreeItem item = new TreeItem();
 				item.setId(obj.get("oid").toString());
 				item.setText(obj.get("name").toString());
 				Map<String,String> attributes = new HashMap<>();
 				attributes.put("type", type);
 				item.setAttributes(attributes);
-				item.setChildren(getPipelineChildren(obj.get("oid").toString(),tendersOid,dataList,dataRefList));
+				item.setChildren(getPipelineChildren(obj.get("oid").toString(),obj.get("tenders_oid").toString(),dataList,dataRefList));
 				itemList.add(item);
 			}
 		}
@@ -114,7 +115,8 @@ public class ImplementScopeService extends BaseService{
 		for(Map<String,Object> obj : dataList){
 			String type = obj.get("type")!=null?obj.get("type").toString():"";
 			String parentOid = obj.get("parent_oid")!=null?obj.get("parent_oid").toString():"";
-			if(parentOid.equals(parentId)){
+			String thisTendersOid = obj.get("tenders_oid")!=null?obj.get("tenders_oid").toString():"";
+			if(parentOid.equals(parentId) && thisTendersOid.equals(tendersOid)){
 				switch (type) {
 				case "1":
 					setProvinceItem(segmentItem,tendersOid,obj,dataRefList);
@@ -172,6 +174,9 @@ public class ImplementScopeService extends BaseService{
 		if(dataRefList!=null && dataRefList.size()>0){
 			Map<String,Object> flagMap = new HashMap<String,Object>();
 			flagMap.put("scope_oid", map.get("oid"));
+			flagMap.put("tenders_oid", tendersOid);
+			flagMap.put("pipeline_oid", map.get("parent_oid").toString());
+			flagMap.put("project_oid", map.get("project_oid").toString());
 			if(dataRefList.contains(flagMap)){
 				item.setChecked(true);
 			}
@@ -185,6 +190,7 @@ public class ImplementScopeService extends BaseService{
 		attributes.put("pipelineOid", map.get("parent_oid").toString());
 		attributes.put("tendersOid", tendersOid);
 		item.setAttributes(attributes);
+		
 		
 		List<TreeItem> childrenItem = parentItem.getChildren();
 		boolean flag = false;
@@ -203,12 +209,11 @@ public class ImplementScopeService extends BaseService{
 			TreeItem provinceItem = new TreeItem();
 			provinceItem.setId(map.get("province").toString());
 			provinceItem.setText(map.get("province_name").toString());
-			
 			List<TreeItem> children = new ArrayList<>();
 			children.add(item);
 			provinceItem.setChildren(children);
 			childrenItem.add(provinceItem);
-			parentItem.setChildren(childrenItem);
+			parentItem.setChildren(childrenItem);			
 		}
 	}
 	/***

@@ -13,7 +13,7 @@ public class ReworkWeldDao {
 	private BaseJdbcTemplate baseJdbcTemplate;
 	
 	public void changeGeomColumn(String oid,String weldOid){
-		String sql = "update daq_weld_rework_weld set geom = (select geom from daq_construction_weld where oid=?) where oid=?";
-		this.baseJdbcTemplate.batchExecute(sql,new Object[]{weldOid,oid});
+		String sql = "update daq_weld_rework_weld set geom = (select geom from daq_construction_weld where oid=?),geo_state=(select geo_state from daq_construction_weld where oid=?) where oid=?";
+		this.baseJdbcTemplate.batchExecute(sql,new Object[]{weldOid,weldOid,oid});
 	}
 }
