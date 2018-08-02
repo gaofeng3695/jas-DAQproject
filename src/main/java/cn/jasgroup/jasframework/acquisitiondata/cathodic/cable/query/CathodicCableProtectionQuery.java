@@ -97,8 +97,8 @@ public class CathodicCableProtectionQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(cableCode)) {
 				conditionSql += " and ccp.cable_code like :cableCode";
 			}
+			conditionSql += this.dataAuthoritySql;
 		}
-		conditionSql += this.dataAuthoritySql;
 		conditionSql += " order by ccp.create_datetime desc";
 		return conditionSql;
 	}

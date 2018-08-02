@@ -83,8 +83,8 @@ public class LayLandRestorationQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(pipeSegmentOrCrossOid)) {
 				conditionSql += " and llr.pipe_segment_or_cross_oid = :pipeSegmentOrCrossOid";
 			}
+			conditionSql += this.dataAuthoritySql;
 		}
-		conditionSql += this.dataAuthoritySql;
 		conditionSql += " order by llr.create_datetime desc";
 		return conditionSql;
 	}
