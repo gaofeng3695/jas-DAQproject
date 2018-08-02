@@ -82,9 +82,9 @@ public class CutWeldQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(pipeOid)) {
 				conditionSql += " and cp.pipe_oid = :pipeOid";
 			}
-			conditionSql += this.dataAuthoritySql;
-			conditionSql += " order by cp.create_datetime desc";
 		}
+		conditionSql += this.dataAuthoritySql;
+		conditionSql += " order by cp.create_datetime desc";
 		return conditionSql;
 	}
 

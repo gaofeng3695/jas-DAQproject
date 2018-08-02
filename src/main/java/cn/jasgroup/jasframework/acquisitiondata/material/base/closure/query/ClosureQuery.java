@@ -94,8 +94,8 @@ public class ClosureQuery extends BaseJavaQuery {
 			if ( isUse != null ){
 				conditionSql += " and mc.is_use = :isUse";
 			}
-			conditionSql += " order by mc.create_datetime desc";
 		}
+		conditionSql += " order by mc.create_datetime desc";
 		return conditionSql;
 	}
 	public String getOid() {
