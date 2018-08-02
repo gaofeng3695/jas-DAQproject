@@ -26,8 +26,8 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 				+ "union all "
 				+ "select t.oid,t.parent_id from pri_unit t inner join pri_unit_temp b on t.parent_id=b.oid and t.active=1 "
 				+ ")"
-				+ "select distinct p.oid as key,p.project_name as value from daq_implement_scope_ref s left join (select oid,project_name,pipe_network_type_code from daq_project where active=1) p on s.project_oid=p.oid where s.unit_oid in (select oid from pri_unit_temp) "
-				+ "and p.pipe_network_type_code=?";
+				+ "select distinct p.oid as key,p.project_name as value,p.create_datetime from daq_implement_scope_ref s left join (select oid,project_name,pipe_network_type_code,create_datetime from daq_project where active=1) p on s.project_oid=p.oid where s.unit_oid in (select oid from pri_unit_temp) "
+				+ "and p.pipe_network_type_code=? order by p.create_datetime asc";
 		return this.queryForList(sql, new Object[]{unitOid,pipeNetworkTypeCode});
 	}
 	
@@ -46,7 +46,8 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 				+ "union all "
 				+ "select t.oid,t.parent_id from pri_unit t inner join pri_unit_temp b on t.parent_id=b.oid and t.active=1 "
 				+ ")"
-				+ "select distinct tt.oid as key,tt.tenders_name as value from daq_implement_scope_ref t left join (select oid,tenders_name,project_oid from daq_tenders where active=1) tt on t.tenders_oid=tt.oid where t.unit_oid in (select oid from pri_unit_temp) and tt.project_oid=?";
+				+ "select distinct tt.oid as key,tt.tenders_name as value,tt.create_datetime from daq_implement_scope_ref t left join (select oid,tenders_name,project_oid,create_datetime from daq_tenders where active=1) tt on t.tenders_oid=tt.oid where t.unit_oid in (select oid from pri_unit_temp) and tt.project_oid=?"
+				+ " order by tt.create_datetime asc";
 		return this.queryForList(sql, new Object[]{unitOid,projectOid});
 	}
 	/***
@@ -64,10 +65,11 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 				+ "union all "
 				+ "select t.oid,t.parent_id from pri_unit t inner join pri_unit_temp b on t.parent_id=b.oid and t.active=1 "
 				+ ")"
-				+ "select distinct t.oid as key,t.pipeline_name as value from daq_implement_scope_ref s left join (select oid,pipeline_name from daq_pipeline where active=1) t on t.oid=s.pipeline_oid where s.unit_oid in (select oid from pri_unit_temp)";
+				+ "select distinct t.oid as key,t.pipeline_name as value,t.create_datetime from daq_implement_scope_ref s left join (select oid,pipeline_name,create_datetime from daq_pipeline where active=1) t on t.oid=s.pipeline_oid where s.unit_oid in (select oid from pri_unit_temp)";
 		if(StringUtils.isNotBlank(tendersOid)){
 			sql += " and s.tenders_oid='"+tendersOid+"'";
 		}
+		 sql += " order by t.create_datetime asc";
 		return this.queryForList(sql, null);
 	}
 	/***
@@ -86,10 +88,11 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 				+ "union all "
 				+ "select t.oid,t.parent_id from pri_unit t inner join pri_unit_temp b on t.parent_id=b.oid and t.active=1 "
 				+ ")"
-				+ "select distinct v.oid as key,v.name as value,v.type from v_daq_pipe_segment_cross v left join daq_implement_scope_ref t on t.scope_oid=v.oid where t.unit_oid in (select oid from pri_unit_temp)";
+				+ "select distinct v.oid as key,v.name as value,v.type,v.create_datetime from v_daq_pipe_segment_cross v left join daq_implement_scope_ref t on t.scope_oid=v.oid where t.unit_oid in (select oid from pri_unit_temp)";
 		if(StringUtils.isNotBlank(pipelineOid)){
 			sql += " and t.pipeline_oid='"+pipelineOid+"'";
 		}
+		sql += "order by v.create_datetime asc";
 		return this.queryForList(sql, null);
 	}
 	/***
@@ -102,7 +105,7 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getSupervisionUnitByTendersOid(String tendersOid){
-		String sql = "select distinct t.oid as key,t.unit_name as value from pri_unit t left join daq_implement_scope_ref i on t.oid = i.unit_oid where i.tenders_oid=? and t.hierarchy like 'Unit.0001.0004%' and t.active=1";
+		String sql = "select distinct t.oid as key,t.unit_name as value,t.create_datetime from pri_unit t left join daq_implement_scope_ref i on t.oid = i.unit_oid where i.tenders_oid=? and t.hierarchy like 'Unit.0001.0004%' and t.active=1 order by t.create_datetime asc";
 		return this.queryForList(sql, new Object[]{tendersOid});
 	}
 	/***
@@ -115,7 +118,7 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getConstructionUnitByTendersOid(String tendersOid){
-		String sql = "select distinct t.oid as key,t.unit_name as value from pri_unit t left join daq_implement_scope_ref i on t.oid = i.unit_oid where i.tenders_oid=? and t.hierarchy like 'Unit.0001.0005%' and t.active=1";
+		String sql = "select distinct t.oid as key,t.unit_name as value,t.create_datetime from pri_unit t left join daq_implement_scope_ref i on t.oid = i.unit_oid where i.tenders_oid=? and t.hierarchy like 'Unit.0001.0005%' and t.active=1 order by t.create_datetime asc";
 		return this.queryForList(sql, new Object[]{tendersOid});
 	}
 	
@@ -129,7 +132,7 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getMedianStakeList(String pipeSegmentOrCrossOid){
-		String sql ="select t.oid as key,t.median_stake_code as value from (select v.*,n.median_stake_code as start_median_stake_code,m.median_stake_code as end_median_stake_code from v_daq_pipe_segment_cross v left join (select oid,median_stake_code from daq_median_stake where active=1) n on n.oid=v.start_stake_oid left join (select oid,median_stake_code from daq_median_stake where active=1) m on m.oid=v.end_stake_oid) vv left join daq_median_stake t on t.median_stake_code>=vv.start_median_stake_code and t.median_stake_code<=vv.end_median_stake_code where vv.oid =?";
+		String sql ="select t.oid as key,t.median_stake_code as value from (select v.*,n.median_stake_code as start_median_stake_code,m.median_stake_code as end_median_stake_code from v_daq_pipe_segment_cross v left join (select oid,median_stake_code from daq_median_stake where active=1) n on n.oid=v.start_stake_oid left join (select oid,median_stake_code from daq_median_stake where active=1) m on m.oid=v.end_stake_oid) vv left join daq_median_stake t on t.median_stake_code>=vv.start_median_stake_code and t.median_stake_code<=vv.end_median_stake_code where vv.oid =? order by t.create_datetime asc";
 		return this.queryForList(sql, new Object[]{pipeSegmentOrCrossOid});
 	}
 	
@@ -150,9 +153,10 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 				+ "union all "
 				+ "select t.oid,t.parent_id from pri_unit t inner join pri_unit_temp b on t.parent_id=b.oid and t.active=1 "
 				+ ")"
-				+ "select distinct c.oid as key,c.cross_name as value,c.cross_length as length from daq_cross c left join daq_implement_scope_ref t on t.scope_oid=c.oid where t.unit_oid in (select oid from pri_unit_temp) ";
+				+ "select distinct c.oid as key,c.cross_name as value,c.cross_length as length,c.create_datetime from daq_cross c left join daq_implement_scope_ref t on t.scope_oid=c.oid where t.unit_oid in (select oid from pri_unit_temp) ";
 			sql += " and t.pipeline_oid='"+pipelineOid+"'";
-			sql +="  and c.cross_way_code='"+crossWay+"'";
+			sql += "  and c.cross_way_code='"+crossWay+"'";
+			sql += " order by c.create_datetime asc";
 		return this.queryForList(sql, null);
 	}
 	/***
@@ -171,8 +175,9 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 				+ "union all "
 				+ "select t.oid,t.parent_id from pri_unit t inner join pri_unit_temp b on t.parent_id=b.oid and t.active=1 "
 				+ ")"
-				+ "select distinct s.oid as key,s.pipe_segment_code as value from daq_pipe_segment s left join daq_implement_scope_ref t on t.scope_oid=s.oid where t.unit_oid in (select oid from pri_unit_temp)";
+				+ "select distinct s.oid as key,s.pipe_segment_code as value,s.create_datetime from daq_pipe_segment s left join daq_implement_scope_ref t on t.scope_oid=s.oid where t.unit_oid in (select oid from pri_unit_temp)";
 			sql += " and t.pipeline_oid='"+pipelineOid+"'";
+			sql += " order by s.create_datetime asc";
 			return this.queryForList(sql, null);
 	}
 }
