@@ -4,6 +4,8 @@ import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
 import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
+import cn.jasgroup.jasframework.base.annotation.UniqueConstraintStrategy;
+import cn.jasgroup.jasframework.base.annotation.UniqueConstraints;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 
 @CommonSaveConfig(
@@ -14,6 +16,12 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 	)
 @CommonDeleteConfig(
 		scene = "/workUnit/delete"
+	)
+@UniqueConstraints(
+	    strategys ={
+	        @UniqueConstraintStrategy(columnNames={"projectOid","workUnitName"},name="机组名称已存在"),
+	        @UniqueConstraintStrategy(columnNames={"projectOid","workUnitCode"},name="机组编号已存在"),
+	    }
 	)
 @JdbcEntity(name="daq_work_unit")
 public class WorkUnitEntity extends CommonJdbcEntity{
