@@ -17,6 +17,6 @@ public class ReworkWeldService extends CommonDataJdbcService{
 	private ReworkWeldDao reworkWeldDao;
 	
 	public void changeGeomColumn(ReworkWeld reworkWeld){
-		reworkWeldDao.changeGeomColumn(reworkWeld.getWeldOid());
+		reworkWeldDao.changeGeomColumn(reworkWeld.getOid(),reworkWeld.getWeldOid());
 	}
 }

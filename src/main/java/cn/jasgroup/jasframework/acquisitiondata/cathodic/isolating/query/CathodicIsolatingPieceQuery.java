@@ -97,8 +97,8 @@ public class CathodicIsolatingPieceQuery extends BaseJavaQuery {
 				conditionSql += " and cip.isolating_piece_code like :isolatingPieceCode";
 			}
 			conditionSql += this.dataAuthoritySql;
-			conditionSql += " order by cip.create_datetime desc";
 		}
+		conditionSql += " order by cip.create_datetime desc";
 		return conditionSql;
 	}
 		

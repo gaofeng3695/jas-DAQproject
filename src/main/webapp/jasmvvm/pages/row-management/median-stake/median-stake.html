@@ -23,7 +23,7 @@
 
 <body>
 	<div id="app" v-cloak>
-		<jas-two-panel-resizer layout="horizontal" length="40%" @paneresize="paneresize">
+		<jas-two-panel-resizer ref="resizer" layout="horizontal" length="40%" @paneresize="paneresize">
 			<div slot="closePanel" id="jasMap" class="jasmap"></div>
 			<jas-list-wrapper slot="mainPanel">
 				<el-form slot="search" :model="topSearch" label-width="100px">
@@ -57,9 +57,9 @@
 						</el-col>
 					</el-row>
 				</el-form>
-				<jas-table-for-list ref="table" slot="list" :self-btns="['locate']"  :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" search-path="/jdbc/commonData/medianStake/getPage.do"
-				  :add-url="addUrl" :detail-url="detailUrl" delete-path="/daq/medianStake/delete.do" @locate="locate" :class-name="className"
-				  :template-code="templateCode"></jas-table-for-list>
+				<jas-table-for-list ref="table" slot="list" :self-btns="['locate']" :privilege-code="privilegeCode" :fields="tableFields"
+				  :form="topSearch" search-path="/jdbc/commonData/medianStake/getPage.do" :add-url="addUrl" :detail-url="detailUrl" delete-path="/daq/medianStake/delete.do"
+				  @locate="locate" :class-name="className" :template-code="templateCode"></jas-table-for-list>
 			</jas-list-wrapper>
 		</jas-two-panel-resizer>
 
@@ -191,7 +191,9 @@
 				};
 				this.jasMap = new JasMap({
 					appConfigPath: './../../map/config.json',
-
+					layersVisible: {
+						daq_median_stake: true
+					},
 					onMapLoaded: function (e) {
 						//
 						// this.logMapInfo();
@@ -237,9 +239,17 @@
 				this.$refs.table.search();
 			},
 			locate: function (row) {
-				this.jasMap.flashGraphic(row.oid, 'daq_median_stake');
+				var that = this;
+				if (!this.$refs.resizer.panelShowed) {
+					this.$refs.resizer.panelShowed = true;
+					setTimeout(function () {
+						that.jasMap.flashGraphic(row.oid, 'daq_median_stake');
+					}, 300);
+				} else {
+					this.jasMap.flashGraphic(row.oid, 'daq_median_stake');
+				}
 			},
-			paneresize : function(){
+			paneresize: function () {
 				this.jasMap.resizeMap();
 			}
 		},

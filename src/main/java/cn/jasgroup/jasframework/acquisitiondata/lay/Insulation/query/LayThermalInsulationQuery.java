@@ -86,8 +86,8 @@ public class LayThermalInsulationQuery extends BaseJavaQuery{
 				conditionSql += " and lti.pipe_segment_or_cross_oid = :pipeSegmentOrCrossOid";
 			}
 			conditionSql += this.dataAuthoritySql;
-			conditionSql += " order by lti.create_datetime desc";
 		}
+		conditionSql += " order by lti.create_datetime desc";
 		return conditionSql;
 	}
 	public String getOid() {

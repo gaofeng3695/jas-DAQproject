@@ -92,8 +92,8 @@ public class CathodicTestStakeQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(testStakeCode)) {
 				conditionSql += " and cts.test_stack_code like :testStakeCode";
 			}
+			conditionSql += this.dataAuthoritySql;
 		}
-		conditionSql += this.dataAuthoritySql;
 		conditionSql += " group BY cts.oid,pro.project_name,pi.pipeline_name,te.tenders_name,ps.pipe_segment_name,ms.median_stake_code,u.unit_name,pu.unit_name,d.code_name ";
 		conditionSql += " order by cts.create_datetime desc";
 		return conditionSql;

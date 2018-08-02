@@ -98,8 +98,8 @@ public class ConstructionWeldQuery extends BaseJavaQuery{
 				conditionSql += " and cw.weld_code like :weldCode";
 			}
 			conditionSql += this.dataAuthoritySql;
-			conditionSql += " order by cw.create_datetime desc";
 		}
+		conditionSql += " order by cw.create_datetime desc";
 		return conditionSql;
 	}
 

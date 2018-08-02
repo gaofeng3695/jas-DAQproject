@@ -92,8 +92,8 @@ public class CathodicAnodeBedQuery extends BaseJavaQuery{
 				conditionSql += " and cab.ground_bed like :groundBed";
 			}
 			conditionSql += this.dataAuthoritySql;
-			conditionSql += " order by cab.create_datetime desc";
 		}
+		conditionSql += " order by cab.create_datetime desc";
 		return conditionSql;
 	}
 

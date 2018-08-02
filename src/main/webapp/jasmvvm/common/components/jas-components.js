@@ -12,7 +12,7 @@ Vue.component('jas-base-group-title', {
 	].join(''),
 });
 
-Vue.component('jas-base-el-multi-select', { //:ref="item.field"
+Vue.component('jas-base-el-multi-select', { //value 值 支持逗号分隔 的多选下拉框
 	props: {
 		value: {},
 		options: {
@@ -43,6 +43,45 @@ Vue.component('jas-base-el-multi-select', { //:ref="item.field"
 		},
 		fatherSelectChanged: function ($event) {
 			this.$emit('change', $event);
+		},
+	}
+});
+
+Vue.component('jas-base-el-cascader', { //value 值 支持逗号分隔 的多选下拉框
+	props: {
+		value: {},
+		options: {
+			type: Array,
+			default: function () {
+				return []
+			}
+		},
+		item: {
+			type: Object //{field,name}
+		},
+		props: {
+
+		}
+	},
+	computed: {
+		_value: {
+			get: function () {
+				if (!this.options || !this.value || !this.options.length) return [];
+				return jasTools.base.getIdArrFromTree(this.options, this.value);
+			},
+			set: function (newValue) {
+				this.$emit('input', newValue[newValue.length - 1]);
+			}
+		}
+	},
+	template: [
+		'<el-cascader :options="options" :props="props" v-model="_value" :show-all-levels="false" @visible-change="visibleChange($event,item.field)"',
+		'	change-on-select clearable :placeholder="\'请选择\'+item.name"  size="small">',
+		'</el-cascader>',
+	].join(''),
+	methods: {
+		visibleChange: function ($event) {
+			this.$emit('visible-change', $event);
 		},
 	}
 });
@@ -1244,6 +1283,7 @@ Vue.component('jas-form-items', {
 		'				<template v-if="fieldsConfig[item.field].type == \'multiSelect\'">',
 		'				  <jas-base-el-multi-select :ref="item.field" v-model="form[item.field]" :item="item" :options="fieldsConfig[item.field].options" @visible-change="visibleChange($event,item.field)" @change="fatherSelectChanged($event,item.field)"></jas-base-el-multi-select>',
 		'				</template>',
+
 		'				<template v-if="fieldsConfig[item.field].type == \'input\'">',
 		'					<el-input @change="fieldChanged(item.field)" v-model="form[item.field]" :placeholder="\'请输入\'+item.name" size="small" clearable></el-input>',
 		'				</template>',
@@ -1471,6 +1511,11 @@ Vue.component('jas-form-items-group', {
 		'				<template v-if="fieldsConfig[item.field].type == \'multiSelect\'">',
 		'				  <jas-base-el-multi-select :ref="item.field" v-model="form[item.field]" :item="item" :options="fieldsConfig[item.field].options" @visible-change="visibleChange($event,item.field)" @change="fatherSelectChanged($event,item.field)"></jas-base-el-multi-select>',
 		'				</template>',
+
+		'				<template v-if="fieldsConfig[item.field].type == \'cascader\'">',
+		'				  <jas-base-el-cascader :ref="item.field" v-model="form[item.field]" :props="fieldsConfig[item.field].props" :item="item" :options="fieldsConfig[item.field].options" @visible-change="visibleChange($event,item.field)"></jas-base-el-cascader>',
+		'				</template>',
+
 		'				<template v-if="fieldsConfig[item.field].type == \'input\'">',
 		'					<el-input @change="fieldChanged(item.field)" v-model="form[item.field]" :placeholder="\'请输入\'+item.name" size="small" clearable></el-input>',
 		'				</template>',
@@ -1534,6 +1579,8 @@ Vue.component('jas-form-items-group', {
 							trigger: 'change'
 						}]
 					}
+
+
 					/* 请求阈值 */
 					if (config.domainName) {
 						(function (field, config) {
@@ -1544,7 +1591,11 @@ Vue.component('jas-form-items-group', {
 					}
 					if (config.optionUrl) {
 						(function (field, config) {
-							jasTools.ajax.post(jasTools.base.rootPath + "/" + config.optionUrl, {}, function (data) {
+							var obj = {};
+							if (config.requestParams) {
+								obj = jasTools.base.extend(obj, config.requestParams);
+							}
+							jasTools.ajax.post(jasTools.base.rootPath + "/" + config.optionUrl, obj, function (data) {
 								config.options = data.rows;
 							});
 						})(field, config)

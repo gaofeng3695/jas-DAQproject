@@ -98,8 +98,8 @@ public class CathodicCableProtectionQuery extends BaseJavaQuery{
 				conditionSql += " and ccp.cable_code like :cableCode";
 			}
 			conditionSql += this.dataAuthoritySql;
-			conditionSql += " order by ccp.create_datetime desc";
 		}
+		conditionSql += " order by ccp.create_datetime desc";
 		return conditionSql;
 	}
 		

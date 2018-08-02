@@ -72,7 +72,7 @@ public class ImplementScopeDao extends BaseJdbcDao{
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getImplemntScopeRef(String unitOid){
-		String sql = "select scope_oid from daq_implement_scope_ref where unit_oid=? and active=1";
+		String sql = "select scope_oid,tenders_oid,pipeline_oid,project_oid from daq_implement_scope_ref where unit_oid=? and active=1";
 		return this.queryForList(sql, new Object[]{unitOid});
 	}
 }

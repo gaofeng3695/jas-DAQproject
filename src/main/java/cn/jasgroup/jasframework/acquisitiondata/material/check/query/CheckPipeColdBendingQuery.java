@@ -79,9 +79,9 @@ public class CheckPipeColdBendingQuery extends BaseJavaQuery {
 			if (StringUtils.isNotBlank(pipeColdBendingOid)) {
 				conditionSql += " and pipe_cold_bending_oid = :pipeColdBendingOid";
 			}
-			conditionSql += this.dataAuthoritySql;
-			conditionSql += " order by  cpcb.create_datetime desc";
 		}
+		conditionSql += this.dataAuthoritySql;
+		conditionSql += " order by  cpcb.create_datetime desc";
 		return conditionSql;
 	}
 

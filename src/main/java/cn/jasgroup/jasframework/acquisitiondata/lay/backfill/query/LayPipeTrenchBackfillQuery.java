@@ -85,8 +85,8 @@ public class LayPipeTrenchBackfillQuery extends BaseJavaQuery{
 				conditionSql += " and lptb.pipe_segment_or_cross_oid = :pipeSegmentOrCrossOid";
 			}
 			conditionSql += this.dataAuthoritySql;
-			conditionSql += " order by lptb.create_datetime desc";
 		}
+		conditionSql += " order by lptb.create_datetime desc";
 		return conditionSql;
 	}
 
