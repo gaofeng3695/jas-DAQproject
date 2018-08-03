@@ -22,7 +22,7 @@
 		<jas-list-wrapper>
 			<jas-search-for-list slot="search" :form="topSearch" :fields="fields" :fields-config="fieldsConfig" @search="searchList"></jas-search-for-list>
 			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" :search-path="searchPath"
-			  :add-url="addUrl" :detail-url="detailUrl" :delete-path="deletePath" :class-name="className" :template-code="templateCode"></jas-table-for-list>
+			  :add-url="addUrl" :detail-url="detailUrl" :delete-path="deletePath" :class-name="className" :template-code="templateCode"  @locate="locate"></jas-table-for-list>
 		</jas-list-wrapper>
 
 	</div>
@@ -199,6 +199,18 @@
 		methods: {
 			searchList: function () {
 				this.$refs.table.search();
+			},
+			locate: function (row) {
+				// 'daq_cathodic_isolating_piece',
+				// 'daq_cathodic_cable_protection',
+				// 'daq_cathodic_sacrifice_anode',
+				// 'daq_cathodic_insulated_joint',
+				// 'daq_cathodic_solid_decoupler',
+				// 'daq_cathodic_test_stake',
+				// 'daq_cathodic_polarity_drainage',
+				// 'daq_cathodic_anode_bed',
+				var code = 'daq_cathodic_cable_protection';
+				top.app.locate(row.oid, code);
 			},
 		},
 	});

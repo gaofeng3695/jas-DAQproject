@@ -2,7 +2,7 @@
 
 
 Vue.directive('tabclose', {
-    bind: function(el) {
+    bind: function (el) {
         var clickItem = document.createElement("ul");
         clickItem.style.width = "150px";
         clickItem.style.border = "1px solid #e4e7ed";
@@ -51,8 +51,8 @@ Vue.directive('tabclose', {
         item4.style.textAlign = "center";
         clickItem.append(item4);
         el.append(clickItem);
-        setTimeout(function() {
-            document.oncontextmenu = function(event) {
+        setTimeout(function () {
+            document.oncontextmenu = function (event) {
                 var ev = event || window.event;
                 var mX = event.clientX;
                 var mY = event.clientY;
@@ -61,20 +61,20 @@ Vue.directive('tabclose', {
                 clickItem.style.display = "block";
                 return false; //取消window自带的菜单弹出来
             };
-            document.getElementById("item1").onclick = function() {
+            document.getElementById("item1").onclick = function () {
                 // alert("刷新当前页面");
-                var that = VueInstIndex;
+                var that = app;
                 var id = "pane-" + that.currentTap;
                 document.getElementById(id).querySelector("iframe").contentWindow.location.reload(true);
                 clickItem.style.display = "none";
-                // VueInstIndex.refresh();
+                // app.refresh();
             };
-            document.getElementById("item2").onclick = function() {
+            document.getElementById("item2").onclick = function () {
                 // alert("关闭当前页面");
-                var that = VueInstIndex;
-                var tabs = VueInstIndex.tabs;
-                var activeName = VueInstIndex.currentTap;
-                tabs.forEach(function(tab, index) {
+                var that = app;
+                var tabs = app.tabs;
+                var activeName = app.currentTap;
+                tabs.forEach(function (tab, index) {
                     if (tab.name === activeName) {
                         var nextTab = tabs[index + 1] || tabs[index - 1];
                         if (nextTab) {
@@ -82,36 +82,36 @@ Vue.directive('tabclose', {
                         }
                     }
                 });
-                that.tabs = tabs.filter(function(tab) {
+                that.tabs = tabs.filter(function (tab) {
                     return !tab.closable || tab.name !== activeName;
                 });
                 clickItem.style.display = "none";
-                // VueInstIndex.closeCurrent(); //关闭当前
+                // app.closeCurrent(); //关闭当前
             };
-            document.getElementById("item3").onclick = function() {
+            document.getElementById("item3").onclick = function () {
                 // alert("关闭其他页面");
-                // VueInstIndex.closeOther(); //关闭其他
-                var that = VueInstIndex;
-                that.tabs = that.tabs.filter(function(tab) {
+                // app.closeOther(); //关闭其他
+                var that = app;
+                that.tabs = that.tabs.filter(function (tab) {
                     return tab.name == that.currentTap || !tab.closable;
                 });
                 clickItem.style.display = "none";
             };
-            document.getElementById("item4").onclick = function() {
+            document.getElementById("item4").onclick = function () {
                 // alert("关闭所有页面");
-                // VueInstIndex.closeAllPage(); //关闭所有
-                var that = VueInstIndex;
+                // app.closeAllPage(); //关闭所有
+                var that = app;
                 var tab = [];
-                that.tabs.forEach(function(item) {
+                that.tabs.forEach(function (item) {
                     if (!item.closable) {
                         tab.push(item);
                     }
                 });
                 that.tabs = tab;
-                that.currentTap = VueInstIndex.tabs[0].name;
+                that.currentTap = app.tabs[0].name;
                 clickItem.style.display = "none";
             };
-            window.addEventListener('click', function() {
+            window.addEventListener('click', function () {
                 clickItem.style.display = "none";
             });
             // //获取页面有多少个子的iframe 给每个iframe增加点击事件
