@@ -55,7 +55,7 @@
 		<div class="table-wrapper  jas-flex-box is-vertical">
 			<!--搜索区域-->
 			<div class="search-wrap" v-if="isShowSearch">
-				<el-row :gutter="10">
+				<el-row :gutter="10" v-show="!isClosed">
 					<el-form ref="searchTable" :model="searchTable" label-width="120px">
 						<template v-for="item in searchData">
 							<el-col v-if="item.type!='opertion'" :xs="24" :sm="12" :md="12" :lg="6" :xl="6" :class="{'height' : item.type=='UT_03'||item.type=='UT_04'||item.type=='UT_02'||item.type=='UT_14'||item.type=='UT_05'||item.type=='UT_06'||item.type=='UT_07'||item.type=='UT_08' }">
@@ -113,11 +113,17 @@
 								<template v-for="child in item.options">
 									<el-button :type="child.type" size="small" @click="child.click">{{child.name}}</el-button>
 								</template>
+								<el-button size="small" type="text" @click="isClosed=!isClosed" >收起</el-button>
 							</el-col>
 						</template>
 					</el-form>
 				</el-row>
-
+				<el-row v-show="isClosed">
+					<div style="float:left;">搜索栏</div>
+					<div style="float:right;">
+						<el-button size="small" type="text" @click="isClosed=!isClosed" style="padding:0;">展开</el-button>
+					</div>
+				</el-row>
 			</div>
 			<!--按钮区域-->
 			<el-row style="padding:15px 0px">
@@ -182,6 +188,7 @@
 				headStyle: {
 					'background-color': '#f5f7fa ',
 				},
+				isClosed: false,
 				templateCode: "",
 				className: '',
 				isApprove: '',
