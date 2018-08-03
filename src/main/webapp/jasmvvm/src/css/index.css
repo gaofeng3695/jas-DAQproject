@@ -64,6 +64,7 @@ body,
 	padding-right: 30px;
 	font-size: 16px;
 	color: #fff;
+	line-height: 40px;
 }
 
 .user-info .dropdown-wrapper {
@@ -307,9 +308,3 @@ body,
 .LoadingBar--error .LoadingBar-glow {
 	box-shadow: -3px 0 15px 1px rgba(244, 67, 54, .4);
 }
-
-
-
-
-
-
