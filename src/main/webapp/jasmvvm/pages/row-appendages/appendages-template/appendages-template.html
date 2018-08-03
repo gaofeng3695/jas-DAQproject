@@ -91,15 +91,8 @@
 				this.$refs.table.search();
 			},
 			locate: function (row) {
-				var that = this;
-				if (!this.$refs.resizer.panelShowed) {
-					this.$refs.resizer.panelShowed = true;
-					setTimeout(function () {
-						that.jasMap.flashGraphic(row.oid, that.tableName);
-					}, 300);
-				} else {
-					this.jasMap.flashGraphic(row.oid, this.tableName);
-				}
+				var code = this.tableName;
+				top.app.locate(row.oid, code);
 			},
 		},
 	});

@@ -156,15 +156,8 @@
 				this.$refs.table.search();
 			},
 			locate: function (row) {
-				var that = this;
-				if (!this.$refs.resizer.panelShowed) {
-					this.$refs.resizer.panelShowed = true;
-					setTimeout(function () {
-						that.jasMap.flashGraphic(row.oid, 'daq_median_stake');
-					}, 300);
-				} else {
-					this.jasMap.flashGraphic(row.oid, 'daq_median_stake');
-				}
+				var code = 'daq_median_stake';
+				top.app.locate(row.oid, code);
 			},
 
 		},

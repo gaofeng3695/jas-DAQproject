@@ -63,11 +63,20 @@
 		},
 		created: function () {
 			var that = this;
-
+			var tableNameMap = {
+				crossExcavation: 'daq_cross_excavation',
+				crossPipeJacking: 'daq_cross_pipe_jacking',
+				crossBoxCulvert: 'daq_cross_box_culvert',
+				crossDrilling: 'daq_cross_drilling',
+				crossShield: 'daq_cross_shield',
+				crossDrillingBlasting: 'daq_cross_drilling_blasting',
+				crossAcross: 'daq_cross_across',
+			};
 			var param = window.jasTools.base.getParamsInUrl(location.href);
 			this.privilegeCode = param.privilegeCode;
 			this.templateCode = param.templateCode;
 			this.pageCode = param.pageCode;
+			this.tableName = tableNameMap[param.pageCode];
 			this.className = param.className;
 			this.addUrl = './pages/row-cross/cross-template/dialogs/add.html?pageCode=' + this.pageCode;
 			this.detailUrl = './pages/row-cross/cross-template/dialogs/detail.html?pageCode=' + this.pageCode;
@@ -88,20 +97,12 @@
 
 		},
 		methods: {
-
 			searchList: function () {
 				this.$refs.table.search();
 			},
 			locate: function (row) {
-				var that = this;
-				if (!this.$refs.resizer.panelShowed) {
-					this.$refs.resizer.panelShowed = true;
-					setTimeout(function () {
-						that.jasMap.flashGraphic(row.oid, that.tableName);
-					}, 300);
-				} else {
-					this.jasMap.flashGraphic(row.oid, this.tableName);
-				}
+				var code = this.tableName;
+				top.app.locate(row.oid, code);
 			},
 		},
 	});

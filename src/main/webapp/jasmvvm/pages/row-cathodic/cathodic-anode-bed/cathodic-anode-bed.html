@@ -24,8 +24,7 @@
 			<jas-search-for-list slot="search" :form="topSearch" :fields="fields" :fields-config="fieldsConfig" @search="searchList"></jas-search-for-list>
 			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" :search-path="searchPath"
 			  :add-url="addUrl" :detail-url="detailUrl" :delete-path="deletePath" :class-name="className" :template-code="templateCode"
-			  @locate="locate">
-			</jas-table-for-list>
+			  @locate="locate"></jas-table-for-list>
 		</jas-list-wrapper>
 
 
@@ -228,30 +227,23 @@
 			this.templateCode = param.templateCode; //|| "stake-2";
 			this.className = param.className; // || 'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';
 
-			// 'daq_cathodic_isolating_piece',
-			// 'daq_cathodic_cable_protection',
-			// 'daq_cathodic_sacrifice_anode',
-			// 'daq_cathodic_insulated_joint',
-			// 'daq_cathodic_solid_decoupler',
-			// 'daq_cathodic_test_stake',
-			// 'daq_cathodic_polarity_drainage',
-			// 'daq_cathodic_anode_bed',
-			this.tableName = 'daq_cathodic_anode_bed';
+
 		},
 		methods: {
 			searchList: function () {
 				this.$refs.table.search();
 			},
 			locate: function (row) {
-				var that = this;
-				if (!this.$refs.resizer.panelShowed) {
-					this.$refs.resizer.panelShowed = true;
-					setTimeout(function () {
-						that.jasMap.flashGraphic(row.oid, that.tableName);
-					}, 300);
-				} else {
-					this.jasMap.flashGraphic(row.oid, this.tableName);
-				}
+				// 'daq_cathodic_isolating_piece',
+				// 'daq_cathodic_cable_protection',
+				// 'daq_cathodic_sacrifice_anode',
+				// 'daq_cathodic_insulated_joint',
+				// 'daq_cathodic_solid_decoupler',
+				// 'daq_cathodic_test_stake',
+				// 'daq_cathodic_polarity_drainage',
+				// 'daq_cathodic_anode_bed',
+				var code = 'daq_cathodic_anode_bed';
+				top.app.locate(row.oid, code);
 			},
 
 
