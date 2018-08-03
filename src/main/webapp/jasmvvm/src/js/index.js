@@ -5,9 +5,6 @@ window.app = new Vue({
 	data: function () {
 		return {
 			username: localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')).userName,
-			isMapOpen: false,
-			panelMoving: false,
-			mapSrc: '',
 			progress: 0,
 			error: false,
 			direction: 'right',
@@ -75,7 +72,7 @@ window.app = new Vue({
 				if (typeof arr === "object") {
 					arr.forEach(function (item) {
 						item.index = item.id || '';
-						item.icon = item.icon || 'fa fa-bookmark';
+						item.icon = item.icon || 'fa fa-bookmark'; //fa-bars fa-bookmark
 						item.title = item.text;
 						if (item.attributes && item.attributes.URL) {
 							item.link = jasTools.base.rootPath + '/' + item.attributes.URL;
@@ -215,11 +212,6 @@ window.app = new Vue({
 				this._goFullscreen();
 			} else if (command === 'resetPassword') {
 				this._resetPassword();
-			} else if (command === 'map') { //
-				this.isMapOpen = !this.isMapOpen;
-				if (!this.mapSrc) {
-					this.mapSrc = './pages/map/index.html';
-				}
 			}
 		},
 		_goFullscreen: function () {
@@ -325,7 +317,6 @@ window.app = new Vue({
 		},
 		locate: function (id, tableCode) {
 			var that = this;
-			console.log('', id, tableCode)
 			if (!this.$refs.resizer.panelShowed) {
 				this.$refs.resizer.panelShowed = true;
 				setTimeout(function () {

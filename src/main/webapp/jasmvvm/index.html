@@ -34,7 +34,6 @@
 				<!-- header 开始 -->
 				<div class="header">
 					<div class="logo item">
-
 					</div>
 					<div class="name item">
 						<div class="china">中盈安信研发平台</div>
@@ -42,13 +41,22 @@
 					</div>
 
 					<div class="user-info">
+						<!-- <div style="height:40px;">
+							<i class="fa fa-arrows-alt" aria-hidden="true"></i>
+							<i class="fa fa-unlock-alt" aria-hidden="true"></i>
+							<i style="font-size: 18px;" class="fa fa-sign-out" aria-hidden="true"></i>
+
+						</div>
+						<div style="height:40px;">
+							<i style="font-size: 18px;" class="fa fa-user-circle-o" aria-hidden="true"></i>
+							<span>{{username}}</span>
+						</div> -->
 						<el-dropdown class="dropdown-wrapper" trigger="click" @command="handleCommand">
 							<span class="el-dropdown-link">
 								<img class="user-logo" src="./src/images/enterlogo.png"> {{username}}
 							</span>
 							<el-dropdown-menu slot="dropdown">
 								<el-dropdown-item command="fullscreen">切换全屏</el-dropdown-item>
-								<el-dropdown-item command="map">{{isMapOpen?'隐藏地图':'打开地图'}}</el-dropdown-item>
 								<el-dropdown-item command="resetPassword">修改密码</el-dropdown-item>
 								<el-dropdown-item command="loginout">退出登录</el-dropdown-item>
 							</el-dropdown-menu>
@@ -72,14 +80,14 @@
 								<template v-for="item in items">
 									<el-submenu v-if="item.subs" :index="item.index">
 										<template slot="title">
-											<i :class="item.icon"></i>
+											<i :class=" 'fa fa-folder' || item.icon"></i>
 											<span slot="title">{{ item.title }}</span>
 										</template>
 										<!-- 第二层菜单开始 -->
 										<template v-for="subitem in item.subs">
 											<el-submenu v-if="subitem.subs" :index="subitem.index">
 												<template slot="title">
-													<i :class="subitem.icon"></i>
+													<i :class="  'fa fa-bars' || subitem.icon"></i>
 													<span slot="title">{{ subitem.title }}</span>
 												</template>
 
@@ -132,7 +140,7 @@
 
 											</el-submenu>
 											<el-menu-item :index="subitem.index" v-else>
-												<i :class="subitem.icon"></i>
+												<i :class=" 'fa fa-bars' || subitem.icon"></i>
 												<span slot="title">{{ subitem.title }}</span>
 											</el-menu-item>
 										</template>
@@ -140,7 +148,7 @@
 
 									</el-submenu>
 									<el-menu-item :index="item.index" v-else>
-										<i :class="item.icon"></i>
+										<i :class=" 'fa fa-folder' || item.icon"></i>
 										<span slot="title">{{ item.title }}</span>
 									</el-menu-item>
 								</template>
