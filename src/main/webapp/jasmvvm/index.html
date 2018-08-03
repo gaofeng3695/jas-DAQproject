@@ -160,27 +160,24 @@
 				<el-main>
 					<div v-tabclose></div>
 
-					<multipane @paneresizestart="panelMoving = true" @paneresizestop="panelMoving = false" class="foo" layout="horizontal" style="height: 100%;">
-						<div v-loading="panelMoving" class="mapWrap" v-show="isMapOpen" :style="{ height: '40%', minHeight: '20%',maxHeight: '80%' }"
-						  element-loading-spinner="11" element-loading-background="rgba(0, 0, 0, 0)">
-							<iframe class="iframe" :src="mapSrc" frameborder="0" height="100%"></iframe>
-						</div>
-						<multipane-resizer v-show="isMapOpen"></multipane-resizer>
-						<div v-loading="panelMoving" :style="{ flexGrow: 1 }" style="height:0%;" element-loading-spinner="11" element-loading-background="rgba(0, 0, 0, 0)">
-							<el-tabs class="tabswrapper jas-flex-box" v-model="currentTap" type="card" @tab-remove="removeTab">
-								<el-tab-pane v-for="(item, index) in tabs" :key="item.link" :name="item.name" :closable="item.closable">
-									<span slot="label">
-										<i :class="item.icon||'el-icon-date'"></i> {{item.title}}
-									</span>
-									<div class="iframewrapper">
-										<div class="iframesubwrapper">
-											<iframe class="iframe" :src="item.link" frameborder="0" height="100%"></iframe>
-										</div>
+					<jas-two-panel-resizer ref="resizer" layout="horizontal" length="40%" @paneresize="paneresize">
+						<div slot="closePanel" id="jasMap" class="jasmap" style="height:100%;"> </div>
+
+						<el-tabs slot="mainPanel" class="tabswrapper jas-flex-box" v-model="currentTap" type="card" @tab-remove="removeTab">
+							<el-tab-pane v-for="(item, index) in tabs" :key="item.link" :name="item.name" :closable="item.closable">
+								<span slot="label">
+									<i :class="item.icon||'el-icon-date'"></i> {{item.title}}
+								</span>
+								<div class="iframewrapper">
+									<div class="iframesubwrapper">
+										<iframe class="iframe" :src="item.link" frameborder="0" height="100%"></iframe>
 									</div>
-								</el-tab-pane>
-							</el-tabs>
-						</div>
-					</multipane>
+								</div>
+							</el-tab-pane>
+						</el-tabs>
+
+					</jas-two-panel-resizer>
+
 
 				</el-main>
 			</el-container>
@@ -212,7 +209,8 @@
 <!-- 先引入index的配置文件，再引入index文件 -->
 <script src="./common/components/jas-components.js"></script>
 <script src="./common/js/jas-tools.js"></script>
-<!-- <script src="./src/js/index-config.js"></script> -->
+<script id="mapApi" src="./pages/map/mapjs/mapjs4ol.js"></script>
+
 <script src="./src/js/index.js"></script>
 
 </html>

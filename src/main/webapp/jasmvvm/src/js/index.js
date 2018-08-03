@@ -9,15 +9,15 @@
 				username: localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')).userName,
 				isMapOpen: false,
 				panelMoving: false,
-				mapSrc : '',
+				mapSrc: '',
 				progress: 0,
 				error: false,
 				direction: 'right',
 
 				isExpend: true,
 				menuWith: 200,
-				menusOpened: ['P-daq-hq-001006001'],
-				currentTap: 'P-daq-hq-001006001',
+				menusOpened: ['P-daq-hq-pd-001001'],
+				currentTap: 'P-daq-hq-pd-001001',
 				tabs: [], // 打开的标签页
 				items: [] //菜单数组
 			}
@@ -39,6 +39,16 @@
 				}
 			}
 		},
+		created: function () {
+			this.initJasMap();
+		},
+		mounted: function () {
+			this.goProgess();
+			this._queryMenuData();
+			this._listenWindowClose();
+			this._setWindowResizeEventToCloseMenu();
+			this._requestLoginInfo();
+		},
 		methods: {
 			_queryMenuData: function () {
 				var that = this; // 获取左侧菜单
@@ -52,8 +62,8 @@
 						"appId": "402894a152681ba30152681e8b320003",
 						"language": "zh_CN"
 					},
-					success: function (data,xhr,param) {
-						if(typeof data  === 'object' && data.length > 0){
+					success: function (data, xhr, param) {
+						if (typeof data === 'object' && data.length > 0) {
 							that.items = that._formatMenus(data);
 							that.tabs = that._createTabsArr(that.menusOpened, that.items);
 						}
@@ -207,9 +217,9 @@
 					this._goFullscreen();
 				} else if (command === 'resetPassword') {
 					this._resetPassword();
-				}else if (command === 'map') { //
+				} else if (command === 'map') { //
 					this.isMapOpen = !this.isMapOpen;
-					if(!this.mapSrc){
+					if (!this.mapSrc) {
 						this.mapSrc = './pages/map/index.html';
 					}
 				}
@@ -287,17 +297,37 @@
 
 
 			},
-
+			paneresize: function () {
+				this.jasMap.resizeMap();
+			},
+			initJasMap: function () {
+				var onCenterStakeLayerClicked = function (e) {
+					//业务逻辑
+				};
+				var layersVisible = {
+					daq_median_stake: true,
+				};
+				layersVisible[this.tableName] = true;
+				this.jasMap = new JasMap({
+					layersVisible: layersVisible,
+					appConfigPath: './pages/map/config.json',
+					onMapLoaded: function (e) {},
+					onError: function (e) {
+						console.error(e.data.message);
+						top.Vue.prototype.$message({
+							message: e.data.message,
+							type: 'error'
+						});
+					},
+					onLayerAdded: function (e) {
+						var layerId = e.data.layerId;
+						if (layerId === "centerlinestake") {
+							//添加单个图层的点击事件
+							this.addLayerClickEventListener(layerId, onCenterStakeLayerClicked);
+						}
+					}
+				});
+			},
 		},
-		created: function () {
-
-		},
-		mounted: function () {
-			this.goProgess();
-			this._queryMenuData();
-			this._listenWindowClose();
-			this._setWindowResizeEventToCloseMenu();
-			this._requestLoginInfo();
-		}
 	})
 })(window, Vue, screenfull);

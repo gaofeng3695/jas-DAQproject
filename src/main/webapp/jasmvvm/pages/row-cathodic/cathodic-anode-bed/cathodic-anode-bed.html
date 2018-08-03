@@ -19,27 +19,24 @@
 
 <body>
 	<div id="app" v-cloak>
-		<jas-two-panel-resizer ref="resizer" layout="horizontal" length="40%" @paneresize="paneresize">
-			<div slot="closePanel" id="jasMap" class="jasmap"></div>
-			<jas-list-wrapper slot="mainPanel">
-				<jas-search-for-list slot="search" :form="topSearch" :fields="fields" :fields-config="fieldsConfig" @search="searchList"></jas-search-for-list>
-				<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" :search-path="searchPath"
-				  :add-url="addUrl" :detail-url="detailUrl" :delete-path="deletePath" :class-name="className" :template-code="templateCode" @locate="locate"></jas-table-for-list>
-			</jas-list-wrapper>
-		</jas-two-panel-resizer>
+
+		<jas-list-wrapper>
+			<jas-search-for-list slot="search" :form="topSearch" :fields="fields" :fields-config="fieldsConfig" @search="searchList"></jas-search-for-list>
+			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" :search-path="searchPath"
+			  :add-url="addUrl" :detail-url="detailUrl" :delete-path="deletePath" :class-name="className" :template-code="templateCode"
+			  @locate="locate">
+			</jas-table-for-list>
+		</jas-list-wrapper>
+
 
 	</div>
 </body>
 
 <script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
 <script src="./../../../lib/vue/vue.js"></script>
-<script src="./../../../lib/vue-multipane/vue-multipane.js"></script>
 <script src="./../../../lib/element-ui/v2.4.1/index.min.js"></script>
 <script src="./../../../common/components/jas-components.js"></script>
 <script src="./../../../common/js/jas-tools.js"></script>
-
-<script id="mapApi" src="./../../map/mapjs/mapjs4ol.js"></script>
-
 
 <script>
 	var vm = new Vue({
@@ -240,7 +237,6 @@
 			// 'daq_cathodic_polarity_drainage',
 			// 'daq_cathodic_anode_bed',
 			this.tableName = 'daq_cathodic_anode_bed';
-			this.initJasMap();
 		},
 		methods: {
 			searchList: function () {
@@ -257,37 +253,8 @@
 					this.jasMap.flashGraphic(row.oid, this.tableName);
 				}
 			},
-			paneresize: function () {
-				this.jasMap.resizeMap();
-			},
-			initJasMap: function () {
-				var onCenterStakeLayerClicked = function (e) {
-					//业务逻辑
-				};
-				var layersVisible = {
-					daq_median_stake: true,
-				};
-				layersVisible[this.tableName] = true;
-				this.jasMap = new JasMap({
-					layersVisible: layersVisible,
-					appConfigPath: './../../map/config.json',
-					onMapLoaded: function (e) {},
-					onError: function (e) {
-						console.error(e.data.message);
-						top.Vue.prototype.$message({
-							message: e.data.message,
-							type: 'error'
-						});
-					},
-					onLayerAdded: function (e) {
-						var layerId = e.data.layerId;
-						if (layerId === "centerlinestake") {
-							//添加单个图层的点击事件
-							this.addLayerClickEventListener(layerId, onCenterStakeLayerClicked);
-						}
-					}
-				});
-			},
+
+
 		},
 	});
 </script>
