@@ -4544,6 +4544,327 @@ comment on column daq_appendages_casing_pipe.active is '有效标志';
 
 /**********管道附属物end***************/
 /**********中低压begin***************/
+CREATE TABLE daq_mv_pipe_node (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	pipe_node_code VARCHAR (50),
+	pipe_node_type VARCHAR (50),
+	pipe_node_spec VARCHAR (50),
+	manufacturer VARCHAR (60),
+	factory_num VARCHAR (60),
+	pointx NUMERIC (9, 3),
+	pointy NUMERIC (9, 3),
+	pointz NUMERIC (7, 2),
+	buried_depth NUMERIC (7, 2),
+	user_building VARCHAR (60),
+	is_electronic_label SMALLINT,
+	electronic_label_type VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL
+);
+
+comment on table daq_mv_pipe_node is '节点信息表';
+comment on column daq_mv_pipe_node.oid is '主键';
+comment on column daq_mv_pipe_node.project_oid is '项目oid';
+comment on column daq_mv_pipe_node.pipe_node_code is '节点编号';
+comment on column daq_mv_pipe_node.pipe_node_type is '点类型';
+comment on column daq_mv_pipe_node.pipe_node_spec is '规格';
+comment on column daq_mv_pipe_node.manufacturer is '生产厂家';
+comment on column daq_mv_pipe_node.factory_num is '出厂编号';
+comment on column daq_mv_pipe_node.pointx is 'X坐标';
+comment on column daq_mv_pipe_node.pointy is 'Y坐标';
+comment on column daq_mv_pipe_node.pointz is '管顶高程(m)';
+comment on column daq_mv_pipe_node.buried_depth is '埋深(m)';
+comment on column daq_mv_pipe_node.user_building is '用户楼宇';
+comment on column daq_mv_pipe_node.is_electronic_label is '是否设置电子标签';
+comment on column daq_mv_pipe_node.electronic_label_type is '电子标签类型';
+comment on column daq_mv_pipe_node.collection_person is '采集人员';
+comment on column daq_mv_pipe_node.collection_date is '采集日期';
+comment on column daq_mv_pipe_node.geo_state is '空间数据状态';
+comment on column daq_mv_pipe_node.remarks is '备注';
+comment on column daq_mv_pipe_node.create_user_id is '创建人id';
+comment on column daq_mv_pipe_node.create_user_name is '创建人名称';
+comment on column daq_mv_pipe_node.create_datetime is '创建时间';
+comment on column daq_mv_pipe_node.modify_user_id is '修改人id';
+comment on column daq_mv_pipe_node.modify_user_name is '修改人名称';
+comment on column daq_mv_pipe_node.modify_datetime is '修改时间';
+comment on column daq_mv_pipe_node.active is '有效标志';
+create index INDEX_DAQ_MV_PIPE_NODE_PIPE_NODE_CODE_6 ON daq_mv_pipe_node ( pipe_node_code );
+
+CREATE TABLE daq_mv_pipe_section (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	pipe_section_code VARCHAR (50),
+	start_pipe_node_code VARCHAR (50),
+	start_pointx NUMERIC (9, 3),
+	start_pointy NUMERIC (9, 3),
+	start_pointz NUMERIC (7, 2),
+	end_pipe_node_code VARCHAR (50),
+	end_pointx NUMERIC (9, 3),
+	end_pointy NUMERIC (9, 3),
+	end_pointz NUMERIC (7, 2),
+	pipe_section_length NUMERIC (12, 3),
+	pipe_diameter NUMERIC (9, 3),
+	wall thickness NUMERIC (9, 3),
+	pipe_section_material VARCHAR (50),
+	pipe_section_spec VARCHAR (50),
+	design_life SMALLINT,
+	pipe_outer_anticorrosive SMALLINT,
+	outer_anticorrosive_grade VARCHAR (10),
+	cathodic_protection_method SMALLINT,
+	burial_method SMALLINT,
+	pipe_section_category SMALLINT,
+	construct_category VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL
+);
+
+comment on table daq_mv_pipe_section is '管段信息表';
+comment on column daq_mv_pipe_section.oid is '主键';
+comment on column daq_mv_pipe_section.project_oid is '项目oid';
+comment on column daq_mv_pipe_section.pipe_section_code is '管段编号';
+comment on column daq_mv_pipe_section.start_pipe_node_code is '起始节点编号';
+comment on column daq_mv_pipe_section.start_pointx is '起始点X坐标';
+comment on column daq_mv_pipe_section.start_pointy is '起始点Y坐标';
+comment on column daq_mv_pipe_section.start_pointz is '起始点管顶高程(m)';
+comment on column daq_mv_pipe_section.end_pipe_node_code is '终止节点编号';
+comment on column daq_mv_pipe_section.end_pointx is '终止点X坐标';
+comment on column daq_mv_pipe_section.end_pointy is '终止点Y坐标';
+comment on column daq_mv_pipe_section.end_pointz is '终止点管顶高程(m)';
+comment on column daq_mv_pipe_section.pipe_section_length is '管段长度(m)';
+comment on column daq_mv_pipe_section.pipe_diameter is '管径(mm)';
+comment on column daq_mv_pipe_section.wall thickness is '壁厚(mm)';
+comment on column daq_mv_pipe_section.pipe_section_material is '材质';
+comment on column daq_mv_pipe_section.pipe_section_spec is '规格';
+comment on column daq_mv_pipe_section.design_life is '管道设计年限(年)';
+comment on column daq_mv_pipe_section.pipe_outer_anticorrosive is '管道外防腐';
+comment on column daq_mv_pipe_section.outer_anticorrosive_grade is '防腐等级';
+comment on column daq_mv_pipe_section.cathodic_protection_method is '阴极保护方式';
+comment on column daq_mv_pipe_section.burial_method is '埋设方式';
+comment on column daq_mv_pipe_section.pipe_section_category is '管段类别';
+comment on column daq_mv_pipe_section.construct_category is '施工方式';
+comment on column daq_mv_pipe_section.collection_person is '采集人员';
+comment on column daq_mv_pipe_section.collection_date is '采集日期';
+comment on column daq_mv_pipe_section.geo_state is '空间数据状态';
+comment on column daq_mv_pipe_section.remarks is '备注';
+comment on column daq_mv_pipe_section.create_user_id is '创建人id';
+comment on column daq_mv_pipe_section.create_user_name is '创建人名称';
+comment on column daq_mv_pipe_section.create_datetime is '创建时间';
+comment on column daq_mv_pipe_section.modify_user_id is '修改人id';
+comment on column daq_mv_pipe_section.modify_user_name is '修改人名称';
+comment on column daq_mv_pipe_section.modify_datetime is '修改时间';
+comment on column daq_mv_pipe_section.active is '有效标志';
+create index INDEX_DAQ_MV_PIPE_SECTION_PIPE_SECTION_CODE_6 ON daq_mv_pipe_section ( pipe_section_code );
+
+CREATE TABLE daq_mv_across_info (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	pipe_section_code VARCHAR (50),
+	start_pipe_node_code VARCHAR (50),
+	start_pointx NUMERIC (9, 3),
+	start_pointy NUMERIC (9, 3),
+	start_pointz NUMERIC (7, 2),
+	end_pipe_node_code VARCHAR (50),
+	end_pointx NUMERIC (9, 3),
+	end_pointy NUMERIC (9, 3),
+	end_pointz NUMERIC (7, 2),
+	pipe_section_length NUMERIC (12, 3),
+	across_method VARCHAR (50),
+	across_object VARCHAR (50),
+	burial_method SMALLINT,
+	pipe_section_category SMALLINT,
+	pipe_section_material VARCHAR (50),
+	pipe_section_spec VARCHAR (50),
+	outer_diameter NUMERIC (9, 3),
+	wall thickness NUMERIC (9, 3),
+	design_life SMALLINT,
+	measure_unit VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL
+);
+
+comment on table daq_mv_across_info is '穿越信息表';
+comment on column daq_mv_across_info.oid is '主键';
+comment on column daq_mv_across_info.project_oid is '项目oid';
+comment on column daq_mv_across_info.pipe_section_code is '管段编号';
+comment on column daq_mv_across_info.start_pipe_node_code is '起始节点编号';
+comment on column daq_mv_across_info.start_pointx is '起始点X坐标';
+comment on column daq_mv_across_info.start_pointy is '起始点Y坐标';
+comment on column daq_mv_across_info.start_pointz is '起始点管顶高程(m)';
+comment on column daq_mv_across_info.end_pipe_node_code is '终止节点编号';
+comment on column daq_mv_across_info.end_pointx is '终止点X坐标';
+comment on column daq_mv_across_info.end_pointy is '终止点Y坐标';
+comment on column daq_mv_across_info.end_pointz is '终止点管顶高程(m)';
+comment on column daq_mv_across_info.pipe_section_length is '管段长度(m)';
+comment on column daq_mv_across_info.across_method is '穿越方式';
+comment on column daq_mv_across_info.across_object is '穿越对象类型';
+comment on column daq_mv_across_info.burial_method is '埋地方式';
+comment on column daq_mv_across_info.pipe_section_category is '管段类别';
+comment on column daq_mv_across_info.pipe_section_material is '材质';
+comment on column daq_mv_across_info.pipe_section_spec is '规格';
+comment on column daq_mv_across_info.outer_diameter is '外径';
+comment on column daq_mv_across_info.wall thickness is '壁厚';
+comment on column daq_mv_across_info.design_life is '管道设计年限';
+comment on column daq_mv_across_info.measure_unit is '陀螺仪测量单位 ';
+comment on column daq_mv_across_info.collection_person is '采集人员';
+comment on column daq_mv_across_info.collection_date is '采集日期';
+comment on column daq_mv_across_info.geo_state is '空间数据状态';
+comment on column daq_mv_across_info.remarks is '备注';
+comment on column daq_mv_across_info.create_user_id is '创建人id';
+comment on column daq_mv_across_info.create_user_name is '创建人名称';
+comment on column daq_mv_across_info.create_datetime is '创建时间';
+comment on column daq_mv_across_info.modify_user_id is '修改人id';
+comment on column daq_mv_across_info.modify_user_name is '修改人名称';
+comment on column daq_mv_across_info.modify_datetime is '修改时间';
+comment on column daq_mv_across_info.active is '有效标志';
+create index INDEX_DAQ_MV_ACROSS_INFO_PIPE_SECTION_CODE_6 ON daq_mv_across_info ( pipe_section_code );
+
+CREATE TABLE daq_mv_stride_across_info (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	pipe_section_code VARCHAR (50),
+	start_pipe_node_code VARCHAR (50),
+	start_pointx NUMERIC (9, 3),
+	start_pointy NUMERIC (9, 3),
+	start_pointz NUMERIC (7, 2),
+	end_pipe_node_code VARCHAR (50),
+	end_pointx NUMERIC (9, 3),
+	end_pointy NUMERIC (9, 3),
+	end_pointz NUMERIC (7, 2),
+	pipe_section_length NUMERIC (12, 3),
+	across_method VARCHAR (50),
+	across_object VARCHAR (50),
+	burial_method SMALLINT,
+	pipe_section_category SMALLINT,
+	pipe_section_material VARCHAR (50),
+	pipe_section_spec VARCHAR (50),
+	outer_diameter NUMERIC (9, 3),
+	wall thickness NUMERIC (9, 3),
+	design_life SMALLINT,
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL
+);
+
+comment on table daq_mv_stride_across_info is '跨越信息表';
+comment on column daq_mv_stride_across_info.oid is '主键';
+comment on column daq_mv_stride_across_info.project_oid is '项目oid';
+comment on column daq_mv_stride_across_info.pipe_section_code is '管段编号';
+comment on column daq_mv_stride_across_info.start_pipe_node_code is '起始节点编号';
+comment on column daq_mv_stride_across_info.start_pointx is '起始点X坐标';
+comment on column daq_mv_stride_across_info.start_pointy is '起始点Y坐标';
+comment on column daq_mv_stride_across_info.start_pointz is '起始点管顶高程(m)';
+comment on column daq_mv_stride_across_info.end_pipe_node_code is '终止节点编号';
+comment on column daq_mv_stride_across_info.end_pointx is '终止点X坐标';
+comment on column daq_mv_stride_across_info.end_pointy is '终止点Y坐标';
+comment on column daq_mv_stride_across_info.end_pointz is '终止点管顶高程(m)';
+comment on column daq_mv_stride_across_info.pipe_section_length is '管段长度(m)';
+comment on column daq_mv_stride_across_info.across_method is '穿越方式';
+comment on column daq_mv_stride_across_info.across_object is '穿越对象类型';
+comment on column daq_mv_stride_across_info.burial_method is '埋地方式';
+comment on column daq_mv_stride_across_info.pipe_section_category is '管段类别';
+comment on column daq_mv_stride_across_info.pipe_section_material is '材质';
+comment on column daq_mv_stride_across_info.pipe_section_spec is '规格';
+comment on column daq_mv_stride_across_info.outer_diameter is '外径';
+comment on column daq_mv_stride_across_info.wall thickness is '壁厚';
+comment on column daq_mv_stride_across_info.design_life is '管道设计年限';
+comment on column daq_mv_stride_across_info.collection_person is '采集人员';
+comment on column daq_mv_stride_across_info.collection_date is '采集日期';
+comment on column daq_mv_stride_across_info.geo_state is '空间数据状态';
+comment on column daq_mv_stride_across_info.remarks is '备注';
+comment on column daq_mv_stride_across_info.create_user_id is '创建人id';
+comment on column daq_mv_stride_across_info.create_user_name is '创建人名称';
+comment on column daq_mv_stride_across_info.create_datetime is '创建时间';
+comment on column daq_mv_stride_across_info.modify_user_id is '修改人id';
+comment on column daq_mv_stride_across_info.modify_user_name is '修改人名称';
+comment on column daq_mv_stride_across_info.modify_datetime is '修改时间';
+comment on column daq_mv_stride_across_info.active is '有效标志';
+create index INDEX_DAQ_MV_STRIDE_ACROSS_INFO_PIPE_SECTION_CODE_6 ON daq_mv_stride_across_info ( pipe_section_code );
+
+CREATE TABLE daq_mv_pipe_trench_protect (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	pipe_trench_length NUMERIC (9, 2),
+	pipe_trench_width NUMERIC (9, 3),
+	pipe_trench_height NUMERIC (9, 4),
+	start_pointx NUMERIC (9, 3),
+	start_pointy NUMERIC (9, 3),
+	start_pointz NUMERIC (7, 2),
+	end_pointx NUMERIC (9, 3),
+	end_pointy NUMERIC (9, 3),
+	end_pointz NUMERIC (7, 2),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL
+);
+
+comment on table daq_mv_pipe_trench_protect is '管沟信息表';
+comment on column daq_mv_pipe_trench_protect.oid is '主键';
+comment on column daq_mv_pipe_trench_protect.project_oid is '项目oid';
+comment on column daq_mv_pipe_trench_protect.pipe_trench_length is '管沟长度(m)';
+comment on column daq_mv_pipe_trench_protect.pipe_trench_width is '管沟宽度(m)';
+comment on column daq_mv_pipe_trench_protect.pipe_trench_height is '管沟高度(m)';
+comment on column daq_mv_pipe_trench_protect.start_pointx is '起始点X坐标';
+comment on column daq_mv_pipe_trench_protect.start_pointy is '起始点Y坐标';
+comment on column daq_mv_pipe_trench_protect.start_pointz is '起始点管顶高程(m)';
+comment on column daq_mv_pipe_trench_protect.end_pointx is '终止点X坐标';
+comment on column daq_mv_pipe_trench_protect.end_pointy is '终止点Y坐标';
+comment on column daq_mv_pipe_trench_protect.end_pointz is '终止点管顶高程(m)';
+comment on column daq_mv_pipe_trench_protect.collection_person is '采集人员';
+comment on column daq_mv_pipe_trench_protect.collection_date is '采集日期';
+comment on column daq_mv_pipe_trench_protect.geo_state is '空间数据状态';
+comment on column daq_mv_pipe_trench_protect.remarks is '备注';
+comment on column daq_mv_pipe_trench_protect.create_user_id is '创建人id';
+comment on column daq_mv_pipe_trench_protect.create_user_name is '创建人名称';
+comment on column daq_mv_pipe_trench_protect.create_datetime is '创建时间';
+comment on column daq_mv_pipe_trench_protect.modify_user_id is '修改人id';
+comment on column daq_mv_pipe_trench_protect.modify_user_name is '修改人名称';
+comment on column daq_mv_pipe_trench_protect.modify_datetime is '修改时间';
+comment on column daq_mv_pipe_trench_protect.active is '有效标志';
+create index INDEX_DAQ_MV_PIPE_TRENCH_PROTECT_PIPE_TRENCH_LENGTH_6 ON daq_mv_pipe_trench_protect ( pipe_trench_length );
 
 /**********中低压end***************/
 /*********数据审核记录表begin***************/

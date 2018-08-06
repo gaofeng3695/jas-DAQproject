@@ -27,7 +27,7 @@ public class PipeFittingDao{
 		String sql= null;
 		switch (pipeTypeCode) {
 		case "pipe_type_code_001"://直钢管
-			sql = "select pipe_code as value,pipe_code as key from daq_material_pipe t where active=1 and is_cut=1 and is_use=0 and is_cold_bend=0";
+			sql = "select pipe_code as value,pipe_code as key from daq_material_pipe t where active=1 and is_use=0 and is_cold_bend=0";
 			break;
 		case "pipe_type_code_002"://热煨弯管
 			sql = "select hot_bends_code as key,hot_bends_code as value from daq_material_hot_bends  t where active=1 and is_use=0";
