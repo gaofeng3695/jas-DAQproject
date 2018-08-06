@@ -12,7 +12,7 @@ import cn.jasgroup.jasframework.dataaccess.base.BaseJdbcDao;
 public class WeldDao extends BaseJdbcDao{
 	
 	public List<Map<String,Object>> getWeldList(String pipeSegmentOrCrossOid){
-		String sql = "select t.oid as key,t.weld_code as value from daq_construction_weld t where t.active=1 and t.pipe_segment_or_cross_oid=?";
+		String sql = "select t.oid as key,t.weld_code as value from daq_construction_weld t where t.active=1 and t.pipe_segment_or_cross_oid=? and approve_status=2";
 		return this.queryForList(sql, new Object[]{pipeSegmentOrCrossOid});
 	}
 	
