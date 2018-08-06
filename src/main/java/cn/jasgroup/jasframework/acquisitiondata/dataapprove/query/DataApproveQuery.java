@@ -37,7 +37,6 @@ public class DataApproveQuery extends BaseJavaQuery{
 		}else{
 			sql +=" and t.business_oid='' order by t.create_datetime desc";
 		}
-		sql += " order by t.create_datetime desc";
 		return sql;
 	}
 	
