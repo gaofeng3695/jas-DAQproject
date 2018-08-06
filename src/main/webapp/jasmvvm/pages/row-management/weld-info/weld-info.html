@@ -162,7 +162,7 @@
 						name: '外观质量检查',
 						field: 'surfaceCheck',
 						formatter: function (row, column, cellvalue, index) {
-							if (cellvalue == '0') {
+							if (cellvalue == '1') {
 								return '合格';
 							} else {
 								return '不合格';
@@ -181,7 +181,7 @@
 						name: '是否金口',
 						field: 'isGoldeJoint',
 						formatter: function (row, column, cellvalue, index) {
-							if (cellvalue == '0') {
+							if (cellvalue == '1') {
 								return '是';
 							} else {
 								return '否';
@@ -191,7 +191,7 @@
 						name: '是否连头口',
 						field: 'isPipeHead',
 						formatter: function (row, column, cellvalue, index) {
-							if (cellvalue == '0') {
+							if (cellvalue == '1') {
 								return '是';
 							} else {
 								return '否';

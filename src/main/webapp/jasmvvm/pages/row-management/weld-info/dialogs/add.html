@@ -93,14 +93,14 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="打底人员">
-								<el-select v-model="formData.padderOid" clearable placeholder="请选择打底人员" size="small">
+								<el-select v-model="formData.padderOid" clearable placeholder="请选择打底人员" size="small" multiple>
 									<el-option v-for="item in domain.persons" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="填充人员">
-								<el-select v-model="formData.coverOid" clearable placeholder="请选择填充人员" size="small">
+								<el-select v-model="formData.coverOid" clearable placeholder="请选择填充人员" size="small" multiple>
 									<el-option v-for="item in domain.persons" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
@@ -108,7 +108,7 @@
 
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="盖面人员">
-								<el-select v-model="formData.renderOid" clearable placeholder="请选择盖面人员" size="small">
+								<el-select v-model="formData.renderOid" clearable placeholder="请选择盖面人员" size="small" multiple>
 									<el-option v-for="item in domain.persons" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
@@ -312,19 +312,21 @@
 					frontPipeCodes: [], //前管件
 					backPipeCodes: [], //后管件
 					surfaceChecks: [{
-						key: 0,
+						key: 1,
 						value: '合格'
 					}, {
-						key: 1,
+						key: 0,
 						value: '不合格'
 					}], //外观质量检查
+					value:'1',
 					isPass: [{
-						key: 0,
+						key: 1,
 						value: '是'
 					}, {
-						key: 1,
+						key: 0,
 						value: '否'
-					}] //是否
+					}],//是否
+					value:"1"
 				},
 				rules: {
 					projectOid: [{
@@ -420,13 +422,13 @@
 					weldRodBatchNum: null,
 					weldWireBatchNum: null,
 					weldProduce: null,
-					surfaceCheck: null,
+					surfaceCheck: 1,
 					constructUnit: null,
 					workUnitOid: null,
 					coverOid: null,
 					padderOid: null,
 					renderOid: null,
-					isGoldeJoint: null,
+					isGoldeJoint: 0,
 					isPipeHead: 0,
 					constructDate: null,
 					supervisionUnit: null,
@@ -692,10 +694,26 @@
 					url = jasTools.base.rootPath +
 						"/jdbc/commonData/constructionWeld/update.do";
 				}
-
+				var coverOid = that.formData.coverOid;
+				var coverOidStr = "";
+				for(var i=0;i<coverOid.length;i++){
+					coverOidStr+=coverOid[i]+",";
+				}
+				var renderOid = that.formData.renderOid;
+				var renderOidStr = "";
+				for(var i=0;i<renderOid.length;i++){
+					renderOidStr+=renderOid[i]+",";
+				}
+				var padderOid = that.formData.padderOid;
+				var padderOidStr = "";
+				for(var i=0;i<padderOid.length;i++){
+					padderOidStr+=padderOid[i]+",";
+				}
+				that.formData.coverOid = coverOidStr.substr(0,coverOidStr.length-1)
+				that.formData.renderOid = renderOidStr.substr(0,renderOidStr.length-1)
+				that.formData.padderOid = padderOidStr.substr(0,padderOidStr.length-1)
 				jasTools.ajax.post(url, that.formData, function (data) {
 					that.$refs.upload.uploadFile(data.data || that.oid);
-
 				});
 
 			},
@@ -712,9 +730,29 @@
 				jasTools.ajax.post(url, {
 					oid: that.oid
 				}, function (data) {
-					for (var key in that.formData) {
+					/* for (var key in that.formData) {
 						that.formData[key] = data.rows[0][key];
+					} */
+					that.formData = data.rows[0];
+					
+					if (that.formData.coverOid.length == 0) {
+						that.formData.coverOid = [];
+					} else {
+						that.formData.coverOid = that.formData.coverOid.split(",");
 					}
+					
+					if (that.formData.renderOid.length == 0) {
+						that.formData.renderOid = [];
+					} else {
+						that.formData.renderOid = that.formData.renderOid.split(",");
+					}
+					
+					if (that.formData.padderOid.length == 0) {
+						that.formData.padderOid = [];
+					} else {
+						that.formData.padderOid = that.formData.padderOid.split(",");
+					}
+					
 					that.projectChanged(data.rows[0].projectOid);
 					that.tendersChanged(data.rows[0].tendersOid);
 					that.getSupervisionUnit(data.rows[0].tendersOid);
