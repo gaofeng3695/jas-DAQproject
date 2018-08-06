@@ -64,6 +64,7 @@ body,
 	padding-right: 30px;
 	font-size: 16px;
 	color: #fff;
+	line-height: 40px;
 }
 
 .user-info .dropdown-wrapper {
@@ -306,47 +307,4 @@ body,
 
 .LoadingBar--error .LoadingBar-glow {
 	box-shadow: -3px 0 15px 1px rgba(244, 67, 54, .4);
-}
-
-
-/* 分栏样式 */
-
-.multipane.foo.layout-v .multipane-resizer {
-	margin: 0;
-	left: 0;
-	/* reset default styling */
-	width: 15px;
-	background: blue;
-}
-
-.multipane.foo.layout-h .multipane-resizer {
-	margin: 0;
-	top: 0;
-	/* reset default styling */
-	height: 10px;
-	background: #f1f1f1;
-}
-
-.multipane-resizer {
-	margin: 0;
-	left: 0;
-	position: relative;
-}
-
-.multipane-resizer:before {
-	display: block;
-	content: "";
-	width: 40px;
-	height: 3px;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	margin-top: -2.5px;
-	margin-left: -20px;
-	border-top: 1px solid #ccc;
-	border-bottom: 1px solid #ccc;
-}
-
-.multipane-resizer:hover:before {
-	border-color: #999;
 }

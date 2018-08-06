@@ -20,7 +20,7 @@
 		}
 
 		.table-wrapper {
-			padding: 15px;
+			padding:  0 15px 15px;
 			height: 100%;
 			box-sizing: border-box;
 		}
@@ -54,8 +54,8 @@
 	<div id="app" v-cloak>
 		<div class="table-wrapper  jas-flex-box is-vertical">
 			<!--搜索区域-->
-			<div class="search-wrap" v-if="isShowSearch">
-				<el-row :gutter="10">
+			<div class="search-wrap" ref="searchWrapper" v-if="isShowSearch" style="overflow: hidden;">
+				<el-row :gutter="10" style="padding-top: 15px;">
 					<el-form ref="searchTable" :model="searchTable" label-width="120px">
 						<template v-for="item in searchData">
 							<el-col v-if="item.type!='opertion'" :xs="24" :sm="12" :md="12" :lg="6" :xl="6" :class="{'height' : item.type=='UT_03'||item.type=='UT_04'||item.type=='UT_02'||item.type=='UT_14'||item.type=='UT_05'||item.type=='UT_06'||item.type=='UT_07'||item.type=='UT_08' }">
@@ -113,11 +113,17 @@
 								<template v-for="child in item.options">
 									<el-button :type="child.type" size="small" @click="child.click">{{child.name}}</el-button>
 								</template>
+								<!-- <el-button size="small" type="text" @click="isClosed=!isClosed" >收起</el-button> -->
 							</el-col>
 						</template>
 					</el-form>
 				</el-row>
-
+				<!-- <el-row v-show="isClosed">
+					<div style="float:left;">搜索栏</div>
+					<div style="float:right;">
+						<el-button size="small" type="text" @click="isClosed=!isClosed" style="padding:0;">展开</el-button>
+					</div>
+				</el-row> -->
 			</div>
 			<!--按钮区域-->
 			<el-row style="padding:15px 0px">
@@ -135,8 +141,20 @@
 				  :form="searchTable" :oids="oids" :template-code="templateCode" :class-name="className"></jas-import-export-btns>
 
 				<div style="display:inline-block;float:right">
-					<el-button size="small" icon="el-icon-refresh" @click="refresh"></el-button>
-					<!--<el-button size="small" type="primary" plain="plain" @click="refresh">刷新</el-button>-->
+
+
+					<el-tooltip class="item" content="刷新" placement="top">
+						<el-button size="small" icon="el-icon-refresh" @click="refresh"></el-button>
+					</el-tooltip>
+					<el-tooltip v-show="isClosed" class="item" content="展开搜索" placement="top">
+						<el-button size="small" icon="el-icon-arrow-down" @click="toggleSearch"></el-button>
+					</el-tooltip>
+					<el-tooltip v-show="!isClosed" class="item" content="收起搜索" placement="top">
+						<el-button size="small" icon="el-icon-arrow-up" @click="toggleSearch"></el-button>
+					</el-tooltip>
+
+
+
 				</div>
 			</el-row>
 			<!--表格区域-->
@@ -182,6 +200,7 @@
 				headStyle: {
 					'background-color': '#f5f7fa ',
 				},
+				isClosed: false,
 				templateCode: "",
 				className: '',
 				isApprove: '',
@@ -244,6 +263,19 @@
 			}
 		},
 		methods: { //方法的写法
+			toggleSearch: function () {
+				if (this.isClosed) {
+					this.isClosed = false;
+					this.$refs.searchWrapper.style.height = 'auto';
+					this.$refs.searchWrapper.style.borderBottom = '1px solid #e4e7ed';
+				} else {
+					this.isClosed = true;
+					this.$refs.searchWrapper.style.borderBottom = 'none';
+					this.$refs.searchWrapper.style.height = 0;
+				}
+			},
+
+
 			frozenBtn: function (row) {
 				if (row.approve_status > 0 || row.approve_status == '审核通过' || row.approve_status == '待审核') {
 					return true;

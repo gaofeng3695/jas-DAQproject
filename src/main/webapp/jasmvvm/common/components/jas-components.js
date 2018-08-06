@@ -355,10 +355,15 @@ Vue.component('jas-detail-table', {
 });
 
 Vue.component('jas-list-wrapper', {
+	data: function () {
+		return {
+			isClosed: false,
+		}
+	},
 	template: [
-		'<div style="padding: 15px;box-sizing: border-box;height: 100%;" class="jas-flex-box is-vertical">',
-		'	<div style="padding-bottom: 10px;border-bottom: 1px solid #e4e7ed;">',
-		'      <slot name="search"></slot>',
+		'<div style="padding:  0 15px 15px;box-sizing: border-box;height: 100%;" class="jas-flex-box is-vertical">',
+		'	<div ref="searchWrapper" style="border-bottom: 1px solid #e4e7ed;overflow:hidden;box-sizing:border-box;">',
+		'      <div style="padding:15px 0 10px;"><slot name="search"></slot></div>',
 		'	</div>',
 		'	<div class="jas-flex-box is-vertical is-grown">',
 		'      <slot name="list"></slot>',
@@ -367,6 +372,23 @@ Vue.component('jas-list-wrapper', {
 
 		'</div>',
 	].join(''),
+	mounted: function () {
+		var that = this;
+	},
+	methods: {
+
+		toggleSearch: function () {
+			if (this.$refs.searchWrapper.clientHeight < 10) {
+				this.isClosed = false;
+				this.$refs.searchWrapper.style.height = 'auto';
+				this.$refs.searchWrapper.style.borderBottom = '1px solid #e4e7ed';
+			} else {
+				this.isClosed = true;
+				this.$refs.searchWrapper.style.borderBottom = 'none';
+				this.$refs.searchWrapper.style.height = 0;
+			}
+		}
+	}
 });
 
 Vue.component('jas-search-for-list', {
@@ -397,8 +419,53 @@ Vue.component('jas-search-for-list', {
 			},
 			fatherSelectList: [],
 			childSelectList: [],
+			isClosed: false,
 		}
 	},
+	template: [
+		'<el-form class="jas-search-for-list" :model="form" label-width="120px">',
+		'		<el-row v-show="!isClosed">',
+		'	    <template v-for="item in fields">',
+		'	    	<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">',
+		'	    		<el-form-item :label="item.name"  :prop="item.field" :rules="fieldsConfig[item.field] && fieldsConfig[item.field].rules" style="margin-bottom: 15px ">',
+		'	    			<template v-if="fieldsConfig[item.field].type == \'select\'">',
+		'	    				<el-select :ref="item.field" v-model="form[item.field]" clearable :placeholder="\'请选择\'+item.name" size="small" @visible-change="visibleChange($event,item.field)"  @change="fatherSelectChanged($event,item.field)">',
+		'	    					<el-option v-for="option in fieldsConfig[item.field].options" :key="option.key" :label="option.value" :value="option.key"></el-option>',
+		'	    				</el-select>',
+		'	    			</template>',
+		'	    			<template v-if="fieldsConfig[item.field].type == \'input\'">',
+		'	    				<el-input v-model="form[item.field]" :placeholder="\'请输入\'+item.name" size="small" clearable></el-input>',
+		'	    			</template>',
+		'	    			<template v-if="fieldsConfig[item.field].type == \'number\'">',
+		'							<el-input-number v-model="form[item.field]" :precision="fieldsConfig[item.field].precision" :step="1" :max="fieldsConfig[item.field].max" controls-position="right" clearable :placeholder="\'请输入\'+item.name" size="small"></el-input-number>',
+		'	    			</template>',
+		'	    			<template v-if="fieldsConfig[item.field].type == \'number\'">',
+		'							<el-input-number v-model="form[item.field]" :precision="fieldsConfig[item.field].precision" :step="1" :max="fieldsConfig[item.field].max" controls-position="right" clearable :placeholder="\'请输入\'+item.name" size="small"></el-input-number>',
+		'	    			</template>',
+		'	    			<template v-if="fieldsConfig[item.field].type == \'date\'">',
+		'	    				<el-date-picker clearable value-format="yyyy-MM-dd HH:mm:ss" type="date" :placeholder="\'请选择\'+item.name" v-model="form[item.field]" size="small" style="width: 100%;"></el-date-picker>',
+		'	    			</template>',
+		'	    		</el-form-item>',
+		'	    	</el-col>',
+		'	    </template>',
+		'			<el-col :xs="24" :sm="btnSize.sm" :md="btnSize.md" :lg="btnSize.lg" :xl="btnSize.xl">',
+		'					<el-form-item style="float:right;margin-bottom: 0px;">',
+		'							<el-button size="small" type="primary" @click="search">查询</el-button>',
+		'							<el-button size="small" @click="reset">重置</el-button>',
+		// '							<el-button size="small" type="text" @click="isClosed=!isClosed" >收起</el-button>',
+		'					</el-form-item>',
+		'			</el-col>',
+		'		</el-row>',
+		// '		<el-row v-show="isClosed">',
+		// '			<div style="float:left;">搜索栏</div>',
+		// '			<div style="float:right;">',
+		// '				<el-button size="small" type="text" @click="isClosed=!isClosed" style="padding:0;">展开</el-button>',
+		// '			</div>',
+		// '		</el-row>',
+
+		'</el-form>',
+
+	].join(''),
 	mounted: function () {
 		this.setFieldsPattern();
 		this.resetFieldsConfig(this.fields, this.fieldsConfig);
@@ -581,42 +648,7 @@ Vue.component('jas-search-for-list', {
 			});
 		},
 	},
-	template: [
-		'<el-form class="jas-search-for-list" :model="form" label-width="120px">',
-		'		<el-row>',
-		'	    <template v-for="item in fields">',
-		'	    	<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">',
-		'	    		<el-form-item :label="item.name"  :prop="item.field" :rules="fieldsConfig[item.field] && fieldsConfig[item.field].rules" style="margin-bottom: 15px ">',
-		'	    			<template v-if="fieldsConfig[item.field].type == \'select\'">',
-		'	    				<el-select :ref="item.field" v-model="form[item.field]" clearable :placeholder="\'请选择\'+item.name" size="small" @visible-change="visibleChange($event,item.field)"  @change="fatherSelectChanged($event,item.field)">',
-		'	    					<el-option v-for="option in fieldsConfig[item.field].options" :key="option.key" :label="option.value" :value="option.key"></el-option>',
-		'	    				</el-select>',
-		'	    			</template>',
-		'	    			<template v-if="fieldsConfig[item.field].type == \'input\'">',
-		'	    				<el-input v-model="form[item.field]" :placeholder="\'请输入\'+item.name" size="small" clearable></el-input>',
-		'	    			</template>',
-		'	    			<template v-if="fieldsConfig[item.field].type == \'number\'">',
-		'							<el-input-number v-model="form[item.field]" :precision="fieldsConfig[item.field].precision" :step="1" :max="fieldsConfig[item.field].max" controls-position="right" clearable :placeholder="\'请输入\'+item.name" size="small"></el-input-number>',
-		'	    			</template>',
-		'	    			<template v-if="fieldsConfig[item.field].type == \'number\'">',
-		'							<el-input-number v-model="form[item.field]" :precision="fieldsConfig[item.field].precision" :step="1" :max="fieldsConfig[item.field].max" controls-position="right" clearable :placeholder="\'请输入\'+item.name" size="small"></el-input-number>',
-		'	    			</template>',
-		'	    			<template v-if="fieldsConfig[item.field].type == \'date\'">',
-		'	    				<el-date-picker clearable value-format="yyyy-MM-dd HH:mm:ss" type="date" :placeholder="\'请选择\'+item.name" v-model="form[item.field]" size="small" style="width: 100%;"></el-date-picker>',
-		'	    			</template>',
-		'	    		</el-form-item>',
-		'	    	</el-col>',
-		'	    </template>',
-		'			<el-col :xs="24" :sm="btnSize.sm" :md="btnSize.md" :lg="btnSize.lg" :xl="btnSize.xl">',
-		'					<el-form-item style="float:right;margin-bottom: 0px;">',
-		'							<el-button size="small" type="primary" @click="search">查询</el-button>',
-		'							<el-button size="small" @click="reset">重置</el-button>',
-		'					</el-form-item>',
-		'			</el-col>',
-		'		</el-row>',
-		'</el-form>',
 
-	].join(''),
 });
 
 Vue.component('jas-table-for-list', {
@@ -677,6 +709,7 @@ Vue.component('jas-table-for-list', {
 			pageSize: 10,
 			oids: [],
 			rows: [],
+			isClosed: false,
 		}
 	},
 	computed: {
@@ -701,7 +734,18 @@ Vue.component('jas-table-for-list', {
 		'	<el-button size="small" plain type="primary" icon="fa fa-plus" v-if="isApprove&&isHasPrivilege(' + "'bt_approve'" + ')" :disabled="approveRows.length==0" @click="approve">审核</el-button>',
 		'<jas-import-export-btns :is-import="isHasPrivilege(' + "'bt_import'" + ')" :is-export="isHasPrivilege(' + "'bt_export'" + ')" ',
 		'		:form="form" :oids="oids" :template-code="_templateCode" :class-name="_classNameQuery"></jas-import-export-btns>',
-		'	<el-button class="fr" size="small" icon="el-icon-refresh" @click="refresh"></el-button>',
+
+		'  <span class="fr">',
+		'		 <el-tooltip class="item" content="刷新" placement="top">',
+		'       <el-button size="small" icon="el-icon-refresh" @click="refresh"></el-button>',
+		'		 </el-tooltip>',
+		'		 <el-tooltip v-show="isClosed" class="item" content="展开搜索" placement="top">',
+		'	     <el-button size="small" icon="el-icon-arrow-down" @click="toggleSearch"></el-button>',
+		'		 </el-tooltip>',
+		'		 <el-tooltip v-show="!isClosed" class="item" content="收起搜索" placement="top">',
+		'	     <el-button size="small" icon="el-icon-arrow-up" @click="toggleSearch"></el-button>',
+		'		 </el-tooltip>',
+		'  </span>',
 		'</div>',
 		'<div class="is-grown">',
 		'	<el-table @selection-change="handleSelectionChange" @row-dblclick="preview" v-loading="loading" height="100%" :data="tableData" border :header-cell-style="headStyle" style="width: 100%" stripe>',
@@ -746,6 +790,10 @@ Vue.component('jas-table-for-list', {
 		this.search();
 	},
 	methods: {
+		toggleSearch: function () {
+			this.$parent.toggleSearch();
+			this.isClosed = this.$parent.isClosed;
+		},
 		frozenBtn: function (row) {
 			if (row.approveStatus > 0) {
 				return true;

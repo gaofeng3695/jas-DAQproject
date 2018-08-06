@@ -16,16 +16,14 @@
 <body>
 	<div id="app" v-cloak>
 
-		<jas-two-panel-resizer ref="resizer" layout="horizontal" length="40%" @paneresize="paneresize">
-			<div slot="closePanel" id="jasMap" class="jasmap"></div>
-			<jas-list-wrapper slot="mainPanel">
-				<jas-search-for-list slot="search" :form="topSearch" :fields="fields" :fields-config="fieldsConfig" @search="searchList"></jas-search-for-list>
-				<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" :search-path="searchPath"
-				  :add-url="addUrl" :detail-url="detailUrl" :delete-path="deletePath" :upcall-path="upcallPath" :class-name="className"
-				  :template-code="templateCode" @locate="locate"></jas-table-for-list>
-			</jas-list-wrapper>
 
-		</jas-two-panel-resizer>
+		<jas-list-wrapper>
+			<jas-search-for-list slot="search" :form="topSearch" :fields="fields" :fields-config="fieldsConfig" @search="searchList"></jas-search-for-list>
+			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" :search-path="searchPath"
+			  :add-url="addUrl" :detail-url="detailUrl" :delete-path="deletePath" :upcall-path="upcallPath" :class-name="className"
+			  :template-code="templateCode" @locate="locate"></jas-table-for-list>
+		</jas-list-wrapper>
+
 
 	</div>
 </body>
@@ -33,11 +31,9 @@
 <script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
 <script src="./../../../lib/vue/vue.js"></script>
 <script src="./../../../lib/element-ui/v2.4.1/index.min.js"></script>
-<script src="./../../../lib/vue-multipane/vue-multipane.js"></script>
 <script src="./../../../common/components/jas-components.js"></script>
 <script src="./../../../common/js/jas-tools.js"></script>
 
-<script id="mapApi" src="./../../map/mapjs/mapjs4ol.js"></script>
 <script src="./cross-config.js"></script>
 <script>
 	var vm = new Vue({
@@ -79,8 +75,8 @@
 			var param = window.jasTools.base.getParamsInUrl(location.href);
 			this.privilegeCode = param.privilegeCode;
 			this.templateCode = param.templateCode;
-			this.tableName = tableNameMap[param.pageCode];
 			this.pageCode = param.pageCode;
+			this.tableName = tableNameMap[param.pageCode];
 			this.className = param.className;
 			this.addUrl = './pages/row-cross/cross-template/dialogs/add.html?pageCode=' + this.pageCode;
 			this.detailUrl = './pages/row-cross/cross-template/dialogs/detail.html?pageCode=' + this.pageCode;
@@ -95,60 +91,19 @@
 				this.pageCode);
 			this.tableFields = crossConfig.methods.formatFields(crossConfig[this.pageCode].tableFields, crossConfig.fieldsConfig,
 				this.pageCode);
-			this.initJasMap();
 
 		},
 		mounted: function () {
 
 		},
 		methods: {
-
 			searchList: function () {
 				this.$refs.table.search();
 			},
 			locate: function (row) {
-				var that = this;
-				if (!this.$refs.resizer.panelShowed) {
-					this.$refs.resizer.panelShowed = true;
-					setTimeout(function () {
-						that.jasMap.flashGraphic(row.oid, that.tableName);
-					}, 300);
-				} else {
-					this.jasMap.flashGraphic(row.oid, this.tableName);
-				}
+				var code = this.tableName;
+				top.app.locate(row.oid, code);
 			},
-			paneresize: function () {
-				this.jasMap.resizeMap();
-			},
-			initJasMap: function () {
-				var onCenterStakeLayerClicked = function (e) {
-					//业务逻辑
-				};
-				var layersVisible = {
-					daq_median_stake: true,
-				};
-				layersVisible[this.tableName] = true;
-				this.jasMap = new JasMap({
-					layersVisible: layersVisible,
-					appConfigPath: './../../map/config.json',
-					onMapLoaded: function (e) {},
-					onError: function (e) {
-						console.error(e.data.message);
-						top.Vue.prototype.$message({
-							message: e.data.message,
-							type: 'error'
-						});
-					},
-					onLayerAdded: function (e) {
-						var layerId = e.data.layerId;
-						if (layerId === "centerlinestake") {
-							//添加单个图层的点击事件
-							this.addLayerClickEventListener(layerId, onCenterStakeLayerClicked);
-						}
-					}
-				});
-			},
-
 		},
 	});
 </script>
