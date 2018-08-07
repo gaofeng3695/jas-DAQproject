@@ -168,7 +168,7 @@
 				<el-main>
 					<div v-tabclose></div>
 
-					<jas-two-panel-resizer ref="resizer" layout="horizontal" length="40%" @paneresize="paneresize">
+					<jas-two-panel-resizer :showed="panelShowed" ref="resizer" layout="horizontal" length="40%" @paneresize="paneresize" @statuschanged="statuschanged">
 						<div slot="closePanel" id="jasMap" class="jasmap" style="height:100%;"> </div>
 
 						<el-tabs slot="mainPanel" class="tabswrapper jas-flex-box" v-model="currentTap" type="card" @tab-remove="removeTab">

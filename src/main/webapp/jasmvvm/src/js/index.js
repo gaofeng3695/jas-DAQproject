@@ -8,7 +8,7 @@ window.app = new Vue({
 			progress: 0,
 			error: false,
 			direction: 'right',
-
+			panelShowed: false,
 			isExpend: true,
 			menuWith: 200,
 			menusOpened: ['P-daq-scope-0001'],
@@ -35,9 +35,10 @@ window.app = new Vue({
 		}
 	},
 	created: function () {
-		this.initJasMap();
+		// this.initJasMap();
 	},
 	mounted: function () {
+		// this.$refs.resizer.panelShowed = false;
 		this.goProgess();
 		this._queryMenuData();
 		this._listenWindowClose();
@@ -288,9 +289,20 @@ window.app = new Vue({
 
 		},
 		paneresize: function () {
-			this.jasMap.resizeMap();
+			this.jasMap && this.jasMap.resizeMap();
 		},
-		initJasMap: function () {
+		statuschanged: function (val) {
+			var that = this;
+			if (val) {
+				if (!that.isMapInited) {
+					that.isMapInited = true;
+					setTimeout(function () {
+						that.initJasMap();
+					}, 300);
+				}
+			}
+		},
+		initJasMap: function (fn) {
 			var onCenterStakeLayerClicked = function (e) {
 				//业务逻辑
 			};
@@ -299,7 +311,9 @@ window.app = new Vue({
 					daq_median_stake: true,
 				},
 				appConfigPath: './pages/map/config.json',
-				onMapLoaded: function (e) {},
+				onMapLoaded: function (e) {
+					fn && fn();
+				},
 				onError: function (e) {
 					top.Vue.prototype.$message({
 						message: e.data.message,
@@ -320,7 +334,16 @@ window.app = new Vue({
 			if (!this.$refs.resizer.panelShowed) {
 				this.$refs.resizer.panelShowed = true;
 				setTimeout(function () {
-					that.jasMap.flashGraphic(id, tableCode);
+					if (!that.isMapInited) {
+						that.isMapInited = true;
+						that.initJasMap();
+						top.Vue.prototype.$message({
+							message: '正在初始化地图，请稍后定位',
+							type: 'warning'
+						});
+					} else {
+						that.jasMap.flashGraphic(id, tableCode);
+					}
 				}, 300);
 			} else {
 				this.jasMap.flashGraphic(id, tableCode);

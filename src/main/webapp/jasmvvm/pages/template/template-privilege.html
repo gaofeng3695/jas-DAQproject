@@ -20,7 +20,7 @@
 		}
 
 		.table-wrapper {
-			padding:  0 15px 15px;
+			padding: 0 15px 15px;
 			height: 100%;
 			box-sizing: border-box;
 		}
@@ -158,8 +158,8 @@
 				</div>
 			</el-row>
 			<!--表格区域-->
-			<el-table class="is-grown" v-loading="loading" @selection-change="handleSelectionChange" :data="tableData" height='100' style="width: 100%;"
-			  :header-cell-style="headStyle" border stripe @row-dblclick="viewRow">
+			<el-table ref="mytable" class="is-grown" v-loading="loading" @selection-change="handleSelectionChange" :data="tableData"
+			  height='100' style="width: 100%;" :header-cell-style="headStyle" border stripe @row-dblclick="viewRow" @row-click="checkRow">
 				<el-table-column type="selection" width="55" align="center" fixed></el-table-column>
 				<el-table-column type="index" label="序号" width="50" align="center" fixed></el-table-column>
 				<el-table-column v-for="item,index in tableColumn" :fixed="index===0?true:false" :prop="item.id" :label="item.name" :key="item.id"
@@ -581,6 +581,9 @@
 					height: that.config.view.height,
 					src: jasTools.base.setParamsToUrl(src, row),
 				});
+			},
+			checkRow: function (row) {
+				this.$refs['mytable'].toggleRowSelection(row)
 			},
 			viewRow: function (row) {
 				var that = this;

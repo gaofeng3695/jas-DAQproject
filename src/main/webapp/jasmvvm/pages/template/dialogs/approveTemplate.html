@@ -57,6 +57,14 @@
     methods: {
       requestApprove: function (status) {
         var that = this;
+        if (status == -1 && !this.remarks) {
+          top.Vue.prototype.$message({
+            type: 'error',
+            message: '驳回状态下，审批意见必填'
+          });
+          return;
+        }
+
         var url = jasTools.base.rootPath + '/daq/dataApprove/save.do';
         jasTools.ajax.post(url, {
           businessOid: this.oids,
@@ -72,7 +80,7 @@
           top.jasTools.dialog.close('success');
         });
       },
-      close : function(){
+      close: function () {
         top.jasTools.dialog.close();
       },
     },
