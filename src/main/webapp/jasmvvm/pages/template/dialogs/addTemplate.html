@@ -468,6 +468,12 @@
 				var url = jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/get.do";
 				//该接口需要入参主键，因为主键不确定，所以全部传入表单对象
 				jasTools.ajax.post(url, this.formDetail, function (data) {
+					// data.data.collection_date=''
+					for (var key in data.data) {
+						if (data.data[key] == null) {
+							data.data[key] = '';
+						}
+					}
 					that.formData = data.data;
 				});
 			},
