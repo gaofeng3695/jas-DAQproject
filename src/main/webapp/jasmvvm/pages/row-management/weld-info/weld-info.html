@@ -164,8 +164,10 @@
 						formatter: function (row, column, cellvalue, index) {
 							if (cellvalue == '1') {
 								return '合格';
-							} else {
+							} else if(cellvalue=="0"){
 								return '不合格';
+							}else{
+								return "";
 							}
 						}
 					}, {
@@ -183,8 +185,10 @@
 						formatter: function (row, column, cellvalue, index) {
 							if (cellvalue == '1') {
 								return '是';
-							} else {
+							} else if(cellvalue=="0"){
 								return '否';
+							}else{
+								return "";
 							}
 						}
 					}, {
@@ -193,8 +197,10 @@
 						formatter: function (row, column, cellvalue, index) {
 							if (cellvalue == '1') {
 								return '是';
-							} else {
+							} else if(cellvalue=="0"){
 								return '否';
+							}else{
+								return "";
 							}
 						}
 					}, {

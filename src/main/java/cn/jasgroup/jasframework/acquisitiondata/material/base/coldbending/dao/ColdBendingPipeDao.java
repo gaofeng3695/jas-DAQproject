@@ -5,14 +5,16 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
+import cn.jasgroup.jasframework.acquisitiondata.material.base.coldbending.dao.entity.ColdBendingPipe;
 import cn.jasgroup.jasframework.dataaccess.base.BaseJdbcDao;
 
 @Repository
 public class ColdBendingPipeDao extends BaseJdbcDao{
 	
-	public void chanageOriginalPipeUseState(String pipeCode){
-		String sql = "update daq_material_pipe set is_cold_bend=1 where oid=?";
-		this.update(sql, new Object[]{pipeCode});
+	public void chanageOriginalPipeUseState(String projectOid,String pipelineOid, String tendersOid, String pipeOid){
+//		String sql = "update daq_material_pipe set is_cold_bend=1 where oid=?";
+		String sql = "update daq_material_pipe set project_oid=?,pipeline_oid=?,tenders_oid=? where oid=?";
+		this.update(sql, new Object[]{projectOid,pipelineOid,tendersOid,pipeOid});
 	}
 	
 	/***
@@ -26,5 +28,15 @@ public class ColdBendingPipeDao extends BaseJdbcDao{
 	public List<Map<String,Object>>getList(String tendersOid){
 		String sql = "select t.oid as key,t.pipe_cold_bending_code as value from daq_material_pipe_cold_bending t where t.active=1 and t.tenders_oid=?";
 		return this.queryForList(sql, new Object[]{tendersOid});
+	}
+	
+	public ColdBendingPipe find(String oid){
+		String sql = "select * from daq_material_pipe_cold_bending t where t.oid=?";
+		List<ColdBendingPipe> list = this.queryForList(sql, new Object[]{oid}, ColdBendingPipe.class);
+		if(list!=null && list.size()>0){
+			return list.get(0);
+		}else{
+			return null;
+		}
 	}
 }

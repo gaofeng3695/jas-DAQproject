@@ -9,15 +9,12 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import cn.jasgroup.framework.automation.query.MapQuery;
-import cn.jasgroup.framework.automation.service.VariateInjectService;
 import cn.jasgroup.framework.data.result.BaseResult;
 import cn.jasgroup.framework.data.result.ListResult;
 import cn.jasgroup.jasframework.acquisitiondata.privilege.service.DaqPrivilegeService;

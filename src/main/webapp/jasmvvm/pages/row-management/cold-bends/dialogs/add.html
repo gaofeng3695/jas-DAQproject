@@ -104,9 +104,9 @@
 				<jas-base-group-title name="冷湾信息数据"></jas-base-group-title>
 				<el-row>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="原材料钢管编号" prop="pipeCode" required>
-							<el-select v-model="formData.pipeCode" placeholder="请选择原材料钢管编号" size="small" @change="pipeCodeChanged">
-								<el-option v-for="item in domain.pipeCodes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+						<el-form-item label="原材料钢管编号" prop="pipeOid" required>
+							<el-select v-model="formData.pipeOid" placeholder="请选择原材料钢管编号" size="small" @change="pipeOidChanged">
+								<el-option v-for="item in domain.pipeOids" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
@@ -237,7 +237,7 @@
 					pipeline: [],
 					tenders: [],
 					pipeSegment: [],
-					pipeCodes: [],
+					pipeOids: [],
 					supervisionUnits: [],
 					constructUnits: [], //施工单位
 					//监理单位
@@ -268,7 +268,7 @@
 						message: '监理单位为必填项',
 						trigger: 'change'
 					}],
-					pipeCode: [{
+					pipeOid: [{
 						required: true,
 						message: '原材料钢管编号为必填项',
 						trigger: 'change'
@@ -289,7 +289,7 @@
 					tendersOid: "",
 					pipelineOid: "",
 					pipeSegmentOrCrossOid: "",
-					pipeCode: "",
+					pipeOid: "",
 					certificateNum: "",
 					pipeColdBendingCode: "",
 					pipeBendingStandards: "",
@@ -338,9 +338,9 @@
 				that.domain.project = arr;
 			});
 			this.requestDomainFromBizTable(
-				'/daq/materialPipe/getCutAndNotUse.do', {},
+				'/daq/materialPipe/getCutAndNotUse.do', {type:"2"},
 				function (arr) {
-					that.domain.pipeCodes = arr;
+					that.domain.pipeOids = that.domain.pipeOids.concat(arr);
 				});
 		},
 		methods: {
@@ -442,10 +442,10 @@
 					that.formData.pipeSegmentOrCrossOid = '';
 				}
 			},
-			pipeCodeChanged: function (val) {
+			pipeOidChanged: function (val) {
 				var that = this;
 				let obj = {};
-				obj = that.domain.pipeCodes.find((item)=>{//这里的userList就是上面遍历的数据源
+				obj = that.domain.pipeOids.find((item)=>{//这里的userList就是上面遍历的数据源
 					return item.key === val;//筛选出匹配数据
 				});
 				this.formData.pipeColdBendingCode = obj.value + "-LW";
@@ -493,6 +493,9 @@
 					for (var key in that.formData) {
 						that.formData[key] = data.rows[0][key];
 					}
+					var item = {key:data.rows[0]["pipeOid"],value:data.rows[0]["pipeCode"]};
+					that.domain.pipeOids.push(item);
+					console.log(that.domain.pipeOids);
 					that.projectChanged(data.rows[0].projectOid);
 					that.tendersChanged(data.rows[0].tendersOid);
 					that.getSupervisionUnit(data.rows[0].tendersOid);
