@@ -67,7 +67,7 @@ public class ColdBendingPipeQuery extends BaseJavaQuery{
 				+ "left join v_daq_pipe_segment_cross v on v.oid = t.pipe_segment_or_cross_oid "
 				+ "left join(select oid,unit_name from pri_unit) u on t.construct_unit = u.oid "
 				+ "left join(select oid,unit_name from pri_unit) uu on t.supervision_unit = uu.oid "
-				+ "left join(select oid,pipe_code from daq_material_pipe) pp on t.oid = pp.oid "
+				+ "left join(select oid,pipe_code from daq_material_pipe) pp on t.pipe_oid = pp.oid "
 				+ "where t.active=1";
 		if(StringUtils.isNotBlank(oid)){
 			sql += " and t.oid = :oid";

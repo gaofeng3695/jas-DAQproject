@@ -748,7 +748,7 @@ Vue.component('jas-table-for-list', {
 		'  </span>',
 		'</div>',
 		'<div class="is-grown">',
-		'	<el-table @selection-change="handleSelectionChange" @row-dblclick="preview" v-loading="loading" height="100%" :data="tableData" border :header-cell-style="headStyle" style="width: 100%" stripe>',
+		'	<el-table ref="mytable" @selection-change="handleSelectionChange" @row-dblclick="preview" @row-click="checkRow" v-loading="loading" height="100%" :data="tableData" border :header-cell-style="headStyle" style="width: 100%" stripe>',
 		'    <el-table-column type="selection" width="55" align="center" fixed></el-table-column>',
 		'		<el-table-column label="序号" type="index" align="center" width="50" fixed>',
 		'		</el-table-column>',
@@ -919,6 +919,9 @@ Vue.component('jas-table-for-list', {
 					that.refresh()
 				}
 			});
+		},
+		checkRow: function (row) {
+			this.$refs['mytable'].toggleRowSelection(row)
 		},
 		preview: function (row) {
 			var that = this;
@@ -1097,7 +1100,11 @@ Vue.component('jas-two-panel-resizer', {
 		},
 		length: {
 			type: String,
-		}
+		},
+		showed: {
+			default: true,
+			type: Boolean,
+		},
 	},
 	data: function () {
 		return {
@@ -1124,6 +1131,12 @@ Vue.component('jas-two-panel-resizer', {
 					maxWidth: '100%',
 				}
 			}
+		},
+
+	},
+	watch: {
+		panelShowed: function (val) {
+			this.$emit('statuschanged', val);
 		}
 	},
 	template: [
@@ -1153,6 +1166,7 @@ Vue.component('jas-two-panel-resizer', {
 	},
 	created: function () {
 		this._length = this.length;
+		this.panelShowed = this.showed;
 	},
 	mounted: function () {
 		if (this.layout === 'horizontal') {
@@ -1988,6 +2002,15 @@ Vue.component('jas-approve-dialog', {
 		},
 		requestApprove: function (status) {
 			var that = this;
+
+			if (status == -1 && !this.remarks) {
+				top.Vue.prototype.$message({
+					type: 'error',
+					message: '驳回状态下，审批意见必填'
+				});
+				return;
+			}
+
 			var url = jasTools.base.rootPath + '/daq/dataApprove/save.do';
 			jasTools.ajax.post(url, {
 				businessOid: [this._oid],

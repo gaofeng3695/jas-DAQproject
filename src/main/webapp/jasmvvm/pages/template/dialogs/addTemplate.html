@@ -424,7 +424,7 @@
 								});
 							}
 							if (item.uiType == 'UT_04' || item.uiType == 'UT_03' || item.uiType == 'UT_02') {
-								that.formData[item.fieldName] = new Date(that.formData[item.fieldName]);
+								/* that.formData[item.fieldName] = new Date(that.formData[item.fieldName]); */
 							}
 							if (item.regularExpression == '4' && item.min && item.max) {
 								obj.verify.push({
@@ -468,6 +468,12 @@
 				var url = jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/get.do";
 				//该接口需要入参主键，因为主键不确定，所以全部传入表单对象
 				jasTools.ajax.post(url, this.formDetail, function (data) {
+					// data.data.collection_date=''
+					/* for (var key in data.data) {
+						if (data.data[key] == null) {
+							data.data[key] = '';
+						}
+					} */
 					that.formData = data.data;
 				});
 			},
@@ -579,14 +585,26 @@
 				if (falg) {
 					that.formAttr.forEach(function (parent, index) {
 						parent.data.forEach(function (child) {
-							if (child.childField.indexOf(item.id) > -1) {
-								if (!that.formData[child.id]) {
-									top.Vue.prototype.$message({
-										message: '请先选择' + child.name,
-										type: 'warning'
-									});
+							if(child.childField.indexOf(",")>-1){
+								if (child.childField.indexOf(item.id) > -1) {
+									if (!that.formData[child.id]) {
+										top.Vue.prototype.$message({
+											message: '请先选择' + child.name,
+											type: 'warning'
+										});
+									}
+									return;
 								}
-								return;
+							}else{
+								if (child.childField==item.id) {
+									if (!that.formData[child.id]) {
+										top.Vue.prototype.$message({
+											message: '请先选择' + child.name,
+											type: 'warning'
+										});
+									}
+									return;
+								}
 							}
 						})
 					});

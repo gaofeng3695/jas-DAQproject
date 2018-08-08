@@ -1471,7 +1471,7 @@ CREATE TABLE daq_weld_anticorrosion_check (
 	overlap_check SMALLINT,
 	appearance_check SMALLINT,
 	electric_spark_leak_detection SMALLINT,
-	buckle_conclusion varchar(500),
+	buckle_conclusion SMALLINT,
 	anticorrosion varchar(20),
 	construct_unit varchar(36),
 	supervision_unit varchar(38),
@@ -1647,7 +1647,7 @@ CREATE TABLE daq_weld_cut (
 	pipeline_oid varchar(36),
 	tenders_oid varchar(36),
 	pipe_segment_or_cross_oid varchar(36),
-	cut_weld_code varchar(50),
+	weld_oid varchar(36),
 	front_weld_oid varchar(36),
 	back_weld_oid varchar(36),
 	cut_weld_date timestamp(6),
@@ -1673,7 +1673,7 @@ comment on column daq_weld_cut.project_oid IS '项目oid';
 comment on column daq_weld_cut.pipeline_oid IS '管线oid';
 comment on column daq_weld_cut.tenders_oid IS '标段oid';
 comment on column daq_weld_cut.pipe_segment_or_cross_oid IS '线路段/穿跨越';
-comment on column daq_weld_cut.cut_weld_code IS '割口编号';
+comment on column daq_weld_cut.weld_oid IS '割口编号';
 comment on column daq_weld_cut.front_weld_oid IS '新焊口编号1';
 comment on column daq_weld_cut.back_weld_oid IS '新焊口编号2';
 comment on column daq_weld_cut.cut_weld_date IS '割口日期';
