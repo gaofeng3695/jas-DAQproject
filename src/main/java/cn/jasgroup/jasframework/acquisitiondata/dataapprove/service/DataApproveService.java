@@ -61,6 +61,9 @@ public class DataApproveService extends CommonDataHibernateService{
 		}else if(StringUtils.isNotBlank(dataApprove.getClassName())){
 			try {
 				String tableName = ModelFacade.getTableName(dataApprove.getClassName());
+				if(tableName.equalsIgnoreCase("daq_material_pipe_cold_bending") && approveStatus==2){
+					dataApproveDao.chanageOriginalPipeUseState(tableName,businessOid);
+				}
 				dataApproveDao.changeBusinessApproveStatus(tableName, null, businessOid, approveStatus);
 			} catch (Exception e) {
 				e.printStackTrace();
