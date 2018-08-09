@@ -3,6 +3,7 @@ package cn.jasgroup.jasframework.acquisitiondata.weld.cutweld.service;
 import java.util.Date;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -124,6 +125,8 @@ public class CutWeldService {
 		}else if (i == 4) {
 			cutedPipe.setPipeLength(cutWeld.getFifthParagraphLength());
 		}
-		cutedPipe.setPipeWeight(pipe.getPipeWeight()*(cutedPipe.getPipeLength()/pipe.getPipeLength()));
+		if(pipe.getPipeWeight()!=null && pipe.getPipeWeight()>0){
+			cutedPipe.setPipeWeight(pipe.getPipeWeight()*(cutedPipe.getPipeLength()/pipe.getPipeLength()));
+		}
 	}
 }
