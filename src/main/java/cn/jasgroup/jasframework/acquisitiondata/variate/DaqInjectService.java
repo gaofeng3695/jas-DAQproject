@@ -54,7 +54,7 @@ public class DaqInjectService {
 		}
 		String sqlTemp = sql.substring(0,sql.lastIndexOf("@privilege_strategy_sql")).trim();
 		if(sqlTemp.endsWith("and")){
-			strategySql = strategySql.replace(" and", "");
+			strategySql = strategySql.replaceFirst(" and", "");
 		}
 		sql = sql.replace("@privilege_strategy_sql", strategySql);
 		mapQuery.setSql(sql);
