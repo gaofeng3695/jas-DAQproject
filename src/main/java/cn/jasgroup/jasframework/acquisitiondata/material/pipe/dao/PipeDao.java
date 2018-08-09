@@ -20,9 +20,9 @@ public class PipeDao {
 	public List<Map<String, Object>> getPipeList(String type) {
 		String sql = null;
 		if(type.equals("1")){
-			sql ="select oid as key,pipe_code as value,pipe_length as length from daq_material_pipe where active=1 and is_use=0 and pipe_length >= 1";
+			sql ="select oid as key,pipe_code as value,pipe_length as length,pipe_diameter,wall_thickness from daq_material_pipe where active=1 and is_use=0 and pipe_length >= 1";
 		}else{
-			sql ="select oid as key,pipe_code as value,pipe_length as length from daq_material_pipe where active=1 and is_use=0 and is_cold_bend=0 and pipe_length >= 1";
+			sql ="select oid as key,pipe_code as value,pipe_length as length,pipe_diameter,wall_thickness from daq_material_pipe where active=1 and is_use=0 and is_cold_bend=0 and pipe_length >= 1";
 		}
 		return baseJdbcDao.queryForList(sql, null);
 	}

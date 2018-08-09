@@ -77,14 +77,16 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="管径(mm)">
-								<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData.pipeDiameter" clearable
-								  placeholder="请输入管径(mm)" size="small"></el-input-number>
+								<!-- <el-input-number :precision="3" :step="1" disabled :max="1000000" controls-position="right" v-model="formData.pipeDiameter" clearable
+								  placeholder="请输入管径(mm)" size="small"></el-input-number> -->
+								 <el-input v-model="formData.pipeDiameter" disabled size="small"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="壁厚(mm)">
-								<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData.wallThickness" clearable
-								  placeholder="请输入壁厚(mm)" size="small"></el-input-number>
+								<!-- <el-input-number :precision="3" :step="1" disabled :max="1000000" controls-position="right" v-model="formData.wallThickness" clearable
+								  placeholder="请输入壁厚(mm)" size="small"></el-input-number> -->
+							  	<el-input v-model="formData.wallThickness" disabled size="small"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
@@ -347,8 +349,12 @@
 					});
 					if (arr.length > 0) {
 						this.formData.pipeLength = arr[0].length;
+						this.formData.pipeDiameter = arr[0].pipe_diameter;
+						this.formData.wallThickness = arr[0].wall_thickness;
 					} else {
 						this.formData.pipeLength = '';
+						this.formData.pipeDiameter = '';
+						this.formData.wallThickness = '';
 					}
 				}
 			},
