@@ -65,6 +65,11 @@ public class DaqDetectionFaUltrasonicBo extends CommonBaseBo {
 	private String pipeSegmentOrCrossName;
 
 	/**
+	 * 焊口oid
+	 */
+	private String weldOid;
+
+	/**
 	 * 焊口编号 
 	 */
 	private String weldCode; 
@@ -224,6 +229,14 @@ public class DaqDetectionFaUltrasonicBo extends CommonBaseBo {
 
 	public void setPipeSegmentOrCrossName(String pipeSegmentOrCrossName) {
 		this.pipeSegmentOrCrossName = pipeSegmentOrCrossName;
+	}
+
+	public String getWeldOid() {
+		return weldOid;
+	}
+
+	public void setWeldOid(String weldOid) {
+		this.weldOid = weldOid;
 	}
 
 	public String getWeldCode() {

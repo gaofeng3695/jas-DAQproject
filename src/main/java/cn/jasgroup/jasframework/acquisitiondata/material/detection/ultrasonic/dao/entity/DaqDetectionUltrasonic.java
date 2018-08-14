@@ -50,8 +50,10 @@ public class DaqDetectionUltrasonic extends CommonJdbcEntity{
 	/** 线路段/穿跨越 */
 	private String pipeSegmentOrCrossOid; 
 
-	/** 焊口编号 */
-	private String weldCode; 
+	/**
+	 * 焊口oid
+	 */
+	private String weldOid;
 
 	/** 检测报告编号 */
 	private String detectionReportNum; 
@@ -134,13 +136,13 @@ public class DaqDetectionUltrasonic extends CommonJdbcEntity{
 		super.setField("pipeSegmentOrCrossOid");
 	}
 
-	public String getWeldCode() {
-		return weldCode; 
+	public String getWeldOid() {
+		return weldOid;
 	}
 
-	public void setWeldCode(String weldCode) {
-		this.weldCode = weldCode; 
-		super.setField("weldCode");
+	public void setWeldOid(String weldOid) {
+		this.weldOid = weldOid;
+		super.setField("weldOid");
 	}
 
 	public String getDetectionReportNum() {

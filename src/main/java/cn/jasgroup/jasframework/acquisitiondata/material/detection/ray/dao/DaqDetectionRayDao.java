@@ -63,7 +63,8 @@ public class DaqDetectionRayDao extends BaseNamedParameterJdbcDao{
 				+ "	dt.tenders_name,"
 				+ "	v.name as pipeSegmentOrCrossName,"
 				+ "	u1.unit_name as detectionUnitName,"
-				+ "	u2.unit_name as supervisionUnitName"
+				+ "	u2.unit_name as supervisionUnitName,"
+				+ " vdwi.weld_code "	
 				+ " from daq_detection_ray t "
 				+ " left join sys_domain d1 on d1.code_id = t.detection_type"
 				+ " left join sys_domain d2 on d2.code_id = t.evaluation_grade"
@@ -73,6 +74,7 @@ public class DaqDetectionRayDao extends BaseNamedParameterJdbcDao{
 				+ " left join v_daq_pipe_segment_cross v on v.oid=t.pipe_segment_or_cross_oid "
 				+ " left join pri_unit u1 on u1.oid=t.detection_unit "
 				+ " left join pri_unit u2 on u2.oid=t.supervision_unit "
+				+ " left join (select oid,weld_code from v_daq_weld_info) vdwi on vdwi.oid=t.weld_oid "	
 				+ " where t.active = 1 and t.oid =?";
 		DaqDetectionRayBo rayBo = 
 				(DaqDetectionRayBo) this.baseJdbcDao.queryForObject(sql, new String[]{oid}, DaqDetectionRayBo.class);

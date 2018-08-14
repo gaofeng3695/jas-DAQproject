@@ -57,9 +57,9 @@ public class DaqDetectionMagneticPowder extends CommonJdbcEntity {
 	private String pipeSegmentOrCrossOid; 
 
 	/**
-	 * 焊口编号 
+	 * 焊口oid
 	 */
-	private String weldCode; 
+	private String weldOid;
 
 	/**
 	 * 检测报告编号 
@@ -162,13 +162,13 @@ public class DaqDetectionMagneticPowder extends CommonJdbcEntity {
 		super.setField("pipeSegmentOrCrossOid");
 	}
 
-	public String getWeldCode() {
-		return weldCode; 
+	public String getWeldOid() {
+		return weldOid;
 	}
 
-	public void setWeldCode(String weldCode) {
-		this.weldCode = weldCode; 
-		super.setField("weldCode");
+	public void setWeldOid(String weldOid) {
+		this.weldOid = weldOid;
+		super.setField("weldOid");
 	}
 
 	public String getDetectionReportNum() {
