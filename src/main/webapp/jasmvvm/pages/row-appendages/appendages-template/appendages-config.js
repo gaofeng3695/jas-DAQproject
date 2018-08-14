@@ -781,21 +781,21 @@ var crossConfig = {
       isRequired: true
     }, //: -0.5,
     pointx: {
-      name: '坐标X',
+      name: 'X坐标',
       type: 'number',
       max: 9999999,
       precision: 3,
       nameConfig: {
-        appendagesMarkStake: '东坐标'
+        appendagesMarkStake: 'X坐标'
       }
     }, //: null,
     pointy: {
-      name: '坐标Y',
+      name: 'Y坐标',
       type: 'number',
       max: 99999999,
       precision: 3,
       nameConfig: {
-        appendagesMarkStake: '北坐标'
+        appendagesMarkStake: 'Y坐标'
       }
     }, //: null,
     stakeStructure: {
@@ -1011,25 +1011,25 @@ var crossConfig = {
     }, //: "test",
 
     "startPointx": {
-      name: '起点坐标X',
+      name: '起点X坐标',
       type: 'number',
       max: 999999,
       precision: 3,
     }, //: 115.005,
     "startPointy": {
-      name: '起点坐标Y',
+      name: '起点Y坐标',
       type: 'number',
       max: 9999999,
       precision: 3,
     }, //: 38.153,
     "endPointx": {
-      name: '终点坐标X',
+      name: '终点X坐标',
       type: 'number',
       max: 999999,
       precision: 3,
     }, //: 115.005,
     "endPointy": {
-      name: '终点坐标Y',
+      name: '终点Y坐标',
       type: 'number',
       max: 9999999,
       precision: 3,
