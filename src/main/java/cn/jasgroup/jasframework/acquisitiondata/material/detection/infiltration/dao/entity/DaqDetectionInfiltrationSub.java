@@ -23,9 +23,9 @@ public class DaqDetectionInfiltrationSub extends CommonJdbcEntity {
 	private String parentOid; 
 
 	/**
-	 * 焊口编号 
+	 * 焊口oid
 	 */
-	private String weldCode; 
+	private String weldOid; 
 
 	/**
 	 * 缺陷位置 
@@ -51,13 +51,13 @@ public class DaqDetectionInfiltrationSub extends CommonJdbcEntity {
 		super.setField("parentOid");
 	}
 
-	public String getWeldCode() {
-		return weldCode; 
+	public String getWeldOid() {
+		return weldOid;
 	}
 
-	public void setWeldCode(String weldCode) {
-		this.weldCode = weldCode; 
-		super.setField("weldCode");
+	public void setWeldOid(String weldOid) {
+		this.weldOid = weldOid;
+		super.setField("weldOid");
 	}
 
 	public String getDefectPosition() {

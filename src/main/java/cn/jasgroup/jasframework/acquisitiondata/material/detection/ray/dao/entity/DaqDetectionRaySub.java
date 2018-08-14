@@ -21,8 +21,10 @@ public class DaqDetectionRaySub extends CommonJdbcEntity {
 	/** 主表oid */
 	private String parentOid;
 
-	/** 焊口编号 */
-	private String weldCode;
+	/**
+	 * 焊口oid
+	 */
+	private String weldOid;
 
 	/** 缺陷位置 */
 	private String defectPosition;
@@ -43,14 +45,14 @@ public class DaqDetectionRaySub extends CommonJdbcEntity {
 		super.setField("parentOid");
 	}
 
-	@Column(name = "weld_code", length = 36)
-	public String getWeldCode() {
-		return weldCode;
+	@Column(name = "weld_oid", length = 36)
+	public String getWeldOid() {
+		return weldOid;
 	}
 
-	public void setWeldCode(String weldCode) {
-		this.weldCode = weldCode;
-		super.setField("weldCode");
+	public void setWeldOid(String weldOid) {
+		this.weldOid = weldOid;
+		super.setField("weldOid");
 	}
 
 	@Column(name = "defect_position", length = 60)

@@ -51,8 +51,10 @@ public class DaqDetectionRay extends CommonJdbcEntity {
 	/** 线路段/穿跨越 */
 	private String pipeSegmentOrCrossOid;
 
-	/** 焊口编号 */
-	private String weldCode;
+	/**
+	 * 焊口oid
+	 */
+	private String weldOid;
 
 	/** 检测报告编号 */
 	private String detectionReportNum;
@@ -136,16 +138,16 @@ public class DaqDetectionRay extends CommonJdbcEntity {
 		super.setField("pipeSegmentOrCrossOid");
 	}
 
-	@Column(name = "weld_code", length = 36)
-	public String getWeldCode() {
-		return weldCode;
+	@Column(name = "weld_oid", length = 36)
+	public String getWeldOid() {
+		return weldOid;
 	}
 
-	public void setWeldCode(String weldCode) {
-		this.weldCode = weldCode;
-		super.setField("weldCode");
+	public void setWeldOid(String weldOid) {
+		this.weldOid = weldOid;
+		super.setField("weldOid");
 	}
-
+	
 	@Column(name = "detection_report_num", length = 60)
 	public String getDetectionReportNum() {
 		return detectionReportNum;
