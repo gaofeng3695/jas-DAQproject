@@ -20,8 +20,10 @@ public class DaqDetectionUltrasonicSub extends CommonJdbcEntity{
 	/** 主表oid */
 	private String parentOid; 
 
-	/** 焊口编号 */
-	private String weldCode; 
+	/**
+	 * 焊口oid
+	 */
+	private String weldOid;
 
 	/** 缺陷位置 */
 	private String defectPosition; 
@@ -41,13 +43,13 @@ public class DaqDetectionUltrasonicSub extends CommonJdbcEntity{
 		super.setField("parentOid");
 	}
 
-	public String getWeldCode() {
-		return weldCode; 
+	public String getWeldOid() {
+		return weldOid;
 	}
 
-	public void setWeldCode(String weldCode) {
-		this.weldCode = weldCode;
-		super.setField("weldCode");
+	public void setWeldOid(String weldOid) {
+		this.weldOid = weldOid;
+		super.setField("weldOid");
 	}
 
 	public String getDefectPosition() {

@@ -34,8 +34,10 @@ public class DaqDetectionPaUltrasonicSubDao extends BaseJdbcDao{
 	 */
 	@SuppressWarnings("unchecked")
 	public List<DaqDetectionPaUltrasonicSub> getList(String parentOid){
-		String sql = "select t.*"
+		String sql = "select t.*,"
+				+ " vdwi.weld_code "
 				+ " from daq_detection_pa_ultrasonic_sub t "
+				+ " left join (select oid,weld_code from v_daq_weld_info) vdwi on vdwi.oid=t.weld_oid "	
 				+ " where t.active = 1 and t.parent_oid = ?";
 		List<DaqDetectionPaUltrasonicSub> paUltrasonicSubList = 
 				this.baseJdbcDao.queryForList(sql, new String[]{parentOid}, DaqDetectionPaUltrasonicSub.class);

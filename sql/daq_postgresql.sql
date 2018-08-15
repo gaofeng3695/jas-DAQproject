@@ -1902,7 +1902,7 @@ CREATE TABLE daq_detection_ray (
 	pipeline_oid VARCHAR (36),
 	tenders_oid VARCHAR (36),
 	pipe_segment_or_cross_oid VARCHAR (36),
-	weld_code VARCHAR (36),
+	weld_oid VARCHAR (36),
 	detection_report_num VARCHAR (60),
 	detection_deta TIMESTAMP (6),
 	detection_type VARCHAR (50),
@@ -1930,7 +1930,7 @@ comment on column daq_detection_ray.project_oid is '项目oid';
 comment on column daq_detection_ray.pipeline_oid is '管线oid';
 comment on column daq_detection_ray.tenders_oid is '标段oid';
 comment on column daq_detection_ray.pipe_segment_or_cross_oid is '线路段/穿跨越';
-comment on column daq_detection_ray.weld_code is '焊口编号';
+comment on column daq_detection_ray.weld_oid is '焊口编号';
 comment on column daq_detection_ray.detection_report_num is '检测报告编号';
 comment on column daq_detection_ray.detection_deta is '检测日期';
 comment on column daq_detection_ray.detection_type is '检测类型';
@@ -1951,13 +1951,13 @@ comment on column daq_detection_ray.modify_user_id is '修改人id';
 comment on column daq_detection_ray.modify_user_name is '修改人名称';
 comment on column daq_detection_ray.modify_datetime is '修改时间';
 comment on column daq_detection_ray.active is '有效标志';
-create index INDEX_DAQ_DETECTION_RAY_WELD_CODE_9 ON daq_detection_ray ( weld_code );
+create index INDEX_DAQ_DETECTION_RAY_weld_oid_9 ON daq_detection_ray ( weld_oid );
 create index INDEX_DAQ_DETECTION_RAY_DETECTION_REPORT_NUM_10 ON daq_detection_ray ( detection_report_num );
 
 CREATE TABLE daq_detection_ray_sub (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
 	parent_oid VARCHAR (36),
-	weld_code VARCHAR (36),
+	weld_oid VARCHAR (36),
 	defect_position VARCHAR (60),
 	defect_properties VARCHAR (50),
 	defect_size NUMERIC (9, 3),
@@ -1972,7 +1972,7 @@ CREATE TABLE daq_detection_ray_sub (
 comment on table daq_detection_ray_sub is '射线检测子表';
 comment on column daq_detection_ray_sub.oid is '主键';
 comment on column daq_detection_ray_sub.parent_oid is '主表oid';
-comment on column daq_detection_ray_sub.weld_code is '焊口编号';
+comment on column daq_detection_ray_sub.weld_oid is '焊口编号';
 comment on column daq_detection_ray_sub.defect_position is '缺陷位置';
 comment on column daq_detection_ray_sub.defect_properties is '缺陷性质';
 comment on column daq_detection_ray_sub.defect_size is '缺陷尺寸(mm/mm²/点)';
@@ -1983,7 +1983,7 @@ comment on column daq_detection_ray_sub.modify_user_id is '修改人id';
 comment on column daq_detection_ray_sub.modify_user_name is '修改人名称';
 comment on column daq_detection_ray_sub.modify_datetime is '修改时间';
 comment on column daq_detection_ray_sub.active is '有效标志';
-create index INDEX_DAQ_DETECTION_RAY_SUB_WELD_CODE_6 ON daq_detection_ray_sub ( weld_code );
+create index INDEX_DAQ_DETECTION_RAY_SUB_weld_oid_6 ON daq_detection_ray_sub ( weld_oid );
 
 CREATE TABLE daq_detection_ultrasonic (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -1991,7 +1991,7 @@ CREATE TABLE daq_detection_ultrasonic (
 	pipeline_oid VARCHAR (36),
 	tenders_oid VARCHAR (36),
 	pipe_segment_or_cross_oid VARCHAR (36),
-	weld_code VARCHAR (36),
+	weld_oid VARCHAR (36),
 	detection_report_num VARCHAR (60),
 	detection_deta TIMESTAMP (6),
 	detection_type VARCHAR (50),
@@ -2020,7 +2020,7 @@ comment on column daq_detection_ultrasonic.project_oid is '项目oid';
 comment on column daq_detection_ultrasonic.pipeline_oid is '管线oid';
 comment on column daq_detection_ultrasonic.tenders_oid is '标段oid';
 comment on column daq_detection_ultrasonic.pipe_segment_or_cross_oid is '线路段/穿跨越';
-comment on column daq_detection_ultrasonic.weld_code is '焊口编号';
+comment on column daq_detection_ultrasonic.weld_oid is '焊口编号';
 comment on column daq_detection_ultrasonic.detection_report_num is '检测报告编号';
 comment on column daq_detection_ultrasonic.detection_deta is '检测日期';
 comment on column daq_detection_ultrasonic.detection_type is '检测类型';
@@ -2042,13 +2042,13 @@ comment on column daq_detection_ultrasonic.modify_user_id is '修改人id';
 comment on column daq_detection_ultrasonic.modify_user_name is '修改人名称';
 comment on column daq_detection_ultrasonic.modify_datetime is '修改时间';
 comment on column daq_detection_ultrasonic.active is '有效标志';
-create index INDEX_DAQ_DETECTION_ULTRASONIC_WELD_CODE_9 ON daq_detection_ultrasonic ( weld_code );
+create index INDEX_DAQ_DETECTION_ULTRASONIC_weld_oid_9 ON daq_detection_ultrasonic ( weld_oid );
 create index INDEX_DAQ_DETECTION_ULTRASONIC_DETECTION_REPORT_NUM_10 ON daq_detection_ultrasonic ( detection_report_num );
 
 CREATE TABLE daq_detection_ultrasonic_sub (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
 	parent_oid VARCHAR (36),
-	weld_code VARCHAR (36),
+	weld_oid VARCHAR (36),
 	defect_position VARCHAR (60),
 	defect_properties VARCHAR (50),
 	defect_size NUMERIC (9, 3),
@@ -2063,7 +2063,7 @@ CREATE TABLE daq_detection_ultrasonic_sub (
 comment on table daq_detection_ultrasonic_sub is '超声波检测子表';
 comment on column daq_detection_ultrasonic_sub.oid is '主键';
 comment on column daq_detection_ultrasonic_sub.parent_oid is '主表oid';
-comment on column daq_detection_ultrasonic_sub.weld_code is '焊口编号';
+comment on column daq_detection_ultrasonic_sub.weld_oid is '焊口编号';
 comment on column daq_detection_ultrasonic_sub.defect_position is '缺陷位置';
 comment on column daq_detection_ultrasonic_sub.defect_properties is '缺陷性质';
 comment on column daq_detection_ultrasonic_sub.defect_size is '缺陷尺寸(mm/mm²/点)';
@@ -2074,7 +2074,7 @@ comment on column daq_detection_ultrasonic_sub.modify_user_id is '修改人id';
 comment on column daq_detection_ultrasonic_sub.modify_user_name is '修改人名称';
 comment on column daq_detection_ultrasonic_sub.modify_datetime is '修改时间';
 comment on column daq_detection_ultrasonic_sub.active is '有效标志';
-create index INDEX_daq_detection_ultrasonic_sub_WELD_CODE_6 ON daq_detection_ultrasonic_sub ( weld_code );
+create index INDEX_daq_detection_ultrasonic_sub_weld_oid_6 ON daq_detection_ultrasonic_sub ( weld_oid );
 
 CREATE TABLE daq_detection_infiltration (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -2082,7 +2082,7 @@ CREATE TABLE daq_detection_infiltration (
 	pipeline_oid VARCHAR (36),
 	tenders_oid VARCHAR (36),
 	pipe_segment_or_cross_oid VARCHAR (36),
-	weld_code VARCHAR (36),
+	weld_oid VARCHAR (36),
 	detection_report_num VARCHAR (60),
 	detection_deta TIMESTAMP (6),
 	evaluation_result SMALLINT,
@@ -2109,7 +2109,7 @@ comment on column daq_detection_infiltration.project_oid is '项目oid';
 comment on column daq_detection_infiltration.pipeline_oid is '管线oid';
 comment on column daq_detection_infiltration.tenders_oid is '标段oid';
 comment on column daq_detection_infiltration.pipe_segment_or_cross_oid is '线路段/穿跨越';
-comment on column daq_detection_infiltration.weld_code is '焊口编号';
+comment on column daq_detection_infiltration.weld_oid is '焊口编号';
 comment on column daq_detection_infiltration.detection_report_num is '检测报告编号';
 comment on column daq_detection_infiltration.detection_deta is '检测日期';
 comment on column daq_detection_infiltration.evaluation_result is '评定结果';
@@ -2129,13 +2129,13 @@ comment on column daq_detection_infiltration.modify_user_id is '修改人id';
 comment on column daq_detection_infiltration.modify_user_name is '修改人名称';
 comment on column daq_detection_infiltration.modify_datetime is '修改时间';
 comment on column daq_detection_infiltration.active is '有效标志';
-create index INDEX_DAQ_DETECTION_INFILTRATION_WELD_CODE_9 ON daq_detection_infiltration ( weld_code );
+create index INDEX_DAQ_DETECTION_INFILTRATION_weld_oid_9 ON daq_detection_infiltration ( weld_oid );
 create index INDEX_DAQ_DETECTION_INFILTRATION_DETECTION_REPORT_NUM_10 ON daq_detection_infiltration ( detection_report_num );
 
 CREATE TABLE daq_detection_infiltration_sub (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
 	parent_oid VARCHAR (36),
-	weld_code VARCHAR (36),
+	weld_oid VARCHAR (36),
 	defect_position VARCHAR (60),
 	defect_properties VARCHAR (50),
 	defect_size NUMERIC (9, 3),
@@ -2150,7 +2150,7 @@ CREATE TABLE daq_detection_infiltration_sub (
 comment on table daq_detection_infiltration_sub is '渗透检测子表';
 comment on column daq_detection_infiltration_sub.oid is '主键';
 comment on column daq_detection_infiltration_sub.parent_oid is '主表oid';
-comment on column daq_detection_infiltration_sub.weld_code is '焊口编号';
+comment on column daq_detection_infiltration_sub.weld_oid is '焊口编号';
 comment on column daq_detection_infiltration_sub.defect_position is '缺陷位置';
 comment on column daq_detection_infiltration_sub.defect_properties is '缺陷性质';
 comment on column daq_detection_infiltration_sub.defect_size is '缺陷尺寸(mm/mm²/点)';
@@ -2161,7 +2161,7 @@ comment on column daq_detection_infiltration_sub.modify_user_id is '修改人id'
 comment on column daq_detection_infiltration_sub.modify_user_name is '修改人名称';
 comment on column daq_detection_infiltration_sub.modify_datetime is '修改时间';
 comment on column daq_detection_infiltration_sub.active is '有效标志';
-create index INDEX_daq_detection_infiltration_sub_WELD_CODE_6 ON daq_detection_infiltration_sub ( weld_code );
+create index INDEX_daq_detection_infiltration_sub_weld_oid_6 ON daq_detection_infiltration_sub ( weld_oid );
 
 CREATE TABLE daq_detection_magnetic_powder (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -2169,7 +2169,7 @@ CREATE TABLE daq_detection_magnetic_powder (
 	pipeline_oid VARCHAR (36),
 	tenders_oid VARCHAR (36),
 	pipe_segment_or_cross_oid VARCHAR (36),
-	weld_code VARCHAR (36),
+	weld_oid VARCHAR (36),
 	detection_report_num VARCHAR (60),
 	detection_deta TIMESTAMP (6),
 	evaluation_result SMALLINT,
@@ -2196,7 +2196,7 @@ comment on column daq_detection_magnetic_powder.project_oid is '项目oid';
 comment on column daq_detection_magnetic_powder.pipeline_oid is '管线oid';
 comment on column daq_detection_magnetic_powder.tenders_oid is '标段oid';
 comment on column daq_detection_magnetic_powder.pipe_segment_or_cross_oid is '线路段/穿跨越';
-comment on column daq_detection_magnetic_powder.weld_code is '焊口编号';
+comment on column daq_detection_magnetic_powder.weld_oid is '焊口编号';
 comment on column daq_detection_magnetic_powder.detection_report_num is '检测报告编号';
 comment on column daq_detection_magnetic_powder.detection_deta is '检测日期';
 comment on column daq_detection_magnetic_powder.evaluation_result is '评定结果';
@@ -2216,13 +2216,13 @@ comment on column daq_detection_magnetic_powder.modify_user_id is '修改人id';
 comment on column daq_detection_magnetic_powder.modify_user_name is '修改人名称';
 comment on column daq_detection_magnetic_powder.modify_datetime is '修改时间';
 comment on column daq_detection_magnetic_powder.active is '有效标志';
-create index INDEX_DAQ_DETECTION_MAGNETIC_POWDER_WELD_CODE_9 ON daq_detection_magnetic_powder ( weld_code );
+create index INDEX_DAQ_DETECTION_MAGNETIC_POWDER_weld_oid_9 ON daq_detection_magnetic_powder ( weld_oid );
 create index INDEX_DAQ_DETECTION_MAGNETIC_POWDER_DETECTION_REPORT_NUM_10 ON daq_detection_magnetic_powder ( detection_report_num );
 
 CREATE TABLE daq_detection_magnetic_powder_sub (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
 	parent_oid VARCHAR (36),
-	weld_code VARCHAR (36),
+	weld_oid VARCHAR (36),
 	defect_position VARCHAR (60),
 	defect_properties VARCHAR (50),
 	defect_size NUMERIC (9, 3),
@@ -2237,7 +2237,7 @@ CREATE TABLE daq_detection_magnetic_powder_sub (
 comment on table daq_detection_magnetic_powder_sub is '磁粉检测子表';
 comment on column daq_detection_magnetic_powder_sub.oid is '主键';
 comment on column daq_detection_magnetic_powder_sub.parent_oid is '主表oid';
-comment on column daq_detection_magnetic_powder_sub.weld_code is '焊口编号';
+comment on column daq_detection_magnetic_powder_sub.weld_oid is '焊口编号';
 comment on column daq_detection_magnetic_powder_sub.defect_position is '缺陷位置';
 comment on column daq_detection_magnetic_powder_sub.defect_properties is '缺陷性质';
 comment on column daq_detection_magnetic_powder_sub.defect_size is '缺陷尺寸(mm/mm²/点)';
@@ -2248,7 +2248,7 @@ comment on column daq_detection_magnetic_powder_sub.modify_user_id is '修改人
 comment on column daq_detection_magnetic_powder_sub.modify_user_name is '修改人名称';
 comment on column daq_detection_magnetic_powder_sub.modify_datetime is '修改时间';
 comment on column daq_detection_magnetic_powder_sub.active is '有效标志';
-create index INDEX_daq_detection_magnetic_powder_sub_WELD_CODE_6 ON daq_detection_magnetic_powder_sub ( weld_code );
+create index INDEX_daq_detection_magnetic_powder_sub_weld_oid_6 ON daq_detection_magnetic_powder_sub ( weld_oid );
 
 CREATE TABLE daq_detection_fa_ultrasonic (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -2256,7 +2256,7 @@ CREATE TABLE daq_detection_fa_ultrasonic (
 	pipeline_oid VARCHAR (36),
 	tenders_oid VARCHAR (36),
 	pipe_segment_or_cross_oid VARCHAR (36),
-	weld_code VARCHAR (36),
+	weld_oid VARCHAR (36),
 	detection_report_num VARCHAR (60),
 	detection_deta TIMESTAMP (6),
 	detection_type VARCHAR (50),
@@ -2284,7 +2284,7 @@ comment on column daq_detection_fa_ultrasonic.project_oid is '项目oid';
 comment on column daq_detection_fa_ultrasonic.pipeline_oid is '管线oid';
 comment on column daq_detection_fa_ultrasonic.tenders_oid is '标段oid';
 comment on column daq_detection_fa_ultrasonic.pipe_segment_or_cross_oid is '线路段/穿跨越';
-comment on column daq_detection_fa_ultrasonic.weld_code is '焊口编号';
+comment on column daq_detection_fa_ultrasonic.weld_oid is '焊口编号';
 comment on column daq_detection_fa_ultrasonic.detection_report_num is '检测报告编号';
 comment on column daq_detection_fa_ultrasonic.detection_deta is '检测日期';
 comment on column daq_detection_fa_ultrasonic.detection_type is '检测类型';
@@ -2305,13 +2305,13 @@ comment on column daq_detection_fa_ultrasonic.modify_user_id is '修改人id';
 comment on column daq_detection_fa_ultrasonic.modify_user_name is '修改人名称';
 comment on column daq_detection_fa_ultrasonic.modify_datetime is '修改时间';
 comment on column daq_detection_fa_ultrasonic.active is '有效标志';
-create index INDEX_DAQ_DETECTION_FA_ULTRASONIC_WELD_CODE_9 ON daq_detection_fa_ultrasonic ( weld_code );
+create index INDEX_DAQ_DETECTION_FA_ULTRASONIC_weld_oid_9 ON daq_detection_fa_ultrasonic ( weld_oid );
 create index INDEX_DAQ_DETECTION_FA_ULTRASONIC_DETECTION_REPORT_NUM_10 ON daq_detection_fa_ultrasonic ( detection_report_num );
 
 CREATE TABLE daq_detection_fa_ultrasonic_sub (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
 	parent_oid VARCHAR (36),
-	weld_code VARCHAR (36),
+	weld_oid VARCHAR (36),
 	defect_position VARCHAR (60),
 	amplitude_region VARCHAR (60),
 	defect_length NUMERIC (9, 3),
@@ -2328,7 +2328,7 @@ CREATE TABLE daq_detection_fa_ultrasonic_sub (
 comment on table daq_detection_fa_ultrasonic_sub is '全自动超声波检测子表';
 comment on column daq_detection_fa_ultrasonic_sub.oid is '主键';
 comment on column daq_detection_fa_ultrasonic_sub.parent_oid is '主表oid';
-comment on column daq_detection_fa_ultrasonic_sub.weld_code is '焊口编号';
+comment on column daq_detection_fa_ultrasonic_sub.weld_oid is '焊口编号';
 comment on column daq_detection_fa_ultrasonic_sub.defect_position is '缺陷位置';
 comment on column daq_detection_fa_ultrasonic_sub.amplitude_region is '振幅区域';
 comment on column daq_detection_fa_ultrasonic_sub.defect_length is '缺陷长度(mm)';
@@ -2341,7 +2341,7 @@ comment on column daq_detection_fa_ultrasonic_sub.modify_user_id is '修改人id
 comment on column daq_detection_fa_ultrasonic_sub.modify_user_name is '修改人名称';
 comment on column daq_detection_fa_ultrasonic_sub.modify_datetime is '修改时间';
 comment on column daq_detection_fa_ultrasonic_sub.active is '有效标志';
-create index INDEX_daq_detection_fa_ultrasonic_sub_WELD_CODE_6 ON daq_detection_fa_ultrasonic_sub ( weld_code );
+create index INDEX_daq_detection_fa_ultrasonic_sub_weld_oid_6 ON daq_detection_fa_ultrasonic_sub ( weld_oid );
 
 CREATE TABLE daq_detection_pa_ultrasonic (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -2349,7 +2349,7 @@ CREATE TABLE daq_detection_pa_ultrasonic (
 	pipeline_oid VARCHAR (36),
 	tenders_oid VARCHAR (36),
 	pipe_segment_or_cross_oid VARCHAR (36),
-	weld_code VARCHAR (36),
+	weld_oid VARCHAR (36),
 	detection_report_num VARCHAR (60),
 	detection_file_num VARCHAR (60),
 	detection_deta TIMESTAMP (6),
@@ -2377,7 +2377,7 @@ comment on column daq_detection_pa_ultrasonic.project_oid is '项目oid';
 comment on column daq_detection_pa_ultrasonic.pipeline_oid is '管线oid';
 comment on column daq_detection_pa_ultrasonic.tenders_oid is '标段oid';
 comment on column daq_detection_pa_ultrasonic.pipe_segment_or_cross_oid is '线路段/穿跨越';
-comment on column daq_detection_pa_ultrasonic.weld_code is '焊口编号';
+comment on column daq_detection_pa_ultrasonic.weld_oid is '焊口编号';
 comment on column daq_detection_pa_ultrasonic.detection_report_num is '检测报告编号';
 comment on column daq_detection_pa_ultrasonic.detection_file_num is '检测文件编号';
 comment on column daq_detection_pa_ultrasonic.detection_deta is '检测日期';
@@ -2398,13 +2398,13 @@ comment on column daq_detection_pa_ultrasonic.modify_user_id is '修改人id';
 comment on column daq_detection_pa_ultrasonic.modify_user_name is '修改人名称';
 comment on column daq_detection_pa_ultrasonic.modify_datetime is '修改时间';
 comment on column daq_detection_pa_ultrasonic.active is '有效标志';
-create index INDEX_DAQ_DETECTION_PA_ULTRASONIC_WELD_CODE_9 ON daq_detection_pa_ultrasonic ( weld_code );
+create index INDEX_DAQ_DETECTION_PA_ULTRASONIC_weld_oid_9 ON daq_detection_pa_ultrasonic ( weld_oid );
 create index INDEX_DAQ_DETECTION_PA_ULTRASONIC_DETECTION_REPORT_NUM_10 ON daq_detection_pa_ultrasonic ( detection_report_num );
 
 CREATE TABLE daq_detection_pa_ultrasonic_sub (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
 	parent_oid VARCHAR (36),
-	weld_code VARCHAR (36),
+	weld_oid VARCHAR (36),
 	defect_position VARCHAR (60),
 	amplitude_region VARCHAR (60),
 	defect_length NUMERIC (9, 3),
@@ -2421,7 +2421,7 @@ CREATE TABLE daq_detection_pa_ultrasonic_sub (
 comment on table daq_detection_pa_ultrasonic_sub is '相控阵超声波检测子表';
 comment on column daq_detection_pa_ultrasonic_sub.oid is '主键';
 comment on column daq_detection_pa_ultrasonic_sub.parent_oid is '主表oid';
-comment on column daq_detection_pa_ultrasonic_sub.weld_code is '焊口编号';
+comment on column daq_detection_pa_ultrasonic_sub.weld_oid is '焊口编号';
 comment on column daq_detection_pa_ultrasonic_sub.defect_position is '缺陷位置';
 comment on column daq_detection_pa_ultrasonic_sub.amplitude_region is '振幅区域';
 comment on column daq_detection_pa_ultrasonic_sub.defect_length is '缺陷长度(mm)';
@@ -2434,7 +2434,7 @@ comment on column daq_detection_pa_ultrasonic_sub.modify_user_id is '修改人id
 comment on column daq_detection_pa_ultrasonic_sub.modify_user_name is '修改人名称';
 comment on column daq_detection_pa_ultrasonic_sub.modify_datetime is '修改时间';
 comment on column daq_detection_pa_ultrasonic_sub.active is '有效标志';
-create index INDEX_daq_detection_pa_ultrasonic_sub_WELD_CODE_6 ON daq_detection_pa_ultrasonic_sub ( weld_code );
+create index INDEX_daq_detection_pa_ultrasonic_sub_weld_oid_6 ON daq_detection_pa_ultrasonic_sub ( weld_oid );
 /**********管道检测信息end***************/
 /**********管道敷设信息begin***************/
 CREATE TABLE daq_lay_surveying (

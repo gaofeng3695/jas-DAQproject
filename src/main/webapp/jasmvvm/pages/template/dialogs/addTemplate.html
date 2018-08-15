@@ -502,6 +502,8 @@
 				for (key in that.formData) {
 					if (that.formData[key] instanceof Array) {
 						that.formData[key] = that.formData[key].join(",")
+					}else if(that.formData[key]==''){
+						that.formData[key]=null;
 					}
 				}
 				jasTools.ajax.post(url, that.formData, function () {
