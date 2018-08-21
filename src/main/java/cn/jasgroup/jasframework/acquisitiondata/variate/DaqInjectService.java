@@ -13,6 +13,7 @@ import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 import cn.jasgroup.jasframework.base.data.BaseQuery;
 import cn.jasgroup.jasframework.security.dao.UnitDao;
 import cn.jasgroup.jasframework.security.dao.entity.PriUnit;
+import cn.jasgroup.jasframework.security.service.UnitService;
 import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 
 @Service
@@ -20,7 +21,8 @@ import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 public class DaqInjectService {
 	
 	@Resource
-	private UnitDao unitDao;
+//	private UnitDao unitDao;
+	private UnitService unitService;
 	
 	public void injectCurrentUnitId(BaseData baseData){
 		baseData.setValue("current_unit_id", ThreadLocalHolder.getCurrentUser().getUnitId());
@@ -32,12 +34,11 @@ public class DaqInjectService {
 			return;
 		}
 		String unitOid = ThreadLocalHolder.getCurrentUser().getUnitId();
-		List<PriUnit> unitEntityList = unitDao.findUnitByID(unitOid);
-		if(unitEntityList==null || unitEntityList.size()==0){
+		PriUnit unitEntity = (PriUnit)unitService.get(PriUnit.class,unitOid);
+		if(unitEntity==null){
 			return;
 		}
 		String strategySql = "";
-		PriUnit unitEntity = unitEntityList.get(0);
 		String hierarchy = unitEntity.getHierarchy();
 		if(hierarchy.startsWith(UnitHierarchyEnum.construct_unit.getHierarchy())){//施工单位
 			strategySql = " and construct_unit in (select uu.oid from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid='"+unitOid+"')";
@@ -72,12 +73,11 @@ public class DaqInjectService {
 	 */
 	public void injectDataAuthoritySql(BaseJavaQuery query,String dataAuthoritySql){
 		String unitOid = ThreadLocalHolder.getCurrentUser().getUnitId();
-		List<PriUnit> unitEntityList = unitDao.findUnitByID(unitOid);
-		if(unitEntityList==null || unitEntityList.size()==0){
+		PriUnit unitEntity = (PriUnit)unitService.get(PriUnit.class,unitOid);
+		if(unitEntity==null){
 			dataAuthoritySql = "";
 			return;
 		}
-		PriUnit unitEntity = unitEntityList.get(0);
 		String hierarchy = unitEntity.getHierarchy();
 		if(hierarchy.startsWith(UnitHierarchyEnum.construct_unit.getHierarchy())){//施工单位
 			dataAuthoritySql = " and construct_unit in (select uu.oid from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid='"+unitOid+"')";
