@@ -380,7 +380,18 @@
 							type: 'warning',
 							callback: function (action) {
 								if (action === 'confirm') {
-									window.top.location.href = '/login.html';
+									window.top.location.href = 'login.html';
+								}
+							}
+						});
+						return;
+					}
+					if (data.status == -1 && data.code == "402") { // token失效或者过期，会返回-1
+						window.top.Vue.prototype.$confirm('登录信息失效，请重新登录', '提示', {
+							type: 'warning',
+							callback: function (action) {
+								if (action === 'confirm') {
+									window.top.location.href = 'login.html';
 								}
 							}
 						});
