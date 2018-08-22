@@ -324,6 +324,10 @@
 					oid: that.oid
 				}, function (data) {
 					that.form = data.data;
+					that.fieldsConfig.weldOid.options = [{
+						key: that.form.weldOid,
+						value: that.form.weldCode
+					}];
 					that.$refs['mainForm'].triggerFatherSelectsChange();
 					that.form.ultrasonicSubList.forEach(function (item) {
 						item.operationFlag = 2;
