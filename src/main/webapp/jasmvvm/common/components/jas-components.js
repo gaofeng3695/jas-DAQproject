@@ -1463,7 +1463,11 @@ Vue.component('jas-form-items', {
 			var fieldConfig = this.fieldsConfig[fatherField];
 			var form = this.form;
 			var setChildOptionsAndValue = function (childField, options) { // 入参下拉选项
-				that.fieldsConfig[childField].options = options;
+				if(that.fieldsConfig[childField].options.length==0){
+					that.fieldsConfig[childField].options = options;
+				}else{
+					that.fieldsConfig[childField].options = that.fieldsConfig[childField].options.concat(options);
+				}
 				!isInit && (form[childField] = '');
 				if (options.length === 1) { //只有一个选项就自动复制
 					form[childField] = options[0].key;
