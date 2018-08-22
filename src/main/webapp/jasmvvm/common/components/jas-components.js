@@ -1468,8 +1468,9 @@ Vue.component('jas-form-items', {
 				}else{
 					that.fieldsConfig[childField].options = that.fieldsConfig[childField].options.concat(options);
 				}
+				var length = that.fieldsConfig[childField].options.length;
 				!isInit && (form[childField] = '');
-				if (options.length === 1) { //只有一个选项就自动复制
+				if (length === 1) { //只有一个选项就自动复制
 					form[childField] = options[0].key;
 				}
 				that.$refs[childField][0].$emit('change', isInit);
