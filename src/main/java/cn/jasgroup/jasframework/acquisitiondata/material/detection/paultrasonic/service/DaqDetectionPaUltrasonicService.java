@@ -8,11 +8,14 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cn.jasgroup.jasframework.acquisitiondata.material.detection.magneticpowder.dao.entity.DaqDetectionMagneticPowder;
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.paultrasonic.dao.DaqDetectionPaUltrasonicDao;
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.paultrasonic.dao.DaqDetectionPaUltrasonicSubDao;
+import cn.jasgroup.jasframework.acquisitiondata.material.detection.paultrasonic.dao.entity.DaqDetectionPaUltrasonic;
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.paultrasonic.dao.entity.DaqDetectionPaUltrasonicSub;
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.paultrasonic.query.bo.DaqDetectionPaUltrasonicBo;
 import cn.jasgroup.jasframework.engine.jdbc.service.CommonDataJdbcService;
+import cn.jasgroup.jasframework.support.BaseEntityThreadLocalHolder;
 
 /**
  * @description 相控阵超声波service
@@ -61,5 +64,59 @@ public class DaqDetectionPaUltrasonicService extends CommonDataJdbcService {
 			paUltrasonicBo.setPaUltrasonicSubList(paUltrasonicSubList);
 		}
 		return paUltrasonicBo;
+	}
+	
+	/**
+	 * <p>功能描述：保存后改变焊口的状态。</p>
+	  * <p> 葛建。</p>	
+	  * @param daqDetectionInfiltration
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年8月21日 下午4:32:59。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public void saveChanageWledStatus(DaqDetectionPaUltrasonic daqDetectionPaUltrasonic){
+		this.paUltrasonicDao.chanageWledStatus(daqDetectionPaUltrasonic.getWeldOid(), 1);
+	}
+	
+	/**
+	 * <p>功能描述：修改前将原实体快照放入当前线程中。</p>
+	  * <p> 葛建。</p>	
+	  * @param daqDetectionInfiltration
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年8月21日 下午4:33:13。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public void updateChanageWledStatusBeforeAdvice(DaqDetectionPaUltrasonic daqDetectionPaUltrasonic){
+		DaqDetectionPaUltrasonic oldDaqDetectionPaUltrasonic = this.paUltrasonicDao.find(daqDetectionPaUltrasonic.getOid());
+		BaseEntityThreadLocalHolder.setEntitySnap(oldDaqDetectionPaUltrasonic);
+	}
+	
+	/**
+	 * <p>功能描述：修改后改变焊口状态。</p>
+	  * <p> 葛建。</p>	
+	  * @param daqDetectionInfiltration
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年8月21日 下午4:33:25。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public void updateChanageWledStatus(DaqDetectionPaUltrasonic daqDetectionPaUltrasonic){
+		//从当前线程获取原实体快照
+		DaqDetectionPaUltrasonic oldDaqDetectionPaUltrasonic = (DaqDetectionPaUltrasonic)BaseEntityThreadLocalHolder.getEntitySnap();
+		//将原实体焊口状态改为未渗透检测
+		this.paUltrasonicDao.chanageWledStatus(oldDaqDetectionPaUltrasonic.getWeldOid(), 0);
+		this.paUltrasonicDao.chanageWledStatus(daqDetectionPaUltrasonic.getWeldOid(), 1);
+	}
+	
+	/**
+	 * <p>功能描述：删除后改变焊口状态。</p>
+	  * <p> 葛建。</p>	
+	  * @param daqDetectionInfiltration
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年8月21日 下午4:33:37。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public void deleteChanageWledStatus(DaqDetectionPaUltrasonic daqDetectionPaUltrasonic){
+		DaqDetectionPaUltrasonic olDaqDetectionPaUltrasonic = paUltrasonicDao.find(daqDetectionPaUltrasonic.getOid());
+		this.paUltrasonicDao.chanageWledStatus(olDaqDetectionPaUltrasonic.getWeldOid(), 0);
 	}
 }

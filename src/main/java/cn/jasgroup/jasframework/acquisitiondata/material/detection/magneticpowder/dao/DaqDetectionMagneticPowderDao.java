@@ -1,14 +1,18 @@
 package cn.jasgroup.jasframework.acquisitiondata.material.detection.magneticpowder.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import cn.jasgroup.jasframework.acquisitiondata.material.detection.magneticpowder.dao.entity.DaqDetectionMagneticPowder;
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.magneticpowder.query.bo.DaqDetectionMagneticPowderBo;
 import cn.jasgroup.jasframework.dataaccess.base.BaseJdbcDao;
 import cn.jasgroup.jasframework.dataaccess.base.BaseNamedParameterJdbcDao;
+import cn.jasgroup.jasframework.dataaccess3.core.BaseJdbcTemplate;
 
 /**
  * @description 磁粉检测主表dao
@@ -23,6 +27,9 @@ public class DaqDetectionMagneticPowderDao extends BaseNamedParameterJdbcDao{
 
 	@Resource
 	private BaseJdbcDao baseJdbcDao;
+	
+	@Autowired
+	private BaseJdbcTemplate baseJdbcTemplate;
 	
 	/**
 	 * <p>功能描述：更改审核状态。</p>
@@ -75,5 +82,39 @@ public class DaqDetectionMagneticPowderDao extends BaseNamedParameterJdbcDao{
 		DaqDetectionMagneticPowderBo magneticPowderBo = 
 				(DaqDetectionMagneticPowderBo) this.baseJdbcDao.queryForObject(sql, new String[]{oid}, DaqDetectionMagneticPowderBo.class);
 		return magneticPowderBo;
+	}
+	
+	/**
+	 * <p>功能描述：查询单个对象。</p>
+	  * <p> 葛建。</p>	
+	  * @param oid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年8月21日 下午4:34:19。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public DaqDetectionMagneticPowder find(String oid) {
+		String sql = "select * from daq_detection_magnetic_powder t where t.oid=?";
+		List<DaqDetectionMagneticPowder> data = baseJdbcTemplate.queryForList(sql, new Object[]{oid}, DaqDetectionMagneticPowder.class);
+		if(data!=null && data.size()>0){
+			return data.get(0);
+		}else{
+			return null;
+		}
+	}
+	
+	/**
+	 * <p>功能描述：改变焊口检查状态。</p>
+	  * <p> 葛建。</p>	
+	  * @param weldOid
+	  * @param status
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年8月21日 下午4:31:12。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public void chanageWledStatus(String weldOid, int status) {
+		String sql = "update daq_construction_weld set is_magnetic_powder="+status+" where oid='"+weldOid+"';"
+				+ "update daq_weld_rework_weld set is_magnetic_powder="+status+" where oid='"+weldOid+"';";
+		baseJdbcTemplate.batchExecute(sql);
 	}
 }
