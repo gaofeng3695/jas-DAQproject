@@ -128,7 +128,7 @@ public class WeldController extends BaseController{
 		String token = request.getParameter("token");
 		try {
 			List<Map<String,Object>> rows= (List<Map<String, Object>>) redisService.getValue(token+"_get_weld_list_local");
-			if(rows.size()>0){
+			if(rows!=null && rows.size()>0){
 				if(StringUtils.isNotBlank(weldOid)){
 					redisService.putValue(token+"_weld_oid_local", weldOid);
 					redisService.expirse(token, 5, TimeUnit.HOURS);
