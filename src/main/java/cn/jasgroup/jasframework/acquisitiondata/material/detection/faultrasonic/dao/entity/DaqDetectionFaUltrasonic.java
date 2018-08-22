@@ -47,7 +47,7 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 	})
 @CommonDeleteConfig(scene = "/detectionFaUltrasonic/delete",
 		afterAdvice = {
-				@Process(service = "coldBendingPipeService", method = "deleteChanageWledStatus()")
+				@Process(service = "daqDetectionFaUltrasonicService", method = "deleteChanageWledStatus()")
 		})
 @CommonDeleteBatchConfig(scene = "/detectionFaUltrasonic/deleteBatch")
 @JdbcEntity(name="daq_detection_fa_ultrasonic")

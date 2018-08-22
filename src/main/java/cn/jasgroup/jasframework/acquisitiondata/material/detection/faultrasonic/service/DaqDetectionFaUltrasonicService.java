@@ -97,9 +97,9 @@ public class DaqDetectionFaUltrasonicService extends CommonDataJdbcService {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public void updateChanageWledStatus(DaqDetectionFaUltrasonic daqDetectionFaUltrasonic){
-		this.faUltrasonicDao.chanageWledStatus(daqDetectionFaUltrasonic.getWeldOid(), 1);
 		DaqDetectionFaUltrasonic oldDaqDetectionFaUltrasonic = (DaqDetectionFaUltrasonic)BaseEntityThreadLocalHolder.getEntitySnap();
 		this.faUltrasonicDao.chanageWledStatus(oldDaqDetectionFaUltrasonic.getWeldOid(), 0);
+		this.faUltrasonicDao.chanageWledStatus(daqDetectionFaUltrasonic.getWeldOid(), 1);
 	}
 	/**
 	  * <p>功能描述：删除后。</p>
@@ -110,6 +110,7 @@ public class DaqDetectionFaUltrasonicService extends CommonDataJdbcService {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public void deleteChanageWledStatus(DaqDetectionFaUltrasonic daqDetectionFaUltrasonic){
-		this.faUltrasonicDao.chanageWledStatus(daqDetectionFaUltrasonic.getWeldOid(), 0);
+		DaqDetectionFaUltrasonic oldDaqDetectionFaUltrasonic = faUltrasonicDao.find(daqDetectionFaUltrasonic.getOid());
+		this.faUltrasonicDao.chanageWledStatus(oldDaqDetectionFaUltrasonic.getWeldOid(), 0);
 	}
 }
