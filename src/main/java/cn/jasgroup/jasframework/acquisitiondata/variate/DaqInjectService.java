@@ -1,17 +1,13 @@
 package cn.jasgroup.jasframework.acquisitiondata.variate;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
-import cn.jasgroup.framework.automation.query.MapQuery;
 import cn.jasgroup.jasframework.base.data.BaseData;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
-import cn.jasgroup.jasframework.base.data.BaseQuery;
-import cn.jasgroup.jasframework.security.dao.UnitDao;
+import cn.jasgroup.jasframework.base.data.MapQuery;
 import cn.jasgroup.jasframework.security.dao.entity.PriUnit;
 import cn.jasgroup.jasframework.security.service.UnitService;
 import cn.jasgroup.jasframework.support.ThreadLocalHolder;
