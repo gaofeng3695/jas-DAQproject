@@ -1,6 +1,6 @@
 [
 	{
-		"conditionExpression":"className == 'cn.jasgroup.framework.automation.query.MapQuery'",
+		"conditionExpression":"className == 'cn.jasgroup.jasframework.base.data.MapQuery'",
 		"service": "daqInjectService",
 		"method":"privilegeStrategySql()"
 	}
