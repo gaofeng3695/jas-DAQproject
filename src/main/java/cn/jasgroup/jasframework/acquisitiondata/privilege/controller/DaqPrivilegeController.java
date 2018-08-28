@@ -135,9 +135,6 @@ public class DaqPrivilegeController extends BaseController{
 		ListResult<Map<String,Object>> result = null;
 		try {
 			String tendersOid = param.get("tendersOid");
-			if(StringUtils.isBlank(tendersOid)){
-				return new BaseResult(-1, "error", "标段id不能为空！");
-			}
 			List<Map<String,Object>> rows = this.daqPrivilegeService.getSupervisionUnitByTendersOid(tendersOid);
 			result = new ListResult<>(1, "200", "ok", rows);
 		} catch (Exception e) {
@@ -162,9 +159,6 @@ public class DaqPrivilegeController extends BaseController{
 		ListResult<Map<String,Object>> result = null;
 		try {
 			String tendersOid = param.get("tendersOid");
-			if(StringUtils.isBlank(tendersOid)){
-				return new BaseResult(-1, "error", "标段id不能为空！");
-			}
 			List<Map<String,Object>> rows = this.daqPrivilegeService.getConstructionUnitByTendersOid(tendersOid);
 			result = new ListResult<>(1, "200", "ok", rows);
 		} catch (Exception e) {
@@ -195,8 +189,6 @@ public class DaqPrivilegeController extends BaseController{
 				pipeSegmentOrCrossOid = param.get("crossOid");
 			}else if(StringUtils.isNotBlank(param.get("pipeSegmentOid"))){
 				pipeSegmentOrCrossOid = param.get("pipeSegmentOid");
-			}else{
-				return new BaseResult(-1, "error", "oid不能为空！");
 			}
 			List<Map<String,Object>> rows = this.daqPrivilegeService.getMedianStakeList(pipeSegmentOrCrossOid);
 			result = new ListResult<>(1, "200", "ok", rows);

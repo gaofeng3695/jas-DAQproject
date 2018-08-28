@@ -3,6 +3,7 @@ package cn.jasgroup.jasframework.acquisitiondata.material.base.coldbending.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import cn.jasgroup.jasframework.acquisitiondata.material.base.coldbending.dao.entity.ColdBendingPipe;
@@ -26,8 +27,13 @@ public class ColdBendingPipeDao extends BaseJdbcDao{
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>>getList(String tendersOid){
-		String sql = "select t.oid as key,t.pipe_cold_bending_code as value from daq_material_pipe_cold_bending t where t.active=1 and t.tenders_oid=?";
-		return this.queryForList(sql, new Object[]{tendersOid});
+		String sql = "select t.oid as key,t.pipe_cold_bending_code as value,t.tenders_oid "
+				+ "from daq_material_pipe_cold_bending t "
+				+ "where t.active=1";
+		if(StringUtils.isNotBlank(tendersOid)){
+			sql += " and t.tenders_oid='"+tendersOid+"'";
+		}
+		return this.queryForList(sql, new Object[]{});
 	}
 	
 	public ColdBendingPipe find(String oid){
