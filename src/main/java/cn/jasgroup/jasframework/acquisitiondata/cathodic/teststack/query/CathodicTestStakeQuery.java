@@ -55,7 +55,7 @@ public class CathodicTestStakeQuery extends BaseJavaQuery{
 	/**
 	 * 审核状态
 	 */
-	private Integer approveStatus;
+	private String approveStatus;
 
 	@Override
 	public String getQuerySql() {
@@ -97,8 +97,8 @@ public class CathodicTestStakeQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(testStakeCode)) {
 				conditionSql += " and cts.test_stack_code like :testStakeCode";
 			}
-			if (approveStatus != null) {
-				conditionSql += " and cts.approve_status = :approveStatus";
+			if (StringUtils.isNotBlank(approveStatus)) {
+				conditionSql += " and cts.approve_status in ("+ approveStatus +")";
 			}
 			conditionSql += this.dataAuthoritySql;
 		}
@@ -159,11 +159,11 @@ public class CathodicTestStakeQuery extends BaseJavaQuery{
 		this.testStakeCode = testStakeCode;
 	}
 
-	public Integer getApproveStatus() {
+	public String getApproveStatus() {
 		return approveStatus;
 	}
 
-	public void setApproveStatus(Integer approveStatus) {
+	public void setApproveStatus(String approveStatus) {
 		this.approveStatus = approveStatus;
 	} 
 	

@@ -60,7 +60,7 @@ public class CathodicIsolatingPieceQuery extends BaseJavaQuery {
 	/**
 	 * 审核状态
 	 */
-	private Integer approveStatus;
+	private String approveStatus;
 
 	@Override
 	public String getQuerySql() {
@@ -101,8 +101,8 @@ public class CathodicIsolatingPieceQuery extends BaseJavaQuery {
 			if (StringUtils.isNotBlank(isolatingPieceCode)) {
 				conditionSql += " and cip.isolating_piece_code like :isolatingPieceCode";
 			}
-			if (approveStatus != null) {
-				conditionSql += " and cip.approve_status = :approveStatus";
+			if (StringUtils.isNotBlank(approveStatus)) {
+				conditionSql += " and cip.approve_status in ("+ approveStatus +")";
 			}
 			conditionSql += this.dataAuthoritySql;
 		}
@@ -161,11 +161,11 @@ public class CathodicIsolatingPieceQuery extends BaseJavaQuery {
 		this.isolatingPieceCode = isolatingPieceCode;
 	}
 
-	public Integer getApproveStatus() {
+	public String getApproveStatus() {
 		return approveStatus;
 	}
 
-	public void setApproveStatus(Integer approveStatus) {
+	public void setApproveStatus(String approveStatus) {
 		this.approveStatus = approveStatus;
 	}
 

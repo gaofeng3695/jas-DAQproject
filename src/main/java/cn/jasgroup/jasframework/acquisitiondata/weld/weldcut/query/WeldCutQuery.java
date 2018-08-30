@@ -46,7 +46,7 @@ public class WeldCutQuery extends BaseJavaQuery {
 	/**
 	 * 审核状态
 	 */
-	private Integer approveStatus;
+	private String approveStatus;
 
 	@Override
 	public String getQuerySql() {
@@ -90,8 +90,8 @@ public class WeldCutQuery extends BaseJavaQuery {
 			if (StringUtils.isNotBlank(pipeSegmentOrCrossOid)) {
 				conditionSql += " and wc.pipe_segment_or_cross_oid = :pipeSegmentOrCrossOid";
 			}
-			if (approveStatus != null) {
-				conditionSql += " and wc.approve_status = :approveStatus";
+			if (StringUtils.isNotBlank(approveStatus)) {
+				conditionSql += " and wc.approve_status in ("+ approveStatus +")";
 			}
 			conditionSql += this.dataAuthoritySql;
 		}
@@ -131,11 +131,11 @@ public class WeldCutQuery extends BaseJavaQuery {
 		this.pipeSegmentOrCrossOid = pipeSegmentOrCrossOid;
 	}
 
-	public Integer getApproveStatus() {
+	public String getApproveStatus() {
 		return approveStatus;
 	}
 
-	public void setApproveStatus(Integer approveStatus) {
+	public void setApproveStatus(String approveStatus) {
 		this.approveStatus = approveStatus;
 	}
 

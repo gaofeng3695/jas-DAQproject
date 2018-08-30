@@ -33,7 +33,7 @@ public class DaqDetectionPaUltrasonicQuery extends BaseJavaQuery {
 	private String tendersOid;
 	private String pipeSegmentOrCrossOid;
 	private String weldOid;
-	private Integer approveStatus;
+	private String approveStatus;
 	
 	@Override
 	public String getSql() {
@@ -74,8 +74,8 @@ public class DaqDetectionPaUltrasonicQuery extends BaseJavaQuery {
 		if (null != oids && oids.size() > 0) {
 			sql += " and oid in (:oids) ";
 		}
-		if (approveStatus != null) {
-			sql += " and t.approve_status = :approveStatus ";
+		if (StringUtils.isNotBlank(approveStatus)) {
+			sql += " and t.approve_status in ("+ approveStatus +")";
 		}
 		sql += this.dataAuthoritySql;
 		sql +=" order by t.create_datetime desc";
@@ -130,11 +130,11 @@ public class DaqDetectionPaUltrasonicQuery extends BaseJavaQuery {
 		this.pipeSegmentOrCrossOid = pipeSegmentOrCrossOid;
 	}
 
-	public Integer getApproveStatus() {
+	public String getApproveStatus() {
 		return approveStatus;
 	}
 
-	public void setApproveStatus(Integer approveStatus) {
+	public void setApproveStatus(String approveStatus) {
 		this.approveStatus = approveStatus;
 	}
 	
