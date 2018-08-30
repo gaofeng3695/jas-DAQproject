@@ -48,6 +48,11 @@ public class CutWeldQuery extends BaseJavaQuery{
 	 * 钢管编号
 	 */
 	private String pipeOid;
+	
+	/**
+	 * 审核状态
+	 */
+	private Integer approveStatus;
 
 	@Override
 	public String getQuerySql() {
@@ -81,6 +86,9 @@ public class CutWeldQuery extends BaseJavaQuery{
 			}		
 			if (StringUtils.isNotBlank(pipeOid)) {
 				conditionSql += " and cp.pipe_oid = :pipeOid";
+			}
+			if (approveStatus != null) {
+				conditionSql += " and cp.approve_status = :approveStatus";
 			}
 			conditionSql += this.dataAuthoritySql;
 		}
@@ -126,6 +134,14 @@ public class CutWeldQuery extends BaseJavaQuery{
 
 	public void setPipeOid(String pipeOid) {
 		this.pipeOid = pipeOid;
+	}
+
+	public Integer getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(Integer approveStatus) {
+		this.approveStatus = approveStatus;
 	} 
 	
 }

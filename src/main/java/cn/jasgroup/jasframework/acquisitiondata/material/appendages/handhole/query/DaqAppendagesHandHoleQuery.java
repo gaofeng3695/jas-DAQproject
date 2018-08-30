@@ -35,6 +35,7 @@ public class DaqAppendagesHandHoleQuery extends BaseJavaQuery {
 	private String handHoleName;
 	private String handHoleType;
 	private String medianStakeOid;
+	private Integer approveStatus;
 	
 	@Override
 	public String getSql() {
@@ -86,6 +87,9 @@ public class DaqAppendagesHandHoleQuery extends BaseJavaQuery {
 		}
 		if (null != oids && oids.size() > 0) {
 			sql += " and oid in (:oids) ";
+		}
+		if( approveStatus != null ){
+			sql += " and t.approve_status = :approveStatus ";
 		}
 		sql += this.dataAuthoritySql;
 		sql +=" order by t.create_datetime desc";
@@ -165,6 +169,14 @@ public class DaqAppendagesHandHoleQuery extends BaseJavaQuery {
 
 	public void setMedianStakeOid(String medianStakeOid) {
 		this.medianStakeOid = medianStakeOid;
+	}
+
+	public Integer getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(Integer approveStatus) {
+		this.approveStatus = approveStatus;
 	}
 	
 }

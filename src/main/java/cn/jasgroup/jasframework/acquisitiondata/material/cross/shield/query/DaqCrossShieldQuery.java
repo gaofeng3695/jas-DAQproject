@@ -33,6 +33,7 @@ public class DaqCrossShieldQuery extends BaseJavaQuery{
 	private String crossOid;
 	private String startMedianStakeOid;
 	private String endMedianStakeOid;
+	private Integer approveStatus;
 	
 	@Override
 	public String getSql() {
@@ -77,6 +78,9 @@ public class DaqCrossShieldQuery extends BaseJavaQuery{
 		}
 		if(null != oids && oids.size()>0){
 			sql += " and oids in (:oids) ";
+		}
+		if( approveStatus != null ){
+			sql += " and t.approve_status = :approveStatus ";
 		}
 		sql += this.dataAuthoritySql;
 		sql += " order by t.create_datetime desc";
@@ -137,6 +141,14 @@ public class DaqCrossShieldQuery extends BaseJavaQuery{
 
 	public void setEndMedianStakeOid(String endMedianStakeOid) {
 		this.endMedianStakeOid = endMedianStakeOid;
+	}
+
+	public Integer getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(Integer approveStatus) {
+		this.approveStatus = approveStatus;
 	}
 
 }

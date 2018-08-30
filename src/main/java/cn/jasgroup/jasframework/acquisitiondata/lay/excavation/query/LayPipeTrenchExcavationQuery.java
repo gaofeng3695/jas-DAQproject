@@ -46,6 +46,11 @@ public class LayPipeTrenchExcavationQuery extends BaseJavaQuery{
 	 * 线路段/穿跨越
 	 */
 	private String pipeSegmentOrCrossOid;
+	
+	/**
+	 * 审核状态
+	 */
+	private Integer approveStatus;
 
 	@Override
 	public String getQuerySql() {
@@ -82,6 +87,9 @@ public class LayPipeTrenchExcavationQuery extends BaseJavaQuery{
 			}
 			if (StringUtils.isNotBlank(pipeSegmentOrCrossOid)) {
 				conditionSql += " and lpte.pipe_segment_or_cross_oid = :pipeSegmentOrCrossOid";
+			}
+			if (approveStatus != null) {
+				conditionSql += " and lpte.approve_status = :approveStatus";
 			}
 			conditionSql += this.dataAuthoritySql;
 		}
@@ -127,6 +135,14 @@ public class LayPipeTrenchExcavationQuery extends BaseJavaQuery{
 
 	public void setPipeSegmentOrCrossOid(String pipeSegmentOrCrossOid) {
 		this.pipeSegmentOrCrossOid = pipeSegmentOrCrossOid;
+	}
+
+	public Integer getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(Integer approveStatus) {
+		this.approveStatus = approveStatus;
 	}
 	
 }

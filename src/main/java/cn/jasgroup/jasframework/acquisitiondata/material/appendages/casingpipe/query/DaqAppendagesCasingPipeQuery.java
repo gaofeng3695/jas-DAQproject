@@ -33,6 +33,7 @@ public class DaqAppendagesCasingPipeQuery extends BaseJavaQuery {
 	private String pipeSegmentOrCrossOid;
 	private String startMedianStakeOid;
 	private String endMedianStakeOid;
+	private Integer approveStatus;
 	
 	@Override
 	public String getSql() {
@@ -79,6 +80,9 @@ public class DaqAppendagesCasingPipeQuery extends BaseJavaQuery {
 		}
 		if (null != oids && oids.size() > 0) {
 			sql += " and oid in (:oids) ";
+		}
+		if( approveStatus != null ){
+			sql += " and t.approve_status = :approveStatus ";
 		}
 		sql += this.dataAuthoritySql;
 		sql +=" order by t.create_datetime desc";
@@ -139,6 +143,14 @@ public class DaqAppendagesCasingPipeQuery extends BaseJavaQuery {
 
 	public void setEndMedianStakeOid(String endMedianStakeOid) {
 		this.endMedianStakeOid = endMedianStakeOid;
+	}
+
+	public Integer getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(Integer approveStatus) {
+		this.approveStatus = approveStatus;
 	}
 
 }

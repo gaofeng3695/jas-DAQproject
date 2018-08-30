@@ -8,19 +8,21 @@ import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 
 /***
-  * 
-  *<p>类描述：焊口割口query。</p>
-  * @author 雷凯 。
-  * @version v1.0.0.1。
-  * @since JDK1.8。
-  *<p>创建日期：2018年8月21日 下午5:42:50。</p>
+ * 
+ * <p>
+ * 类描述：焊口割口query。
+ * </p>
+ * 
+ * @author 雷凯 。
+ * @version v1.0.0.1。
+ * @since JDK1.8。
+ *        <p>
+ * 		创建日期：2018年8月21日 下午5:42:50。
+ *        </p>
  */
-@QueryConfig(scene = "/weldCut/getPage",
-	resultClass = WeldCutBo.class,
-	queryBeforeProcess = {
-		 @Process(service = "daqInjectService" , method = "injectDataAuthoritySql(dataAuthoritySql)")
-	})
-public class WeldCutQuery extends BaseJavaQuery{
+@QueryConfig(scene = "/weldCut/getPage", resultClass = WeldCutBo.class, queryBeforeProcess = {
+		@Process(service = "daqInjectService", method = "injectDataAuthoritySql(dataAuthoritySql)") })
+public class WeldCutQuery extends BaseJavaQuery {
 	/**
 	 * 项目oid
 	 */
@@ -40,14 +42,21 @@ public class WeldCutQuery extends BaseJavaQuery{
 	 * 线路段/穿跨越
 	 */
 	private String pipeSegmentOrCrossOid;
-	
+
+	/**
+	 * 审核状态
+	 */
+	private Integer approveStatus;
+
 	@Override
 	public String getQuerySql() {
 		String sql = "SELECT wc.oid,wc.project_oid,pro.project_name,wc.pipeline_oid,pi.pipeline_name,wc.tenders_oid,te.tenders_name,wc.pipe_segment_or_cross_oid,vpsc.name as pipe_segment_or_cross_name, wc.weld_oid, "
 				+ "wc.front_weld_oid, wc.back_weld_oid,w.weld_code as weld_code,bw.weld_code as back_weld_code,fw.weld_code as front_weld_code, wc.cut_weld_date,"
 				+ "wc.construct_unit,u.unit_name as construct_unit_name,wc.work_unit_oid, wu.work_unit_code, wc.supervision_unit,pu.unit_name as supervision_unit_name, wc.supervision_engineer, wc.collection_person, "
 				+ "wc.collection_date,"
-//				+ "case when wc.approve_status = -1 then '驳回' when wc.approve_status = 1 then '待审核' when wc.approve_status = 2 then '审核通过' else '未上报' end as approve_status_name,"
+				// + "case when wc.approve_status = -1 then '驳回' when
+				// wc.approve_status = 1 then '待审核' when wc.approve_status = 2
+				// then '审核通过' else '未上报' end as approve_status_name,"
 				+ "wc.remarks,wc.create_user_id,wc.create_user_name, wc.create_datetime, wc.modify_user_id,wc.modify_user_name, wc.modify_datetime,wc.active,wc.approve_status FROM daq_weld_cut wc "
 				+ "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = wc.project_oid "
 				+ "LEFT JOIN (SELECT oid, pipeline_name, active FROM daq_pipeline where active=1) pi ON pi.oid = wc.pipeline_oid "
@@ -63,11 +72,12 @@ public class WeldCutQuery extends BaseJavaQuery{
 		sql += getConditionSql();
 		return sql;
 	}
+
 	private String getConditionSql() {
-		String conditionSql ="";
+		String conditionSql = "";
 		if (StringUtils.isNotBlank(oid)) {
 			conditionSql += " and wc.oid = :oid ";
-		}else {
+		} else {
 			if (StringUtils.isNotBlank(projectOid)) {
 				conditionSql += " and wc.project_oid = :projectOid";
 			}
@@ -80,12 +90,15 @@ public class WeldCutQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(pipeSegmentOrCrossOid)) {
 				conditionSql += " and wc.pipe_segment_or_cross_oid = :pipeSegmentOrCrossOid";
 			}
+			if (approveStatus != null) {
+				conditionSql += " and wc.approve_status = :approveStatus";
+			}
 			conditionSql += this.dataAuthoritySql;
 		}
 		conditionSql += " order by wc.create_datetime desc";
 		return conditionSql;
 	}
-	
+
 	public String getProjectOid() {
 		return projectOid;
 	}
@@ -117,4 +130,13 @@ public class WeldCutQuery extends BaseJavaQuery{
 	public void setPipeSegmentOrCrossOid(String pipeSegmentOrCrossOid) {
 		this.pipeSegmentOrCrossOid = pipeSegmentOrCrossOid;
 	}
+
+	public Integer getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(Integer approveStatus) {
+		this.approveStatus = approveStatus;
+	}
+
 }
