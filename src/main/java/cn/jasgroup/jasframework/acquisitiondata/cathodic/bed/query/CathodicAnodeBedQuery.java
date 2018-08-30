@@ -155,5 +155,14 @@ public class CathodicAnodeBedQuery extends BaseJavaQuery{
 
 	public void setGroundBed(String groundBed) {
 		this.groundBed = groundBed;
+	}
+
+	public Integer getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(Integer approveStatus) {
+		this.approveStatus = approveStatus;
 	} 
+	
 }
