@@ -51,6 +51,11 @@ public class CathodicCableProtectionQuery extends BaseJavaQuery{
 	 * 阴保电缆编号 
 	 */
 	private String cableCode;
+	
+	/**
+	 * 审核状态
+	 */
+	private Integer approveStatus;
 
 	@Override
 	public String getQuerySql() {
@@ -96,6 +101,9 @@ public class CathodicCableProtectionQuery extends BaseJavaQuery{
 			}
 			if (StringUtils.isNotBlank(cableCode)) {
 				conditionSql += " and ccp.cable_code like :cableCode";
+			}
+			if (approveStatus != null) {
+				conditionSql += " and ccp.approve_status = :approveStatus";
 			}
 			conditionSql += this.dataAuthoritySql;
 		}
@@ -152,6 +160,14 @@ public class CathodicCableProtectionQuery extends BaseJavaQuery{
 
 	public void setCableCode(String cableCode) {
 		this.cableCode = cableCode;
+	}
+
+	public Integer getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(Integer approveStatus) {
+		this.approveStatus = approveStatus;
 	} 
 
 }

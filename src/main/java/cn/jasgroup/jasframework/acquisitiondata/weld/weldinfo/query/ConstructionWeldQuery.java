@@ -49,6 +49,11 @@ public class ConstructionWeldQuery extends BaseJavaQuery{
 	 */
 	private String weldCode;
 
+	/**
+	 * 审核状态
+	 */
+	private Integer approveStatus;
+
 	@Override
 	public String getQuerySql() {
 		String sql = "SELECT cw.*,pro.project_name, pi.pipeline_name, te.tenders_name, vpsc.name as pipe_segment_or_cross_name, ms.median_stake_code,"
@@ -100,6 +105,9 @@ public class ConstructionWeldQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(weldCode)) {
 				conditionSql += " and cw.weld_code like :weldCode";
 			}
+			if (approveStatus != null) {
+				conditionSql += " and cw.approve_status = :approveStatus";
+			}
 			conditionSql += this.dataAuthoritySql;
 		}
 		conditionSql += " order by cw.create_datetime desc";
@@ -147,6 +155,14 @@ public class ConstructionWeldQuery extends BaseJavaQuery{
 
 	public void setWeldCode(String weldCode) {
 		this.weldCode = weldCode;
+	}
+
+	public Integer getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(Integer approveStatus) {
+		this.approveStatus = approveStatus;
 	}
 
 }

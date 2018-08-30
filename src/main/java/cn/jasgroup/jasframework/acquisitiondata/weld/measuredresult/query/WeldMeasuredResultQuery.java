@@ -53,6 +53,11 @@ public class WeldMeasuredResultQuery extends BaseJavaQuery{
 	 * 焊口编号 
 	 */
 	private String weldOid;
+	
+	/**
+	 * 审核状态
+	 */
+	private Integer approveStatus;
 
 	@Override
 	public String getQuerySql() {
@@ -92,6 +97,9 @@ public class WeldMeasuredResultQuery extends BaseJavaQuery{
 			}
 			if (StringUtils.isNotBlank(weldOid)) {
 				conditionSql += " and wmr.weld_oid = :weldOid";
+			}
+			if (approveStatus != null) {
+				conditionSql += " and wmr.approve_status = :approveStatus";
 			}
 			conditionSql += this.dataAuthoritySql;
 		}
@@ -145,6 +153,14 @@ public class WeldMeasuredResultQuery extends BaseJavaQuery{
 
 	public void setWeldOid(String weldOid) {
 		this.weldOid = weldOid;
+	}
+
+	public Integer getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(Integer approveStatus) {
+		this.approveStatus = approveStatus;
 	} 
 	
 }
