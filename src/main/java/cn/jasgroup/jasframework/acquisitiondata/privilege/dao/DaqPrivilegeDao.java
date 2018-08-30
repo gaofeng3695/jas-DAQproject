@@ -209,4 +209,25 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 			sql += " order by s.create_datetime asc";
 			return this.queryForList(sql, null);
 	}
+	
+	/***
+	  * <p>功能描述：根据监理单位获取对应标段下的施工单位和检测单位。</p>
+	  * <p> 雷凯。</p>	
+	  * @param unitOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年8月30日 下午4:36:43。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String,Object>> getConstructAndDetectionUnitList(String unitOid){
+		String sql = "select distinct tt.unit_oid as key,pp.unit_name as value from daq_implement_scope_ref tt "
+				+ "left join( "
+					+ "select distinct t.tenders_oid from daq_implement_scope_ref t "
+					+ "left join("
+						+ "select p.oid from pri_unit p "
+						+ "inner join (select hierarchy from pri_unit where oid='"+unitOid+"') pp on p.hierarchy like pp.hierarchy||'%') pu on pu.oid = t.unit_oid) uu on uu.tenders_oid = tt.tenders_oid "
+				+ "inner join (select oid,unit_name,hierarchy from pri_unit where hierarchy like 'Unit.0001.0005%' or hierarchy like 'Unit.0001.0006%') pp on pp.oid=tt.unit_oid "
+				+ "order by pp.unit_name";
+		return this.queryForList(sql, null);
+	}
 }

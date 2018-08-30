@@ -132,4 +132,16 @@ public class DaqPrivilegeService extends BaseService{
 		String unitOid = ThreadLocalHolder.getCurrentUser().getUnitId();
 		return this.daqPrivilegeDao.getPipeSegmentList(pipelineOid, unitOid);
 	}
+	/***
+	  * <p>功能描述：根据监理单位获取对应标段下的施工单位和检测单位。</p>
+	  * <p> 雷凯。</p>	
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年8月30日 下午4:38:15。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String,Object>>getConstructAndDetectionUnitList(){
+		String unitOid = ThreadLocalHolder.getCurrentUser().getUnitId();
+		return this.daqPrivilegeDao.getConstructAndDetectionUnitList(unitOid);
+	}
 }
