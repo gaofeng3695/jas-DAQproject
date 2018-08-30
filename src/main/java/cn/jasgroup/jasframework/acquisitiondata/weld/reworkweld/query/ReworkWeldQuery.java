@@ -57,7 +57,7 @@ public class ReworkWeldQuery extends BaseJavaQuery {
 	/**
 	 * 审核状态
 	 */
-	private Integer approveStatus;
+	private String approveStatus;
 
 	@Override
 	public String getQuerySql() {
@@ -109,8 +109,8 @@ public class ReworkWeldQuery extends BaseJavaQuery {
 			if (StringUtils.isNotBlank(weldOid)) {
 				conditionSql += " and wrw.weld_oid = :weldOid";
 			}
-			if (approveStatus != null) {
-				conditionSql += " and wrw.approve_status = :approveStatus";
+			if (StringUtils.isNotBlank(approveStatus)) {
+				conditionSql += " and wrw.approve_status in ("+ approveStatus +")";
 			}
 			conditionSql +=  this.dataAuthoritySql;
 		}
@@ -166,11 +166,11 @@ public class ReworkWeldQuery extends BaseJavaQuery {
 		this.weldOid = weldOid;
 	}
 
-	public Integer getApproveStatus() {
+	public String getApproveStatus() {
 		return approveStatus;
 	}
 
-	public void setApproveStatus(Integer approveStatus) {
+	public void setApproveStatus(String approveStatus) {
 		this.approveStatus = approveStatus;
 	}
 

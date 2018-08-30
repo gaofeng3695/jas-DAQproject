@@ -50,7 +50,7 @@ public class LayLandRestorationQuery extends BaseJavaQuery{
 	/**
 	 * 审核状态
 	 */
-	private Integer approveStatus;
+	private String approveStatus;
 
 	@Override
 	public String getQuerySql() {
@@ -88,8 +88,8 @@ public class LayLandRestorationQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(pipeSegmentOrCrossOid)) {
 				conditionSql += " and llr.pipe_segment_or_cross_oid = :pipeSegmentOrCrossOid";
 			}
-			if (approveStatus != null) {
-				conditionSql += " and llr.approve_status = :approveStatus";
+			if (StringUtils.isNotBlank(approveStatus)) {
+				conditionSql += " and llr.approve_status in ("+ approveStatus +")";
 			}
 			conditionSql += this.dataAuthoritySql;
 		}
@@ -137,11 +137,11 @@ public class LayLandRestorationQuery extends BaseJavaQuery{
 		this.pipeSegmentOrCrossOid = pipeSegmentOrCrossOid;
 	}
 
-	public Integer getApproveStatus() {
+	public String getApproveStatus() {
 		return approveStatus;
 	}
 
-	public void setApproveStatus(Integer approveStatus) {
+	public void setApproveStatus(String approveStatus) {
 		this.approveStatus = approveStatus;
 	}
 

@@ -55,7 +55,7 @@ public class CathodicPolarityDrainageQuery extends BaseJavaQuery{
 	/**
 	 * 审核状态
 	 */
-	private Integer approveStatus;
+	private String approveStatus;
 
 	@Override
 	public String getQuerySql() {
@@ -96,8 +96,8 @@ public class CathodicPolarityDrainageQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(equipmentCode)) {
 				conditionSql += " and cpd.equipment_code like :equipmentCode";
 			}
-			if (approveStatus != null) {
-				conditionSql += " and cpd.approve_status = :approveStatus";
+			if (StringUtils.isNotBlank(approveStatus)) {
+				conditionSql += " and cpd.approve_status in ("+ approveStatus +")";
 			}
 			conditionSql += this.dataAuthoritySql;
 		}
@@ -156,11 +156,11 @@ public class CathodicPolarityDrainageQuery extends BaseJavaQuery{
 		this.equipmentCode = equipmentCode;
 	}
 
-	public Integer getApproveStatus() {
+	public String getApproveStatus() {
 		return approveStatus;
 	}
 
-	public void setApproveStatus(Integer approveStatus) {
+	public void setApproveStatus(String approveStatus) {
 		this.approveStatus = approveStatus;
 	} 
 

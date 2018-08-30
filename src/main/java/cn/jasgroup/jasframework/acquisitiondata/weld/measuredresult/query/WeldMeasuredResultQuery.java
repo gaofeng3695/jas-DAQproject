@@ -57,7 +57,7 @@ public class WeldMeasuredResultQuery extends BaseJavaQuery{
 	/**
 	 * 审核状态
 	 */
-	private Integer approveStatus;
+	private String approveStatus;
 
 	@Override
 	public String getQuerySql() {
@@ -98,8 +98,8 @@ public class WeldMeasuredResultQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(weldOid)) {
 				conditionSql += " and wmr.weld_oid = :weldOid";
 			}
-			if (approveStatus != null) {
-				conditionSql += " and wmr.approve_status = :approveStatus";
+			if (StringUtils.isNotBlank(approveStatus)) {
+				conditionSql += " and wmr.approve_status in ("+ approveStatus +")";
 			}
 			conditionSql += this.dataAuthoritySql;
 		}
@@ -155,11 +155,11 @@ public class WeldMeasuredResultQuery extends BaseJavaQuery{
 		this.weldOid = weldOid;
 	}
 
-	public Integer getApproveStatus() {
+	public String getApproveStatus() {
 		return approveStatus;
 	}
 
-	public void setApproveStatus(Integer approveStatus) {
+	public void setApproveStatus(String approveStatus) {
 		this.approveStatus = approveStatus;
 	} 
 	

@@ -55,7 +55,7 @@ public class CathodicSacrificeAnodeQuery extends BaseJavaQuery{
 	/**
 	 * 审核状态
 	 */
-	private Integer approveStatus;
+	private String approveStatus;
 
 	@Override
 	public String getQuerySql() {
@@ -96,8 +96,8 @@ public class CathodicSacrificeAnodeQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(anodeCode)) {
 				conditionSql += " and csa.anode_code like :anodeCode";
 			}
-			if (approveStatus != null) {
-				conditionSql += " and csa.approve_status = :approveStatus";
+			if (StringUtils.isNotBlank(approveStatus)) {
+				conditionSql += " and csa.approve_status in ("+ approveStatus +")";
 			}
 			conditionSql += this.dataAuthoritySql;
 		}
@@ -156,11 +156,11 @@ public class CathodicSacrificeAnodeQuery extends BaseJavaQuery{
 		this.anodeCode = anodeCode;
 	}
 
-	public Integer getApproveStatus() {
+	public String getApproveStatus() {
 		return approveStatus;
 	}
 
-	public void setApproveStatus(Integer approveStatus) {
+	public void setApproveStatus(String approveStatus) {
 		this.approveStatus = approveStatus;
 	}
 	

@@ -52,7 +52,7 @@ public class CutWeldQuery extends BaseJavaQuery{
 	/**
 	 * 审核状态
 	 */
-	private Integer approveStatus;
+	private String approveStatus;
 
 	@Override
 	public String getQuerySql() {
@@ -87,8 +87,8 @@ public class CutWeldQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(pipeOid)) {
 				conditionSql += " and cp.pipe_oid = :pipeOid";
 			}
-			if (approveStatus != null) {
-				conditionSql += " and cp.approve_status = :approveStatus";
+			if (StringUtils.isNotBlank(approveStatus)) {
+				conditionSql += " and cp.approve_status in ("+ approveStatus +")";
 			}
 			conditionSql += this.dataAuthoritySql;
 		}
@@ -136,11 +136,11 @@ public class CutWeldQuery extends BaseJavaQuery{
 		this.pipeOid = pipeOid;
 	}
 
-	public Integer getApproveStatus() {
+	public String getApproveStatus() {
 		return approveStatus;
 	}
 
-	public void setApproveStatus(Integer approveStatus) {
+	public void setApproveStatus(String approveStatus) {
 		this.approveStatus = approveStatus;
 	} 
 	

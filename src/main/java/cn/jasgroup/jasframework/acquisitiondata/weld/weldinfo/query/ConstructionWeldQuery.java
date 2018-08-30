@@ -52,7 +52,7 @@ public class ConstructionWeldQuery extends BaseJavaQuery{
 	/**
 	 * 审核状态
 	 */
-	private Integer approveStatus;
+	private String approveStatus;
 
 	@Override
 	public String getQuerySql() {
@@ -105,8 +105,8 @@ public class ConstructionWeldQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(weldCode)) {
 				conditionSql += " and cw.weld_code like :weldCode";
 			}
-			if (approveStatus != null) {
-				conditionSql += " and cw.approve_status = :approveStatus";
+			if (StringUtils.isNotBlank(approveStatus)) {
+				conditionSql += " and cw.approve_status in ("+ approveStatus +")";
 			}
 			conditionSql += this.dataAuthoritySql;
 		}
@@ -157,11 +157,11 @@ public class ConstructionWeldQuery extends BaseJavaQuery{
 		this.weldCode = weldCode;
 	}
 
-	public Integer getApproveStatus() {
+	public String getApproveStatus() {
 		return approveStatus;
 	}
 
-	public void setApproveStatus(Integer approveStatus) {
+	public void setApproveStatus(String approveStatus) {
 		this.approveStatus = approveStatus;
 	}
 

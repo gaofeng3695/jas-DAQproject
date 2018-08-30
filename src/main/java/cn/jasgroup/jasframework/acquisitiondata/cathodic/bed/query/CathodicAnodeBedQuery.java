@@ -55,7 +55,7 @@ public class CathodicAnodeBedQuery extends BaseJavaQuery{
 	/**
 	 * 审核状态
 	 */
-	private Integer approveStatus;
+	private String approveStatus;
 
 	@Override
 	public String getQuerySql() {
@@ -96,8 +96,8 @@ public class CathodicAnodeBedQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(groundBed)) {
 				conditionSql += " and cab.ground_bed like :groundBed";
 			}
-			if (approveStatus != null) {
-				conditionSql += " and cab.approve_status = :approveStatus";
+			if (StringUtils.isNotBlank(approveStatus)) {
+				conditionSql += " and cab.approve_status in ("+ approveStatus +")";
 			}
 			
 			conditionSql += this.dataAuthoritySql;
@@ -157,11 +157,11 @@ public class CathodicAnodeBedQuery extends BaseJavaQuery{
 		this.groundBed = groundBed;
 	}
 
-	public Integer getApproveStatus() {
+	public String getApproveStatus() {
 		return approveStatus;
 	}
 
-	public void setApproveStatus(Integer approveStatus) {
+	public void setApproveStatus(String approveStatus) {
 		this.approveStatus = approveStatus;
 	} 
 	

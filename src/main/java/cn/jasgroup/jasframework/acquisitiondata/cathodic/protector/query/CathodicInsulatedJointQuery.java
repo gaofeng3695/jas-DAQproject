@@ -55,7 +55,7 @@ public class CathodicInsulatedJointQuery extends BaseJavaQuery{
 	/**
 	 * 审核状态
 	 */
-	private Integer approveStatus;
+	private String approveStatus;
 
 	@Override
 	public String getQuerySql() {
@@ -93,8 +93,8 @@ public class CathodicInsulatedJointQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(equipmentCode)) {
 				conditionSql += " and cij.equipment_code like :equipmentCode";
 			}
-			if (approveStatus != null) {
-				conditionSql += " and cij.approve_status = :approveStatus";
+			if (StringUtils.isNotBlank(approveStatus)) {
+				conditionSql += " and cij.approve_status in ("+ approveStatus +")";
 			}
 			conditionSql += this.dataAuthoritySql;
 		}
@@ -153,11 +153,11 @@ public class CathodicInsulatedJointQuery extends BaseJavaQuery{
 		this.equipmentCode = equipmentCode;
 	}
 
-	public Integer getApproveStatus() {
+	public String getApproveStatus() {
 		return approveStatus;
 	}
 
-	public void setApproveStatus(Integer approveStatus) {
+	public void setApproveStatus(String approveStatus) {
 		this.approveStatus = approveStatus;
 	} 
 
