@@ -1072,7 +1072,7 @@ CREATE TABLE daq_check_coating_pipe (
 	project_oid varchar(36),
 	tenders_oid varchar(36),
 	construct_unit varchar(36),
-	pipe_code varchar(50),
+	pipe_oid varchar(50),
 	groove_check varchar(5),
 	pipe_end_proring_check varchar(5),
 	coating_io_face_check varchar(5),
@@ -1095,7 +1095,7 @@ comment on table daq_check_coating_pipe IS '防腐管检查及信息记录表';
 comment on column daq_check_coating_pipe.oid IS '主键';
 comment on column daq_check_coating_pipe.project_oid IS '项目oid';
 comment on column daq_check_coating_pipe.tenders_oid IS '标段oid';
-comment on column daq_check_coating_pipe.pipe_code IS '钢管编号';
+comment on column daq_check_coating_pipe.pipe_oid IS '钢管编号';
 comment on column daq_check_coating_pipe.groove_check IS '坡口检查';
 comment on column daq_check_coating_pipe.pipe_end_proring_check IS '管端保护圈';
 comment on column daq_check_coating_pipe.coating_io_face_check IS '防腐层内外表面质量';
@@ -1120,7 +1120,7 @@ CREATE TABLE daq_check_hot_bends (
 	project_oid varchar(36),
 	tenders_oid varchar(36),
 	construct_unit varchar(36),
-	hot_bends_code varchar(50),
+	hot_bends_oid varchar(50),
 	weld_position varchar(5),
 	pipe_length varchar(5),
 	ovality varchar(5),
@@ -1142,7 +1142,7 @@ comment on table daq_check_hot_bends IS '热煨弯管检查信息记录表';
 comment on column daq_check_hot_bends.oid IS '主键';
 comment on column daq_check_hot_bends.project_oid IS '项目oid';
 comment on column daq_check_hot_bends.tenders_oid IS '标段oid';
-comment on column daq_check_hot_bends.hot_bends_code IS '弯管编号';
+comment on column daq_check_hot_bends.hot_bends_oid IS '弯管oid';
 comment on column daq_check_hot_bends.weld_position IS '纵焊缝位置';
 comment on column daq_check_hot_bends.pipe_length IS '直管段长度';
 comment on column daq_check_hot_bends.ovality IS '椭圆度<0.6%D';
