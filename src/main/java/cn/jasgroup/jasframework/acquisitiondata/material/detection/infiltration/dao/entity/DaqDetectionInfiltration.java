@@ -19,6 +19,7 @@ import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
 import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
 import cn.jasgroup.jasframework.base.annotation.Merge;
+import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.assist.MergeType;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 
@@ -28,11 +29,33 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
  * @version v1.0.0.1。
  * @since JDK1.8。
  * <p>创建日期：2018年7月11日 上午11:05:38。</p>
+ * {@link cn.jasgroup.jasframework.acquisitiondata.material.detection.infiltration.service.DaqDetectionInfiltrationService #saveChanageWledStatus}
+ * {@link cn.jasgroup.jasframework.acquisitiondata.material.detection.infiltration.service.DaqDetectionInfiltrationService #updateChanageWledStatusBeforeAdvice}
+ * {@link cn.jasgroup.jasframework.acquisitiondata.material.detection.infiltration.service.DaqDetectionInfiltrationService #updateChanageWledStatus}
+ * {@link cn.jasgroup.jasframework.acquisitiondata.material.detection.infiltration.service.DaqDetectionInfiltrationService #deleteChanageWledStatus}
  */
 
-@CommonSaveConfig(scene = "/detectionInfiltration/save")
-@CommonUpdateConfig(scene = "/detectionInfiltration/update")
-@CommonDeleteConfig(scene = "/detectionInfiltration/delete")
+@CommonSaveConfig(
+	scene = "/detectionInfiltration/save",
+	afterAdvice = {
+		@Process(service = "daqDetectionInfiltrationService", method = "saveChanageWledStatus()")
+	}
+)
+@CommonUpdateConfig(
+	scene = "/detectionInfiltration/update",
+	beforeAdvice={
+		@Process(service = "daqDetectionInfiltrationService", method = "updateChanageWledStatusBeforeAdvice()")
+	},
+	afterAdvice={
+		@Process(service = "daqDetectionInfiltrationService", method = "updateChanageWledStatus()")
+	}
+)
+@CommonDeleteConfig(
+	scene = "/detectionInfiltration/delete",
+	afterAdvice = {
+		@Process(service = "daqDetectionInfiltrationService", method = "deleteChanageWledStatus()")
+	}
+)
 @CommonDeleteBatchConfig(scene = "/detectionInfiltration/deleteBatch")
 @CommonGetConfig(scene = "/detectionInfiltration/get")
 @JdbcEntity(name="daq_detection_infiltration")

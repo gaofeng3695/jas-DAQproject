@@ -18,6 +18,7 @@ import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
 import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
 import cn.jasgroup.jasframework.base.annotation.Merge;
+import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.assist.MergeType;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 
@@ -27,11 +28,33 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
  * @version v1.0.0.1。
  * @since JDK1.8。
  * <p>创建日期：2018年7月12日 上午9:30:25。</p>
+ * {@link cn.jasgroup.jasframework.acquisitiondata.material.detection.magneticpowder.service.DaqDetectionMagneticPowderService #saveChanageWledStatus}
+ * {@link cn.jasgroup.jasframework.acquisitiondata.material.detection.magneticpowder.service.DaqDetectionMagneticPowderService #updateChanageWledStatusBeforeAdvice}
+ * {@link cn.jasgroup.jasframework.acquisitiondata.material.detection.magneticpowder.service.DaqDetectionMagneticPowderService #updateChanageWledStatus}
+ * {@link cn.jasgroup.jasframework.acquisitiondata.material.detection.magneticpowder.service.DaqDetectionMagneticPowderService #deleteChanageWledStatus}
  */
 
-@CommonSaveConfig(scene = "/detectionMagneticPowder/save")
-@CommonUpdateConfig(scene = "/detectionMagneticPowder/update")
-@CommonDeleteConfig(scene = "/detectionMagneticPowder/delete")
+@CommonSaveConfig(
+	scene = "/detectionMagneticPowder/save",
+	afterAdvice = {
+		@Process(service = "daqDetectionMagneticPowderService", method = "saveChanageWledStatus()")
+	}
+)
+@CommonUpdateConfig(
+	scene = "/detectionMagneticPowder/update",
+	beforeAdvice={
+		@Process(service = "daqDetectionMagneticPowderService", method = "updateChanageWledStatusBeforeAdvice()")
+	},
+	afterAdvice={
+		@Process(service = "daqDetectionMagneticPowderService", method = "updateChanageWledStatus()")
+	}
+)
+@CommonDeleteConfig(
+	scene = "/detectionMagneticPowder/delete",
+	afterAdvice = {
+		@Process(service = "daqDetectionMagneticPowderService", method = "deleteChanageWledStatus()")
+	}
+)
 @CommonDeleteBatchConfig(scene = "/detectionMagneticPowder/deleteBatch")
 @JdbcEntity(name="daq_detection_magnetic_powder")
 public class DaqDetectionMagneticPowder extends CommonJdbcEntity {

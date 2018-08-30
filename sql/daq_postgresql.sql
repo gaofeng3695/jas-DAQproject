@@ -1072,7 +1072,7 @@ CREATE TABLE daq_check_coating_pipe (
 	project_oid varchar(36),
 	tenders_oid varchar(36),
 	construct_unit varchar(36),
-	pipe_code varchar(50),
+	pipe_oid varchar(50),
 	groove_check varchar(5),
 	pipe_end_proring_check varchar(5),
 	coating_io_face_check varchar(5),
@@ -1095,7 +1095,7 @@ comment on table daq_check_coating_pipe IS '防腐管检查及信息记录表';
 comment on column daq_check_coating_pipe.oid IS '主键';
 comment on column daq_check_coating_pipe.project_oid IS '项目oid';
 comment on column daq_check_coating_pipe.tenders_oid IS '标段oid';
-comment on column daq_check_coating_pipe.pipe_code IS '钢管编号';
+comment on column daq_check_coating_pipe.pipe_oid IS '钢管编号';
 comment on column daq_check_coating_pipe.groove_check IS '坡口检查';
 comment on column daq_check_coating_pipe.pipe_end_proring_check IS '管端保护圈';
 comment on column daq_check_coating_pipe.coating_io_face_check IS '防腐层内外表面质量';
@@ -1120,7 +1120,7 @@ CREATE TABLE daq_check_hot_bends (
 	project_oid varchar(36),
 	tenders_oid varchar(36),
 	construct_unit varchar(36),
-	hot_bends_code varchar(50),
+	hot_bends_oid varchar(50),
 	weld_position varchar(5),
 	pipe_length varchar(5),
 	ovality varchar(5),
@@ -1142,7 +1142,7 @@ comment on table daq_check_hot_bends IS '热煨弯管检查信息记录表';
 comment on column daq_check_hot_bends.oid IS '主键';
 comment on column daq_check_hot_bends.project_oid IS '项目oid';
 comment on column daq_check_hot_bends.tenders_oid IS '标段oid';
-comment on column daq_check_hot_bends.hot_bends_code IS '弯管编号';
+comment on column daq_check_hot_bends.hot_bends_oid IS '弯管oid';
 comment on column daq_check_hot_bends.weld_position IS '纵焊缝位置';
 comment on column daq_check_hot_bends.pipe_length IS '直管段长度';
 comment on column daq_check_hot_bends.ovality IS '椭圆度<0.6%D';
@@ -1450,6 +1450,26 @@ comment on column daq_construction_weld.modify_datetime IS '修改时间';
 comment on column daq_construction_weld.active IS '有效标志';
 CREATE INDEX index_daq_construction_weld_weld_code_9 ON daq_construction_weld USING btree (weld_code);
 ALTER TABLE daq_construction_weld ADD PRIMARY KEY (oid);
+alter table daq_construction_weld add is_cut smallint default 0;
+comment on column daq_construction_weld.is_cut IS '是否割口';
+alter table daq_construction_weld add is_ray smallint default 0;
+comment on column daq_construction_weld.is_ray IS '是否射线检测';
+alter table daq_construction_weld add is_ultrasonic smallint default 0;
+comment on column daq_construction_weld.is_ultrasonic IS '是否超声波检查';
+alter table daq_construction_weld add is_infiltration smallint default 0;
+comment on column daq_construction_weld.is_infiltration IS '是否渗透检测';
+alter table daq_construction_weld add is_magnetic_powder smallint default 0;
+comment on column daq_construction_weld.is_magnetic_powder IS '是否磁粉检测';
+alter table daq_construction_weld add is_fa_ultrasonic smallint default 0;
+comment on column daq_construction_weld.is_fa_ultrasonic IS '是否全自动检测';
+alter table daq_construction_weld add is_pa_ultrasonic smallint default 0;
+comment on column daq_construction_weld.is_pa_ultrasonic IS '相控阵超声波检测';
+
+
+create or replace view v_daq_weld_info as
+select oid,weld_code,pipe_segment_or_cross_oid from daq_construction_weld where active=1 and approve_status=2 
+union all 
+select oid,rework_weld_code,pipe_segment_or_cross_oid as weld_code from daq_weld_rework_weld where active=1 and approve_status=2
 
 CREATE TABLE daq_weld_anticorrosion_check (
 	oid varchar(36) NOT NULL,
@@ -1756,6 +1776,28 @@ comment on column daq_weld_rework_weld.modify_user_id IS '修改人id';
 comment on column daq_weld_rework_weld.modify_user_name IS '修改人名称';
 comment on column daq_weld_rework_weld.modify_datetime IS '修改时间';
 comment on column daq_weld_rework_weld.active IS '有效标志';
+
+alter table daq_weld_rework_weld add is_cut smallint default 0;
+comment on column daq_weld_rework_weld.is_cut IS '是否割口';
+
+alter table daq_weld_rework_weld add is_ray smallint default 0;
+comment on column daq_weld_rework_weld.is_ray IS '是否射线检测';
+
+alter table daq_weld_rework_weld add is_ultrasonic smallint default 0;
+comment on column daq_weld_rework_weld.is_ultrasonic IS '是否超声波检查';
+
+alter table daq_weld_rework_weld add is_infiltration smallint default 0;
+comment on column daq_weld_rework_weld.is_infiltration IS '是否渗透检测';
+
+alter table daq_weld_rework_weld add is_magnetic_powder smallint default 0;
+comment on column daq_weld_rework_weld.is_magnetic_powder IS '是否磁粉检测';
+
+alter table daq_weld_rework_weld add is_fa_ultrasonic smallint default 0;
+comment on column daq_weld_rework_weld.is_fa_ultrasonic IS '是否全自动检测';
+
+alter table daq_weld_rework_weld add is_pa_ultrasonic smallint default 0;
+comment on column daq_weld_rework_weld.is_pa_ultrasonic IS '相控阵超声波检测';
+
 
 CREATE INDEX index_daq_weld_anticorrosion_check_weld_oid_9 ON daq_weld_anticorrosion_check USING btree (weld_oid);
 ALTER TABLE daq_weld_anticorrosion_check ADD PRIMARY KEY (oid);

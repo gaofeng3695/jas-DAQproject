@@ -33,6 +33,7 @@ public class DaqDetectionRayQuery extends BaseJavaQuery {
 	private String tendersOid;
 	private String pipeSegmentOrCrossOid;
 	private String weldOid;
+	private String approveStatus;
 	
 	@Override
 	public String getSql() {
@@ -73,6 +74,9 @@ public class DaqDetectionRayQuery extends BaseJavaQuery {
 		}
 		if (null != oids && oids.size() > 0) {
 			sql += " and oid in (:oids) ";
+		}
+		if (StringUtils.isNotBlank(approveStatus)) {
+			sql += " and t.approve_status in ("+ approveStatus +")";
 		}
 		sql += this.dataAuthoritySql;
 		sql +=" order by t.create_datetime desc";
@@ -125,6 +129,14 @@ public class DaqDetectionRayQuery extends BaseJavaQuery {
 
 	public void setPipeSegmentOrCrossOid(String pipeSegmentOrCrossOid) {
 		this.pipeSegmentOrCrossOid = pipeSegmentOrCrossOid;
+	}
+
+	public String getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(String approveStatus) {
+		this.approveStatus = approveStatus;
 	}
 	
 }

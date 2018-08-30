@@ -18,20 +18,37 @@ import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
 import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
 import cn.jasgroup.jasframework.base.annotation.Merge;
+import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.assist.MergeType;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 
 /**
  * <p>类描述：全自动超声波检测主表。</p>
+ * {@link cn.jasgroup.jasframework.acquisitiondata.material.detection.faultrasonic.service.DaqDetectionFaUltrasonicService #saveChanageWledStatus}
+ * {@link cn.jasgroup.jasframework.acquisitiondata.material.detection.faultrasonic.service.DaqDetectionFaUltrasonicService #updateChanageWledStatus}
+ * {@link cn.jasgroup.jasframework.acquisitiondata.material.detection.faultrasonic.service.DaqDetectionFaUltrasonicService #updateChanageWledStatusBeforeAdvice}
+ * {@link cn.jasgroup.jasframework.acquisitiondata.material.detection.faultrasonic.service.DaqDetectionFaUltrasonicService #deleteChanageWledStatus}
  * @author 张毅
  * @version v1.0.0.1。
  * @since JDK1.8。
  * <p>创建日期：2018年7月12日 上午10:22:02。</p>
  */
  
-@CommonSaveConfig(scene = "/detectionFaUltrasonic/save")
-@CommonUpdateConfig(scene = "/detectionFaUltrasonic/update")
-@CommonDeleteConfig(scene = "/detectionFaUltrasonic/delete")
+@CommonSaveConfig(scene = "/detectionFaUltrasonic/save",
+		afterAdvice = {
+				@Process(service = "daqDetectionFaUltrasonicService", method = "saveChanageWledStatus()")
+		})
+@CommonUpdateConfig(scene = "/detectionFaUltrasonic/update",
+		beforeAdvice={
+			@Process(service = "daqDetectionFaUltrasonicService", method = "updateChanageWledStatusBeforeAdvice()")
+		},
+		afterAdvice={
+		@Process(service = "daqDetectionFaUltrasonicService", method = "updateChanageWledStatus()")
+	})
+@CommonDeleteConfig(scene = "/detectionFaUltrasonic/delete",
+		afterAdvice = {
+				@Process(service = "daqDetectionFaUltrasonicService", method = "deleteChanageWledStatus()")
+		})
 @CommonDeleteBatchConfig(scene = "/detectionFaUltrasonic/deleteBatch")
 @JdbcEntity(name="daq_detection_fa_ultrasonic")
 public class DaqDetectionFaUltrasonic extends CommonJdbcEntity {

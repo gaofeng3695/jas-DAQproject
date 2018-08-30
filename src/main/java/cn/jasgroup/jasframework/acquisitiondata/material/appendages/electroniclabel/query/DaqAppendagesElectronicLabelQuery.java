@@ -34,6 +34,7 @@ public class DaqAppendagesElectronicLabelQuery extends BaseJavaQuery {
 	private String electronicLabelCode;
 	private String productNum;
 	private String medianStakeOid;
+	private String approveStatus;
 	
 	@Override
 	public String getSql() {
@@ -80,6 +81,9 @@ public class DaqAppendagesElectronicLabelQuery extends BaseJavaQuery {
 		}
 		if (null != oids && oids.size() > 0) {
 			sql += " and oid in (:oids) ";
+		}
+		if(StringUtils.isNotBlank(approveStatus)){
+			sql += " and t.approve_status in ("+ approveStatus +")";
 		}
 		sql += this.dataAuthoritySql;
 		sql +=" order by t.create_datetime desc";
@@ -155,6 +159,13 @@ public class DaqAppendagesElectronicLabelQuery extends BaseJavaQuery {
 	public void setProductNum(String productNum) {
 		this.productNum = productNum;
 	}
-	
+
+	public String getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(String approveStatus) {
+		this.approveStatus = approveStatus;
+	}
 	
 }

@@ -110,10 +110,7 @@ public class ColdBendingPipeController extends BaseController{
 		ListResult<Map<String,Object>> result = null;
 		try {
 			String tendersOid = param.get("tendersOid");
-			if(StringUtil.isBlank(tendersOid)){
-				return new BaseResult(-1, "400", "tendersOid not is null");
-			}
-			List<Map<String, Object>> rows = this.coldBendingPipeService.getList(tendersOid);
+			List<Map<String, Object>> rows = this.coldBendingPipeService.getListData(tendersOid);
 			result = new ListResult<>(1, "200", "ok", rows);
 		} catch (Exception e) {
 			result = new ListResult<>(-1, "400", "error");

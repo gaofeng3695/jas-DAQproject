@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import cn.jasgroup.framework.data.result.BaseResult;
 import cn.jasgroup.framework.data.result.ListResult;
+import cn.jasgroup.framework.data.result.SimpleResult;
 import cn.jasgroup.jasframework.acquisitiondata.privilege.service.DaqPrivilegeService;
 import cn.jasgroup.jasframework.base.controller.BaseController;
 import cn.jasgroup.jasframework.security.AuthUser;
@@ -135,9 +135,6 @@ public class DaqPrivilegeController extends BaseController{
 		ListResult<Map<String,Object>> result = null;
 		try {
 			String tendersOid = param.get("tendersOid");
-			if(StringUtils.isBlank(tendersOid)){
-				return new BaseResult(-1, "error", "标段id不能为空！");
-			}
 			List<Map<String,Object>> rows = this.daqPrivilegeService.getSupervisionUnitByTendersOid(tendersOid);
 			result = new ListResult<>(1, "200", "ok", rows);
 		} catch (Exception e) {
@@ -162,9 +159,6 @@ public class DaqPrivilegeController extends BaseController{
 		ListResult<Map<String,Object>> result = null;
 		try {
 			String tendersOid = param.get("tendersOid");
-			if(StringUtils.isBlank(tendersOid)){
-				return new BaseResult(-1, "error", "标段id不能为空！");
-			}
 			List<Map<String,Object>> rows = this.daqPrivilegeService.getConstructionUnitByTendersOid(tendersOid);
 			result = new ListResult<>(1, "200", "ok", rows);
 		} catch (Exception e) {
@@ -195,8 +189,6 @@ public class DaqPrivilegeController extends BaseController{
 				pipeSegmentOrCrossOid = param.get("crossOid");
 			}else if(StringUtils.isNotBlank(param.get("pipeSegmentOid"))){
 				pipeSegmentOrCrossOid = param.get("pipeSegmentOid");
-			}else{
-				return new BaseResult(-1, "error", "oid不能为空！");
 			}
 			List<Map<String,Object>> rows = this.daqPrivilegeService.getMedianStakeList(pipeSegmentOrCrossOid);
 			result = new ListResult<>(1, "200", "ok", rows);
@@ -278,6 +270,63 @@ public class DaqPrivilegeController extends BaseController{
 			result = new ListResult<>(1, "200", "ok", rows);
 		} catch (Exception e) {
 			result = new ListResult<>(-1, "400", "error");
+			e.printStackTrace();
+		}
+		return result;
+	}
+	/**
+	  * <p>功能描述：根据监理单位获取对应标段下的施工单位和检测单位。</p>
+	  * <p> 雷凯。</p>	
+	  * @param request
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年8月30日 下午4:38:59。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="/getConstructAndDetectionUnitList",method = RequestMethod.POST)
+	@ResponseBody
+	public Object getConstructAndDetectionUnitList(HttpServletRequest request){
+		ListResult<Map<String,Object>> result = null;
+		try {
+			List<Map<String,Object>> rows = this.daqPrivilegeService.getConstructAndDetectionUnitList();
+			result = new ListResult<>(1, "200", "ok", rows);
+		} catch (Exception e) {
+			result = new ListResult<>(-1, "400", "error");
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	/***
+	  * <p>功能描述：获取离线数据。</p>
+	  * <p> 雷凯。</p>	
+	  * @param request
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年8月30日 上午10:59:36。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="/getOfflineData",method = RequestMethod.POST)
+	@ResponseBody
+	public Object getOfflineData(HttpServletRequest request){
+		SimpleResult<Map<String,Object>> result = null;
+		Map<String,Object> dataMap = new HashMap<String,Object>();
+		try {
+			List<Map<String, Object>> projectRows = this.daqPrivilegeService.getProject("pipe_network_code_001");
+			dataMap.put("projectData", projectRows);
+			List<Map<String, Object>> tendersRows = this.daqPrivilegeService.getTendersList(null);
+			dataMap.put("tendersData", tendersRows);
+			List<Map<String,Object>> pipelineRows = this.daqPrivilegeService.getPipelineList(null);
+			dataMap.put("pipelineData", pipelineRows);
+			List<Map<String, Object>> pipeSegmentOrCrossRows = this.daqPrivilegeService.getPipeSegmentOrCrossList(null);
+			dataMap.put("pipeSegmentOrCrossData", pipeSegmentOrCrossRows);
+			List<Map<String,Object>> supervisionUnitRows = this.daqPrivilegeService.getSupervisionUnitByTendersOid(null);
+			dataMap.put("supervisionUnitData", supervisionUnitRows);
+			List<Map<String,Object>> medianStakeRows = this.daqPrivilegeService.getMedianStakeList(null);
+			dataMap.put("medianStakeData", medianStakeRows);
+			result = new SimpleResult<Map<String,Object>>(0, "200", "ok", dataMap);
+		} catch (Exception e) {
+			result = new SimpleResult<>(-1, "400", e.getMessage());
 			e.printStackTrace();
 		}
 		return result;

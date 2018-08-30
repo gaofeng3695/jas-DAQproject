@@ -33,6 +33,7 @@ public class DaqCrossPipeJackingQuery extends BaseJavaQuery {
 	private String crossOid;
 	private String startMedianStakeOid;
 	private String endMedianStakeOid;
+	private String approveStatus;
 	
 	@Override
 	public String getSql() {
@@ -77,6 +78,9 @@ public class DaqCrossPipeJackingQuery extends BaseJavaQuery {
 		}
 		if(null != oids && oids.size()>0){
 			sql += " and oids in (:oids) ";
+		}
+		if(StringUtils.isNotBlank(approveStatus)){
+			sql += " and t.approve_status in ("+ approveStatus +")";
 		}
 		sql += this.dataAuthoritySql;
 		sql += " order by t.create_datetime desc";
@@ -137,6 +141,14 @@ public class DaqCrossPipeJackingQuery extends BaseJavaQuery {
 
 	public void setEndMedianStakeOid(String endMedianStakeOid) {
 		this.endMedianStakeOid = endMedianStakeOid;
+	}
+
+	public String getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(String approveStatus) {
+		this.approveStatus = approveStatus;
 	}
 
 }

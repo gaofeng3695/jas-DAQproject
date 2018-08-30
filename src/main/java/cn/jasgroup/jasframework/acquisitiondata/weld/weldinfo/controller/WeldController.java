@@ -31,6 +31,16 @@ public class WeldController extends BaseController{
 	@Autowired
 	private RedisService redisService;
 	
+	/***
+	  * <p>功能描述：获取焊口列表（焊口+返修-割口）。</p>
+	  * <p> 雷凯。</p>	
+	  * @param request
+	  * @param param
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年8月21日 下午2:14:05。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
 	@RequestMapping(value="getWeldList",method = RequestMethod.POST)
 	@ResponseBody
 	public Object getWeldList(HttpServletRequest request,@RequestBody Map<String,String> param){
@@ -50,6 +60,66 @@ public class WeldController extends BaseController{
 		}
 		return result;
 	}
+	/***
+	 * <p>功能描述：获取焊口列表（焊口-返修-割口）。</p>
+	 * <p> 雷凯。</p>	
+	 * @param request
+	 * @param param
+	 * @return
+	 * @since JDK1.8。
+	 * <p>创建日期:2018年8月21日 下午2:14:05。</p>
+	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="getOnlyWeldList",method = RequestMethod.POST)
+	@ResponseBody
+	public Object getOnlyWeldList(HttpServletRequest request,@RequestBody Map<String,String> param){
+		ListResult<Map<String,Object>> result=null;
+		String pipeSegmentOrCrossOid=param.get("pipeSegmentOrCrossOid");
+		try {
+			List<Map<String,Object>> rows = this.weldService.getOnlyWeldList(pipeSegmentOrCrossOid);
+			result = new ListResult<>(1, "200", "ok", rows);
+		} catch (Exception e) {
+			result = new ListResult<>(-1, "400", "error");
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	/***
+	 * <p>功能描述：获取焊口列表（焊口-返修-割口）。</p>
+	 * <p> 雷凯。</p>	
+	 * @param request
+	 * @param param
+	 * @return
+	 * @since JDK1.8。
+	 * <p>创建日期:2018年8月21日 下午2:14:05。</p>
+	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="getAllWeldList",method = RequestMethod.POST)
+	@ResponseBody
+	public Object getAllWeldList(HttpServletRequest request,@RequestBody Map<String,String> param){
+		ListResult<Map<String,Object>> result=null;
+		String pipeSegmentOrCrossOid=param.get("pipeSegmentOrCrossOid");
+		String detectionType=param.get("detectionType");
+		try {
+			List<Map<String,Object>> rows = this.weldService.getAllWeldList(pipeSegmentOrCrossOid,detectionType);
+			result = new ListResult<>(1, "200", "ok", rows);
+		} catch (Exception e) {
+			result = new ListResult<>(-1, "400", "error");
+			e.printStackTrace();
+		}
+		return result;
+	}
+	/***
+	  * <p>功能描述：。</p>
+	  * <p> 雷凯。</p>	
+	  * @param request
+	  * @param param
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年8月21日 下午2:16:22。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
 	@RequestMapping(value="getWeldListByWeldOid",method = RequestMethod.POST)
 	@ResponseBody
 	public Object getWeldListByWeldOid(HttpServletRequest request,@RequestBody Map<String,String> param){
@@ -58,7 +128,7 @@ public class WeldController extends BaseController{
 		String token = request.getParameter("token");
 		try {
 			List<Map<String,Object>> rows= (List<Map<String, Object>>) redisService.getValue(token+"_get_weld_list_local");
-			if(rows.size()>0){
+			if(rows!=null && rows.size()>0){
 				if(StringUtils.isNotBlank(weldOid)){
 					redisService.putValue(token+"_weld_oid_local", weldOid);
 					redisService.expirse(token, 5, TimeUnit.HOURS);

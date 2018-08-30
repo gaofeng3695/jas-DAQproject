@@ -81,6 +81,10 @@ $(document).ready(function() {
 				}
 				return true;
 			}
+		},complete:function(xhr,status,data){
+			console.log(xhr);
+			console.log(status);
+			console.log(data);
 		}
 	});
 });

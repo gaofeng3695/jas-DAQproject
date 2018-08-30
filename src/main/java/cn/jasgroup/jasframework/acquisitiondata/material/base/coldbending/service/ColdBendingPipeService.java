@@ -71,12 +71,13 @@ public class ColdBendingPipeService extends CommonDataHibernateService{
 		this.coldBendingPipeDao.chanageOriginalPipeUseState(coldBendingPipe.getProjectOid(),coldBendingPipe.getPipelineOid(),coldBendingPipe.getTendersOid(),coldBendingPipe.getPipeOid());
 	}
 	public void updateChanageOriginalPipeUseState(ColdBendingPipe coldBendingPipe){
-		this.coldBendingPipeDao.chanageOriginalPipeUseState(coldBendingPipe.getProjectOid(),coldBendingPipe.getPipelineOid(),coldBendingPipe.getTendersOid(),coldBendingPipe.getPipeOid());
 		ColdBendingPipe oldColdBendingPipe = (ColdBendingPipe)BaseEntityThreadLocalHolder.getEntitySnap();
 		this.coldBendingPipeDao.chanageOriginalPipeUseState("","","",oldColdBendingPipe.getPipeOid());
+		this.coldBendingPipeDao.chanageOriginalPipeUseState(coldBendingPipe.getProjectOid(),coldBendingPipe.getPipelineOid(),coldBendingPipe.getTendersOid(),coldBendingPipe.getPipeOid());
 	}
 	public void deleteChanageOriginalPipeUseState(ColdBendingPipe coldBendingPipe){
-		this.coldBendingPipeDao.chanageOriginalPipeUseState("","","",coldBendingPipe.getPipeOid());
+		ColdBendingPipe oldColdBendingPipe = this.coldBendingPipeDao.find(coldBendingPipe.getOid());
+		this.coldBendingPipeDao.chanageOriginalPipeUseState("","","",oldColdBendingPipe.getPipeOid());
 	}
 	public void updateChanageBeforeAdvice(ColdBendingPipe coldBendingPipe){
 		ColdBendingPipe oldColdBendingPipe = this.coldBendingPipeDao.find(coldBendingPipe.getOid());
@@ -91,7 +92,7 @@ public class ColdBendingPipeService extends CommonDataHibernateService{
 	  * <p>创建日期:2018年7月20日 下午3:13:45。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public List<Map<String,Object>> getList(String tendersOid){
+	public List<Map<String,Object>> getListData(String tendersOid){
 		return this.coldBendingPipeDao.getList(tendersOid);
 	}
 }

@@ -33,6 +33,7 @@ public class DaqAppendagesMarkStakeQuery extends BaseJavaQuery {
 	private String pipeSegmentOrCrossOid;
 	private String markStakeCode;
 	private String medianStakeOid;
+	private String approveStatus;
 	
 	@Override
 	public String getSql() {
@@ -82,6 +83,9 @@ public class DaqAppendagesMarkStakeQuery extends BaseJavaQuery {
 		}
 		if (null != oids && oids.size() > 0) {
 			sql += " and oid in (:oids) ";
+		}
+		if(StringUtils.isNotBlank(approveStatus)){
+			sql += " and t.approve_status in ("+ approveStatus +")";
 		}
 		sql += this.dataAuthoritySql;
 		sql +=" order by t.create_datetime desc";
@@ -145,6 +149,14 @@ public class DaqAppendagesMarkStakeQuery extends BaseJavaQuery {
 
 	public void setMedianStakeOid(String medianStakeOid) {
 		this.medianStakeOid = medianStakeOid;
+	}
+
+	public String getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(String approveStatus) {
+		this.approveStatus = approveStatus;
 	}
 	
 }

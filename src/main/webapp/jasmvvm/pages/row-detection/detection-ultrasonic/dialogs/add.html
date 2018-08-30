@@ -71,7 +71,7 @@
 						name: '管线名称'
 					}, {
 						field: "pipeSegmentOrCrossOid",
-						name: '线路段/传跨越'
+						name: '线路段/穿跨越'
 					}, {
 						field: "weldOid",
 						name: '焊口编号'
@@ -153,12 +153,13 @@
 					pipeSegmentOrCrossOid: {
 						type: 'select',
 						childSelect: ['weldOid'],
-						childUrl: ['/daq/weld/getWeldList.do'],
+						childUrl: ['/daq/weld/getAllWeldList.do'],
 						isRequired: true,
 					},
 					weldOid: {
 						type: 'select',
 						isRequired: true,
+						requestParams:{detectionType:"2"}
 					},
 					weldCode: {
 						type: 'input',
@@ -240,7 +241,7 @@
 					projectOid: '', // '项目名称'
 					tendersOid: '', // '标段名称'
 					pipelineOid: '', // '管线名称'
-					pipeSegmentOrCrossOid: '', // '线路段/传跨越'
+					pipeSegmentOrCrossOid: '', // '线路段/穿跨越'
 					weldCode: '', // '焊口编号'
 					detectionReportNum: '', // '检测报告编号'
 					detectionDeta: '', // '检测日期'
@@ -323,6 +324,10 @@
 					oid: that.oid
 				}, function (data) {
 					that.form = data.data;
+					that.fieldsConfig.weldOid.options = [{
+						key: that.form.weldOid,
+						value: that.form.weldCode
+					}];
 					that.$refs['mainForm'].triggerFatherSelectsChange();
 					that.form.ultrasonicSubList.forEach(function (item) {
 						item.operationFlag = 2;

@@ -51,6 +51,11 @@ public class CathodicSacrificeAnodeQuery extends BaseJavaQuery{
 	 * 阳极编号
 	 */
 	private String anodeCode;
+	
+	/**
+	 * 审核状态
+	 */
+	private String approveStatus;
 
 	@Override
 	public String getQuerySql() {
@@ -90,6 +95,9 @@ public class CathodicSacrificeAnodeQuery extends BaseJavaQuery{
 			}
 			if (StringUtils.isNotBlank(anodeCode)) {
 				conditionSql += " and csa.anode_code like :anodeCode";
+			}
+			if (StringUtils.isNotBlank(approveStatus)) {
+				conditionSql += " and csa.approve_status in ("+ approveStatus +")";
 			}
 			conditionSql += this.dataAuthoritySql;
 		}
@@ -147,4 +155,13 @@ public class CathodicSacrificeAnodeQuery extends BaseJavaQuery{
 	public void setAnodeCode(String anodeCode) {
 		this.anodeCode = anodeCode;
 	}
+
+	public String getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(String approveStatus) {
+		this.approveStatus = approveStatus;
+	}
+	
 }
