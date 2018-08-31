@@ -56,6 +56,11 @@ public class ColdBendingPipeQuery extends BaseJavaQuery{
 	 */
 	private Integer isUse;
 	
+	/**
+	 * 审核状态
+	 */
+	private String approveStatus;
+	
 	@Override
 	public String getSql() {
 		String sql = "select t.oid,p.project_name,l.pipeline_name,s.tenders_name,t.oid,t.project_oid,t.tenders_oid,t.pipeline_oid,t.pipe_segment_or_cross_oid,t.pipe_oid,t.certificate_num,t.pipe_cold_bending_code,t.pipe_bending_standards,t.bending_radius,t.bending_angle,t.curve_length,t.straight_pipe_length,t.pipe_length,t.ellipticity,t.wall_thickness_redurate,t.pipe_diameter,t.wall_thickness,t.produce_date,t.construct_unit,t.supervision_unit,t.supervision_engineer,t.collection_person,t.collection_date,t.remarks,case when t.is_use=1 then '是' else '否' end as is_use,v.name as pipe_segment_or_cross_name"
@@ -89,6 +94,9 @@ public class ColdBendingPipeQuery extends BaseJavaQuery{
 			}
 			if(null!=isUse){
 				sql +=" and t.is_use=:isUse";
+			}
+			if (StringUtils.isNotBlank(approveStatus)) {
+				sql += " and cw.approve_status in ("+ approveStatus +")";
 			}
 			sql +=  this.dataAuthoritySql;
 		}
@@ -148,4 +156,13 @@ public class ColdBendingPipeQuery extends BaseJavaQuery{
 	public void setIsUse(Integer isUse) {
 		this.isUse = isUse;
 	}
+
+	public String getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(String approveStatus) {
+		this.approveStatus = approveStatus;
+	}
+	
 }
