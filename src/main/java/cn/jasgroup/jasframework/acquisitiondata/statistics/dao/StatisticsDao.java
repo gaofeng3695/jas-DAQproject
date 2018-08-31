@@ -11,6 +11,8 @@ import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
@@ -78,7 +80,7 @@ public class StatisticsDao {
         StringBuilder sql = new StringBuilder();
         String sqlTemplate = " select '%s' as code, '%s' as category_code, count(*) as total, " +
                 " sum(case when (approve_status=" + ApproveStatusEnum.WAIT_AUDITING.getCode() + ") then 1 else 0 end) as unaudited " +
-                " from %s where active = 1 and supervision_unit in (:supervisionUnits) ";
+                " from %s where active = 1 and approve_status!=0 and supervision_unit in (:supervisionUnits) ";
 
         // 拼接统计SQL
         for (int i = 0; i < codeList.size(); i++) {
