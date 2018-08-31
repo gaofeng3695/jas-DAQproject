@@ -21,6 +21,7 @@ public class StatisticsController {
     @Autowired
     private StatisticsService statisticsService;
 
+
     /**
      * 数据录入统计(app)
      * @param stasticTypes 统计类型来源:
@@ -38,7 +39,7 @@ public class StatisticsController {
      * 数据审核统计(app)
      * @return {@link BaseResult}
      */
-    @PostMapping("dataAuditing")
+    @GetMapping("dataAuditing")
     public BaseResult dataAuditing(@RequestParam String constructUnit) {
         return ResultVOUtil.ofSuccess(this.statisticsService.dataAuditing(constructUnit));
     }
