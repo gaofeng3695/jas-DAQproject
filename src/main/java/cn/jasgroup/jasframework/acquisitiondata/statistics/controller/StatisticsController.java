@@ -40,7 +40,7 @@ public class StatisticsController {
      * @return {@link BaseResult}
      */
     @GetMapping("dataAuditing")
-    public BaseResult dataAuditing(@RequestParam String constructUnit) {
+    public BaseResult dataAuditing(@RequestParam(required = false) String constructUnit) {
         return ResultVOUtil.ofSuccess(this.statisticsService.dataAuditing(constructUnit));
     }
 }
