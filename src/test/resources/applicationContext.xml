@@ -16,6 +16,9 @@
 	http://www.springframework.org/schema/rabbit 
 	http://www.springframework.org/schema/rabbit/spring-rabbit.xsd">
 
+	<!-- 注入ApplicationContext，开发人员可以使用 WebContextFactoryUtil提供的getBean方法获取注入的bean对象 -->
+	<bean class="cn.jasgroup.jasframework.utils.web.WebContextFactoryUtil"></bean>
+	
 	<context:component-scan base-package="cn.jasgroup.*">
 		<context:exclude-filter type="annotation"
 			expression="org.springframework.stereotype.Controller" />
@@ -211,8 +214,6 @@
 	<!-- ==============异常处理切面配置 结束 ============== -->
 
 
-	<!-- 注入ApplicationContext，开发人员可以使用 WebContextFactoryUtil提供的getBean方法获取注入的bean对象 -->
-	<bean class="cn.jasgroup.jasframework.utils.web.WebContextFactoryUtil"></bean>
 
 
 	<!-- redisTemplate配置开始 -->
