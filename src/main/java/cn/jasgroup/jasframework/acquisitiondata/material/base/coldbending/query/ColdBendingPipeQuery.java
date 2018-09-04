@@ -96,7 +96,7 @@ public class ColdBendingPipeQuery extends BaseJavaQuery{
 				sql +=" and t.is_use=:isUse";
 			}
 			if (StringUtils.isNotBlank(approveStatus)) {
-				sql += " and cw.approve_status in ("+ approveStatus +")";
+				sql += " and t.approve_status in ("+ approveStatus +")";
 			}
 			sql +=  this.dataAuthoritySql;
 		}
