@@ -6,6 +6,13 @@ import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 
+/**
+  *<p>类描述：防腐补口剥离强度试验信息query。</p>
+  * @author 葛建 。
+  * @version v1.0.0.1。
+  * @since JDK1.8。
+  *<p>创建日期：2018年9月3日 下午2:31:23。</p>
+ */
 @QueryConfig(scene = "/weldAnticorrosionTest/getPage",
 	queryBeforeProcess = {
 		 @Process(service = "daqInjectService" , method = "injectDataAuthoritySql(dataAuthoritySql)")
