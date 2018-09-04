@@ -18,6 +18,7 @@ import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
 import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
 import cn.jasgroup.jasframework.base.annotation.Merge;
+import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.assist.MergeType;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 
@@ -27,11 +28,33 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
  * @version v1.0.0.1。
  * @since JDK1.8。
  * <p>创建日期：2018年7月12日 上午10:56:31。</p>
+ * {@link cn.jasgroup.jasframework.acquisitiondata.material.detection.paultrasonic.service.DaqDetectionPaUltrasonicService #saveChanageWledStatus}
+ * {@link cn.jasgroup.jasframework.acquisitiondata.material.detection.paultrasonic.service.DaqDetectionPaUltrasonicService #updateChanageWledStatusBeforeAdvice}
+ * {@link cn.jasgroup.jasframework.acquisitiondata.material.detection.paultrasonic.service.DaqDetectionPaUltrasonicService #updateChanageWledStatus}
+ * {@link cn.jasgroup.jasframework.acquisitiondata.material.detection.paultrasonic.service.DaqDetectionPaUltrasonicService #deleteChanageWledStatus}
  */
 
-@CommonSaveConfig(scene = "/detectionPaUltrasonic/save")
-@CommonUpdateConfig(scene = "/detectionPaUltrasonic/update")
-@CommonDeleteConfig(scene = "/detectionPaUltrasonic/delete")
+@CommonSaveConfig(
+	scene = "/detectionPaUltrasonic/save",
+	afterAdvice = {
+		@Process(service = "daqDetectionPaUltrasonicService", method = "saveChanageWledStatus()")
+	}
+)
+@CommonUpdateConfig(
+	scene = "/detectionPaUltrasonic/update",
+	beforeAdvice={
+		@Process(service = "daqDetectionPaUltrasonicService", method = "updateChanageWledStatusBeforeAdvice()")
+	},
+	afterAdvice={
+		@Process(service = "daqDetectionPaUltrasonicService", method = "updateChanageWledStatus()")
+	}
+)
+@CommonDeleteConfig(
+	scene = "/detectionPaUltrasonic/delete",
+	afterAdvice = {
+		@Process(service = "daqDetectionPaUltrasonicService", method = "deleteChanageWledStatus()")
+	}
+)
 @CommonDeleteBatchConfig(scene = "/detectionPaUltrasonic/deleteBatch")
 @JdbcEntity(name="daq_detection_pa_ultrasonic")
 public class DaqDetectionPaUltrasonic extends CommonJdbcEntity {
@@ -57,9 +80,9 @@ public class DaqDetectionPaUltrasonic extends CommonJdbcEntity {
 	private String pipeSegmentOrCrossOid; 
 
 	/**
-	 * 焊口编号 
+	 * 焊口oid
 	 */
-	private String weldCode; 
+	private String weldOid;
 
 	/**
 	 * 检测报告编号 
@@ -167,13 +190,13 @@ public class DaqDetectionPaUltrasonic extends CommonJdbcEntity {
 		super.setField("pipeSegmentOrCrossOid");
 	}
 
-	public String getWeldCode() {
-		return weldCode; 
+	public String getWeldOid() {
+		return weldOid;
 	}
 
-	public void setWeldCode(String weldCode) {
-		this.weldCode = weldCode; 
-		super.setField("weldCode");
+	public void setWeldOid(String weldOid) {
+		this.weldOid = weldOid;
+		super.setField("weldOid");
 	}
 
 	public String getDetectionReportNum() {

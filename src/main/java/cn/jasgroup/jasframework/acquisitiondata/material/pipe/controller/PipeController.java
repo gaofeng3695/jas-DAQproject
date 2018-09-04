@@ -1,10 +1,10 @@
 package cn.jasgroup.jasframework.acquisitiondata.material.pipe.controller;
 
-import static org.hamcrest.CoreMatchers.nullValue;
-
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import cn.jasgroup.framework.data.result.ListResult;
+import cn.jasgroup.framework.data.result.SimpleResult;
+import cn.jasgroup.jasframework.acquisitiondata.material.base.coldbending.service.ColdBendingPipeService;
 import cn.jasgroup.jasframework.acquisitiondata.material.pipe.service.PipeService;
 
 @RestController
@@ -24,6 +26,9 @@ public class PipeController {
 
 	@Autowired
 	private PipeService pipeService;
+	
+	@Resource(name="coldBendingPipeService")
+	private ColdBendingPipeService coldBendingPipeService;
 	
 	/**
 	 * <p>功能描述：查询未使用的钢管。</p>
@@ -46,6 +51,34 @@ public class PipeController {
 			result = new ListResult<>(1,"200","ok",rows);
 		}catch(Exception e){
 			result = new ListResult<>(-1,"400","error");
+			e.printStackTrace();
+		}
+		return result;
+	}
+	/***
+	  * <p>功能描述：获取物资离线数据。</p>
+	  * <p> 雷凯。</p>	
+	  * @param request
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年8月30日 下午3:09:34。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="/getOfflineMaterialData", method = RequestMethod.POST)
+	@ResponseBody
+	public Object getOfflineMaterialData(HttpServletRequest request){
+		SimpleResult<Map<String,Object>> result = null;
+		Map<String,Object> dataMap = new HashMap<String,Object>();
+		try {
+			List<Map<String, Object>> coldBendingRows = this.coldBendingPipeService.getListData(null);
+			dataMap.put("coldBendingData", coldBendingRows);
+			List<Map<String,Object>> pipeRows = this.pipeService.getMaterialPipeList();
+			dataMap.put("materialPipeData", pipeRows);
+			List<Map<String,Object>> HotBendsRows = this.pipeService.getMaterialHotBendsList();
+			dataMap.put("materialHotBendsData", HotBendsRows);
+			result = new SimpleResult<Map<String,Object>>(1, "200", "ok", dataMap);
+		} catch (Exception e) {
+			result = new SimpleResult<Map<String,Object>>(-1, "400", e.getMessage());
 			e.printStackTrace();
 		}
 		return result;

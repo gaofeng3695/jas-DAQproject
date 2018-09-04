@@ -1,14 +1,18 @@
 package cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.dao.entity.DaqDetectionRay;
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.query.bo.DaqDetectionRayBo;
 import cn.jasgroup.jasframework.dataaccess.base.BaseJdbcDao;
 import cn.jasgroup.jasframework.dataaccess.base.BaseNamedParameterJdbcDao;
+import cn.jasgroup.jasframework.dataaccess3.core.BaseJdbcTemplate;
 
 /**
  * @description 射线检测dao
@@ -23,6 +27,9 @@ public class DaqDetectionRayDao extends BaseNamedParameterJdbcDao{
 
 	@Resource
 	private BaseJdbcDao baseJdbcDao;
+	
+	@Autowired
+	private BaseJdbcTemplate baseJdbcTemplate;
 	
 	/**
 	 * <p>功能描述：更改审核状态。</p>
@@ -63,7 +70,8 @@ public class DaqDetectionRayDao extends BaseNamedParameterJdbcDao{
 				+ "	dt.tenders_name,"
 				+ "	v.name as pipeSegmentOrCrossName,"
 				+ "	u1.unit_name as detectionUnitName,"
-				+ "	u2.unit_name as supervisionUnitName"
+				+ "	u2.unit_name as supervisionUnitName,"
+				+ " vdwi.weld_code "	
 				+ " from daq_detection_ray t "
 				+ " left join sys_domain d1 on d1.code_id = t.detection_type"
 				+ " left join sys_domain d2 on d2.code_id = t.evaluation_grade"
@@ -73,9 +81,44 @@ public class DaqDetectionRayDao extends BaseNamedParameterJdbcDao{
 				+ " left join v_daq_pipe_segment_cross v on v.oid=t.pipe_segment_or_cross_oid "
 				+ " left join pri_unit u1 on u1.oid=t.detection_unit "
 				+ " left join pri_unit u2 on u2.oid=t.supervision_unit "
+				+ " left join (select oid,weld_code from v_daq_weld_info) vdwi on vdwi.oid=t.weld_oid "	
 				+ " where t.active = 1 and t.oid =?";
 		DaqDetectionRayBo rayBo = 
 				(DaqDetectionRayBo) this.baseJdbcDao.queryForObject(sql, new String[]{oid}, DaqDetectionRayBo.class);
 		return rayBo;
+	}
+	
+	/**
+	 * <p>功能描述：查询单个对象。</p>
+	  * <p> 葛建。</p>	
+	  * @param oid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年8月21日 下午4:34:19。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public DaqDetectionRay find(String oid) {
+		String sql = "select * from daq_detection_ray t where t.oid=?";
+		List<DaqDetectionRay> data = baseJdbcTemplate.queryForList(sql, new Object[]{oid}, DaqDetectionRay.class);
+		if(data!=null && data.size()>0){
+			return data.get(0);
+		}else{
+			return null;
+		}
+	}
+	
+	/**
+	 * <p>功能描述：改变焊口检查状态。</p>
+	  * <p> 葛建。</p>	
+	  * @param weldOid
+	  * @param status
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年8月21日 下午4:31:12。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public void chanageWledStatus(String weldOid, int status) {
+		String sql = "update daq_construction_weld set is_ray="+status+" where oid='"+weldOid+"';"
+				+ "update daq_weld_rework_weld set is_ray="+status+" where oid='"+weldOid+"';";
+		baseJdbcTemplate.batchExecute(sql);
 	}
 }

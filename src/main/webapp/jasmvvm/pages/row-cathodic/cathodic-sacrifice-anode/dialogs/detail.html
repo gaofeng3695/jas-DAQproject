@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<link rel="stylesheet" href="./../../../../lib/font-awesome-4.7.0/css/font-awesome.css">
+	<link rel="stylesheet" href="./../../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../../src/css/main.css">
+	<style>
+	</style>
+</head>
+
+<body>
+	<div id="app" v-cloak>
+		<jas-approve-dialog>
+			<div>
+				<jas-base-group-title name="基础数据"></jas-base-group-title>
+				<jas-detail-table :titles="baseArr" :detail="detail"></jas-detail-table>
+				<jas-base-group-title name="位置数据"></jas-base-group-title>
+				<jas-detail-table :titles="addressArr" :detail="detail"></jas-detail-table>
+				<jas-base-group-title name="牺牲阳极数据"></jas-base-group-title>
+				<jas-detail-table :titles="busData" :detail="detail"></jas-detail-table>
+				<jas-base-group-title name="其他信息"></jas-base-group-title>
+				<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
+				<jas-base-group-title name="附件信息"></jas-base-group-title>
+				<jas-file-list :biz-id="oid"></jas-file-list>
+			</div>
+		</jas-approve-dialog>
+
+	</div>
+</body>
+<script src="./../../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../../lib/vue/vue.js"></script>
+<script src="./../../../../lib/element-ui/v2.4.1/index.min.js"></script>
+<script src="./../../../../common/components/jas-components.js "></script>
+<script src="./../../../../common/js/jas-tools.js"></script>
+<!--<script src="js/ajaxFileUpload.js"></script>-->
+<script>
+	var app = new Vue({
+		el: "#app",
+		data: function () {
+			var that = this;
+			return {
+				baseArr: [ //
+					{
+						name: '项目名称',
+						field: 'projectName'
+					}, {
+						name: '标段名称',
+						field: 'tendersName'
+					}, {
+						name: '管线名称',
+						field: 'pipelineName'
+					}, {
+						name: "线路段名称",
+						field: "pipeSegmentName"
+					}, {
+						name: '施工单位',
+						field: 'constructUnitName'
+					}, {
+						name: '施工日期',
+						field: 'constructDate'
+					},
+					{
+						name: '监理单位',
+						field: 'supervisionUnitName'
+					}, {
+						name: '监理工程师',
+						field: 'supervisionEngineer'
+					}, {
+						name: '采集人员',
+						field: 'collectionPerson'
+					}, {
+						name: '采集日期',
+						field: 'collectionDate'
+					}, {
+						name: '审核状态',
+						field: 'approveStatus'
+					}
+				],
+
+				addressArr: [{
+					name: '桩号',
+					field: 'medianStakeCode'
+				}, {
+					name: '相对桩位置(m)',
+					field: 'relativeMileage'
+				}, {
+					name: 'X坐标',
+					field: 'pointx'
+				}, {
+					name: 'Y坐标',
+					field: 'pointy'
+				}, {
+					name: '高程(m)',
+					field: 'pointz',
+				}],
+				busData: [{
+						name: "阳极编号",
+						field: "anodeCode"
+					}, {
+						name: '保护对象',
+						field: 'protectObject'
+					}, {
+						name: '是否临时',
+						field: 'isTemporary'
+					}, {
+						name: '设计寿命(年)',
+						field: 'designLife'
+					}, {
+						name: '牺牲阳极材料',
+						field: 'anodeMaterial'
+					}, {
+						name: '牺牲阳极型号',
+						field: 'anodeSpecification',
+					}, {
+						name: '牺牲阳极数量(支)',
+						field: 'andoeQuantity',
+					},
+					{
+						name: '牺牲阳极单重(kg)',
+						field: 'andoeWeight',
+					}, {
+						name: '牺牲阳极总重(kg)',
+						field: 'totalWeight'
+					}, {
+						name: '阳极间距(m)',
+						field: 'anodeDistance'
+					}, {
+						name: '与管道距离(m)',
+						field: 'pipeDistance',
+					}, {
+						name: '制造商',
+						field: 'manufacture',
+					}, {
+						name: '埋设日期',
+						field: 'burialDate',
+					},
+					{
+						name: '阳极埋深(m)',
+						field: 'anodeBuriedDepth',
+					},
+					{
+						name: '铺设长度(m)',
+						field: 'layLength',
+					},
+					{
+						name: '填包料重量(kg)',
+						field: 'fillWeight',
+					},
+					{
+						name: '各接点质量及绝缘情况',
+						field: 'insulationQuality',
+					},
+					{
+						name: '检查片埋设情况',
+						field: 'tabletsCondition',
+					},
+					{
+						name: '安装位置描述',
+						field: 'installLocationDescription',
+					},
+					{
+						name: '结论',
+						field: 'conclusion',
+					}
+				],
+				otherArr: [{
+					name: '备注',
+					field: 'remarks',
+				}],
+				detail: {},
+				columnNum: 2,
+				oid: '',
+			}
+		},
+
+		created: function () {
+			var that = this;
+			var param = window.jasTools.base.getParamsInUrl(location.href);
+			if (param.oid) {
+				this.oid = param.oid;
+				this.params = param;
+				this.getDetailByObjectId();
+			};
+
+		},
+		methods: {
+			getDetailByObjectId: function () {
+				var that = this;
+				var url = jasTools.base.rootPath +
+					"/jdbc/commonData/cathodicSacrificeAnode/getPage.do";
+				jasTools.ajax.post(url, {
+					oid: that.oid
+				}, function (data) {
+					that.detail = data.rows[0];
+					that.detail.conclusion = that.detail.conclusion == 0 ? '合格' : '不合格';
+					that.detail.tabletsCondition = that.detail.tabletsCondition == 0 ? '符合设计要求' : '不符合设计要求';
+					that.detail.isTemporary = that.detail.isTemporary == 0 ? '是' : '否';
+					if (that.detail.approveStatus == -1) {
+						that.detail.approveStatus = '驳回';
+					}
+					if (that.detail.approveStatus == 0) {
+						that.detail.approveStatus = '未提交';
+					}
+					if (that.detail.approveStatus == 1) {
+						that.detail.approveStatus = '审核中';
+					}
+					if (that.detail.approveStatus == 2) {
+						that.detail.approveStatus = '通过';
+					}
+				});
+			},
+		},
+	});
+</script>
+
+</html>

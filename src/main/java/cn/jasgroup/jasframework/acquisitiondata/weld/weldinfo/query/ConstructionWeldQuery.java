@@ -49,6 +49,11 @@ public class ConstructionWeldQuery extends BaseJavaQuery{
 	 */
 	private String weldCode;
 
+	/**
+	 * 审核状态
+	 */
+	private String approveStatus;
+
 	@Override
 	public String getQuerySql() {
 		String sql = "SELECT cw.*,pro.project_name, pi.pipeline_name, te.tenders_name, vpsc.name as pipe_segment_or_cross_name, ms.median_stake_code,"
@@ -67,9 +72,12 @@ public class ConstructionWeldQuery extends BaseJavaQuery{
 					+ "LEFT JOIN (select code_id, code_name,active from sys_domain where active=1) d ON d.code_id = cw.weld_type "
 					+ "LEFT JOIN (select code_id, code_name,active from sys_domain where active=1) dm ON dm.code_id = cw.weld_method "
 					+ "LEFT JOIN (SELECT oid, weld_produce_code, active FROM daq_weld_produce_specification where active=1) wps ON wps.oid = cw.weld_produce "
-					+ "LEFT JOIN (SELECT oid, personnel_name, active FROM daq_work_personnel where active=1) wp ON wp.oid = cw.cover_oid "
-					+ "LEFT JOIN (SELECT oid, personnel_name, active FROM daq_work_personnel where active=1) wpe ON wpe.oid = cw.padder_oid "
-					+ "LEFT JOIN (SELECT oid, personnel_name, active FROM daq_work_personnel where active=1) wper ON wper.oid = cw.render_oid "
+//					+ "LEFT JOIN (SELECT oid, personnel_name, active FROM daq_work_personnel where active=1) wp ON wp.oid = cw.cover_oid "
+					+ "Left join (SELECT t.oid, array_to_string(array_agg(wpe.personnel_name),',') as personnel_name FROM daq_construction_weld t LEFT JOIN ( SELECT oid, personnel_name, active FROM daq_work_personnel WHERE active = 1 ) wpe ON t.cover_oid like '%'||wpe.oid||'%' group by t.oid) wp ON wp.oid = cw.oid "
+//					+ "LEFT JOIN (SELECT oid, personnel_name, active FROM daq_work_personnel where active=1) wpe ON wpe.oid = cw.padder_oid "
+					+ "LEFT JOIN (SELECT t.oid, array_to_string(array_agg(wpe.personnel_name),',') as personnel_name FROM daq_construction_weld t LEFT JOIN ( SELECT oid, personnel_name, active FROM daq_work_personnel WHERE active = 1 ) wpe ON t.padder_oid like '%'||wpe.oid||'%' group by t.oid) wpe ON wpe.oid = cw.oid "
+//					+ "LEFT JOIN (SELECT oid, personnel_name, active FROM daq_work_personnel where active=1) wper ON wper.oid = cw.render_oid "
+					+ "LEFT JOIN (SELECT t.oid, array_to_string(array_agg(wpe.personnel_name),',') as personnel_name FROM daq_construction_weld t LEFT JOIN ( SELECT oid, personnel_name, active FROM daq_work_personnel WHERE active = 1 ) wpe ON t.render_oid like '%'||wpe.oid||'%' group by t.oid) wper ON wper.oid = cw.oid "
 					+ "left join (select code_id, code_name from sys_domain where active=1) pf on cw.front_pipe_type= pf.code_id "
 					+ "left join (select code_id, code_name from sys_domain where active=1) bp on cw.back_pipe_type=bp.code_id "
 					+ "WHERE cw.active = 1";
@@ -97,8 +105,12 @@ public class ConstructionWeldQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(weldCode)) {
 				conditionSql += " and cw.weld_code like :weldCode";
 			}
-			conditionSql += " order by cw.create_datetime desc";
+			if (StringUtils.isNotBlank(approveStatus)) {
+				conditionSql += " and cw.approve_status in ("+ approveStatus +")";
+			}
+			conditionSql += this.dataAuthoritySql;
 		}
+		conditionSql += " order by cw.create_datetime desc";
 		return conditionSql;
 	}
 
@@ -143,6 +155,14 @@ public class ConstructionWeldQuery extends BaseJavaQuery{
 
 	public void setWeldCode(String weldCode) {
 		this.weldCode = weldCode;
+	}
+
+	public String getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(String approveStatus) {
+		this.approveStatus = approveStatus;
 	}
 
 }

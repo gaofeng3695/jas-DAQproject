@@ -1,14 +1,19 @@
 package cn.jasgroup.jasframework.acquisitiondata.material.detection.infiltration.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import cn.jasgroup.jasframework.acquisitiondata.material.detection.faultrasonic.dao.entity.DaqDetectionFaUltrasonic;
+import cn.jasgroup.jasframework.acquisitiondata.material.detection.infiltration.dao.entity.DaqDetectionInfiltration;
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.infiltration.query.bo.DaqDetectionInfiltrationBo;
 import cn.jasgroup.jasframework.dataaccess.base.BaseJdbcDao;
 import cn.jasgroup.jasframework.dataaccess.base.BaseNamedParameterJdbcDao;
+import cn.jasgroup.jasframework.dataaccess3.core.BaseJdbcTemplate;
 
 /**
  * @description 渗透检测dao
@@ -23,6 +28,9 @@ public class DaqDetectionInfiltrationDao extends BaseNamedParameterJdbcDao{
 
 	@Resource
 	private BaseJdbcDao baseJdbcDao;
+	
+	@Autowired
+	private BaseJdbcTemplate baseJdbcTemplate;
 	
 	/**
 	 * <p>功能描述：更改审核状态。</p>
@@ -61,17 +69,53 @@ public class DaqDetectionInfiltrationDao extends BaseNamedParameterJdbcDao{
 				+ "	dt.tenders_name,"
 				+ "	v.name as pipeSegmentOrCrossName,"
 				+ "	u1.unit_name as detectionUnitName,"
-				+ "	u2.unit_name as supervisionUnitName"				
+				+ "	u2.unit_name as supervisionUnitName,"
+				+ " vdwi.weld_code "						
 				+ " from daq_detection_infiltration t "
 				+ " left join daq_project p on p.oid=t.project_oid "
 				+ " left join daq_pipeline l on l.oid=t.pipeline_oid "
 				+ " left join daq_tenders dt on dt.oid=t.tenders_oid "
 				+ " left join v_daq_pipe_segment_cross v on v.oid=t.pipe_segment_or_cross_oid "
 				+ " left join pri_unit u1 on u1.oid=t.detection_unit "
-				+ " left join pri_unit u2 on u2.oid=t.supervision_unit "				
+				+ " left join pri_unit u2 on u2.oid=t.supervision_unit "	
+				+ " left join (select oid,weld_code from v_daq_weld_info) vdwi on vdwi.oid=t.weld_oid "				
 				+ " where t.active = 1 and t.oid =?";
 		DaqDetectionInfiltrationBo infiltrationBo = 
 				(DaqDetectionInfiltrationBo) this.baseJdbcDao.queryForObject(sql, new String[]{oid}, DaqDetectionInfiltrationBo.class);
 		return infiltrationBo;
+	}
+
+	/**
+	 * <p>功能描述：获取单个对象。</p>
+	  * <p> 葛建。</p>	
+	  * @param oid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年8月21日 下午4:21:15。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public DaqDetectionInfiltration find(String oid) {
+		String sql = "select * from daq_detection_infiltration t where t.oid=?";
+		List<DaqDetectionInfiltration> data = baseJdbcTemplate.queryForList(sql, new Object[]{oid}, DaqDetectionInfiltration.class);
+		if(data!=null && data.size()>0){
+			return data.get(0);
+		}else{
+			return null;
+		}
+	}
+	
+	/**
+	 * <p>功能描述：改变焊口的检查状态。</p>
+	 * <p> 葛建。</p>	
+	 * @param weldOid
+	 * @param i
+	 * @since JDK1.8。
+	 * <p>创建日期:2018年8月21日 下午4:09:21。</p>
+	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public void chanageWledStatus(String weldOid, int status) {
+		String sql = "update daq_construction_weld set is_infiltration="+status+" where oid='"+weldOid+"';"
+				+ "update daq_weld_rework_weld set is_infiltration="+status+" where oid='"+weldOid+"';";
+		baseJdbcTemplate.batchExecute(sql);
 	}
 }

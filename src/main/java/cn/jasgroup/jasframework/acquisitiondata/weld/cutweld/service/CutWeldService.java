@@ -3,15 +3,15 @@ package cn.jasgroup.jasframework.acquisitiondata.weld.cutweld.service;
 import java.util.Date;
 import java.util.UUID;
 
-import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cn.jasgroup.jasframework.acquisitiondata.material.pipe.dao.PipeDao;
 import cn.jasgroup.jasframework.acquisitiondata.material.pipe.dao.entity.SteelPipe;
+import cn.jasgroup.jasframework.acquisitiondata.utils.BeanUtilEx;
 import cn.jasgroup.jasframework.acquisitiondata.weld.cutweld.dao.entity.CutWeld;
-import cn.jasgroup.jasframework.base.data.BaseEntity;
 import cn.jasgroup.jasframework.engine.jdbc.service.CommonDataJdbcService;
 import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 
@@ -90,12 +90,12 @@ public class CutWeldService {
 			SteelPipe cutedPipe = new SteelPipe();
 			//将原钢管数据赋值给段钢管
 			try {
-				BeanUtils.copyProperties(cutedPipe, pipe);
+				BeanUtilEx.copyProperties(cutedPipe, pipe);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			cutedPipe.setOid(UUID.randomUUID().toString());
-			cutedPipe.setPipeCode(pipe.getPipeCode() + i);
+			cutedPipe.setPipeCode(pipe.getPipeCode() +"-"+(i+1));
 			setLengthAndWeight(cutedPipe,cutWeld,i,pipe);
 			cutedPipe.setIsCut(0);
 			cutedPipe.setIsUse(0);
@@ -125,6 +125,8 @@ public class CutWeldService {
 		}else if (i == 4) {
 			cutedPipe.setPipeLength(cutWeld.getFifthParagraphLength());
 		}
-		cutedPipe.setPipeWeight(pipe.getPipeWeight()*(cutedPipe.getPipeLength()/pipe.getPipeLength()));
+		if(pipe.getPipeWeight()!=null && pipe.getPipeWeight()>0){
+			cutedPipe.setPipeWeight(pipe.getPipeWeight()*(cutedPipe.getPipeLength()/pipe.getPipeLength()));
+		}
 	}
 }

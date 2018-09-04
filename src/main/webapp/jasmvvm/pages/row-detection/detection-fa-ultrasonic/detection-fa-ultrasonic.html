@@ -59,10 +59,10 @@
 						name: '管线名称'
 					}, {
 						field: "pipeSegmentOrCrossOid",
-						name: '线路段/传跨越'
+						name: '线路段/穿跨越'
 					}, {
 						name: '焊口编号',
-						field: 'weldCode'
+						field: 'weldOid'
 					}
 				],
 				fieldsConfig: {
@@ -84,13 +84,26 @@
 					},
 					pipeSegmentOrCrossOid: {
 						type: 'select',
+						childSelect: ['weldOid'],
+						childUrl: ['/daq/weld/getAllWeldList.do'],
 					},
-					weldCode:{
-						type: 'input',
-					}
+					weldOid: {
+						type: 'select',
+						requestParams:{detectionType:"5"}
+					},
 				},
 				tableFields: [ //
 					{
+						field: 'approveStatus',
+						name: '审核状态',
+						formatter: function (a, b, value, c) {
+							if (value == -1) return '驳回';
+							// if (value == 0) return '未上报';
+							if (value == 1) return '审核中';
+							if (value == 2) return '通过';
+							return '未上报';
+						}
+					}, {
 						name: '项目名称',
 						field: 'projectName'
 					}, {
@@ -122,7 +135,7 @@
 							if (cellValue == 2) return '割口';
 							return cellValue;
 						}
-					},  {
+					}, {
 						name: '评定结果',
 						field: 'evaluationResult',
 						formatter: function (row, column, cellValue, index) {
@@ -136,7 +149,7 @@
 					}, {
 						name: '检测人员',
 						field: 'detectionPerson'
-					},{
+					}, {
 						name: '审核人员',
 						field: 'auditor'
 					}, {

@@ -4,6 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="renderer" content="webkit">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>中盈安信研发平台</title>
 
@@ -33,7 +34,6 @@
 				<!-- header 开始 -->
 				<div class="header">
 					<div class="logo item">
-
 					</div>
 					<div class="name item">
 						<div class="china">中盈安信研发平台</div>
@@ -41,13 +41,22 @@
 					</div>
 
 					<div class="user-info">
+						<!-- <div style="height:40px;">
+							<i class="fa fa-arrows-alt" aria-hidden="true"></i>
+							<i class="fa fa-unlock-alt" aria-hidden="true"></i>
+							<i style="font-size: 18px;" class="fa fa-sign-out" aria-hidden="true"></i>
+
+						</div>
+						<div style="height:40px;">
+							<i style="font-size: 18px;" class="fa fa-user-circle-o" aria-hidden="true"></i>
+							<span>{{username}}</span>
+						</div> -->
 						<el-dropdown class="dropdown-wrapper" trigger="click" @command="handleCommand">
 							<span class="el-dropdown-link">
 								<img class="user-logo" src="./src/images/enterlogo.png"> {{username}}
 							</span>
 							<el-dropdown-menu slot="dropdown">
 								<el-dropdown-item command="fullscreen">切换全屏</el-dropdown-item>
-								<el-dropdown-item command="map">{{isMapOpen?'隐藏地图':'打开地图'}}</el-dropdown-item>
 								<el-dropdown-item command="resetPassword">修改密码</el-dropdown-item>
 								<el-dropdown-item command="loginout">退出登录</el-dropdown-item>
 							</el-dropdown-menu>
@@ -71,14 +80,14 @@
 								<template v-for="item in items">
 									<el-submenu v-if="item.subs" :index="item.index">
 										<template slot="title">
-											<i :class="item.icon"></i>
+											<i :class=" 'fa fa-folder' || item.icon"></i>
 											<span slot="title">{{ item.title }}</span>
 										</template>
 										<!-- 第二层菜单开始 -->
 										<template v-for="subitem in item.subs">
 											<el-submenu v-if="subitem.subs" :index="subitem.index">
 												<template slot="title">
-													<i :class="subitem.icon"></i>
+													<i :class="  'fa fa-bars' || subitem.icon"></i>
 													<span slot="title">{{ subitem.title }}</span>
 												</template>
 
@@ -131,7 +140,7 @@
 
 											</el-submenu>
 											<el-menu-item :index="subitem.index" v-else>
-												<i :class="subitem.icon"></i>
+												<i :class=" 'fa fa-bars' || subitem.icon"></i>
 												<span slot="title">{{ subitem.title }}</span>
 											</el-menu-item>
 										</template>
@@ -139,7 +148,7 @@
 
 									</el-submenu>
 									<el-menu-item :index="item.index" v-else>
-										<i :class="item.icon"></i>
+										<i :class=" 'fa fa-folder' || item.icon"></i>
 										<span slot="title">{{ item.title }}</span>
 									</el-menu-item>
 								</template>
@@ -159,27 +168,24 @@
 				<el-main>
 					<div v-tabclose></div>
 
-					<multipane @paneresizestart="panelMoving = true" @paneresizestop="panelMoving = false" class="foo" layout="horizontal" style="height: 100%;">
-						<div v-loading="panelMoving" class="mapWrap" v-show="isMapOpen" :style="{ height: '40%', minHeight: '20%',maxHeight: '80%' }"
-						  element-loading-spinner="11" element-loading-background="rgba(0, 0, 0, 0)">
-							<iframe class="iframe" :src="mapSrc" frameborder="0" height="100%"></iframe>
-						</div>
-						<multipane-resizer v-show="isMapOpen"></multipane-resizer>
-						<div v-loading="panelMoving" :style="{ flexGrow: 1 }" style="height:0%;" element-loading-spinner="11" element-loading-background="rgba(0, 0, 0, 0)">
-							<el-tabs class="tabswrapper jas-flex-box" v-model="currentTap" type="card" @tab-remove="removeTab">
-								<el-tab-pane v-for="(item, index) in tabs" :key="item.link" :name="item.name" :closable="item.closable">
-									<span slot="label">
-										<i :class="item.icon||'el-icon-date'"></i> {{item.title}}
-									</span>
-									<div class="iframewrapper">
-										<div class="iframesubwrapper">
-											<iframe class="iframe" :src="item.link" frameborder="0" height="100%"></iframe>
-										</div>
+					<jas-two-panel-resizer :showed="panelShowed" ref="resizer" layout="horizontal" length="40%" @paneresize="paneresize" @statuschanged="statuschanged">
+						<div slot="closePanel" id="jasMap" class="jasmap" style="height:100%;"> </div>
+
+						<el-tabs slot="mainPanel" class="tabswrapper jas-flex-box" v-model="currentTap" type="card" @tab-remove="removeTab">
+							<el-tab-pane v-for="(item, index) in tabs" :key="item.link" :name="item.name" :closable="item.closable">
+								<span slot="label">
+									<i :class="item.icon||'el-icon-date'"></i> {{item.title}}
+								</span>
+								<div class="iframewrapper">
+									<div class="iframesubwrapper">
+										<iframe class="iframe" :src="item.link" frameborder="0" height="100%"></iframe>
 									</div>
-								</el-tab-pane>
-							</el-tabs>
-						</div>
-					</multipane>
+								</div>
+							</el-tab-pane>
+						</el-tabs>
+
+					</jas-two-panel-resizer>
+
 
 				</el-main>
 			</el-container>
@@ -211,7 +217,8 @@
 <!-- 先引入index的配置文件，再引入index文件 -->
 <script src="./common/components/jas-components.js"></script>
 <script src="./common/js/jas-tools.js"></script>
-<!-- <script src="./src/js/index-config.js"></script> -->
+<script id="mapApi" src="./pages/map/mapjs/mapjs4ol.js"></script>
+
 <script src="./src/js/index.js"></script>
 
 </html>

@@ -18,6 +18,11 @@ public class DaqDetectionMagneticPowderSubBo extends CommonBaseBo{
 	/** 主表oid */
 	private String parentOid;
 
+	/**
+	 * 焊口oid
+	 */
+	private String weldOid;
+
 	/** 焊口编号 */
 	private String weldCode;
 
@@ -47,6 +52,14 @@ public class DaqDetectionMagneticPowderSubBo extends CommonBaseBo{
 
 	public void setParentOid(String parentOid) {
 		this.parentOid = parentOid;
+	}
+
+	public String getWeldOid() {
+		return weldOid;
+	}
+
+	public void setWeldOid(String weldOid) {
+		this.weldOid = weldOid;
 	}
 
 	public String getWeldCode() {

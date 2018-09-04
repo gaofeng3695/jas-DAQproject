@@ -86,6 +86,16 @@
 					}
 				},
 				tableFields: [{
+					field: 'approveStatus',
+					name: '审核状态',
+					formatter: function (a, b, value, c) {
+						if (value == -1) return '驳回';
+						if (value == 0) return '未提交';
+						if (value == 1) return '审核中';
+						if (value == 2) return '通过';
+						return value;
+					}
+				},{
 						name: '项目名称',
 						field: 'projectName'
 					}, {
@@ -123,6 +133,18 @@
 					{
 						name: '第五段长度(m)',
 						field: 'fifthParagraphLength'
+					},
+					{
+						name: '施工单位',
+						field: 'constructUnitName'
+					},
+					{
+						name: '监理单位',
+						field: 'supervisionUnitName'
+					},
+					{
+						name: '监理工程师',
+						field: 'supervisionEngineer'
 					}
 				]
 			}

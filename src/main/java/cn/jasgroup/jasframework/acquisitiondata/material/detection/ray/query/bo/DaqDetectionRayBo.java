@@ -46,6 +46,11 @@ public class DaqDetectionRayBo extends CommonBaseBo{
 	
 	/** 线路段/穿跨越 名称*/
 	private String pipeSegmentOrCrossName;
+
+	/**
+	 * 焊口oid
+	 */
+	private String weldOid;
 	
 	/** 焊口编号 */
 	private String weldCode;
@@ -166,6 +171,14 @@ public class DaqDetectionRayBo extends CommonBaseBo{
 
 	public void setPipeSegmentOrCrossOid(String pipeSegmentOrCrossOid) {
 		this.pipeSegmentOrCrossOid = pipeSegmentOrCrossOid;
+	}
+
+	public String getWeldOid() {
+		return weldOid;
+	}
+
+	public void setWeldOid(String weldOid) {
+		this.weldOid = weldOid;
 	}
 
 	public String getWeldCode() {

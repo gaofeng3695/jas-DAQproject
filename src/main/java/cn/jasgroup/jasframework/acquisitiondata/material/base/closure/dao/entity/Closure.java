@@ -14,6 +14,7 @@ import cn.jasgroup.jasframework.base.annotation.UniqueConstraintStrategy;
 import cn.jasgroup.jasframework.base.annotation.UniqueConstraints;
 import cn.jasgroup.jasframework.base.annotation.UpdateDeleteSet;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
+import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 
 /**
  * 
@@ -114,6 +115,10 @@ public class Closure extends CommonJdbcEntity{
 	 *  备注
 	 */
 	private String remarks; 
+	/**
+	 * 施工单位
+	 */
+	private String constructUnit = ThreadLocalHolder.getCurrentUser().getUnitId(); 
 
 	public String getClosureCode() {
 		return closureCode; 
@@ -250,6 +255,14 @@ public class Closure extends CommonJdbcEntity{
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
 		super.setField("remarks");
+	}
+
+	public String getConstructUnit() {
+		return constructUnit;
+	}
+
+	public void setConstructUnit(String constructUnit) {
+		this.constructUnit = constructUnit;
 	}
 	
 }

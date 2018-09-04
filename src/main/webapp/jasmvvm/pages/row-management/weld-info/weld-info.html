@@ -56,7 +56,7 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
 						<el-form-item label="焊口编号">
-						   <el-input v-model="topSearch.weldCode" clearable placeholder="请输入焊口编号" size="small"></el-input>
+							<el-input v-model="topSearch.weldCode" clearable placeholder="请输入焊口编号" size="small"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
@@ -68,7 +68,8 @@
 				</el-row>
 			</el-form>
 			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" search-path="/jdbc/commonData/constructionWeld/getPage.do"
-			  :add-url="addUrl" :detail-url="detailUrl" delete-path="/jdbc/commonData/constructionWeld/delete.do" :class-name="className" :template-code="templateCode"></jas-table-for-list>
+			  :add-url="addUrl" :detail-url="detailUrl" delete-path="/jdbc/commonData/constructionWeld/delete.do" :class-name="className"
+			  :template-code="templateCode" @locate="locate"></jas-table-for-list>
 		</jas-list-wrapper>
 
 
@@ -99,6 +100,16 @@
 					weldOid: '',
 				},
 				tableFields: [{
+						field: 'approveStatus',
+						name: '审核状态',
+						formatter: function (a, b, value, c) {
+							if (value == -1) return '驳回';
+							if (value == 0) return '未提交';
+							if (value == 1) return '审核中';
+							if (value == 2) return '通过';
+							return value;
+						}
+					}, {
 						name: '项目名称',
 						field: 'projectName'
 					}, {
@@ -138,7 +149,7 @@
 						name: '后管件编号',
 						field: 'backPipeCode'
 					},
-					 {
+					{
 						name: '焊条批号',
 						field: 'weldRodBatchNum'
 					}, {
@@ -149,12 +160,14 @@
 						field: 'weldProduceCode'
 					}, {
 						name: '外观质量检查',
-						field: 'surfaceCheck',	
+						field: 'surfaceCheck',
 						formatter: function (row, column, cellvalue, index) {
-							if (cellvalue == '0') {
+							if (cellvalue == '1') {
 								return '合格';
-							} else {
+							} else if(cellvalue=="0"){
 								return '不合格';
+							}else{
+								return "";
 							}
 						}
 					}, {
@@ -170,26 +183,30 @@
 						name: '是否金口',
 						field: 'isGoldeJoint',
 						formatter: function (row, column, cellvalue, index) {
-							if (cellvalue == '0') {
+							if (cellvalue == '1') {
 								return '是';
-							} else {
+							} else if(cellvalue=="0"){
 								return '否';
+							}else{
+								return "";
 							}
 						}
 					}, {
 						name: '是否连头口',
 						field: 'isPipeHead',
 						formatter: function (row, column, cellvalue, index) {
-							if (cellvalue == '0') {
+							if (cellvalue == '1') {
 								return '是';
-							} else {
+							} else if(cellvalue=="0"){
 								return '否';
+							}else{
+								return "";
 							}
 						}
 					}, {
 						name: '施工日期',
 						field: 'constructDate'
-					},{
+					}, {
 						name: '施工单位',
 						field: 'constructUnitName'
 					}, {
@@ -216,7 +233,7 @@
 					tenders: [], //标段
 					pipeline: [], //管线
 					pipeSegment: [],
-					welds:[]//焊口编号
+					welds: [] //焊口编号
 				}
 			}
 		},
@@ -331,6 +348,10 @@
 				this.topSearch.pipeSegmentOrCrossOid = '';
 
 				this.$refs.table.search();
+			},
+			locate: function (row) {
+				var code = 'daq_construction_weld';
+				top.app.locate(row.oid, code);
 			},
 		},
 	});

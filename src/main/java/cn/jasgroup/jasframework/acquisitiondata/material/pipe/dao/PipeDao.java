@@ -6,8 +6,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.google.common.base.Strings;
-
 import cn.jasgroup.jasframework.dataaccess.base.BaseJdbcDao;
 
 @Repository
@@ -20,9 +18,9 @@ public class PipeDao {
 	public List<Map<String, Object>> getPipeList(String type) {
 		String sql = null;
 		if(type.equals("1")){
-			sql ="select oid as key,pipe_code as value from daq_material_pipe where active=1 and is_use=0 and pipe_length >= 1";
+			sql ="select oid as key,pipe_code as value,pipe_length as length,pipe_diameter,wall_thickness from daq_material_pipe where active=1 and is_use=0 and pipe_length >= 1";
 		}else{
-			sql ="select oid as key,pipe_code as value from daq_material_pipe where active=1 and is_use=0 and is_cold_bend=0 and pipe_length >= 1";
+			sql ="select oid as key,pipe_code as value,pipe_length as length,pipe_diameter,wall_thickness from daq_material_pipe where active=1 and is_use=0 and is_cold_bend=0 and pipe_length >= 1";
 		}
 		return baseJdbcDao.queryForList(sql, null);
 	}
@@ -36,4 +34,28 @@ public class PipeDao {
 		baseJdbcDao.delete(sql, values);
 	}
 	
+	/***
+	  * <p>功能描述：获取所有的钢管列表。</p>
+	  * <p> 雷凯。</p>	
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年8月30日 下午3:19:33。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String,Object>> getMaterialPipeList(){
+		String sql = "select oid as key,pipe_code as value from daq_material_pipe where active=1";
+		return baseJdbcDao.queryForList(sql, null);
+	}
+	/**
+	  * <p>功能描述：获取所有的热煨弯管列表。</p>
+	  * <p> 雷凯。</p>	
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年8月30日 下午3:21:33。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String,Object>> getMaterialHotBendsList(){
+		String sql = "select oid as key,hot_bends_code as value from daq_material_hot_bends where active=1";
+		return baseJdbcDao.queryForList(sql, null);
+	}
 }

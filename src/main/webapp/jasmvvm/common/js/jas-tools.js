@@ -368,7 +368,9 @@
 			var data = type === 'GET' ? params : JSON.stringify(params)
 			$.ajax({
 				type: type || "GET",
-				url: url + "?token=" + localStorage.getItem('token'),
+				url: tools.setParamsToUrl(url, {
+					token: localStorage.getItem('token')
+				}),
 				contentType: "application/json",
 				data: data,
 				// dataType: "json",
@@ -378,7 +380,18 @@
 							type: 'warning',
 							callback: function (action) {
 								if (action === 'confirm') {
-									window.top.location.href = '/login.html';
+									window.top.location.href = 'login.html';
+								}
+							}
+						});
+						return;
+					}
+					if (data.status == -1 && data.code == "402") { // token失效或者过期，会返回-1
+						window.top.Vue.prototype.$confirm('登录信息失效，请重新登录', '提示', {
+							type: 'warning',
+							callback: function (action) {
+								if (action === 'confirm') {
+									window.top.location.href = 'login.html';
 								}
 							}
 						});
@@ -407,7 +420,9 @@
 		var downloadByIframe = function (type, url, data) {
 			if (!url) return;
 			var config = {
-				url: url + "?token=" + localStorage.getItem('token'), //下载地址
+				url: tools.setParamsToUrl(url, {
+					token: localStorage.getItem('token')
+				}),
 				data: data || {},
 				method: type || data,
 			}
@@ -432,7 +447,9 @@
 		 */
 		var downloadByPost = function (url, obj, cbsuccess, cbfail) {
 			if (!url) return;
-			url += '?token=' + localStorage.getItem('token'); //下载地址
+			url = tools.setParamsToUrl(url, {
+				token: localStorage.getItem('token')
+			});
 			var xhr = new XMLHttpRequest();
 			xhr.open('POST', url, true); // 也可以使用POST方式，根据接口
 			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");

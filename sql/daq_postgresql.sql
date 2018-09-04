@@ -312,26 +312,23 @@ comment on column daq_median_stake.remarks is '备注';
 comment on column daq_median_stake.geo_state is '空间数据状态';
 create index INDEX_DAQ_MEDIAN_STAKE_MEDIAN_STAKE_CODE_5 ON daq_median_stake ( median_stake_code );
 
-select dropgeometrycolumn('public', 'daq_median_stake', 'geom');
-select AddGeometryColumn('public', 'daq_median_stake', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_median_stake_geom_idx ON public.daq_median_stake USING gist (geom);
-
 /***标段范围管理视图***/
-create or replace view v_daq_scope as select tt.*,a.name as province_name from (
-	select t.oid,t.oid as project_oid,null as parent_oid,t.project_name as name,1 as ordernum,-1 as type,'项目' as type_name,null as province from daq_project t where t.active=1
+create or replace view v_daq_scope as 
+	select tt.oid,tt.project_oid,tt.parent_oid,tt.name,tt.ordernum,tt.type,tt.type_name,tt.province,a.name as province_name from (
+	select t.oid,t.oid as project_oid,null as parent_oid,t.project_name as name,1 as ordernum,-1 as type,'项目' as type_name,null as province,t.create_datetime from daq_project t where t.active=1
 	union all
-	select t.oid,t.project_oid,t.project_oid as parent_oid,t.pipeline_name as name,2 as ordernum,0 as type,'管线' as type_name, null province from daq_pipeline t where t.active=1
+	select t.oid,t.project_oid,t.project_oid as parent_oid,t.pipeline_name as name,2 as ordernum,0 as type,'管线' as type_name, null province,t.create_datetime from daq_pipeline t where t.active=1
 	union all
-	select t.oid,t.project_oid,t.pipeline_oid as parent_oid,t.pipe_segment_name as name,3 as ordernum,1 as type,'线路段' as type_name,t.province from daq_pipe_segment t where t.active=1
+	select t.oid,t.project_oid,t.pipeline_oid as parent_oid,t.pipe_segment_name as name,3 as ordernum,1 as type,'线路段' as type_name,t.province,t.create_datetime from daq_pipe_segment t where t.active=1
 	union all
-	select t.oid,t.project_oid,t.pipeline_oid as parent_oid,t.cross_name as name,4 as ordernum,2 as type,'穿跨越' as type_name,t.province from daq_cross t where t.active=1
+	select t.oid,t.project_oid,t.pipeline_oid as parent_oid,t.cross_name as name,4 as ordernum,2 as type,'穿跨越' as type_name,t.province,t.create_datetime from daq_cross t where t.active=1
 	union all
-	select t.oid,t.project_oid,t.pipeline_oid as parent_oid,t.pipe_station_name as name,5 as ordernum,3 as type,'站场/阀室' as type_name,t.province from daq_pipe_station  t where t.active=1
+	select t.oid,t.project_oid,t.pipeline_oid as parent_oid,t.pipe_station_name as name,5 as ordernum,3 as type,'站场/阀室' as type_name,t.province,t.create_datetime from daq_pipe_station  t where t.active=1
 	union all
-	select t.oid,t.project_oid,t.pipeline_oid as parent_oid,t.road_name as name,6 as ordernum,4 as type,'伴行道路' as type_name,t.province from daq_maintenance_road t where t.active=1
+	select t.oid,t.project_oid,t.pipeline_oid as parent_oid,t.road_name as name,6 as ordernum,4 as type,'伴行道路' as type_name,t.province,t.create_datetime from daq_maintenance_road t where t.active=1
 	union all
-	select t.oid,t.project_oid,t.pipeline_oid as parent_oid,t.power_line_name as name,7 as ordernum,5 as type,'外供电线路' as type_name,t.province from daq_power_line t where t.active=1
-	) tt left join area a on tt.province=a.oid order by tt.ordernum
+	select t.oid,t.project_oid,t.pipeline_oid as parent_oid,t.power_line_name as name,7 as ordernum,5 as type,'外供电线路' as type_name,t.province,t.create_datetime from daq_power_line t where t.active=1
+	) tt left join area a on tt.province=a.oid order by tt.ordernum,tt.create_datetime
 
 CREATE TABLE daq_tenders_scope_ref (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -366,23 +363,24 @@ create index INDEX_DAQ_TENDERS_SCOPE_REF_SCOPE_OID_6 ON daq_tenders_scope_ref ( 
 /**********范围管理数据表end***************/
 /**********权限管理数据表begin***************/
 /**实施范围视图**/
-create or replace view v_daq_implement_scope as 
-	select tt.*,a.name as province_name from (select t.oid,null as parent_oid,t.project_name as name,-2 as type,'项目' as type_name,t.oid as project_oid,null as province from daq_project t where t.active=1 and t.pipe_network_type_code='pipe_network_code_001'
+create or replace view v_daq_implement_scope as
+	select tt.oid,tt.parent_oid,tt.name,tt.type,tt.type_name,tt.project_oid,tt.tenders_oid,tt.province,a.name as province_name from (
+	select t.oid,null as parent_oid,t.project_name as name,-2 as type,'项目' as type_name,t.oid as project_oid,null as province,null as tenders_oid,t.create_datetime from daq_project t where t.active=1 and t.pipe_network_type_code='pipe_network_code_001'
 	union all
-	select distinct t.oid,t.project_oid as parent_oid,t.tenders_name as name,-1 as type,'标段' as type_name,t.project_oid,null as province from daq_tenders_scope_ref r join daq_tenders t on r.tenders_oid=t.oid where t.active=1
+	select distinct t.oid,t.project_oid as parent_oid,t.tenders_name as name,-1 as type,'标段' as type_name,t.project_oid,null as province,t.oid as tenders_oid,t.create_datetime from daq_tenders_scope_ref r join daq_tenders t on r.tenders_oid=t.oid where t.active=1
 	union all
-	select distinct t.oid,r.tenders_oid as parent_oid,t.pipeline_name as name,0 as type,'管线' as type_name,t.project_oid,null as province from daq_pipeline t join daq_tenders_scope_ref r on t.oid=r.pipeline_oid and t.active=1
+	select distinct t.oid,r.tenders_oid as parent_oid,t.pipeline_name as name,0 as type,'管线' as type_name,t.project_oid,null as province,r.tenders_oid,t.create_datetime from daq_pipeline t join daq_tenders_scope_ref r on t.oid=r.pipeline_oid and t.active=1
 	union all
-	select t.oid,t.pipeline_oid as parent_oid,t.pipe_segment_name as name,1 as type,'线路段' as type_name,t.project_oid,t.province from daq_pipe_segment t join daq_tenders_scope_ref r on t.oid=r.scope_oid where t.active=1
+	select t.oid,t.pipeline_oid as parent_oid,t.pipe_segment_name as name,1 as type,'线路段' as type_name,t.project_oid,t.province,r.tenders_oid,t.create_datetime from daq_pipe_segment t join daq_tenders_scope_ref r on t.oid=r.scope_oid where t.active=1
 	union all
-	select t.oid,t.pipeline_oid as parent_oid,t.cross_name as name,2 as type,'穿跨越' as type_name,t.project_oid,t.province from daq_cross t join daq_tenders_scope_ref r on t.oid=r.scope_oid where t.active=1
+	select t.oid,t.pipeline_oid as parent_oid,t.cross_name as name,2 as type,'穿跨越' as type_name,t.project_oid,t.province,r.tenders_oid,t.create_datetime from daq_cross t join daq_tenders_scope_ref r on t.oid=r.scope_oid where t.active=1
 	union all
-	select t.oid,t.pipeline_oid as parent_oid,t.pipe_station_name as name,3 as type,'站场/阀室' as type_name,t.project_oid,t.province from daq_pipe_station t join daq_tenders_scope_ref r on t.oid=r.scope_oid where t.active=1
+	select t.oid,t.pipeline_oid as parent_oid,t.pipe_station_name as name,3 as type,'站场/阀室' as type_name,t.project_oid,t.province,r.tenders_oid,t.create_datetime from daq_pipe_station t join daq_tenders_scope_ref r on t.oid=r.scope_oid where t.active=1
 	union all
-	select t.oid,t.pipeline_oid as parent_oid,t.road_name as name,4 as type,'伴行道路' as type_name,t.project_oid,t.province from daq_maintenance_road t join daq_tenders_scope_ref r on t.oid=r.scope_oid where t.active=1
+	select t.oid,t.pipeline_oid as parent_oid,t.road_name as name,4 as type,'伴行道路' as type_name,t.project_oid,t.province,r.tenders_oid,t.create_datetime from daq_maintenance_road t join daq_tenders_scope_ref r on t.oid=r.scope_oid where t.active=1
 	union all
-	select t.oid,t.pipeline_oid as parent_oid,t.power_line_name as name,5 as type,'外供电线路' as type_name,t.project_oid,t.province from daq_power_line t join daq_tenders_scope_ref r on t.oid=r.scope_oid where t.active=1
-	) tt left join area a on tt.province=a.oid order by tt.type
+	select t.oid,t.pipeline_oid as parent_oid,t.power_line_name as name,5 as type,'外供电线路' as type_name,t.project_oid,t.province,r.tenders_oid,t.create_datetime from daq_power_line t join daq_tenders_scope_ref r on t.oid=r.scope_oid where t.active=1
+	) tt left join area a on tt.province=a.oid order by tt.type,tt.create_datetime
 	
 CREATE TABLE daq_implement_scope_ref (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -551,6 +549,7 @@ CREATE TABLE daq_material_closure (
 	pipeline_oid varchar(36),
 	tenders_oid varchar(36),
 	is_use SMALLINT DEFAULT 0,
+	construct_unit varchar(36),
 	remarks varchar(200),
 	create_user_id varchar(36),
 	create_user_name varchar(50),
@@ -576,6 +575,7 @@ comment on column daq_material_closure.project_oid IS '项目oid';
 comment on column daq_material_closure.pipeline_oid IS '管线oid';
 comment on column daq_material_closure.tenders_oid IS '标段oid';
 comment on column daq_material_closure.is_use IS '是否使用';
+comment on column daq_material_closure.construct_unit IS '施工单位';
 comment on column daq_material_closure.remarks IS '备注';
 comment on column daq_material_closure.create_user_id IS '创建人id';
 comment on column daq_material_closure.create_user_name IS '创建人名称';
@@ -601,6 +601,7 @@ CREATE TABLE daq_material_flange (
 	pipeline_oid varchar(36),
 	tenders_oid varchar(36),
 	is_use SMALLINT DEFAULT 0,
+	construct_unit varchar(36),
 	remarks varchar(200),
 	create_user_id varchar(36),
 	create_user_name varchar(50),
@@ -626,6 +627,7 @@ comment on column daq_material_flange.project_oid IS '项目oid';
 comment on column daq_material_flange.pipeline_oid IS '管线oid';
 comment on column daq_material_flange.tenders_oid IS '标段oid';
 comment on column daq_material_flange.is_use IS '是否使用';
+comment on column daq_material_flange.construct_unit IS '施工单位';
 comment on column daq_material_flange.remarks IS '备注';
 comment on column daq_material_flange.create_user_id IS '创建人id';
 comment on column daq_material_flange.create_user_name IS '创建人名称';
@@ -670,6 +672,7 @@ CREATE TABLE daq_material_hot_bends (
 	coating_certificate_num varchar(60),
 	coating_factory varchar(70),
 	is_use SMALLINT DEFAULT 0,
+	construct_unit varchar(36),
 	remarks varchar(200),
 	create_user_id varchar(36),
 	create_user_name varchar(50),
@@ -713,6 +716,7 @@ comment on column daq_material_hot_bends.coating_date IS '防腐日期';
 comment on column daq_material_hot_bends.coating_certificate_num IS '防腐证书编号';
 comment on column daq_material_hot_bends.coating_factory IS '防腐加工厂家';
 comment on column daq_material_hot_bends.is_use IS '是否使用';
+comment on column daq_material_hot_bends.construct_unit IS '施工单位';
 comment on column daq_material_hot_bends.remarks IS '备注';
 comment on column daq_material_hot_bends.create_user_id IS '创建人id';
 comment on column daq_material_hot_bends.create_user_name IS '创建人名称';
@@ -735,6 +739,7 @@ CREATE TABLE daq_material_insulated_joint (
 	pipeline_oid varchar(36),
 	tenders_oid varchar(36),
 	is_use SMALLINT DEFAULT 0,
+	construct_unit varchar(36),
 	remarks varchar(200),
 	create_user_id varchar(36),
 	create_user_name varchar(50),
@@ -757,6 +762,7 @@ comment on column daq_material_insulated_joint.project_oid IS '项目oid';
 comment on column daq_material_insulated_joint.pipeline_oid IS '管线oid';
 comment on column daq_material_insulated_joint.tenders_oid IS '标段oid';
 comment on column daq_material_insulated_joint.is_use IS '是否使用';
+comment on column daq_material_insulated_joint.construct_unit IS '施工单位';
 comment on column daq_material_insulated_joint.remarks IS '备注';
 comment on column daq_material_insulated_joint.create_user_id IS '创建人id';
 comment on column daq_material_insulated_joint.create_user_name IS '创建人名称';
@@ -797,6 +803,7 @@ CREATE TABLE daq_material_pipe (
 	is_cut SMALLINT DEFAULT 0,
 	is_use SMALLINT DEFAULT 0,
 	is_cold_bend SMALLINT DEFAULT 0,
+	construct_unit varchar(36),
 	remarks varchar(200),
 	create_user_id varchar(36),
 	create_user_name varchar(50),
@@ -837,6 +844,7 @@ comment on column daq_material_pipe.coating_factory IS '防腐加工厂家';
 comment on column daq_material_pipe.is_cut IS '是否切管';
 comment on column daq_material_pipe.is_use IS '是否使用';
 comment on column daq_material_pipe.is_cold_bend IS '是否冷弯';
+comment on column daq_material_pipe.construct_unit IS '施工单位';
 comment on column daq_material_pipe.remarks IS '备注';
 comment on column daq_material_pipe.create_user_id IS '创建人id';
 comment on column daq_material_pipe.create_user_name IS '创建人名称';
@@ -872,6 +880,7 @@ CREATE TABLE daq_material_pipe_cold_bending (
 	collection_person varchar(30),
 	collection_date timestamp(6),
 	is_use SMALLINT DEFAULT 0,
+	approve_status SMALLINT DEFAULT 0,
 	remarks varchar(200),
 	create_user_id varchar(36),
 	create_user_name varchar(50),
@@ -907,6 +916,7 @@ comment on column daq_material_pipe_cold_bending.supervision_engineer IS '监理
 comment on column daq_material_pipe_cold_bending.collection_person IS '采集人员';
 comment on column daq_material_pipe_cold_bending.collection_date IS '采集时间';
 comment on column daq_material_pipe_cold_bending.is_use IS '是否使用';
+comment on column daq_material_pipe_cold_bending.approve_status IS '审核状态';
 comment on column daq_material_pipe_cold_bending.remarks IS '备注';
 comment on column daq_material_pipe_cold_bending.create_user_id IS '创建人id';
 comment on column daq_material_pipe_cold_bending.create_user_name IS '创建人名称';
@@ -934,6 +944,7 @@ CREATE TABLE daq_material_reducer (
 	pipeline_oid varchar(36),
 	tenders_oid varchar(36),
 	is_use SMALLINT DEFAULT 0,
+	construct_unit varchar(36),
 	remarks varchar(200),
 	create_user_id varchar(36),
 	create_user_name varchar(50),
@@ -961,6 +972,7 @@ comment on column daq_material_reducer.project_oid IS '项目oid';
 comment on column daq_material_reducer.pipeline_oid IS '管线oid';
 comment on column daq_material_reducer.tenders_oid IS '标段oid';
 comment on column daq_material_reducer.is_use IS '是否使用';
+comment on column daq_material_reducer.construct_unit IS '施工单位';
 comment on column daq_material_reducer.remarks IS '备注';
 comment on column daq_material_reducer.create_user_id IS '创建人id';
 comment on column daq_material_reducer.create_user_name IS '创建人名称';
@@ -991,6 +1003,7 @@ CREATE TABLE daq_material_tee (
 	pipeline_oid varchar(36),
 	tenders_oid varchar(36),
 	is_use SMALLINT DEFAULT 0,
+	construct_unit varchar(36),
 	remarks varchar(200),
 	create_user_id varchar(36),
 	create_user_name varchar(50),
@@ -1021,6 +1034,7 @@ comment on column daq_material_tee.project_oid IS '项目oid';
 comment on column daq_material_tee.pipeline_oid IS '管线oid';
 comment on column daq_material_tee.tenders_oid IS '标段oid';
 comment on column daq_material_tee.is_use IS '是否使用';
+comment on column daq_material_tee.construct_unit IS '施工单位';
 comment on column daq_material_tee.remarks IS '备注';
 comment on column daq_material_tee.create_user_id IS '创建人id';
 comment on column daq_material_tee.create_user_name IS '创建人名称';
@@ -1047,17 +1061,18 @@ ALTER TABLE daq_material_reducer ADD PRIMARY KEY (oid);
 CREATE INDEX index_daq_material_tee_tee_code_5 ON daq_material_tee USING btree (tee_code);
 ALTER TABLE daq_material_tee ADD PRIMARY KEY (oid);
 
-create or replace view v_daq_pipe_segment_cross as  select s.oid,s.pipe_segment_name as name,s.start_stake_oid,s.end_stake_oid,1 as type,s.pipe_segment_code AS code from daq_pipe_segment s where s.active=1
+create or replace view v_daq_pipe_segment_cross as 
+select s.oid,s.pipe_segment_name as name,s.start_stake_oid,s.end_stake_oid,1 as type,s.pipe_segment_code AS code,s.create_datetime from daq_pipe_segment s where s.active=1
 union all
-select s.oid,s.cross_name as name,s.start_stake_oid,s.end_stake_oid, 2 as type,s.cross_code AS code from daq_cross s where s.active=1
+select s.oid,s.cross_name as name,s.start_stake_oid,s.end_stake_oid, 2 as type,s.cross_code AS code,s.create_datetime from daq_cross s where s.active=1
 /**********线路物资基本信息end***************/
 /**********线路物资检查信息begin***************/
 CREATE TABLE daq_check_coating_pipe (
 	oid varchar(36) NOT NULL,
 	project_oid varchar(36),
 	tenders_oid varchar(36),
-	construction_unit varchar(36),
-	pipe_code varchar(50),
+	construct_unit varchar(36),
+	pipe_oid varchar(50),
 	groove_check varchar(5),
 	pipe_end_proring_check varchar(5),
 	coating_io_face_check varchar(5),
@@ -1080,8 +1095,7 @@ comment on table daq_check_coating_pipe IS '防腐管检查及信息记录表';
 comment on column daq_check_coating_pipe.oid IS '主键';
 comment on column daq_check_coating_pipe.project_oid IS '项目oid';
 comment on column daq_check_coating_pipe.tenders_oid IS '标段oid';
-comment on column daq_check_coating_pipe.construction_unit IS '施工单位';
-comment on column daq_check_coating_pipe.pipe_code IS '钢管编号';
+comment on column daq_check_coating_pipe.pipe_oid IS '钢管编号';
 comment on column daq_check_coating_pipe.groove_check IS '坡口检查';
 comment on column daq_check_coating_pipe.pipe_end_proring_check IS '管端保护圈';
 comment on column daq_check_coating_pipe.coating_io_face_check IS '防腐层内外表面质量';
@@ -1089,6 +1103,7 @@ comment on column daq_check_coating_pipe.diameter_check IS '管径偏差+0.2mm�
 comment on column daq_check_coating_pipe.coating_io_ends_check IS '防腐层端部内外涂层';
 comment on column daq_check_coating_pipe.excess_weld_metal IS '管端焊缝余高（0mm）';
 comment on column daq_check_coating_pipe.ovality IS '椭圆度<0.6%D';
+comment on column daq_check_coating_pipe.construct_unit IS '施工单位';
 comment on column daq_check_coating_pipe.checked_by IS '检查人';
 comment on column daq_check_coating_pipe.checked_date IS '检查日期';
 comment on column daq_check_coating_pipe.remarks IS '备注';
@@ -1104,8 +1119,8 @@ CREATE TABLE daq_check_hot_bends (
 	oid varchar(36) NOT NULL,
 	project_oid varchar(36),
 	tenders_oid varchar(36),
-	construction_unit varchar(36),
-	hot_bends_code varchar(50),
+	construct_unit varchar(36),
+	hot_bends_oid varchar(50),
 	weld_position varchar(5),
 	pipe_length varchar(5),
 	ovality varchar(5),
@@ -1127,14 +1142,14 @@ comment on table daq_check_hot_bends IS '热煨弯管检查信息记录表';
 comment on column daq_check_hot_bends.oid IS '主键';
 comment on column daq_check_hot_bends.project_oid IS '项目oid';
 comment on column daq_check_hot_bends.tenders_oid IS '标段oid';
-comment on column daq_check_hot_bends.construction_unit IS '施工单位';
-comment on column daq_check_hot_bends.hot_bends_code IS '弯管编号';
+comment on column daq_check_hot_bends.hot_bends_oid IS '弯管oid';
 comment on column daq_check_hot_bends.weld_position IS '纵焊缝位置';
 comment on column daq_check_hot_bends.pipe_length IS '直管段长度';
 comment on column daq_check_hot_bends.ovality IS '椭圆度<0.6%D';
 comment on column daq_check_hot_bends.groove_check IS '坡口检查';
 comment on column daq_check_hot_bends.coating_io_face_check IS '防腐层内外表面质量';
 comment on column daq_check_hot_bends.coating_io_ends_check IS '防腐层端部内外涂层';
+comment on column daq_check_hot_bends.construct_unit IS '施工单位';
 comment on column daq_check_hot_bends.checked_by IS '检查人';
 comment on column daq_check_hot_bends.checked_date IS '检查日期';
 comment on column daq_check_hot_bends.remarks IS '备注';
@@ -1150,7 +1165,7 @@ CREATE TABLE daq_check_insulated_joint (
 	oid varchar(36) NOT NULL,
 	project_oid varchar(36),
 	tenders_oid varchar(36),
-	construction_unit varchar(36),
+	construct_unit varchar(36),
 	manufacturer_code varchar(36),
 	certification_num varchar(60),
 	diameter numeric(9,3),
@@ -1173,7 +1188,6 @@ comment on table daq_check_insulated_joint IS '绝缘接头检查及信息记录
 comment on column daq_check_insulated_joint.oid IS '主键';
 comment on column daq_check_insulated_joint.project_oid IS '项目oid';
 comment on column daq_check_insulated_joint.tenders_oid IS '标段oid';
-comment on column daq_check_insulated_joint.construction_unit IS '施工单位';
 comment on column daq_check_insulated_joint.manufacturer_code IS '出厂编号';
 comment on column daq_check_insulated_joint.certification_num IS '合格证编号';
 comment on column daq_check_insulated_joint.diameter IS '公称直径(mm)';
@@ -1183,6 +1197,7 @@ comment on column daq_check_insulated_joint.test_equipment IS '测试仪器';
 comment on column daq_check_insulated_joint.specand_model IS '仪器规格型号';
 comment on column daq_check_insulated_joint.resistance_val IS '实测绝缘电阻值(MΩ)';
 comment on column daq_check_insulated_joint.check_results IS '验收结论';
+comment on column daq_check_insulated_joint.construct_unit IS '施工单位';
 comment on column daq_check_insulated_joint.remarks IS '备注';
 comment on column daq_check_insulated_joint.create_user_id IS '创建人id';
 comment on column daq_check_insulated_joint.create_user_name IS '创建人名称';
@@ -1196,8 +1211,8 @@ CREATE TABLE daq_check_pipe_cold_bending (
 	oid varchar(36) NOT NULL,
 	project_oid varchar(36),
 	tenders_oid varchar(36),
-	construction_unit varchar(36),
-	pipe_cold_bending_code varchar(50),
+	construct_unit varchar(36),
+	pipe_cold_bending_oid varchar(50),
 	certificate_num varchar(60),
 	pipe_length numeric(9,3),
 	pipe_diameter numeric(9,3),
@@ -1224,8 +1239,7 @@ comment on table daq_check_pipe_cold_bending IS '冷弯管检查及信息记录�
 comment on column daq_check_pipe_cold_bending.oid IS '主键';
 comment on column daq_check_pipe_cold_bending.project_oid IS '项目oid';
 comment on column daq_check_pipe_cold_bending.tenders_oid IS '标段oid';
-comment on column daq_check_pipe_cold_bending.construction_unit IS '施工单位';
-comment on column daq_check_pipe_cold_bending.pipe_cold_bending_code IS '冷弯管编号';
+comment on column daq_check_pipe_cold_bending.pipe_cold_bending_oid IS '冷弯管oid';
 comment on column daq_check_pipe_cold_bending.certificate_num IS '合格证编号';
 comment on column daq_check_pipe_cold_bending.pipe_length IS '弯管长度(m)';
 comment on column daq_check_pipe_cold_bending.pipe_diameter IS '管径(mm)';
@@ -1237,6 +1251,7 @@ comment on column daq_check_pipe_cold_bending.ovality IS '椭圆度<0.6%D';
 comment on column daq_check_pipe_cold_bending.groove_check IS '坡口检查';
 comment on column daq_check_pipe_cold_bending.coating_io_face_check IS '防腐层内外表面质量';
 comment on column daq_check_pipe_cold_bending.coating_io_ends_check IS '防腐层端部内外涂层';
+comment on column daq_check_pipe_cold_bending.construct_unit IS '施工单位';
 comment on column daq_check_pipe_cold_bending.checked_by IS '检查人';
 comment on column daq_check_pipe_cold_bending.checked_date IS '检查日期';
 comment on column daq_check_pipe_cold_bending.remarks IS '备注';
@@ -1252,7 +1267,7 @@ CREATE TABLE daq_check_reducer (
 	oid varchar(36) NOT NULL,
 	project_oid varchar(36),
 	tenders_oid varchar(36),
-	construction_unit varchar(36),
+	construct_unit varchar(36),
 	reducer_code varchar(36),
 	ovality varchar(5),
 	groove_check varchar(5),
@@ -1273,12 +1288,12 @@ comment on table daq_check_reducer IS '大小头检查及信息记录表';
 comment on column daq_check_reducer.oid IS '主键';
 comment on column daq_check_reducer.project_oid IS '项目oid';
 comment on column daq_check_reducer.tenders_oid IS '标段oid';
-comment on column daq_check_reducer.construction_unit IS '施工单位';
 comment on column daq_check_reducer.reducer_code IS '大小头编号';
 comment on column daq_check_reducer.ovality IS '椭圆度<0.6%D';
 comment on column daq_check_reducer.groove_check IS '坡口检查';
 comment on column daq_check_reducer.coating_io_face_check IS '防腐层内外表面质量';
 comment on column daq_check_reducer.coating_io_ends_check IS '防腐层端部内外涂层';
+comment on column daq_check_reducer.construct_unit IS '施工单位';
 comment on column daq_check_reducer.checked_by IS '检查人';
 comment on column daq_check_reducer.checked_date IS '检查日期';
 comment on column daq_check_reducer.remarks IS '备注';
@@ -1294,7 +1309,7 @@ CREATE TABLE daq_check_tee (
 	oid varchar(36) NOT NULL,
 	project_oid varchar(36),
 	tenders_oid varchar(36),
-	construction_unit varchar(36),
+	construct_unit varchar(36),
 	tee_code varchar(36),
 	pipe_wall_thickness numeric(9,3),
 	branch_wall_thickness numeric(9,3),
@@ -1317,7 +1332,6 @@ comment on table daq_check_tee IS '三通检查及信息记录表';
 comment on column daq_check_tee.oid IS '主键';
 comment on column daq_check_tee.project_oid IS '项目oid';
 comment on column daq_check_tee.tenders_oid IS '标段oid';
-comment on column daq_check_tee.construction_unit IS '施工单位';
 comment on column daq_check_tee.tee_code IS '三通编号';
 comment on column daq_check_tee.pipe_wall_thickness IS '管端壁厚(mm)';
 comment on column daq_check_tee.branch_wall_thickness IS '拔制端壁厚（mm）';
@@ -1325,6 +1339,7 @@ comment on column daq_check_tee.ovality IS '椭圆度<0.6%D';
 comment on column daq_check_tee.groove_check IS '坡口检查';
 comment on column daq_check_tee.coating_io_face_check IS '防腐层内外表面质量';
 comment on column daq_check_tee.coating_io_ends_check IS '防腐层端部内外涂层';
+comment on column daq_check_tee.construct_unit IS '施工单位';
 comment on column daq_check_tee.checked_by IS '检查人';
 comment on column daq_check_tee.checked_date IS '检查日期';
 comment on column daq_check_tee.remarks IS '备注';
@@ -1371,9 +1386,9 @@ CREATE TABLE daq_construction_weld (
 	surface_check SMALLINT,
 	construct_unit varchar(36),
 	work_unit_oid varchar(36),
-	cover_oid varchar(36),
-	padder_oid varchar(36),
-	render_oid varchar(36),
+	cover_oid varchar(360),
+	padder_oid varchar(360),
+	render_oid varchar(360),
 	is_golde_joint SMALLINT,
 	is_pipe_head SMALLINT,
 	construct_date timestamp(6),
@@ -1435,10 +1450,26 @@ comment on column daq_construction_weld.modify_datetime IS '修改时间';
 comment on column daq_construction_weld.active IS '有效标志';
 CREATE INDEX index_daq_construction_weld_weld_code_9 ON daq_construction_weld USING btree (weld_code);
 ALTER TABLE daq_construction_weld ADD PRIMARY KEY (oid);
-select dropgeometrycolumn('public', 'daq_construction_weld', 'geom');
-select AddGeometryColumn('public', 'daq_construction_weld', 'geom', 4490, 'POINT', 4);
-CREATE INDEX point_test_geom_idx ON public.daq_construction_weld USING gist (geom);
+alter table daq_construction_weld add is_cut smallint default 0;
+comment on column daq_construction_weld.is_cut IS '是否割口';
+alter table daq_construction_weld add is_ray smallint default 0;
+comment on column daq_construction_weld.is_ray IS '是否射线检测';
+alter table daq_construction_weld add is_ultrasonic smallint default 0;
+comment on column daq_construction_weld.is_ultrasonic IS '是否超声波检查';
+alter table daq_construction_weld add is_infiltration smallint default 0;
+comment on column daq_construction_weld.is_infiltration IS '是否渗透检测';
+alter table daq_construction_weld add is_magnetic_powder smallint default 0;
+comment on column daq_construction_weld.is_magnetic_powder IS '是否磁粉检测';
+alter table daq_construction_weld add is_fa_ultrasonic smallint default 0;
+comment on column daq_construction_weld.is_fa_ultrasonic IS '是否全自动检测';
+alter table daq_construction_weld add is_pa_ultrasonic smallint default 0;
+comment on column daq_construction_weld.is_pa_ultrasonic IS '相控阵超声波检测';
 
+
+create or replace view v_daq_weld_info as
+select oid,weld_code,pipe_segment_or_cross_oid from daq_construction_weld where active=1 and approve_status=2 
+union all 
+select oid,rework_weld_code,pipe_segment_or_cross_oid as weld_code from daq_weld_rework_weld where active=1 and approve_status=2
 
 CREATE TABLE daq_weld_anticorrosion_check (
 	oid varchar(36) NOT NULL,
@@ -1460,7 +1491,7 @@ CREATE TABLE daq_weld_anticorrosion_check (
 	overlap_check SMALLINT,
 	appearance_check SMALLINT,
 	electric_spark_leak_detection SMALLINT,
-	buckle_conclusion varchar(500),
+	buckle_conclusion SMALLINT,
 	anticorrosion varchar(20),
 	construct_unit varchar(36),
 	supervision_unit varchar(38),
@@ -1636,7 +1667,7 @@ CREATE TABLE daq_weld_cut (
 	pipeline_oid varchar(36),
 	tenders_oid varchar(36),
 	pipe_segment_or_cross_oid varchar(36),
-	cut_weld_code varchar(50),
+	weld_oid varchar(36),
 	front_weld_oid varchar(36),
 	back_weld_oid varchar(36),
 	cut_weld_date timestamp(6),
@@ -1662,7 +1693,7 @@ comment on column daq_weld_cut.project_oid IS '项目oid';
 comment on column daq_weld_cut.pipeline_oid IS '管线oid';
 comment on column daq_weld_cut.tenders_oid IS '标段oid';
 comment on column daq_weld_cut.pipe_segment_or_cross_oid IS '线路段/穿跨越';
-comment on column daq_weld_cut.cut_weld_code IS '割口编号';
+comment on column daq_weld_cut.weld_oid IS '割口编号';
 comment on column daq_weld_cut.front_weld_oid IS '新焊口编号1';
 comment on column daq_weld_cut.back_weld_oid IS '新焊口编号2';
 comment on column daq_weld_cut.cut_weld_date IS '割口日期';
@@ -1693,9 +1724,9 @@ CREATE TABLE daq_weld_rework_weld (
 	weld_rod_batch_num varchar(60),
 	weld_wire_batch_num varchar(60),
 	weld_produce varchar(36),
-	cover_oid varchar(36),
-	padder_oid varchar(36),
-	render_oid varchar(36),
+	cover_oid varchar(360),
+	padder_oid varchar(360),
+	render_oid varchar(360),
 	weld_date timestamp(6),
 	construct_unit varchar(36),
 	work_unit_oid varchar(36),
@@ -1704,6 +1735,7 @@ CREATE TABLE daq_weld_rework_weld (
 	collection_person varchar(30),
 	collection_date timestamp(6),
 	approve_status SMALLINT default 0,
+	geo_state varchar(10),
 	remarks varchar(200),
 	create_user_id varchar(36),
 	create_user_name varchar(50),
@@ -1735,6 +1767,7 @@ comment on column daq_weld_rework_weld.supervision_engineer IS '监理工程师'
 comment on column daq_weld_rework_weld.collection_person IS '采集人员';
 comment on column daq_weld_rework_weld.collection_date IS '采集日期';
 comment on column daq_weld_rework_weld.approve_status IS '审核状态';
+comment on column daq_weld_rework_weld.geo_state IS '空间数据状态';
 comment on column daq_weld_rework_weld.remarks IS '备注';
 comment on column daq_weld_rework_weld.create_user_id IS '创建人id';
 comment on column daq_weld_rework_weld.create_user_name IS '创建人名称';
@@ -1743,6 +1776,28 @@ comment on column daq_weld_rework_weld.modify_user_id IS '修改人id';
 comment on column daq_weld_rework_weld.modify_user_name IS '修改人名称';
 comment on column daq_weld_rework_weld.modify_datetime IS '修改时间';
 comment on column daq_weld_rework_weld.active IS '有效标志';
+
+alter table daq_weld_rework_weld add is_cut smallint default 0;
+comment on column daq_weld_rework_weld.is_cut IS '是否割口';
+
+alter table daq_weld_rework_weld add is_ray smallint default 0;
+comment on column daq_weld_rework_weld.is_ray IS '是否射线检测';
+
+alter table daq_weld_rework_weld add is_ultrasonic smallint default 0;
+comment on column daq_weld_rework_weld.is_ultrasonic IS '是否超声波检查';
+
+alter table daq_weld_rework_weld add is_infiltration smallint default 0;
+comment on column daq_weld_rework_weld.is_infiltration IS '是否渗透检测';
+
+alter table daq_weld_rework_weld add is_magnetic_powder smallint default 0;
+comment on column daq_weld_rework_weld.is_magnetic_powder IS '是否磁粉检测';
+
+alter table daq_weld_rework_weld add is_fa_ultrasonic smallint default 0;
+comment on column daq_weld_rework_weld.is_fa_ultrasonic IS '是否全自动检测';
+
+alter table daq_weld_rework_weld add is_pa_ultrasonic smallint default 0;
+comment on column daq_weld_rework_weld.is_pa_ultrasonic IS '相控阵超声波检测';
+
 
 CREATE INDEX index_daq_weld_anticorrosion_check_weld_oid_9 ON daq_weld_anticorrosion_check USING btree (weld_oid);
 ALTER TABLE daq_weld_anticorrosion_check ADD PRIMARY KEY (oid);
@@ -1773,6 +1828,9 @@ CREATE TABLE daq_cut_pipe (
 	fourth_paragraph_length numeric(9,3),
 	fifth_paragraph_length numeric(9,3),
 	approve_status SMALLINT default 0,
+	construct_unit VARCHAR (36),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
 	remarks varchar(200),
 	create_user_id varchar(36),
 	create_user_name varchar(50),
@@ -1797,6 +1855,9 @@ comment on column daq_cut_pipe.third_paragraph_length IS '第三段长度(m)';
 comment on column daq_cut_pipe.fourth_paragraph_length IS '第四段长度(m)';
 comment on column daq_cut_pipe.fifth_paragraph_length IS '第五段长度(m)';
 comment on column daq_cut_pipe.approve_status IS '审核状态';
+comment on column daq_cut_pipe.construct_unit IS '施工单位';
+comment on column daq_cut_pipe.supervision_unit IS '监理单位';
+comment on column daq_cut_pipe.supervision_engineer IS '监理工程师';
 comment on column daq_cut_pipe.remarks IS '备注';
 comment on column daq_cut_pipe.create_user_id IS '创建人id';
 comment on column daq_cut_pipe.create_user_name IS '创建人名称';
@@ -1874,8 +1935,6 @@ comment on column daq_weld_measured_result.modify_user_name is '修改人名称'
 comment on column daq_weld_measured_result.modify_datetime is '修改时间';
 comment on column daq_weld_measured_result.active is '有效标志';
 create index INDEX_DAQ_WELD_MEASURED_RESULT_WELD_OID_9 ON daq_weld_measured_result ( weld_oid );
-select AddGeometryColumn('public', 'daq_weld_measured_result', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_weld_measured_result_geom_idx ON public.daq_weld_measured_result USING gist (geom);
 
 /**********管道焊接信息end***************/
 /**********管道检测信息begin***************/
@@ -1885,7 +1944,7 @@ CREATE TABLE daq_detection_ray (
 	pipeline_oid VARCHAR (36),
 	tenders_oid VARCHAR (36),
 	pipe_segment_or_cross_oid VARCHAR (36),
-	weld_code VARCHAR (36),
+	weld_oid VARCHAR (36),
 	detection_report_num VARCHAR (60),
 	detection_deta TIMESTAMP (6),
 	detection_type VARCHAR (50),
@@ -1913,7 +1972,7 @@ comment on column daq_detection_ray.project_oid is '项目oid';
 comment on column daq_detection_ray.pipeline_oid is '管线oid';
 comment on column daq_detection_ray.tenders_oid is '标段oid';
 comment on column daq_detection_ray.pipe_segment_or_cross_oid is '线路段/穿跨越';
-comment on column daq_detection_ray.weld_code is '焊口编号';
+comment on column daq_detection_ray.weld_oid is '焊口编号';
 comment on column daq_detection_ray.detection_report_num is '检测报告编号';
 comment on column daq_detection_ray.detection_deta is '检测日期';
 comment on column daq_detection_ray.detection_type is '检测类型';
@@ -1934,13 +1993,13 @@ comment on column daq_detection_ray.modify_user_id is '修改人id';
 comment on column daq_detection_ray.modify_user_name is '修改人名称';
 comment on column daq_detection_ray.modify_datetime is '修改时间';
 comment on column daq_detection_ray.active is '有效标志';
-create index INDEX_DAQ_DETECTION_RAY_WELD_CODE_9 ON daq_detection_ray ( weld_code );
+create index INDEX_DAQ_DETECTION_RAY_weld_oid_9 ON daq_detection_ray ( weld_oid );
 create index INDEX_DAQ_DETECTION_RAY_DETECTION_REPORT_NUM_10 ON daq_detection_ray ( detection_report_num );
 
 CREATE TABLE daq_detection_ray_sub (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
 	parent_oid VARCHAR (36),
-	weld_code VARCHAR (36),
+	weld_oid VARCHAR (36),
 	defect_position VARCHAR (60),
 	defect_properties VARCHAR (50),
 	defect_size NUMERIC (9, 3),
@@ -1955,7 +2014,7 @@ CREATE TABLE daq_detection_ray_sub (
 comment on table daq_detection_ray_sub is '射线检测子表';
 comment on column daq_detection_ray_sub.oid is '主键';
 comment on column daq_detection_ray_sub.parent_oid is '主表oid';
-comment on column daq_detection_ray_sub.weld_code is '焊口编号';
+comment on column daq_detection_ray_sub.weld_oid is '焊口编号';
 comment on column daq_detection_ray_sub.defect_position is '缺陷位置';
 comment on column daq_detection_ray_sub.defect_properties is '缺陷性质';
 comment on column daq_detection_ray_sub.defect_size is '缺陷尺寸(mm/mm²/点)';
@@ -1966,7 +2025,7 @@ comment on column daq_detection_ray_sub.modify_user_id is '修改人id';
 comment on column daq_detection_ray_sub.modify_user_name is '修改人名称';
 comment on column daq_detection_ray_sub.modify_datetime is '修改时间';
 comment on column daq_detection_ray_sub.active is '有效标志';
-create index INDEX_DAQ_DETECTION_RAY_SUB_WELD_CODE_6 ON daq_detection_ray_sub ( weld_code );
+create index INDEX_DAQ_DETECTION_RAY_SUB_weld_oid_6 ON daq_detection_ray_sub ( weld_oid );
 
 CREATE TABLE daq_detection_ultrasonic (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -1974,7 +2033,7 @@ CREATE TABLE daq_detection_ultrasonic (
 	pipeline_oid VARCHAR (36),
 	tenders_oid VARCHAR (36),
 	pipe_segment_or_cross_oid VARCHAR (36),
-	weld_code VARCHAR (36),
+	weld_oid VARCHAR (36),
 	detection_report_num VARCHAR (60),
 	detection_deta TIMESTAMP (6),
 	detection_type VARCHAR (50),
@@ -2003,7 +2062,7 @@ comment on column daq_detection_ultrasonic.project_oid is '项目oid';
 comment on column daq_detection_ultrasonic.pipeline_oid is '管线oid';
 comment on column daq_detection_ultrasonic.tenders_oid is '标段oid';
 comment on column daq_detection_ultrasonic.pipe_segment_or_cross_oid is '线路段/穿跨越';
-comment on column daq_detection_ultrasonic.weld_code is '焊口编号';
+comment on column daq_detection_ultrasonic.weld_oid is '焊口编号';
 comment on column daq_detection_ultrasonic.detection_report_num is '检测报告编号';
 comment on column daq_detection_ultrasonic.detection_deta is '检测日期';
 comment on column daq_detection_ultrasonic.detection_type is '检测类型';
@@ -2025,13 +2084,13 @@ comment on column daq_detection_ultrasonic.modify_user_id is '修改人id';
 comment on column daq_detection_ultrasonic.modify_user_name is '修改人名称';
 comment on column daq_detection_ultrasonic.modify_datetime is '修改时间';
 comment on column daq_detection_ultrasonic.active is '有效标志';
-create index INDEX_DAQ_DETECTION_ULTRASONIC_WELD_CODE_9 ON daq_detection_ultrasonic ( weld_code );
+create index INDEX_DAQ_DETECTION_ULTRASONIC_weld_oid_9 ON daq_detection_ultrasonic ( weld_oid );
 create index INDEX_DAQ_DETECTION_ULTRASONIC_DETECTION_REPORT_NUM_10 ON daq_detection_ultrasonic ( detection_report_num );
 
 CREATE TABLE daq_detection_ultrasonic_sub (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
 	parent_oid VARCHAR (36),
-	weld_code VARCHAR (36),
+	weld_oid VARCHAR (36),
 	defect_position VARCHAR (60),
 	defect_properties VARCHAR (50),
 	defect_size NUMERIC (9, 3),
@@ -2046,7 +2105,7 @@ CREATE TABLE daq_detection_ultrasonic_sub (
 comment on table daq_detection_ultrasonic_sub is '超声波检测子表';
 comment on column daq_detection_ultrasonic_sub.oid is '主键';
 comment on column daq_detection_ultrasonic_sub.parent_oid is '主表oid';
-comment on column daq_detection_ultrasonic_sub.weld_code is '焊口编号';
+comment on column daq_detection_ultrasonic_sub.weld_oid is '焊口编号';
 comment on column daq_detection_ultrasonic_sub.defect_position is '缺陷位置';
 comment on column daq_detection_ultrasonic_sub.defect_properties is '缺陷性质';
 comment on column daq_detection_ultrasonic_sub.defect_size is '缺陷尺寸(mm/mm²/点)';
@@ -2057,7 +2116,7 @@ comment on column daq_detection_ultrasonic_sub.modify_user_id is '修改人id';
 comment on column daq_detection_ultrasonic_sub.modify_user_name is '修改人名称';
 comment on column daq_detection_ultrasonic_sub.modify_datetime is '修改时间';
 comment on column daq_detection_ultrasonic_sub.active is '有效标志';
-create index INDEX_daq_detection_ultrasonic_sub_WELD_CODE_6 ON daq_detection_ultrasonic_sub ( weld_code );
+create index INDEX_daq_detection_ultrasonic_sub_weld_oid_6 ON daq_detection_ultrasonic_sub ( weld_oid );
 
 CREATE TABLE daq_detection_infiltration (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -2065,7 +2124,7 @@ CREATE TABLE daq_detection_infiltration (
 	pipeline_oid VARCHAR (36),
 	tenders_oid VARCHAR (36),
 	pipe_segment_or_cross_oid VARCHAR (36),
-	weld_code VARCHAR (36),
+	weld_oid VARCHAR (36),
 	detection_report_num VARCHAR (60),
 	detection_deta TIMESTAMP (6),
 	evaluation_result SMALLINT,
@@ -2092,7 +2151,7 @@ comment on column daq_detection_infiltration.project_oid is '项目oid';
 comment on column daq_detection_infiltration.pipeline_oid is '管线oid';
 comment on column daq_detection_infiltration.tenders_oid is '标段oid';
 comment on column daq_detection_infiltration.pipe_segment_or_cross_oid is '线路段/穿跨越';
-comment on column daq_detection_infiltration.weld_code is '焊口编号';
+comment on column daq_detection_infiltration.weld_oid is '焊口编号';
 comment on column daq_detection_infiltration.detection_report_num is '检测报告编号';
 comment on column daq_detection_infiltration.detection_deta is '检测日期';
 comment on column daq_detection_infiltration.evaluation_result is '评定结果';
@@ -2112,13 +2171,13 @@ comment on column daq_detection_infiltration.modify_user_id is '修改人id';
 comment on column daq_detection_infiltration.modify_user_name is '修改人名称';
 comment on column daq_detection_infiltration.modify_datetime is '修改时间';
 comment on column daq_detection_infiltration.active is '有效标志';
-create index INDEX_DAQ_DETECTION_INFILTRATION_WELD_CODE_9 ON daq_detection_infiltration ( weld_code );
+create index INDEX_DAQ_DETECTION_INFILTRATION_weld_oid_9 ON daq_detection_infiltration ( weld_oid );
 create index INDEX_DAQ_DETECTION_INFILTRATION_DETECTION_REPORT_NUM_10 ON daq_detection_infiltration ( detection_report_num );
 
 CREATE TABLE daq_detection_infiltration_sub (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
 	parent_oid VARCHAR (36),
-	weld_code VARCHAR (36),
+	weld_oid VARCHAR (36),
 	defect_position VARCHAR (60),
 	defect_properties VARCHAR (50),
 	defect_size NUMERIC (9, 3),
@@ -2133,7 +2192,7 @@ CREATE TABLE daq_detection_infiltration_sub (
 comment on table daq_detection_infiltration_sub is '渗透检测子表';
 comment on column daq_detection_infiltration_sub.oid is '主键';
 comment on column daq_detection_infiltration_sub.parent_oid is '主表oid';
-comment on column daq_detection_infiltration_sub.weld_code is '焊口编号';
+comment on column daq_detection_infiltration_sub.weld_oid is '焊口编号';
 comment on column daq_detection_infiltration_sub.defect_position is '缺陷位置';
 comment on column daq_detection_infiltration_sub.defect_properties is '缺陷性质';
 comment on column daq_detection_infiltration_sub.defect_size is '缺陷尺寸(mm/mm²/点)';
@@ -2144,7 +2203,7 @@ comment on column daq_detection_infiltration_sub.modify_user_id is '修改人id'
 comment on column daq_detection_infiltration_sub.modify_user_name is '修改人名称';
 comment on column daq_detection_infiltration_sub.modify_datetime is '修改时间';
 comment on column daq_detection_infiltration_sub.active is '有效标志';
-create index INDEX_daq_detection_infiltration_sub_WELD_CODE_6 ON daq_detection_infiltration_sub ( weld_code );
+create index INDEX_daq_detection_infiltration_sub_weld_oid_6 ON daq_detection_infiltration_sub ( weld_oid );
 
 CREATE TABLE daq_detection_magnetic_powder (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -2152,7 +2211,7 @@ CREATE TABLE daq_detection_magnetic_powder (
 	pipeline_oid VARCHAR (36),
 	tenders_oid VARCHAR (36),
 	pipe_segment_or_cross_oid VARCHAR (36),
-	weld_code VARCHAR (36),
+	weld_oid VARCHAR (36),
 	detection_report_num VARCHAR (60),
 	detection_deta TIMESTAMP (6),
 	evaluation_result SMALLINT,
@@ -2179,7 +2238,7 @@ comment on column daq_detection_magnetic_powder.project_oid is '项目oid';
 comment on column daq_detection_magnetic_powder.pipeline_oid is '管线oid';
 comment on column daq_detection_magnetic_powder.tenders_oid is '标段oid';
 comment on column daq_detection_magnetic_powder.pipe_segment_or_cross_oid is '线路段/穿跨越';
-comment on column daq_detection_magnetic_powder.weld_code is '焊口编号';
+comment on column daq_detection_magnetic_powder.weld_oid is '焊口编号';
 comment on column daq_detection_magnetic_powder.detection_report_num is '检测报告编号';
 comment on column daq_detection_magnetic_powder.detection_deta is '检测日期';
 comment on column daq_detection_magnetic_powder.evaluation_result is '评定结果';
@@ -2199,13 +2258,13 @@ comment on column daq_detection_magnetic_powder.modify_user_id is '修改人id';
 comment on column daq_detection_magnetic_powder.modify_user_name is '修改人名称';
 comment on column daq_detection_magnetic_powder.modify_datetime is '修改时间';
 comment on column daq_detection_magnetic_powder.active is '有效标志';
-create index INDEX_DAQ_DETECTION_MAGNETIC_POWDER_WELD_CODE_9 ON daq_detection_magnetic_powder ( weld_code );
+create index INDEX_DAQ_DETECTION_MAGNETIC_POWDER_weld_oid_9 ON daq_detection_magnetic_powder ( weld_oid );
 create index INDEX_DAQ_DETECTION_MAGNETIC_POWDER_DETECTION_REPORT_NUM_10 ON daq_detection_magnetic_powder ( detection_report_num );
 
 CREATE TABLE daq_detection_magnetic_powder_sub (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
 	parent_oid VARCHAR (36),
-	weld_code VARCHAR (36),
+	weld_oid VARCHAR (36),
 	defect_position VARCHAR (60),
 	defect_properties VARCHAR (50),
 	defect_size NUMERIC (9, 3),
@@ -2220,7 +2279,7 @@ CREATE TABLE daq_detection_magnetic_powder_sub (
 comment on table daq_detection_magnetic_powder_sub is '磁粉检测子表';
 comment on column daq_detection_magnetic_powder_sub.oid is '主键';
 comment on column daq_detection_magnetic_powder_sub.parent_oid is '主表oid';
-comment on column daq_detection_magnetic_powder_sub.weld_code is '焊口编号';
+comment on column daq_detection_magnetic_powder_sub.weld_oid is '焊口编号';
 comment on column daq_detection_magnetic_powder_sub.defect_position is '缺陷位置';
 comment on column daq_detection_magnetic_powder_sub.defect_properties is '缺陷性质';
 comment on column daq_detection_magnetic_powder_sub.defect_size is '缺陷尺寸(mm/mm²/点)';
@@ -2231,7 +2290,7 @@ comment on column daq_detection_magnetic_powder_sub.modify_user_id is '修改人
 comment on column daq_detection_magnetic_powder_sub.modify_user_name is '修改人名称';
 comment on column daq_detection_magnetic_powder_sub.modify_datetime is '修改时间';
 comment on column daq_detection_magnetic_powder_sub.active is '有效标志';
-create index INDEX_daq_detection_magnetic_powder_sub_WELD_CODE_6 ON daq_detection_magnetic_powder_sub ( weld_code );
+create index INDEX_daq_detection_magnetic_powder_sub_weld_oid_6 ON daq_detection_magnetic_powder_sub ( weld_oid );
 
 CREATE TABLE daq_detection_fa_ultrasonic (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -2239,7 +2298,7 @@ CREATE TABLE daq_detection_fa_ultrasonic (
 	pipeline_oid VARCHAR (36),
 	tenders_oid VARCHAR (36),
 	pipe_segment_or_cross_oid VARCHAR (36),
-	weld_code VARCHAR (36),
+	weld_oid VARCHAR (36),
 	detection_report_num VARCHAR (60),
 	detection_deta TIMESTAMP (6),
 	detection_type VARCHAR (50),
@@ -2267,7 +2326,7 @@ comment on column daq_detection_fa_ultrasonic.project_oid is '项目oid';
 comment on column daq_detection_fa_ultrasonic.pipeline_oid is '管线oid';
 comment on column daq_detection_fa_ultrasonic.tenders_oid is '标段oid';
 comment on column daq_detection_fa_ultrasonic.pipe_segment_or_cross_oid is '线路段/穿跨越';
-comment on column daq_detection_fa_ultrasonic.weld_code is '焊口编号';
+comment on column daq_detection_fa_ultrasonic.weld_oid is '焊口编号';
 comment on column daq_detection_fa_ultrasonic.detection_report_num is '检测报告编号';
 comment on column daq_detection_fa_ultrasonic.detection_deta is '检测日期';
 comment on column daq_detection_fa_ultrasonic.detection_type is '检测类型';
@@ -2288,13 +2347,13 @@ comment on column daq_detection_fa_ultrasonic.modify_user_id is '修改人id';
 comment on column daq_detection_fa_ultrasonic.modify_user_name is '修改人名称';
 comment on column daq_detection_fa_ultrasonic.modify_datetime is '修改时间';
 comment on column daq_detection_fa_ultrasonic.active is '有效标志';
-create index INDEX_DAQ_DETECTION_FA_ULTRASONIC_WELD_CODE_9 ON daq_detection_fa_ultrasonic ( weld_code );
+create index INDEX_DAQ_DETECTION_FA_ULTRASONIC_weld_oid_9 ON daq_detection_fa_ultrasonic ( weld_oid );
 create index INDEX_DAQ_DETECTION_FA_ULTRASONIC_DETECTION_REPORT_NUM_10 ON daq_detection_fa_ultrasonic ( detection_report_num );
 
 CREATE TABLE daq_detection_fa_ultrasonic_sub (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
 	parent_oid VARCHAR (36),
-	weld_code VARCHAR (36),
+	weld_oid VARCHAR (36),
 	defect_position VARCHAR (60),
 	amplitude_region VARCHAR (60),
 	defect_length NUMERIC (9, 3),
@@ -2311,7 +2370,7 @@ CREATE TABLE daq_detection_fa_ultrasonic_sub (
 comment on table daq_detection_fa_ultrasonic_sub is '全自动超声波检测子表';
 comment on column daq_detection_fa_ultrasonic_sub.oid is '主键';
 comment on column daq_detection_fa_ultrasonic_sub.parent_oid is '主表oid';
-comment on column daq_detection_fa_ultrasonic_sub.weld_code is '焊口编号';
+comment on column daq_detection_fa_ultrasonic_sub.weld_oid is '焊口编号';
 comment on column daq_detection_fa_ultrasonic_sub.defect_position is '缺陷位置';
 comment on column daq_detection_fa_ultrasonic_sub.amplitude_region is '振幅区域';
 comment on column daq_detection_fa_ultrasonic_sub.defect_length is '缺陷长度(mm)';
@@ -2324,7 +2383,7 @@ comment on column daq_detection_fa_ultrasonic_sub.modify_user_id is '修改人id
 comment on column daq_detection_fa_ultrasonic_sub.modify_user_name is '修改人名称';
 comment on column daq_detection_fa_ultrasonic_sub.modify_datetime is '修改时间';
 comment on column daq_detection_fa_ultrasonic_sub.active is '有效标志';
-create index INDEX_daq_detection_fa_ultrasonic_sub_WELD_CODE_6 ON daq_detection_fa_ultrasonic_sub ( weld_code );
+create index INDEX_daq_detection_fa_ultrasonic_sub_weld_oid_6 ON daq_detection_fa_ultrasonic_sub ( weld_oid );
 
 CREATE TABLE daq_detection_pa_ultrasonic (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -2332,7 +2391,7 @@ CREATE TABLE daq_detection_pa_ultrasonic (
 	pipeline_oid VARCHAR (36),
 	tenders_oid VARCHAR (36),
 	pipe_segment_or_cross_oid VARCHAR (36),
-	weld_code VARCHAR (36),
+	weld_oid VARCHAR (36),
 	detection_report_num VARCHAR (60),
 	detection_file_num VARCHAR (60),
 	detection_deta TIMESTAMP (6),
@@ -2360,7 +2419,7 @@ comment on column daq_detection_pa_ultrasonic.project_oid is '项目oid';
 comment on column daq_detection_pa_ultrasonic.pipeline_oid is '管线oid';
 comment on column daq_detection_pa_ultrasonic.tenders_oid is '标段oid';
 comment on column daq_detection_pa_ultrasonic.pipe_segment_or_cross_oid is '线路段/穿跨越';
-comment on column daq_detection_pa_ultrasonic.weld_code is '焊口编号';
+comment on column daq_detection_pa_ultrasonic.weld_oid is '焊口编号';
 comment on column daq_detection_pa_ultrasonic.detection_report_num is '检测报告编号';
 comment on column daq_detection_pa_ultrasonic.detection_file_num is '检测文件编号';
 comment on column daq_detection_pa_ultrasonic.detection_deta is '检测日期';
@@ -2381,13 +2440,13 @@ comment on column daq_detection_pa_ultrasonic.modify_user_id is '修改人id';
 comment on column daq_detection_pa_ultrasonic.modify_user_name is '修改人名称';
 comment on column daq_detection_pa_ultrasonic.modify_datetime is '修改时间';
 comment on column daq_detection_pa_ultrasonic.active is '有效标志';
-create index INDEX_DAQ_DETECTION_PA_ULTRASONIC_WELD_CODE_9 ON daq_detection_pa_ultrasonic ( weld_code );
+create index INDEX_DAQ_DETECTION_PA_ULTRASONIC_weld_oid_9 ON daq_detection_pa_ultrasonic ( weld_oid );
 create index INDEX_DAQ_DETECTION_PA_ULTRASONIC_DETECTION_REPORT_NUM_10 ON daq_detection_pa_ultrasonic ( detection_report_num );
 
 CREATE TABLE daq_detection_pa_ultrasonic_sub (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
 	parent_oid VARCHAR (36),
-	weld_code VARCHAR (36),
+	weld_oid VARCHAR (36),
 	defect_position VARCHAR (60),
 	amplitude_region VARCHAR (60),
 	defect_length NUMERIC (9, 3),
@@ -2404,7 +2463,7 @@ CREATE TABLE daq_detection_pa_ultrasonic_sub (
 comment on table daq_detection_pa_ultrasonic_sub is '相控阵超声波检测子表';
 comment on column daq_detection_pa_ultrasonic_sub.oid is '主键';
 comment on column daq_detection_pa_ultrasonic_sub.parent_oid is '主表oid';
-comment on column daq_detection_pa_ultrasonic_sub.weld_code is '焊口编号';
+comment on column daq_detection_pa_ultrasonic_sub.weld_oid is '焊口编号';
 comment on column daq_detection_pa_ultrasonic_sub.defect_position is '缺陷位置';
 comment on column daq_detection_pa_ultrasonic_sub.amplitude_region is '振幅区域';
 comment on column daq_detection_pa_ultrasonic_sub.defect_length is '缺陷长度(mm)';
@@ -2417,7 +2476,7 @@ comment on column daq_detection_pa_ultrasonic_sub.modify_user_id is '修改人id
 comment on column daq_detection_pa_ultrasonic_sub.modify_user_name is '修改人名称';
 comment on column daq_detection_pa_ultrasonic_sub.modify_datetime is '修改时间';
 comment on column daq_detection_pa_ultrasonic_sub.active is '有效标志';
-create index INDEX_daq_detection_pa_ultrasonic_sub_WELD_CODE_6 ON daq_detection_pa_ultrasonic_sub ( weld_code );
+create index INDEX_daq_detection_pa_ultrasonic_sub_weld_oid_6 ON daq_detection_pa_ultrasonic_sub ( weld_oid );
 /**********管道检测信息end***************/
 /**********管道敷设信息begin***************/
 CREATE TABLE daq_lay_surveying (
@@ -2478,8 +2537,6 @@ comment on column daq_lay_surveying.modify_user_id is '修改人id';
 comment on column daq_lay_surveying.modify_user_name is '修改人名称';
 comment on column daq_lay_surveying.modify_datetime is '修改时间';
 comment on column daq_lay_surveying.active is '有效标志';
-select AddGeometryColumn('public', 'daq_lay_surveying', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_lay_surveying_geom_idx ON public.daq_lay_surveying USING gist (geom);
 
 CREATE TABLE daq_lay_pipe_trench_excavation (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -2553,8 +2610,7 @@ comment on column daq_lay_pipe_trench_excavation.modify_user_id is '修改人id'
 comment on column daq_lay_pipe_trench_excavation.modify_user_name is '修改人名称';
 comment on column daq_lay_pipe_trench_excavation.modify_datetime is '修改时间';
 comment on column daq_lay_pipe_trench_excavation.active is '有效标志';
-select AddGeometryColumn('public', 'daq_lay_pipe_trench_excavation', 'geom', 4490, 'LINESTRING', 4);
-CREATE INDEX daq_lay_pipe_trench_excavation_geom_idx ON public.daq_lay_pipe_trench_excavation USING gist (geom);
+
 
 CREATE TABLE daq_lay_pipe_trench_backfill (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -2623,8 +2679,7 @@ comment on column daq_lay_pipe_trench_backfill.modify_user_id is '修改人id';
 comment on column daq_lay_pipe_trench_backfill.modify_user_name is '修改人名称';
 comment on column daq_lay_pipe_trench_backfill.modify_datetime is '修改时间';
 comment on column daq_lay_pipe_trench_backfill.active is '有效标志';
-select AddGeometryColumn('public', 'daq_lay_pipe_trench_backfill', 'geom', 4490, 'LINESTRING', 4);
-CREATE INDEX daq_lay_pipe_trench_backfill_geom_idx ON public.daq_lay_pipe_trench_backfill USING gist (geom);
+
 
 CREATE TABLE daq_lay_land_restoration (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -2686,8 +2741,7 @@ comment on column daq_lay_land_restoration.modify_user_id is '修改人id';
 comment on column daq_lay_land_restoration.modify_user_name is '修改人名称';
 comment on column daq_lay_land_restoration.modify_datetime is '修改时间';
 comment on column daq_lay_land_restoration.active is '有效标志';
-select AddGeometryColumn('public', 'daq_lay_land_restoration', 'geom', 4490, 'LINESTRING', 4);
-CREATE INDEX daq_lay_land_restoration_geom_idx ON public.daq_lay_land_restoration USING gist (geom);
+
 
 CREATE TABLE daq_lay_thermal_insulation (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -2754,8 +2808,7 @@ comment on column daq_lay_thermal_insulation.modify_user_id is '修改人id';
 comment on column daq_lay_thermal_insulation.modify_user_name is '修改人名称';
 comment on column daq_lay_thermal_insulation.modify_datetime is '修改时间';
 comment on column daq_lay_thermal_insulation.active is '有效标志';
-select AddGeometryColumn('public', 'daq_lay_thermal_insulation', 'geom', 4490, 'LINESTRING', 4);
-CREATE INDEX daq_lay_thermal_insulation_geom_idx ON public.daq_lay_thermal_insulation USING gist (geom);
+
 /**********管道敷设信息end***************/
 /**********管道穿跨越信息begin***************/
 CREATE TABLE daq_cross_excavation (
@@ -2834,8 +2887,7 @@ comment on column daq_cross_excavation.modify_user_name is '修改人名称';
 comment on column daq_cross_excavation.modify_datetime is '修改时间';
 comment on column daq_cross_excavation.active is '有效标志';
 create index INDEX_DAQ_CROSS_EXCAVATION_CROSS_OID_8 ON daq_cross_excavation ( cross_oid );
-select AddGeometryColumn('public', 'daq_cross_excavation', 'geom', 4490, 'LINESTRING', 4);
-CREATE INDEX daq_cross_excavation_geom_idx ON public.daq_cross_excavation USING gist (geom);
+
 
 CREATE TABLE daq_cross_pipe_jacking (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -2911,8 +2963,7 @@ comment on column daq_cross_pipe_jacking.modify_user_name is '修改人名称';
 comment on column daq_cross_pipe_jacking.modify_datetime is '修改时间';
 comment on column daq_cross_pipe_jacking.active is '有效标志';
 create index INDEX_daq_cross_pipe_jacking_CROSS_OID_8 ON daq_cross_pipe_jacking ( cross_oid );
-select AddGeometryColumn('public', 'daq_cross_pipe_jacking', 'geom', 4490, 'LINESTRING', 4);
-CREATE INDEX daq_cross_pipe_jacking_geom_idx ON public.daq_cross_pipe_jacking USING gist (geom);
+
 
 CREATE TABLE daq_cross_box_culvert (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -2988,8 +3039,6 @@ comment on column daq_cross_box_culvert.modify_user_name is '修改人名称';
 comment on column daq_cross_box_culvert.modify_datetime is '修改时间';
 comment on column daq_cross_box_culvert.active is '有效标志';
 create index INDEX_daq_cross_box_culvert_CROSS_OID_8 ON daq_cross_box_culvert ( cross_oid );
-select AddGeometryColumn('public', 'daq_cross_box_culvert', 'geom', 4490, 'LINESTRING', 4);
-CREATE INDEX daq_cross_box_culvert_geom_idx ON public.daq_cross_box_culvert USING gist (geom);
 
 CREATE TABLE daq_cross_drilling (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -3069,8 +3118,7 @@ comment on column daq_cross_drilling.modify_user_name is '修改人名称';
 comment on column daq_cross_drilling.modify_datetime is '修改时间';
 comment on column daq_cross_drilling.active is '有效标志';
 create index INDEX_daq_cross_drilling_CROSS_OID_8 ON daq_cross_drilling ( cross_oid );
-select AddGeometryColumn('public', 'daq_cross_drilling', 'geom', 4490, 'LINESTRING', 4);
-CREATE INDEX daq_cross_drilling_geom_idx ON public.daq_cross_drilling USING gist (geom);
+
 
 CREATE TABLE daq_cross_shield (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -3146,8 +3194,7 @@ comment on column daq_cross_shield.modify_user_name is '修改人名称';
 comment on column daq_cross_shield.modify_datetime is '修改时间';
 comment on column daq_cross_shield.active is '有效标志';
 create index INDEX_daq_cross_shield_CROSS_OID_8 ON daq_cross_shield ( cross_oid );
-select AddGeometryColumn('public', 'daq_cross_shield', 'geom', 4490, 'LINESTRING', 4);
-CREATE INDEX daq_cross_shield_geom_idx ON public.daq_cross_shield USING gist (geom);
+
 
 CREATE TABLE daq_cross_drilling_blasting (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -3229,8 +3276,7 @@ comment on column daq_cross_drilling_blasting.modify_user_name is '修改人名�
 comment on column daq_cross_drilling_blasting.modify_datetime is '修改时间';
 comment on column daq_cross_drilling_blasting.active is '有效标志';
 create index INDEX_daq_cross_drilling_blasting_CROSS_OID_8 ON daq_cross_drilling_blasting ( cross_oid );
-select AddGeometryColumn('public', 'daq_cross_drilling_blasting', 'geom', 4490, 'LINESTRING', 4);
-CREATE INDEX daq_cross_drilling_blasting_geom_idx ON public.daq_cross_drilling_blasting USING gist (geom);
+
 
 CREATE TABLE daq_cross_across (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -3308,8 +3354,7 @@ comment on column daq_cross_across.modify_user_name is '修改人名称';
 comment on column daq_cross_across.modify_datetime is '修改时间';
 comment on column daq_cross_across.active is '有效标志';
 create index INDEX_daq_cross_across_CROSS_OID_8 ON daq_cross_across ( cross_oid );
-select AddGeometryColumn('public', 'daq_cross_across', 'geom', 4490, 'LINESTRING', 4);
-CREATE INDEX daq_cross_across_geom_idx ON public.daq_cross_across USING gist (geom);
+
 /**********管道穿跨越信息end***************/
 /**********管道阴保begin***************/
 CREATE TABLE daq_cathodic_isolating_piece (
@@ -3381,9 +3426,6 @@ comment on column daq_cathodic_isolating_piece.modify_datetime is '修改时间'
 comment on column daq_cathodic_isolating_piece.active is '有效标志';
 create index INDEX_DAQ_CATHODIC_ISOLATING_PIECE_ISOLATING_PIECE_CODE_9 ON daq_cathodic_isolating_piece ( isolating_piece_code );
 create index INDEX_DAQ_CATHODIC_ISOLATING_PIECE_ISOLATING_PIECE_NAME_10 ON daq_cathodic_isolating_piece ( isolating_piece_name );
-
-select AddGeometryColumn('public', 'daq_cathodic_isolating_piece', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_cathodic_isolating_piece_geom_idx ON public.daq_cathodic_isolating_piece USING gist (geom);
 
 CREATE TABLE daq_cathodic_cable_protection (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -3462,8 +3504,6 @@ comment on column daq_cathodic_cable_protection.modify_datetime is '修改时间
 comment on column daq_cathodic_cable_protection.active is '有效标志';
 create index INDEX_DAQ_CATHODIC_CABLE_PROTECTION_CABLE_CODE_9 ON daq_cathodic_cable_protection ( cable_code );
 create index INDEX_DAQ_CATHODIC_CABLE_PROTECTION_CABLE_SPECIFICATION_10 ON daq_cathodic_cable_protection ( cable_specification );
-select AddGeometryColumn('public', 'daq_cathodic_cable_protection', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_cathodic_cable_protection_geom_idx ON public.daq_cathodic_cable_protection USING gist (geom);
 
 CREATE TABLE daq_cathodic_sacrifice_anode (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -3561,8 +3601,7 @@ comment on column daq_cathodic_sacrifice_anode.modify_user_name is '修改人名
 comment on column daq_cathodic_sacrifice_anode.modify_datetime is '修改时间';
 comment on column daq_cathodic_sacrifice_anode.active is '有效标志';
 create index INDEX_DAQ_CATHODIC_SACRIFICE_ANODE_ANODE_CODE_9 ON daq_cathodic_sacrifice_anode ( anode_code );
-select AddGeometryColumn('public', 'daq_cathodic_sacrifice_anode', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_cathodic_sacrifice_anode_geom_idx ON public.daq_cathodic_sacrifice_anode USING gist (geom);
+
 
 CREATE TABLE daq_cathodic_insulated_joint (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -3624,8 +3663,6 @@ comment on column daq_cathodic_insulated_joint.modify_user_name is '修改人名
 comment on column daq_cathodic_insulated_joint.modify_datetime is '修改时间';
 comment on column daq_cathodic_insulated_joint.active is '有效标志';
 create index INDEX_DAQ_CATHODIC_INSULATED_JOINT_EQUIPMENT_CODE_9 ON daq_cathodic_insulated_joint ( equipment_code );
-select AddGeometryColumn('public', 'daq_cathodic_insulated_joint', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_cathodic_insulated_joint_geom_idx ON public.daq_cathodic_insulated_joint USING gist (geom);
 
 CREATE TABLE daq_cathodic_solid_decoupler (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -3682,8 +3719,7 @@ comment on column daq_cathodic_solid_decoupler.modify_user_name is '修改人名
 comment on column daq_cathodic_solid_decoupler.modify_datetime is '修改时间';
 comment on column daq_cathodic_solid_decoupler.active is '有效标志';
 create index INDEX_DAQ_CATHODIC_SOLID_DECOUPLER_EQUIPMENT_CODE_9 ON daq_cathodic_solid_decoupler ( equipment_code );
-select AddGeometryColumn('public', 'daq_cathodic_solid_decoupler', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_cathodic_solid_decoupler_geom_idx ON public.daq_cathodic_solid_decoupler USING gist (geom);
+
 
 CREATE TABLE daq_cathodic_test_stake (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -3755,8 +3791,7 @@ comment on column daq_cathodic_test_stake.modify_user_name is '修改人名称';
 comment on column daq_cathodic_test_stake.modify_datetime is '修改时间';
 comment on column daq_cathodic_test_stake.active is '有效标志';
 create index INDEX_DAQ_CATHODIC_TEST_STAKE_TEST_STAKE_CODE_9 ON daq_cathodic_test_stake ( test_stake_code );
-select AddGeometryColumn('public', 'daq_cathodic_test_stake', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_cathodic_test_stake_geom_idx ON public.daq_cathodic_test_stake USING gist (geom);
+
 
 CREATE TABLE daq_cathodic_polarity_drainage (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -3855,8 +3890,7 @@ comment on column daq_cathodic_polarity_drainage.modify_user_name is '修改人�
 comment on column daq_cathodic_polarity_drainage.modify_datetime is '修改时间';
 comment on column daq_cathodic_polarity_drainage.active is '有效标志';
 create index INDEX_DAQ_CATHODIC_POLARITY_DRAINAGE_EQUIPMENT_CODE_9 ON daq_cathodic_polarity_drainage ( equipment_code );
-select AddGeometryColumn('public', 'daq_cathodic_polarity_drainage', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_cathodic_polarity_drainage_geom_idx ON public.daq_cathodic_polarity_drainage USING gist (geom);
+
 
 CREATE TABLE daq_cathodic_anode_bed (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -3951,11 +3985,12 @@ comment on column daq_cathodic_anode_bed.modify_user_name is '修改人名称';
 comment on column daq_cathodic_anode_bed.modify_datetime is '修改时间';
 comment on column daq_cathodic_anode_bed.active is '有效标志';
 create index INDEX_DAQ_CATHODIC_ANODE_BED_GROUND_BED_9 ON daq_cathodic_anode_bed ( ground_bed );
-select AddGeometryColumn('public', 'daq_cathodic_anode_bed', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_cathodic_anode_bed_geom_idx ON public.daq_cathodic_anode_bed USING gist (geom);
+
 
 CREATE TABLE daq_cathodic_electrical_parameter_test (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
 	test_stake_oid VARCHAR (36),
 	natural_potential NUMERIC (8, 2),
 	open_circuit_potential_one NUMERIC (8, 2),
@@ -3966,6 +4001,9 @@ CREATE TABLE daq_cathodic_electrical_parameter_test (
 	output_current_two NUMERIC (8, 2),
 	earthing_resistance_one NUMERIC (8, 2),
 	earthing_resistance_two NUMERIC (8, 2),
+	construct_unit VARCHAR (36),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
 	test_person VARCHAR (30),
 	test_date TIMESTAMP (6),
 	approve_status SMALLINT default 0,
@@ -3980,6 +4018,8 @@ CREATE TABLE daq_cathodic_electrical_parameter_test (
 );
 comment on table daq_cathodic_electrical_parameter_test is '牺牲阳极电参数测试记录表';
 comment on column daq_cathodic_electrical_parameter_test.oid is '主键';
+comment on column daq_cathodic_electrical_parameter_test.project_oid is '项目oid';
+comment on column daq_cathodic_electrical_parameter_test.tenders_oid is '标段oid';
 comment on column daq_cathodic_electrical_parameter_test.test_stake_oid is '测试桩编号';
 comment on column daq_cathodic_electrical_parameter_test.natural_potential is '管道对地自然电位(V)';
 comment on column daq_cathodic_electrical_parameter_test.open_circuit_potential_one is '阳极1开路电位(V)';
@@ -3990,6 +4030,9 @@ comment on column daq_cathodic_electrical_parameter_test.output_current_one is '
 comment on column daq_cathodic_electrical_parameter_test.output_current_two is '阳极2输出电流(mA)';
 comment on column daq_cathodic_electrical_parameter_test.earthing_resistance_one is '阳极1接地电阻(Ω)';
 comment on column daq_cathodic_electrical_parameter_test.earthing_resistance_two is '阳极2接地电阻(Ω)';
+comment on column daq_cathodic_electrical_parameter_test.construct_unit is '施工单位';
+comment on column daq_cathodic_electrical_parameter_test.supervision_unit is '监理单位';
+comment on column daq_cathodic_electrical_parameter_test.supervision_engineer is '监理工程师';
 comment on column daq_cathodic_electrical_parameter_test.test_person is '测试人';
 comment on column daq_cathodic_electrical_parameter_test.test_date is '测试时间';
 comment on column daq_cathodic_electrical_parameter_test.approve_status is '审核状态';
@@ -4005,6 +4048,8 @@ create index INDEX_DAQ_CATHODIC_ELECTRICAL_PARAMETER_TEST_TEST_STAKE_OID_5 ON da
 
 CREATE TABLE daq_cathodic_impressed_current_test (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
 	test_stake_oid VARCHAR (36),
 	test_region VARCHAR (50),
 	test_date TIMESTAMP (6),
@@ -4018,6 +4063,9 @@ CREATE TABLE daq_cathodic_impressed_current_test (
 	standard_current NUMERIC (8, 2),
 	measured_current NUMERIC (8, 2),
 	approve_status SMALLINT default 0,
+	construct_unit VARCHAR (36),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
 	remarks VARCHAR (200),
 	create_user_id VARCHAR (36),
 	create_user_name VARCHAR (50),
@@ -4029,6 +4077,8 @@ CREATE TABLE daq_cathodic_impressed_current_test (
 );
 comment on table daq_cathodic_impressed_current_test is '外加电流电参数测试记录表';
 comment on column daq_cathodic_impressed_current_test.oid is '主键';
+comment on column daq_cathodic_impressed_current_test.project_oid is '项目oid';
+comment on column daq_cathodic_impressed_current_test.tenders_oid is '标段oid';
 comment on column daq_cathodic_impressed_current_test.test_stake_oid is '测试桩编号';
 comment on column daq_cathodic_impressed_current_test.test_region is '测试区段';
 comment on column daq_cathodic_impressed_current_test.test_date is '测试日期';
@@ -4042,6 +4092,9 @@ comment on column daq_cathodic_impressed_current_test.measured_voltage is '投�
 comment on column daq_cathodic_impressed_current_test.standard_current is '投产后管道保护标准电流(mA)';
 comment on column daq_cathodic_impressed_current_test.measured_current is '投产后管道保护实测电流(mA)';
 comment on column daq_cathodic_impressed_current_test.approve_status is '审核状态';
+comment on column daq_cathodic_impressed_current_test.construct_unit is '施工单位';
+comment on column daq_cathodic_impressed_current_test.supervision_unit is '监理单位';
+comment on column daq_cathodic_impressed_current_test.supervision_engineer is '监理工程师';
 comment on column daq_cathodic_impressed_current_test.remarks is '备注';
 comment on column daq_cathodic_impressed_current_test.create_user_id is '创建人id';
 comment on column daq_cathodic_impressed_current_test.create_user_name is '创建人名称';
@@ -4116,8 +4169,6 @@ comment on column daq_appendages_mark_stake.modify_user_name is '修改人名称
 comment on column daq_appendages_mark_stake.modify_datetime is '修改时间';
 comment on column daq_appendages_mark_stake.active is '有效标志';
 create index INDEX_DAQ_APPENDAGES_MARK_STAKE_MEDIAN_STAKE_OID_10 ON daq_appendages_mark_stake ( median_stake_oid );
-select AddGeometryColumn('public', 'daq_appendages_mark_stake', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_appendages_mark_stake_geom_idx ON public.daq_appendages_mark_stake USING gist (geom);
 
 CREATE TABLE daq_appendages_electronic_label (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -4181,8 +4232,7 @@ comment on column daq_appendages_electronic_label.modify_user_name is '修改人
 comment on column daq_appendages_electronic_label.modify_datetime is '修改时间';
 comment on column daq_appendages_electronic_label.active is '有效标志';
 create index INDEX_DAQ_APPENDAGES_ELECTRONIC_LABEL_PRODUCT_NUM_10 ON daq_appendages_electronic_label ( product_num );
-select AddGeometryColumn('public', 'daq_appendages_electronic_label', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_appendages_electronic_label_geom_idx ON public.daq_appendages_electronic_label USING gist (geom);
+
 
 CREATE TABLE daq_appendages_hand_hole (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -4258,8 +4308,6 @@ comment on column daq_appendages_hand_hole.modify_user_name is '修改人名称'
 comment on column daq_appendages_hand_hole.modify_datetime is '修改时间';
 comment on column daq_appendages_hand_hole.active is '有效标志';
 create index INDEX_DAQ_APPENDAGES_HAND_HOLE_HAND_HOLE_NAME_10 ON daq_appendages_hand_hole ( hand_hole_name );
-select AddGeometryColumn('public', 'daq_appendages_hand_hole', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_appendages_hand_hole_geom_idx ON public.daq_appendages_hand_hole USING gist (geom);
 
 CREATE TABLE daq_appendages_obstacle (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -4333,8 +4381,6 @@ comment on column daq_appendages_obstacle.modify_user_name is '修改人名称';
 comment on column daq_appendages_obstacle.modify_datetime is '修改时间';
 comment on column daq_appendages_obstacle.active is '有效标志';
 create index INDEX_DAQ_APPENDAGES_OBSTACLE_OBSTACLE_NAME_10 ON daq_appendages_obstacle ( obstacle_name );
-select AddGeometryColumn('public', 'daq_appendages_obstacle', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_appendages_obstacle_geom_idx ON public.daq_appendages_obstacle USING gist (geom);
 
 CREATE TABLE daq_appendages_hydraulic_protection (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -4410,8 +4456,7 @@ comment on column daq_appendages_hydraulic_protection.modify_user_name is '修�
 comment on column daq_appendages_hydraulic_protection.modify_datetime is '修改时间';
 comment on column daq_appendages_hydraulic_protection.active is '有效标志';
 create index INDEX_DAQ_APPENDAGES_HYDRAULIC_PROTECTION_HYDRAULIC_PROTECTION_CODE_9 ON daq_appendages_hydraulic_protection ( hydraulic_protection_code );
-select AddGeometryColumn('public', 'daq_appendages_hydraulic_protection', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_appendages_hydraulic_protection_geom_idx ON public.daq_appendages_hydraulic_protection USING gist (geom);
+
 
 CREATE TABLE daq_appendages_concomitant_road (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -4538,9 +4583,449 @@ comment on column daq_appendages_casing_pipe.modify_user_id is '修改人id';
 comment on column daq_appendages_casing_pipe.modify_user_name is '修改人名称';
 comment on column daq_appendages_casing_pipe.modify_datetime is '修改时间';
 comment on column daq_appendages_casing_pipe.active is '有效标志';
-select AddGeometryColumn('public', 'daq_appendages_casing_pipe', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_appendages_casing_pipe_geom_idx ON public.daq_appendages_casing_pipe USING gist (geom);
+
 /**********管道附属物end***************/
 /**********中低压begin***************/
+CREATE TABLE daq_mv_pipe_node (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	pipe_node_code VARCHAR (50),
+	pipe_node_type VARCHAR (50),
+	pipe_node_spec VARCHAR (50),
+	manufacturer VARCHAR (60),
+	factory_num VARCHAR (60),
+	pointx NUMERIC (9, 3),
+	pointy NUMERIC (9, 3),
+	pointz NUMERIC (7, 2),
+	buried_depth NUMERIC (7, 2),
+	user_building VARCHAR (60),
+	is_electronic_label SMALLINT,
+	electronic_label_type VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL
+);
+
+comment on table daq_mv_pipe_node is '节点信息表';
+comment on column daq_mv_pipe_node.oid is '主键';
+comment on column daq_mv_pipe_node.project_oid is '项目oid';
+comment on column daq_mv_pipe_node.pipe_node_code is '节点编号';
+comment on column daq_mv_pipe_node.pipe_node_type is '点类型';
+comment on column daq_mv_pipe_node.pipe_node_spec is '规格';
+comment on column daq_mv_pipe_node.manufacturer is '生产厂家';
+comment on column daq_mv_pipe_node.factory_num is '出厂编号';
+comment on column daq_mv_pipe_node.pointx is 'X坐标';
+comment on column daq_mv_pipe_node.pointy is 'Y坐标';
+comment on column daq_mv_pipe_node.pointz is '管顶高程(m)';
+comment on column daq_mv_pipe_node.buried_depth is '埋深(m)';
+comment on column daq_mv_pipe_node.user_building is '用户楼宇';
+comment on column daq_mv_pipe_node.is_electronic_label is '是否设置电子标签';
+comment on column daq_mv_pipe_node.electronic_label_type is '电子标签类型';
+comment on column daq_mv_pipe_node.collection_person is '采集人员';
+comment on column daq_mv_pipe_node.collection_date is '采集日期';
+comment on column daq_mv_pipe_node.geo_state is '空间数据状态';
+comment on column daq_mv_pipe_node.remarks is '备注';
+comment on column daq_mv_pipe_node.create_user_id is '创建人id';
+comment on column daq_mv_pipe_node.create_user_name is '创建人名称';
+comment on column daq_mv_pipe_node.create_datetime is '创建时间';
+comment on column daq_mv_pipe_node.modify_user_id is '修改人id';
+comment on column daq_mv_pipe_node.modify_user_name is '修改人名称';
+comment on column daq_mv_pipe_node.modify_datetime is '修改时间';
+comment on column daq_mv_pipe_node.active is '有效标志';
+create index INDEX_DAQ_MV_PIPE_NODE_PIPE_NODE_CODE_6 ON daq_mv_pipe_node ( pipe_node_code );
+
+CREATE TABLE daq_mv_pipe_section (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	pipe_section_code VARCHAR (50),
+	start_pipe_node_code VARCHAR (50),
+	start_pointx NUMERIC (9, 3),
+	start_pointy NUMERIC (9, 3),
+	start_pointz NUMERIC (7, 2),
+	end_pipe_node_code VARCHAR (50),
+	end_pointx NUMERIC (9, 3),
+	end_pointy NUMERIC (9, 3),
+	end_pointz NUMERIC (7, 2),
+	pipe_section_length NUMERIC (12, 3),
+	pipe_diameter NUMERIC (9, 3),
+	wall thickness NUMERIC (9, 3),
+	pipe_section_material VARCHAR (50),
+	pipe_section_spec VARCHAR (50),
+	design_life SMALLINT,
+	pipe_outer_anticorrosive SMALLINT,
+	outer_anticorrosive_grade VARCHAR (10),
+	cathodic_protection_method SMALLINT,
+	burial_method SMALLINT,
+	pipe_section_category SMALLINT,
+	construct_category VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL
+);
+
+comment on table daq_mv_pipe_section is '管段信息表';
+comment on column daq_mv_pipe_section.oid is '主键';
+comment on column daq_mv_pipe_section.project_oid is '项目oid';
+comment on column daq_mv_pipe_section.pipe_section_code is '管段编号';
+comment on column daq_mv_pipe_section.start_pipe_node_code is '起始节点编号';
+comment on column daq_mv_pipe_section.start_pointx is '起始点X坐标';
+comment on column daq_mv_pipe_section.start_pointy is '起始点Y坐标';
+comment on column daq_mv_pipe_section.start_pointz is '起始点管顶高程(m)';
+comment on column daq_mv_pipe_section.end_pipe_node_code is '终止节点编号';
+comment on column daq_mv_pipe_section.end_pointx is '终止点X坐标';
+comment on column daq_mv_pipe_section.end_pointy is '终止点Y坐标';
+comment on column daq_mv_pipe_section.end_pointz is '终止点管顶高程(m)';
+comment on column daq_mv_pipe_section.pipe_section_length is '管段长度(m)';
+comment on column daq_mv_pipe_section.pipe_diameter is '管径(mm)';
+comment on column daq_mv_pipe_section.wall thickness is '壁厚(mm)';
+comment on column daq_mv_pipe_section.pipe_section_material is '材质';
+comment on column daq_mv_pipe_section.pipe_section_spec is '规格';
+comment on column daq_mv_pipe_section.design_life is '管道设计年限(年)';
+comment on column daq_mv_pipe_section.pipe_outer_anticorrosive is '管道外防腐';
+comment on column daq_mv_pipe_section.outer_anticorrosive_grade is '防腐等级';
+comment on column daq_mv_pipe_section.cathodic_protection_method is '阴极保护方式';
+comment on column daq_mv_pipe_section.burial_method is '埋设方式';
+comment on column daq_mv_pipe_section.pipe_section_category is '管段类别';
+comment on column daq_mv_pipe_section.construct_category is '施工方式';
+comment on column daq_mv_pipe_section.collection_person is '采集人员';
+comment on column daq_mv_pipe_section.collection_date is '采集日期';
+comment on column daq_mv_pipe_section.geo_state is '空间数据状态';
+comment on column daq_mv_pipe_section.remarks is '备注';
+comment on column daq_mv_pipe_section.create_user_id is '创建人id';
+comment on column daq_mv_pipe_section.create_user_name is '创建人名称';
+comment on column daq_mv_pipe_section.create_datetime is '创建时间';
+comment on column daq_mv_pipe_section.modify_user_id is '修改人id';
+comment on column daq_mv_pipe_section.modify_user_name is '修改人名称';
+comment on column daq_mv_pipe_section.modify_datetime is '修改时间';
+comment on column daq_mv_pipe_section.active is '有效标志';
+create index INDEX_DAQ_MV_PIPE_SECTION_PIPE_SECTION_CODE_6 ON daq_mv_pipe_section ( pipe_section_code );
+
+CREATE TABLE daq_mv_across_info (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	pipe_section_code VARCHAR (50),
+	start_pipe_node_code VARCHAR (50),
+	start_pointx NUMERIC (9, 3),
+	start_pointy NUMERIC (9, 3),
+	start_pointz NUMERIC (7, 2),
+	end_pipe_node_code VARCHAR (50),
+	end_pointx NUMERIC (9, 3),
+	end_pointy NUMERIC (9, 3),
+	end_pointz NUMERIC (7, 2),
+	pipe_section_length NUMERIC (12, 3),
+	across_method VARCHAR (50),
+	across_object VARCHAR (50),
+	burial_method SMALLINT,
+	pipe_section_category SMALLINT,
+	pipe_section_material VARCHAR (50),
+	pipe_section_spec VARCHAR (50),
+	outer_diameter NUMERIC (9, 3),
+	wall thickness NUMERIC (9, 3),
+	design_life SMALLINT,
+	measure_unit VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL
+);
+
+comment on table daq_mv_across_info is '穿越信息表';
+comment on column daq_mv_across_info.oid is '主键';
+comment on column daq_mv_across_info.project_oid is '项目oid';
+comment on column daq_mv_across_info.pipe_section_code is '管段编号';
+comment on column daq_mv_across_info.start_pipe_node_code is '起始节点编号';
+comment on column daq_mv_across_info.start_pointx is '起始点X坐标';
+comment on column daq_mv_across_info.start_pointy is '起始点Y坐标';
+comment on column daq_mv_across_info.start_pointz is '起始点管顶高程(m)';
+comment on column daq_mv_across_info.end_pipe_node_code is '终止节点编号';
+comment on column daq_mv_across_info.end_pointx is '终止点X坐标';
+comment on column daq_mv_across_info.end_pointy is '终止点Y坐标';
+comment on column daq_mv_across_info.end_pointz is '终止点管顶高程(m)';
+comment on column daq_mv_across_info.pipe_section_length is '管段长度(m)';
+comment on column daq_mv_across_info.across_method is '穿越方式';
+comment on column daq_mv_across_info.across_object is '穿越对象类型';
+comment on column daq_mv_across_info.burial_method is '埋地方式';
+comment on column daq_mv_across_info.pipe_section_category is '管段类别';
+comment on column daq_mv_across_info.pipe_section_material is '材质';
+comment on column daq_mv_across_info.pipe_section_spec is '规格';
+comment on column daq_mv_across_info.outer_diameter is '外径';
+comment on column daq_mv_across_info.wall thickness is '壁厚';
+comment on column daq_mv_across_info.design_life is '管道设计年限';
+comment on column daq_mv_across_info.measure_unit is '陀螺仪测量单位 ';
+comment on column daq_mv_across_info.collection_person is '采集人员';
+comment on column daq_mv_across_info.collection_date is '采集日期';
+comment on column daq_mv_across_info.geo_state is '空间数据状态';
+comment on column daq_mv_across_info.remarks is '备注';
+comment on column daq_mv_across_info.create_user_id is '创建人id';
+comment on column daq_mv_across_info.create_user_name is '创建人名称';
+comment on column daq_mv_across_info.create_datetime is '创建时间';
+comment on column daq_mv_across_info.modify_user_id is '修改人id';
+comment on column daq_mv_across_info.modify_user_name is '修改人名称';
+comment on column daq_mv_across_info.modify_datetime is '修改时间';
+comment on column daq_mv_across_info.active is '有效标志';
+create index INDEX_DAQ_MV_ACROSS_INFO_PIPE_SECTION_CODE_6 ON daq_mv_across_info ( pipe_section_code );
+
+CREATE TABLE daq_mv_stride_across_info (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	pipe_section_code VARCHAR (50),
+	start_pipe_node_code VARCHAR (50),
+	start_pointx NUMERIC (9, 3),
+	start_pointy NUMERIC (9, 3),
+	start_pointz NUMERIC (7, 2),
+	end_pipe_node_code VARCHAR (50),
+	end_pointx NUMERIC (9, 3),
+	end_pointy NUMERIC (9, 3),
+	end_pointz NUMERIC (7, 2),
+	pipe_section_length NUMERIC (12, 3),
+	across_method VARCHAR (50),
+	across_object VARCHAR (50),
+	burial_method SMALLINT,
+	pipe_section_category SMALLINT,
+	pipe_section_material VARCHAR (50),
+	pipe_section_spec VARCHAR (50),
+	outer_diameter NUMERIC (9, 3),
+	wall thickness NUMERIC (9, 3),
+	design_life SMALLINT,
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL
+);
+
+comment on table daq_mv_stride_across_info is '跨越信息表';
+comment on column daq_mv_stride_across_info.oid is '主键';
+comment on column daq_mv_stride_across_info.project_oid is '项目oid';
+comment on column daq_mv_stride_across_info.pipe_section_code is '管段编号';
+comment on column daq_mv_stride_across_info.start_pipe_node_code is '起始节点编号';
+comment on column daq_mv_stride_across_info.start_pointx is '起始点X坐标';
+comment on column daq_mv_stride_across_info.start_pointy is '起始点Y坐标';
+comment on column daq_mv_stride_across_info.start_pointz is '起始点管顶高程(m)';
+comment on column daq_mv_stride_across_info.end_pipe_node_code is '终止节点编号';
+comment on column daq_mv_stride_across_info.end_pointx is '终止点X坐标';
+comment on column daq_mv_stride_across_info.end_pointy is '终止点Y坐标';
+comment on column daq_mv_stride_across_info.end_pointz is '终止点管顶高程(m)';
+comment on column daq_mv_stride_across_info.pipe_section_length is '管段长度(m)';
+comment on column daq_mv_stride_across_info.across_method is '穿越方式';
+comment on column daq_mv_stride_across_info.across_object is '穿越对象类型';
+comment on column daq_mv_stride_across_info.burial_method is '埋地方式';
+comment on column daq_mv_stride_across_info.pipe_section_category is '管段类别';
+comment on column daq_mv_stride_across_info.pipe_section_material is '材质';
+comment on column daq_mv_stride_across_info.pipe_section_spec is '规格';
+comment on column daq_mv_stride_across_info.outer_diameter is '外径';
+comment on column daq_mv_stride_across_info.wall thickness is '壁厚';
+comment on column daq_mv_stride_across_info.design_life is '管道设计年限';
+comment on column daq_mv_stride_across_info.collection_person is '采集人员';
+comment on column daq_mv_stride_across_info.collection_date is '采集日期';
+comment on column daq_mv_stride_across_info.geo_state is '空间数据状态';
+comment on column daq_mv_stride_across_info.remarks is '备注';
+comment on column daq_mv_stride_across_info.create_user_id is '创建人id';
+comment on column daq_mv_stride_across_info.create_user_name is '创建人名称';
+comment on column daq_mv_stride_across_info.create_datetime is '创建时间';
+comment on column daq_mv_stride_across_info.modify_user_id is '修改人id';
+comment on column daq_mv_stride_across_info.modify_user_name is '修改人名称';
+comment on column daq_mv_stride_across_info.modify_datetime is '修改时间';
+comment on column daq_mv_stride_across_info.active is '有效标志';
+create index INDEX_DAQ_MV_STRIDE_ACROSS_INFO_PIPE_SECTION_CODE_6 ON daq_mv_stride_across_info ( pipe_section_code );
+
+CREATE TABLE daq_mv_pipe_trench_protect (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	pipe_trench_length NUMERIC (9, 2),
+	pipe_trench_width NUMERIC (9, 3),
+	pipe_trench_height NUMERIC (9, 4),
+	start_pointx NUMERIC (9, 3),
+	start_pointy NUMERIC (9, 3),
+	start_pointz NUMERIC (7, 2),
+	end_pointx NUMERIC (9, 3),
+	end_pointy NUMERIC (9, 3),
+	end_pointz NUMERIC (7, 2),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	geo_state VARCHAR (10),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL
+);
+
+comment on table daq_mv_pipe_trench_protect is '管沟信息表';
+comment on column daq_mv_pipe_trench_protect.oid is '主键';
+comment on column daq_mv_pipe_trench_protect.project_oid is '项目oid';
+comment on column daq_mv_pipe_trench_protect.pipe_trench_length is '管沟长度(m)';
+comment on column daq_mv_pipe_trench_protect.pipe_trench_width is '管沟宽度(m)';
+comment on column daq_mv_pipe_trench_protect.pipe_trench_height is '管沟高度(m)';
+comment on column daq_mv_pipe_trench_protect.start_pointx is '起始点X坐标';
+comment on column daq_mv_pipe_trench_protect.start_pointy is '起始点Y坐标';
+comment on column daq_mv_pipe_trench_protect.start_pointz is '起始点管顶高程(m)';
+comment on column daq_mv_pipe_trench_protect.end_pointx is '终止点X坐标';
+comment on column daq_mv_pipe_trench_protect.end_pointy is '终止点Y坐标';
+comment on column daq_mv_pipe_trench_protect.end_pointz is '终止点管顶高程(m)';
+comment on column daq_mv_pipe_trench_protect.collection_person is '采集人员';
+comment on column daq_mv_pipe_trench_protect.collection_date is '采集日期';
+comment on column daq_mv_pipe_trench_protect.geo_state is '空间数据状态';
+comment on column daq_mv_pipe_trench_protect.remarks is '备注';
+comment on column daq_mv_pipe_trench_protect.create_user_id is '创建人id';
+comment on column daq_mv_pipe_trench_protect.create_user_name is '创建人名称';
+comment on column daq_mv_pipe_trench_protect.create_datetime is '创建时间';
+comment on column daq_mv_pipe_trench_protect.modify_user_id is '修改人id';
+comment on column daq_mv_pipe_trench_protect.modify_user_name is '修改人名称';
+comment on column daq_mv_pipe_trench_protect.modify_datetime is '修改时间';
+comment on column daq_mv_pipe_trench_protect.active is '有效标志';
+create index INDEX_DAQ_MV_PIPE_TRENCH_PROTECT_PIPE_TRENCH_LENGTH_6 ON daq_mv_pipe_trench_protect ( pipe_trench_length );
 
 /**********中低压end***************/
+/*********数据审核记录表begin***************/
+CREATE TABLE daq_data_approve (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	business_oid VARCHAR (36),
+	approve_opinion VARCHAR (200),
+	approve_status SMALLINT,
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL
+);
+comment on table daq_data_approve is '数据审核记录表';
+comment on column daq_data_approve.oid is '主键';
+comment on column daq_data_approve.business_oid is '业务oid';
+comment on column daq_data_approve.approve_opinion is '审批意见';
+comment on column daq_data_approve.approve_status is '审核状态';
+comment on column daq_data_approve.create_user_id is '创建人id';
+comment on column daq_data_approve.create_user_name is '创建人名称';
+comment on column daq_data_approve.create_datetime is '创建时间';
+comment on column daq_data_approve.modify_user_id is '修改人id';
+comment on column daq_data_approve.modify_user_name is '修改人名称';
+comment on column daq_data_approve.modify_datetime is '修改时间';
+comment on column daq_data_approve.active is '有效标志';
+create index INDEX_DAQ_DATA_APPROVE_BUSINESS_OID_5 ON daq_data_approve ( business_oid );
+/**********数据审核记录表end***************/
+/*********空间数据相关start*********/
+select dropgeometrycolumn('public', 'daq_median_stake', 'geom');
+select AddGeometryColumn('public', 'daq_median_stake', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_median_stake_geom_idx ON public.daq_median_stake USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_construction_weld', 'geom', 4490, 'POINT', 4);
+CREATE INDEX point_test_geom_idx ON public.daq_construction_weld USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_weld_measured_result', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_weld_measured_result_geom_idx ON public.daq_weld_measured_result USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_lay_surveying', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_lay_surveying_geom_idx ON public.daq_lay_surveying USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_lay_pipe_trench_excavation', 'geom', 4490, 'LINESTRING', 4);
+CREATE INDEX daq_lay_pipe_trench_excavation_geom_idx ON public.daq_lay_pipe_trench_excavation USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_lay_pipe_trench_backfill', 'geom', 4490, 'LINESTRING', 4);
+CREATE INDEX daq_lay_pipe_trench_backfill_geom_idx ON public.daq_lay_pipe_trench_backfill USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_lay_land_restoration', 'geom', 4490, 'LINESTRING', 4);
+CREATE INDEX daq_lay_land_restoration_geom_idx ON public.daq_lay_land_restoration USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_lay_thermal_insulation', 'geom', 4490, 'LINESTRING', 4);
+CREATE INDEX daq_lay_thermal_insulation_geom_idx ON public.daq_lay_thermal_insulation USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_cross_excavation', 'geom', 4490, 'LINESTRING', 4);
+CREATE INDEX daq_cross_excavation_geom_idx ON public.daq_cross_excavation USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_cross_pipe_jacking', 'geom', 4490, 'LINESTRING', 4);
+CREATE INDEX daq_cross_pipe_jacking_geom_idx ON public.daq_cross_pipe_jacking USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_cross_box_culvert', 'geom', 4490, 'LINESTRING', 4);
+CREATE INDEX daq_cross_box_culvert_geom_idx ON public.daq_cross_box_culvert USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_cross_drilling', 'geom', 4490, 'LINESTRING', 4);
+CREATE INDEX daq_cross_drilling_geom_idx ON public.daq_cross_drilling USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_cross_shield', 'geom', 4490, 'LINESTRING', 4);
+CREATE INDEX daq_cross_shield_geom_idx ON public.daq_cross_shield USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_cross_drilling_blasting', 'geom', 4490, 'LINESTRING', 4);
+CREATE INDEX daq_cross_drilling_blasting_geom_idx ON public.daq_cross_drilling_blasting USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_cross_across', 'geom', 4490, 'LINESTRING', 4);
+CREATE INDEX daq_cross_across_geom_idx ON public.daq_cross_across USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_cathodic_isolating_piece', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_cathodic_isolating_piece_geom_idx ON public.daq_cathodic_isolating_piece USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_cathodic_cable_protection', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_cathodic_cable_protection_geom_idx ON public.daq_cathodic_cable_protection USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_cathodic_sacrifice_anode', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_cathodic_sacrifice_anode_geom_idx ON public.daq_cathodic_sacrifice_anode USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_cathodic_insulated_joint', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_cathodic_insulated_joint_geom_idx ON public.daq_cathodic_insulated_joint USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_cathodic_solid_decoupler', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_cathodic_solid_decoupler_geom_idx ON public.daq_cathodic_solid_decoupler USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_cathodic_test_stake', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_cathodic_test_stake_geom_idx ON public.daq_cathodic_test_stake USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_cathodic_polarity_drainage', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_cathodic_polarity_drainage_geom_idx ON public.daq_cathodic_polarity_drainage USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_cathodic_anode_bed', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_cathodic_anode_bed_geom_idx ON public.daq_cathodic_anode_bed USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_appendages_mark_stake', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_appendages_mark_stake_geom_idx ON public.daq_appendages_mark_stake USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_appendages_electronic_label', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_appendages_electronic_label_geom_idx ON public.daq_appendages_electronic_label USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_appendages_hand_hole', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_appendages_hand_hole_geom_idx ON public.daq_appendages_hand_hole USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_appendages_obstacle', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_appendages_obstacle_geom_idx ON public.daq_appendages_obstacle USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_appendages_hydraulic_protection', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_appendages_hydraulic_protection_geom_idx ON public.daq_appendages_hydraulic_protection USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_appendages_casing_pipe', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_appendages_casing_pipe_geom_idx ON public.daq_appendages_casing_pipe USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_weld_rework_weld', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_weld_rework_weld_idx ON public.daq_weld_rework_weld USING gist (geom);
+/*********空间数据相关end*********/

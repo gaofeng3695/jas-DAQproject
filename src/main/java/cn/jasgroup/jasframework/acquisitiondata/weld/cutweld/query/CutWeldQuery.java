@@ -48,14 +48,23 @@ public class CutWeldQuery extends BaseJavaQuery{
 	 * 钢管编号
 	 */
 	private String pipeOid;
+	
+	/**
+	 * 审核状态
+	 */
+	private String approveStatus;
 
 	@Override
 	public String getQuerySql() {
-		String sql = "SELECT cp.*,	pro.project_name,	pi.pipeline_name,	te.tenders_name, mp.pipe_code FROM daq_cut_pipe cp "
+		String sql = "SELECT cp.*,	pro.project_name,	pi.pipeline_name,	te.tenders_name, mp.pipe_code"
+					+ ",cu.unit_name as construct_unit_name, su.unit_name as supervision_unit_name "
+					+ "FROM daq_cut_pipe cp "
 					+ "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = cp.project_oid "
 					+ "LEFT JOIN (SELECT oid, pipeline_name, active FROM daq_pipeline where active=1) pi ON pi.oid = cp.pipeline_oid "
 					+ "LEFT JOIN (SELECT oid, tenders_name, active FROM daq_tenders where active=1) te ON te.oid = cp.tenders_oid "
 					+ "LEFT JOIN (select oid, pipe_code, active from daq_material_pipe where active=1) mp on mp.oid = cp.pipe_oid "
+					+ "left join (select oid, unit_name, active from pri_unit where active=1) cu on cu.oid=cp.construct_unit "
+					+ "left join (select oid, unit_name, active from pri_unit where active=1) su on su.oid = cp.supervision_unit "
 					+ "WHERE cp.active = 1 ";
 		sql += getConditionSql();
 		return sql;
@@ -78,8 +87,12 @@ public class CutWeldQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(pipeOid)) {
 				conditionSql += " and cp.pipe_oid = :pipeOid";
 			}
-			conditionSql += " order by cp.create_datetime desc";
+			if (StringUtils.isNotBlank(approveStatus)) {
+				conditionSql += " and cp.approve_status in ("+ approveStatus +")";
+			}
+			conditionSql += this.dataAuthoritySql;
 		}
+		conditionSql += " order by cp.create_datetime desc";
 		return conditionSql;
 	}
 
@@ -121,6 +134,14 @@ public class CutWeldQuery extends BaseJavaQuery{
 
 	public void setPipeOid(String pipeOid) {
 		this.pipeOid = pipeOid;
+	}
+
+	public String getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(String approveStatus) {
+		this.approveStatus = approveStatus;
 	} 
 	
 }

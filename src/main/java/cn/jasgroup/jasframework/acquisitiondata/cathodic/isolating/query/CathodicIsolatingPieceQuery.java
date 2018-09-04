@@ -56,6 +56,11 @@ public class CathodicIsolatingPieceQuery extends BaseJavaQuery {
 	 * 绝缘件编号
 	 */
 	private String isolatingPieceCode;
+	
+	/**
+	 * 审核状态
+	 */
+	private String approveStatus;
 
 	@Override
 	public String getQuerySql() {
@@ -96,8 +101,12 @@ public class CathodicIsolatingPieceQuery extends BaseJavaQuery {
 			if (StringUtils.isNotBlank(isolatingPieceCode)) {
 				conditionSql += " and cip.isolating_piece_code like :isolatingPieceCode";
 			}
-			conditionSql += " order by cip.create_datetime desc";
+			if (StringUtils.isNotBlank(approveStatus)) {
+				conditionSql += " and cip.approve_status in ("+ approveStatus +")";
+			}
+			conditionSql += this.dataAuthoritySql;
 		}
+		conditionSql += " order by cip.create_datetime desc";
 		return conditionSql;
 	}
 		
@@ -150,6 +159,14 @@ public class CathodicIsolatingPieceQuery extends BaseJavaQuery {
 
 	public void setIsolatingPieceCode(String isolatingPieceCode) {
 		this.isolatingPieceCode = isolatingPieceCode;
+	}
+
+	public String getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(String approveStatus) {
+		this.approveStatus = approveStatus;
 	}
 
 }

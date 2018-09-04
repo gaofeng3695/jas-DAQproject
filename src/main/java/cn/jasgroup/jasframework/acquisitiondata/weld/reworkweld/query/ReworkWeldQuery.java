@@ -53,6 +53,11 @@ public class ReworkWeldQuery extends BaseJavaQuery {
 	 * 返修口编号
 	 */
 	private String weldOid;
+	
+	/**
+	 * 审核状态
+	 */
+	private String approveStatus;
 
 	@Override
 	public String getQuerySql() {
@@ -61,7 +66,7 @@ public class ReworkWeldQuery extends BaseJavaQuery {
 					+ "wrw.weld_rod_batch_num,wrw.weld_wire_batch_num, wrw.weld_produce, wps.weld_produce_code, wrw.cover_oid, wp.personnel_name as cover_name, "
 					+ "wrw.padder_oid, wpe.personnel_name as padder_name,wrw.render_oid, wper.personnel_name as render_name, wrw.weld_date,"
 					+ "wrw.construct_unit, u.unit_name as construct_unit_name,wrw.work_unit_oid, wu.work_unit_name, wrw.supervision_unit,"
-					+ "pu.unit_name as supervision_unit_name, wrw.supervision_engineer,wrw.collection_person,wrw.collection_date,wrw.remarks,"
+					+ "pu.unit_name as supervision_unit_name, wrw.supervision_engineer,wrw.collection_person,wrw.collection_date, wrw.approve_status, wrw.remarks,"
 					+ "wrw.create_user_id,wrw.create_user_name,wrw.create_datetime,wrw.modify_user_id,wrw.modify_user_name,	wrw.modify_datetime,wrw.active"
 					+ " FROM daq_weld_rework_weld wrw "
 					+ "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = wrw.project_oid  "
@@ -73,9 +78,12 @@ public class ReworkWeldQuery extends BaseJavaQuery {
 					+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) u on u.oid = wrw.construct_unit "
 					+ "LEFT JOIN (select oid, work_unit_name, active from daq_work_unit where active=1) wu ON wu.oid = wrw.work_unit_oid "
 					+ "LEFT JOIN (SELECT oid, weld_produce_code, active FROM daq_weld_produce_specification where active=1) wps ON wps.oid = wrw.weld_produce "
-					+ "LEFT JOIN (SELECT oid, personnel_name, active FROM daq_work_personnel where active=1) wp ON wp.oid = wrw.cover_oid "
-					+ "LEFT JOIN (SELECT oid, personnel_name, active FROM daq_work_personnel where active=1) wpe ON wpe.oid = wrw.padder_oid "
-					+ "LEFT JOIN (SELECT oid, personnel_name, active FROM daq_work_personnel where active=1) wper ON wper.oid = wrw.render_oid "
+//					+ "LEFT JOIN (SELECT oid, personnel_name, active FROM daq_work_personnel where active=1) wp ON wp.oid = wrw.cover_oid "
+//					+ "LEFT JOIN (SELECT oid, personnel_name, active FROM daq_work_personnel where active=1) wpe ON wpe.oid = wrw.padder_oid "
+//					+ "LEFT JOIN (SELECT oid, personnel_name, active FROM daq_work_personnel where active=1) wper ON wper.oid = wrw.render_oid "
+					+ "LEFT JOIN (SELECT t.oid, array_to_string(array_agg(wpe.personnel_name),',') as personnel_name FROM daq_weld_rework_weld t LEFT JOIN ( SELECT oid, personnel_name, active FROM daq_work_personnel WHERE active = 1 ) wpe ON t.cover_oid like '%'||wpe.oid||'%' group by t.oid) wp ON wp.oid = wrw.oid "
+					+ "LEFT JOIN (SELECT t.oid, array_to_string(array_agg(wpe.personnel_name),',') as personnel_name FROM daq_weld_rework_weld t LEFT JOIN ( SELECT oid, personnel_name, active FROM daq_work_personnel WHERE active = 1 ) wpe ON t.padder_oid like '%'||wpe.oid||'%' group by t.oid) wpe ON wpe.oid = wrw.oid "
+					+ "LEFT JOIN (SELECT t.oid, array_to_string(array_agg(wpe.personnel_name),',') as personnel_name FROM daq_weld_rework_weld t LEFT JOIN ( SELECT oid, personnel_name, active FROM daq_work_personnel WHERE active = 1 ) wpe ON t.render_oid like '%'||wpe.oid||'%' group by t.oid) wper ON wper.oid = wrw.oid "
 					+ "WHERE wrw.active = 1";
 		sql += getConditionSql();
 		return sql;
@@ -101,8 +109,12 @@ public class ReworkWeldQuery extends BaseJavaQuery {
 			if (StringUtils.isNotBlank(weldOid)) {
 				conditionSql += " and wrw.weld_oid = :weldOid";
 			}
-			conditionSql += " order by wrw.create_datetime desc";
+			if (StringUtils.isNotBlank(approveStatus)) {
+				conditionSql += " and wrw.approve_status in ("+ approveStatus +")";
+			}
+			conditionSql +=  this.dataAuthoritySql;
 		}
+		conditionSql += " order by wrw.create_datetime desc";
 		return conditionSql;
 	}
 
@@ -152,6 +164,14 @@ public class ReworkWeldQuery extends BaseJavaQuery {
 
 	public void setWeldOid(String weldOid) {
 		this.weldOid = weldOid;
+	}
+
+	public String getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(String approveStatus) {
+		this.approveStatus = approveStatus;
 	}
 
 }

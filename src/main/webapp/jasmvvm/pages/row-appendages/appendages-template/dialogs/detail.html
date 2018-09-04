@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<link rel="stylesheet" href="./../../../../lib/font-awesome-4.7.0/css/font-awesome.css">
+	<link rel="stylesheet" href="./../../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../../src/css/main.css">
+	<style>
+	</style>
+</head>
+
+<body>
+	<div id="app" v-cloak>
+
+		<jas-approve-dialog>
+			<div>
+
+				<jas-base-group-title :name="groupNames[0]"></jas-base-group-title>
+				<jas-detail-table :titles="fields" :detail="detail"></jas-detail-table>
+				<jas-base-group-title :name="groupNames[1]"></jas-base-group-title>
+				<jas-detail-table :titles="fields2" :detail="detail"></jas-detail-table>
+
+				<jas-base-group-title name="其他信息"></jas-base-group-title>
+				<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
+
+				<jas-base-group-title name="附件信息"></jas-base-group-title>
+				<jas-file-list :biz-id="oid"></jas-file-list>
+			</div>
+		</jas-approve-dialog>
+
+
+	</div>
+</body>
+<script src="./../../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../../lib/vue/vue.js"></script>
+<script src="./../../../../lib/element-ui/v2.4.1/index.min.js"></script>
+
+<script src="./../../../../common/components/jas-components.js "></script>
+<script src="./../../../../common/js/jas-tools.js"></script>
+<script src="./../appendages-config.js"></script>
+<script>
+	var app = new Vue({
+		el: "#app",
+		data: function () {
+			var that = this;
+			return {
+				fields: [],
+				fields2: [],
+				groupNames: [],
+				otherArr: [{
+					name: '备注',
+					field: 'remarks',
+				}],
+				detail: {},
+				columnNum: 2,
+				oid: '',
+			}
+		},
+		created: function () {
+			var that = this;
+			var param = window.jasTools.base.getParamsInUrl(location.href);
+
+			this.pageCode = param.pageCode;
+
+			var fields = crossConfig[this.pageCode].detailFields1;
+			var fields2 = crossConfig[this.pageCode].detailFields2;
+			this.fields = crossConfig.methods.formatFields(fields, crossConfig.fieldsConfig, this.pageCode);
+			this.fields2 = crossConfig.methods.formatFields(fields2, crossConfig.fieldsConfig, this.pageCode);
+
+			this.groupNames = crossConfig[this.pageCode].groupNames;
+
+			if (param.oid) {
+				this.oid = param.oid;
+				this.params = param;
+				this.getDetailByObjectId();
+			};
+		},
+		methods: {
+			getDetailByObjectId: function () {
+				var that = this;
+				var url = jasTools.base.rootPath + "/daq/" + this.pageCode + "/get.do";
+				jasTools.ajax.get(url, {
+					oid: this.oid
+				}, function (data) {
+					that.detail = data.data;
+				});
+			},
+		},
+	});
+</script>
+
+</html>

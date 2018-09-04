@@ -51,6 +51,11 @@ public class CathodicInsulatedJointQuery extends BaseJavaQuery{
 	 * 设备编号 
 	 */
 	private String equipmentCode;
+	
+	/**
+	 * 审核状态
+	 */
+	private String approveStatus;
 
 	@Override
 	public String getQuerySql() {
@@ -88,8 +93,12 @@ public class CathodicInsulatedJointQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(equipmentCode)) {
 				conditionSql += " and cij.equipment_code like :equipmentCode";
 			}
-			conditionSql += " order by cij.create_datetime desc";
+			if (StringUtils.isNotBlank(approveStatus)) {
+				conditionSql += " and cij.approve_status in ("+ approveStatus +")";
+			}
+			conditionSql += this.dataAuthoritySql;
 		}
+		conditionSql += " order by cij.create_datetime desc";
 		return conditionSql;
 	}
 
@@ -142,6 +151,14 @@ public class CathodicInsulatedJointQuery extends BaseJavaQuery{
 
 	public void setEquipmentCode(String equipmentCode) {
 		this.equipmentCode = equipmentCode;
+	}
+
+	public String getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(String approveStatus) {
+		this.approveStatus = approveStatus;
 	} 
 
 }

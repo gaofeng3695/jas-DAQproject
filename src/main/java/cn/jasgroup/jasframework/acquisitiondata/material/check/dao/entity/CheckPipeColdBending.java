@@ -14,6 +14,7 @@ import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
 import cn.jasgroup.jasframework.base.annotation.UniqueConstraintStrategy;
 import cn.jasgroup.jasframework.base.annotation.UniqueConstraints;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
+import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 
 /**
   *<p>类描述：冷弯管检查及信息记录实体类。</p>
@@ -33,7 +34,7 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 )
 @UniqueConstraints(
 	strategys ={
-		@UniqueConstraintStrategy(columnNames={"pipeColdBendingCode"})
+		@UniqueConstraintStrategy(columnNames={"certificateNum"})
 	}
 )
 @JdbcEntity(name="daq_check_pipe_cold_bending")
@@ -45,9 +46,9 @@ public class CheckPipeColdBending extends CommonJdbcEntity{
 	private String projectOid; 
 
 	/**
-	 *  监工单位oid
+	 * 施工单位
 	 */
-	private String constructionUnit; 
+	private String constructUnit;
 
 	/**
 	 *  标段oid
@@ -57,7 +58,7 @@ public class CheckPipeColdBending extends CommonJdbcEntity{
 	/**
 	 * 冷弯管编号
 	 */
-	private String pipeColdBendingCode; 
+	private String pipeColdBendingOid; 
 
 	/**
 	 *  合格证编号
@@ -138,15 +139,6 @@ public class CheckPipeColdBending extends CommonJdbcEntity{
 		super.setField("projectOid");
 	}
 
-	public String getConstructionUnit() {
-		return constructionUnit;
-	}
-
-	public void setConstructionUnit(String constructionUnit) {
-		this.constructionUnit = constructionUnit;
-		super.setField("constructionUnit");
-	}
-
 	public String getTendersOid() {
 		return tendersOid;
 	}
@@ -156,13 +148,12 @@ public class CheckPipeColdBending extends CommonJdbcEntity{
 		super.setField("tendersOid");
 	}
 
-	public String getPipeColdBendingCode() {
-		return pipeColdBendingCode; 
+	public String getPipeColdBendingOid() {
+		return pipeColdBendingOid;
 	}
 
-	public void setPipeColdBendingCode(String pipeColdBendingCode) {
-		this.pipeColdBendingCode = pipeColdBendingCode; 
-		super.setField("pipeColdBendingCode");
+	public void setPipeColdBendingOid(String pipeColdBendingOid) {
+		this.pipeColdBendingOid = pipeColdBendingOid;
 	}
 
 	public String getCertificateNum() {
@@ -291,6 +282,15 @@ public class CheckPipeColdBending extends CommonJdbcEntity{
 	public void setRemarks(String remarks) {
 		this.remarks = remarks; 
 		super.setField("remarks");
+	}
+	
+	public String getConstructUnit() {
+		return constructUnit;
+	}
+
+	public void setConstructUnit(String constructUnit) {
+		this.constructUnit = constructUnit;
+		super.setField("constructUnit");
 	}
 
 }

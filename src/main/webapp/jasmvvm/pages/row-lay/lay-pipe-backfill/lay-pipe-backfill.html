@@ -22,7 +22,8 @@
 		<jas-list-wrapper>
 			<jas-search-for-list slot="search" :form="topSearch" :fields="fields" :fields-config="fieldsConfig" @search="searchList"></jas-search-for-list>
 			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" :search-path="searchPath"
-			  :add-url="addUrl" :detail-url="detailUrl" :delete-path="deletePath" :class-name="className" :template-code="templateCode"></jas-table-for-list>
+			  :add-url="addUrl" :detail-url="detailUrl" :delete-path="deletePath" :class-name="className" :template-code="templateCode"
+			  @locate="locate"></jas-table-for-list>
 		</jas-list-wrapper>
 
 	</div>
@@ -63,7 +64,7 @@
 						name: '管线名称'
 					}, {
 						field: "pipeSegmentOrCrossOid",
-						name: '线路段/传跨越'
+						name: '线路段/穿跨越'
 					}
 				],
 				fieldsConfig: {
@@ -89,6 +90,20 @@
 				},
 				tableFields: [ //
 					{
+						field: 'approveStatus',
+						name: '审核状态',
+						formatter: function (a, b, value, c) {
+							if (value == -1)
+								return '驳回';
+							if (value == 0)
+								return '未提交';
+							if (value == 1)
+								return '审核中';
+							if (value == 2)
+								return '通过';
+							return value;
+						}
+					}, {
 						name: '项目名称',
 						field: 'projectName'
 					}, {
@@ -133,13 +148,13 @@
 					}, {
 						name: '标识埋深(m)',
 						field: 'signDepth'
-					},{
+					}, {
 						name: '施工单位',
 						field: 'constructUnitName'
 					}, {
 						name: '施工日期',
 						field: 'constructDate'
-					},{
+					}, {
 						name: '监理单位',
 						field: 'supervisionUnitName'
 					}, {
@@ -166,6 +181,16 @@
 		methods: {
 			searchList: function () {
 				this.$refs.table.search();
+			},
+			locate: function (row) {
+				// daq_lay_surveying 测量放线表
+				// daq_lay_pipe_trench_excavation 管沟开挖表
+				// daq_lay_pipe_trench_backfill 管沟回填表
+				// daq_lay_land_restoration 地貌恢复表
+				// daq_lay_thermal_insulation 保温表
+
+				var code = 'daq_lay_pipe_trench_backfill';
+				top.app.locate(row.oid, code);
 			},
 		},
 	});

@@ -33,6 +33,7 @@ public class DaqCrossAcrossQuery extends BaseJavaQuery {
 	private String crossOid;
 	private String startMedianStakeOid;
 	private String endMedianStakeOid;
+	private String approveStatus;
 	
 	@Override
 	public String getSql() {
@@ -47,17 +48,17 @@ public class DaqCrossAcrossQuery extends BaseJavaQuery {
 				+ "	u1.unit_name as constructUnitName,"
 				+ "	u2.unit_name as supervisionUnitName"
 				+ " from daq_cross_across t "
-				+ " left join daq_project p on p.oid=t.project_oid "
-				+ " left join daq_pipeline l on l.oid=t.pipeline_oid "
-				+ " left join daq_tenders dt on dt.oid=t.tenders_oid "
+				+ " left join (select oid,project_name from daq_project) p on p.oid=t.project_oid "
+				+ " left join (select oid,pipeline_name from daq_pipeline) l on l.oid=t.pipeline_oid "
+				+ " left join (select oid,tenders_name from daq_tenders) dt on dt.oid=t.tenders_oid "
 				+ " left join v_daq_pipe_segment_cross v on v.oid=t.cross_oid "
 				+ " left join (select m.oid,m.median_stake_code from daq_median_stake m where active=1) ms"
 				+ " on ms.oid=t.start_median_stake_oid "
 				+ " left join (select m.oid,m.median_stake_code from daq_median_stake m where active=1) me"
 				+ " on me.oid=t.end_median_stake_oid "				
-				+ " left join pri_unit u1 on u1.oid=t.construct_unit "
-				+ " left join pri_unit u2 on u2.oid=t.supervision_unit "
-				+ " left join sys_domain sd on sd.code_id=t.across_type "
+				+ " left join (select oid,unit_name from pri_unit) u1 on u1.oid=t.construct_unit "
+				+ " left join (select oid,unit_name from pri_unit) u2 on u2.oid=t.supervision_unit "
+				+ " left join (select code_name,code_id from sys_domain) sd on sd.code_id=t.across_type "
 				+ " where t.active = 1 ";
 		if(StringUtils.isNotBlank(projectOid)){
 			sql += " and t.project_oid = :projectOid ";
@@ -80,6 +81,11 @@ public class DaqCrossAcrossQuery extends BaseJavaQuery {
 		if(null != oids && oids.size()>0){
 			sql += " and oids in (:oids) ";
 		}
+		if(StringUtils.isNotBlank(approveStatus)){
+			sql += " and t.approve_status in ("+ approveStatus +")";
+		}
+		sql += this.dataAuthoritySql;
+		sql += " order by t.create_datetime desc";
 		return sql;
 	}
 
@@ -137,6 +143,14 @@ public class DaqCrossAcrossQuery extends BaseJavaQuery {
 
 	public void setEndMedianStakeOid(String endMedianStakeOid) {
 		this.endMedianStakeOid = endMedianStakeOid;
+	}
+
+	public String getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(String approveStatus) {
+		this.approveStatus = approveStatus;
 	}
 	
 }

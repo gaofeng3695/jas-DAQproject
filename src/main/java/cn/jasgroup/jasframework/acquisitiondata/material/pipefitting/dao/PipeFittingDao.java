@@ -27,7 +27,7 @@ public class PipeFittingDao{
 		String sql= null;
 		switch (pipeTypeCode) {
 		case "pipe_type_code_001"://直钢管
-			sql = "select pipe_code as value,pipe_code as key from daq_material_pipe t where active=1 and is_cut=1 and is_use=0 and is_cold_bend=0";
+			sql = "select pipe_code as value,pipe_code as key from daq_material_pipe t where active=1 and is_use=0 and is_cold_bend=0";
 			break;
 		case "pipe_type_code_002"://热煨弯管
 			sql = "select hot_bends_code as key,hot_bends_code as value from daq_material_hot_bends  t where active=1 and is_use=0";
@@ -48,7 +48,7 @@ public class PipeFittingDao{
 			sql = "select closure_code as key,closure_code as value from daq_material_closure  t where active=1 and is_use=0";
 			break;
 		case "pipe_type_code_008"://冷弯管
-			sql = "select pipe_cold_bending_code as key,pipe_cold_bending_code as value from daq_material_pipe_cold_bending  t where active=1 and is_use=0 and pipe_segment_or_cross_oid='"+pipeSegmentOrCrossOid+"'";
+			sql = "select pipe_cold_bending_code as key,pipe_cold_bending_code as value from daq_material_pipe_cold_bending  t where active=1 and is_use=0 and pipe_segment_or_cross_oid='"+pipeSegmentOrCrossOid+"' and approve_status=2";
 			break;
 		}
 		return this.baseJdbcTemplate.queryForListHump(sql, null);

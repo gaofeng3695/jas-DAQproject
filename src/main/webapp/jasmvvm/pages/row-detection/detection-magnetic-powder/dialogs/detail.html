@@ -16,19 +16,22 @@
 <body>
 	<div id="app" v-cloak>
 
-		<jas-dialog-wrapper>
 
-			<jas-base-group-title name="磁粉检测基本信息"></jas-base-group-title>
-			<jas-detail-table :titles="fieldsArr" :detail="detail"></jas-detail-table>
+		<jas-approve-dialog>
+			<div>
 
-			<jas-sub-detail-group group-name="缺陷信息" :detail-list="detail.powderSubList" :fields="subFieldsArr"></jas-sub-detail-group>
+				<jas-base-group-title name="磁粉检测基本信息"></jas-base-group-title>
+				<jas-detail-table :titles="fieldsArr" :detail="detail"></jas-detail-table>
 
-			<jas-base-group-title name="其他信息"></jas-base-group-title>
-			<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
+				<jas-sub-detail-group group-name="缺陷信息" :detail-list="detail.powderSubList" :fields="subFieldsArr"></jas-sub-detail-group>
 
-			<jas-base-group-title name="附件信息"></jas-base-group-title>
-			<jas-file-list :biz-id="oid"></jas-file-list>
-		</jas-dialog-wrapper>
+				<jas-base-group-title name="其他信息"></jas-base-group-title>
+				<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
+
+				<jas-base-group-title name="附件信息"></jas-base-group-title>
+				<jas-file-list :biz-id="oid"></jas-file-list>
+			</div>
+		</jas-approve-dialog>
 
 
 	</div>
@@ -69,7 +72,7 @@
 						name: '管线名称'
 					}, {
 						field: "pipeSegmentOrCrossName",
-						name: '线路段/传跨越'
+						name: '线路段/穿跨越'
 					}, {
 						field: "weldCode",
 						name: '焊口编号'
@@ -113,7 +116,17 @@
 					}, {
 						field: "collectionDate",
 						name: '采集日期'
-					}
+					}, {
+						field: 'approveStatus',
+						name: '审核状态',
+						formatter: function (a, b, value, c) {
+							if (value == -1) return '驳回';
+							// if (value == 0) return '未上报';
+							if (value == 1) return '审核中';
+							if (value == 2) return '通过';
+							return '未上报';
+						}
+					},
 				],
 				otherArr: [{
 					name: '备注',

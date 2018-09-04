@@ -16,21 +16,24 @@
 <body>
 	<div id="app" v-cloak>
 
-		<jas-dialog-wrapper>
 
-			<jas-base-group-title name="基本信息"></jas-base-group-title>
-			<jas-detail-table :titles="fieldsArr" :detail="detail"></jas-detail-table>
-		  <jas-base-group-title name="位置信息"></jas-base-group-title>
-			<jas-detail-table :titles="addressFieldsArr" :detail="detail"></jas-detail-table>
-			<jas-base-group-title name="管沟开挖数据"></jas-base-group-title>
-			<jas-detail-table :titles="subFieldsArr" :detail="detail"></jas-detail-table>
+		<jas-approve-dialog>
+			<div>
+				<jas-base-group-title name="基本信息"></jas-base-group-title>
+				<jas-detail-table :titles="fieldsArr" :detail="detail"></jas-detail-table>
+				<jas-base-group-title name="位置信息"></jas-base-group-title>
+				<jas-detail-table :titles="addressFieldsArr" :detail="detail"></jas-detail-table>
+				<jas-base-group-title name="管沟开挖数据"></jas-base-group-title>
+				<jas-detail-table :titles="subFieldsArr" :detail="detail"></jas-detail-table>
 
-			<jas-base-group-title name="其他信息"></jas-base-group-title>
-			<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
+				<jas-base-group-title name="其他信息"></jas-base-group-title>
+				<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
 
-			<!--<jas-base-group-title name="附件信息"></jas-base-group-title>
-			<jas-file-list :biz-id="oid"></jas-file-list>-->
-		</jas-dialog-wrapper>
+				<jas-base-group-title name="附件信息"></jas-base-group-title>
+				<jas-file-list :biz-id="oid"></jas-file-list>
+
+			</div>
+		</jas-approve-dialog>
 
 
 	</div>
@@ -48,47 +51,46 @@
 			var that = this;
 			return {
 				addressFieldsArr: [{
-						name: '起始桩号',
-						field: 'startMedianStakeName'
-					}, {
-						name: '相对起始桩里程(m)',
-						field: 'startRelativeMileage'
-					}, {
-						name: '结束桩号',
-						field: 'endMedianStakeName'
-					}, {
-						name: '相对结束桩里程(m)',
-						field: 'endRelativeMileage'
-					},],
-				subFieldsArr: [  {
-						name: '土壤类别',
-						field: 'soilType'
-					}, {
-						name: '管沟深度(m)',
-						field: 'pipeTrenchDepth',
-					}, {
-						name: '沟底宽度(m)',
-						field: 'grooveWidth'
-					}, {
-						name: '放坡角度(°)',
-						field: 'slopeAngle'
-					}, {
-						name: '沟底长度(m)',
-						field: 'grooveHeight',
-					}, {
-						name: '设计转角(°)',
-						field: 'designCornerAngle'
-					}, {
-						name: '实际转角(°)',
-						field: 'actualCornerAngle'
-					}, {
-						name: '结论',
-						field: 'conclusion',
-					},{
-						name: '检查验收意见',
-						field: 'acceptanceOpinion',
-					}
-				],
+					name: '起始桩号',
+					field: 'startMedianStakeName'
+				}, {
+					name: '相对起始桩里程(m)',
+					field: 'startRelativeMileage'
+				}, {
+					name: '结束桩号',
+					field: 'endMedianStakeName'
+				}, {
+					name: '相对结束桩里程(m)',
+					field: 'endRelativeMileage'
+				}, ],
+				subFieldsArr: [{
+					name: '土壤类别',
+					field: 'soilType'
+				}, {
+					name: '管沟深度(m)',
+					field: 'pipeTrenchDepth',
+				}, {
+					name: '沟底宽度(m)',
+					field: 'grooveWidth'
+				}, {
+					name: '放坡角度(°)',
+					field: 'slopeAngle'
+				}, {
+					name: '沟底长度(m)',
+					field: 'grooveHeight',
+				}, {
+					name: '设计转角(°)',
+					field: 'designCornerAngle'
+				}, {
+					name: '实际转角(°)',
+					field: 'actualCornerAngle'
+				}, {
+					name: '结论',
+					field: 'conclusion',
+				}, {
+					name: '检查验收意见',
+					field: 'acceptanceOpinion',
+				}],
 				fieldsArr: [ //
 					{
 						field: "projectName",
@@ -120,6 +122,9 @@
 					}, {
 						field: "supervisionEngineer",
 						name: '监理工程师'
+					}, {
+						name: '审核状态',
+						field: 'approveStatus'
 					}
 				],
 				otherArr: [{
@@ -145,6 +150,18 @@
 				var url = jasTools.base.rootPath + "/jdbc/commonData/layPipeTrenchExcavation/getPage.do";
 				jasTools.ajax.post(url, this.params, function (data) {
 					that.detail = data.rows[0];
+					if (that.detail.approveStatus == -1) {
+						that.detail.approveStatus = '驳回';
+					}
+					if (that.detail.approveStatus == 0) {
+						that.detail.approveStatus = '未提交';
+					}
+					if (that.detail.approveStatus == 1) {
+						that.detail.approveStatus = '审核中';
+					}
+					if (that.detail.approveStatus == 2) {
+						that.detail.approveStatus = '通过';
+					}
 				});
 			},
 		},

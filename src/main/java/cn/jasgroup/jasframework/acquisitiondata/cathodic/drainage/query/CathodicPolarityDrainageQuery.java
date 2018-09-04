@@ -51,6 +51,11 @@ public class CathodicPolarityDrainageQuery extends BaseJavaQuery{
 	 * 设备编号 
 	 */
 	private String equipmentCode;
+	
+	/**
+	 * 审核状态
+	 */
+	private String approveStatus;
 
 	@Override
 	public String getQuerySql() {
@@ -64,8 +69,8 @@ public class CathodicPolarityDrainageQuery extends BaseJavaQuery{
 				+ "LEFT JOIN (select oid, median_stake_code, active from daq_median_stake where active=1) ms ON ms.oid = cpd.median_stake_oid "
 				+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) pu on pu.oid = cpd.supervision_unit "
 				+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) u on u.oid = cpd.construct_unit "
-				+ "LEFT JOIN (SELECT code_id, code_name, active FROM sys_domain where active=1) d ON d.code_name = cpd.ground_bed_material "
-				+ "LEFT JOIN (SELECT code_id, code_name, active FROM sys_domain where active=1) dm ON dm.code_name = cpd.drainage_purpose "
+				+ "LEFT JOIN (SELECT code_id, code_name, active FROM sys_domain where active=1) d ON d.code_id = cpd.ground_bed_material "
+				+ "LEFT JOIN (SELECT code_id, code_name, active FROM sys_domain where active=1) dm ON dm.code_id = cpd.drainage_purpose "
 				+ "WHERE cpd.active = 1";
 		sql += getConditionSql();
 		return sql;
@@ -91,8 +96,12 @@ public class CathodicPolarityDrainageQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(equipmentCode)) {
 				conditionSql += " and cpd.equipment_code like :equipmentCode";
 			}
-			conditionSql += " order by cpd.create_datetime desc";
+			if (StringUtils.isNotBlank(approveStatus)) {
+				conditionSql += " and cpd.approve_status in ("+ approveStatus +")";
+			}
+			conditionSql += this.dataAuthoritySql;
 		}
+		conditionSql += " order by cpd.create_datetime desc";
 		return conditionSql;
 	}
 		
@@ -145,6 +154,14 @@ public class CathodicPolarityDrainageQuery extends BaseJavaQuery{
 
 	public void setEquipmentCode(String equipmentCode) {
 		this.equipmentCode = equipmentCode;
+	}
+
+	public String getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(String approveStatus) {
+		this.approveStatus = approveStatus;
 	} 
 
 }

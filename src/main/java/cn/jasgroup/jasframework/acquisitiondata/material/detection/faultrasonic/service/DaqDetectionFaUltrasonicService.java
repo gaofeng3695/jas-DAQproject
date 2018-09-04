@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.faultrasonic.dao.DaqDetectionFaUltrasonicDao;
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.faultrasonic.dao.DaqDetectionFaUltrasonicSubDao;
+import cn.jasgroup.jasframework.acquisitiondata.material.detection.faultrasonic.dao.entity.DaqDetectionFaUltrasonic;
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.faultrasonic.dao.entity.DaqDetectionFaUltrasonicSub;
 import cn.jasgroup.jasframework.acquisitiondata.material.detection.faultrasonic.query.bo.DaqDetectionFaUltrasonicBo;
 import cn.jasgroup.jasframework.engine.jdbc.service.CommonDataJdbcService;
+import cn.jasgroup.jasframework.support.BaseEntityThreadLocalHolder;
 
 /**
  * @description 全自动超声波检测主表service
@@ -61,5 +63,54 @@ public class DaqDetectionFaUltrasonicService extends CommonDataJdbcService {
 			faUltrasonicBo.setFaUltrasonicSubList(faUltrasonicSubList);
 		}
 		return faUltrasonicBo;
+	}
+	
+	/***
+	  * <p>功能描述：保存后改变焊口的状态。</p>
+	  * <p> 雷凯。</p>	
+	  * @param daqDetectionFaUltrasonic
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年8月21日 下午3:23:50。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public void saveChanageWledStatus(DaqDetectionFaUltrasonic daqDetectionFaUltrasonic){
+		this.faUltrasonicDao.chanageWledStatus(daqDetectionFaUltrasonic.getWeldOid(), 1);
+	}
+	/**
+	  * <p>功能描述：修改前。</p>
+	  * <p> 雷凯。</p>	
+	  * @param daqDetectionFaUltrasonic
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年8月21日 下午3:24:33。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public void updateChanageWledStatusBeforeAdvice(DaqDetectionFaUltrasonic daqDetectionFaUltrasonic){
+		DaqDetectionFaUltrasonic oldDaqDetectionFaUltrasonic = this.faUltrasonicDao.find(daqDetectionFaUltrasonic.getOid());
+		BaseEntityThreadLocalHolder.setEntitySnap(oldDaqDetectionFaUltrasonic);
+	}
+	/**
+	  * <p>功能描述：修改后。</p>
+	  * <p> 雷凯。</p>	
+	  * @param daqDetectionFaUltrasonic
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年8月21日 下午3:24:48。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public void updateChanageWledStatus(DaqDetectionFaUltrasonic daqDetectionFaUltrasonic){
+		DaqDetectionFaUltrasonic oldDaqDetectionFaUltrasonic = (DaqDetectionFaUltrasonic)BaseEntityThreadLocalHolder.getEntitySnap();
+		this.faUltrasonicDao.chanageWledStatus(oldDaqDetectionFaUltrasonic.getWeldOid(), 0);
+		this.faUltrasonicDao.chanageWledStatus(daqDetectionFaUltrasonic.getWeldOid(), 1);
+	}
+	/**
+	  * <p>功能描述：删除后。</p>
+	  * <p> 雷凯。</p>	
+	  * @param daqDetectionFaUltrasonic
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年8月21日 下午3:24:56。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public void deleteChanageWledStatus(DaqDetectionFaUltrasonic daqDetectionFaUltrasonic){
+		DaqDetectionFaUltrasonic oldDaqDetectionFaUltrasonic = faUltrasonicDao.find(daqDetectionFaUltrasonic.getOid());
+		this.faUltrasonicDao.chanageWledStatus(oldDaqDetectionFaUltrasonic.getWeldOid(), 0);
 	}
 }

@@ -70,7 +70,8 @@
 				</el-row>
 			</el-form>
 			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" search-path="/jdbc/commonData/reworkWeld/getPage.do"
-			  :add-url="addUrl" :detail-url="detailUrl" delete-path="/jdbc/commonData/reworkWeld/delete.do" :class-name="className" :template-code="templateCode"></jas-table-for-list>
+			  :add-url="addUrl" :detail-url="detailUrl" delete-path="/jdbc/commonData/reworkWeld/delete.do" :class-name="className"
+			  :template-code="templateCode" @locate="locate"></jas-table-for-list>
 		</jas-list-wrapper>
 
 
@@ -101,6 +102,16 @@
 					weldOid: '',
 				},
 				tableFields: [{
+						field: 'approveStatus',
+						name: '审核状态',
+						formatter: function (a, b, value, c) {
+							if (value == -1) return '驳回';
+							if (value == 0) return '未提交';
+							if (value == 1) return '审核中';
+							if (value == 2) return '通过';
+							return value;
+						}
+					}, {
 						name: '项目名称',
 						field: 'projectName'
 					}, {
@@ -166,7 +177,7 @@
 					tenders: [], //标段
 					pipeline: [], //管线
 					pipeSegment: [],
-					welds:[]//焊口编号
+					welds: [] //焊口编号
 				}
 			}
 		},
@@ -260,7 +271,7 @@
 				if (val) {
 					this
 						.requestDomainFromBizTable(
-							'/daq/weld/getWeldList.do', {
+							'/daq/weld/getOnlyWeldList.do', {
 								pipeSegmentOrCrossOid: val
 							},
 							function (arr) {
@@ -282,6 +293,10 @@
 				this.topSearch.pipeSegmentOrCrossOid = '';
 
 				this.$refs.table.search();
+			},
+			locate: function (row) {
+				var code = 'daq_weld_rework_weld';
+				top.app.locate(row.oid, code);
 			},
 		},
 	});

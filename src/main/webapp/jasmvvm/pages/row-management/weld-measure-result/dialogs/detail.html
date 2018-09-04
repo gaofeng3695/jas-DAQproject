@@ -15,18 +15,20 @@
 
 <body>
 	<div id="app" v-cloak>
-		<jas-dialog-wrapper>
-			<jas-base-group-title name="基础数据"></jas-base-group-title>
-			<jas-detail-table :titles="baseArr" :detail="detail"></jas-detail-table>
-			<jas-base-group-title name="位置数据"></jas-base-group-title>
-			<jas-detail-table :titles="addressArr" :detail="detail"></jas-detail-table>
-			<jas-base-group-title name="中线成果数据"></jas-base-group-title>
-			<jas-detail-table :titles="busArr" :detail="detail"></jas-detail-table>
-			<jas-base-group-title name="其他信息"></jas-base-group-title>
-			<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
-		</jas-dialog-wrapper>
-		<!--	<jas-base-group-title name="附件信息"></jas-base-group-title>
-		<jas-file-list :biz-id="oid"></jas-file-list>-->
+		<jas-approve-dialog>
+			<div>
+				<jas-base-group-title name="基础数据"></jas-base-group-title>
+				<jas-detail-table :titles="baseArr" :detail="detail"></jas-detail-table>
+				<jas-base-group-title name="位置数据"></jas-base-group-title>
+				<jas-detail-table :titles="addressArr" :detail="detail"></jas-detail-table>
+				<jas-base-group-title name="中线成果数据"></jas-base-group-title>
+				<jas-detail-table :titles="busArr" :detail="detail"></jas-detail-table>
+				<jas-base-group-title name="其他信息"></jas-base-group-title>
+				<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
+				<jas-base-group-title name="附件信息"></jas-base-group-title>
+				<jas-file-list :biz-id="oid"></jas-file-list>
+			</div>
+		</jas-approve-dialog>
 	</div>
 </body>
 <script src="./../../../../lib/jquery/jquery-1.12.4.min.js"></script>
@@ -54,7 +56,7 @@
 					}, {
 						name: "线路段名称",
 						field: "pipeSegmentOrCrossName"
-					},  {
+					}, {
 						name: "焊口编号",
 						field: "weldCode"
 					}, {
@@ -76,12 +78,15 @@
 					}, {
 						name: '测量日期',
 						field: 'surveyDate'
-					} ,{
+					}, {
 						name: '采集人员',
 						field: 'collectionPerson'
 					}, {
 						name: '采集日期',
 						field: 'collectionDate'
+					}, {
+						name: '审核状态',
+						field: 'approveStatus'
 					}
 				],
 				addressArr: [{
@@ -90,7 +95,7 @@
 				}, {
 					name: '相对桩位置',
 					field: 'relativeMileage'
-				},{
+				}, {
 					name: '坐标X',
 					field: 'pointx'
 				}, {
@@ -98,16 +103,15 @@
 					field: 'pointy'
 				}],
 				busArr: [{
-						name: '地表高程',
-						field: 'surfaceeLevation'
-					}, {
-						name: '管顶高程',
-						field: 'pipeTopElevation'
-					}, {
-						name: '埋深',
-						field: 'buriedDepth'
-					}
-				],
+					name: '地表高程',
+					field: 'surfaceeLevation'
+				}, {
+					name: '管顶高程',
+					field: 'pipeTopElevation'
+				}, {
+					name: '埋深',
+					field: 'buriedDepth'
+				}],
 				otherArr: [{
 					name: '备注',
 					field: 'remarks',
@@ -136,7 +140,18 @@
 					"/jdbc/commonData/weldMeasuredResult/getPage.do";
 				jasTools.ajax.post(url, this.params, function (data) {
 					that.detail = data.rows[0];
-					
+					if (that.detail.approveStatus == -1) {
+						that.detail.approveStatus = '驳回';
+					}
+					if (that.detail.approveStatus == 0) {
+						that.detail.approveStatus = '未提交';
+					}
+					if (that.detail.approveStatus == 1) {
+						that.detail.approveStatus = '审核中';
+					}
+					if (that.detail.approveStatus == 2) {
+						that.detail.approveStatus = '通过';
+					}
 				});
 			},
 		},

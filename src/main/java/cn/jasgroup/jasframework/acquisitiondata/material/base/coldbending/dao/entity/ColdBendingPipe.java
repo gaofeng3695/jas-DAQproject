@@ -9,7 +9,9 @@ import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
+import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
 import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.UpdateDeleteSet;
 import cn.jasgroup.jasframework.engine.hibernate.entity.CommonHibernateEntity;
@@ -17,7 +19,10 @@ import cn.jasgroup.jasframework.engine.hibernate.entity.CommonHibernateEntity;
 /***
  * 
   *<p>类描述：冷弯管实体类。
-  *{@link cn.jasgroup.jasframework.acquisitiondata.material.base.coldbending.service.ColdBendingPipeService #chanageOriginalPipeUseState()}</p>
+  *{@link cn.jasgroup.jasframework.acquisitiondata.material.base.coldbending.service.ColdBendingPipeService #saveChanageOriginalPipeUseState()}
+  *{@link cn.jasgroup.jasframework.acquisitiondata.material.base.coldbending.service.ColdBendingPipeService #updateChanageOriginalPipeUseState()}
+  *{@link cn.jasgroup.jasframework.acquisitiondata.material.base.coldbending.service.ColdBendingPipeService #deleteChanageOriginalPipeUseState()}
+  *{@link cn.jasgroup.jasframework.acquisitiondata.material.base.coldbending.service.ColdBendingPipeService #updateChanageBeforeAdvice()}</p>
   * @author 雷凯 。
   * @version v1.0.0.1。
   * @since JDK1.8。
@@ -25,10 +30,22 @@ import cn.jasgroup.jasframework.engine.hibernate.entity.CommonHibernateEntity;
  */
 @CommonSaveConfig(
     afterAdvice = {
-        @Process(service = "coldBendingPipeService", method = "chanageOriginalPipeUseState()")
+        @Process(service = "coldBendingPipeService", method = "saveChanageOriginalPipeUseState()")
     }
 )
-
+@CommonUpdateConfig(
+		beforeAdvice={
+				@Process(service = "coldBendingPipeService", method = "updateChanageBeforeAdvice()")
+			},
+		afterAdvice={
+				@Process(service = "coldBendingPipeService", method = "updateChanageOriginalPipeUseState()")
+			}
+)
+@CommonDeleteConfig(
+		afterAdvice={
+				@Process(service = "coldBendingPipeService", method = "deleteChanageOriginalPipeUseState()")
+			}
+	)
 @Entity(name="daq_material_pipe_cold_bending")
 public class ColdBendingPipe extends CommonHibernateEntity{
 	/** 项目oid */
@@ -102,6 +119,11 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 
 	/** 是否使用 */
 	private Integer isUse = 0; 
+	
+	/**
+	 *审核状态 
+	 */
+	private Integer approveStatus = 0; 
 
 	/** 备注 */
 	private String remarks;
@@ -356,4 +378,15 @@ public class ColdBendingPipe extends CommonHibernateEntity{
 		this.remarks = remarks;
 		super.setField("remarks");
 	}
+
+	@Column(name="approve_status")
+	public Integer getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(Integer approveStatus) {
+		this.approveStatus = approveStatus;
+	}
+	
+	
 }

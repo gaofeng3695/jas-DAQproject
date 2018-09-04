@@ -3,6 +3,7 @@ package cn.jasgroup.jasframework.acquisitiondata.material.check.query;
 import org.apache.commons.lang.StringUtils;
 
 import cn.jasgroup.jasframework.acquisitiondata.material.check.query.bo.CheckPipeColdBendingBo;
+import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 
@@ -13,8 +14,15 @@ import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
   * @version v1.0.0.1。
   * @since JDK1.8。
   *<p>创建日期：2018年7月6日 下午5:39:07。</p>
+  *{@link cn.jasgroup.jasframework.acquisitiondata.variate.DaqInjectService #injectDataAuthoritySql()}
  */
-@QueryConfig(scene = "/checkPipeColdBending/getPage", resultClass = CheckPipeColdBendingBo.class)
+@QueryConfig(
+		scene = "/checkPipeColdBending/getPage", 
+		resultClass = CheckPipeColdBendingBo.class,
+		queryBeforeProcess = {
+				 @Process(service = "daqInjectService" , method = "injectDataAuthoritySql(dataAuthoritySql)")
+			}
+	)
 public class CheckPipeColdBendingQuery extends BaseJavaQuery {
 	
 	/**
@@ -30,7 +38,7 @@ public class CheckPipeColdBendingQuery extends BaseJavaQuery {
 	/**
 	 *  管线oid
 	 */
-	private String constructionUnit; 
+	private String constructUnit; 
 
 	/**
 	 *  标段oid
@@ -38,16 +46,17 @@ public class CheckPipeColdBendingQuery extends BaseJavaQuery {
 	private String tendersOid; 
 
 	/**
-	 * 冷弯管编号
+	 * 冷弯管oid
 	 */
-	private String pipeColdBendingCode;
+	private String pipeColdBendingOid;
 	
 	@Override
 	public String getQuerySql() {
-		String sql ="select cpcb.*, pro.project_name, pi.unit_name,te.tenders_name from daq_check_pipe_cold_bending cpcb "
+		String sql ="select cpcb.*, pro.project_name, pi.unit_name,te.tenders_name,cp.pipe_cold_bending_code from daq_check_pipe_cold_bending cpcb "
 				+ "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = cpcb.project_oid "
-				+ "LEFT JOIN (SELECT oid, unit_name, active FROM pri_unit where active=1) pi ON pi.oid = cpcb.construction_unit "
+				+ "LEFT JOIN (SELECT oid, unit_name, active FROM pri_unit where active=1) pi ON pi.oid = cpcb.construct_unit "
 				+ "LEFT JOIN (SELECT oid, tenders_name, active FROM daq_tenders where active=1) te ON te.oid = cpcb.tenders_oid "
+				+ "left join (select oid, pipe_cold_bending_code from daq_material_pipe_cold_bending ) cp on cp.oid = cpcb.pipe_cold_bending_oid "
 				+ "where cpcb.active=1 ";
 		sql += getConditionSql();
 		return sql;
@@ -64,14 +73,15 @@ public class CheckPipeColdBendingQuery extends BaseJavaQuery {
 			if (StringUtils.isNotBlank(tendersOid)) {
 				conditionSql += " and cpcb.tenders_oid = :tendersOid";
 			}
-			if (StringUtils.isNotBlank(constructionUnit)) {
-				conditionSql += " and cpcb.construction_unit = :constructionUnit";
+			if (StringUtils.isNotBlank(constructUnit)) {
+				conditionSql += " and cpcb.construct_unit = :constructUnit";
 			}
-			if (StringUtils.isNotBlank(pipeColdBendingCode)) {
-				conditionSql += " and pipe_cold_bending_code like :pipeColdBendingCode";
+			if (StringUtils.isNotBlank(pipeColdBendingOid)) {
+				conditionSql += " and pipe_cold_bending_oid = :pipeColdBendingOid";
 			}
-			conditionSql += " order by  cpcb.create_datetime desc";
 		}
+		conditionSql += this.dataAuthoritySql;
+		conditionSql += " order by  cpcb.create_datetime desc";
 		return conditionSql;
 	}
 
@@ -91,12 +101,12 @@ public class CheckPipeColdBendingQuery extends BaseJavaQuery {
 		this.projectOid = projectOid;
 	}
 
-	public String getConstructionUnit() {
-		return constructionUnit;
+	public String getConstructUnit() {
+		return constructUnit;
 	}
 
-	public void setConstructionUnit(String constructionUnit) {
-		this.constructionUnit = constructionUnit;
+	public void setConstructUnit(String constructUnit) {
+		this.constructUnit = constructUnit;
 	}
 
 	public String getTendersOid() {
@@ -107,15 +117,12 @@ public class CheckPipeColdBendingQuery extends BaseJavaQuery {
 		this.tendersOid = tendersOid;
 	}
 
-	public String getPipeColdBendingCode() {
-		if (StringUtils.isNotBlank(pipeColdBendingCode)) {
-			return "%"+pipeColdBendingCode+"%";
-		}
-		return null;
+	public String getPipeColdBendingOid() {
+		return pipeColdBendingOid;
 	}
 
-	public void setPipeColdBendingCode(String pipeColdBendingCode) {
-		this.pipeColdBendingCode = pipeColdBendingCode;
+	public void setPipeColdBendingOid(String pipeColdBendingOid) {
+		this.pipeColdBendingOid = pipeColdBendingOid;
 	}
 
 }

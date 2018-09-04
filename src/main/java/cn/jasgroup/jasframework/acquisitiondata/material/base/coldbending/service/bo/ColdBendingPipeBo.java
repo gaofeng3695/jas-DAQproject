@@ -32,6 +32,9 @@ public class ColdBendingPipeBo extends CommonBaseBo{
 	/** 线路段/穿跨越名称 */
 	private String pipeSegmentOrCrossName; 
 
+	/** 原材料钢管Oid */
+	private String pipeOid;
+	
 	/** 原材料钢管编号 */
 	private String pipeCode; 
 
@@ -98,7 +101,12 @@ public class ColdBendingPipeBo extends CommonBaseBo{
 	private Date collectionDate; 
 
 	/** 是否使用 */
-	private String isUse; 
+	private String isUse;
+	
+	/***
+	 * 审核状态
+	 */
+	private Integer approveStatus; 
 
 	/** 备注 */
 	private String remarks;
@@ -358,6 +366,22 @@ public class ColdBendingPipeBo extends CommonBaseBo{
 
 	public void setSupervisionUnitName(String supervisionUnitName) {
 		this.supervisionUnitName = supervisionUnitName;
+	}
+
+	public Integer getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(Integer approveStatus) {
+		this.approveStatus = approveStatus;
+	}
+
+	public String getPipeOid() {
+		return pipeOid;
+	}
+
+	public void setPipeOid(String pipeOid) {
+		this.pipeOid = pipeOid;
 	}
 	
 }

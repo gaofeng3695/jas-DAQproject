@@ -41,15 +41,18 @@
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-						<el-form-item label="施工单位" prop="constructionUnit">
-							<el-select v-model="topSearch.constructionUnit" clearable placeholder="请选择施工单位" size="small">
-								<el-option v-for="item in domain.constructionUnitArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+						<el-form-item label="施工单位" prop="constructUnit">
+							<el-select v-model="topSearch.constructUnit" clearable placeholder="请选择施工单位" size="small">
+								<el-option v-for="item in domain.constructUnitArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
 						<el-form-item label="冷弯管编号">
-							<el-input v-model="topSearch.pipeColdBendingCode" clearable placeholder="请输入冷弯管编号" size="small"></el-input>
+							<!-- <el-input v-model="topSearch.pipeColdBendingCode" clearable placeholder="请输入冷弯管编号" size="small"></el-input> -->
+							<el-select v-model="topSearch.pipeColdBendingOid" clearable placeholder="请输入冷弯管 " size="small">
+								<el-option v-for="item in domain.pipeColdBendingOidArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -83,10 +86,10 @@
 				detailUrl: './pages/row-management/check-cold-bends/dialogs/detail.html',
 				privilegeCode: '',
 				topSearch: {
-					pipeColdBendingCode: "",
+					pipeColdBendingOid: "",
 					projectOid: "",
 					tendersOid: "",
-					constructionUnit: ""
+					constructUnit: ""
 				},
 				tableFields: [{
 					name: '项目名称',
@@ -183,9 +186,10 @@
 						key: '1',
 						value: '不合格'
 					}],
-					constructionUnitArr: [],
+					constructUnitArr: [],
 					project: [], //项目
 					tenders: [], //标段
+					pipeColdBendingOidArr:[]
 				}
 			}
 		},
@@ -202,6 +206,7 @@
 					arr) {
 					that.domain.project = arr;
 				});
+			this.getConstructUnit();
 		},
 		methods: {
 			requestDomainFromBizTable: function (url, obj, cb) {
@@ -226,32 +231,44 @@
 				} else {
 					that.domain.tenders = [];
 					that.topSearch.tendersOid = '';
-					that.domain.constructionUnitArr = [];
-					that.topSearch.constructionUnit = '';
+					that.domain.pipeColdBendingOidArr = [];
+					that.topSearch.pipeColdBendingOid = '';
 				}
 			},
 			tendersChanged: function (val) { //根据标段触发管线列表
 				var that = this;
 				if (val) {
-					this
-						.requestDomainFromBizTable(
-							'/daq/privilege/getConstructionUnitByTendersOid.do', {
-								tendersOid: val
+					this.requestDomainFromBizTable(
+							'/daq/clodBendingPipe/getList.do', {
+								tendersOid:val
 							},
 							function (arr) {
-								that.domain.constructionUnitArr = arr;
+								console.log(arr);
+								that.domain.pipeColdBendingOidArr = arr;
+								console.log(that.domain.pipeColdBendingOidArr);
 							});
 				} else {
-					that.domain.constructionUnitArr = [];
-					that.topSearch.constructionUnit = '';
+					that.domain.pipeColdBendingOidArr = [];
+					that.topSearch.pipeColdBendingOid = '';
 				}
+			},
+			getConstructUnit: function(){
+				var that = this;
+				this.requestDomainFromBizTable(
+					'/daq/privilege/getCurrentUnitId.do', {
+					},
+					function (arr) {
+						that.domain.constructUnitArr = arr;
+					}
+				);
+				
 			},
 			searchList: function () {
 				this.$refs.table.search();
 			},
 			reset: function () {
-				this.topSearch.pipeColdBendingCode = '';
-				this.topSearch.constructionUnit = '';
+				this.topSearch.pipeColdBendingOid = '';
+				this.topSearch.constructUnit = '';
 				this.topSearch.projectOid = '';
 				this.topSearch.tendersOid = '';
 				this.$refs.table.search();

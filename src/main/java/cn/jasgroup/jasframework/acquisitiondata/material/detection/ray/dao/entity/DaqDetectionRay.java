@@ -20,6 +20,7 @@ import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
 import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
 import cn.jasgroup.jasframework.base.annotation.Merge;
+import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.assist.MergeType;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 
@@ -29,11 +30,33 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
  * @version v1.0.0.1。
  * @since JDK1.8。
  * <p>创建日期：2018年7月10日 上午10:06:13。</p>
+ * {@link cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.service.DaqDetectionRayService #saveChanageWledStatus}
+ * {@link cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.service.DaqDetectionRayService #updateChanageWledStatusBeforeAdvice}
+ * {@link cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.service.DaqDetectionRayService #updateChanageWledStatus}
+ * {@link cn.jasgroup.jasframework.acquisitiondata.material.detection.ray.service.DaqDetectionRayService #deleteChanageWledStatus}
  */
 
-@CommonSaveConfig(scene = "/detectionRay/save")
-@CommonUpdateConfig(scene = "/detectionRay/update")
-@CommonDeleteConfig(scene = "/detectionRay/delete")
+@CommonSaveConfig(
+	scene = "/detectionRay/save",
+	afterAdvice = {
+		@Process(service = "daqDetectionRayService", method = "saveChanageWledStatus()")
+	}
+)
+@CommonUpdateConfig(
+	scene = "/detectionRay/update",
+	beforeAdvice={
+		@Process(service = "daqDetectionRayService", method = "updateChanageWledStatusBeforeAdvice()")
+	},
+	afterAdvice={
+		@Process(service = "daqDetectionRayService", method = "updateChanageWledStatus()")
+	}
+)
+@CommonDeleteConfig(
+	scene = "/detectionRay/delete",
+	afterAdvice = {
+		@Process(service = "daqDetectionRayService", method = "deleteChanageWledStatus()")
+	}
+)
 @CommonDeleteBatchConfig(scene = "/detectionRay/deleteBatch")
 @CommonGetConfig(scene = "/detectionRay/get")
 @JdbcEntity(name = "daq_detection_ray")
@@ -51,8 +74,10 @@ public class DaqDetectionRay extends CommonJdbcEntity {
 	/** 线路段/穿跨越 */
 	private String pipeSegmentOrCrossOid;
 
-	/** 焊口编号 */
-	private String weldCode;
+	/**
+	 * 焊口oid
+	 */
+	private String weldOid;
 
 	/** 检测报告编号 */
 	private String detectionReportNum;
@@ -136,16 +161,16 @@ public class DaqDetectionRay extends CommonJdbcEntity {
 		super.setField("pipeSegmentOrCrossOid");
 	}
 
-	@Column(name = "weld_code", length = 36)
-	public String getWeldCode() {
-		return weldCode;
+	@Column(name = "weld_oid", length = 36)
+	public String getWeldOid() {
+		return weldOid;
 	}
 
-	public void setWeldCode(String weldCode) {
-		this.weldCode = weldCode;
-		super.setField("weldCode");
+	public void setWeldOid(String weldOid) {
+		this.weldOid = weldOid;
+		super.setField("weldOid");
 	}
-
+	
 	@Column(name = "detection_report_num", length = 60)
 	public String getDetectionReportNum() {
 		return detectionReportNum;

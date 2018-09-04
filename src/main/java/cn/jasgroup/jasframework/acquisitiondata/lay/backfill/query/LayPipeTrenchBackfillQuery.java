@@ -46,6 +46,11 @@ public class LayPipeTrenchBackfillQuery extends BaseJavaQuery{
 	 * 线路段/穿跨越
 	 */
 	private String pipeSegmentOrCrossOid;
+	
+	/**
+	 * 审核状态
+	 */
+	private String approveStatus;
 
 	@Override
 	public String getQuerySql() {
@@ -84,8 +89,12 @@ public class LayPipeTrenchBackfillQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(pipeSegmentOrCrossOid)) {
 				conditionSql += " and lptb.pipe_segment_or_cross_oid = :pipeSegmentOrCrossOid";
 			}
-			conditionSql += " order by lptb.create_datetime desc";
+			if (StringUtils.isNotBlank(approveStatus)) {
+				conditionSql += " and lptb.approve_status in ("+ approveStatus +")";
+			}
+			conditionSql += this.dataAuthoritySql;
 		}
+		conditionSql += " order by lptb.create_datetime desc";
 		return conditionSql;
 	}
 
@@ -127,6 +136,14 @@ public class LayPipeTrenchBackfillQuery extends BaseJavaQuery{
 
 	public void setPipeSegmentOrCrossOid(String pipeSegmentOrCrossOid) {
 		this.pipeSegmentOrCrossOid = pipeSegmentOrCrossOid;
+	}
+
+	public String getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(String approveStatus) {
+		this.approveStatus = approveStatus;
 	}
 	
 }
