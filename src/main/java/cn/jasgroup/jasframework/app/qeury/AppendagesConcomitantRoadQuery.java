@@ -21,6 +21,7 @@ import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 public class AppendagesConcomitantRoadQuery extends BaseJavaQuery {
 	
 	private String approveStatus;
+	private String constructUnit;
 
 	@Override
 	public String getQuerySql() {
@@ -49,6 +50,9 @@ public class AppendagesConcomitantRoadQuery extends BaseJavaQuery {
 		if (StringUtils.isNotBlank(approveStatus)) {
 			conditionSql = " and t.approve_status in ("+ approveStatus +")";
 		}
+//		if (StringUtils.isNotBlank(constructUnit)) {
+//			conditionSql += " and construct_unit in (select uu.oid from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid=:constructUnit)";
+//		}
 		conditionSql += this.dataAuthoritySql;
 		conditionSql += "  order by t.create_datetime desc";
 		return conditionSql;
@@ -60,6 +64,14 @@ public class AppendagesConcomitantRoadQuery extends BaseJavaQuery {
 
 	public void setApproveStatus(String approveStatus) {
 		this.approveStatus = approveStatus;
+	}
+
+	public String getConstructUnit() {
+		return constructUnit;
+	}
+
+	public void setConstructUnit(String constructUnit) {
+		this.constructUnit = constructUnit;
 	}
 	
 }
