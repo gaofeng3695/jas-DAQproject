@@ -34,6 +34,7 @@ public class DaqDetectionRayQuery extends BaseJavaQuery {
 	private String pipeSegmentOrCrossOid;
 	private String weldOid;
 	private String approveStatus;
+	private String detectionUnit;
 	
 	@Override
 	public String getSql() {
@@ -77,6 +78,9 @@ public class DaqDetectionRayQuery extends BaseJavaQuery {
 		}
 		if (StringUtils.isNotBlank(approveStatus)) {
 			sql += " and t.approve_status in ("+ approveStatus +")";
+		}
+		if (StringUtils.isNotBlank(detectionUnit)) {
+			sql += " and t.detection_unit in (select uu.oid from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid=:detectionUnit)";
 		}
 		sql += this.dataAuthoritySql;
 		sql +=" order by t.create_datetime desc";
@@ -137,6 +141,14 @@ public class DaqDetectionRayQuery extends BaseJavaQuery {
 
 	public void setApproveStatus(String approveStatus) {
 		this.approveStatus = approveStatus;
+	}
+
+	public String getDetectionUnit() {
+		return detectionUnit;
+	}
+
+	public void setDetectionUnit(String detectionUnit) {
+		this.detectionUnit = detectionUnit;
 	}
 	
 }
