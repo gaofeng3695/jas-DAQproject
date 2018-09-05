@@ -34,7 +34,11 @@ public class DaqDetectionUltrasonicQuery extends BaseJavaQuery{
 	private String pipeSegmentOrCrossOid;	
 	private String weldOid;
 	private String approveStatus;
-	private String detectionUnit;
+	
+	/**
+	 * 检测单位oid
+	 */
+	private String constructUnit;
 	
 	@Override
 	public String getSql() {
@@ -79,8 +83,8 @@ public class DaqDetectionUltrasonicQuery extends BaseJavaQuery{
 		if (StringUtils.isNotBlank(approveStatus)) {
 			sql += " and t.approve_status in ("+ approveStatus +")";
 		}	
-		if (StringUtils.isNotBlank(detectionUnit)) {
-			sql += " and t.detection_unit in (select uu.oid from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid=:detectionUnit)";
+		if (StringUtils.isNotBlank(constructUnit)) {
+			sql += " and t.detection_unit in (select uu.oid from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid=:constructUnit)";
 		}
 		sql += this.dataAuthoritySql;
 		sql +=" order by t.create_datetime desc";
@@ -143,12 +147,12 @@ public class DaqDetectionUltrasonicQuery extends BaseJavaQuery{
 		this.approveStatus = approveStatus;
 	}
 
-	public String getDetectionUnit() {
-		return detectionUnit;
+	public String getConstructUnit() {
+		return constructUnit;
 	}
 
-	public void setDetectionUnit(String detectionUnit) {
-		this.detectionUnit = detectionUnit;
+	public void setConstructUnit(String constructUnit) {
+		this.constructUnit = constructUnit;
 	}
 	
 }
