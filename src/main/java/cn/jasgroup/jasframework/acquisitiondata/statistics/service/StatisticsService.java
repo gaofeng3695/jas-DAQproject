@@ -2,6 +2,7 @@ package cn.jasgroup.jasframework.acquisitiondata.statistics.service;
 
 import cn.jasgroup.framework.data.exception.BusinessException;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.ApproveStatisticsBlock;
+import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.ApproveStatusEnum;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.EntryStatisticsBlock;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.dao.StatisticsDao;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.DataApproveStatisticsBo;
@@ -76,8 +77,8 @@ public class StatisticsService {
         for (String statisType : weldApproveBlock.keySet()) {
             if (statisTypes.contains(statisType)) {
                 long enteredCount = resultList.stream().filter(resultBo -> statisType.equals(resultBo.getStatisType())).count();
-                long toSubmitCount = resultList.stream().filter(resultBo -> statisType.equals(resultBo.getStatisType()) && 1 == resultBo.getStatisResult()).count();
-                long repulseCount = resultList.stream().filter(resultBo -> statisType.equals(resultBo.getStatisType()) && 2 == resultBo.getStatisResult()).count();
+                long toSubmitCount = resultList.stream().filter(resultBo -> statisType.equals(resultBo.getStatisType()) && ApproveStatusEnum.UNREPORTED.getCode() == resultBo.getStatisResult().intValue()).count();
+                long repulseCount = resultList.stream().filter(resultBo -> statisType.equals(resultBo.getStatisType()) && ApproveStatusEnum.REJECT.getCode() == resultBo.getStatisResult().intValue()).count();
                 returnList.add(new DataEntryStatisticsBo(statisType, enteredCount, toSubmitCount, repulseCount));
             }
         }
@@ -88,8 +89,13 @@ public class StatisticsService {
 
     /**
      * 数据审核统计, 默认统计
+     * 统计范围:
      *   - 包含6个分类及各分类下的数据统计 {@link ApproveStatisticsBlock#APPROVE_CATEGORY}
      *   - 各分类下的数据统计: {@link ApproveStatisticsBlock#ALL}
+     * 过滤条件:
+     *  - 根据参数施工单位过滤 (该部门及部门以下的)
+     *  - 根据监理单位当前用户过滤 (部门及部门以下的)
+     *  - TODO: 根据登录用户的项目ID
      */
     public List<DataApproveStatisticsBo> dataAuditing(String constructUnitId) {
 
@@ -105,9 +111,10 @@ public class StatisticsService {
             }
             String constructUnitHierarchy = constructUnit.getHierarchy();
 
-            if (!constructUnitHierarchy.startsWith(UnitHierarchyEnum.construct_unit.getHierarchy())) {
-                logger.error("施工单位层级错误, hierarchy={}", constructUnitHierarchy);
-                throw new BusinessException("施工单位层级错误", "403");
+            if (!constructUnitHierarchy.startsWith(UnitHierarchyEnum.construct_unit.getHierarchy()) &&
+                    !constructUnitHierarchy.startsWith(UnitHierarchyEnum.detection_unit.getHierarchy())) {
+                logger.error("施工/检测单位层级错误, hierarchy={}", constructUnitHierarchy);
+                throw new BusinessException("施工/检测单位层级错误", "403");
             }
 
             constructUnits = this.statisticsDao.queryConstructUnitByHierarchy(constructUnitHierarchy);
