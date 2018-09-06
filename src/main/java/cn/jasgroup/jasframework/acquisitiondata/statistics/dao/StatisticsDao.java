@@ -44,7 +44,7 @@ public class StatisticsDao {
      * @param statisTypeList 统计类型来源
      * @return List
      */
-    public List<StatisticsResultBo> listDataEntry(List<String> statisTypeList) {
+    public List<StatisticsResultBo> listDataEntry(List<String> statisTypeList, String projectOid) {
         StringBuilder sql = new StringBuilder();
         if (CollectionUtils.isEmpty(statisTypeList)) {
             return Lists.newArrayList();
@@ -64,10 +64,18 @@ public class StatisticsDao {
                 sql.append(String.format(" select '%s' as statis_type, approve_status as statis_result from %s where active = 1  and create_user_id =:createUserId ", statType, tableName));
             }
 
+            if (!StringUtils.isEmpty(projectOid)) {
+                sql.append(" and projectOid = :projectOid");
+            }
+
             sql.append(i<(statisTypeList.size()-1) ? " UNION ALL ":"");
         }
 
-        return commonDataJdbcDao.queryForList(sql.toString(), ImmutableMap.of("createUserId", ThreadLocalHolder.getCurrentUserId()), StatisticsResultBo.class);
+        Map<String, Object> variables = Maps.newHashMap();
+        variables.put("createUserId", ThreadLocalHolder.getCurrentUserId());
+        variables.put("projectOid", projectOid);
+
+        return commonDataJdbcDao.queryForList(sql.toString(), variables, StatisticsResultBo.class);
     }
 
 
@@ -83,6 +91,10 @@ public class StatisticsDao {
                 " sum(case when (approve_status=" + ApproveStatusEnum.WAIT_AUDITING.getCode() + ") then 1 else 0 end) as unaudited " +
                 " from %s where active = 1 and approve_status!=0 and supervision_unit in (:supervisionUnits) ";
 
+        if (!StringUtils.isEmpty(projectOid)) {
+            sqlTemplate = sqlTemplate.concat(" and project_oid = :projectOid ");
+        }
+
         // 拼接统计SQL
         for (int i = 0; i < codeList.size(); i++) {
             String code = codeList.get(i);
@@ -90,11 +102,6 @@ public class StatisticsDao {
             String tableName = statisticsBlock.getTableName();
             String categoryCode = statisticsBlock.getCategoryCode();
             sql.append(String.format(sqlTemplate, code, categoryCode, tableName));
-
-            if (!StringUtils.isEmpty(projectOid)) {
-                sql.append(" and project_oid =: projectOid ");
-            }
-
 
             // 如果是管道检测分类下的: 统计的字段是检测单位, 其他分类则是施工单位
             if (!CollectionUtils.isEmpty(constructUnitIds)) {

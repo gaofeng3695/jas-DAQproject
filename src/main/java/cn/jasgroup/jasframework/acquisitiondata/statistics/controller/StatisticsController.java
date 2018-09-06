@@ -34,9 +34,10 @@ public class StatisticsController {
      */
     @PostMapping("dataEntry")
     public BaseResult dataEntry(@RequestBody Map<String, Object> params) {
+        @SuppressWarnings("unchecked")
         List<String> stasticsTypes = (List<String>) params.get("stasticsTypes");
-        String objectOid = (String) params.get("objectOid");
-        return ResultVOUtil.ofSuccess(statisticsService.dataEntry(stasticsTypes));
+        String objectOid = (String) params.get("projectOid");
+        return ResultVOUtil.ofSuccess(statisticsService.dataEntry(stasticsTypes, objectOid));
     }
 
 
