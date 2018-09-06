@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * description: 统计相关接口
@@ -25,14 +26,17 @@ public class StatisticsController {
 
     /**
      * 数据录入统计(app)
-     * @param stasticsTypes 统计类型来源:
+     * @param params 统计类型来源:
      * - 支持传入单个, 多个进行统计
      * - 不传默认统计默认的7个
+     *
      * @return {@link BaseResult}
      */
     @PostMapping("dataEntry")
-    public BaseResult dataEntry(@RequestBody(required = false) String stasticsTypes) {
-        return ResultVOUtil.ofSuccess(statisticsService.dataEntry(Arrays.asList(stasticsTypes.split(","))));
+    public BaseResult dataEntry(@RequestBody Map<String, Object> params) {
+        List<String> stasticsTypes = (List<String>) params.get("stasticsTypes");
+        String objectOid = (String) params.get("objectOid");
+        return ResultVOUtil.ofSuccess(statisticsService.dataEntry(stasticsTypes));
     }
 
 
