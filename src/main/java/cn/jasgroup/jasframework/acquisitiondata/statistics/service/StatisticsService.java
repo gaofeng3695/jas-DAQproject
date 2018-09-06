@@ -13,7 +13,12 @@ import cn.jasgroup.jasframework.acquisitiondata.variate.UnitHierarchyEnum;
 import cn.jasgroup.jasframework.security.dao.entity.PriUnit;
 import cn.jasgroup.jasframework.security.service.UnitService;
 import cn.jasgroup.jasframework.support.ThreadLocalHolder;
+import com.google.common.base.Preconditions;
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import com.google.common.collect.MapDifference;
+import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +54,7 @@ public class StatisticsService {
      * - {@link EntryStatisticsBlock#WELD_APPROVE_BLOCK}
      * @return list
      */
-    public List<DataEntryStatisticsBo> dataEntry(List<String> statisTypes) {
+    public List<DataEntryStatisticsBo> dataEntry(List<String> statisTypes, String projectOid) {
 
         List<DataEntryStatisticsBo> returnList = Lists.newArrayList();
         Map<String, String> pipeCheckedBlock = EntryStatisticsBlock.getPipeCheckedBlock();
@@ -63,7 +68,7 @@ public class StatisticsService {
             statisTypes.removeIf(s -> !pipeCheckedBlock.containsKey(s) && !weldApproveBlock.containsKey(s));
         }
 
-        List<StatisticsResultBo> resultList = statisticsDao.listDataEntry(statisTypes);
+        List<StatisticsResultBo> resultList = statisticsDao.listDataEntry(statisTypes, projectOid);
 
         // pipeCheckedBlock: 没有审核操作的: 只统计录入数
         for (String statisType : pipeCheckedBlock.keySet()) {
@@ -84,6 +89,16 @@ public class StatisticsService {
         }
 
         return returnList;
+    }
+
+
+    public static void main(String[] args) {
+        Map<String, Integer> left = ImmutableMap.of("a", 1, "b", 4, "c", 3);
+        Map<String, Integer> right = ImmutableMap.of("a", 1, "d", 4, "c", 3);
+        MapDifference<String, Integer> diff = Maps.difference(left, right);
+        System.out.println(diff.entriesInCommon());
+        System.out.println(diff.entriesOnlyOnLeft());
+        System.out.println(diff.entriesOnlyOnRight());
     }
 
 
