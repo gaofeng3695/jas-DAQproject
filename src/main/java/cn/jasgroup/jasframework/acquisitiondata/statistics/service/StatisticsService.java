@@ -97,7 +97,7 @@ public class StatisticsService {
      *  - 根据监理单位当前用户过滤 (部门及部门以下的)
      *  - TODO: 根据登录用户的项目ID
      */
-    public List<DataApproveStatisticsBo> dataAuditing(String constructUnitId) {
+    public List<DataApproveStatisticsBo> dataAuditing(String projectOid, String constructUnitId) {
 
         List<DataApproveStatisticsBo> returnList = new ArrayList<>();
 
@@ -140,7 +140,7 @@ public class StatisticsService {
             throw new BusinessException("currentUserUnits Not Found", "404");
         }
 
-        List<DataApproveSubBo> dataApproveSubBos = this.statisticsDao.listDataAuditing(supervisionUnits, constructUnits);
+        List<DataApproveSubBo> dataApproveSubBos = this.statisticsDao.listDataAuditing(projectOid, supervisionUnits, constructUnits);
 
         // 包装统计数据的中文名
         dataApproveSubBos.forEach(dataApproveSubBo -> dataApproveSubBo.setCnName(ApproveStatisticsBlock.ALL.get(dataApproveSubBo.getCode()).getCnName()));

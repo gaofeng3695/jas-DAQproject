@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,7 +76,7 @@ public class StatisticsDao {
      * @param constructUnitIds 施工单位ID集合
      * @return List
      */
-    public List<DataApproveSubBo> listDataAuditing(List<String> supervisionUnits, List<String> constructUnitIds) {
+    public List<DataApproveSubBo> listDataAuditing(String projectOid, List<String> supervisionUnits, List<String> constructUnitIds) {
         List<String> codeList = new ArrayList<>(ApproveStatisticsBlock.ALL.keySet());
         StringBuilder sql = new StringBuilder();
         String sqlTemplate = " select '%s' as code, '%s' as category_code, count(*) as total, " +
@@ -90,6 +91,11 @@ public class StatisticsDao {
             String categoryCode = statisticsBlock.getCategoryCode();
             sql.append(String.format(sqlTemplate, code, categoryCode, tableName));
 
+            if (!StringUtils.isEmpty(projectOid)) {
+                sql.append(" and project_oid =: projectOid ");
+            }
+
+
             // 如果是管道检测分类下的: 统计的字段是检测单位, 其他分类则是施工单位
             if (!CollectionUtils.isEmpty(constructUnitIds)) {
                 if (ApproveStatisticsBlock.PIPE_INSPECTION_BLOCK.containsKey(code)) {
@@ -98,13 +104,18 @@ public class StatisticsDao {
                     sql.append(String.format(" and %s in (:constructUnitIds) ", ApproveStatisticsBlock.CONSTRUCT_UNIT));
                 }
             }
+
             sql.append(i<(codeList.size()-1) ? " UNION ALL ":"");
         }
 
-        return commonDataJdbcDao.queryForList(sql.toString(),
-                ImmutableMap.of("constructUnitIds", constructUnitIds==null?new ArrayList<>():constructUnitIds, "supervisionUnits", supervisionUnits),
-                DataApproveSubBo.class);
+        Map<String, Object> variables = Maps.newHashMap();
+        variables.put("constructUnitIds", constructUnitIds);
+        variables.put("supervisionUnits", supervisionUnits);
+        variables.put("projectOid", projectOid);
+        return commonDataJdbcDao.queryForList(sql.toString(), variables, DataApproveSubBo.class);
     }
+
+
 
     public List<String> queryConstructUnitByHierarchy(String hierarchy) {
         String sql = " select oid from pri_unit where active = 1 and hierarchy like :hierarchy ";

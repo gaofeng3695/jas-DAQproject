@@ -6,6 +6,7 @@ import cn.jasgroup.jasframework.acquisitiondata.utils.ResultVOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -24,14 +25,14 @@ public class StatisticsController {
 
     /**
      * 数据录入统计(app)
-     * @param stasticTypes 统计类型来源:
-     *                     - 支持传入单个, 多个进行统计
-     *                     - 不传默认统计默认的7个
+     * @param stasticsTypes 统计类型来源:
+     * - 支持传入单个, 多个进行统计
+     * - 不传默认统计默认的7个
      * @return {@link BaseResult}
      */
     @PostMapping("dataEntry")
-    public BaseResult dataEntry(@RequestBody(required = false) List<String> stasticTypes) {
-        return ResultVOUtil.ofSuccess(statisticsService.dataEntry(stasticTypes));
+    public BaseResult dataEntry(@RequestBody(required = false) String stasticsTypes) {
+        return ResultVOUtil.ofSuccess(statisticsService.dataEntry(Arrays.asList(stasticsTypes.split(","))));
     }
 
 
@@ -40,7 +41,8 @@ public class StatisticsController {
      * @return {@link BaseResult}
      */
     @GetMapping("dataAuditing")
-    public BaseResult dataAuditing(@RequestParam(required = false) String constructUnit) {
-        return ResultVOUtil.ofSuccess(this.statisticsService.dataAuditing(constructUnit));
+    public BaseResult dataAuditing(@RequestParam(required = false) String constructUnit,
+                                   @RequestParam(required = false) String projectOid) {
+        return ResultVOUtil.ofSuccess(this.statisticsService.dataAuditing(projectOid, constructUnit));
     }
 }
