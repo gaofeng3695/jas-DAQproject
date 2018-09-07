@@ -27,7 +27,7 @@ public class ColdBendingPipeDao extends BaseJdbcDao{
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>>getList(String tendersOid){
-		String sql = "select t.oid as key,t.pipe_cold_bending_code as value,t.tenders_oid "
+		String sql = "select t.oid as key,t.pipe_cold_bending_code as value,t.tenders_oid,t.is_use,t.approve_status "
 				+ "from daq_material_pipe_cold_bending t "
 				+ "where t.active=1";
 		if(StringUtils.isNotBlank(tendersOid)){

@@ -52,7 +52,7 @@ public class CheckPipeColdBendingQuery extends BaseJavaQuery {
 	
 	@Override
 	public String getQuerySql() {
-		String sql ="select cpcb.*, pro.project_name, pi.unit_name,te.tenders_name,cp.pipe_cold_bending_code from daq_check_pipe_cold_bending cpcb "
+		String sql ="select cpcb.*, pro.project_name, pi.unit_name,pi.unit_name as construct_unit_name,te.tenders_name,cp.pipe_cold_bending_code from daq_check_pipe_cold_bending cpcb "
 				+ "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = cpcb.project_oid "
 				+ "LEFT JOIN (SELECT oid, unit_name, active FROM pri_unit where active=1) pi ON pi.oid = cpcb.construct_unit "
 				+ "LEFT JOIN (SELECT oid, tenders_name, active FROM daq_tenders where active=1) te ON te.oid = cpcb.tenders_oid "

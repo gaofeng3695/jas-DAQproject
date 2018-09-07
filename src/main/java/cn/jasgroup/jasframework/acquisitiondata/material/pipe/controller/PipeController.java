@@ -71,11 +71,19 @@ public class PipeController {
 		Map<String,Object> dataMap = new HashMap<String,Object>();
 		try {
 			List<Map<String, Object>> coldBendingRows = this.coldBendingPipeService.getListData(null);
-			dataMap.put("coldBendingData", coldBendingRows);
+			dataMap.put("coldBendingData", coldBendingRows);//冷弯管
 			List<Map<String,Object>> pipeRows = this.pipeService.getMaterialPipeList();
-			dataMap.put("materialPipeData", pipeRows);
-			List<Map<String,Object>> HotBendsRows = this.pipeService.getMaterialHotBendsList();
-			dataMap.put("materialHotBendsData", HotBendsRows);
+			dataMap.put("materialPipeData", pipeRows);//钢管
+			List<Map<String,Object>> hotBendsRows = this.pipeService.getMaterialHotBendsList();
+			dataMap.put("materialHotBendsData", hotBendsRows);//热煨弯管
+			List<Map<String,Object>> teeRows = this.pipeService.getMaterialTeeList();
+			dataMap.put("materialTeeData", teeRows);//三通
+			List<Map<String,Object>> jnsulatedJointRows = this.pipeService.getMaterialJnsulatedJointList();
+			dataMap.put("materialJnsulatedJointData", jnsulatedJointRows);//绝缘接头
+			List<Map<String,Object>> reducerRows = this.pipeService.getMaterialReducerList();
+			dataMap.put("materialReducerData", reducerRows);//大小头
+			List<Map<String,Object>> closureRows = this.pipeService.getMaterialClosureList();
+			dataMap.put("materialClosureData", closureRows);//封堵物
 			result = new SimpleResult<Map<String,Object>>(1, "200", "ok", dataMap);
 		} catch (Exception e) {
 			result = new SimpleResult<Map<String,Object>>(-1, "400", e.getMessage());

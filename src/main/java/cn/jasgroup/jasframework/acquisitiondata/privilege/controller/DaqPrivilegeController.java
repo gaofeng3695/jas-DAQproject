@@ -322,8 +322,8 @@ public class DaqPrivilegeController extends BaseController{
 			dataMap.put("pipeSegmentOrCrossData", pipeSegmentOrCrossRows);
 			List<Map<String,Object>> supervisionUnitRows = this.daqPrivilegeService.getSupervisionUnitByTendersOid(null);
 			dataMap.put("supervisionUnitData", supervisionUnitRows);
-			List<Map<String,Object>> medianStakeRows = this.daqPrivilegeService.getMedianStakeList(null);
-			dataMap.put("medianStakeData", medianStakeRows);
+//			List<Map<String,Object>> medianStakeRows = this.daqPrivilegeService.getMedianStakeList(null);
+//			dataMap.put("medianStakeData", medianStakeRows);
 			result = new SimpleResult<Map<String,Object>>(0, "200", "ok", dataMap);
 		} catch (Exception e) {
 			result = new SimpleResult<>(-1, "400", e.getMessage());
