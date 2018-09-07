@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +44,7 @@ public class StatisticsDao {
      * @param statisTypeList 统计类型来源
      * @return List
      */
-    public List<StatisticsResultBo> listDataEntry(List<String> statisTypeList) {
+    public List<StatisticsResultBo> listDataEntry(List<String> statisTypeList, String projectOid) {
         StringBuilder sql = new StringBuilder();
         if (CollectionUtils.isEmpty(statisTypeList)) {
             return Lists.newArrayList();
@@ -63,10 +64,18 @@ public class StatisticsDao {
                 sql.append(String.format(" select '%s' as statis_type, approve_status as statis_result from %s where active = 1  and create_user_id =:createUserId ", statType, tableName));
             }
 
+            if (!StringUtils.isEmpty(projectOid)) {
+                sql.append(" and projectOid = :projectOid");
+            }
+
             sql.append(i<(statisTypeList.size()-1) ? " UNION ALL ":"");
         }
 
-        return commonDataJdbcDao.queryForList(sql.toString(), ImmutableMap.of("createUserId", ThreadLocalHolder.getCurrentUserId()), StatisticsResultBo.class);
+        Map<String, Object> variables = Maps.newHashMap();
+        variables.put("createUserId", ThreadLocalHolder.getCurrentUserId());
+        variables.put("projectOid", projectOid);
+
+        return commonDataJdbcDao.queryForList(sql.toString(), variables, StatisticsResultBo.class);
     }
 
 
@@ -75,12 +84,16 @@ public class StatisticsDao {
      * @param constructUnitIds 施工单位ID集合
      * @return List
      */
-    public List<DataApproveSubBo> listDataAuditing(List<String> supervisionUnits, List<String> constructUnitIds) {
+    public List<DataApproveSubBo> listDataAuditing(String projectOid, List<String> supervisionUnits, List<String> constructUnitIds) {
         List<String> codeList = new ArrayList<>(ApproveStatisticsBlock.ALL.keySet());
         StringBuilder sql = new StringBuilder();
         String sqlTemplate = " select '%s' as code, '%s' as category_code, count(*) as total, " +
                 " sum(case when (approve_status=" + ApproveStatusEnum.WAIT_AUDITING.getCode() + ") then 1 else 0 end) as unaudited " +
                 " from %s where active = 1 and approve_status!=0 and supervision_unit in (:supervisionUnits) ";
+
+        if (!StringUtils.isEmpty(projectOid)) {
+            sqlTemplate = sqlTemplate.concat(" and project_oid = :projectOid ");
+        }
 
         // 拼接统计SQL
         for (int i = 0; i < codeList.size(); i++) {
@@ -98,13 +111,18 @@ public class StatisticsDao {
                     sql.append(String.format(" and %s in (:constructUnitIds) ", ApproveStatisticsBlock.CONSTRUCT_UNIT));
                 }
             }
+
             sql.append(i<(codeList.size()-1) ? " UNION ALL ":"");
         }
 
-        return commonDataJdbcDao.queryForList(sql.toString(),
-                ImmutableMap.of("constructUnitIds", constructUnitIds==null?new ArrayList<>():constructUnitIds, "supervisionUnits", supervisionUnits),
-                DataApproveSubBo.class);
+        Map<String, Object> variables = Maps.newHashMap();
+        variables.put("constructUnitIds", constructUnitIds);
+        variables.put("supervisionUnits", supervisionUnits);
+        variables.put("projectOid", projectOid);
+        return commonDataJdbcDao.queryForList(sql.toString(), variables, DataApproveSubBo.class);
     }
+
+
 
     public List<String> queryConstructUnitByHierarchy(String hierarchy) {
         String sql = " select oid from pri_unit where active = 1 and hierarchy like :hierarchy ";

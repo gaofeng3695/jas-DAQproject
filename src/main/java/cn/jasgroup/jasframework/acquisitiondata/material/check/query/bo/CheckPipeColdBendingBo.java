@@ -7,7 +7,9 @@ import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class CheckPipeColdBendingBo {
+import cn.jasgroup.jasframework.base.data.CommonBaseBo;
+
+public class CheckPipeColdBendingBo extends CommonBaseBo{
 
 	/**
 	 * oid
@@ -33,6 +35,7 @@ public class CheckPipeColdBendingBo {
 	 * 监工单位名称
 	 */
 	private String unitName;
+	private String constructUnitName;
 
 	/**
 	 * 标段oid
@@ -308,6 +311,14 @@ public class CheckPipeColdBendingBo {
 
 	public void setPipeColdBendingOid(String pipeColdBendingOid) {
 		this.pipeColdBendingOid = pipeColdBendingOid;
+	}
+
+	public String getConstructUnitName() {
+		return constructUnitName;
+	}
+
+	public void setConstructUnitName(String constructUnitName) {
+		this.constructUnitName = constructUnitName;
 	}
 	
 }

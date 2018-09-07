@@ -43,7 +43,7 @@ public class PipeDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getMaterialPipeList(){
-		String sql = "select oid as key,pipe_code as value from daq_material_pipe where active=1";
+		String sql = "select oid as key,pipe_code as value,is_use,is_cold_bend from daq_material_pipe where active=1";
 		return baseJdbcDao.queryForList(sql, null);
 	}
 	/**
@@ -55,7 +55,55 @@ public class PipeDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getMaterialHotBendsList(){
-		String sql = "select oid as key,hot_bends_code as value from daq_material_hot_bends where active=1";
+		String sql = "select oid as key,hot_bends_code as value,is_use from daq_material_hot_bends where active=1";
+		return baseJdbcDao.queryForList(sql, null);
+	}
+	/**
+	  * <p>功能描述：获取所有的三通列表。</p>
+	  * <p> 雷凯。</p>	
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年9月5日 下午4:12:34。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String,Object>> getMaterialTeeList(){
+		String sql = "select oid as key,tee_code as value,is_use from daq_material_tee  t where active=1";
+		return baseJdbcDao.queryForList(sql, null);
+	}
+	/**
+	  * <p>功能描述：获取所有的绝缘接头列表。</p>
+	  * <p> 雷凯。</p>	
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年9月5日 下午4:13:35。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String,Object>> getMaterialJnsulatedJointList(){
+		String sql = "select oid as key,manufacturer_code as value,is_use from daq_material_insulated_joint t where active=1";
+		return baseJdbcDao.queryForList(sql, null);
+	}
+	/***
+	  * <p>功能描述：获取所有的大小头列表。</p>
+	  * <p> 雷凯。</p>	
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年9月5日 下午4:14:03。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String,Object>> getMaterialReducerList(){
+		String sql = "select oid as key,reducer_code as value,is_use from daq_material_reducer t where active=1";
+		return baseJdbcDao.queryForList(sql, null);
+	}
+	/***
+	 * <p>功能描述：获取所有的封堵物列表。</p>
+	 * <p> 雷凯。</p>	
+	 * @return
+	 * @since JDK1.8。
+	 * <p>创建日期:2018年9月5日 下午4:14:03。</p>
+	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String,Object>> getMaterialClosureList(){
+		String sql = "select oid as key,closure_code as value,is_use from daq_material_closure t where active=1";
 		return baseJdbcDao.queryForList(sql, null);
 	}
 }

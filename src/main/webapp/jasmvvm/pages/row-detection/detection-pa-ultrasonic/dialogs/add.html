@@ -79,6 +79,9 @@
 						field: "detectionReportNum",
 						name: '检测报告编号'
 					}, {
+						field:"detectionFileNum",
+						name: "检测文件编号 "
+					},{
 						field: "detectionDeta",
 						name: '检测日期'
 					}, {
@@ -91,14 +94,11 @@
 						field: "evaluationResult",
 						name: '评定结果'
 					}, {
-						field: "detectionLength",
-						name: '检测长度(mm)'
-					}, {
 						field: "detectionUnit",
 						name: '检测单位'
 					}, {
-						field: "detectionPerson",
-						name: '检测人员'
+						field: "auditor",
+						name: '审核人员'
 					}, {
 						field: "supervisionUnit",
 						name: '监理单位'
@@ -118,7 +118,7 @@
 						field: "amplitudeRegion",
 						name: '振幅区域'
 					}, {
-						field: "defectSize",
+						field: "defectLength",
 						name: '缺陷长度(mm)'
 					}, {
 						field: "defectDepth",
@@ -131,7 +131,7 @@
 				sonFormDefault: {
 					defectPosition: '', // 缺陷位置
 					amplitudeRegion: '', //缺陷性质
-					defectSize: '', // 缺陷尺寸(mm/mm²/点)
+					defectLength: '', // 缺陷尺寸(mm/mm²/点)
 					defectDepth: '', // 缺陷尺寸(mm/mm²/点)
 					height: '', // 缺陷尺寸(mm/mm²/点)
 				},
@@ -173,6 +173,9 @@
 					detectionReportNum: {
 						type: 'input',
 					},
+					detectionFileNum: {
+						type: 'input',
+					},
 					detectionDeta: {
 						type: 'date',
 						isRequired: true,
@@ -195,11 +198,6 @@
 							value: '不合格'
 						}],
 					},
-					detectionLength: {
-						type: 'number',
-						max: 100000000,
-						precision: 3,
-					},
 					detectionDispose: {
 						type: 'select',
 						options: [{
@@ -215,7 +213,7 @@
 						options: [],
 						isRequired: true
 					},
-					detectionPerson: {
+					auditor: {
 						type: 'input',
 					},
 					supervisionUnit: {
@@ -235,7 +233,7 @@
 					amplitudeRegion: {
 						type: 'input',
 					},
-					defectSize: {
+					defectLength: {
 						type: 'number',
 						max: 100000000,
 						precision: 3,
@@ -258,13 +256,13 @@
 					pipeSegmentOrCrossOid: '', // '线路段/穿跨越'
 					weldCode: '', // '焊口编号'
 					detectionReportNum: '', // '检测报告编号'
+					detectionFileNum: '', // '检测报告编号'
 					detectionDeta: '', // '检测日期'
 					detectionType: '', // '检测类型'
 					detectionDispose: '', // '检测处置'
 					evaluationResult: '', // '评定结果'
-					detectionLength: '', // '检测长度(mm)'
 					detectionUnit: '', // '检测单位'
-					detectionPerson: '', // '检测人员'
+					auditor: '', // '审核人员'
 					supervisionUnit: '', // '监理单位'
 					supervisionEngineer: '', // '监理工程师'
 					collectionDate: '', // '采集日期'

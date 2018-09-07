@@ -51,6 +51,11 @@ public class LayPipeTrenchExcavationQuery extends BaseJavaQuery{
 	 * 审核状态
 	 */
 	private String approveStatus;
+		
+	/**
+	* 施工单位
+	*/		
+	private String constructUnit;
 
 	@Override
 	public String getQuerySql() {
@@ -90,6 +95,9 @@ public class LayPipeTrenchExcavationQuery extends BaseJavaQuery{
 			}
 			if (StringUtils.isNotBlank(approveStatus)) {
 				conditionSql += " and lpte.approve_status in ("+ approveStatus +")";
+			}	
+			if (StringUtils.isNotBlank(constructUnit)) {
+				conditionSql += " and construct_unit in (select uu.oid from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid=:constructUnit)";
 			}
 			conditionSql += this.dataAuthoritySql;
 		}
@@ -143,6 +151,14 @@ public class LayPipeTrenchExcavationQuery extends BaseJavaQuery{
 
 	public void setApproveStatus(String approveStatus) {
 		this.approveStatus = approveStatus;
+	}
+
+	public String getConstructUnit() {
+		return constructUnit;
+	}
+
+	public void setConstructUnit(String constructUnit) {
+		this.constructUnit = constructUnit;
 	}
 	
 }
