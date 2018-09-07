@@ -196,9 +196,6 @@
 			this.requestConfig();
 			this.requestRule();
 			this.requestFieldConfigByOid();
-			if (!this.isAddPage) {
-				this.requestDetailByObj(); //请求表单详情
-			}
 		},
 		methods: {
 			requestConfig: function () {
@@ -245,7 +242,7 @@
 					if (that.isAddPage) {
 						that.getAddField(fieldsGrouped);
 					} else {
-						that.getEditField(fieldsGrouped);
+						that.requestDetailByObj(fieldsGrouped); //请求表单详情
 					}
 				})
 			},
@@ -463,7 +460,7 @@
 					that.$refs.upload.requestFile(that.formData[that.pkArray[0]]); // 触发附件请求
 				});
 			},
-			requestDetailByObj: function () { //请求表单详情
+			requestDetailByObj: function (fieldsGrouped) { //请求表单详情
 				var that = this;
 				var url = jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/get.do";
 				//该接口需要入参主键，因为主键不确定，所以全部传入表单对象
@@ -475,6 +472,7 @@
 						}
 					} */
 					that.formData = data.data;
+					that.getEditField(fieldsGrouped);
 				});
 			},
 			cancel: function () {

@@ -117,6 +117,10 @@ public class ConstructionWeldBo extends CommonBaseBo {
 	 * 前管件编号
 	 */
 	private String frontPipeCode;
+	/***
+	 * 前管件oid
+	 */
+	private String frontPipeOid;
 
 	/**
 	 * 后管件类型
@@ -132,6 +136,10 @@ public class ConstructionWeldBo extends CommonBaseBo {
 	 * 后管件编号
 	 */
 	private String backPipeCode;
+	/**
+	 * 后管件oid
+	 */
+	private String backPipeOid;
 
 	/**
 	 * 焊条批号
@@ -657,6 +665,22 @@ public class ConstructionWeldBo extends CommonBaseBo {
 
 	public void setBackPipeTypeName(String backPipeTypeName) {
 		this.backPipeTypeName = backPipeTypeName;
+	}
+
+	public String getFrontPipeOid() {
+		return frontPipeOid;
+	}
+
+	public void setFrontPipeOid(String frontPipeOid) {
+		this.frontPipeOid = frontPipeOid;
+	}
+
+	public String getBackPipeOid() {
+		return backPipeOid;
+	}
+
+	public void setBackPipeOid(String backPipeOid) {
+		this.backPipeOid = backPipeOid;
 	}
 	
 }

@@ -188,9 +188,9 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="前管件编号" prop="frontPipeCode" required>
-								<el-select v-model="formData.frontPipeCode" clearable placeholder="请选择前管件编号" size="small">
-									<el-option v-for="item in domain.frontPipeCodes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							<el-form-item label="前管件编号" prop="frontPipeOid" required>
+								<el-select v-model="formData.frontPipeOid" clearable placeholder="请选择前管件编号" size="small">
+									<el-option v-for="item in domain.frontPipeOids" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 
 							</el-form-item>
@@ -204,11 +204,11 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="后管件编号" prop="backPipeCode" required>
-								<el-select v-model="formData.backPipeCode" clearable placeholder="请选择后管件编号" size="small">
-									<el-option v-for="item in domain.backPipeCodes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+							<el-form-item label="后管件编号" prop="backPipeOid" required>
+								<el-select v-model="formData.backPipeOid" clearable placeholder="请选择后管件编号" size="small">
+									<el-option v-for="item in domain.backPipeOids" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
-								<!--<el-input v-model="formData.backPipeCode" placeholder="请输入后管件编号" size="small"></el-input>-->
+								<!--<el-input v-model="formData.backPipeOid" placeholder="请输入后管件编号" size="small"></el-input>-->
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
@@ -309,8 +309,8 @@
 					weldProduces: [], //焊接工艺
 					weldMethods: [], //焊接方式
 					pipeTypes: [], //管件类型
-					frontPipeCodes: [], //前管件
-					backPipeCodes: [], //后管件
+					frontPipeOids: [], //前管件
+					backPipeOids: [], //后管件
 					surfaceChecks: [{
 						key: 1,
 						value: '合格'
@@ -387,7 +387,7 @@
 						message: '前管件类型为必填项',
 						trigger: 'change'
 					}],
-					frontPipeCode: [{
+					frontPipeOid: [{
 						required: true,
 						message: '前管件编号为必填项',
 						trigger: 'change'
@@ -397,7 +397,7 @@
 						message: '后管件类型为必填项',
 						trigger: 'change'
 					}],
-					backPipeCode: [{
+					backPipeOid: [{
 						required: true,
 						message: '后管件编号为必填项',
 						trigger: 'change'
@@ -414,9 +414,9 @@
 					medianStakeOid: "",
 					relativeMileage: "",
 					frontPipeType: "",
-					frontPipeCode: null,
+					frontPipeOid: null,
 					backPipeType: null,
-					backPipeCode: null,
+					backPipeOid: null,
 					weldRodBatchNum: null,
 					weldWireBatchNum: null,
 					weldProduce: null,
@@ -646,11 +646,11 @@
 								pipeTypeCode: val
 							},
 							function (arr) {
-								that.domain.frontPipeCodes = arr;
+								that.domain.frontPipeOids = arr;
 							});
 				} else {
-					that.domain.frontPipeCodes = [];
-					that.formData.frontPipeCode = "";
+					that.domain.frontPipeOids = [];
+					that.formData.frontPipeOid = "";
 				}
 			},
 			backpipeChange: function (val) { //触发后管件编号
@@ -663,11 +663,11 @@
 								pipeTypeCode: val
 							},
 							function (arr) {
-								that.domain.backPipeCodes = arr;
+								that.domain.backPipeOids = arr;
 							});
 				} else {
-					that.domain.backPipeCodes = [];
-					that.formData.backPipeCode = '';
+					that.domain.backPipeOids = [];
+					that.formData.backPipeOid = '';
 				}
 			},
 			submit: function (formName) {

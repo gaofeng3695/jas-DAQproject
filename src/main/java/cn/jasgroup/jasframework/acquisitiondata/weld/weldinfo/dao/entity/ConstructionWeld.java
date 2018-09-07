@@ -121,7 +121,7 @@ public class ConstructionWeld extends CommonJdbcEntity {
 	/**
 	 * 前管件编号 
 	 */
-	private String frontPipeCode; 
+	private String frontPipeOid; 
 
 	/**
 	 * 后管件类型 
@@ -131,7 +131,7 @@ public class ConstructionWeld extends CommonJdbcEntity {
 	/**
 	 * 后管件编号 
 	 */
-	private String backPipeCode; 
+	private String backPipeOid; 
 
 	/**
 	 * 焊条批号 
@@ -319,14 +319,6 @@ public class ConstructionWeld extends CommonJdbcEntity {
 		super.setField("frontPipeType");
 	}
 
-	public String getFrontPipeCode() {
-		return frontPipeCode; 
-	}
-
-	public void setFrontPipeCode(String frontPipeCode) {
-		this.frontPipeCode = frontPipeCode; 
-		super.setField("frontPipeCode");
-	}
 
 	public String getBackPipeType() {
 		return backPipeType; 
@@ -336,14 +328,23 @@ public class ConstructionWeld extends CommonJdbcEntity {
 		this.backPipeType = backPipeType; 
 		super.setField("backPipeType");
 	}
-
-	public String getBackPipeCode() {
-		return backPipeCode; 
+	
+	public String getFrontPipeOid() {
+		return frontPipeOid;
 	}
 
-	public void setBackPipeCode(String backPipeCode) {
-		this.backPipeCode = backPipeCode; 
-		super.setField("backPipeCode");
+	public void setFrontPipeOid(String frontPipeOid) {
+		this.frontPipeOid = frontPipeOid;
+		super.setField("frontPipeOid");
+	}
+
+	public String getBackPipeOid() {
+		return backPipeOid;
+	}
+
+	public void setBackPipeOid(String backPipeOid) {
+		this.backPipeOid = backPipeOid;
+		super.setField("backPipeOid");
 	}
 
 	public String getWeldRodBatchNum() {
