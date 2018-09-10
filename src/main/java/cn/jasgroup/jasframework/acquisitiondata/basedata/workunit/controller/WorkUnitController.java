@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import cn.jasgroup.framework.data.result.ListResult;
+import cn.jasgroup.framework.data.result.SimpleResult;
+import cn.jasgroup.jasframework.acquisitiondata.basedata.weldproduct.service.WeldProductService;
+import cn.jasgroup.jasframework.acquisitiondata.basedata.workperson.service.WorkPersonService;
 import cn.jasgroup.jasframework.acquisitiondata.basedata.workunit.service.WorkUnitService;
 import cn.jasgroup.jasframework.security.controller.UnitController;
 import cn.jasgroup.jasframework.security.dao.entity.PriUnit;
@@ -28,6 +31,12 @@ public class WorkUnitController {
 
 	@Autowired
 	private WorkUnitService workUnitService;
+	
+	@Autowired
+	private WorkPersonService workPersonService;
+	
+	@Autowired
+	private WeldProductService weldProductService;
 	
 	@Autowired
 	private UnitController unitController;
@@ -102,6 +111,34 @@ public class WorkUnitController {
 			result = new ListResult<>(1, "200", "ok", rows);
 		} catch (Exception e) {
 			result = new ListResult<>(-1, "400", e.getMessage());
+			e.printStackTrace();
+		}
+		return result;
+	}
+	/***
+	  * <p>功能描述：获取基础数据离线数据。</p>
+	  * <p> 雷凯。</p>	
+	  * @param request
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年9月10日 下午3:44:05。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping("getOfflineWorkUnitData")
+	@ResponseBody
+	public Object getOfflineWorkUnitData(HttpServletRequest request){
+		SimpleResult<Map<String,Object>> result= null;
+		Map<String,Object> data = new HashMap<String,Object>();
+		try{
+			List<Map<String, Object>> workUnitRows = this.workUnitService.getListByCondition();
+			data.put("workUnitData", workUnitRows);
+			List<Map<String, Object>> workPersonRows = this.workPersonService.getListByCondition();
+			data.put("workPersonData", workPersonRows);
+			List<Map<String,Object>> weldProductRows = this.weldProductService.getListByCondition(null);
+			data.put("weldProductData", weldProductRows);
+			result = new SimpleResult<>(1,"200","ok",data);
+		}catch(Exception e){
+			result = new SimpleResult<>(-1,"400","error");
 			e.printStackTrace();
 		}
 		return result;
