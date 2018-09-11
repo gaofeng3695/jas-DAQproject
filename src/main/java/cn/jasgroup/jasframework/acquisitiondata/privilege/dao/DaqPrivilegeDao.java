@@ -230,4 +230,16 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 				+ "order by pp.unit_name";
 		return this.queryForList(sql, null);
 	}
+	/**
+	  * <p>功能描述：获取施工单位所有用户。</p>
+	  * <p> 雷凯。</p>	
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年9月11日 上午9:47:40。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String,Object>> getConstructUnitAllUser(){
+		String sql = "select t.oid,t.user_name,t.login_name,t.password,t.unit_id from pri_user t inner join (select oid from pri_unit where hierarchy like 'Unit.0001.0005%' and active=1) u on u.oid=t.unit_id and t.active=1";
+		return this.queryForList(sql, null);
+	}
 }
