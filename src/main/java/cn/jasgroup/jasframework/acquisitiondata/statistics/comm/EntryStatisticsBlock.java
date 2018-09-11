@@ -21,16 +21,16 @@ public class EntryStatisticsBlock {
     static {
 
         PIPE_CHECKED_BLOCK = ImmutableMap.<String, String>builder()
-                .put("coating_pipe", "daq_check_coating_pipe")
-                .put("hot_bends", "daq_check_hot_bends")
-                .put("pipe_cold_bending", "daq_check_pipe_cold_bending")
+                .put("coating_pipe", "daq_check_coating_pipe") // 防腐管检查
+                .put("hot_bends", "daq_check_hot_bends") // 热煨弯管检查
+                .put("pipe_cold_bending", "daq_check_pipe_cold_bending") // 冷弯管检查
                 .build();
 
         WELD_APPROVE_BLOCK = ImmutableMap.<String, String>builder()
-                .put("construction_weld", "daq_construction_weld")
-                .put("rework_weld", "daq_weld_rework_weld")
-                .put("measured_result", "daq_weld_measured_result")
-                .put("anticorrosion_check", "daq_weld_anticorrosion_check")
+                .put("construction_weld", "daq_construction_weld") // 焊口记录
+                .put("rework_weld", "daq_weld_rework_weld") // 焊口返修
+                .put("measured_result", "daq_weld_measured_result") // 焊口测量
+                .put("anticorrosion_check", "daq_weld_anticorrosion_check") // 补口记录
                 .build();
     }
 
