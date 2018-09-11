@@ -43,7 +43,7 @@ public class DaqInjectService {
 		}else if(hierarchy.startsWith(UnitHierarchyEnum.detection_unit.getHierarchy())){//检测单位
 			strategySql = " and detection_unit in (select uu.oid from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid='"+unitOid+"')";
 		}else if(hierarchy.startsWith(UnitHierarchyEnum.project_unit.getHierarchy())){//建设单位
-			strategySql = " ";
+			strategySql = " and 1=1 ";
 		}else if(hierarchy.startsWith(UnitHierarchyEnum.supplier.getHierarchy())){//厂商
 			strategySql = " and construct_unit in (select uu.oid from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid='"+unitOid+"')";
 		}else{
@@ -82,7 +82,7 @@ public class DaqInjectService {
 		}else if(hierarchy.startsWith(UnitHierarchyEnum.detection_unit.getHierarchy())){//检测单位
 			dataAuthoritySql = " and detection_unit in (select uu.oid from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid='"+unitOid+"')";
 		}else if(hierarchy.startsWith(UnitHierarchyEnum.project_unit.getHierarchy())){//建设单位
-			dataAuthoritySql = " ";
+			dataAuthoritySql = " and 1=1 ";
 		}else if(hierarchy.startsWith(UnitHierarchyEnum.supplier.getHierarchy())){//厂商
 			dataAuthoritySql = " and construct_unit in (select uu.oid from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid='"+unitOid+"')";
 		}else{

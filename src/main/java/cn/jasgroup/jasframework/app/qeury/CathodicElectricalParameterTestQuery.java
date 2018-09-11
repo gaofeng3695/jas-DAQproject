@@ -21,6 +21,7 @@ import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 public class CathodicElectricalParameterTestQuery extends BaseJavaQuery {
 	
 	private String approveStatus;
+	private String constructUnit;
 
 	@Override
 	public String getQuerySql() {
@@ -29,8 +30,8 @@ public class CathodicElectricalParameterTestQuery extends BaseJavaQuery {
 					+ "cept.output_current_two, cept.earthing_resistance_one, cept.earthing_resistance_two, cept.test_person, "
 					+ "to_char(cept.test_date, 'YYYY-MM-DD') as test_date,"
 					+ "case when cept.approve_status = -1 then '驳回' when cept.approve_status = 1 then '待审核' when cept.approve_status = 2 then '审核通过' else '未上报' end as approve_status_name,"
-					+ "cept.approve_status as \"approveStatus\", cept.remarks, cept.create_user_id, cept.create_user_name, cept.create_datetime, "
-					+ "cept.modify_user_id, cept.modify_user_name, cept.modify_datetime, cept.active,pu.unit_name as construct_unit_name,cept.construct_unit,"
+					+ "cept.approve_status as \"approveStatus\", cept.remarks, cept.create_user_id, cept.create_user_name, to_char(cept.create_datetime, 'YYYY-MM-DD') as create_datetime, "
+					+ "cept.modify_user_id, cept.modify_user_name, to_char(cept.modify_datetime, 'YYYY-MM-DD') as modify_datetime, cept.active,pu.unit_name as construct_unit_name,cept.construct_unit,"
 					+ "su.unit_name as supervision_unit_name,cept.supervision_engineer,cept.supervision_unit,cept.project_oid,cept.tenders_oid,"
 					+ "dp.project_name,dt.tenders_name "
 					+ "FROM daq_cathodic_electrical_parameter_test cept "
@@ -49,6 +50,9 @@ public class CathodicElectricalParameterTestQuery extends BaseJavaQuery {
 		if (StringUtils.isNotBlank(approveStatus)) {
 			conditionSql = " and cept.approve_status in ("+ approveStatus +")";
 		}
+		if (StringUtils.isNotBlank(constructUnit)) {
+			conditionSql += " and construct_unit in (select uu.oid from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid=:constructUnit)";
+		}
 		conditionSql += this.dataAuthoritySql;
 		conditionSql += "  order by cept.create_datetime desc";
 		return conditionSql;
@@ -60,6 +64,14 @@ public class CathodicElectricalParameterTestQuery extends BaseJavaQuery {
 
 	public void setApproveStatus(String approveStatus) {
 		this.approveStatus = approveStatus;
+	}
+
+	public String getConstructUnit() {
+		return constructUnit;
+	}
+
+	public void setConstructUnit(String constructUnit) {
+		this.constructUnit = constructUnit;
 	}
 	
 }

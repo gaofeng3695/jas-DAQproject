@@ -34,6 +34,7 @@ public class DaqCrossDrillingQuery extends BaseJavaQuery {
 	private String startMedianStakeOid;
 	private String endMedianStakeOid;
 	private String approveStatus;
+	private String constructUnit;
 	
 	@Override
 	public String getSql() {
@@ -81,6 +82,9 @@ public class DaqCrossDrillingQuery extends BaseJavaQuery {
 		}
 		if(StringUtils.isNotBlank(approveStatus)){
 			sql += " and t.approve_status in ("+ approveStatus +")";
+		}
+		if (StringUtils.isNotBlank(constructUnit)) {
+			sql += " and construct_unit in (select uu.oid from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid=:constructUnit)";
 		}
 		sql += this.dataAuthoritySql;
 		sql += " order by t.create_datetime desc";
@@ -149,6 +153,14 @@ public class DaqCrossDrillingQuery extends BaseJavaQuery {
 
 	public void setApproveStatus(String approveStatus) {
 		this.approveStatus = approveStatus;
+	}
+
+	public String getConstructUnit() {
+		return constructUnit;
+	}
+
+	public void setConstructUnit(String constructUnit) {
+		this.constructUnit = constructUnit;
 	}
 	
 }

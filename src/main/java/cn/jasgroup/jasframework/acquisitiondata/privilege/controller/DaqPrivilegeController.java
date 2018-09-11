@@ -322,11 +322,33 @@ public class DaqPrivilegeController extends BaseController{
 			dataMap.put("pipeSegmentOrCrossData", pipeSegmentOrCrossRows);
 			List<Map<String,Object>> supervisionUnitRows = this.daqPrivilegeService.getSupervisionUnitByTendersOid(null);
 			dataMap.put("supervisionUnitData", supervisionUnitRows);
-			List<Map<String,Object>> medianStakeRows = this.daqPrivilegeService.getMedianStakeList(null);
-			dataMap.put("medianStakeData", medianStakeRows);
+//			List<Map<String,Object>> medianStakeRows = this.daqPrivilegeService.getMedianStakeList(null);
+//			dataMap.put("medianStakeData", medianStakeRows);
 			result = new SimpleResult<Map<String,Object>>(0, "200", "ok", dataMap);
 		} catch (Exception e) {
 			result = new SimpleResult<>(-1, "400", e.getMessage());
+			e.printStackTrace();
+		}
+		return result;
+	}
+	/***
+	  * <p>功能描述：获取施工单位所有用户。</p>
+	  * <p> 雷凯。</p>	
+	  * @param request
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年9月11日 上午9:45:19。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="/getConstructUnitAllUser",method = RequestMethod.POST)
+	@ResponseBody
+	public Object getConstructUnitAllUser(HttpServletRequest request){
+		ListResult<Map<String,Object>> result = null;
+		try{
+			List<Map<String,Object>> rows = this.daqPrivilegeService.getConstructUnitAllUser();
+			result = new ListResult<>(0, "200", "ok", rows);
+		}catch(Exception e){
+			result = new ListResult<>(-1, "400", e.getMessage());
 			e.printStackTrace();
 		}
 		return result;

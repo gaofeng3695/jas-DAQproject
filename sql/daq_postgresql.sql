@@ -1377,9 +1377,9 @@ CREATE TABLE daq_construction_weld (
 	median_stake_oid varchar(50),
 	relative_mileage numeric(9,3),
 	front_pipe_type varchar(50),
-	front_pipe_code varchar(36),
+	front_pipe_oid varchar(36),
 	back_pipe_type varchar(50),
-	back_pipe_code varchar(36),
+	back_pipe_oid varchar(36),
 	weld_rod_batch_num varchar(60),
 	weld_wire_batch_num varchar(60),
 	weld_produce varchar(36),
@@ -1419,9 +1419,9 @@ comment on column daq_construction_weld.weld_method IS '焊接方式';
 comment on column daq_construction_weld.median_stake_oid IS '桩号';
 comment on column daq_construction_weld.relative_mileage IS '相对桩位置(m)';
 comment on column daq_construction_weld.front_pipe_type IS '前管件类型';
-comment on column daq_construction_weld.front_pipe_code IS '前管件编号';
+comment on column daq_construction_weld.front_pipe_oid IS '前管件编号';
 comment on column daq_construction_weld.back_pipe_type IS '后管件类型';
-comment on column daq_construction_weld.back_pipe_code IS '后管件编号';
+comment on column daq_construction_weld.back_pipe_oid IS '后管件编号';
 comment on column daq_construction_weld.weld_rod_batch_num IS '焊条批号';
 comment on column daq_construction_weld.weld_wire_batch_num IS '焊丝批号';
 comment on column daq_construction_weld.weld_produce IS '焊接工艺规程';
@@ -5029,3 +5029,17 @@ CREATE INDEX daq_appendages_casing_pipe_geom_idx ON public.daq_appendages_casing
 select AddGeometryColumn('public', 'daq_weld_rework_weld', 'geom', 4490, 'POINT', 4);
 CREATE INDEX daq_weld_rework_weld_idx ON public.daq_weld_rework_weld USING gist (geom);
 /*********空间数据相关end*********/
+create or replace view v_daq_material as
+select oid,pipe_code as code from daq_material_pipe where active=1
+union all
+select oid,hot_bends_code as code from daq_material_hot_bends where active=1
+union all 
+select oid,tee_code as code from daq_material_tee  t where active=1
+union all 
+select oid,manufacturer_code as code from daq_material_insulated_joint where active=1
+union all
+select oid,reducer_code as code from daq_material_reducer where active=1
+union all
+select oid,closure_code as code from daq_material_closure where active=1
+union all
+select oid,pipe_cold_bending_code as code from daq_material_pipe_cold_bending where active=1

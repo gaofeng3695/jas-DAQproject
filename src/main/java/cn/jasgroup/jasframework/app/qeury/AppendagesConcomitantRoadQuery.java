@@ -21,6 +21,7 @@ import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 public class AppendagesConcomitantRoadQuery extends BaseJavaQuery {
 	
 	private String approveStatus;
+	private String constructUnit;
 
 	@Override
 	public String getQuerySql() {
@@ -28,7 +29,8 @@ public class AppendagesConcomitantRoadQuery extends BaseJavaQuery {
 				+ "t.concomitant_road_length,t.pavement_type,t.road_width,to_char(t.commence_date,'YYYY-MM-DD') as commence_date,"
 				+ "to_char(t.completion_date,'YYYY-MM-DD') as completion_date,t.construct_unit,t.supervision_unit,t.supervision_engineer,"
 				+ "t.collection_person,to_char(t.collection_date,'YYYY-MM-DD') as collection_date,t.geo_state,t.approve_status as \"approveStatus\","
-				+ "t.remarks, t.create_user_id,t.create_user_name,t.create_datetime,t.modify_user_id,t.modify_user_name,t.modify_datetime,t.active,"
+				+ "t.remarks, t.create_user_id,t.create_user_name,to_char(t.create_datetime, 'YYYY-MM-DD') as create_datetime,t.modify_user_id,"
+				+ "t.modify_user_name,to_char(t.modify_datetime, 'YYYY-MM-DD') as modify_datetime,t.active,"
 				+ "sd.code_name as pavement_type_name,dp.project_name,dt.tenders_name,dl.pipeline_name,cu.unit_name as construct_unit_name,"
 				+ "su.unit_name as supervision_unit_name,"
 				+ "case when t.approve_status = -1 then '驳回' when t.approve_status = 1 then '待审核' when t.approve_status = 2 then '审核通过' else '未上报' end as approve_status_name "
@@ -49,6 +51,9 @@ public class AppendagesConcomitantRoadQuery extends BaseJavaQuery {
 		if (StringUtils.isNotBlank(approveStatus)) {
 			conditionSql = " and t.approve_status in ("+ approveStatus +")";
 		}
+//		if (StringUtils.isNotBlank(constructUnit)) {
+//			conditionSql += " and construct_unit in (select uu.oid from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid=:constructUnit)";
+//		}
 		conditionSql += this.dataAuthoritySql;
 		conditionSql += "  order by t.create_datetime desc";
 		return conditionSql;
@@ -60,6 +65,14 @@ public class AppendagesConcomitantRoadQuery extends BaseJavaQuery {
 
 	public void setApproveStatus(String approveStatus) {
 		this.approveStatus = approveStatus;
+	}
+
+	public String getConstructUnit() {
+		return constructUnit;
+	}
+
+	public void setConstructUnit(String constructUnit) {
+		this.constructUnit = constructUnit;
 	}
 	
 }

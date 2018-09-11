@@ -21,6 +21,7 @@ import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 public class CathodicImpressedCurrentTestQuery extends BaseJavaQuery {
 	
 	private String approveStatus;
+	private String constructUnit;
 
 	@Override
 	public String getQuerySql() {
@@ -29,8 +30,8 @@ public class CathodicImpressedCurrentTestQuery extends BaseJavaQuery {
 				+ "to_char(cict.polarization_date, 'YYYY-MM-DD') as polarization_date,  cict.natural_potential, cict.earthing_resistance, "
 				+ "cict.direct_current_voltage, cict.standard_voltage, cict.measured_voltage, cict.standard_current, cict.measured_current,"
 				+ "case when cict.approve_status = -1 then '驳回' when cict.approve_status = 1 then '待审核' when cict.approve_status = 2 then '审核通过' else '未上报' end as approve_status_name,"
-				+ "cict.approve_status as \"approveStatus\", cict.remarks, cict.create_user_id, cict.create_user_name, cict.create_datetime, "
-				+ "cict.modify_user_id, cict.modify_user_name, cict.modify_datetime, cict.active, cict.construct_unit, pu.unit_name,"
+				+ "cict.approve_status as \"approveStatus\", cict.remarks, cict.create_user_id, cict.create_user_name, to_char(cict.create_datetime, 'YYYY-MM-DD') as create_datetime, "
+				+ "cict.modify_user_id, cict.modify_user_name, to_char(cict.modify_datetime, 'YYYY-MM-DD') as modify_datetime, cict.active, cict.construct_unit, pu.unit_name,"
 				+ "su.unit_name as supervision_unit_name,cict.supervision_engineer "
 				+ "FROM daq_cathodic_impressed_current_test cict "
 				+ "LEFT JOIN (select oid, test_stake_code, active from daq_cathodic_test_stake where active=1) cts ON cts.oid = cict.test_stake_oid "
@@ -48,6 +49,9 @@ public class CathodicImpressedCurrentTestQuery extends BaseJavaQuery {
 		if (StringUtils.isNotBlank(approveStatus)) {
 			conditionSql = " and cict.approve_status in ("+ approveStatus +")";
 		}
+		if (StringUtils.isNotBlank(constructUnit)) {
+			conditionSql += " and construct_unit in (select uu.oid from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid=:constructUnit)";
+		}
 		conditionSql += this.dataAuthoritySql;
 		conditionSql += " order by cict.create_datetime desc";
 		return conditionSql;
@@ -59,6 +63,14 @@ public class CathodicImpressedCurrentTestQuery extends BaseJavaQuery {
 
 	public void setApproveStatus(String approveStatus) {
 		this.approveStatus = approveStatus;
+	}
+
+	public String getConstructUnit() {
+		return constructUnit;
+	}
+
+	public void setConstructUnit(String constructUnit) {
+		this.constructUnit = constructUnit;
 	}
 	
 }
