@@ -144,4 +144,15 @@ public class DaqPrivilegeService extends BaseService{
 		String unitOid = ThreadLocalHolder.getCurrentUser().getUnitId();
 		return this.daqPrivilegeDao.getConstructAndDetectionUnitList(unitOid);
 	}
+	/**
+	  * <p>功能描述：获取施工单位所有用户。</p>
+	  * <p> 雷凯。</p>	
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年9月11日 上午9:47:47。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String,Object>>getConstructUnitAllUser(){
+		return this.daqPrivilegeDao.getConstructUnitAllUser();
+	}
 }
