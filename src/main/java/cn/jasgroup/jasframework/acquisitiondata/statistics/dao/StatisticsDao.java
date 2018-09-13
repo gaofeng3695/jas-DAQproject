@@ -4,22 +4,19 @@ import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.ApproveStatistic
 import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.ApproveStatusEnum;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.EntryStatisticsBlock;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.DataApproveSubBo;
-import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.StatisticsResultBo;
+import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.StatsResultBo;
 import cn.jasgroup.jasframework.dataaccess3.core.BaseNamedParameterJdbcTemplate;
 import cn.jasgroup.jasframework.engine.jdbc.dao.CommonDataJdbcDao;
 import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -44,7 +41,7 @@ public class StatisticsDao {
      * @param statisTypeList 统计类型来源
      * @return List
      */
-    public List<StatisticsResultBo> listDataEntry(List<String> statisTypeList, String projectOid) {
+    public List<StatsResultBo> listDataEntry(List<String> statisTypeList, String projectOid) {
         StringBuilder sql = new StringBuilder();
         if (CollectionUtils.isEmpty(statisTypeList)) {
             return Lists.newArrayList();
@@ -75,12 +72,12 @@ public class StatisticsDao {
         variables.put("createUserId", ThreadLocalHolder.getCurrentUserId());
         variables.put("projectOid", projectOid);
 
-        return commonDataJdbcDao.queryForList(sql.toString(), variables, StatisticsResultBo.class);
+        return commonDataJdbcDao.queryForList(sql.toString(), variables, StatsResultBo.class);
     }
 
 
     /**
-     * 数据审核统计
+     * 数据审核统计 
      * @param constructUnitIds 施工单位ID集合
      * @return List
      */

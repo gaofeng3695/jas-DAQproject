@@ -1,27 +1,26 @@
 package cn.jasgroup.jasframework.acquisitiondata.statistics.controller;
 
 import cn.jasgroup.framework.data.result.BaseResult;
-import cn.jasgroup.jasframework.acquisitiondata.statistics.service.StatisticsService;
+import cn.jasgroup.jasframework.acquisitiondata.statistics.service.AppStatisticsService;
 import cn.jasgroup.jasframework.acquisitiondata.utils.ResultVOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 /**
- * description: 统计相关接口
+ * description: APP统计相关接口
  *
  * @author xiefayang
  * 2018/8/27 10:30
  */
 @RestController
 @RequestMapping("/statistics")
-public class StatisticsController {
+public class AppStatisticsController {
 
     @Autowired
-    private StatisticsService statisticsService;
+    private AppStatisticsService appStatisticsService;
 
 
     /**
@@ -37,7 +36,7 @@ public class StatisticsController {
         @SuppressWarnings("unchecked")
         List<String> stasticsTypes = (List<String>) params.get("stasticsTypes");
         String objectOid = (String) params.get("projectOid");
-        return ResultVOUtil.ofSuccess(statisticsService.dataEntry(stasticsTypes, objectOid));
+        return ResultVOUtil.ofSuccess(appStatisticsService.dataEntry(stasticsTypes, objectOid));
     }
 
 
@@ -48,6 +47,6 @@ public class StatisticsController {
     @GetMapping("dataAuditing")
     public BaseResult dataAuditing(@RequestParam(required = false) String constructUnit,
                                    @RequestParam(required = false) String projectOid) {
-        return ResultVOUtil.ofSuccess(this.statisticsService.dataAuditing(projectOid, constructUnit));
+        return ResultVOUtil.ofSuccess(this.appStatisticsService.dataAuditing(projectOid, constructUnit));
     }
 }
