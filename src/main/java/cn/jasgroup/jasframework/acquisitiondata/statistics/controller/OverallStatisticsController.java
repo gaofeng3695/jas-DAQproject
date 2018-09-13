@@ -5,11 +5,13 @@ import cn.jasgroup.jasframework.acquisitiondata.statistics.service.OverallStatis
 import cn.jasgroup.jasframework.acquisitiondata.utils.ResultVOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -53,6 +55,21 @@ public class OverallStatisticsController {
             return ResultVOUtil.ofStatus(HttpStatus.BAD_REQUEST);
         }
         return ResultVOUtil.ofSuccess(this.overallStatisticsService.processCumulativeCompletion((List<String>) params.get("projectOids")));
+    }
+
+
+    /**
+     * 一次性合格率统计(射线检测)
+     * @param params projectOids
+     * @return {@link BaseResult}
+     */
+    @PostMapping("statsDetectionRayPassCount")
+    public BaseResult statsDetectionRayPassCount(@RequestBody Map<String, Object> params) {
+        if (CollectionUtils.isEmpty((Collection<?>) params.get("projectOids"))) {
+            return ResultVOUtil.ofStatus(HttpStatus.BAD_REQUEST);
+        }
+
+        return ResultVOUtil.ofSuccess(this.overallStatisticsService.statsDetectionRayPassCount((List<String>) params.get("projectOids")));
     }
 
 
