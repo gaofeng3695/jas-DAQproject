@@ -8,7 +8,7 @@ import java.util.List;
  * @author xiefayang
  * 2018/8/29 14:03
  */
-public class DataApproveStatisticsBo {
+public class DataApproveStatsBo {
 
     /** 统计code */
     private String code;
@@ -25,10 +25,10 @@ public class DataApproveStatisticsBo {
     private List<DataApproveSubBo> dataApproveSubBoList;
 
 
-    public DataApproveStatisticsBo() {
+    public DataApproveStatsBo() {
     }
 
-    public DataApproveStatisticsBo(String code, String cnName, Integer total, Integer unaudited, List<DataApproveSubBo> dataApproveSubBoList) {
+    public DataApproveStatsBo(String code, String cnName, Integer total, Integer unaudited, List<DataApproveSubBo> dataApproveSubBoList) {
         this.code = code;
         this.cnName = cnName;
         this.total = total;
