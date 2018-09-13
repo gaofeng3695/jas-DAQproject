@@ -18,6 +18,10 @@ public class WeldInfoBo {
 
     private String backPipeOid;
 
+    private Integer statsMonth;
+
+    private String createDatetime;
+
     public String getOid() {
         return oid;
     }
@@ -56,5 +60,21 @@ public class WeldInfoBo {
 
     public void setBackPipeOid(String backPipeOid) {
         this.backPipeOid = backPipeOid;
+    }
+
+    public Integer getStatsMonth() {
+        return statsMonth;
+    }
+
+    public void setStatsMonth(Integer statsMonth) {
+        this.statsMonth = statsMonth;
+    }
+
+    public String getCreateDatetime() {
+        return createDatetime;
+    }
+
+    public void setCreateDatetime(String createDatetime) {
+        this.createDatetime = createDatetime;
     }
 }
