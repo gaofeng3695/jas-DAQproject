@@ -16,7 +16,7 @@ public class DateStatsResultBo extends StatsResultBo {
     }
 
     public Integer getStatsMonth() {
-        return statsMonth;
+        return statsMonth==null ? 0:statsMonth;
     }
 
     public void setStatsMonth(Integer statsMonth) {
