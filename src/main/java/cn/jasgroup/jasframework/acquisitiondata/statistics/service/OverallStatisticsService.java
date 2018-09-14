@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -103,7 +105,9 @@ public class OverallStatisticsService {
 
         // 初始化分月数据
         for (StatsProcessEnum processEnum : StatsProcessEnum.values()) {
-            Arrays.stream(MonthlyEnum.values()).forEach(monthlyEnum -> table.put(processEnum.getType(), monthlyEnum.getMonth(), 0));
+            for (MonthlyEnum monthlyEnum : MonthlyEnum.values()) {
+                table.put(processEnum.getType(), monthlyEnum.getMonth(), 0);
+            }
         }
 
         statsResult.forEach(bo -> table.put(bo.getStatsType(), bo.getStatsMonth(), bo.getStatsResult()==null?0:bo.getStatsResult()));
@@ -115,12 +119,13 @@ public class OverallStatisticsService {
 //                }
 //            }
 //        });
-
+        int currentMonth = LocalDate.now().getMonthValue();
         // 计算累积结果
         Table<String, Integer, Object> resultTable = HashBasedTable.create();
+        MonthlyEnum[] monthlyEnums = MonthlyEnum.values();
         for (String statsType : table.rowKeySet()) {
-            for (MonthlyEnum monthlyEnum : MonthlyEnum.values()) {
-                resultTable.put(statsType, monthlyEnum.getMonth(), this.getCumulativeCount(table, statsType, monthlyEnum.getMonth()));
+            for (int i = 0; i < currentMonth; i++) {
+                resultTable.put(statsType, monthlyEnums[i].getMonth(), this.getCumulativeCount(table, statsType, monthlyEnums[i].getMonth()));
             }
         }
 
