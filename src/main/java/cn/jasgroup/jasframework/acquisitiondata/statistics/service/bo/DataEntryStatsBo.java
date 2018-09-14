@@ -6,7 +6,7 @@ package cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo;
  * @author xiefayang
  * 2018/8/28 14:43
  */
-public class DataEntryStatisticsBo {
+public class DataEntryStatsBo {
 
     /** 统计类型 */
     private String statisType;
@@ -20,15 +20,15 @@ public class DataEntryStatisticsBo {
     /** 打回 */
     private Long repulseCount;
 
-    public DataEntryStatisticsBo() {
+    public DataEntryStatsBo() {
     }
 
-    public DataEntryStatisticsBo(String statisType, Long enteredCount) {
+    public DataEntryStatsBo(String statisType, Long enteredCount) {
         this.statisType = statisType;
         this.enteredCount = enteredCount;
     }
 
-    public DataEntryStatisticsBo(String statisType, Long enteredCount, Long toSubmitCount, Long repulseCount) {
+    public DataEntryStatsBo(String statisType, Long enteredCount, Long toSubmitCount, Long repulseCount) {
         this.statisType = statisType;
         this.enteredCount = enteredCount;
         this.toSubmitCount = toSubmitCount;

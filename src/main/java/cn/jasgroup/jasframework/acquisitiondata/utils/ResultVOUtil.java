@@ -47,4 +47,36 @@ public class ResultVOUtil {
                 String.valueOf(httpStatus.value()), httpStatus.getReasonPhrase());
     }
 
+
+    public static ErrorResult ofEnum(ErrorEnum errorEnum) {
+        return ofError(errorEnum.getCode(), errorEnum.getMessage());
+    }
+
+    public enum ErrorEnum {
+
+        PARAMS_ERROR(4003, "参数错误"),
+
+        ;
+
+        private Integer code;
+
+        private String message;
+
+
+        ErrorEnum(Integer code, String message) {
+            this.code = code;
+            this.message = message;
+        }
+
+        public Integer getCode() {
+            return code;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+    }
+
 }
+
+

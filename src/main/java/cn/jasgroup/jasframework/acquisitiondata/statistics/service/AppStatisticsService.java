@@ -5,16 +5,14 @@ import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.ApproveStatistic
 import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.ApproveStatusEnum;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.EntryStatisticsBlock;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.dao.StatisticsDao;
-import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.DataApproveStatisticsBo;
+import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.DataApproveStatsBo;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.DataApproveSubBo;
-import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.DataEntryStatisticsBo;
-import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.StatisticsResultBo;
+import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.DataEntryStatsBo;
+import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.StatsResultBo;
 import cn.jasgroup.jasframework.acquisitiondata.variate.UnitHierarchyEnum;
 import cn.jasgroup.jasframework.security.dao.entity.PriUnit;
 import cn.jasgroup.jasframework.security.service.UnitService;
 import cn.jasgroup.jasframework.support.ThreadLocalHolder;
-import com.google.common.base.Preconditions;
-import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.MapDifference;
@@ -36,9 +34,9 @@ import java.util.stream.Collectors;
  * 2018/8/27 10:37
  */
 @Service
-public class StatisticsService {
+public class AppStatisticsService {
 
-    private static final Logger logger = LoggerFactory.getLogger(StatisticsService.class);
+    private static final Logger logger = LoggerFactory.getLogger(AppStatisticsService.class);
 
     @Autowired
     private StatisticsDao statisticsDao;
@@ -54,9 +52,9 @@ public class StatisticsService {
      * - {@link EntryStatisticsBlock#WELD_APPROVE_BLOCK}
      * @return list
      */
-    public List<DataEntryStatisticsBo> dataEntry(List<String> statisTypes, String projectOid) {
+    public List<DataEntryStatsBo> dataEntry(List<String> statisTypes, String projectOid) {
 
-        List<DataEntryStatisticsBo> returnList = Lists.newArrayList();
+        List<DataEntryStatsBo> returnList = Lists.newArrayList();
         Map<String, String> pipeCheckedBlock = EntryStatisticsBlock.getPipeCheckedBlock();
         Map<String, String> weldApproveBlock = EntryStatisticsBlock.getWeldApproveBlock();
 
@@ -68,23 +66,23 @@ public class StatisticsService {
             statisTypes.removeIf(s -> !pipeCheckedBlock.containsKey(s) && !weldApproveBlock.containsKey(s));
         }
 
-        List<StatisticsResultBo> resultList = statisticsDao.listDataEntry(statisTypes, projectOid);
+        List<StatsResultBo> resultList = statisticsDao.listDataEntry(statisTypes, projectOid);
 
         // pipeCheckedBlock: 没有审核操作的: 只统计录入数
-        for (String statisType : pipeCheckedBlock.keySet()) {
-            if (statisTypes.contains(statisType)) {
-                Optional<StatisticsResultBo> optional = resultList.stream().filter(resultBo -> statisType.equals(resultBo.getStatisType())).findAny();
-                optional.ifPresent(statisticsResultBo -> returnList.add(new DataEntryStatisticsBo(statisType, statisticsResultBo.getStatisResult())));
+        for (String statsType : pipeCheckedBlock.keySet()) {
+            if (statisTypes.contains(statsType)) {
+                Optional<StatsResultBo> optional = resultList.stream().filter(resultBo -> statsType.equals(resultBo.getStatsType())).findAny();
+                optional.ifPresent(statsResultBo -> returnList.add(new DataEntryStatsBo(statsType, Long.valueOf(String.valueOf(statsResultBo.getStatsResult())))));
             }
         }
 
         // weldApproveBlock: 有审核操作的: 统计录入数, 待提交数, 打回数
-        for (String statisType : weldApproveBlock.keySet()) {
-            if (statisTypes.contains(statisType)) {
-                long enteredCount = resultList.stream().filter(resultBo -> statisType.equals(resultBo.getStatisType())).count();
-                long toSubmitCount = resultList.stream().filter(resultBo -> statisType.equals(resultBo.getStatisType()) && ApproveStatusEnum.UNREPORTED.getCode() == resultBo.getStatisResult().intValue()).count();
-                long repulseCount = resultList.stream().filter(resultBo -> statisType.equals(resultBo.getStatisType()) && ApproveStatusEnum.REJECT.getCode() == resultBo.getStatisResult().intValue()).count();
-                returnList.add(new DataEntryStatisticsBo(statisType, enteredCount, toSubmitCount, repulseCount));
+        for (String statsType : weldApproveBlock.keySet()) {
+            if (statisTypes.contains(statsType)) {
+                long enteredCount = resultList.stream().filter(resultBo -> statsType.equals(resultBo.getStatsType())).count();
+                long toSubmitCount = resultList.stream().filter(resultBo -> statsType.equals(resultBo.getStatsType()) && Objects.equals(ApproveStatusEnum.UNREPORTED.getCode(), Integer.valueOf(String.valueOf(resultBo.getStatsResult())))).count();
+                long repulseCount = resultList.stream().filter(resultBo -> statsType.equals(resultBo.getStatsType()) && Objects.equals(ApproveStatusEnum.REJECT.getCode(), Integer.valueOf(String.valueOf(resultBo.getStatsResult())))).count();
+                returnList.add(new DataEntryStatsBo(statsType, enteredCount, toSubmitCount, repulseCount));
             }
         }
 
@@ -112,9 +110,9 @@ public class StatisticsService {
      *  - 根据监理单位当前用户过滤 (部门及部门以下的)
      *  - TODO: 根据登录用户的项目ID
      */
-    public List<DataApproveStatisticsBo> dataAuditing(String projectOid, String constructUnitId) {
+    public List<DataApproveStatsBo> dataAuditing(String projectOid, String constructUnitId) {
 
-        List<DataApproveStatisticsBo> returnList = new ArrayList<>();
+        List<DataApproveStatsBo> returnList = new ArrayList<>();
 
         List<String> constructUnits = null;
 
@@ -171,7 +169,7 @@ public class StatisticsService {
             int unauditedSum = subCollect.stream().mapToInt(DataApproveSubBo::getUnaudited).sum();
 
             returnList.add(
-                    new DataApproveStatisticsBo(categoryCode, ApproveStatisticsBlock.APPROVE_CATEGORY.get(categoryCode),
+                    new DataApproveStatsBo(categoryCode, ApproveStatisticsBlock.APPROVE_CATEGORY.get(categoryCode),
                             totalSum, unauditedSum, subCollect)
             );
         }
