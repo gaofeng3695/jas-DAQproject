@@ -106,7 +106,7 @@ public class OverallStatisticsService {
             Arrays.stream(MonthlyEnum.values()).forEach(monthlyEnum -> table.put(processEnum.getType(), monthlyEnum.getMonth(), 0));
         }
 
-        statsResult.forEach(bo -> table.put(bo.getStatsType(), bo.getStatsMonth(), bo.getStatsResult()));
+        statsResult.forEach(bo -> table.put(bo.getStatsType(), bo.getStatsMonth(), bo.getStatsResult()==null?0:bo.getStatsResult()));
 
 //        table.rowKeySet().forEach(statsType -> {
 //            for (MonthlyEnum monthlyEnum : MonthlyEnum.values()) {
@@ -157,7 +157,8 @@ public class OverallStatisticsService {
 
     private Double sumPipeLength(Map<String, Double> idToLengthMap, Set<String> oids) {
         List<Double> sumList = oids.stream().map(idToLengthMap::get).collect(Collectors.toList());
-        return sumList.stream().mapToDouble(s -> s).sum();
+        double sum = sumList.stream().mapToDouble(s -> (s == null ? 0 : s)).sum();
+        return sum;
     }
 
     private List<String> getWeldPipeOidsByType(List<WeldInfoBo> weldInfoBos, StatsPipeEnum statsPipeEnum) {
