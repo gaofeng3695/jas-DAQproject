@@ -3,6 +3,7 @@ package cn.jasgroup.jasframework.acquisitiondata.statistics.service;
 import cn.jasgroup.framework.data.exception.BusinessException;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.MonthlyEnum;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.StatsPipeEnum;
+import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.StatsProcessEnum;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.dao.OverallStatisticsDao;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.DataEntryAuditBo;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.DateStatsResultBo;
@@ -16,9 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static cn.jasgroup.jasframework.acquisitiondata.statistics.comm.StatsPipeEnum.COLD_BEND;
@@ -98,16 +97,24 @@ public class OverallStatisticsService {
 
         // 初始化table
         Table<String, Integer, Object> table = HashBasedTable.create();
-        statsResult.forEach(bo -> table.put(bo.getStatsType(), bo.getStatsMonth(), bo.getStatsResult()));
+//        for (DateStatsResultBo bo : statsResult) {
+//            table.put(bo.getStatsType(), bo.getStatsMonth(), bo.getStatsResult());
+//        }
 
         // 初始化分月数据
-        table.rowKeySet().forEach(statsType -> {
-            for (MonthlyEnum monthlyEnum : MonthlyEnum.values()) {
-                if (!table.contains(statsType, monthlyEnum.getMonth())) {
-                    table.put(statsType, monthlyEnum.getMonth(), 0);
-                }
-            }
-        });
+        for (StatsProcessEnum processEnum : StatsProcessEnum.values()) {
+            Arrays.stream(MonthlyEnum.values()).forEach(monthlyEnum -> table.put(processEnum.getType(), monthlyEnum.getMonth(), 0));
+        }
+
+        statsResult.forEach(bo -> table.put(bo.getStatsType(), bo.getStatsMonth(), bo.getStatsResult()));
+
+//        table.rowKeySet().forEach(statsType -> {
+//            for (MonthlyEnum monthlyEnum : MonthlyEnum.values()) {
+//                if (!table.contains(statsType, monthlyEnum.getMonth())) {
+//                    table.put(statsType, monthlyEnum.getMonth(), 0);
+//                }
+//            }
+//        });
 
         // 计算累积结果
         Table<String, Integer, Object> resultTable = HashBasedTable.create();
@@ -122,7 +129,11 @@ public class OverallStatisticsService {
 
     private List<DateStatsResultBo> getDateStatsResults(List<WeldInfoBo> weldInfoBos) {
         List<StatsResultBo> pipeLengthResult = getPipeLength(weldInfoBos);
-        Map<String, Double> idToLengthMap = pipeLengthResult.stream().collect(Collectors.toMap(StatsResultBo::getOid, bo -> Double.parseDouble(bo.getStatsResult().toString()), (a, b) -> b));
+        Map<String, Double> idToLengthMap = new HashMap<>();
+        for (StatsResultBo bo : pipeLengthResult) {
+            Double pipeLength = bo.getStatsResult()==null ? 0d:Double.parseDouble(bo.getStatsResult().toString());
+            idToLengthMap.put(bo.getOid(), pipeLength);
+        }
 
         Set<Integer> monthSet = weldInfoBos.stream().map(WeldInfoBo::getStatsMonth).collect(Collectors.toSet());
         List<DateStatsResultBo> weldStatsResult = Lists.newArrayList();

@@ -69,12 +69,12 @@ public class OverallStatisticsDao {
                 " select 'pipe' as stats_type, stats_month as stats_month, sum(stats_result) as stats_result from ( " +
                 "  select 'check_coating_pipe' as stats_type, EXTRACT(MONTH from t.create_datetime) as stats_month, sum(p.pipe_length) as stats_result from daq_check_coating_pipe t  " +
                 "  left join daq_material_pipe p on t.pipe_oid = p.oid  " +
-                "  where t.active = 1 and p.active = 1 and EXTRACT(YEAR from t.create_datetime) = EXTRACT(YEAR from current_date) --and t.project_oid in (:projectOids)  " +
+                "  where t.active = 1 and p.active = 1 and EXTRACT(YEAR from t.create_datetime) = EXTRACT(YEAR from current_date) and t.project_oid in (:projectOids)  " +
                 "  group by EXTRACT(MONTH from t.create_datetime)  " +
                 "  union all  " +
                 "  select 'check_hot_bends' as stats_type, EXTRACT(MONTH from t.create_datetime) as stats_month, sum(p.pipe_length) as stats_result from daq_check_hot_bends t  " +
                 "  left join daq_material_hot_bends p on t.hot_bends_oid = p.oid  " +
-                "  where t.active = 1 and p.active = 1 and EXTRACT(YEAR from t.create_datetime) = EXTRACT(YEAR from current_date) --and t.project_oid in (:projectOids)  " +
+                "  where t.active = 1 and p.active = 1 and EXTRACT(YEAR from t.create_datetime) = EXTRACT(YEAR from current_date) and t.project_oid in (:projectOids)  " +
                 "  group by EXTRACT(MONTH from t.create_datetime)  " +
                 ") as ss group by stats_month";
         return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOids", projectOids), DateStatsResultBo.class);
@@ -122,19 +122,22 @@ public class OverallStatisticsDao {
         boolean coldBendEmpty = CollectionUtils.isEmpty(params.get(COLD_BEND.getCode()));
 
         if (!steelPipeEmpty) {
-            sql += " select oid, pipe_length as stats_result from daq_material_pipe where oid in (:" +params.get(STRAIGHT_STEEL_PIPE.getCode())+ ") ";
+            sql += " select oid, pipe_length as stats_result from daq_material_pipe where active = 1 and oid in (:" +STRAIGHT_STEEL_PIPE.getCode()+ ") ";
         }
 
         if (!hotBendEmpty) {
             sql += steelPipeEmpty ? "" : " union all ";
-            sql += " select oid, pipe_length as stats_result from daq_material_hot_bends where oid in (:"+params.get(HOT_BEND.getCode())+") ";
+            sql += " select oid, pipe_length as stats_result from daq_material_hot_bends where active = 1 and oid in (:"+HOT_BEND.getCode()+") ";
         }
 
         if (!coldBendEmpty) {
             sql += (!steelPipeEmpty||!hotBendEmpty) ? " union all " : "";
-            sql += " select oid, pipe_length as stats_result from daq_material_pipe_cold_bending where oid in ('') ";
+            sql += " select oid, pipe_length as stats_result from daq_material_pipe_cold_bending where active = 1 and oid in (:"+COLD_BEND.getCode()+") ";
         }
 
+        if (StringUtils.isEmpty(sql)) {
+            return Lists.newArrayList();
+        }
         return this.commonDataJdbcDao.queryForList(sql, params, StatsResultBo.class);
     }
 
