@@ -8,6 +8,8 @@ package cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo;
  */
 public class StatsResultBo {
 
+    private String oid;
+
     private String statsType;
 
     private Object statsResult;
@@ -18,6 +20,14 @@ public class StatsResultBo {
     public StatsResultBo(String statsType, Object statsResult) {
         this.statsType = statsType;
         this.statsResult = statsResult;
+    }
+
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
     }
 
     public String getStatsType() {

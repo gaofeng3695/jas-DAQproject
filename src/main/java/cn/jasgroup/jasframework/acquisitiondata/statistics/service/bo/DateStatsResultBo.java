@@ -7,6 +7,14 @@ public class DateStatsResultBo extends StatsResultBo {
 
     private Integer statsMonth;
 
+    public DateStatsResultBo() {
+    }
+
+    public DateStatsResultBo(String statsType, Object statsResult, Integer statsMonth) {
+        super(statsType, statsResult);
+        this.statsMonth = statsMonth;
+    }
+
     public Integer getStatsMonth() {
         return statsMonth;
     }

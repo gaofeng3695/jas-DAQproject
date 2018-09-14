@@ -3,6 +3,7 @@ package cn.jasgroup.jasframework.acquisitiondata.statistics.controller;
 import cn.jasgroup.framework.data.result.BaseResult;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.service.OverallStatisticsService;
 import cn.jasgroup.jasframework.acquisitiondata.utils.ResultVOUtil;
+import com.google.common.collect.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
@@ -54,7 +55,9 @@ public class OverallStatisticsController {
         if (null == params.get("projectOids")) {
             return ResultVOUtil.ofStatus(HttpStatus.BAD_REQUEST);
         }
-        return ResultVOUtil.ofSuccess(this.overallStatisticsService.processCumulativeCompletion((List<String>) params.get("projectOids")));
+
+        Table<String, Integer, Object> resultTable = this.overallStatisticsService.processMonthlyCompletion((List<String>) params.get("projectOids"));
+        return ResultVOUtil.ofSuccess(resultTable.rowMap());
     }
 
 
