@@ -8,19 +8,22 @@ import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.DataEntryA
 import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.DateStatsResultBo;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.StatsResultBo;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.WeldInfoBo;
-import cn.jasgroup.jasframework.engine.jdbc.service.CommonDataJdbcService;
 import com.google.common.collect.*;
+import com.sun.star.corba.ObjectKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+import static cn.jasgroup.jasframework.acquisitiondata.statistics.comm.StatsPipeEnum.COLD_BEND;
+import static cn.jasgroup.jasframework.acquisitiondata.statistics.comm.StatsPipeEnum.HOT_BEND;
+import static cn.jasgroup.jasframework.acquisitiondata.statistics.comm.StatsPipeEnum.STRAIGHT_STEEL_PIPE;
 
 /**
  * description: 总体统计业务逻辑
@@ -50,7 +53,7 @@ public class OverallStatisticsService {
         List<WeldInfoBo> weldList = this.overallStatisticsDao.listWeldInfo(projectOids);
 
         // 补口关联的焊口关联的管件信息
-        List<WeldInfoBo> patchRelaWeldList = this.overallStatisticsDao.listWeldRelaAnticorrosionInfo(projectOids);
+        List<WeldInfoBo> patchRelaWeldList = this.overallStatisticsDao.listPatchRelaWeldInfo(projectOids);
 
         // 管材
         resultList.addAll(this.overallStatisticsDao.statsPipeLength(projectOids));
@@ -69,7 +72,7 @@ public class OverallStatisticsService {
     /**
      * 各工序当前年分月完成情况对比
      */
-    public void processMonthlyCompletion(List<String> projectOids) {
+    public  Table<String, Integer, Object> processMonthlyCompletion(List<String> projectOids) {
 
         List<Integer> monthlys = Lists.newArrayList(MonthlyEnum.values()).stream().map(MonthlyEnum::getMonth).collect(Collectors.toList());
 
@@ -77,21 +80,25 @@ public class OverallStatisticsService {
         List<DateStatsResultBo> otherStatsResult = this.overallStatisticsDao.statsOtherLengthMonthly(projectOids);
 
         // TODO: 管材
-        List<DateStatsResultBo> pipeStatesResult = this.overallStatisticsDao.statsPipeLengthMonthly(projectOids);
+        List<DateStatsResultBo> pipeStatsResult = this.overallStatisticsDao.statsPipeLengthMonthly(projectOids);
 
         // TODO: 焊接
         List<WeldInfoBo> weldInfoBos = this.overallStatisticsDao.listWeldInfoCurrentYear(projectOids);
-
-
+        List<DateStatsResultBo> weldStatsResult = getDateStatsResults(weldInfoBos);
 
         // TODO: 补口
+        List<WeldInfoBo> patchRelaWelInfoBos = this.overallStatisticsDao.listPatchRelaWeldInfoByYear(projectOids);
+        List<DateStatsResultBo> patchStatsResult = getDateStatsResults(patchRelaWelInfoBos);
 
+        List<DateStatsResultBo> statsResult = Lists.newArrayList();
+        statsResult.addAll(pipeStatsResult);
+        statsResult.addAll(weldStatsResult);
+        statsResult.addAll(patchStatsResult);
+        statsResult.addAll(otherStatsResult);
 
         // 初始化table
         Table<String, Integer, Object> table = HashBasedTable.create();
-        for (DateStatsResultBo bo : otherStatsResult) {
-            table.put(bo.getStatsType(), bo.getStatsMonth(), bo.getStatsResult());
-        }
+        statsResult.forEach(bo -> table.put(bo.getStatsType(), bo.getStatsMonth(), bo.getStatsResult()));
 
         // 初始化分月数据
         table.rowKeySet().forEach(statsType -> {
@@ -103,16 +110,71 @@ public class OverallStatisticsService {
         });
 
         // 计算累积结果
-        Table<String, Integer, Object> leijiTable = HashBasedTable.create();
+        Table<String, Integer, Object> resultTable = HashBasedTable.create();
         for (String statsType : table.rowKeySet()) {
             for (MonthlyEnum monthlyEnum : MonthlyEnum.values()) {
-                leijiTable.put(statsType, monthlyEnum.getMonth(), this.getCumulateCount(table, statsType, monthlyEnum.getMonth()));
+                resultTable.put(statsType, monthlyEnum.getMonth(), this.getCumulativeCount(table, statsType, monthlyEnum.getMonth()));
             }
         }
 
+        return resultTable;
     }
 
-    private Double getCumulateCount(Table<String, Integer, Object> table, String rowKey, Integer columnKey) {
+    private List<DateStatsResultBo> getDateStatsResults(List<WeldInfoBo> weldInfoBos) {
+        List<StatsResultBo> pipeLengthResult = getPipeLength(weldInfoBos);
+        Map<String, Double> idToLengthMap = pipeLengthResult.stream().collect(Collectors.toMap(StatsResultBo::getOid, bo -> Double.parseDouble(bo.getStatsResult().toString()), (a, b) -> b));
+
+        Set<Integer> monthSet = weldInfoBos.stream().map(WeldInfoBo::getStatsMonth).collect(Collectors.toSet());
+        List<DateStatsResultBo> weldStatsResult = Lists.newArrayList();
+        for (Integer month : monthSet) {
+            Set<String> pipeOidsForMonth = this.getWeldPipeOidsByMonth(weldInfoBos, month);
+            weldStatsResult.add(new DateStatsResultBo("weld", this.sumPipeLength(idToLengthMap, pipeOidsForMonth), month));
+        }
+
+        return weldStatsResult;
+    }
+
+    private List<StatsResultBo> getPipeLength(List<WeldInfoBo> weldInfoBos) {
+        List<String> pipeOids = getWeldPipeOidsByType(weldInfoBos, StatsPipeEnum.STRAIGHT_STEEL_PIPE);
+        List<String> hotOids = getWeldPipeOidsByType(weldInfoBos, StatsPipeEnum.HOT_BEND);
+        List<String> coldOids = getWeldPipeOidsByType(weldInfoBos, StatsPipeEnum.COLD_BEND);
+        return this.overallStatisticsDao.queryPipeLengthOidIn(ImmutableMap.of(
+                STRAIGHT_STEEL_PIPE.getCode(), pipeOids, HOT_BEND.getCode(), hotOids, COLD_BEND.getCode(), coldOids
+        ));
+    }
+
+
+    private Double sumPipeLength(Map<String, Double> idToLengthMap, Set<String> oids) {
+        List<Double> sumList = oids.stream().map(idToLengthMap::get).collect(Collectors.toList());
+        return sumList.stream().mapToDouble(s -> s).sum();
+    }
+
+    private List<String> getWeldPipeOidsByType(List<WeldInfoBo> weldInfoBos, StatsPipeEnum statsPipeEnum) {
+        List<String> pipeOidList = Lists.newArrayList();
+        for (WeldInfoBo weldInfoBo : weldInfoBos) {
+            if (statsPipeEnum.getCode().equals(weldInfoBo.getFrontPipeType())) {
+                pipeOidList.add(weldInfoBo.getFrontPipeOid());
+            }
+
+            if (statsPipeEnum.getCode().equals(weldInfoBo.getBackPipeType())) {
+                pipeOidList.add(weldInfoBo.getBackPipeOid());
+            }
+        }
+        return pipeOidList;
+    }
+
+    private Set<String> getWeldPipeOidsByMonth(List<WeldInfoBo> weldInfoBos, Integer month) {
+        Set<String> pipeOidList = Sets.newHashSet();
+        for (WeldInfoBo weldInfoBo : weldInfoBos) {
+            if (month.equals(weldInfoBo.getStatsMonth())) {
+                pipeOidList.add(weldInfoBo.getFrontPipeOid());
+                pipeOidList.add(weldInfoBo.getBackPipeOid());
+            }
+        }
+        return pipeOidList;
+    }
+
+    private Double getCumulativeCount(Table<String, Integer, Object> table, String rowKey, Integer columnKey) {
         Double count = 0d;
         for (Integer i = 0; i < columnKey; i++) {
             count = Double.sum(count, Double.parseDouble(table.get(rowKey, i+1).toString()));
@@ -120,62 +182,7 @@ public class OverallStatisticsService {
         return count;
     }
 
-    public static void main(String[] args) {
-        DateStatsResultBo bo1 = new DateStatsResultBo();
-        DateStatsResultBo bo2 = new DateStatsResultBo();
-        DateStatsResultBo bo3 = new DateStatsResultBo();
-        DateStatsResultBo bo4 = new DateStatsResultBo();
-        bo1.setStatsType("weld");
-        bo1.setStatsMonth(5);
-        bo1.setStatsResult(4);
 
-        bo2.setStatsType("weld");
-        bo2.setStatsMonth(7);
-        bo2.setStatsResult(7);
-
-        bo3.setStatsType("pipe");
-        bo3.setStatsMonth(2);
-        bo3.setStatsResult(2);
-
-        bo4.setStatsType("pipe");
-        bo4.setStatsMonth(3);
-        bo4.setStatsResult(3);
-
-        List<DateStatsResultBo> otherStatsResult = Lists.newArrayList(bo1, bo2, bo3, bo4);
-        Table<String, Integer, Object> table = HashBasedTable.create();
-        for (DateStatsResultBo bo : otherStatsResult) {
-            table.put(bo.getStatsType(), bo.getStatsMonth(), bo.getStatsResult());
-        }
-
-
-        for (String statsType : table.rowKeySet()) {
-            for (MonthlyEnum monthlyEnum : MonthlyEnum.values()) {
-                if (!table.contains(statsType, monthlyEnum.getMonth())) {
-                    table.put(statsType, monthlyEnum.getMonth(), 0);
-                }
-            }
-        }
-
-        System.out.println(table);
-
-        Table<String, Integer, Object> leijiTable = HashBasedTable.create();
-        for (String statsType : table.rowKeySet()) {
-            for (MonthlyEnum monthlyEnum : MonthlyEnum.values()) {
-//                leijiTable.put(statsType, monthlyEnum.getMonth(), getLeiji(table, statsType, monthlyEnum.getMonth()));
-            }
-        }
-
-        System.out.println(leijiTable);
-    }
-
-    private static void initMonthly(List<DateStatsResultBo> otherStatsResult) {
-
-        List<Integer> monthlyCollect = Lists.newArrayList(MonthlyEnum.values()).stream().map(MonthlyEnum::getMonth).collect(Collectors.toList());
-
-        for (DateStatsResultBo bo : otherStatsResult) {
-
-        }
-    }
 
 
     /**
