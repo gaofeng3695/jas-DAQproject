@@ -106,4 +106,9 @@ public class PipeDao {
 		String sql = "select oid as key,closure_code as value,is_use from daq_material_closure t where active=1";
 		return baseJdbcDao.queryForList(sql, null);
 	}
+
+	public List<Map<String, Object>> getValveList() {
+		String sql = "select oid as key,valve_name as value from daq_material_valve where active=1";
+		return baseJdbcDao.queryForList(sql, null);
+	}
 }

@@ -94,6 +94,9 @@ public class PipeService {
 	public List<Map<String, Object>> getMaterialClosureList() {
 		return pipeDao.getMaterialClosureList();
 	}
+	public List<Map<String, Object>> getValveList() {
+		return pipeDao.getValveList();
+	}
 	
 	
 }
