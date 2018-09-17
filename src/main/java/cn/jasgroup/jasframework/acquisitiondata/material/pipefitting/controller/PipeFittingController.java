@@ -40,11 +40,12 @@ public class PipeFittingController extends BaseController{
 		ListResult<Map<String,Object>> result = null;
 		try {
 			String pipeSegmentOrCrossOid = param.get("pipeSegmentOrCrossOid");
+			String projectOid = param.get("projectOid");
 			String pipeTypeCode = param.get("pipeTypeCode");
 			if(StringUtils.isBlank(pipeTypeCode)){
 				return new ListResult<>(-1, "400", "pipeTypeCode is not null!"); 
 			}
-			List<Map<String, Object>> rows = this.pipeFittingService.getPipeFittingList(pipeSegmentOrCrossOid,pipeTypeCode);
+			List<Map<String, Object>> rows = this.pipeFittingService.getPipeFittingList(projectOid,pipeSegmentOrCrossOid,pipeTypeCode);
 			result = new ListResult<>(1, "200", "ok", rows);
 		} catch (Exception e) {
 			result = new ListResult<>(-1, "400", "error");

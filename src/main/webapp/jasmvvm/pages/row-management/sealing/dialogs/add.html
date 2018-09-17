@@ -41,14 +41,14 @@
 				<el-form ref="formData" :rules="rules" :model="formData" label-width="150px">
 					<jas-base-group-title name="基础数据"></jas-base-group-title>
 					<el-row :gutter="10">
-						<!--<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="项目名称" prop="projectOid" required>
 							<el-select v-model="formData.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
 								<el-option v-for="item in domain.project" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+					<!--<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="标段名称" prop="tendersOid" required>
 							<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
 								<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
@@ -200,7 +200,7 @@
 					steelGrades: [], //钢管等级
 					connectionMethodsArr: [],
 					coatingMethodsArr: [],
-					// project: [],
+					project: [],
 					// pipeline: [],
 					// tenders: [],
 					//监理单位
@@ -212,7 +212,11 @@
 						message: '封堵物编号为必填项',
 						trigger: 'change'
 					}],
-
+					projectOid: [{
+							required: true,
+							message: '项目为必填项',
+							trigger: 'change'
+						}],
 					closureType: [{
 						required: true,
 						message: '封堵物类型为必填项',
@@ -220,7 +224,7 @@
 					}],
 				},
 				formData: {
-					// projectOid: "",
+					projectOid: "",
 					// tendersOid: "",
 					// pipelineOid: "",
 					closureCode: '',
@@ -250,9 +254,9 @@
 			that.requestDomainFromCommonTable("coating_methods_domain", function (arr) {
 				that.domain.coatingMethodsArr = arr;
 			});
-			// that.requestDomainFromBizTable('/daq/privilege/getProjectList.do', {}, function (arr) {
-			// 	that.domain.project = arr;
-			// });
+			that.requestDomainFromBizTable('daq/materialPipe/getPipeList.do', {}, function (arr) {
+				that.domain.project = arr;
+			});
 			if (param.oid) {
 				this.oid = param.oid;
 				this.formData.oid = this.oid;

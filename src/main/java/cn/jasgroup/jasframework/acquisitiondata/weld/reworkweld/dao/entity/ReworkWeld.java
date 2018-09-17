@@ -7,6 +7,7 @@ import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import cn.jasgroup.jasframework.base.annotation.CommonDeleteBatchConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
@@ -44,6 +45,9 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 	strategys ={
 		@UniqueConstraintStrategy(columnNames={"pipeSegmentOrCrossOid","reworkWeldCode"})
 	}
+)
+@CommonDeleteBatchConfig(
+		scene = "/reworkWeld/deleteBatch"
 )
 @JdbcEntity(name="daq_weld_rework_weld")
 public class ReworkWeld extends CommonJdbcEntity{
