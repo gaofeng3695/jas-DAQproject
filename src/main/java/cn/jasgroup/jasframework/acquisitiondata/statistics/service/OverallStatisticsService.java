@@ -10,13 +10,13 @@ import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.DateStatsR
 import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.StatsResultBo;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.WeldInfoBo;
 import com.google.common.collect.*;
-import com.sun.star.corba.ObjectKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -95,32 +95,25 @@ public class OverallStatisticsService {
         statsResult.addAll(patchStatsResult);
         statsResult.addAll(otherStatsResult);
 
-        // 初始化table
+        // 初始化table(rowKey:统计类型, columnKey:月份, value: 长度)
         Table<String, Integer, Object> table = HashBasedTable.create();
-//        for (DateStatsResultBo bo : statsResult) {
-//            table.put(bo.getStatsType(), bo.getStatsMonth(), bo.getStatsResult());
-//        }
 
         // 初始化分月数据
         for (StatsProcessEnum processEnum : StatsProcessEnum.values()) {
-            Arrays.stream(MonthlyEnum.values()).forEach(monthlyEnum -> table.put(processEnum.getType(), monthlyEnum.getMonth(), 0));
+            for (MonthlyEnum monthlyEnum : MonthlyEnum.values()) {
+                table.put(processEnum.getType(), monthlyEnum.getMonth(), 0);
+            }
         }
 
         statsResult.forEach(bo -> table.put(bo.getStatsType(), bo.getStatsMonth(), bo.getStatsResult()==null?0:bo.getStatsResult()));
 
-//        table.rowKeySet().forEach(statsType -> {
-//            for (MonthlyEnum monthlyEnum : MonthlyEnum.values()) {
-//                if (!table.contains(statsType, monthlyEnum.getMonth())) {
-//                    table.put(statsType, monthlyEnum.getMonth(), 0);
-//                }
-//            }
-//        });
-
+        int currentMonth = LocalDate.now().getMonthValue();
         // 计算累积结果
         Table<String, Integer, Object> resultTable = HashBasedTable.create();
+        MonthlyEnum[] monthlyEnums = MonthlyEnum.values();
         for (String statsType : table.rowKeySet()) {
-            for (MonthlyEnum monthlyEnum : MonthlyEnum.values()) {
-                resultTable.put(statsType, monthlyEnum.getMonth(), this.getCumulativeCount(table, statsType, monthlyEnum.getMonth()));
+            for (int i = 0; i < currentMonth; i++) {
+                resultTable.put(statsType, monthlyEnums[i].getMonth(), this.getCumulativeCount(table, statsType, monthlyEnums[i].getMonth()));
             }
         }
 
@@ -138,7 +131,7 @@ public class OverallStatisticsService {
         Set<Integer> monthSet = weldInfoBos.stream().map(WeldInfoBo::getStatsMonth).collect(Collectors.toSet());
         List<DateStatsResultBo> weldStatsResult = Lists.newArrayList();
         for (Integer month : monthSet) {
-            Set<String> pipeOidsForMonth = this.getWeldPipeOidsByMonth(weldInfoBos, month);
+            Set<String> pipeOidsForMonth = this.getWeldPipeIdsByMonth(weldInfoBos, month);
             weldStatsResult.add(new DateStatsResultBo("weld", this.sumPipeLength(idToLengthMap, pipeOidsForMonth), month));
         }
 
@@ -146,22 +139,27 @@ public class OverallStatisticsService {
     }
 
     private List<StatsResultBo> getPipeLength(List<WeldInfoBo> weldInfoBos) {
-        List<String> pipeOids = getWeldPipeOidsByType(weldInfoBos, StatsPipeEnum.STRAIGHT_STEEL_PIPE);
-        List<String> hotOids = getWeldPipeOidsByType(weldInfoBos, StatsPipeEnum.HOT_BEND);
-        List<String> coldOids = getWeldPipeOidsByType(weldInfoBos, StatsPipeEnum.COLD_BEND);
+        List<String> pipeIds = getWeldPipeIdsByType(weldInfoBos, StatsPipeEnum.STRAIGHT_STEEL_PIPE);
+        List<String> hotIds = getWeldPipeIdsByType(weldInfoBos, StatsPipeEnum.HOT_BEND);
+        List<String> coldIds = getWeldPipeIdsByType(weldInfoBos, StatsPipeEnum.COLD_BEND);
         return this.overallStatisticsDao.queryPipeLengthOidIn(ImmutableMap.of(
-                STRAIGHT_STEEL_PIPE.getCode(), pipeOids, HOT_BEND.getCode(), hotOids, COLD_BEND.getCode(), coldOids
+                STRAIGHT_STEEL_PIPE.getCode(), pipeIds, HOT_BEND.getCode(), hotIds, COLD_BEND.getCode(), coldIds
         ));
     }
 
 
-    private Double sumPipeLength(Map<String, Double> idToLengthMap, Set<String> oids) {
-        List<Double> sumList = oids.stream().map(idToLengthMap::get).collect(Collectors.toList());
-        double sum = sumList.stream().mapToDouble(s -> (s == null ? 0 : s)).sum();
-        return sum;
+    /**
+     * 计算管子的长度之和
+     * @param idToLengthMap id与length的映射Map
+     * @param pipeIds 管子ID集合
+     * @return Double
+     */
+    private Double sumPipeLength(Map<String, Double> idToLengthMap, Set<String> pipeIds) {
+        List<Double> sumList = pipeIds.stream().map(idToLengthMap::get).collect(Collectors.toList());
+        return sumList.stream().mapToDouble(s -> (s == null ? 0 : s)).sum();
     }
 
-    private List<String> getWeldPipeOidsByType(List<WeldInfoBo> weldInfoBos, StatsPipeEnum statsPipeEnum) {
+    private List<String> getWeldPipeIdsByType(List<WeldInfoBo> weldInfoBos, StatsPipeEnum statsPipeEnum) {
         List<String> pipeOidList = Lists.newArrayList();
         for (WeldInfoBo weldInfoBo : weldInfoBos) {
             if (statsPipeEnum.getCode().equals(weldInfoBo.getFrontPipeType())) {
@@ -175,7 +173,7 @@ public class OverallStatisticsService {
         return pipeOidList;
     }
 
-    private Set<String> getWeldPipeOidsByMonth(List<WeldInfoBo> weldInfoBos, Integer month) {
+    private Set<String> getWeldPipeIdsByMonth(List<WeldInfoBo> weldInfoBos, Integer month) {
         Set<String> pipeOidList = Sets.newHashSet();
         for (WeldInfoBo weldInfoBo : weldInfoBos) {
             if (month.equals(weldInfoBo.getStatsMonth())) {

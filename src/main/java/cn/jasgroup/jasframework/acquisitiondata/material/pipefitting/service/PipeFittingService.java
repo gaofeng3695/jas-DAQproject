@@ -33,8 +33,8 @@ public class PipeFittingService extends CommonDataHibernateService{
 	  * <p>创建日期:2018年7月13日 上午11:33:55。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public List<Map<String, Object>> getPipeFittingList(String pipeSegmentOrCrossOid,String pipeTypeCode){
-		return this.pipeFittingDao.getPipeFittingList(pipeSegmentOrCrossOid,pipeTypeCode);
+	public List<Map<String, Object>> getPipeFittingList(String projectOid,String pipeSegmentOrCrossOid,String pipeTypeCode){
+		return this.pipeFittingDao.getPipeFittingList(projectOid,pipeSegmentOrCrossOid,pipeTypeCode);
 	}
 	
 	/***
@@ -46,15 +46,14 @@ public class PipeFittingService extends CommonDataHibernateService{
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public void saveChanagePipeFittingUseState(ConstructionWeld constructionWeld){
-		String projectOid = constructionWeld.getProjectOid();
 		String tendersOid = constructionWeld.getTendersOid();
 		String pipelineOid = constructionWeld.getPipelineOid();
 		String frontPipeOid = constructionWeld.getFrontPipeOid();
 		String frontPipeTypeCode = constructionWeld.getFrontPipeType();
-		this.pipeFittingDao.updatePipeFitting(projectOid, tendersOid, pipelineOid, frontPipeOid, frontPipeTypeCode,1);
+		this.pipeFittingDao.updateFrontPipeFitting(tendersOid, pipelineOid, frontPipeOid, frontPipeTypeCode,1);
 		String backPipeOid = constructionWeld.getBackPipeOid();
 		String backPipeTypeCode = constructionWeld.getBackPipeType();
-		this.pipeFittingDao.updatePipeFitting(projectOid, tendersOid, pipelineOid, backPipeOid, backPipeTypeCode,1);
+		this.pipeFittingDao.updateBackPipeFitting(tendersOid, pipelineOid, backPipeOid, backPipeTypeCode,1);
 	}
 	
 	/**
@@ -69,21 +68,20 @@ public class PipeFittingService extends CommonDataHibernateService{
 		ConstructionWeld oldConstructionWeld = (ConstructionWeld) BaseEntityThreadLocalHolder.getEntitySnap();
 		String oldFrontPipeOid = oldConstructionWeld.getFrontPipeOid();
 		String oldFrontPipeTypeCode = oldConstructionWeld.getFrontPipeType();
-		this.pipeFittingDao.updatePipeFitting("", "", "", oldFrontPipeOid, oldFrontPipeTypeCode,0);
+		this.pipeFittingDao.updateFrontPipeFitting("", "", oldFrontPipeOid, oldFrontPipeTypeCode,0);
 		String oldBackPipeOid = oldConstructionWeld.getBackPipeOid();
 		String oldBackPipeTypeCode = oldConstructionWeld.getBackPipeType();
-		this.pipeFittingDao.updatePipeFitting("", "", "", oldBackPipeOid, oldBackPipeTypeCode,0);
+		this.pipeFittingDao.updateBackPipeFitting( "", "", oldBackPipeOid, oldBackPipeTypeCode,0);
 		
 		
-		String projectOid = constructionWeld.getProjectOid();
 		String tendersOid = constructionWeld.getTendersOid();
 		String pipelineOid = constructionWeld.getPipelineOid();
 		String frontPipeOid = constructionWeld.getFrontPipeOid();
 		String frontPipeTypeCode = constructionWeld.getFrontPipeType();
-		this.pipeFittingDao.updatePipeFitting(projectOid, tendersOid, pipelineOid, frontPipeOid, frontPipeTypeCode,1);
+		this.pipeFittingDao.updateFrontPipeFitting(tendersOid, pipelineOid, frontPipeOid, frontPipeTypeCode,1);
 		String backPipeOid = constructionWeld.getBackPipeOid();
 		String backPipeTypeCode = constructionWeld.getBackPipeType();
-		this.pipeFittingDao.updatePipeFitting(projectOid, tendersOid, pipelineOid, backPipeOid, backPipeTypeCode,1);
+		this.pipeFittingDao.updateBackPipeFitting(tendersOid, pipelineOid, backPipeOid, backPipeTypeCode,1);
 		
 	}
 	public void updateChanageBeforeAdvice(ConstructionWeld constructionWeld){
@@ -102,9 +100,9 @@ public class PipeFittingService extends CommonDataHibernateService{
 		ConstructionWeld oldConstructionWeld = (ConstructionWeld) weldDao.find(constructionWeld.getOid());
 		String oldFrontPipeOid = oldConstructionWeld.getFrontPipeOid();
 		String oldFrontPipeTypeCode = oldConstructionWeld.getFrontPipeType();
-		this.pipeFittingDao.updatePipeFitting("", "", "", oldFrontPipeOid, oldFrontPipeTypeCode,0);
+		this.pipeFittingDao.updateFrontPipeFitting("", "", oldFrontPipeOid, oldFrontPipeTypeCode,0);
 		String oldBackPipeOid = oldConstructionWeld.getBackPipeOid();
 		String oldBackPipeTypeCode = oldConstructionWeld.getBackPipeType();
-		this.pipeFittingDao.updatePipeFitting("", "", "", oldBackPipeOid, oldBackPipeTypeCode,0);
+		this.pipeFittingDao.updateBackPipeFitting("", "", oldBackPipeOid, oldBackPipeTypeCode,0);
 	}
 }

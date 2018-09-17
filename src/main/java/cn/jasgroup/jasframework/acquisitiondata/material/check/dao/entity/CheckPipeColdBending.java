@@ -7,6 +7,7 @@ import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import cn.jasgroup.jasframework.base.annotation.CommonDeleteBatchConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
@@ -36,6 +37,9 @@ import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 	strategys ={
 		@UniqueConstraintStrategy(columnNames={"certificateNum"})
 	}
+)
+@CommonDeleteBatchConfig(
+		scene = "/checkPipeColdBending/deleteBatch"
 )
 @JdbcEntity(name="daq_check_pipe_cold_bending")
 public class CheckPipeColdBending extends CommonJdbcEntity{

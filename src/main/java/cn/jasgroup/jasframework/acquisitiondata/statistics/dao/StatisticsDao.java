@@ -55,10 +55,10 @@ public class StatisticsDao {
 
             if (pipeCheckedBlock.containsKey(statType)) {
                 String tableName = pipeCheckedBlock.get(statType);
-                sql.append(String.format(" select '%s' as statis_type, count(*) as statis_result from %s where active = 1 and create_user_id =:createUserId ", statType, tableName));
+                sql.append(String.format(" select '%s' as stats_type, count(*) as stats_result from %s where active = 1 and create_user_id =:createUserId ", statType, tableName));
             } else if (weldApproveBlock.containsKey(statType)) {
                 String tableName = weldApproveBlock.get(statType);
-                sql.append(String.format(" select '%s' as statis_type, approve_status as statis_result from %s where active = 1  and create_user_id =:createUserId ", statType, tableName));
+                sql.append(String.format(" select '%s' as stats_type, approve_status as stats_result from %s where active = 1  and create_user_id =:createUserId ", statType, tableName));
             }
 
             if (!StringUtils.isEmpty(projectOid)) {

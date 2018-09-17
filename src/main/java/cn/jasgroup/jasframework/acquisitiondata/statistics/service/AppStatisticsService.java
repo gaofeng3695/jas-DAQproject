@@ -47,30 +47,30 @@ public class AppStatisticsService {
 
     /**
      * 数据录入统计
-     * @param statisTypes 统计类型来源(默认统计7个)
+     * @param statsTypes 统计类型来源(默认统计7个)
      * - {@link EntryStatisticsBlock#PIPE_CHECKED_BLOCK}
      * - {@link EntryStatisticsBlock#WELD_APPROVE_BLOCK}
      * @return list
      */
-    public List<DataEntryStatsBo> dataEntry(List<String> statisTypes, String projectOid) {
+    public List<DataEntryStatsBo> dataEntry(List<String> statsTypes, String projectOid) {
 
         List<DataEntryStatsBo> returnList = Lists.newArrayList();
         Map<String, String> pipeCheckedBlock = EntryStatisticsBlock.getPipeCheckedBlock();
         Map<String, String> weldApproveBlock = EntryStatisticsBlock.getWeldApproveBlock();
 
-        if (CollectionUtils.isEmpty(statisTypes)) {
-            statisTypes = Lists.newArrayList();
-            statisTypes.addAll(EntryStatisticsBlock.getPipeCheckedBlock().keySet());
-            statisTypes.addAll(EntryStatisticsBlock.getWeldApproveBlock().keySet());
+        if (CollectionUtils.isEmpty(statsTypes)) {
+            statsTypes = Lists.newArrayList();
+            statsTypes.addAll(EntryStatisticsBlock.getPipeCheckedBlock().keySet());
+            statsTypes.addAll(EntryStatisticsBlock.getWeldApproveBlock().keySet());
         } else {
-            statisTypes.removeIf(s -> !pipeCheckedBlock.containsKey(s) && !weldApproveBlock.containsKey(s));
+            statsTypes.removeIf(s -> !pipeCheckedBlock.containsKey(s) && !weldApproveBlock.containsKey(s));
         }
 
-        List<StatsResultBo> resultList = statisticsDao.listDataEntry(statisTypes, projectOid);
+        List<StatsResultBo> resultList = statisticsDao.listDataEntry(statsTypes, projectOid);
 
         // pipeCheckedBlock: 没有审核操作的: 只统计录入数
         for (String statsType : pipeCheckedBlock.keySet()) {
-            if (statisTypes.contains(statsType)) {
+            if (statsTypes.contains(statsType)) {
                 Optional<StatsResultBo> optional = resultList.stream().filter(resultBo -> statsType.equals(resultBo.getStatsType())).findAny();
                 optional.ifPresent(statsResultBo -> returnList.add(new DataEntryStatsBo(statsType, Long.valueOf(String.valueOf(statsResultBo.getStatsResult())))));
             }
@@ -78,7 +78,7 @@ public class AppStatisticsService {
 
         // weldApproveBlock: 有审核操作的: 统计录入数, 待提交数, 打回数
         for (String statsType : weldApproveBlock.keySet()) {
-            if (statisTypes.contains(statsType)) {
+            if (statsTypes.contains(statsType)) {
                 long enteredCount = resultList.stream().filter(resultBo -> statsType.equals(resultBo.getStatsType())).count();
                 long toSubmitCount = resultList.stream().filter(resultBo -> statsType.equals(resultBo.getStatsType()) && Objects.equals(ApproveStatusEnum.UNREPORTED.getCode(), Integer.valueOf(String.valueOf(resultBo.getStatsResult())))).count();
                 long repulseCount = resultList.stream().filter(resultBo -> statsType.equals(resultBo.getStatsType()) && Objects.equals(ApproveStatusEnum.REJECT.getCode(), Integer.valueOf(String.valueOf(resultBo.getStatsResult())))).count();

@@ -1,7 +1,7 @@
 package cn.jasgroup.jasframework.acquisitiondata.statistics.comm;
 
 /**
- * description: none
+ * description: 工序类型枚举
  *
  * @author xiefayang
  * 2018/9/14 10:29
