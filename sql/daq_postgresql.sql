@@ -5043,3 +5043,32 @@ union all
 select oid,closure_code as code from daq_material_closure where active=1
 union all
 select oid,pipe_cold_bending_code as code from daq_material_pipe_cold_bending where active=1
+
+/***************添加字段*****************/
+alter table daq_material_pipe_cold_bending add column front_is_use smallint DEFAULT 0;
+alter table daq_material_pipe_cold_bending add column back_is_use smallint DEFAULT 0;
+
+comment on column daq_material_pipe_cold_bending.front_is_use is '前端已焊';
+comment on column daq_material_pipe_cold_bending.back_is_use is '后端已焊';
+
+alter table daq_material_hot_bends add column materiel_code varchar(100);
+alter table daq_material_hot_bends add column production_date timestamp(6);
+alter table daq_material_hot_bends add column front_is_use smallint DEFAULT 0;
+alter table daq_material_hot_bends add column back_is_use smallint DEFAULT 0;
+alter table daq_material_hot_bends add column curve_length numeric(9,3);
+
+comment on column daq_material_hot_bends.materiel_code IS '物料编码';
+comment on column daq_material_hot_bends.production_date IS '出厂日期';
+comment on column daq_material_hot_bends.front_is_use is '前端已焊';
+comment on column daq_material_hot_bends.back_is_use is '后端已焊';
+comment on column daq_material_hot_bends.curve_length is '曲线长度';
+
+alter table daq_material_pipe add column materiel_code varchar(100);
+alter table daq_material_pipe add column production_date timestamp(6);
+alter table daq_material_pipe add column front_is_use smallint DEFAULT 0;
+alter table daq_material_pipe add column back_is_use smallint DEFAULT 0;
+
+comment on column daq_material_pipe.materiel_code IS '物料编码';
+comment on column daq_material_pipe.production_date IS '出厂日期';
+comment on column daq_material_pipe.front_is_use is '前端已焊';
+comment on column daq_material_pipe.back_is_use is '后端已焊';
