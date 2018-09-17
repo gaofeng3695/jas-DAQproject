@@ -155,4 +155,18 @@ public class DaqPrivilegeService extends BaseService{
 	public List<Map<String,Object>>getConstructUnitAllUser(){
 		return this.daqPrivilegeDao.getConstructUnitAllUser();
 	}
+	
+	/**
+	 * <p>功能描述：根据管线oid获取当前用户所在部门及下级部门的站场/阀室列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param pipelineOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年9月17日 上午11:22:49。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getPipeStationList(String pipelineOid) {
+		String unitOid = ThreadLocalHolder.getCurrentUser().getUnitId();
+		return this.daqPrivilegeDao.getPipeStationList(pipelineOid,unitOid);
+	}
 }

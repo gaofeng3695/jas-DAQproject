@@ -170,6 +170,12 @@ public class PipeService {
 	public List<Map<String, Object>> getMaterialClosureList(List<String> projectOids) {
 		return pipeDao.getMaterialClosureList(projectOids);
 	}
+	public List<Map<String, Object>> getValveList(String projectOid) {
+		return pipeDao.getValveList(projectOid);
+	}
+	public List<Map<String, Object>> getValveList(List<String> projectOids) {
+		return pipeDao.getValveList(projectOids);
+	}
 	
 	/**
 	  * <p>功能描述：根据项目获取冷弯管下拉选列表。</p>

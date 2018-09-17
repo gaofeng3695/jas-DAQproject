@@ -264,4 +264,20 @@ public class PipeDao {
 		}
 		return this.baseNamedParameterJdbcTemplate.queryForListHump(sql, param);
 	}
+	public List<Map<String, Object>> getValveList(String projectOid) {
+		String sql = "select oid as key,valve_name as value from daq_material_valve where active=1";
+		if(StringUtils.isNotBlank(projectOid)){
+			sql += " and project_oid='"+projectOid+"'";
+		}
+		return baseJdbcDao.queryForList(sql, null);
+	}
+	public List<Map<String, Object>> getValveList(List<String> projectOids) {
+		String sql = "select oid as key,valve_name as value from daq_material_valve where active=1";
+		Map<String,Object> param = new HashMap<String,Object>();
+		if(projectOids!=null && projectOids.size()>0){
+			sql += " and t.project_oid in (:projectOids)";
+			param.put("projectOids", projectOids);
+		}
+		return this.baseNamedParameterJdbcTemplate.queryForListHump(sql, param);
+	}
 }
