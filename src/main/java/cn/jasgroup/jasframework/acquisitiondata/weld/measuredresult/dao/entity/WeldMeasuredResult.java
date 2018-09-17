@@ -10,6 +10,7 @@ import cn.jasgroup.framework.spatial.annotation.Point;
 import cn.jasgroup.framework.spatial.support.enumeration.CalculateType;
 import cn.jasgroup.framework.spatial.support.enumeration.ScopeType;
 import cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.dao.entity.MedianStake;
+import cn.jasgroup.jasframework.base.annotation.CommonDeleteBatchConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
@@ -33,6 +34,9 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 @CommonDeleteConfig(
 	scene = "/weldMeasuredResult/delete"
 )
+@CommonDeleteBatchConfig(
+		scene = "/weldMeasuredResult/delete"
+		)
 @Point(
 	x="pointx",
 	y="pointy" ,
