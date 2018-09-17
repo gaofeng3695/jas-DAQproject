@@ -83,8 +83,8 @@ public class ConstructionWeldQuery extends BaseJavaQuery{
 					+ "LEFT JOIN (SELECT t.oid, array_to_string(array_agg(wpe.personnel_name),',') as personnel_name FROM daq_construction_weld t LEFT JOIN ( SELECT oid, personnel_name, active FROM daq_work_personnel WHERE active = 1 ) wpe ON t.padder_oid like '%'||wpe.oid||'%' group by t.oid) wpe ON wpe.oid = cw.oid "
 //					+ "LEFT JOIN (SELECT oid, personnel_name, active FROM daq_work_personnel where active=1) wper ON wper.oid = cw.render_oid "
 					+ "LEFT JOIN (SELECT t.oid, array_to_string(array_agg(wpe.personnel_name),',') as personnel_name FROM daq_construction_weld t LEFT JOIN ( SELECT oid, personnel_name, active FROM daq_work_personnel WHERE active = 1 ) wpe ON t.render_oid like '%'||wpe.oid||'%' group by t.oid) wper ON wper.oid = cw.oid "
-					+ "left join (select code_id, code_name from sys_domain where active=1) pf on cw.front_pipe_type= pf.code_id "
-					+ "left join (select code_id, code_name from sys_domain where active=1) bp on cw.back_pipe_type=bp.code_id "
+					+ "left join (select code_id, code_name from sys_domain where active=1 and domain_name='pipe_type_domain') pf on cw.front_pipe_type= pf.code_id "
+					+ "left join (select code_id, code_name from sys_domain where active=1 and domain_name='back_pipe_type_domain') bp on cw.back_pipe_type=bp.code_id "
 					+ "left join (select oid,code from v_daq_material) vmf on vmf.oid=cw.front_pipe_oid "
 					+ "left join (select oid,code from v_daq_material) vmb on vmb.oid=cw.back_pipe_oid "
 					+ "WHERE cw.active = 1";
