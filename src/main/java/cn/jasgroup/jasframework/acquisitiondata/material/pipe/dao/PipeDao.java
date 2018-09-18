@@ -264,6 +264,16 @@ public class PipeDao {
 		}
 		return this.baseNamedParameterJdbcTemplate.queryForListHump(sql, param);
 	}
+	
+	/**
+	 * <p>功能描述：获取阀门列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年9月18日 上午11:28:48。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
 	public List<Map<String, Object>> getValveList(String projectOid) {
 		String sql = "select oid as key,valve_name as value from daq_material_valve where active=1";
 		if(StringUtils.isNotBlank(projectOid)){
@@ -271,6 +281,16 @@ public class PipeDao {
 		}
 		return baseJdbcDao.queryForList(sql, null);
 	}
+	
+	/**
+	 * <p>功能描述：根据项目获取所有的阀门列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOids
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年9月18日 上午11:29:35。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
 	public List<Map<String, Object>> getValveList(List<String> projectOids) {
 		String sql = "select oid as key,valve_name as value from daq_material_valve where active=1";
 		Map<String,Object> param = new HashMap<String,Object>();

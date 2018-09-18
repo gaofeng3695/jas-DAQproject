@@ -279,7 +279,7 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 				+ "union all "
 				+ "select t.oid,t.parent_id from pri_unit t inner join pri_unit_temp b on t.parent_id=b.oid and t.active=1 "
 				+ ")"
-				+ "select distinct t.oid as key,t.pipe_station_name as value,t.create_datetime,s.pipeline_oid,s.scope_oid from daq_implement_scope_ref s "
+				+ "select distinct t.oid as key,t.pipe_station_name as value,t.create_datetime from daq_implement_scope_ref s "
 				+ "left join (select oid,pipe_station_name,create_datetime from daq_pipe_station where active=1) t on t.oid=s.scope_oid where s.unit_oid in (select oid from pri_unit_temp)";
 		if (StringUtils.isNotBlank(pipelineOid)) {
 			sql += " and s.pipeline_oid='"+pipelineOid+"'";
