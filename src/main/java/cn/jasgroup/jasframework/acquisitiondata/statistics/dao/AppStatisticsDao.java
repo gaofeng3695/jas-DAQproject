@@ -308,7 +308,7 @@ public class AppStatisticsDao {
 
     public List<DateApproveStatsForApp> statsDataEntryApproveGroupByDay(String projectId, String startDate, String endDate) {
         String sqlFormat = "" +
-                " select count(*) as total, sum(case when (approve_status=2) then 1 else 0 end) as audited " +
+                " select to_char(create_datetime, 'yyyy-DD-mm') as stats_date, count(*) as total_count, sum(case when (approve_status=2) then 1 else 0 end) as audited_count " +
                 " from %s where active = 1 and project_oid = :projectId" +
                 " group by to_char(create_datetime, 'yyyy-DD-mm') ";
         List<String> codeList = new ArrayList<>(ApproveStatisticsBlock.ALL.keySet());
@@ -319,8 +319,8 @@ public class AppStatisticsDao {
             sql.append(i<(codeList.size()-1) ? " UNION ALL ":"");
         }
 
-        sql.insert(0, " select date, sum(count) as total_count, sum(audited) as audited_count from ( ").append(" ) as ss ");
-        sql.append(" where date BETWEEN :startDate and :endDate ");
+        sql.insert(0, " select stats_date, sum(total_count) as total_count, sum(audited_count) as audited_count from ( ").append(" ) as ss ");
+        sql.append(" where stats_date BETWEEN :startDate and :endDate group by stats_date");
         return commonDataJdbcDao.queryForList(sql.toString(), ImmutableMap.of("projectId", projectId, "startDate", startDate, "endDate", endDate), DateApproveStatsForApp.class);
     }
 }
