@@ -98,11 +98,13 @@ public class PipeFittingService extends CommonDataHibernateService{
 	 */
 	public void deleteChanagePipeFittingUseState(ConstructionWeld constructionWeld){
 		ConstructionWeld oldConstructionWeld = (ConstructionWeld) weldDao.find(constructionWeld.getOid());
-		String oldFrontPipeOid = oldConstructionWeld.getFrontPipeOid();
-		String oldFrontPipeTypeCode = oldConstructionWeld.getFrontPipeType();
-		this.pipeFittingDao.updateFrontPipeFitting("", "", oldFrontPipeOid, oldFrontPipeTypeCode,0);
-		String oldBackPipeOid = oldConstructionWeld.getBackPipeOid();
-		String oldBackPipeTypeCode = oldConstructionWeld.getBackPipeType();
-		this.pipeFittingDao.updateBackPipeFitting("", "", oldBackPipeOid, oldBackPipeTypeCode,0);
+		if(oldConstructionWeld!=null){
+			String oldFrontPipeOid = oldConstructionWeld.getFrontPipeOid();
+			String oldFrontPipeTypeCode = oldConstructionWeld.getFrontPipeType();
+			this.pipeFittingDao.updateFrontPipeFitting("", "", oldFrontPipeOid, oldFrontPipeTypeCode,0);
+			String oldBackPipeOid = oldConstructionWeld.getBackPipeOid();
+			String oldBackPipeTypeCode = oldConstructionWeld.getBackPipeType();
+			this.pipeFittingDao.updateBackPipeFitting("", "", oldBackPipeOid, oldBackPipeTypeCode,0);
+		}
 	}
 }

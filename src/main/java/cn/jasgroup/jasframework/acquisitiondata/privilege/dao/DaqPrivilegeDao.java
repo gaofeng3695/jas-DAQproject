@@ -140,6 +140,26 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 		sql += "order by t.create_datetime asc";
 		return this.queryForList(sql, new Object[]{});
 	}
+	/**
+	  * <p>功能描述：根据项目oid获取施工单位列表。</p>
+	  * <p> 雷凯。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年9月18日 上午9:24:33。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String,Object>> getConstructionUnitByProjectOid(String projectOid){
+		String sql = "select distinct t.oid as key,t.unit_name as value,t.create_datetime "
+				+ "from pri_unit t "
+				+ "left join daq_implement_scope_ref i on t.oid = i.unit_oid "
+				+ "where t.hierarchy like 'Unit.0001.0005%' and t.active=1 ";
+		if(StringUtils.isNotBlank(projectOid)){
+			sql +=" and i.project_oid='"+projectOid+"'";
+		}
+		sql += "order by t.create_datetime asc";
+		return this.queryForList(sql, new Object[]{});
+	}
 	
 	/***
 	  * <p>功能描述：根据线路段oid或者穿跨越oid获取中线桩列表。</p>
