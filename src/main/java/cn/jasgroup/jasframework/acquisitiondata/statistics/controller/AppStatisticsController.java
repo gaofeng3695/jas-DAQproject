@@ -1,13 +1,20 @@
 package cn.jasgroup.jasframework.acquisitiondata.statistics.controller;
 
+import cn.jasgroup.framework.data.exception.BusinessException;
 import cn.jasgroup.framework.data.result.BaseResult;
+import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.StatsProcessForAppEnum;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.service.AppStatisticsService;
 import cn.jasgroup.jasframework.acquisitiondata.utils.ResultVOUtil;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ucar.units.Base;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * description: APP统计相关接口
@@ -21,7 +28,6 @@ public class AppStatisticsController {
 
     @Autowired
     private AppStatisticsService appStatisticsService;
-
 
     /**
      * 数据录入统计(app)
@@ -48,5 +54,59 @@ public class AppStatisticsController {
     public BaseResult dataAuditing(@RequestParam(required = false) String constructUnit,
                                    @RequestParam(required = false) String projectOid) {
         return ResultVOUtil.ofSuccess(this.appStatisticsService.dataAuditing(projectOid, constructUnit));
+    }
+
+    /**
+     * 昨日进度统计
+     * @param projectId 项目ID
+     * @return {@link BaseResult}
+     */
+    @GetMapping("statsYesterdayProcess")
+    public BaseResult statsYesterdayProcess(@RequestParam String projectId) {
+        return ResultVOUtil.ofSuccess(this.appStatisticsService.statsYesterdayProcess(projectId));
+    }
+
+    /**
+     * 近一周累积完成情况统计
+     * @param projectId 项目ID
+     * @return {@link BaseResult}
+     */
+    @GetMapping("statsLatestWeekCumulativeProcess")
+    public BaseResult statsLatestWeekCumulativeProcess(@RequestParam String projectId) {
+        Table<String, String, Object> resultTable = this.appStatisticsService.statsLatestWeekCumulativeProcess(projectId);
+        return ResultVOUtil.ofSuccess(resultTable.rowMap());
+    }
+
+
+    @GetMapping("statsYesterdayProcessDetail")
+    public BaseResult statsYesterdayProcessDetail(@RequestParam String projectId, @RequestParam String statsType) {
+        List<String> statsTypes = Arrays.stream(StatsProcessForAppEnum.values()).map(StatsProcessForAppEnum::getType).collect(Collectors.toList());
+        if (!statsTypes.contains(statsType)) {
+            throw new BusinessException("统计类型statsType不存在", "403");
+        }
+        return ResultVOUtil.ofSuccess(this.appStatisticsService.statsYesterdayProcessDetail(projectId, statsType));
+    }
+
+
+    /**
+     * 焊口检测情况统计
+     * @param projectId 项目ID
+     * @return {@link BaseResult}
+     */
+    @GetMapping("statsWeldCheck")
+    public BaseResult statsWeldCheck(@RequestParam String projectId) {
+        return ResultVOUtil.ofSuccess();
+    }
+
+
+    /**
+     * 数据录入及审核情况统计(本周的)
+     * @param projectId 项目ID
+     * @return {@link BaseResult}
+     */
+    @GetMapping("statsDateEntryAndAuditing")
+    public BaseResult statsDateEntryAndAuditing(@RequestParam String projectId) {
+        Table<String, String, Integer> resultTable = this.appStatisticsService.statsDateEntryAndAuditing(projectId);
+        return ResultVOUtil.ofSuccess(resultTable.rowMap());
     }
 }
