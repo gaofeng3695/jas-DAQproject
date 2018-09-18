@@ -2,7 +2,7 @@ package cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo;
 
 public class DateApproveStatsForApp {
 
-    private String date;
+    private String statsDate;
 
     private Integer totalCount;
 
@@ -12,17 +12,17 @@ public class DateApproveStatsForApp {
     }
 
     public DateApproveStatsForApp(String date, Integer totalCount, Integer auditedCount) {
-        this.date = date;
+        this.statsDate = date;
         this.totalCount = totalCount;
         this.auditedCount = auditedCount;
     }
 
-    public String getDate() {
-        return date;
+    public String getStatsDate() {
+        return statsDate;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setStatsDate(String statsDate) {
+        this.statsDate = statsDate;
     }
 
     public Integer getTotalCount() {

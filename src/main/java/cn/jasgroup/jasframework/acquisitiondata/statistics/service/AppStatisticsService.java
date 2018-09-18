@@ -1,6 +1,7 @@
 package cn.jasgroup.jasframework.acquisitiondata.statistics.service;
 
 import cn.jasgroup.framework.data.exception.BusinessException;
+import cn.jasgroup.jasframework.acquisitiondata.privilege.service.DaqPrivilegeService;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.*;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.dao.OverallStatisticsDao;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.dao.AppStatisticsDao;
@@ -39,8 +40,7 @@ public class AppStatisticsService {
     private OverallStatisticsService overallStatisticsService;
 
     @Autowired
-    private OverallStatisticsDao overallStatisticsDao;
-
+    private DaqPrivilegeService daqPrivilegeService;
 
     @Autowired
     private UnitService unitService;
@@ -199,11 +199,13 @@ public class AppStatisticsService {
         LocalDate now = LocalDate.now();
         String yesterday = now.minusDays(1).toString();
 
-        Map<String, String> idToNameUnit = this.appStatisticsDao.queryConstructNameByIdIn(null);
+        // 获取该项目下的所有施工单位(idToUnitNameMap)
+        List<Map<String, Object>> list = this.daqPrivilegeService.getConstructionUnitByProjectOid(projectId);
+        Map<String, String> idToUnitNameMap = list.stream().collect(Collectors.toMap(construct -> String.valueOf(construct.get("key")), construct -> String.valueOf(construct.get("value")), (a, b) -> b));
 
         if (StatsProcessForAppEnum.PIPE.getType().equals(statsType)) {
             List<StatsProcessResultBo> pipeResultBo = appStatisticsDao.statsPipeLengthGroupByConstruct(projectId, yesterday, yesterday);
-            pipeResultBo.forEach(bo -> bo.setConstructName(idToNameUnit.get(bo.getStatsType())));
+            pipeResultBo.forEach(bo -> bo.setConstructName(idToUnitNameMap.get(bo.getStatsType())));
             return pipeResultBo;
         }
 
@@ -216,7 +218,7 @@ public class AppStatisticsService {
             for (String constructId : dateToWeldInfoList.keySet()) {
                 Double length = this.overallStatisticsService.statsPipeLength(pipeLengthMap, dateToWeldInfoList.get(constructId));
                 Integer count = this.appStatisticsDao.countWeldInfoByDate(projectId, yesterday, constructId);
-                resultBoList.add(new StatsProcessResultBo(constructId, idToNameUnit.get(constructId), count, length));
+                resultBoList.add(new StatsProcessResultBo(constructId, idToUnitNameMap.get(constructId), count, length));
             }
 
             return resultBoList;
@@ -232,7 +234,7 @@ public class AppStatisticsService {
             for (String constructId : dateToWeldInfoList.keySet()) {
                 Double length = this.overallStatisticsService.statsPipeLength(pipeLengthMap, dateToWeldInfoList.get(constructId));
                 Integer count = this.appStatisticsDao.countPatchRelationWeldInfoByDate(projectId, yesterday, constructId);
-                resultBoList.add(new StatsProcessResultBo(constructId, idToNameUnit.get(constructId), count, length));
+                resultBoList.add(new StatsProcessResultBo(constructId, idToUnitNameMap.get(constructId), count, length));
             }
 
             return resultBoList;
@@ -240,7 +242,7 @@ public class AppStatisticsService {
 
         if (StatsProcessForAppEnum.LAY_PIPE_TRENCH_BACKFILL.getType().equals(statsType)) {
             List<StatsProcessResultBo> resultBos = appStatisticsDao.statsBackFillLengthGroupByConstruct(projectId, yesterday, yesterday);
-            resultBos.forEach(bo -> bo.setConstructName(idToNameUnit.get(bo.getStatsType())));
+            resultBos.forEach(bo -> bo.setConstructName(idToUnitNameMap.get(bo.getStatsType())));
             return resultBos;
         }
 
@@ -307,7 +309,7 @@ public class AppStatisticsService {
         List<DateApproveStatsForApp> statsResultList = this.appStatisticsDao.statsDataEntryApproveGroupByDay(projectId, startDate, endDate);
 
         List<String> dayList = StatsUtils.genContinuityDayStr(startDate, endDate, "yyyy-MM-dd");
-        Map<String, DateApproveStatsForApp> dateToCountMap = statsResultList.stream().collect(Collectors.toMap(DateApproveStatsForApp::getDate, app -> app, (a, b) -> b));
+        Map<String, DateApproveStatsForApp> dateToCountMap = statsResultList.stream().collect(Collectors.toMap(DateApproveStatsForApp::getStatsDate, app -> app, (a, b) -> b));
         Table<String, String, Integer> table = TreeBasedTable.create();
         for (String date : dayList) {
             Integer totalCount = 0;
