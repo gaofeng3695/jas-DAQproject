@@ -191,7 +191,7 @@
             for (var key1 in data.data[key]) {
               x.push(data.data[key][key1]);
               if (months.length == 0) {
-                month.push(key1+"月");
+                month.push(key1);
               }
             }
             if (months.length == 0) {
@@ -451,16 +451,18 @@
       },
       select: function (val) {
         var that = this;
-        if (val.length == that.projectArray.length || (val.length == 1 && val[0] == "0")) { //表示肯定是全选
+        if (val.length == that.projectArray.length || (val.length == 1 && val[0] == "0")||(val.length==0)) { //表示肯定是全选
           that.topSearch.projectOids = that.ids;
           that.oldOptions = that.topSearch.projectOids;
           return;
         }
         if (val.indexOf("0") < 0) {
           if (that.oldOptions.length - 1 == val.length) {
-            that.topSearch.projectOids = [];
-            that.oldOptions = [];
-          } else if (val.length == that.projectArray.length - 1) {
+            // that.$toast("默认为全部选择");
+            // that.topSearch.projectOids = [];
+            // that.oldOptions = [];
+          } else
+           if (val.length == that.projectArray.length - 1) {
             that.topSearch.projectOids = that.ids;
             that.oldOptions = that.topSearch.projectOids;
           }
