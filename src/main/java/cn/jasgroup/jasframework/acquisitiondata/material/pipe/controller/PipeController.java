@@ -90,6 +90,8 @@ public class PipeController {
 			dataMap.put("materialReducerData", reducerRows);//大小头
 			List<Map<String,Object>> closureRows = this.pipeService.getMaterialClosureList(projectOids);
 			dataMap.put("materialClosureData", closureRows);//封堵物
+			List<Map<String,Object>> valveRows = this.pipeService.getValveList(projectOids);
+			dataMap.put("materialValveData", valveRows);//封堵物
 			result = new SimpleResult<Map<String,Object>>(1, "200", "ok", dataMap);
 		} catch (Exception e) {
 			result = new SimpleResult<Map<String,Object>>(-1, "400", e.getMessage());
@@ -98,9 +100,17 @@ public class PipeController {
 		return result;
 	}
 	
-	
-	
-	@RequestMapping(value="/getValveByPipeStationOid",method = RequestMethod.POST)
+	/**
+	 * <p>功能描述：获取阀门列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param request
+	  * @param param
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年9月18日 上午11:22:40。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="/getValveList",method = RequestMethod.POST)
 	@ResponseBody
 	public Object getValveList(HttpServletRequest request,@RequestBody Map<String,String> param){
 		ListResult<Map<String,Object>> result = null;
