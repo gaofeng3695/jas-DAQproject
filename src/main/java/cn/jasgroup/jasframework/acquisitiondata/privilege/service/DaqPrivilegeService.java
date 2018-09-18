@@ -93,6 +93,18 @@ public class DaqPrivilegeService extends BaseService{
 	public List<Map<String,Object>>getConstructionUnitByTendersOid(String tendersOid){
 		return this.daqPrivilegeDao.getConstructionUnitByTendersOid(tendersOid);
 	}
+	/**
+	  * <p>功能描述：根据项目oid获取施工单位列表。</p>
+	  * <p> 雷凯。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年9月18日 上午9:24:33。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String,Object>> getConstructionUnitByProjectOid(String projectOid){
+		return this.daqPrivilegeDao.getConstructionUnitByProjectOid(projectOid);
+	}
 	/***
 	  * <p>功能描述：根据线路段oid或者穿跨越oid获取中线桩列表。</p>
 	  * <p> 雷凯。</p>	
