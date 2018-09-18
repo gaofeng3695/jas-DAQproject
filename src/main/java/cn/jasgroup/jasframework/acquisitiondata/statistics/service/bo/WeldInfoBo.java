@@ -20,7 +20,27 @@ public class WeldInfoBo {
 
     private Integer statsMonth;
 
+    private String statsDate;
+
+    private String constructUnit;
+
     private String createDatetime;
+
+    public String getConstructUnit() {
+        return constructUnit;
+    }
+
+    public void setConstructUnit(String constructUnit) {
+        this.constructUnit = constructUnit;
+    }
+
+    public String getStatsDate() {
+        return statsDate;
+    }
+
+    public void setStatsDate(String statsDate) {
+        this.statsDate = statsDate;
+    }
 
     public String getOid() {
         return oid;

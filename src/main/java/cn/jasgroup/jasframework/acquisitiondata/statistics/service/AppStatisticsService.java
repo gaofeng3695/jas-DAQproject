@@ -1,22 +1,15 @@
 package cn.jasgroup.jasframework.acquisitiondata.statistics.service;
 
 import cn.jasgroup.framework.data.exception.BusinessException;
-import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.ApproveStatisticsBlock;
-import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.ApproveStatusEnum;
-import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.EntryStatisticsBlock;
-import cn.jasgroup.jasframework.acquisitiondata.statistics.dao.StatisticsDao;
-import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.DataApproveStatsBo;
-import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.DataApproveSubBo;
-import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.DataEntryStatsBo;
-import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.StatsResultBo;
+import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.*;
+import cn.jasgroup.jasframework.acquisitiondata.statistics.dao.OverallStatisticsDao;
+import cn.jasgroup.jasframework.acquisitiondata.statistics.dao.AppStatisticsDao;
+import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.*;
 import cn.jasgroup.jasframework.acquisitiondata.variate.UnitHierarchyEnum;
 import cn.jasgroup.jasframework.security.dao.entity.PriUnit;
 import cn.jasgroup.jasframework.security.service.UnitService;
 import cn.jasgroup.jasframework.support.ThreadLocalHolder;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.MapDifference;
-import com.google.common.collect.Maps;
+import com.google.common.collect.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,7 +33,13 @@ public class AppStatisticsService {
     private static final Logger logger = LoggerFactory.getLogger(AppStatisticsService.class);
 
     @Autowired
-    private StatisticsDao statisticsDao;
+    private AppStatisticsDao appStatisticsDao;
+
+    @Autowired
+    private OverallStatisticsService overallStatisticsService;
+
+    @Autowired
+    private OverallStatisticsDao overallStatisticsDao;
 
 
     @Autowired
@@ -66,7 +66,7 @@ public class AppStatisticsService {
             statsTypes.removeIf(s -> !pipeCheckedBlock.containsKey(s) && !weldApproveBlock.containsKey(s));
         }
 
-        List<StatsResultBo> resultList = statisticsDao.listDataEntry(statsTypes, projectOid);
+        List<StatsResultBo> resultList = appStatisticsDao.listDataEntry(statsTypes, projectOid);
 
         // pipeCheckedBlock: 没有审核操作的: 只统计录入数
         for (String statsType : pipeCheckedBlock.keySet()) {
@@ -89,15 +89,6 @@ public class AppStatisticsService {
         return returnList;
     }
 
-
-    public static void main(String[] args) {
-        Map<String, Integer> left = ImmutableMap.of("a", 1, "b", 4, "c", 3);
-        Map<String, Integer> right = ImmutableMap.of("a", 1, "d", 4, "c", 3);
-        MapDifference<String, Integer> diff = Maps.difference(left, right);
-        System.out.println(diff.entriesInCommon());
-        System.out.println(diff.entriesOnlyOnLeft());
-        System.out.println(diff.entriesOnlyOnRight());
-    }
 
 
     /**
@@ -130,7 +121,7 @@ public class AppStatisticsService {
                 throw new BusinessException("施工/检测单位层级错误", "403");
             }
 
-            constructUnits = this.statisticsDao.queryConstructUnitByHierarchy(constructUnitHierarchy);
+            constructUnits = this.appStatisticsDao.queryConstructUnitByHierarchy(constructUnitHierarchy);
             if (CollectionUtils.isEmpty(constructUnits)) {
                 throw new BusinessException("ConstructUnits Not Found", "404");
             }
@@ -147,13 +138,13 @@ public class AppStatisticsService {
             }
         }
 
-        List<String> supervisionUnits = this.statisticsDao.queryConstructUnitByHierarchy(currentUnitHierarchy);
+        List<String> supervisionUnits = this.appStatisticsDao.queryConstructUnitByHierarchy(currentUnitHierarchy);
 
         if (CollectionUtils.isEmpty(supervisionUnits)) {
             throw new BusinessException("currentUserUnits Not Found", "404");
         }
 
-        List<DataApproveSubBo> dataApproveSubBos = this.statisticsDao.listDataAuditing(projectOid, supervisionUnits, constructUnits);
+        List<DataApproveSubBo> dataApproveSubBos = this.appStatisticsDao.listDataAuditing(projectOid, supervisionUnits, constructUnits);
 
         // 包装统计数据的中文名
         dataApproveSubBos.forEach(dataApproveSubBo -> dataApproveSubBo.setCnName(ApproveStatisticsBlock.ALL.get(dataApproveSubBo.getCode()).getCnName()));
@@ -176,4 +167,173 @@ public class AppStatisticsService {
 
         return returnList;
     }
+
+
+    public List<StatsProcessResultBo> statsYesterdayProcess(String projectId) {
+        LocalDate now = LocalDate.now();
+        String yesterday = now.minusDays(1).toString();
+        StatsResultBo pipeResultBo = appStatisticsDao.statsPipeLengthByDate(projectId, yesterday, yesterday);
+        StatsResultBo backFillResultBo = this.appStatisticsDao.statsBackFillLength(projectId, yesterday, yesterday);
+
+        // 焊接(km/口)
+        List<WeldInfoBo> weldInfoBos = this.appStatisticsDao.listWeldInfoByDate(projectId, yesterday, yesterday);
+        Integer weldCount = this.appStatisticsDao.countWeldInfoByDate(projectId, yesterday, null);
+        StatsResultBo weldResultBo = overallStatisticsService.statsPipeLengthByType(weldInfoBos, Lists.newArrayList(projectId), StatsProcessEnum.WELD.getType());
+
+        // 补口(km/口)
+        List<WeldInfoBo> patchWeldInBos = this.appStatisticsDao.listPatchRelationWeldInfoByDate(projectId, yesterday, yesterday);
+        Integer patchRelationWeldCount = this.appStatisticsDao.countPatchRelationWeldInfoByDate(projectId, yesterday, null);
+        StatsResultBo patchRelationWeldResultBo = overallStatisticsService.statsPipeLengthByType(patchWeldInBos, Lists.newArrayList(projectId), StatsProcessEnum.PATCH.getType());
+
+
+        return Lists.newArrayList(
+                new StatsProcessResultBo(pipeResultBo.getStatsType(), null, pipeResultBo.getStatsResult()==null?0:pipeResultBo.getStatsResult()),
+                new StatsProcessResultBo(weldResultBo.getStatsType(), weldCount, weldResultBo.getStatsResult()==null?0:weldResultBo.getStatsResult()),
+                new StatsProcessResultBo(patchRelationWeldResultBo.getStatsType(), patchRelationWeldCount, patchRelationWeldResultBo.getStatsResult()==null?0:patchRelationWeldResultBo.getStatsResult()),
+                new StatsProcessResultBo(backFillResultBo.getStatsType(), null, backFillResultBo.getStatsResult()==null?0:backFillResultBo.getStatsResult())
+        );
+    }
+
+
+    public List<StatsProcessResultBo> statsYesterdayProcessDetail(String projectId, String statsType) {
+        LocalDate now = LocalDate.now();
+        String yesterday = now.minusDays(1).toString();
+
+        Map<String, String> idToNameUnit = this.appStatisticsDao.queryConstructNameByIdIn(null);
+
+        if (StatsProcessForAppEnum.PIPE.getType().equals(statsType)) {
+            List<StatsProcessResultBo> pipeResultBo = appStatisticsDao.statsPipeLengthGroupByConstruct(projectId, yesterday, yesterday);
+            pipeResultBo.forEach(bo -> bo.setConstructName(idToNameUnit.get(bo.getStatsType())));
+            return pipeResultBo;
+        }
+
+        if (StatsProcessForAppEnum.WELD.getType().equals(statsType)) {
+            List<WeldInfoBo> weldInfoBos = this.appStatisticsDao.listWeldInfoByDate(projectId, yesterday, yesterday);
+            Map<String, Map<String, Double>> pipeLengthMap = this.overallStatisticsService.getPipeLengthMap(weldInfoBos);
+            //  根据施工单位分组计算
+            Map<String, List<WeldInfoBo>> dateToWeldInfoList = weldInfoBos.stream().collect(Collectors.groupingBy(WeldInfoBo::getConstructUnit, Collectors.toList()));
+            List<StatsProcessResultBo> resultBoList = Lists.newArrayList();
+            for (String constructId : dateToWeldInfoList.keySet()) {
+                Double length = this.overallStatisticsService.statsPipeLength(pipeLengthMap, dateToWeldInfoList.get(constructId));
+                Integer count = this.appStatisticsDao.countWeldInfoByDate(projectId, yesterday, constructId);
+                resultBoList.add(new StatsProcessResultBo(constructId, idToNameUnit.get(constructId), count, length));
+            }
+
+            return resultBoList;
+        }
+
+
+        if (StatsProcessForAppEnum.PATCH.getType().equals(statsType)) {
+            List<WeldInfoBo> weldInfoBos = this.appStatisticsDao.listPatchRelationWeldInfoByDate(projectId, yesterday, yesterday);
+            Map<String, Map<String, Double>> pipeLengthMap = this.overallStatisticsService.getPipeLengthMap(weldInfoBos);
+
+            Map<String, List<WeldInfoBo>> dateToWeldInfoList = weldInfoBos.stream().collect(Collectors.groupingBy(WeldInfoBo::getConstructUnit, Collectors.toList()));
+            List<StatsProcessResultBo> resultBoList = Lists.newArrayList();
+            for (String constructId : dateToWeldInfoList.keySet()) {
+                Double length = this.overallStatisticsService.statsPipeLength(pipeLengthMap, dateToWeldInfoList.get(constructId));
+                Integer count = this.appStatisticsDao.countPatchRelationWeldInfoByDate(projectId, yesterday, constructId);
+                resultBoList.add(new StatsProcessResultBo(constructId, idToNameUnit.get(constructId), count, length));
+            }
+
+            return resultBoList;
+        }
+
+        if (StatsProcessForAppEnum.LAY_PIPE_TRENCH_BACKFILL.getType().equals(statsType)) {
+            List<StatsProcessResultBo> resultBos = appStatisticsDao.statsBackFillLengthGroupByConstruct(projectId, yesterday, yesterday);
+            resultBos.forEach(bo -> bo.setConstructName(idToNameUnit.get(bo.getStatsType())));
+            return resultBos;
+        }
+
+
+        return null;
+    }
+
+
+
+    public Table<String, String, Object> statsLatestWeekCumulativeProcess(String projectId) {
+        LocalDate now = LocalDate.now();
+        String startDate = StatsUtils.getStartDayOfWeek(now.toString(), "yyyy-MM-dd");
+        String endDate = StatsUtils.getEndDayOfWeek(now.toString(), "yyyy-MM-dd");
+
+        List<String> dayList = StatsUtils.genContinuityDayStr(startDate, endDate, "yyyy-MM-dd");
+
+        // TODO: 管材
+        List<DateStatsResultBo> pipeStatsResult = this.appStatisticsDao.statsPipeLengthGroupDate(projectId, startDate, endDate);
+
+        // TODO: 焊接
+        List<WeldInfoBo> weldInfoBos = this.appStatisticsDao.listWeldInfoByDate(projectId, startDate, endDate);
+
+        // TODO: 补口
+        List<WeldInfoBo> patchRelationWeldInfoBos = this.appStatisticsDao.listPatchRelationWeldInfoByDate(projectId, startDate, endDate);
+
+        List<WeldInfoBo> statsWeldList = Lists.newArrayList(weldInfoBos);
+        statsWeldList.addAll(patchRelationWeldInfoBos);
+        Map<String, Map<String, Double>> pipeLengthMap = this.overallStatisticsService.getPipeLengthMap(statsWeldList);
+        List<DateStatsResultBo> weldStatsResult = this.overallStatisticsService.getDateStatsResult(StatsProcessEnum.WELD.getType(), weldInfoBos, pipeLengthMap);
+        List<DateStatsResultBo> patchStatsResult = this.overallStatisticsService.getDateStatsResult(StatsProcessEnum.PATCH.getType(), patchRelationWeldInfoBos, pipeLengthMap);
+
+        //TODO: 回填
+        List<DateStatsResultBo> backFillStatsResult = this.appStatisticsDao.statsBackFillLengthGroupDate(projectId, startDate, endDate);
+
+        List<DateStatsResultBo> resultBos = Lists.newArrayList();
+        resultBos.addAll(pipeStatsResult);
+        resultBos.addAll(weldStatsResult);
+        resultBos.addAll(patchStatsResult);
+        resultBos.addAll(backFillStatsResult);
+
+        // 初始化table生成连续的月份
+        Table<String, String, Object> table = TreeBasedTable.create();
+        this.initTable(dayList, table);
+
+        // Table赋值
+        resultBos.forEach(bo -> table.put(bo.getStatsType(), bo.getStatsDate(), bo.getStatsResult()==null?0:bo.getStatsResult()));
+
+        // 计算累积结果: 每个统计类型下的年月统计值=之前月份累计只和
+        Table<String, String, Object> resultTable = HashBasedTable.create();
+        for (String statsType : table.rowKeySet()) {
+            for (String date : dayList) {
+                resultTable.put(statsType, date, overallStatisticsService.getCumulativeCount(table, dayList, statsType, date));
+            }
+        }
+
+        return resultTable;
+    }
+
+
+    public Table<String, String, Integer> statsDateEntryAndAuditing(String projectId) {
+        LocalDate now = LocalDate.now();
+        String startDate = StatsUtils.getStartDayOfWeek(now.toString(), "yyyy-MM-dd");
+        String endDate = StatsUtils.getEndDayOfWeek(now.toString(), "yyyy-MM-dd");
+        List<DateApproveStatsForApp> statsResultList = this.appStatisticsDao.statsDataEntryApproveGroupByDay(projectId, startDate, endDate);
+
+        List<String> dayList = StatsUtils.genContinuityDayStr(startDate, endDate, "yyyy-MM-dd");
+        Map<String, DateApproveStatsForApp> dateToCountMap = statsResultList.stream().collect(Collectors.toMap(DateApproveStatsForApp::getDate, app -> app, (a, b) -> b));
+        Table<String, String, Integer> table = TreeBasedTable.create();
+        for (String date : dayList) {
+            Integer totalCount = 0;
+            Integer auditedCount = 0;
+            if (dateToCountMap.containsKey(date)) {
+                totalCount = dateToCountMap.get(date).getTotalCount();
+                auditedCount = dateToCountMap.get(date).getAuditedCount();
+            }
+            table.put(date, "totalCount", totalCount);
+            table.put(date, "auditedCount", auditedCount);
+        }
+
+        return table;
+    }
+
+
+    public static void main(String[] args) {
+
+    }
+
+    private void initTable(List<String> dateList, Table<String, String, Object> table) {
+        for (StatsProcessForAppEnum processEnum : StatsProcessForAppEnum.values()) {
+            for (String date : dateList) {
+                table.put(processEnum.getType(), date, 0);
+            }
+        }
+    }
+
 }
