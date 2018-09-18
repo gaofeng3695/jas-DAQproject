@@ -292,7 +292,7 @@ public class PipeDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String, Object>> getValveList(List<String> projectOids) {
-		String sql = "select oid as key,valve_name as value from daq_material_valve where active=1";
+		String sql = "select t.oid as key, t.valve_name as value, t.is_use from daq_material_valve t where t.active=1";
 		Map<String,Object> param = new HashMap<String,Object>();
 		if(projectOids!=null && projectOids.size()>0){
 			sql += " and t.project_oid in (:projectOids)";
