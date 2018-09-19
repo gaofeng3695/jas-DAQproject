@@ -137,17 +137,17 @@ public class AppStatisticsDao {
 
         String conditionSql = " and to_char(t.create_datetime , 'yyyy-MM-dd') between :startDate and :endDate ";
         String sql =
-                "select 'pipe' as stats_type, sum(result) as stats_result from ( " +
+                "select 'pipe' as stats_type, coalesce(sum(result), 0) as stats_result from ( " +
                         // 防腐管检查-钢管长度统计
-                        "  select sum(p.pipe_length) as result from daq_check_coating_pipe t " +
-                        "  left join daq_material_pipe p on t.pipe_oid = p.oid " +
-                        "  where t.active = 1 and p.active = 1 and t.project_oid = :projectId " + conditionSql +
-                        "  union all " +
-                        // 热煨弯管检查-热煨弯管长度统计
-                        "  select sum(p.pipe_length) as result from daq_check_hot_bends t " +
-                        "  left join daq_material_hot_bends p on t.hot_bends_oid = p.oid " +
-                        "  where t.active = 1 and p.active = 1 and t.project_oid = :projectId " + conditionSql +
-                        ") as ss";
+                "  select sum(p.pipe_length) as result from daq_check_coating_pipe t " +
+                "  left join daq_material_pipe p on t.pipe_oid = p.oid " +
+                "  where t.active = 1 and p.active = 1 and t.project_oid = :projectId " + conditionSql +
+                "  union all " +
+                // 热煨弯管检查-热煨弯管长度统计
+                "  select sum(p.pipe_length) as result from daq_check_hot_bends t " +
+                "  left join daq_material_hot_bends p on t.hot_bends_oid = p.oid " +
+                "  where t.active = 1 and p.active = 1 and t.project_oid = :projectId " + conditionSql +
+                ") as ss";
         List resultList = this.commonDataJdbcDao.queryForList(sql,
                 ImmutableMap.of("projectId", projectId, "startDate", startDate, "endDate", endDate), StatsResultBo.class);
         if (CollectionUtils.isEmpty(resultList)) {
@@ -159,6 +159,7 @@ public class AppStatisticsDao {
 
     public List<StatsProcessResultBo> statsPipeLengthGroupByConstruct(String projectId, String startDate, String endDate) {
 
+        // 日期过滤
         String conditionSql = " and to_char(t.create_datetime , 'yyyy-MM-dd') between :startDate and :endDate ";
         String sql = "" +
                 " select stats_type, sum(result) as stats_length from ( " +
@@ -173,6 +174,27 @@ public class AppStatisticsDao {
                 "  group by t.construct_unit " +
                 ") as ss " +
                 " group by stats_type";
+
+        return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectId", projectId, "startDate", startDate, "endDate", endDate), StatsProcessResultBo.class);
+    }
+
+    public List<DateStatsResultBo> statsPipeLengthGroupByConstructAndDate(String projectId, String startDate, String endDate) {
+
+        // 日期过滤
+        String conditionSql = " and to_char(t.create_datetime , 'yyyy-MM-dd') between :startDate and :endDate ";
+        String sql = "" +
+                " select stats_type, date as stats_date, sum(result) as stats_result from ( " +
+                "  select t.construct_unit as stats_type, to_char(t.create_datetime , 'yyyy-MM-dd') as date, sum(p.pipe_length) as result from daq_check_coating_pipe t " +
+                "  left join daq_material_pipe p on t.pipe_oid = p.oid   " +
+                "  where t.active = 1 and p.active = 1 and t.project_oid = :projectId " + conditionSql +
+                "  group by t.construct_unit, to_char(t.create_datetime , 'yyyy-MM-dd') " +
+                "  union all   " +
+                "  select t.construct_unit as stats_type, to_char(t.create_datetime , 'yyyy-MM-dd') as date, sum(p.pipe_length) as result from daq_check_hot_bends t " +
+                "  left join daq_material_hot_bends p on t.hot_bends_oid = p.oid   " +
+                "  where t.active = 1 and p.active = 1 and t.project_oid = :projectId " + conditionSql +
+                "  group by t.construct_unit, to_char(t.create_datetime , 'yyyy-MM-dd') " +
+                " ) as ss   " +
+                " group by stats_type, date";
 
         return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectId", projectId, "startDate", startDate, "endDate", endDate), StatsProcessResultBo.class);
     }
@@ -201,7 +223,7 @@ public class AppStatisticsDao {
 
 
     public StatsResultBo statsBackFillLength(String projectId, String startDate, String endDate) {
-        String sql = "select 'lay_pipe_trench_backfill' as stats_type, sum(backfill_length) as stats_result from daq_lay_pipe_trench_backfill " +
+        String sql = "select 'lay_pipe_trench_backfill' as stats_type, coalesce(sum(backfill_length), 0) as stats_result from daq_lay_pipe_trench_backfill " +
                 " where active = 1 and approve_status = 2 and project_oid = :projectId and to_char(create_datetime, 'yyyy-MM-dd') between :startDate and :endDate ";
         List<StatsResultBo> resultList = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectId", projectId, "startDate", startDate, "endDate", endDate), StatsResultBo.class);
         if (CollectionUtils.isEmpty(resultList)) {
@@ -217,6 +239,15 @@ public class AppStatisticsDao {
                 " where active = 1 and approve_status = 2 and project_oid = :projectId " +
                 " and to_char(create_datetime, 'yyyy-MM-dd') between :startDate and :endDate " +
                 " group by construct_unit ";
+        return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectId", projectId, "startDate", startDate, "endDate", endDate), StatsProcessResultBo.class);
+    }
+
+
+    public List<DateStatsResultBo> statsBackFillLengthGroupByConstructAndDate(String projectId, String startDate, String endDate) {
+        String sql = "" +
+                " select construct_unit as stats_type, to_char(create_datetime , 'yyyy-MM-dd') as stats_date, sum(backfill_length) as stats_result from daq_lay_pipe_trench_backfill " +
+                " where active = 1 and approve_status = 2 and project_oid = :projectId and to_char(create_datetime, 'yyyy-MM-dd') between :startDate and :endDate " +
+                " group by construct_unit, to_char(create_datetime , 'yyyy-MM-dd') ";
         return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectId", projectId, "startDate", startDate, "endDate", endDate), StatsProcessResultBo.class);
     }
 

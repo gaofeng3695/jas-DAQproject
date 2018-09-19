@@ -11,6 +11,8 @@ public class StatsProcessResultBo {
     /** 统计类型 */
     private String statsType;
 
+    private String constructId;
+
     private String constructName;
 
     /** 统计数量 */
@@ -26,6 +28,14 @@ public class StatsProcessResultBo {
         this.statsType = statsType;
         this.statsCount = statsCount;
         this.statsLength = statsLength;
+    }
+
+    public String getConstructId() {
+        return constructId;
+    }
+
+    public void setConstructId(String constructId) {
+        this.constructId = constructId;
     }
 
     public String getConstructName() {

@@ -10,6 +10,7 @@ import cn.jasgroup.jasframework.security.dao.entity.PriUnit;
 import cn.jasgroup.jasframework.security.service.UnitService;
 import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 import com.google.common.collect.*;
+import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import javax.sound.sampled.SourceDataLine;
+import javax.xml.transform.Source;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.*;
@@ -44,6 +47,8 @@ public class AppStatisticsService {
 
     @Autowired
     private UnitService unitService;
+
+    private static final String YYYY_MM_DD = "yyyy-MM-dd";
 
     /**
      * 数据录入统计
@@ -186,14 +191,20 @@ public class AppStatisticsService {
         StatsResultBo patchRelationWeldResultBo = overallStatisticsService.statsPipeLengthByType(patchWeldInBos, Lists.newArrayList(projectId), StatsProcessEnum.PATCH.getType());
 
         return Lists.newArrayList(
-                new StatsProcessResultBo(pipeResultBo.getStatsType(), null, pipeResultBo.getStatsResult()==null?0:pipeResultBo.getStatsResult()),
-                new StatsProcessResultBo(weldResultBo.getStatsType(), weldCount, weldResultBo.getStatsResult()==null?0:weldResultBo.getStatsResult()),
-                new StatsProcessResultBo(patchRelationWeldResultBo.getStatsType(), patchRelationWeldCount, patchRelationWeldResultBo.getStatsResult()==null?0:patchRelationWeldResultBo.getStatsResult()),
-                new StatsProcessResultBo(backFillResultBo.getStatsType(), null, backFillResultBo.getStatsResult()==null?0:backFillResultBo.getStatsResult())
+                new StatsProcessResultBo(pipeResultBo.getStatsType(), null, pipeResultBo.getStatsResult()),
+                new StatsProcessResultBo(weldResultBo.getStatsType(), weldCount, weldResultBo.getStatsResult()),
+                new StatsProcessResultBo(patchRelationWeldResultBo.getStatsType(), patchRelationWeldCount, patchRelationWeldResultBo.getStatsResult()),
+                new StatsProcessResultBo(backFillResultBo.getStatsType(), null, backFillResultBo.getStatsResult())
         );
     }
 
 
+    /**
+     * 统计昨日工序进展情况详情(根据施工单位分组)
+     * @param projectId 项目ID
+     * @param statsType 统计类型
+     * @return List
+     */
     public List<StatsProcessResultBo> statsYesterdayProcessDetail(String projectId, String statsType) {
         String yesterday = LocalDate.now().minusDays(1).toString();
         Map<String, String> unitMap = this.getUnitMap(projectId);
@@ -251,10 +262,10 @@ public class AppStatisticsService {
 
     public Table<String, String, Object> statsLatestWeekCumulativeProcess(String projectId) {
         LocalDate now = LocalDate.now();
-        String startDate = StatsUtils.getStartDayOfWeek(now.toString(), "yyyy-MM-dd");
-        String endDate = StatsUtils.getEndDayOfWeek(now.toString(), "yyyy-MM-dd");
+        String startDate = StatsUtils.getStartDayOfWeek(now.toString(), YYYY_MM_DD);
+        String endDate = StatsUtils.getEndDayOfWeek(now.toString(), YYYY_MM_DD);
 
-        List<String> dayList = StatsUtils.genContinuityDayStr(startDate, endDate, "yyyy-MM-dd");
+        List<String> dayList = StatsUtils.genContinuityDayStr(startDate, endDate, YYYY_MM_DD);
 
         // 管材
         List<DateStatsResultBo> pipeStatsResult = this.appStatisticsDao.statsPipeLengthGroupDate(projectId, startDate, endDate);
@@ -289,7 +300,7 @@ public class AppStatisticsService {
         resultBos.forEach(bo -> table.put(bo.getStatsType(), bo.getStatsDate(), bo.getStatsResult()==null?0:bo.getStatsResult()));
 
         // 计算累积结果: 每个统计类型下的日期统计值=之前月份累计之和
-        Table<String, String, Object> resultTable = HashBasedTable.create();
+        Table<String, String, Object> resultTable = TreeBasedTable.create();
         for (String statsType : table.rowKeySet()) {
             for (String date : dayList) {
                 resultTable.put(statsType, date, overallStatisticsService.getCumulativeCount(table, dayList, statsType, date));
@@ -300,35 +311,87 @@ public class AppStatisticsService {
     }
 
 
-    public Table<String, String, Object> statsLatestWeekCumulativeProcessDetail(String projectId) {
+    /**
+     * 统计最近一周各工序累计完成情况
+     *   - 根据施工单位分组
+     *   - 根据日期过滤
+     * @param projectId 项目ID
+     * @return Table
+     */
+    public List statsLatestWeekCumulativeProcessDetail(String projectId) {
         LocalDate now = LocalDate.now();
-        String startDate = StatsUtils.getStartDayOfWeek(now.toString(), "yyyy-MM-dd");
-        String endDate = StatsUtils.getEndDayOfWeek(now.toString(), "yyyy-MM-dd");
-        List<String> dayList = StatsUtils.genContinuityDayStr(startDate, endDate, "yyyy-MM-dd");
+        String startDate = StatsUtils.getStartDayOfWeek(now.toString(), YYYY_MM_DD);
+        String endDate = StatsUtils.getEndDayOfWeek(now.toString(), YYYY_MM_DD);
+        List<String> dayList = StatsUtils.genContinuityDayStr(startDate, endDate, YYYY_MM_DD);
 
         Map<String, String> unitMap = this.getUnitMap(projectId);
 
-        // TODO: 管材
+        // 管材
+        List<DateStatsResultBo> pipeStatsResult = this.appStatisticsDao.statsPipeLengthGroupByConstructAndDate(projectId, startDate, endDate);
 
-        // TODO: 管沟回填
+        // 管沟回填
+        List<DateStatsResultBo> backFillStatsResult = this.appStatisticsDao.statsBackFillLengthGroupByConstructAndDate(projectId, startDate, endDate);
 
-        // TODO: 焊接
+        List<DateStatsResultBo> weldStatsResult = Lists.newArrayList(), patchStatsResult = Lists.newArrayList();
+        List<WeldInfoBo> weldInfoBos = this.appStatisticsDao.listWeldInfoByDate(projectId, startDate, endDate);
+        List<WeldInfoBo> patchRelationWeldInfoBos = this.appStatisticsDao.listPatchRelationWeldInfoByDate(projectId, startDate, endDate);
+        List<WeldInfoBo> totalWeldList = Lists.newArrayList();
+        totalWeldList.addAll(weldInfoBos);
+        totalWeldList.addAll(patchRelationWeldInfoBos);
+        Map<String, Map<String, Double>> pipeLengthMap = this.overallStatisticsService.getPipeLengthMap(totalWeldList);
 
-        // TODO: 补口
+        // 根据施工单位和日期分组计算焊口信息中的管件长度
+        countGroupUnitAndDate(weldStatsResult, weldInfoBos, pipeLengthMap);
+        countGroupUnitAndDate(patchStatsResult, patchRelationWeldInfoBos, pipeLengthMap);
 
-        // TODO: 包装施工单位中文名 & 填充项目下的单位统计
-        return null;
+
+        // 包装施工单位中文名 & 填充统计结果
+
+        List<Map<String, Object>> resultList = Lists.newArrayList();
+        for (String unitId : unitMap.keySet()) {
+            Table<String, String, Object> table = TreeBasedTable.create();
+            this.initTable(dayList, table);
+
+            pipeStatsResult.stream().filter(bo -> unitId.equals(bo.getStatsType())).forEach(bo -> table.put(StatsProcessForAppEnum.PIPE.getType(), bo.getStatsDate(), bo.getStatsResult()));
+            backFillStatsResult.stream().filter(bo -> unitId.equals(bo.getStatsType())).forEach(bo -> table.put(StatsProcessForAppEnum.LAY_PIPE_TRENCH_BACKFILL.getType(), bo.getStatsDate(), bo.getStatsResult()));
+            weldStatsResult.stream().filter(bo -> unitId.equals(bo.getStatsType())).forEach(bo -> table.put(StatsProcessForAppEnum.WELD.getType(), bo.getStatsDate(), bo.getStatsResult()));
+            patchStatsResult.stream().filter(bo -> unitId.equals(bo.getStatsType())).forEach(bo -> table.put(StatsProcessForAppEnum.WELD.getType(), bo.getStatsDate(), bo.getStatsResult()));
+
+            Map<String, Object> resultMap = Maps.newHashMap();
+            resultMap.put("constructId", unitId);
+            resultMap.put("constructName", unitMap.get(unitId));
+            resultMap.put("statsResult", table.rowMap());
+            resultList.add(resultMap);
+        }
+        return resultList;
     }
+
+
+    /**
+     * 根据施工单位和日期分组计算焊口信息中的管件长度
+     */
+    private void countGroupUnitAndDate(List<DateStatsResultBo> weldStatsResult, List<WeldInfoBo> weldInfoBos, Map<String, Map<String, Double>> pipeLengthMap) {
+        Map<String, List<WeldInfoBo>> dateToWeldInfoList = weldInfoBos.stream().collect(Collectors.groupingBy(WeldInfoBo::getConstructUnit, Collectors.toList()));
+        for (String constructId : dateToWeldInfoList.keySet()) {
+            List<WeldInfoBo> weldInfoList = dateToWeldInfoList.get(constructId);
+            Map<String, List<WeldInfoBo>> dateToWelds = weldInfoList.stream().collect(Collectors.groupingBy(WeldInfoBo::getStatsDate, Collectors.toList()));
+            for (String statsDate : dateToWelds.keySet()) {
+                Double length = this.overallStatisticsService.statsPipeLength(pipeLengthMap, dateToWelds.get(statsDate));
+                weldStatsResult.add(new DateStatsResultBo(constructId, statsDate, length));
+            }
+        }
+    }
+
 
 
 
     public Table<String, String, Integer> statsDateEntryAndAuditing(String projectId) {
         LocalDate now = LocalDate.now();
-        String startDate = StatsUtils.getStartDayOfWeek(now.toString(), "yyyy-MM-dd");
-        String endDate = StatsUtils.getEndDayOfWeek(now.toString(), "yyyy-MM-dd");
+        String startDate = StatsUtils.getStartDayOfWeek(now.toString(), YYYY_MM_DD);
+        String endDate = StatsUtils.getEndDayOfWeek(now.toString(), YYYY_MM_DD);
         List<DateApproveStatsForApp> statsResultList = this.appStatisticsDao.statsDataEntryApproveGroupByDay(projectId, startDate, endDate);
 
-        List<String> dayList = StatsUtils.genContinuityDayStr(startDate, endDate, "yyyy-MM-dd");
+        List<String> dayList = StatsUtils.genContinuityDayStr(startDate, endDate, YYYY_MM_DD);
         Map<String, DateApproveStatsForApp> dateToCountMap = statsResultList.stream().collect(Collectors.toMap(DateApproveStatsForApp::getStatsDate, app -> app, (a, b) -> b));
         Table<String, String, Integer> table = TreeBasedTable.create();
         for (String date : dayList) {
@@ -399,9 +462,7 @@ public class AppStatisticsService {
         }
 
         Sets.SetView<String> diff = Sets.difference(unitMap.keySet(), unitToWeldList.keySet());
-        for (String unitId : diff) {
-            resultList.add(new WeldCheckInfoBo(unitId, unitMap.getOrDefault(unitId, "-"), 0, 0, 0, 0, "-"));
-        }
+        diff.stream().map(unitId -> new WeldCheckInfoBo(unitId, unitMap.getOrDefault(unitId, "-"), 0, 0, 0, 0, "-")).forEach(resultList::add);
 
         return resultList;
     }
@@ -437,16 +498,13 @@ public class AppStatisticsService {
     }
 
     public static void main(String[] args) {
+        LocalDate now = LocalDate.now();
+        String startDate = now.toString();
+        String endDate = now.minusDays(7).toString();
+        System.out.println(startDate + ", " + endDate);
+        List<String> dayList = StatsUtils.genContinuityDayStr(startDate, endDate, YYYY_MM_DD);
 
-        Set<String> s1 = Sets.newHashSet("f4b587f5-4f84-4e51-9ae7-529a7f16b2f6" , "6f45fb5e-f2c7-4e40-bbe1-a2e643cc6a48");
-        Set<String> s2 = Sets.newHashSet("17005abc-6a3c-456e-afa2-97ac9dc8dc13",
-                 "df5332c7-961f-4df0-9cf6-a41b588dbe1b", "b700743e-9f06-4e72-a207-c05f279f6994",
-                "6f45fb5e-f2c7-4e40-bbe1-a2e643cc6a48", "689b0c7c-69f2-4ec4-b0ef-6fa5f490d84f");
-
-        Sets.SetView<String> diff = Sets.difference(s2, s1);
-        for (String unitId : diff) {
-            System.out.println(unitId);
-        }
+        System.out.println(dayList);
     }
 
 
