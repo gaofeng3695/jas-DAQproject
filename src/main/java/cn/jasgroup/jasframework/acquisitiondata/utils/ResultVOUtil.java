@@ -2,7 +2,6 @@ package cn.jasgroup.jasframework.acquisitiondata.utils;
 
 import cn.jasgroup.framework.data.result.ErrorResult;
 import cn.jasgroup.framework.data.result.SimpleResult;
-import com.google.gson.Gson;
 import org.springframework.http.HttpStatus;
 
 /**
@@ -12,11 +11,6 @@ import org.springframework.http.HttpStatus;
  * 2018/3/21 10:08
  */
 public class ResultVOUtil {
-
-    public static void main(String[] args) {
-        Gson gson = new Gson();
-        System.out.println(gson.toJson(ofSuccess()));
-    }
 
     public static SimpleResult ofSuccess(Object data) {
         return new SimpleResult(data);

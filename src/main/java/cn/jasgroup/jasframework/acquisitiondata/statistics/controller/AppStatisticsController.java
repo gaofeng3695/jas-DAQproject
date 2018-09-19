@@ -102,7 +102,8 @@ public class AppStatisticsController {
      */
     @GetMapping("statsLatestWeekCumulativeProcessDetail")
     public BaseResult statsLatestWeekCumulativeProcessDetail(@RequestParam String projectId) {
-        return ResultVOUtil.ofSuccess();
+        List result = this.appStatisticsService.statsLatestWeekCumulativeProcessDetail(projectId);
+        return ResultVOUtil.ofSuccess(result);
     }
 
 
