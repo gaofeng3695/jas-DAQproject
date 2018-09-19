@@ -3,7 +3,6 @@ package cn.jasgroup.jasframework.acquisitiondata.statistics.service;
 import cn.jasgroup.framework.data.exception.BusinessException;
 import cn.jasgroup.jasframework.acquisitiondata.privilege.service.DaqPrivilegeService;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.*;
-import cn.jasgroup.jasframework.acquisitiondata.statistics.dao.OverallStatisticsDao;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.dao.AppStatisticsDao;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.*;
 import cn.jasgroup.jasframework.acquisitiondata.variate.UnitHierarchyEnum;
@@ -18,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -185,7 +185,6 @@ public class AppStatisticsService {
         Integer patchRelationWeldCount = this.appStatisticsDao.countPatchRelationWeldInfoByDate(projectId, yesterday, null);
         StatsResultBo patchRelationWeldResultBo = overallStatisticsService.statsPipeLengthByType(patchWeldInBos, Lists.newArrayList(projectId), StatsProcessEnum.PATCH.getType());
 
-
         return Lists.newArrayList(
                 new StatsProcessResultBo(pipeResultBo.getStatsType(), null, pipeResultBo.getStatsResult()==null?0:pipeResultBo.getStatsResult()),
                 new StatsProcessResultBo(weldResultBo.getStatsType(), weldCount, weldResultBo.getStatsResult()==null?0:weldResultBo.getStatsResult()),
@@ -196,17 +195,17 @@ public class AppStatisticsService {
 
 
     public List<StatsProcessResultBo> statsYesterdayProcessDetail(String projectId, String statsType) {
-        LocalDate now = LocalDate.now();
-        String yesterday = now.minusDays(1).toString();
+        String yesterday = LocalDate.now().minusDays(1).toString();
+        Map<String, String> unitMap = this.getUnitMap(projectId);
 
-        // 获取该项目下的所有施工单位(idToUnitNameMap)
-        List<Map<String, Object>> list = this.daqPrivilegeService.getConstructionUnitByProjectOid(projectId);
-        Map<String, String> idToUnitNameMap = list.stream().collect(Collectors.toMap(construct -> String.valueOf(construct.get("key")), construct -> String.valueOf(construct.get("value")), (a, b) -> b));
+        List<StatsProcessResultBo> returnList = Lists.newArrayList();
 
         if (StatsProcessForAppEnum.PIPE.getType().equals(statsType)) {
-            List<StatsProcessResultBo> pipeResultBo = appStatisticsDao.statsPipeLengthGroupByConstruct(projectId, yesterday, yesterday);
-            pipeResultBo.forEach(bo -> bo.setConstructName(idToUnitNameMap.get(bo.getStatsType())));
-            return pipeResultBo;
+            returnList = appStatisticsDao.statsPipeLengthGroupByConstruct(projectId, yesterday, yesterday);
+        }
+
+        if (StatsProcessForAppEnum.LAY_PIPE_TRENCH_BACKFILL.getType().equals(statsType)) {
+            returnList = appStatisticsDao.statsBackFillLengthGroupByConstruct(projectId, yesterday, yesterday);
         }
 
         if (StatsProcessForAppEnum.WELD.getType().equals(statsType)) {
@@ -214,40 +213,38 @@ public class AppStatisticsService {
             Map<String, Map<String, Double>> pipeLengthMap = this.overallStatisticsService.getPipeLengthMap(weldInfoBos);
             //  根据施工单位分组计算
             Map<String, List<WeldInfoBo>> dateToWeldInfoList = weldInfoBos.stream().collect(Collectors.groupingBy(WeldInfoBo::getConstructUnit, Collectors.toList()));
-            List<StatsProcessResultBo> resultBoList = Lists.newArrayList();
             for (String constructId : dateToWeldInfoList.keySet()) {
-                Double length = this.overallStatisticsService.statsPipeLength(pipeLengthMap, dateToWeldInfoList.get(constructId));
+                List<WeldInfoBo> weldInfoList = dateToWeldInfoList.get(constructId);
+                Double length = this.overallStatisticsService.statsPipeLength(pipeLengthMap, weldInfoList);
                 Integer count = this.appStatisticsDao.countWeldInfoByDate(projectId, yesterday, constructId);
-                resultBoList.add(new StatsProcessResultBo(constructId, idToUnitNameMap.get(constructId), count, length));
+                returnList.add(new StatsProcessResultBo(constructId, count, length));
             }
-
-            return resultBoList;
         }
-
 
         if (StatsProcessForAppEnum.PATCH.getType().equals(statsType)) {
             List<WeldInfoBo> weldInfoBos = this.appStatisticsDao.listPatchRelationWeldInfoByDate(projectId, yesterday, yesterday);
             Map<String, Map<String, Double>> pipeLengthMap = this.overallStatisticsService.getPipeLengthMap(weldInfoBos);
-
+            //  根据施工单位分组计算
             Map<String, List<WeldInfoBo>> dateToWeldInfoList = weldInfoBos.stream().collect(Collectors.groupingBy(WeldInfoBo::getConstructUnit, Collectors.toList()));
-            List<StatsProcessResultBo> resultBoList = Lists.newArrayList();
             for (String constructId : dateToWeldInfoList.keySet()) {
-                Double length = this.overallStatisticsService.statsPipeLength(pipeLengthMap, dateToWeldInfoList.get(constructId));
+                List<WeldInfoBo> weldList = dateToWeldInfoList.get(constructId);
+                Double length = this.overallStatisticsService.statsPipeLength(pipeLengthMap, weldList);
                 Integer count = this.appStatisticsDao.countPatchRelationWeldInfoByDate(projectId, yesterday, constructId);
-                resultBoList.add(new StatsProcessResultBo(constructId, idToUnitNameMap.get(constructId), count, length));
+                returnList.add(new StatsProcessResultBo(constructId, count, length));
             }
-
-            return resultBoList;
         }
 
-        if (StatsProcessForAppEnum.LAY_PIPE_TRENCH_BACKFILL.getType().equals(statsType)) {
-            List<StatsProcessResultBo> resultBos = appStatisticsDao.statsBackFillLengthGroupByConstruct(projectId, yesterday, yesterday);
-            resultBos.forEach(bo -> bo.setConstructName(idToUnitNameMap.get(bo.getStatsType())));
-            return resultBos;
+        // 包装该项目下所有施工单位的统计(统计数据中没有的)
+        Set<String> statsUnitIds = returnList.stream().map(StatsProcessResultBo::getStatsType).collect(Collectors.toSet());
+        for (String unitId : unitMap.keySet()) {
+            if (!statsUnitIds.contains(unitId)) {
+                returnList.add(new StatsProcessResultBo(unitId, 0, 0));
+            }
         }
 
-
-        return null;
+        // 包装单位中文名称
+        returnList.forEach(bo -> bo.setConstructName(unitMap.get(bo.getStatsType())));
+        return returnList;
     }
 
 
@@ -259,22 +256,23 @@ public class AppStatisticsService {
 
         List<String> dayList = StatsUtils.genContinuityDayStr(startDate, endDate, "yyyy-MM-dd");
 
-        // TODO: 管材
+        // 管材
         List<DateStatsResultBo> pipeStatsResult = this.appStatisticsDao.statsPipeLengthGroupDate(projectId, startDate, endDate);
 
-        // TODO: 焊接
+        // 焊接
         List<WeldInfoBo> weldInfoBos = this.appStatisticsDao.listWeldInfoByDate(projectId, startDate, endDate);
 
-        // TODO: 补口
+        // 补口
         List<WeldInfoBo> patchRelationWeldInfoBos = this.appStatisticsDao.listPatchRelationWeldInfoByDate(projectId, startDate, endDate);
 
         List<WeldInfoBo> statsWeldList = Lists.newArrayList(weldInfoBos);
         statsWeldList.addAll(patchRelationWeldInfoBos);
         Map<String, Map<String, Double>> pipeLengthMap = this.overallStatisticsService.getPipeLengthMap(statsWeldList);
+
         List<DateStatsResultBo> weldStatsResult = this.overallStatisticsService.getDateStatsResult(StatsProcessEnum.WELD.getType(), weldInfoBos, pipeLengthMap);
         List<DateStatsResultBo> patchStatsResult = this.overallStatisticsService.getDateStatsResult(StatsProcessEnum.PATCH.getType(), patchRelationWeldInfoBos, pipeLengthMap);
 
-        //TODO: 回填
+        // 回填
         List<DateStatsResultBo> backFillStatsResult = this.appStatisticsDao.statsBackFillLengthGroupDate(projectId, startDate, endDate);
 
         List<DateStatsResultBo> resultBos = Lists.newArrayList();
@@ -290,7 +288,7 @@ public class AppStatisticsService {
         // Table赋值
         resultBos.forEach(bo -> table.put(bo.getStatsType(), bo.getStatsDate(), bo.getStatsResult()==null?0:bo.getStatsResult()));
 
-        // 计算累积结果: 每个统计类型下的年月统计值=之前月份累计只和
+        // 计算累积结果: 每个统计类型下的日期统计值=之前月份累计之和
         Table<String, String, Object> resultTable = HashBasedTable.create();
         for (String statsType : table.rowKeySet()) {
             for (String date : dayList) {
@@ -300,6 +298,28 @@ public class AppStatisticsService {
 
         return resultTable;
     }
+
+
+    public Table<String, String, Object> statsLatestWeekCumulativeProcessDetail(String projectId) {
+        LocalDate now = LocalDate.now();
+        String startDate = StatsUtils.getStartDayOfWeek(now.toString(), "yyyy-MM-dd");
+        String endDate = StatsUtils.getEndDayOfWeek(now.toString(), "yyyy-MM-dd");
+        List<String> dayList = StatsUtils.genContinuityDayStr(startDate, endDate, "yyyy-MM-dd");
+
+        Map<String, String> unitMap = this.getUnitMap(projectId);
+
+        // TODO: 管材
+
+        // TODO: 管沟回填
+
+        // TODO: 焊接
+
+        // TODO: 补口
+
+        // TODO: 包装施工单位中文名 & 填充项目下的单位统计
+        return null;
+    }
+
 
 
     public Table<String, String, Integer> statsDateEntryAndAuditing(String projectId) {
@@ -326,9 +346,6 @@ public class AppStatisticsService {
     }
 
 
-    public static void main(String[] args) {
-
-    }
 
     private void initTable(List<String> dateList, Table<String, String, Object> table) {
         for (StatsProcessForAppEnum processEnum : StatsProcessForAppEnum.values()) {
@@ -336,6 +353,111 @@ public class AppStatisticsService {
                 table.put(processEnum.getType(), date, 0);
             }
         }
+    }
+
+
+
+    public Map<String, Object> statsWeldCheck(String projectId) {
+
+        // 审核通过的焊口数量
+        Integer passedWeldCount = this.appStatisticsDao.countWeldInfoByApproveStatus(projectId, ApproveStatusEnum.PASSED.getCode());
+
+        // 审核通过的射线检测数量
+        Integer passedRayCount = this.appStatisticsDao.countRayCheckByResult(projectId, null);
+
+        // 审核通过且检验合格的射线检测数量
+        Integer passedAndOkCount = this.appStatisticsDao.countRayCheckByResult(projectId, 1);
+
+        Map<String, Object> returnMap = Maps.newHashMap();
+        returnMap.put("passedWeldCount", passedWeldCount);
+        returnMap.put("passedRayCount", passedRayCount);
+        returnMap.put("passedAndOkCount", passedAndOkCount);
+        return returnMap;
+    }
+
+
+    public List<WeldCheckInfoBo> statsWeldCheckDetail(String projectId) {
+        Map<String, String> unitMap = this.getUnitMap(projectId);
+
+        List<WeldInfoBo> weldInfoBos = this.appStatisticsDao.listWeldInfo(projectId);
+        Map<String, List<WeldInfoBo>> unitToWeldList = weldInfoBos.stream().collect(Collectors.groupingBy(WeldInfoBo::getConstructUnit, Collectors.toList()));
+
+        List<String> weldIdList = weldInfoBos.stream().map(WeldInfoBo::getOid).collect(Collectors.toList());
+
+        List<DetectionRayBo> detectionRayBos = this.appStatisticsDao.listDetectionRayWeldIn(projectId, weldIdList);
+
+        Map<String, DetectionRayBo> weldToDetectionRayMap = detectionRayBos.stream().collect(Collectors.toMap(DetectionRayBo::getWeldOid, bo -> bo, (a, b) -> b));
+
+        List<WeldCheckInfoBo> resultList = Lists.newArrayList();
+        for (String unitId : unitToWeldList.keySet()) {
+            Set<String> collect = unitToWeldList.get(unitId).stream().map(WeldInfoBo::getOid).collect(Collectors.toSet());
+            WeldCheckInfoBo weldCheckInfoBo = new WeldCheckInfoBo();
+            weldCheckInfoBo.setUnitId(unitId);
+            weldCheckInfoBo.setUnitName(unitMap.getOrDefault(unitId, "-"));
+            this.wrapperStatsCount(weldCheckInfoBo, collect, weldToDetectionRayMap);
+            resultList.add(weldCheckInfoBo);
+        }
+
+        Sets.SetView<String> diff = Sets.difference(unitMap.keySet(), unitToWeldList.keySet());
+        for (String unitId : diff) {
+            resultList.add(new WeldCheckInfoBo(unitId, unitMap.getOrDefault(unitId, "-"), 0, 0, 0, 0, "-"));
+        }
+
+        return resultList;
+    }
+
+    private void wrapperStatsCount(WeldCheckInfoBo weldCheckInfoBo, Set<String> collect, Map<String, DetectionRayBo> weldToDetectionRay) {
+
+        int weldCount = collect.size();
+        int checkedCount = 0;
+        int qualifiedCount = 0;
+        int onceQualifiedCount = 0;
+
+        for (String weldId : collect) {
+            DetectionRayBo rayBo = weldToDetectionRay.get(weldId);
+            if (weldToDetectionRay.containsKey(weldId)) {
+                checkedCount ++;
+                if (null!=rayBo && Objects.equals(1, rayBo.getEvaluationResult())) {
+                    qualifiedCount ++;
+                    if ("detection_type_code_001".equals(rayBo.getDetectionType())) {
+                        onceQualifiedCount ++;
+                    }
+                }
+            }
+        }
+        NumberFormat numberFormat = NumberFormat.getInstance();
+        numberFormat.setMaximumFractionDigits(2);
+        String onceQualifiedRate = 0 == checkedCount ? "∞%":numberFormat.format((float)onceQualifiedCount / (float)checkedCount * 100).concat("%");
+
+        weldCheckInfoBo.setWeldCount(weldCount);
+        weldCheckInfoBo.setCheckedCount(checkedCount);
+        weldCheckInfoBo.setUncheckedCount(weldCount - checkedCount);
+        weldCheckInfoBo.setQualifiedCount(qualifiedCount);
+        weldCheckInfoBo.setOnceQualifiedRate(onceQualifiedRate);
+    }
+
+    public static void main(String[] args) {
+
+        Set<String> s1 = Sets.newHashSet("f4b587f5-4f84-4e51-9ae7-529a7f16b2f6" , "6f45fb5e-f2c7-4e40-bbe1-a2e643cc6a48");
+        Set<String> s2 = Sets.newHashSet("17005abc-6a3c-456e-afa2-97ac9dc8dc13",
+                 "df5332c7-961f-4df0-9cf6-a41b588dbe1b", "b700743e-9f06-4e72-a207-c05f279f6994",
+                "6f45fb5e-f2c7-4e40-bbe1-a2e643cc6a48", "689b0c7c-69f2-4ec4-b0ef-6fa5f490d84f");
+
+        Sets.SetView<String> diff = Sets.difference(s2, s1);
+        for (String unitId : diff) {
+            System.out.println(unitId);
+        }
+    }
+
+
+    /**
+     * 获取该项目下的所有施工单位
+     * @param projectId 项目ID
+     * @return dToUnitNameMap: key-施工单位ID, value-施工单位名称
+     */
+    private Map<String, String> getUnitMap(String projectId) {
+        List<Map<String, Object>> list = this.daqPrivilegeService.getConstructionUnitByProjectOid(projectId);
+        return list.stream().collect(Collectors.toMap(construct -> String.valueOf(construct.get("key")), construct -> String.valueOf(construct.get("value")), (a, b) -> b));
     }
 
 }

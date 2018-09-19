@@ -66,6 +66,23 @@ public class AppStatisticsController {
         return ResultVOUtil.ofSuccess(this.appStatisticsService.statsYesterdayProcess(projectId));
     }
 
+
+    /**
+     * 昨日进度统计(分单位统计)
+     * @param projectId 项目ID
+     * @param statsType 统计类型 {@link StatsProcessForAppEnum}
+     * @return {@link BaseResult}
+     */
+    @GetMapping("statsYesterdayProcessDetail")
+    public BaseResult statsYesterdayProcessDetail(@RequestParam String projectId, @RequestParam String statsType) {
+        List<String> statsTypes = Arrays.stream(StatsProcessForAppEnum.values()).map(StatsProcessForAppEnum::getType).collect(Collectors.toList());
+        if (!statsTypes.contains(statsType)) {
+            throw new BusinessException("统计类型statsType不存在", "403");
+        }
+        return ResultVOUtil.ofSuccess(this.appStatisticsService.statsYesterdayProcessDetail(projectId, statsType));
+    }
+
+
     /**
      * 近一周累积完成情况统计
      * @param projectId 项目ID
@@ -78,13 +95,14 @@ public class AppStatisticsController {
     }
 
 
-    @GetMapping("statsYesterdayProcessDetail")
-    public BaseResult statsYesterdayProcessDetail(@RequestParam String projectId, @RequestParam String statsType) {
-        List<String> statsTypes = Arrays.stream(StatsProcessForAppEnum.values()).map(StatsProcessForAppEnum::getType).collect(Collectors.toList());
-        if (!statsTypes.contains(statsType)) {
-            throw new BusinessException("统计类型statsType不存在", "403");
-        }
-        return ResultVOUtil.ofSuccess(this.appStatisticsService.statsYesterdayProcessDetail(projectId, statsType));
+    /**
+     * 近一周累积完成情况统计详情(分单位统计)
+     * @param projectId 项目ID
+     * @return {@link BaseResult}
+     */
+    @GetMapping("statsLatestWeekCumulativeProcessDetail")
+    public BaseResult statsLatestWeekCumulativeProcessDetail(@RequestParam String projectId) {
+        return ResultVOUtil.ofSuccess();
     }
 
 
@@ -95,7 +113,18 @@ public class AppStatisticsController {
      */
     @GetMapping("statsWeldCheck")
     public BaseResult statsWeldCheck(@RequestParam String projectId) {
-        return ResultVOUtil.ofSuccess();
+        return ResultVOUtil.ofSuccess(this.appStatisticsService.statsWeldCheck(projectId));
+    }
+
+
+    /**
+     * 焊口检测情况详情(分单位统计)
+     * @param projectId 项目ID
+     * @return {@link BaseResult}
+     */
+    @GetMapping("statsWeldCheckDetail")
+    public BaseResult statsWeldCheckDetail(@RequestParam String projectId) {
+        return ResultVOUtil.ofSuccess(this.appStatisticsService.statsWeldCheckDetail(projectId));
     }
 
 
@@ -109,4 +138,5 @@ public class AppStatisticsController {
         Table<String, String, Integer> resultTable = this.appStatisticsService.statsDateEntryAndAuditing(projectId);
         return ResultVOUtil.ofSuccess(resultTable.rowMap());
     }
+
 }
