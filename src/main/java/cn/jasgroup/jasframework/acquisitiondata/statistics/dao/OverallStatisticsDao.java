@@ -126,17 +126,17 @@ public class OverallStatisticsDao {
 
 
     public List<StatsResultBo> queryStraightPipeLength(Collection<String> idList) {
-        String sql = " select oid as stats_type, pipe_length as stats_result from daq_material_pipe where active = 1 and oid in (:idList) ";
+        String sql = " select oid as stats_type, coalesce(pipe_length, 0) as stats_result from daq_material_pipe where active = 1 and oid in (:idList) ";
         return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("idList", idList), StatsResultBo.class);
     }
 
     public List<StatsResultBo> queryHotBendLength(Collection<String> idList) {
-        String sql = " select oid as stats_type, pipe_length as stats_result from daq_material_hot_bends where active = 1 and oid in (:idList) ";
+        String sql = " select oid as stats_type, coalesce(pipe_length, 0) as stats_result from daq_material_hot_bends where active = 1 and oid in (:idList) ";
         return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("idList", idList), StatsResultBo.class);
     }
 
     public List<StatsResultBo> queryColdBendLength(Collection<String> idList) {
-        String sql = " select oid as stats_type, pipe_length as stats_result from daq_material_pipe_cold_bending where active = 1 and oid in (:idList) ";
+        String sql = " select oid as stats_type, coalesce(pipe_length, 0) as stats_result from daq_material_pipe_cold_bending where active = 1 and oid in (:idList) ";
         return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("idList", idList), StatsResultBo.class);
     }
 
@@ -258,7 +258,7 @@ public class OverallStatisticsDao {
 
     public List<Map<String, Integer>> statsDetectionRayPassCount(List<String> projectIds) {
         String sql = "select count(*) as count, sum(case when (detection_type='detection_type_code_001') then 1 else 0 end) as pass_count " +
-                " from daq_detection_ray where active = 1 and project_oid in (:projectIds) and approve_status = 2 ";
+                " from daq_detection_ray where active = 1 and approve_status = 2 and project_oid in (:projectIds) ";
         return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectIds", projectIds));
     }
 }

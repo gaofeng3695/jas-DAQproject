@@ -28,13 +28,6 @@ public class StatsProcessResultBo {
         this.statsLength = statsLength;
     }
 
-    public StatsProcessResultBo(String statsType, String constructName, Integer statsCount, Object statsLength) {
-        this.statsType = statsType;
-        this.constructName = constructName;
-        this.statsCount = statsCount;
-        this.statsLength = statsLength;
-    }
-
     public String getConstructName() {
         return constructName;
     }

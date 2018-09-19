@@ -177,6 +177,12 @@ public class OverallStatisticsService {
         return weldStatsResult;
     }
 
+
+    /**
+     * 获取每种类型管子的长度(直钢管, 热煨弯管, 冷弯管)
+     * @param weldInfoBos 焊口信息集合
+     * @return Map<String, Map<String, Double>> (key:管件类型, value:[Map：id-length])
+     */
     public Map<String, Map<String, Double>> getPipeLengthMap( List<WeldInfoBo> weldInfoBos) {
         Set<String> straightPipeIds = getWeldPipeIdsByType(weldInfoBos, STRAIGHT_STEEL_PIPE);
         Set<String> hotBendIds = getWeldPipeIdsByType(weldInfoBos, HOT_BEND);
@@ -187,17 +193,14 @@ public class OverallStatisticsService {
         List<StatsResultBo> coldBendLengthList = Lists.newArrayList();
         if (!CollectionUtils.isEmpty(straightPipeIds)) {
             straightPipeLengthList = this.overallStatisticsDao.queryStraightPipeLength(straightPipeIds);
-            straightPipeLengthList.stream().filter(statsResultBo -> statsResultBo.getStatsResult() == null).forEach(statsResultBo -> statsResultBo.setStatsResult(0));
         }
 
         if (!CollectionUtils.isEmpty(hotBendIds)) {
             hotBendLengthList = this.overallStatisticsDao.queryHotBendLength(hotBendIds);
-            hotBendLengthList.stream().filter(statsResultBo -> statsResultBo.getStatsResult() == null).forEach(statsResultBo -> statsResultBo.setStatsResult(0));
         }
 
         if (!CollectionUtils.isEmpty(coldBendIds)) {
             coldBendLengthList = this.overallStatisticsDao.queryColdBendLength(coldBendIds);
-            coldBendLengthList.stream().filter(statsResultBo -> statsResultBo.getStatsResult() == null).forEach(statsResultBo -> statsResultBo.setStatsResult(0));
         }
 
         Map<String, Double> straightLengthMap = straightPipeLengthList.stream().collect(Collectors.toMap(StatsResultBo::getStatsType, statsResultBo -> Double.parseDouble(statsResultBo.getStatsResult().toString()), (a, b) -> b));
