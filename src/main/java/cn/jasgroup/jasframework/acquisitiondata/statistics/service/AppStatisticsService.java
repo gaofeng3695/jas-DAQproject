@@ -499,8 +499,8 @@ public class AppStatisticsService {
 
     public static void main(String[] args) {
         LocalDate now = LocalDate.now();
-        String startDate = now.toString();
-        String endDate = now.minusDays(7).toString();
+        String endDate = now.toString();
+        String startDate = now.minusDays(6).toString();
         System.out.println(startDate + ", " + endDate);
         List<String> dayList = StatsUtils.genContinuityDayStr(startDate, endDate, YYYY_MM_DD);
 
