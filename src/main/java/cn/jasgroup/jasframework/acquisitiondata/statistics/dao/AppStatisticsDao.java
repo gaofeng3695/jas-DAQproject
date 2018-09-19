@@ -285,7 +285,7 @@ public class AppStatisticsDao {
         sql += " and to_char(create_datetime, 'yyyy-MM-dd') = :date";
 
         if (!StringUtils.isEmpty(constructId)) {
-            sql += " and construct_id = :constructId ";
+            sql += " and construct_unit = :constructId ";
             params.put("constructId", constructId);
         }
         return this.commonDataJdbcDao.queryForInt(params, sql);
@@ -314,7 +314,7 @@ public class AppStatisticsDao {
         sql += " and to_char(create_datetime, 'yyyy-MM-dd') = :date";
 
         if (!StringUtils.isEmpty(constructId)) {
-            sql += " and construct_id = :constructId ";
+            sql += " and construct_unit = :constructId ";
             params.put("constructId", constructId);
         }
         return this.commonDataJdbcDao.queryForInt(params, sql);
