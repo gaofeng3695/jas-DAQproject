@@ -196,7 +196,7 @@ public class AppStatisticsDao {
                 " ) as ss   " +
                 " group by stats_type, date";
 
-        return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectId", projectId, "startDate", startDate, "endDate", endDate), StatsProcessResultBo.class);
+        return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectId", projectId, "startDate", startDate, "endDate", endDate), DateStatsResultBo.class);
     }
 
 
@@ -248,7 +248,7 @@ public class AppStatisticsDao {
                 " select construct_unit as stats_type, to_char(create_datetime , 'yyyy-MM-dd') as stats_date, sum(backfill_length) as stats_result from daq_lay_pipe_trench_backfill " +
                 " where active = 1 and approve_status = 2 and project_oid = :projectId and to_char(create_datetime, 'yyyy-MM-dd') between :startDate and :endDate " +
                 " group by construct_unit, to_char(create_datetime , 'yyyy-MM-dd') ";
-        return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectId", projectId, "startDate", startDate, "endDate", endDate), StatsProcessResultBo.class);
+        return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectId", projectId, "startDate", startDate, "endDate", endDate), DateStatsResultBo.class);
     }
 
 
