@@ -56,6 +56,9 @@ public class AppStatisticsController {
         return ResultVOUtil.ofSuccess(this.appStatisticsService.dataAuditing(projectOid, constructUnit));
     }
 
+
+    /* ---------------------------------------------------------------------------------- */
+
     /**
      * 昨日进度统计
      * @param projectId 项目ID

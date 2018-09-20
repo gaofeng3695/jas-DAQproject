@@ -255,16 +255,16 @@ public class AppStatisticsService {
 
         // 包装单位中文名称
         returnList.forEach(bo -> bo.setConstructName(unitMap.get(bo.getStatsType())));
+
+        returnList.sort((o1, o2) -> Double.compare(Double.parseDouble(o2.getStatsLength().toString()), Double.parseDouble(o1.getStatsLength().toString())));
         return returnList;
     }
 
 
 
     public Table<String, String, Object> statsLatestWeekCumulativeProcess(String projectId) {
-        LocalDate now = LocalDate.now();
-        String startDate = StatsUtils.getStartDayOfWeek(now.toString(), YYYY_MM_DD);
-        String endDate = StatsUtils.getEndDayOfWeek(now.toString(), YYYY_MM_DD);
-
+        String startDate = LocalDate.now().minusDays(6).toString();
+        String endDate = LocalDate.now().toString();
         List<String> dayList = StatsUtils.genContinuityDayStr(startDate, endDate, YYYY_MM_DD);
 
         // 管材
@@ -319,9 +319,8 @@ public class AppStatisticsService {
      * @return Table
      */
     public List statsLatestWeekCumulativeProcessDetail(String projectId) {
-        LocalDate now = LocalDate.now();
-        String startDate = StatsUtils.getStartDayOfWeek(now.toString(), YYYY_MM_DD);
-        String endDate = StatsUtils.getEndDayOfWeek(now.toString(), YYYY_MM_DD);
+        String startDate = LocalDate.now().minusDays(6).toString();
+        String endDate = LocalDate.now().toString();
         List<String> dayList = StatsUtils.genContinuityDayStr(startDate, endDate, YYYY_MM_DD);
 
         Map<String, String> unitMap = this.getUnitMap(projectId);
@@ -352,7 +351,11 @@ public class AppStatisticsService {
             Table<String, String, Object> table = TreeBasedTable.create();
             this.initTable(dayList, table);
 
-            pipeStatsResult.stream().filter(bo -> unitId.equals(bo.getStatsType())).forEach(bo -> table.put(StatsProcessForAppEnum.PIPE.getType(), bo.getStatsDate(), bo.getStatsResult()));
+            for (DateStatsResultBo dateStatsResultBo : pipeStatsResult) {
+                if (unitId.equals(dateStatsResultBo.getStatsType())) {
+                    table.put(StatsProcessForAppEnum.PIPE.getType(), dateStatsResultBo.getStatsDate(), dateStatsResultBo.getStatsResult());
+                }
+            }
             backFillStatsResult.stream().filter(bo -> unitId.equals(bo.getStatsType())).forEach(bo -> table.put(StatsProcessForAppEnum.LAY_PIPE_TRENCH_BACKFILL.getType(), bo.getStatsDate(), bo.getStatsResult()));
             weldStatsResult.stream().filter(bo -> unitId.equals(bo.getStatsType())).forEach(bo -> table.put(StatsProcessForAppEnum.WELD.getType(), bo.getStatsDate(), bo.getStatsResult()));
             patchStatsResult.stream().filter(bo -> unitId.equals(bo.getStatsType())).forEach(bo -> table.put(StatsProcessForAppEnum.WELD.getType(), bo.getStatsDate(), bo.getStatsResult()));
@@ -386,9 +389,8 @@ public class AppStatisticsService {
 
 
     public Table<String, String, Integer> statsDateEntryAndAuditing(String projectId) {
-        LocalDate now = LocalDate.now();
-        String startDate = StatsUtils.getStartDayOfWeek(now.toString(), YYYY_MM_DD);
-        String endDate = StatsUtils.getEndDayOfWeek(now.toString(), YYYY_MM_DD);
+        String startDate = LocalDate.now().minusDays(6).toString();
+        String endDate = LocalDate.now().toString();
         List<DateApproveStatsForApp> statsResultList = this.appStatisticsDao.statsDataEntryApproveGroupByDay(projectId, startDate, endDate);
 
         List<String> dayList = StatsUtils.genContinuityDayStr(startDate, endDate, YYYY_MM_DD);
@@ -498,13 +500,14 @@ public class AppStatisticsService {
     }
 
     public static void main(String[] args) {
-        LocalDate now = LocalDate.now();
-        String endDate = now.toString();
-        String startDate = now.minusDays(6).toString();
-        System.out.println(startDate + ", " + endDate);
-        List<String> dayList = StatsUtils.genContinuityDayStr(startDate, endDate, YYYY_MM_DD);
+        List<StatsProcessResultBo> returnList = Lists.newArrayList(
+                new StatsProcessResultBo("", 0, 2.32),
+                new StatsProcessResultBo("", 0, 3.323),
+                new StatsProcessResultBo("", 0, 6.30),
+                new StatsProcessResultBo("", 0, 1.32)
+        );
 
-        System.out.println(dayList);
+        returnList.forEach(bo -> System.out.println(bo.getStatsLength()));
     }
 
 
