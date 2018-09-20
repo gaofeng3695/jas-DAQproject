@@ -47,6 +47,9 @@ public class AppStatisticsDao {
             return Lists.newArrayList();
         }
 
+        Map<String, Object> variables = Maps.newHashMap();
+        variables.put("createUserId", ThreadLocalHolder.getCurrentUserId());
+
         Map<String, String> pipeCheckedBlock = EntryStatisticsBlock.getPipeCheckedBlock();
         Map<String, String> weldApproveBlock = EntryStatisticsBlock.getWeldApproveBlock();
 
@@ -62,15 +65,12 @@ public class AppStatisticsDao {
             }
 
             if (!StringUtils.isEmpty(projectOid)) {
-                sql.append(" and projectOid = :projectOid");
+                sql.append(" and project_oid = :projectOid");
+                variables.put("projectOid", projectOid);
             }
 
             sql.append(i<(statisTypeList.size()-1) ? " UNION ALL ":"");
         }
-
-        Map<String, Object> variables = Maps.newHashMap();
-        variables.put("createUserId", ThreadLocalHolder.getCurrentUserId());
-        variables.put("projectOid", projectOid);
 
         return commonDataJdbcDao.queryForList(sql.toString(), variables, StatsResultBo.class);
     }
@@ -130,6 +130,8 @@ public class AppStatisticsDao {
 
     /**
      * 管材长度统计
+     * - 防腐管检查-钢管长度统计
+     * - 热煨弯管检查-热煨弯管长度统计
      * @param projectId 项目ID集合
      * @return List
      */
@@ -137,17 +139,15 @@ public class AppStatisticsDao {
 
         String conditionSql = " and to_char(t.create_datetime , 'yyyy-MM-dd') between :startDate and :endDate ";
         String sql =
-                "select 'pipe' as stats_type, coalesce(sum(result), 0) as stats_result from ( " +
-                        // 防腐管检查-钢管长度统计
-                "  select sum(p.pipe_length) as result from daq_check_coating_pipe t " +
-                "  left join daq_material_pipe p on t.pipe_oid = p.oid " +
-                "  where t.active = 1 and p.active = 1 and t.project_oid = :projectId " + conditionSql +
-                "  union all " +
-                // 热煨弯管检查-热煨弯管长度统计
-                "  select sum(p.pipe_length) as result from daq_check_hot_bends t " +
-                "  left join daq_material_hot_bends p on t.hot_bends_oid = p.oid " +
-                "  where t.active = 1 and p.active = 1 and t.project_oid = :projectId " + conditionSql +
-                ") as ss";
+                " select 'pipe' as stats_type, coalesce(sum(result), 0) as stats_result from ( " +
+                "   select sum(p.pipe_length) as result from daq_check_coating_pipe t " +
+                "   left join daq_material_pipe p on t.pipe_oid = p.oid " +
+                "   where t.active = 1 and p.active = 1 and t.project_oid = :projectId " + conditionSql +
+                "   union all " +
+                "   select sum(p.pipe_length) as result from daq_check_hot_bends t " +
+                "   left join daq_material_hot_bends p on t.hot_bends_oid = p.oid " +
+                "   where t.active = 1 and p.active = 1 and t.project_oid = :projectId " + conditionSql +
+                " ) as ss ";
         List resultList = this.commonDataJdbcDao.queryForList(sql,
                 ImmutableMap.of("projectId", projectId, "startDate", startDate, "endDate", endDate), StatsResultBo.class);
         if (CollectionUtils.isEmpty(resultList)) {
@@ -221,18 +221,24 @@ public class AppStatisticsDao {
     }
 
 
-
-    public StatsResultBo statsBackFillLength(String projectId, String startDate, String endDate) {
-        String sql = "select 'lay_pipe_trench_backfill' as stats_type, coalesce(sum(backfill_length), 0) as stats_result from daq_lay_pipe_trench_backfill " +
+    /**
+     * 统计管沟回填长度
+     */
+    public StatsResultBo statsBackFillLengthByDate(String projectId, String startDate, String endDate) {
+        String sql = "" +
+                " select 'lay_pipe_trench_backfill' as stats_type, coalesce(sum(backfill_length), 0) as stats_result from daq_lay_pipe_trench_backfill " +
                 " where active = 1 and approve_status = 2 and project_oid = :projectId and to_char(create_datetime, 'yyyy-MM-dd') between :startDate and :endDate ";
         List<StatsResultBo> resultList = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectId", projectId, "startDate", startDate, "endDate", endDate), StatsResultBo.class);
         if (CollectionUtils.isEmpty(resultList)) {
-            return new StatsResultBo("pipe_trench_backfill", 0);
+            return new StatsResultBo("lay_pipe_trench_backfill", 0);
         }
         return resultList.get(0);
     }
 
 
+    /**
+     * 统计管沟回填长度: 根据施工单位分组
+     */
     public List<StatsProcessResultBo> statsBackFillLengthGroupByConstruct(String projectId, String startDate, String endDate) {
         String sql = "" +
                 " select construct_unit as stats_type, sum(backfill_length) as stats_length from daq_lay_pipe_trench_backfill " +
@@ -252,7 +258,7 @@ public class AppStatisticsDao {
     }
 
 
-    public List<DateStatsResultBo> statsBackFillLengthGroupDate(String projectId, String startDate, String endDate) {
+    public List<DateStatsResultBo> statsBackFillLengthGroupByDate(String projectId, String startDate, String endDate) {
         String sql = "" +
                 " select 'lay_pipe_trench_backfill' as stats_type, to_char(create_datetime, 'yyyy-MM-dd') as stats_date, sum(backfill_length) as stats_result from daq_lay_pipe_trench_backfill " +
                 " where active = 1 and approve_status = 2 and project_oid = :projectId " +
