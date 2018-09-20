@@ -10,7 +10,6 @@ import cn.jasgroup.jasframework.security.dao.entity.PriUnit;
 import cn.jasgroup.jasframework.security.service.UnitService;
 import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 import com.google.common.collect.*;
-import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import javax.sound.sampled.SourceDataLine;
-import javax.xml.transform.Source;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.*;
@@ -175,10 +172,9 @@ public class AppStatisticsService {
 
 
     public List<StatsProcessResultBo> statsYesterdayProcess(String projectId) {
-        LocalDate now = LocalDate.now();
-        String yesterday = now.minusDays(1).toString();
+        String yesterday = LocalDate.now().minusDays(1).toString();
         StatsResultBo pipeResultBo = appStatisticsDao.statsPipeLengthByDate(projectId, yesterday, yesterday);
-        StatsResultBo backFillResultBo = this.appStatisticsDao.statsBackFillLength(projectId, yesterday, yesterday);
+        StatsResultBo backFillResultBo = this.appStatisticsDao.statsBackFillLengthByDate(projectId, yesterday, yesterday);
 
         // 焊接(km/口)
         List<WeldInfoBo> weldInfoBos = this.appStatisticsDao.listWeldInfoByDate(projectId, yesterday, yesterday);
@@ -284,7 +280,7 @@ public class AppStatisticsService {
         List<DateStatsResultBo> patchStatsResult = this.overallStatisticsService.getDateStatsResult(StatsProcessEnum.PATCH.getType(), patchRelationWeldInfoBos, pipeLengthMap);
 
         // 回填
-        List<DateStatsResultBo> backFillStatsResult = this.appStatisticsDao.statsBackFillLengthGroupDate(projectId, startDate, endDate);
+        List<DateStatsResultBo> backFillStatsResult = this.appStatisticsDao.statsBackFillLengthGroupByDate(projectId, startDate, endDate);
 
         List<DateStatsResultBo> resultBos = Lists.newArrayList();
         resultBos.addAll(pipeStatsResult);
