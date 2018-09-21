@@ -14,9 +14,20 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.*;
 import java.util.*;
 
-
+/**
+ * 统计相关的工具类
+ *
+ * @author xiefayang
+ * 2018/9/18 15:19
+ */
 public class StatsUtils {
 
+    /**
+     * Double类型精确求和
+     * @param value1 value1
+     * @param value2 value2
+     * @return Double
+     */
     public static Double sumExact(Double value1, Double value2) {
         BigDecimal b1 = new BigDecimal(value1.toString());
         BigDecimal b2 = new BigDecimal(value2.toString());
@@ -66,29 +77,6 @@ public class StatsUtils {
         return dateFormat.format(date);
     }
 
-    public static void main(String[] args) throws ParseException {
-        String start = "2017-9";
-        String end = "2018-3";
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M");
-        Date startDate = dateFormat.parse(start);
-        Date endDate = dateFormat.parse(end);
-//        System.out.println(genContinuityYearMonthStr(startDate, endDate));
-//        System.out.println(LocalDate.now());
-//        System.out.println(getStartDayOfWeek("2018-09-18"));
-//        System.out.println(getEndDayOfWeek("2018-09-18"));
-
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate inputDate = LocalDate.now().plusDays(1);
-
-        TemporalAdjuster FIRST_OF_WEEK = TemporalAdjusters.ofDateAdjuster(localDate -> localDate.minusDays(localDate.getDayOfWeek().getValue()- DayOfWeek.MONDAY.getValue()));
-        String weekStart = df.format(inputDate.with(FIRST_OF_WEEK));
-        TemporalAdjuster LAST_OF_WEEK = TemporalAdjusters.ofDateAdjuster(localDate -> localDate.plusDays(DayOfWeek.SUNDAY.getValue() - localDate.getDayOfWeek().getValue()));
-        String weekEnd = df.format(inputDate.with(LAST_OF_WEEK));
-        System.out.println(weekStart);
-        System.out.println(weekEnd);
-
-    }
-
 
     public static List<String> genContinuityYearMonthStr(Date startDate, Date endDate) {
         LocalDate startLocalDate = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -135,7 +123,13 @@ public class StatsUtils {
         return dayList;
     }
 
-    //获取周第一天
+
+    /**
+     * 获取指定日期所在周的第一天
+     * @param date 日期
+     * @param format 日期格式
+     * @return String类型日期
+     */
     public static String getStartDayOfWeek(String date, String format) {
         LocalDate inputDate = LocalDate.parse(date);
         TemporalAdjuster firstOfWeek = TemporalAdjusters.ofDateAdjuster(localDate -> localDate.minusDays(localDate.getDayOfWeek().getValue()- DayOfWeek.MONDAY.getValue()));
@@ -143,7 +137,12 @@ public class StatsUtils {
     }
 
 
-    //获取周最后一天
+    /**
+     * 获取指定日期所在周的第一天
+     * @param date 日期
+     * @param format 日期格式
+     * @return String类型日期
+     */
     public static String getEndDayOfWeek(String date, String format) {
         LocalDate inputDate = LocalDate.parse(date);
         TemporalAdjuster lastOfWeek = TemporalAdjusters.ofDateAdjuster(localDate -> localDate.plusDays(DayOfWeek.SUNDAY.getValue() - localDate.getDayOfWeek().getValue()));

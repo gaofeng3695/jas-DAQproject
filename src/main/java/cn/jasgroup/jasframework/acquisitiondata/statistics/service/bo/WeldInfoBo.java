@@ -18,6 +18,8 @@ public class WeldInfoBo {
 
     private String backPipeOid;
 
+    private Integer isRay;
+
     private Integer statsMonth;
 
     private String statsDate;
@@ -25,6 +27,14 @@ public class WeldInfoBo {
     private String constructUnit;
 
     private String createDatetime;
+
+    public Integer getIsRay() {
+        return isRay;
+    }
+
+    public void setIsRay(Integer isRay) {
+        this.isRay = isRay;
+    }
 
     public String getConstructUnit() {
         return constructUnit;

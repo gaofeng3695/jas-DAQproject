@@ -23,8 +23,13 @@ public class WeldCheckInfoBo {
     /** 未检测数量 */
     private Integer uncheckedCount;
 
+    /** 射线检测焊口数 */
+    private Integer detectionRayCount;
+
     /** 合格数量 */
     private Integer qualifiedCount;
+
+    private Integer onceQualifiedCount;
 
     /** 一次合格数 */
     private String onceQualifiedRate;
@@ -32,14 +37,31 @@ public class WeldCheckInfoBo {
     public WeldCheckInfoBo() {
     }
 
-    public WeldCheckInfoBo(String unitId, String unitName, Integer weldCount, Integer checkedCount, Integer uncheckedCount, Integer qualifiedCount, String onceQualifiedRate) {
+    public WeldCheckInfoBo(String unitId, String unitName, Integer weldCount, Integer checkedCount, Integer uncheckedCount, Integer qualifiedCount, Integer onceQualifiedCount, String onceQualifiedRate) {
         this.unitId = unitId;
         this.unitName = unitName;
         this.weldCount = weldCount;
         this.checkedCount = checkedCount;
         this.uncheckedCount = uncheckedCount;
         this.qualifiedCount = qualifiedCount;
+        this.onceQualifiedCount= onceQualifiedCount;
         this.onceQualifiedRate = onceQualifiedRate;
+    }
+
+    public Integer getOnceQualifiedCount() {
+        return onceQualifiedCount;
+    }
+
+    public void setOnceQualifiedCount(Integer onceQualifiedCount) {
+        this.onceQualifiedCount = onceQualifiedCount;
+    }
+
+    public Integer getDetectionRayCount() {
+        return detectionRayCount;
+    }
+
+    public void setDetectionRayCount(Integer detectionRayCount) {
+        this.detectionRayCount = detectionRayCount;
     }
 
     public String getUnitId() {
