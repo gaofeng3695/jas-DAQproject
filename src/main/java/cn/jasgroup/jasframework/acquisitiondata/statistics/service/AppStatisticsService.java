@@ -329,6 +329,7 @@ public class AppStatisticsService {
         // 管沟回填
         List<DateStatsResultBo> backFillStatsResult = this.appStatisticsDao.statsBackFillLengthGroupByConstructAndDate(projectId, startDate, endDate);
 
+        // 焊接/补口
         List<DateStatsResultBo> weldStatsResult = Lists.newArrayList(), patchStatsResult = Lists.newArrayList();
         List<WeldInfoBo> weldInfoBos = this.appStatisticsDao.listWeldInfoByDate(projectId, startDate, endDate);
         List<WeldInfoBo> patchRelationWeldInfoBos = this.appStatisticsDao.listPatchRelationWeldInfoByDate(projectId, startDate, endDate);
@@ -342,8 +343,7 @@ public class AppStatisticsService {
         countGroupUnitAndDate(patchStatsResult, patchRelationWeldInfoBos, pipeLengthMap);
 
 
-        // 包装施工单位中文名 & 填充统计结果
-
+        // 包装施工单位中文名 & 填充统计结果(累积计算)
         List<Map<String, Object>> resultList = Lists.newArrayList();
         for (String unitId : unitMap.keySet()) {
             Table<String, String, Object> table = TreeBasedTable.create();
@@ -358,10 +358,20 @@ public class AppStatisticsService {
             weldStatsResult.stream().filter(bo -> unitId.equals(bo.getStatsType())).forEach(bo -> table.put(StatsProcessForAppEnum.WELD.getType(), bo.getStatsDate(), bo.getStatsResult()));
             patchStatsResult.stream().filter(bo -> unitId.equals(bo.getStatsType())).forEach(bo -> table.put(StatsProcessForAppEnum.WELD.getType(), bo.getStatsDate(), bo.getStatsResult()));
 
+            // 累积计算
+            // 计算累积结果: 每个统计类型下的日期统计值=之前月份累计之和
+            Table<String, String, Object> resultTable = TreeBasedTable.create();
+            for (String statsType : table.rowKeySet()) {
+                for (String date : dayList) {
+                    resultTable.put(statsType, date, overallStatisticsService.getCumulativeCount(table, dayList, statsType, date));
+                }
+            }
+
+
             Map<String, Object> resultMap = Maps.newHashMap();
             resultMap.put("constructId", unitId);
             resultMap.put("constructName", unitMap.get(unitId));
-            resultMap.put("statsResult", table.rowMap());
+            resultMap.put("statsResult", resultTable.rowMap());
             resultList.add(resultMap);
         }
         return resultList;
