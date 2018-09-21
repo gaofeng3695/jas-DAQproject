@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import javax.xml.transform.Result;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -162,7 +163,7 @@ public class AppStatisticsDao {
         // 日期过滤
         String conditionSql = " and to_char(t.create_datetime , 'yyyy-MM-dd') between :startDate and :endDate ";
         String sql = "" +
-                " select stats_type, sum(result) as stats_length from ( " +
+                " select stats_type, sum(result) as stats_result from ( " +
                 "  select t.construct_unit as stats_type, sum(p.pipe_length) as result from daq_check_coating_pipe t " +
                 "  left join daq_material_pipe p on t.pipe_oid = p.oid " +
                 "  where t.active = 1 and p.active = 1 and t.project_oid = :projectId " + conditionSql +
@@ -224,7 +225,7 @@ public class AppStatisticsDao {
     /**
      * 统计管沟回填长度
      */
-    public StatsResultBo statsBackFillLengthByDate(String projectId, String startDate, String endDate) {
+    public StatsResultBo sumBackFillLengthByDate(String projectId, String startDate, String endDate) {
         String sql = "" +
                 " select 'lay_pipe_trench_backfill' as stats_type, coalesce(sum(backfill_length), 0) as stats_result from daq_lay_pipe_trench_backfill " +
                 " where active = 1 and approve_status = 2 and project_oid = :projectId and to_char(create_datetime, 'yyyy-MM-dd') between :startDate and :endDate ";
@@ -239,9 +240,9 @@ public class AppStatisticsDao {
     /**
      * 统计管沟回填长度: 根据施工单位分组
      */
-    public List<StatsProcessResultBo> statsBackFillLengthGroupByConstruct(String projectId, String startDate, String endDate) {
+    public List<StatsProcessResultBo> sumBackFillLengthGroupByConstruct(String projectId, String startDate, String endDate) {
         String sql = "" +
-                " select construct_unit as stats_type, sum(backfill_length) as stats_length from daq_lay_pipe_trench_backfill " +
+                " select construct_unit as stats_type, sum(backfill_length) as stats_result from daq_lay_pipe_trench_backfill " +
                 " where active = 1 and approve_status = 2 and project_oid = :projectId " +
                 " and to_char(create_datetime, 'yyyy-MM-dd') between :startDate and :endDate " +
                 " group by construct_unit ";
@@ -249,6 +250,22 @@ public class AppStatisticsDao {
     }
 
 
+    /**
+     * 统计管沟回填长度: 根据日期分组
+     */
+    public List<DateStatsResultBo> statsBackFillLengthGroupByDate(String projectId, String startDate, String endDate) {
+        String sql = "" +
+                " select 'lay_pipe_trench_backfill' as stats_type, to_char(create_datetime, 'yyyy-MM-dd') as stats_date, sum(backfill_length) as stats_result from daq_lay_pipe_trench_backfill " +
+                " where active = 1 and approve_status = 2 and project_oid = :projectId " +
+                " and to_char(create_datetime, 'yyyy-MM-dd') between :startDate and :endDate " +
+                " group by to_char(create_datetime, 'yyyy-MM-dd') ";
+        return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectId", projectId, "startDate", startDate, "endDate", endDate), DateStatsResultBo.class);
+    }
+
+
+    /**
+     * 统计管沟回填长度: 根据施工单位和日期分组
+     */
     public List<DateStatsResultBo> statsBackFillLengthGroupByConstructAndDate(String projectId, String startDate, String endDate) {
         String sql = "" +
                 " select construct_unit as stats_type, to_char(create_datetime , 'yyyy-MM-dd') as stats_date, sum(backfill_length) as stats_result from daq_lay_pipe_trench_backfill " +
@@ -258,14 +275,7 @@ public class AppStatisticsDao {
     }
 
 
-    public List<DateStatsResultBo> statsBackFillLengthGroupByDate(String projectId, String startDate, String endDate) {
-        String sql = "" +
-                " select 'lay_pipe_trench_backfill' as stats_type, to_char(create_datetime, 'yyyy-MM-dd') as stats_date, sum(backfill_length) as stats_result from daq_lay_pipe_trench_backfill " +
-                " where active = 1 and approve_status = 2 and project_oid = :projectId " +
-                " and to_char(create_datetime, 'yyyy-MM-dd') between :startDate and :endDate " +
-                " group by to_char(create_datetime, 'yyyy-MM-dd') ";
-        return (List<DateStatsResultBo>) this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectId", projectId, "startDate", startDate, "endDate", endDate), DateStatsResultBo.class);
-    }
+
 
 
     /**
@@ -365,15 +375,27 @@ public class AppStatisticsDao {
     }
 
 
-    public Integer countWeldInfoByApproveStatus(String projectId, Integer approveStatus) {
+    public Integer countWeldInfoByApproveStatus(String projectId) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("projectId", projectId);
-        String sql = "select count(*) from daq_construction_weld where active = 1 and project_oid = :projectId";
-        if (!StringUtils.isEmpty(approveStatus)) {
-            sql += " and approve_status = :approveStatus ";
-            params.put("approveStatus", approveStatus);
-        }
+        String sql = "select count(*) from daq_construction_weld where active = 1 and project_oid = :projectId and approve_status = 2 ";
         return commonDataJdbcDao.queryForInt(params, sql);
+    }
+
+    public WeldCheckInfoBo countWeldDetectionInfo(String projectId) {
+        String sql = "" +
+                " select count(*) as weld_count, sum(case when (is_ray=1) then 1 else 0 end) as checked_count " +
+                " from daq_construction_weld where active = 1 and project_oid = :projectId and approve_status = 2 ";
+
+        List<WeldCheckInfoBo> list = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectId", projectId), WeldCheckInfoBo.class);
+
+        if (CollectionUtils.isEmpty(list)) {
+            WeldCheckInfoBo bo = new WeldCheckInfoBo();
+            bo.setWeldCount(0);
+            bo.setCheckedCount(0);
+            return bo;
+        }
+        return list.get(0);
     }
 
 
@@ -390,20 +412,43 @@ public class AppStatisticsDao {
 
 
     public List<WeldInfoBo> listWeldInfo(String projectId) {
-        String sql = " select oid, construct_unit from daq_construction_weld where active = 1 and approve_status =2 and project_oid = :projectId ";
+        String sql = " select oid, construct_unit, is_ray from daq_construction_weld where active = 1 and approve_status = 2 and project_oid = :projectId ";
         return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectId", projectId), WeldInfoBo.class);
     }
 
-    public List<DetectionRayBo> listDetectionRayWeldIn(String projectId, Collection<String> weldIds) {
-        String sql = "select * from daq_detection_ray where active = 1 and project_oid = :projectId and approve_status = 2 and weld_oid in (:weldIds)";
+
+    /**
+     * 查询合格的焊口检测(查询射线检测)
+     * @param projectId
+     * @param weldIds
+     * @return
+     */
+    public List<DetectionRayBo> listQualifiedDetectionRayWeldIn(String projectId, Collection<String> weldIds) {
+        String sql = "" +
+                " select oid, weld_oid, detection_type, evaluation_result from daq_detection_ray where active = 1 " +
+                " and project_oid = :projectId and approve_status = 2 and evaluation_result = 1 and weld_oid in (:weldIds) ";
         return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectId", projectId, "weldIds", weldIds), DetectionRayBo.class);
     }
 
 
+    public WeldCheckInfoBo countRayDetection(String projectId) {
+        String sql = "" +
+                " select count(*) as detection_ray_count, sum(case when (evaluation_result=1) then 1 else 0 end) as qualified_count  from daq_detection_ray " +
+                " where active=1 and project_oid = :projectId and approve_status = 2 ";
+        List<WeldCheckInfoBo> list = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectId", projectId), WeldCheckInfoBo.class);
+
+        if (CollectionUtils.isEmpty(list)) {
+            WeldCheckInfoBo bo = new WeldCheckInfoBo();
+            bo.setDetectionRayCount(0);
+            bo.setQualifiedCount(0);
+            return bo;
+        }
+        return list.get(0);
+    }
     public Integer countRayCheckByResult(String projectId, Integer evaluationResult) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("projectId", projectId);
-        String sql = " select  count(*) from daq_detection_ray where active = 1 and approve_status = 2 ";
+        String sql = " select count(*) from daq_detection_ray where active = 1 and approve_status = 2 ";
         if (!StringUtils.isEmpty(evaluationResult)) {
             sql += " and evaluation_result = :evaluationResult ";
             params.put("evaluationResult", evaluationResult);

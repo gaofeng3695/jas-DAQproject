@@ -47,6 +47,8 @@ public class AppStatisticsService {
 
     private static final String YYYY_MM_DD = "yyyy-MM-dd";
 
+    private static final String ONCE_DETECTION_QUALIFIED = "detection_type_code_001";
+
     /**
      * 数据录入统计
      * @param statsTypes 统计类型来源(默认统计7个)
@@ -174,7 +176,7 @@ public class AppStatisticsService {
     public List<StatsProcessResultBo> statsYesterdayProcess(String projectId) {
         String yesterday = LocalDate.now().minusDays(1).toString();
         StatsResultBo pipeResultBo = appStatisticsDao.statsPipeLengthByDate(projectId, yesterday, yesterday);
-        StatsResultBo backFillResultBo = this.appStatisticsDao.statsBackFillLengthByDate(projectId, yesterday, yesterday);
+        StatsResultBo backFillResultBo = this.appStatisticsDao.sumBackFillLengthByDate(projectId, yesterday, yesterday);
 
         // 焊接(km/口)
         List<WeldInfoBo> weldInfoBos = this.appStatisticsDao.listWeldInfoByDate(projectId, yesterday, yesterday);
@@ -212,7 +214,7 @@ public class AppStatisticsService {
         }
 
         if (StatsProcessForAppEnum.LAY_PIPE_TRENCH_BACKFILL.getType().equals(statsType)) {
-            returnList = appStatisticsDao.statsBackFillLengthGroupByConstruct(projectId, yesterday, yesterday);
+            returnList = appStatisticsDao.sumBackFillLengthGroupByConstruct(projectId, yesterday, yesterday);
         }
 
         if (StatsProcessForAppEnum.WELD.getType().equals(statsType)) {
@@ -252,7 +254,7 @@ public class AppStatisticsService {
         // 包装单位中文名称
         returnList.forEach(bo -> bo.setConstructName(unitMap.get(bo.getStatsType())));
 
-        returnList.sort((o1, o2) -> Double.compare(Double.parseDouble(o2.getStatsLength().toString()), Double.parseDouble(o1.getStatsLength().toString())));
+        returnList.sort((o1, o2) -> Double.compare(Double.parseDouble(o2.getStatsResult().toString()), Double.parseDouble(o1.getStatsResult().toString())));
         return returnList;
     }
 
@@ -417,11 +419,26 @@ public class AppStatisticsService {
     }
 
 
+    /**
+     * 统计焊口检测
+     * @param projectId 项目ID
+     * @return Map
+     */
+    public WeldCheckInfoBo statsWeldCheck(String projectId) {
 
-    public Map<String, Object> statsWeldCheck(String projectId) {
+        WeldCheckInfoBo weldCheckInofo = this.appStatisticsDao.countWeldDetectionInfo(projectId);
+        WeldCheckInfoBo rayDetectionInfo = this.appStatisticsDao.countRayDetection(projectId);
+
+        WeldCheckInfoBo resultBo = new WeldCheckInfoBo();
+        resultBo.setWeldCount(weldCheckInofo.getWeldCount());
+        resultBo.setCheckedCount(weldCheckInofo.getCheckedCount());
+        resultBo.setUncheckedCount(weldCheckInofo.getWeldCount() - weldCheckInofo.getCheckedCount());
+        resultBo.setDetectionRayCount(rayDetectionInfo.getDetectionRayCount());
+        resultBo.setQualifiedCount(rayDetectionInfo.getQualifiedCount());
+
 
         // 审核通过的焊口数量
-        Integer passedWeldCount = this.appStatisticsDao.countWeldInfoByApproveStatus(projectId, ApproveStatusEnum.PASSED.getCode());
+        Integer passedWeldCount = this.appStatisticsDao.countWeldInfoByApproveStatus(projectId);
 
         // 审核通过的射线检测数量
         Integer passedRayCount = this.appStatisticsDao.countRayCheckByResult(projectId, null);
@@ -429,71 +446,73 @@ public class AppStatisticsService {
         // 审核通过且检验合格的射线检测数量
         Integer passedAndOkCount = this.appStatisticsDao.countRayCheckByResult(projectId, 1);
 
-        Map<String, Object> returnMap = Maps.newHashMap();
-        returnMap.put("passedWeldCount", passedWeldCount);
-        returnMap.put("passedRayCount", passedRayCount);
-        returnMap.put("passedAndOkCount", passedAndOkCount);
-        return returnMap;
+        return resultBo;
+
+
     }
 
 
+    /**
+     * 统计焊口检测详情(按施工单位分组)
+     * @param projectId 项目ID
+     * @return List
+     */
     public List<WeldCheckInfoBo> statsWeldCheckDetail(String projectId) {
         Map<String, String> unitMap = this.getUnitMap(projectId);
-
+        List<WeldCheckInfoBo> resultBoList = Lists.newArrayList();
         List<WeldInfoBo> weldInfoBos = this.appStatisticsDao.listWeldInfo(projectId);
         Map<String, List<WeldInfoBo>> unitToWeldList = weldInfoBos.stream().collect(Collectors.groupingBy(WeldInfoBo::getConstructUnit, Collectors.toList()));
+        if (CollectionUtils.isEmpty(weldInfoBos) || CollectionUtils.isEmpty(unitToWeldList)) {
+            unitMap.keySet().stream().map(unitId -> new WeldCheckInfoBo(unitId, unitMap.getOrDefault(unitId, "-"), 0, 0, 0, 0, 0, "∞%")).forEach(resultBoList::add);
+            return resultBoList;
+        }
 
         List<String> weldIdList = weldInfoBos.stream().map(WeldInfoBo::getOid).collect(Collectors.toList());
+        List<DetectionRayBo> detectionRayBos = this.appStatisticsDao.listQualifiedDetectionRayWeldIn(projectId, weldIdList);
+        Set<String> qualifiedWeldIds = detectionRayBos.stream().map(DetectionRayBo::getWeldOid).collect(Collectors.toSet());
+        Set<String> onceQualifiedWeldIds = detectionRayBos.stream().filter(bo -> ONCE_DETECTION_QUALIFIED.equals(bo.getDetectionType())).map(DetectionRayBo::getWeldOid).collect(Collectors.toSet());
 
-        List<DetectionRayBo> detectionRayBos = this.appStatisticsDao.listDetectionRayWeldIn(projectId, weldIdList);
 
-        Map<String, DetectionRayBo> weldToDetectionRayMap = detectionRayBos.stream().collect(Collectors.toMap(DetectionRayBo::getWeldOid, bo -> bo, (a, b) -> b));
 
-        List<WeldCheckInfoBo> resultList = Lists.newArrayList();
+        // 分组统计各项: 焊接数量, 已检测, 未检测, 合格数, 一次合格率
         for (String unitId : unitToWeldList.keySet()) {
-            Set<String> collect = unitToWeldList.get(unitId).stream().map(WeldInfoBo::getOid).collect(Collectors.toSet());
-            WeldCheckInfoBo weldCheckInfoBo = new WeldCheckInfoBo();
-            weldCheckInfoBo.setUnitId(unitId);
-            weldCheckInfoBo.setUnitName(unitMap.getOrDefault(unitId, "-"));
-            this.wrapperStatsCount(weldCheckInfoBo, collect, weldToDetectionRayMap);
-            resultList.add(weldCheckInfoBo);
+            List<WeldInfoBo> weldList = unitToWeldList.get(unitId);
+            WeldCheckInfoBo resultBo = new WeldCheckInfoBo();
+
+            int weldCount = weldList.size();
+            int checkedCount = (int) weldList.stream().filter(bo -> 1==bo.getIsRay()).mapToInt(WeldInfoBo::getIsRay).count();
+            int qualifiedCount = (int) weldList.stream().filter(bo -> qualifiedWeldIds.contains(bo.getOid())).count();
+            int onceQualifiedCount = (int) weldList.stream().filter(bo -> onceQualifiedWeldIds.contains(bo.getOid())).count();
+
+            String onceQualifiedRate = "";
+            if (0 == checkedCount) {
+                onceQualifiedRate = "∞%";
+            } else {
+                NumberFormat numberFormat = NumberFormat.getInstance();
+                numberFormat.setMaximumFractionDigits(2);
+                onceQualifiedRate = numberFormat.format((float)onceQualifiedCount / (float)checkedCount * 100).concat("%");
+            }
+
+            resultBo.setUnitId(unitId);
+            resultBo.setUnitName(unitMap.getOrDefault(unitId, "-"));
+            resultBo.setWeldCount(weldCount);
+            resultBo.setCheckedCount(checkedCount);
+            resultBo.setUncheckedCount(weldCount - checkedCount);
+            resultBo.setQualifiedCount(qualifiedCount);
+            resultBo.setOnceQualifiedRate(onceQualifiedRate);
+            resultBo.setOnceQualifiedCount(onceQualifiedCount);
+            resultBoList.add(resultBo);
         }
 
         Sets.SetView<String> diff = Sets.difference(unitMap.keySet(), unitToWeldList.keySet());
-        diff.stream().map(unitId -> new WeldCheckInfoBo(unitId, unitMap.getOrDefault(unitId, "-"), 0, 0, 0, 0, "-")).forEach(resultList::add);
+        diff.stream().map(unitId -> new WeldCheckInfoBo(unitId, unitMap.getOrDefault(unitId, "-"), 0, 0, 0, 0, 0, "∞%")).forEach(resultBoList::add);
 
-        return resultList;
+        // 排序: 按照焊接数量desc
+        resultBoList.sort((o1, o2) -> o2.getWeldCount() - o1.getCheckedCount());
+        return resultBoList;
     }
 
-    private void wrapperStatsCount(WeldCheckInfoBo weldCheckInfoBo, Set<String> collect, Map<String, DetectionRayBo> weldToDetectionRay) {
 
-        int weldCount = collect.size();
-        int checkedCount = 0;
-        int qualifiedCount = 0;
-        int onceQualifiedCount = 0;
-
-        for (String weldId : collect) {
-            DetectionRayBo rayBo = weldToDetectionRay.get(weldId);
-            if (weldToDetectionRay.containsKey(weldId)) {
-                checkedCount ++;
-                if (null!=rayBo && Objects.equals(1, rayBo.getEvaluationResult())) {
-                    qualifiedCount ++;
-                    if ("detection_type_code_001".equals(rayBo.getDetectionType())) {
-                        onceQualifiedCount ++;
-                    }
-                }
-            }
-        }
-        NumberFormat numberFormat = NumberFormat.getInstance();
-        numberFormat.setMaximumFractionDigits(2);
-        String onceQualifiedRate = 0 == checkedCount ? "∞%":numberFormat.format((float)onceQualifiedCount / (float)checkedCount * 100).concat("%");
-
-        weldCheckInfoBo.setWeldCount(weldCount);
-        weldCheckInfoBo.setCheckedCount(checkedCount);
-        weldCheckInfoBo.setUncheckedCount(weldCount - checkedCount);
-        weldCheckInfoBo.setQualifiedCount(qualifiedCount);
-        weldCheckInfoBo.setOnceQualifiedRate(onceQualifiedRate);
-    }
 
     public static void main(String[] args) {
         List<StatsProcessResultBo> returnList = Lists.newArrayList(
@@ -503,7 +522,7 @@ public class AppStatisticsService {
                 new StatsProcessResultBo("", 0, 1.32)
         );
 
-        returnList.forEach(bo -> System.out.println(bo.getStatsLength()));
+        returnList.forEach(bo -> System.out.println(bo.getStatsResult()));
     }
 
 
