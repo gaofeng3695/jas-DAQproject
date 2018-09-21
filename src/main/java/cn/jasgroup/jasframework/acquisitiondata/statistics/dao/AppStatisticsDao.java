@@ -12,13 +12,11 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import org.hibernate.mapping.PrimitiveArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import javax.xml.transform.Result;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,9 +28,6 @@ import java.util.stream.Collectors;
  */
 @Repository
 public class AppStatisticsDao {
-
-    @Autowired
-    private BaseNamedParameterJdbcTemplate baseNamedParameterJdbcTemplate;
 
     @Autowired
     private CommonDataJdbcDao commonDataJdbcDao;
@@ -375,13 +370,6 @@ public class AppStatisticsDao {
     }
 
 
-    public Integer countWeldInfoByApproveStatus(String projectId) {
-        Map<String, Object> params = Maps.newHashMap();
-        params.put("projectId", projectId);
-        String sql = "select count(*) from daq_construction_weld where active = 1 and project_oid = :projectId and approve_status = 2 ";
-        return commonDataJdbcDao.queryForInt(params, sql);
-    }
-
     public WeldCheckInfoBo countWeldDetectionInfo(String projectId) {
         String sql = "" +
                 " select count(*) as weld_count, sum(case when (is_ray=1) then 1 else 0 end) as checked_count " +
@@ -399,18 +387,6 @@ public class AppStatisticsDao {
     }
 
 
-    /**
-     * 统计焊口数量(按施工单位分组)
-     */
-    public List<StatsResultBo> countWeldInfoGroupByConstructId(String projectId) {
-        String sql = "" +
-                " select construct_unit as stats_type, count(*) stats_result from daq_construction_weld where 1=1 " +
-                " and active = 1 and approve_status = 2 and project_oid = :projectId " +
-                " group by construct_unit ";
-        return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectId", projectId), StatsResultBo.class);
-    }
-
-
     public List<WeldInfoBo> listWeldInfo(String projectId) {
         String sql = " select oid, construct_unit, is_ray from daq_construction_weld where active = 1 and approve_status = 2 and project_oid = :projectId ";
         return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectId", projectId), WeldInfoBo.class);
@@ -418,10 +394,10 @@ public class AppStatisticsDao {
 
 
     /**
-     * 查询合格的焊口检测(查询射线检测)
-     * @param projectId
-     * @param weldIds
-     * @return
+     * 查询合格的焊口检测(根据焊口信息ID查询射线检测)
+     * @param projectId 项目ID
+     * @param weldIds 焊口信息ID集合
+     * @return List
      */
     public List<DetectionRayBo> listQualifiedDetectionRayWeldIn(String projectId, Collection<String> weldIds) {
         String sql = "" +
@@ -444,17 +420,6 @@ public class AppStatisticsDao {
             return bo;
         }
         return list.get(0);
-    }
-    public Integer countRayCheckByResult(String projectId, Integer evaluationResult) {
-        Map<String, Object> params = Maps.newHashMap();
-        params.put("projectId", projectId);
-        String sql = " select count(*) from daq_detection_ray where active = 1 and approve_status = 2 ";
-        if (!StringUtils.isEmpty(evaluationResult)) {
-            sql += " and evaluation_result = :evaluationResult ";
-            params.put("evaluationResult", evaluationResult);
-        }
-
-        return commonDataJdbcDao.queryForInt(params, sql);
     }
 
 }

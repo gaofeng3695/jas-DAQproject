@@ -436,19 +436,7 @@ public class AppStatisticsService {
         resultBo.setDetectionRayCount(rayDetectionInfo.getDetectionRayCount());
         resultBo.setQualifiedCount(rayDetectionInfo.getQualifiedCount());
 
-
-        // 审核通过的焊口数量
-        Integer passedWeldCount = this.appStatisticsDao.countWeldInfoByApproveStatus(projectId);
-
-        // 审核通过的射线检测数量
-        Integer passedRayCount = this.appStatisticsDao.countRayCheckByResult(projectId, null);
-
-        // 审核通过且检验合格的射线检测数量
-        Integer passedAndOkCount = this.appStatisticsDao.countRayCheckByResult(projectId, 1);
-
         return resultBo;
-
-
     }
 
 
