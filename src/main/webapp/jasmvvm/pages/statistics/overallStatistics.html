@@ -189,7 +189,9 @@
             var x = [];
             var month = [];
             for (var key1 in data.data[key]) {
-              x.push(data.data[key][key1]);
+              var d=data.data[key][key1]?data.data[key][key1]/1000:0;
+              var d1=d?d.toFixed(5):0;
+              x.push(d1);
               if (months.length == 0) {
                 month.push(key1);
               }
@@ -252,7 +254,9 @@
           data.data.forEach(function (item, index) {
             var type = item.statsType;
             x.push(that.fieldsMap[type].name);
-            y.push(item.statsResult || 0);
+            var result=item.statsResult?item.statsResult/1000:0;
+            var d1=result?result.toFixed(5):0;
+            y.push(d1);
           });
           that.renderChart(x, y);
         });
