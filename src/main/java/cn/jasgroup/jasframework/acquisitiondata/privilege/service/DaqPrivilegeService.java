@@ -2,10 +2,14 @@ package cn.jasgroup.jasframework.acquisitiondata.privilege.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
 
+import cn.jasgroup.jasframework.acquisitiondata.variate.UnitHierarchyEnum;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.springframework.stereotype.Service;
 
 import cn.jasgroup.jasframework.acquisitiondata.privilege.dao.DaqPrivilegeDao;
@@ -154,8 +158,18 @@ public class DaqPrivilegeService extends BaseService{
 	 */
 	public List<Map<String,Object>>getConstructAndDetectionUnitList(){
 		String unitOid = ThreadLocalHolder.getCurrentUser().getUnitId();
-		return this.daqPrivilegeDao.getConstructAndDetectionUnitList(unitOid);
+		List<Map<String, Object>> resultList = this.daqPrivilegeDao.getConstructAndDetectionUnitList(unitOid);
+
+		List<String> unitIds = resultList.stream().map(map -> String.valueOf(map.get("key"))).collect(Collectors.toList());
+        List<Map<String, String>> unitList = this.daqPrivilegeDao.getUnitInIds(unitIds);
+        Map<String, String> idToHierarchy = unitList.stream().collect(Collectors.toMap(mapObj -> mapObj.get("oid"), mapObj -> mapObj.get("hierarchy"), (a, b) -> b));
+        resultList.forEach(resultMap -> resultMap.put("hierarchy", idToHierarchy.get(resultMap.get("key"))));
+
+        return resultList;
 	}
+
+
+
 	/**
 	  * <p>功能描述：获取施工单位所有用户。</p>
 	  * <p> 雷凯。</p>	

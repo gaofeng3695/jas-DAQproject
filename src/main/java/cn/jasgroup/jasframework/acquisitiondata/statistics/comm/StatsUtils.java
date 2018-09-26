@@ -3,7 +3,6 @@ package cn.jasgroup.jasframework.acquisitiondata.statistics.comm;
 
 import com.google.common.collect.Lists;
 
-import javax.xml.transform.Source;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,8 +10,12 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.*;
-import java.util.*;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjuster;
+import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 统计相关的工具类
@@ -23,7 +26,7 @@ import java.util.*;
 public class StatsUtils {
 
     /**
-     * Double类型精确求和
+     * Double类型求和(精确)
      * @param value1 value1
      * @param value2 value2
      * @return Double
@@ -34,21 +37,18 @@ public class StatsUtils {
         return b1.add(b2).doubleValue();
     }
 
+
+    /**
+     * Double类型求和(精确)
+     * @return Double
+     */
     public static Double sumExact(Double value1, Double value2, Double value3) {
         return sumExact(sumExact(value1, value2), value3);
     }
 
-    /**
-     * 浮点类型求和(不保证精确)
-     * @param values 浮点数集合
-     * @return Double
-     */
-    public static Double sum(List<Double> values) {
-        return values.stream().mapToDouble(s -> (s == null ? 0d : s)).sum();
-    }
 
     /**
-     * 浮点类型求和(精确)
+     * Double类型求和(精确)
      * @param values 浮点数集合
      * @return Double
      */
@@ -56,6 +56,23 @@ public class StatsUtils {
         return values.stream().map(BigDecimal::new).reduce(BigDecimal::add).map(BigDecimal::doubleValue).orElse(0d);
     }
 
+
+    /**
+     * Double类型求和(不保证精确)
+     * @param values 浮点数集合
+     * @return Double
+     */
+    public static Double sum(List<Double> values) {
+        return values.stream().mapToDouble(s -> (s == null ? 0d : s)).sum();
+    }
+
+
+    /**
+     * 时间日期类型 -> timestamp
+     * @param dateStr 日期字符串
+     * @param format 日期格式化
+     * @return Long
+     */
     public static Long strToDateLong(String dateStr, String format) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(format);
         try {
@@ -63,29 +80,37 @@ public class StatsUtils {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
         return 0L;
     }
 
+
+    /**
+     * timestamp -> 时间日期类型
+     * @param timestamp 日期timestamp
+     * @param format 日期格式化
+     * @return Long
+     */
     public static String timestampToDateStr(long timestamp, String format) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(format);
         return dateFormat.format( new Date(timestamp));
     }
 
-    public static String dateToDateStr(Date date, String format) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(format);
-        return dateFormat.format(date);
-    }
 
-
-    public static List<String> genContinuityYearMonthStr(Date startDate, Date endDate) {
+    /**
+     * 生成连续的日期字符串集合
+     * @param startDate 开始日期
+     * @param endDate 结束日期
+     * @param format 日期格式化
+     * @return 日期字符串集合
+     */
+    public static List<String> genContinuityYearMonthStr(Date startDate, Date endDate, String format) {
         LocalDate startLocalDate = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate endLocalDate = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         endLocalDate = endLocalDate.with(TemporalAdjusters.firstDayOfMonth());
 
         long months = startLocalDate.until(endLocalDate, ChronoUnit.MONTHS);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
         List<String> yearMonthList = Lists.newArrayList();
 
         LocalDate localDate = startLocalDate;
@@ -96,6 +121,7 @@ public class StatsUtils {
 
         return yearMonthList;
     }
+
 
     public static List<String> genContinuityDayStr(String startDateStr, String endDateStr, String dateFormat) {
         SimpleDateFormat format = new SimpleDateFormat(dateFormat);
