@@ -46,11 +46,13 @@ public class AppStatisticsController {
 
     /**
      * 数据审核统计(app)
+     * @param unitId 单位ID
+     * @param projectOid 项目ID
      * @return {@link BaseResult}
      */
     @GetMapping("dataAuditing")
-    public BaseResult dataAuditing(@RequestParam String unitId, @RequestParam String unitType, @RequestParam String projectOid) {
-        return ResultVOUtil.ofSuccess(this.appStatisticsService.dataAuditing(projectOid, unitId, unitType));
+    public BaseResult dataAuditing(@RequestParam String unitId, @RequestParam String projectOid) {
+        return ResultVOUtil.ofSuccess(this.appStatisticsService.dataAuditing(projectOid, unitId));
     }
 
 

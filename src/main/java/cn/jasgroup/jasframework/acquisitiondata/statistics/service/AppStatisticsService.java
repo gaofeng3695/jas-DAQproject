@@ -102,44 +102,37 @@ public class AppStatisticsService {
      *   - 包含6个分类及各分类下的数据统计 {@link ApproveStatisticsBlock#APPROVE_CATEGORY}
      *   - 各分类下的数据统计: {@link ApproveStatisticsBlock#ALL}
      * 过滤条件:
-     *  - 根据参数施工单位过滤 (该部门及部门以下的)
+     *  - 根据参数: 单位/单位类型(施工单位, 检测单位)过滤, 范围: 该部门及部门以下的
      *  - 根据监理单位当前用户过滤 (部门及部门以下的)
      */
-    public List<DataApproveStatsBo> dataAuditing(String projectOid, String unitId, String unitType) {
-
-        List<DataApproveStatsBo> returnList = new ArrayList<>();
-
-        List<String> unitIds = null;
+    public List<DataApproveStatsBo> dataAuditing(String projectOid, String unitId) {
 
         // 根据参数施工单位过滤 (范围: 该部门及部门以下的)
-        if (!StringUtils.isEmpty(unitId)) {
-            PriUnit constructUnit = (PriUnit) unitService.get(PriUnit.class, unitId);
-            if (null == constructUnit) {
-                throw new BusinessException("constructUnit Not Found", "404");
-            }
-            String constructUnitHierarchy = constructUnit.getHierarchy();
+        PriUnit priUnit = (PriUnit) unitService.get(PriUnit.class, unitId);
+        if (null == priUnit) {
+            throw new BusinessException("unit Not Found", "404");
+        }
+        String unitHierarchy = priUnit.getHierarchy();
 
-            if (!constructUnitHierarchy.startsWith(UnitHierarchyEnum.construct_unit.getHierarchy()) &&
-                    !constructUnitHierarchy.startsWith(UnitHierarchyEnum.detection_unit.getHierarchy())) {
-                logger.error("施工/检测单位层级错误, hierarchy={}", constructUnitHierarchy);
-                throw new BusinessException("施工/检测单位层级错误", "403");
-            }
+        if (!unitHierarchy.startsWith(UnitHierarchyEnum.construct_unit.getHierarchy()) && !unitHierarchy.startsWith(UnitHierarchyEnum.detection_unit.getHierarchy())) {
+            logger.error("施工/检测单位层级错误, hierarchy={}", unitHierarchy);
+            throw new BusinessException("施工/检测单位层级错误", "403");
+        }
 
-            unitIds = this.appStatisticsDao.queryConstructUnitByHierarchy(constructUnitHierarchy);
-            if (CollectionUtils.isEmpty(unitIds)) {
-                throw new BusinessException("ConstructUnits Not Found", "404");
-            }
+        List<String> unitIds = this.appStatisticsDao.queryConstructUnitByHierarchy(unitHierarchy);
+        if (CollectionUtils.isEmpty(unitIds)) {
+            throw new BusinessException("ConstructUnits Not Found", "404");
         }
 
 
-        // 根据监理单位当前用户过滤, (范围: 部门及部门以下的)
+        // 根据当前用户的监理单位过滤 (范围: 部门及部门以下的)
         PriUnit currentUserUnit = (PriUnit) unitService.get(PriUnit.class, ThreadLocalHolder.getCurrentUser().getUnitId());
         String currentUnitHierarchy = currentUserUnit.getHierarchy();
         if (!currentUnitHierarchy.startsWith(UnitHierarchyEnum.supervision_unit.getHierarchy())) {
-            if (!UnitHierarchyEnum.supervision_unit.getHierarchy().contains(currentUnitHierarchy)) {
-                logger.error("当前用户unit:{}权限错误", currentUnitHierarchy);
-                throw new BusinessException("当前用户unit权限错误", "403");
-            }
+//            if (!UnitHierarchyEnum.supervision_unit.getHierarchy().contains(currentUnitHierarchy)) {
+                logger.error("当前用户{}, unitId:{}, 层级{}错误", ThreadLocalHolder.getCurrentUser().getUid(), currentUserUnit.getOid(), currentUnitHierarchy);
+//                throw new BusinessException("当前用户unit权限错误", "403");
+//            }
         }
 
         List<String> supervisionUnits = this.appStatisticsDao.queryConstructUnitByHierarchy(currentUnitHierarchy);
@@ -148,11 +141,12 @@ public class AppStatisticsService {
             throw new BusinessException("currentUserUnits Not Found", "404");
         }
 
-        List<DataApproveSubBo> dataApproveSubBos = this.appStatisticsDao.listDataAuditing(projectOid, supervisionUnits, unitIds, unitType);
+        List<DataApproveSubBo> dataApproveSubBos = this.appStatisticsDao.listDataAuditing(projectOid, supervisionUnits, unitIds, "");
 
-        // 包装统计数据的中文名
-        dataApproveSubBos.forEach(dataApproveSubBo -> dataApproveSubBo.setCnName(ApproveStatisticsBlock.ALL.get(dataApproveSubBo.getCode()).getCnName()));
+        // 包装统计结果的中文名
+        dataApproveSubBos.forEach(bo -> bo.setCnName(ApproveStatisticsBlock.ALL.get(bo.getCode()).getCnName()));
 
+        List<DataApproveStatsBo> returnList = Lists.newArrayList();
 
         for (String categoryCode : ApproveStatisticsBlock.APPROVE_CATEGORY.keySet()) {
             List<DataApproveSubBo> subCollect = dataApproveSubBos.stream().filter(bo -> bo.getCategoryCode().equals(categoryCode)).collect(Collectors.toList());
@@ -164,8 +158,7 @@ public class AppStatisticsService {
             int unauditedSum = subCollect.stream().mapToInt(DataApproveSubBo::getUnaudited).sum();
 
             returnList.add(
-                    new DataApproveStatsBo(categoryCode, ApproveStatisticsBlock.APPROVE_CATEGORY.get(categoryCode),
-                            totalSum, unauditedSum, subCollect)
+                    new DataApproveStatsBo(categoryCode, ApproveStatisticsBlock.APPROVE_CATEGORY.get(categoryCode), totalSum, unauditedSum, subCollect)
             );
         }
 
