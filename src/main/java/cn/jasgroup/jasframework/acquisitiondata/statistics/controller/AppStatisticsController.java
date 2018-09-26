@@ -38,7 +38,7 @@ public class AppStatisticsController {
     @PostMapping("dataEntry")
     public BaseResult dataEntry(@RequestBody Map<String, Object> params) {
         @SuppressWarnings("unchecked")
-        List<String> stasticsTypes = (List<String>) params.get("stasticsTypes");
+        List<String> stasticsTypes = (List<String>) params.get("statsTypes");
         String projectId = (String) params.get("projectOid");
         return ResultVOUtil.ofSuccess(appStatisticsService.dataEntry(stasticsTypes, projectId));
     }
@@ -49,9 +49,8 @@ public class AppStatisticsController {
      * @return {@link BaseResult}
      */
     @GetMapping("dataAuditing")
-    public BaseResult dataAuditing(@RequestParam(required = false) String constructUnit,
-                                   @RequestParam(required = false) String projectOid) {
-        return ResultVOUtil.ofSuccess(this.appStatisticsService.dataAuditing(projectOid, constructUnit));
+    public BaseResult dataAuditing(@RequestParam String unitId, @RequestParam String unitType, @RequestParam String projectOid) {
+        return ResultVOUtil.ofSuccess(this.appStatisticsService.dataAuditing(projectOid, unitId, unitType));
     }
 
 
