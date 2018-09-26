@@ -73,7 +73,7 @@ public class WeldMeasuredResultQuery extends BaseJavaQuery{
 					+ "LEFT JOIN (SELECT oid, pipeline_name, active FROM daq_pipeline where active=1) pi ON pi.oid = wmr.pipeline_oid "
 					+ "LEFT JOIN (SELECT oid, tenders_name, active FROM daq_tenders where active=1) te ON te.oid = wmr.tenders_oid "
 					+ "LEFT JOIN (select * from v_daq_pipe_segment_cross) vpsc on vpsc.oid = wmr.pipe_segment_or_cross_oid "
-					+ "LEFT JOIN (select oid, weld_code, active from daq_construction_weld where active=1) cw ON cw.oid = wmr.weld_oid "
+					+ "LEFT JOIN (select oid, weld_code from v_daq_weld_info) cw ON cw.oid = wmr.weld_oid "
 					+ "LEFT JOIN (select oid, median_stake_code, active from daq_median_stake where active=1) ms ON ms.oid = wmr.median_stake_oid "
 					+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) pu on pu.oid = wmr.supervision_unit "
 					+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) u on u.oid = wmr.construct_unit "

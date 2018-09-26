@@ -100,10 +100,15 @@
 			<artifactId>jasframework-data-authority</artifactId>
 			<version>3.0.0-SNAPSHOT</version>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 	      	<groupId>cn.jasgroup.jasopengis</groupId>
 	      	<artifactId>jasopengis-web</artifactId>
 	      	<version>1.0-RELEASE</version>
+	    </dependency> -->
+	    <dependency>
+	      <groupId>cn.jasgroup.gis</groupId>
+	      <artifactId>jasgis-opengis</artifactId>
+	      <version>1.0-RELEASE</version>
 	    </dependency>
 		<!-- postgresql jdbc驱动jar 可选包，如果项目中使用postgresql，请参考该部分依赖代码在项目中显示添加依赖 -->
 		<!-- <dependency>

@@ -1062,9 +1062,9 @@ CREATE INDEX index_daq_material_tee_tee_code_5 ON daq_material_tee USING btree (
 ALTER TABLE daq_material_tee ADD PRIMARY KEY (oid);
 
 create or replace view v_daq_pipe_segment_cross as 
-select s.oid,s.pipe_segment_name as name,s.start_stake_oid,s.end_stake_oid,1 as type,s.pipe_segment_code AS code,s.create_datetime from daq_pipe_segment s where s.active=1
+select s.oid,s.pipe_segment_name as name,s.start_stake_oid,s.end_stake_oid,1 as type,s.pipe_segment_code AS code,s.create_datetime,s.pipeline_oid from daq_pipe_segment s where s.active=1
 union all
-select s.oid,s.cross_name as name,s.start_stake_oid,s.end_stake_oid, 2 as type,s.cross_code AS code,s.create_datetime from daq_cross s where s.active=1
+select s.oid,s.cross_name as name,s.start_stake_oid,s.end_stake_oid, 2 as type,s.cross_code AS code,s.create_datetime,s.pipeline_oid from daq_cross s where s.active=1
 /**********线路物资基本信息end***************/
 /**********线路物资检查信息begin***************/
 CREATE TABLE daq_check_coating_pipe (
@@ -5072,3 +5072,8 @@ comment on column daq_material_pipe.materiel_code IS '物料编码';
 comment on column daq_material_pipe.production_date IS '出厂日期';
 comment on column daq_material_pipe.front_is_use is '前端已焊';
 comment on column daq_material_pipe.back_is_use is '后端已焊';
+
+alter table daq_construction_weld add column is_anticorrosion_check smallint DEFAULT 0;
+alter table daq_construction_weld add column is_rework smallint DEFAULT 0;
+comment on column daq_construction_weld.is_anticorrosion_check IS '是否补扣';
+comment on column daq_construction_weld.is_rework IS '是否返修';

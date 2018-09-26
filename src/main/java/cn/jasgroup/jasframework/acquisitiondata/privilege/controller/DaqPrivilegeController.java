@@ -285,10 +285,11 @@ public class DaqPrivilegeController extends BaseController{
 	 */
 	@RequestMapping(value="/getConstructAndDetectionUnitList",method = RequestMethod.POST)
 	@ResponseBody
-	public Object getConstructAndDetectionUnitList(HttpServletRequest request){
+	public Object getConstructAndDetectionUnitList(HttpServletRequest request,@RequestBody Map<String,String> param){
 		ListResult<Map<String,Object>> result = null;
 		try {
-			List<Map<String,Object>> rows = this.daqPrivilegeService.getConstructAndDetectionUnitList();
+			String projectOid = param.get("projectOid");
+			List<Map<String,Object>> rows = this.daqPrivilegeService.getConstructAndDetectionUnitList(projectOid);
 			result = new ListResult<>(1, "200", "ok", rows);
 		} catch (Exception e) {
 			result = new ListResult<>(-1, "400", "error");
