@@ -53,6 +53,9 @@ public class ApproveStatisticsBlock {
     /** all */
     public static final Map<String, ApproveStatisticsBlock> ALL;
 
+    /** 非检测类的统计 */
+    public static final Map<String, ApproveStatisticsBlock> NON_DETECTION;
+
 
     static {
         APPROVE_CATEGORY = ImmutableMap.<String, String>builder()
@@ -130,6 +133,14 @@ public class ApproveStatisticsBlock {
         ALL = ImmutableMap.copyOf(ImmutableSet.<Map.Entry<String, ApproveStatisticsBlock>>builder()
                 .addAll(PIPE_WELD_BLOCK.entrySet())
                 .addAll(PIPE_INSPECTION_BLOCK.entrySet())
+                .addAll(PIPE_LAY_BLOCK.entrySet())
+                .addAll(PIPE_CROSS_BLOCK.entrySet())
+                .addAll(PIPE_CATHODE_PROTECTION_BLOCK.entrySet())
+                .addAll(APPENDAGE_BLOCK.entrySet())
+                .build());
+
+        NON_DETECTION = ImmutableMap.copyOf(ImmutableSet.<Map.Entry<String, ApproveStatisticsBlock>>builder()
+                .addAll(PIPE_WELD_BLOCK.entrySet())
                 .addAll(PIPE_LAY_BLOCK.entrySet())
                 .addAll(PIPE_CROSS_BLOCK.entrySet())
                 .addAll(PIPE_CATHODE_PROTECTION_BLOCK.entrySet())
