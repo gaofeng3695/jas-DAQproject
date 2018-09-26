@@ -74,14 +74,15 @@ public class AppStatisticsDao {
 
     /**
      * 数据审核统计 
-     * @param constructUnitIds 施工单位ID集合
+     * @param unitIds 施工单位\检测单位的ID集合
      * @return List
      */
-    public List<DataApproveSubBo> listDataAuditing(String projectOid, List<String> supervisionUnits, List<String> constructUnitIds) {
+    public List<DataApproveSubBo> listDataAuditing(String projectOid, List<String> supervisionUnits, List<String> unitIds, String unitType) {
         List<String> codeList = new ArrayList<>(ApproveStatisticsBlock.ALL.keySet());
         StringBuilder sql = new StringBuilder();
-        String sqlTemplate = " select '%s' as code, '%s' as category_code, count(*) as total, " +
-                " sum(case when (approve_status=" + ApproveStatusEnum.WAIT_AUDITING.getCode() + ") then 1 else 0 end) as unaudited " +
+        String sqlTemplate = " " +
+                " select '%s' as code, '%s' as category_code, count(*) as total, " +
+                " sum(case when (approve_status=1) then 1 else 0 end) as unaudited " +
                 " from %s where active = 1 and approve_status!=0 and supervision_unit in (:supervisionUnits) ";
 
         if (!StringUtils.isEmpty(projectOid)) {
@@ -97,7 +98,7 @@ public class AppStatisticsDao {
             sql.append(String.format(sqlTemplate, code, categoryCode, tableName));
 
             // 如果是管道检测分类下的: 统计的字段是检测单位, 其他分类则是施工单位
-            if (!CollectionUtils.isEmpty(constructUnitIds)) {
+            if (!CollectionUtils.isEmpty(unitIds)) {
                 if (ApproveStatisticsBlock.PIPE_INSPECTION_BLOCK.containsKey(code)) {
                     sql.append(String.format(" and %s in (:constructUnitIds) ", ApproveStatisticsBlock.DETECTION_UNIT));
                 } else {
@@ -109,7 +110,7 @@ public class AppStatisticsDao {
         }
 
         Map<String, Object> variables = Maps.newHashMap();
-        variables.put("constructUnitIds", constructUnitIds);
+        variables.put("constructUnitIds", unitIds);
         variables.put("supervisionUnits", supervisionUnits);
         variables.put("projectOid", projectOid);
         return commonDataJdbcDao.queryForList(sql.toString(), variables, DataApproveSubBo.class);

@@ -104,17 +104,16 @@ public class AppStatisticsService {
      * 过滤条件:
      *  - 根据参数施工单位过滤 (该部门及部门以下的)
      *  - 根据监理单位当前用户过滤 (部门及部门以下的)
-     *  - TODO: 根据登录用户的项目ID
      */
-    public List<DataApproveStatsBo> dataAuditing(String projectOid, String constructUnitId) {
+    public List<DataApproveStatsBo> dataAuditing(String projectOid, String unitId, String unitType) {
 
         List<DataApproveStatsBo> returnList = new ArrayList<>();
 
-        List<String> constructUnits = null;
+        List<String> unitIds = null;
 
         // 根据参数施工单位过滤 (范围: 该部门及部门以下的)
-        if (!StringUtils.isEmpty(constructUnitId)) {
-            PriUnit constructUnit = (PriUnit) unitService.get(PriUnit.class, constructUnitId);
+        if (!StringUtils.isEmpty(unitId)) {
+            PriUnit constructUnit = (PriUnit) unitService.get(PriUnit.class, unitId);
             if (null == constructUnit) {
                 throw new BusinessException("constructUnit Not Found", "404");
             }
@@ -126,8 +125,8 @@ public class AppStatisticsService {
                 throw new BusinessException("施工/检测单位层级错误", "403");
             }
 
-            constructUnits = this.appStatisticsDao.queryConstructUnitByHierarchy(constructUnitHierarchy);
-            if (CollectionUtils.isEmpty(constructUnits)) {
+            unitIds = this.appStatisticsDao.queryConstructUnitByHierarchy(constructUnitHierarchy);
+            if (CollectionUtils.isEmpty(unitIds)) {
                 throw new BusinessException("ConstructUnits Not Found", "404");
             }
         }
@@ -149,7 +148,7 @@ public class AppStatisticsService {
             throw new BusinessException("currentUserUnits Not Found", "404");
         }
 
-        List<DataApproveSubBo> dataApproveSubBos = this.appStatisticsDao.listDataAuditing(projectOid, supervisionUnits, constructUnits);
+        List<DataApproveSubBo> dataApproveSubBos = this.appStatisticsDao.listDataAuditing(projectOid, supervisionUnits, unitIds, unitType);
 
         // 包装统计数据的中文名
         dataApproveSubBos.forEach(dataApproveSubBo -> dataApproveSubBo.setCnName(ApproveStatisticsBlock.ALL.get(dataApproveSubBo.getCode()).getCnName()));
@@ -464,7 +463,7 @@ public class AppStatisticsService {
         List<WeldInfoBo> weldInfoBos = this.appStatisticsDao.listWeldInfo(projectId);
         Map<String, List<WeldInfoBo>> unitToWeldList = weldInfoBos.stream().collect(Collectors.groupingBy(WeldInfoBo::getConstructUnit, Collectors.toList()));
         if (CollectionUtils.isEmpty(weldInfoBos) || CollectionUtils.isEmpty(unitToWeldList)) {
-            unitMap.keySet().stream().map(unitId -> new WeldCheckInfoBo(unitId, unitMap.getOrDefault(unitId, "-"), 0, 0, 0, 0, 0, "∞%")).forEach(resultBoList::add);
+            unitMap.keySet().stream().map(unitId -> new WeldCheckInfoBo(unitId, unitMap.getOrDefault(unitId, "-"), 0, 0, 0, 0, 0, "0%")).forEach(resultBoList::add);
             return resultBoList;
         }
 
@@ -487,7 +486,7 @@ public class AppStatisticsService {
 
             String onceQualifiedRate = "";
             if (0 == checkedCount) {
-                onceQualifiedRate = "∞%";
+                onceQualifiedRate = "0%";
             } else {
                 NumberFormat numberFormat = NumberFormat.getInstance();
                 numberFormat.setMaximumFractionDigits(2);
@@ -506,7 +505,7 @@ public class AppStatisticsService {
         }
 
         Sets.SetView<String> diff = Sets.difference(unitMap.keySet(), unitToWeldList.keySet());
-        diff.stream().map(unitId -> new WeldCheckInfoBo(unitId, unitMap.getOrDefault(unitId, "-"), 0, 0, 0, 0, 0, "∞%")).forEach(resultBoList::add);
+        diff.stream().map(unitId -> new WeldCheckInfoBo(unitId, unitMap.getOrDefault(unitId, "-"), 0, 0, 0, 0, 0, "0%")).forEach(resultBoList::add);
 
         // 排序: 按照焊接数量desc
         resultBoList.sort((o1, o2) -> o2.getWeldCount() - o1.getCheckedCount());
