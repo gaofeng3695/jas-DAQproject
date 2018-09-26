@@ -198,7 +198,7 @@
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="后管件类型" prop="backPipeType" required>
 								<el-select v-model="formData.backPipeType" clearable placeholder="请选择后管件类型" size="small" @change="backpipeChange">
-									<el-option v-for="item in domain.pipeTypes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+									<el-option v-for="item in domain.backpipeTypes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 								<!--<el-input v-model="formData.backPipeType" placeholder="请输入后管件类型" size="small"></el-input>-->
 							</el-form-item>
@@ -309,6 +309,7 @@
 					weldProduces: [], //焊接工艺
 					weldMethods: [], //焊接方式
 					pipeTypes: [], //管件类型
+					backpipeTypes: [], //管件类型
 					frontPipeOids: [], //前管件
 					backPipeOids: [], //后管件
 					surfaceChecks: [{
@@ -468,6 +469,9 @@
 			}); //查询焊口类型
 			this.requestDomainFromDomainTable('pipe_type_domain', function (arr) {
 				that.domain.pipeTypes = arr;
+			}); //查询管件类型
+			this.requestDomainFromDomainTable('back_pipe_type_domain', function (arr) {
+				that.domain.backpipeTypes = arr;
 			}); //查询管件类型
 		},
 		methods: {
@@ -643,6 +647,7 @@
 						.requestDomainFromBizTable(
 							'/daq/pipefitting/getPipeFittingList.do', {
 								pipeSegmentOrCrossOid: that.formData.pipeSegmentOrCrossOid,
+								projectOid: that.formData.projectOid,
 								pipeTypeCode: val
 							},
 							function (arr) {
@@ -660,6 +665,7 @@
 						.requestDomainFromBizTable(
 							'/daq/pipefitting/getPipeFittingList.do', {
 								pipeSegmentOrCrossOid: that.formData.pipeSegmentOrCrossOid,
+								projectOid: that.formData.projectOid,
 								pipeTypeCode: val
 							},
 							function (arr) {

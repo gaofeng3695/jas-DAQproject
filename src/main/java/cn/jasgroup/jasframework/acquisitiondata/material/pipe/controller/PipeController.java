@@ -1,5 +1,6 @@
 package cn.jasgroup.jasframework.acquisitiondata.material.pipe.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cn.jasgroup.framework.data.result.ListResult;
 import cn.jasgroup.framework.data.result.SimpleResult;
-import cn.jasgroup.jasframework.acquisitiondata.material.base.coldbending.service.ColdBendingPipeService;
 import cn.jasgroup.jasframework.acquisitiondata.material.pipe.service.PipeService;
+import cn.jasgroup.jasframework.acquisitiondata.privilege.service.DaqPrivilegeService;
 
 @RestController
 @RequestMapping("daq/materialPipe")
@@ -27,8 +28,8 @@ public class PipeController {
 	@Autowired
 	private PipeService pipeService;
 	
-	@Resource(name="coldBendingPipeService")
-	private ColdBendingPipeService coldBendingPipeService;
+	@Resource(name="daqPrivilegeService")
+	private DaqPrivilegeService daqPrivilegeService;
 	
 	/**
 	 * <p>功能描述：查询未使用的钢管。</p>
@@ -55,6 +56,150 @@ public class PipeController {
 		}
 		return result;
 	}
+	/**
+	  * <p>功能描述：获取钢管编号。</p>
+	  * <p> 雷凯。</p>	
+	  * @param request
+	  * @param param
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年9月15日 下午7:06:56。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="/getPipeList", method = RequestMethod.POST)
+	@ResponseBody
+	public Object getPipeList(HttpServletRequest request,@RequestBody Map<String,String> param){
+		ListResult<Map<String, Object>> result= null;
+		try{
+			String projectOid = param.get("projectOid");
+			List<Map<String,Object>> pipeRows = this.pipeService.getMaterialPipeList(projectOid);
+			result = new ListResult<>(1,"200","ok",pipeRows);
+		}catch(Exception e){
+			result = new ListResult<>(-1,"400","error");
+			e.printStackTrace();
+		}
+		return result;
+	}
+	/***
+	  * <p>功能描述：热煨弯管。</p>
+	  * <p> 雷凯。</p>	
+	  * @param request
+	  * @param param
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年9月15日 下午7:07:47。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="/getHotBendsList", method = RequestMethod.POST)
+	@ResponseBody
+	public Object getHotBendsList(HttpServletRequest request,@RequestBody Map<String,String> param){
+		ListResult<Map<String, Object>> result= null;
+		try{
+			String projectOid = param.get("projectOid");
+			List<Map<String,Object>> hotBendsRows = this.pipeService.getMaterialHotBendsList(projectOid);
+			result = new ListResult<>(1,"200","ok",hotBendsRows);
+		}catch(Exception e){
+			result = new ListResult<>(-1,"400","error");
+			e.printStackTrace();
+		}
+		return result;
+	}
+	/***
+	 * <p>功能描述：三通。</p>
+	 * <p> 雷凯。</p>	
+	 * @param request
+	 * @param param
+	 * @return
+	 * @since JDK1.8。
+	 * <p>创建日期:2018年9月15日 下午7:07:47。</p>
+	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="/getTeeList", method = RequestMethod.POST)
+	@ResponseBody
+	public Object getTeeList(HttpServletRequest request,@RequestBody Map<String,String> param){
+		ListResult<Map<String, Object>> result= null;
+		try{
+			String projectOid = param.get("projectOid");
+			List<Map<String,Object>> teeRows = this.pipeService.getMaterialTeeList(projectOid);
+			result = new ListResult<>(1,"200","ok",teeRows);
+		}catch(Exception e){
+			result = new ListResult<>(-1,"400","error");
+			e.printStackTrace();
+		}
+		return result;
+	}
+	/***
+	  * <p>功能描述：绝缘接头。</p>
+	  * <p> 雷凯。</p>	
+	  * @param request
+	  * @param param
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年9月15日 下午7:09:37。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="/getJnsulatedJointList", method = RequestMethod.POST)
+	@ResponseBody
+	public Object getJnsulatedJointList(HttpServletRequest request,@RequestBody Map<String,String> param){
+		ListResult<Map<String, Object>> result= null;
+		try{
+			String projectOid = param.get("projectOid");
+			List<Map<String,Object>> jnsulatedJointRows = this.pipeService.getMaterialJnsulatedJointList(projectOid);
+			result = new ListResult<>(1,"200","ok",jnsulatedJointRows);
+		}catch(Exception e){
+			result = new ListResult<>(-1,"400","error");
+			e.printStackTrace();
+		}
+		return result;
+	}
+	/***
+	  * <p>功能描述：大小头。</p>
+	  * <p> 雷凯。</p>	
+	  * @param request
+	  * @param param
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年9月15日 下午7:10:17。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="/getReducerList", method = RequestMethod.POST)
+	@ResponseBody
+	public Object getReducerList(HttpServletRequest request,@RequestBody Map<String,String> param){
+		ListResult<Map<String, Object>> result= null;
+		try{
+			String projectOid = param.get("projectOid");
+			List<Map<String,Object>> reducerRows = this.pipeService.getMaterialReducerList(projectOid);
+			result = new ListResult<>(1,"200","ok",reducerRows);
+		}catch(Exception e){
+			result = new ListResult<>(-1,"400","error");
+			e.printStackTrace();
+		}
+		return result;
+	}
+	/***
+	  * <p>功能描述：封堵物。</p>
+	  * <p> 雷凯。</p>	
+	  * @param request
+	  * @param param
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年9月15日 下午7:10:36。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="/getClosureList", method = RequestMethod.POST)
+	@ResponseBody
+	public Object getClosureList(HttpServletRequest request,@RequestBody Map<String,String> param){
+		ListResult<Map<String, Object>> result= null;
+		try{
+			String projectOid = param.get("projectOid");
+			List<Map<String,Object>> closureRows = this.pipeService.getMaterialClosureList(projectOid);
+			result = new ListResult<>(1,"200","ok",closureRows);
+		}catch(Exception e){
+			result = new ListResult<>(-1,"400","error");
+			e.printStackTrace();
+		}
+		return result;
+	}
 	/***
 	  * <p>功能描述：获取物资离线数据。</p>
 	  * <p> 雷凯。</p>	
@@ -70,23 +215,42 @@ public class PipeController {
 		SimpleResult<Map<String,Object>> result = null;
 		Map<String,Object> dataMap = new HashMap<String,Object>();
 		try {
-			List<Map<String, Object>> coldBendingRows = this.coldBendingPipeService.getListData(null);
+			List<Map<String,Object>> projectList= daqPrivilegeService.getProject("pipe_network_code_001");
+			List<String> projectOids=new ArrayList<String>();
+			for(Map<String,Object> map:projectList){
+				projectOids.add(map.get("key").toString());
+			}
+			List<Map<String, Object>> coldBendingRows = this.pipeService.getPipeColdBendingList(projectOids);
 			dataMap.put("coldBendingData", coldBendingRows);//冷弯管
-			List<Map<String,Object>> pipeRows = this.pipeService.getMaterialPipeList();
+			List<Map<String,Object>> pipeRows = this.pipeService.getMaterialPipeList(projectOids);
 			dataMap.put("materialPipeData", pipeRows);//钢管
-			List<Map<String,Object>> hotBendsRows = this.pipeService.getMaterialHotBendsList();
+			List<Map<String,Object>> hotBendsRows = this.pipeService.getMaterialHotBendsList(projectOids);
 			dataMap.put("materialHotBendsData", hotBendsRows);//热煨弯管
-			List<Map<String,Object>> teeRows = this.pipeService.getMaterialTeeList();
+			List<Map<String,Object>> teeRows = this.pipeService.getMaterialTeeList(projectOids);
 			dataMap.put("materialTeeData", teeRows);//三通
-			List<Map<String,Object>> jnsulatedJointRows = this.pipeService.getMaterialJnsulatedJointList();
+			List<Map<String,Object>> jnsulatedJointRows = this.pipeService.getMaterialJnsulatedJointList(projectOids);
 			dataMap.put("materialJnsulatedJointData", jnsulatedJointRows);//绝缘接头
-			List<Map<String,Object>> reducerRows = this.pipeService.getMaterialReducerList();
+			List<Map<String,Object>> reducerRows = this.pipeService.getMaterialReducerList(projectOids);
 			dataMap.put("materialReducerData", reducerRows);//大小头
-			List<Map<String,Object>> closureRows = this.pipeService.getMaterialClosureList();
+			List<Map<String,Object>> closureRows = this.pipeService.getMaterialClosureList(projectOids);
 			dataMap.put("materialClosureData", closureRows);//封堵物
 			result = new SimpleResult<Map<String,Object>>(1, "200", "ok", dataMap);
 		} catch (Exception e) {
 			result = new SimpleResult<Map<String,Object>>(-1, "400", e.getMessage());
+			e.printStackTrace();
+		}
+		return result;
+	}
+	@RequestMapping(value="/getValveList",method = RequestMethod.POST)
+	@ResponseBody
+	public Object getValveList(HttpServletRequest request,@RequestBody Map<String,String> param){
+		ListResult<Map<String,Object>> result = null;
+		try {
+			String projectOid = param.get("projectOid");
+			List<Map<String,Object>> rows = this.pipeService.getValveList(projectOid);
+			result = new ListResult<>(1, "200", "ok", rows);
+		} catch (Exception e) {
+			result = new ListResult<>(-1, "400", "error");
 			e.printStackTrace();
 		}
 		return result;

@@ -10,10 +10,13 @@ import cn.jasgroup.framework.spatial.annotation.Point;
 import cn.jasgroup.framework.spatial.support.enumeration.CalculateType;
 import cn.jasgroup.framework.spatial.support.enumeration.ScopeType;
 import cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.dao.entity.MedianStake;
+import cn.jasgroup.jasframework.base.annotation.CommonDeleteBatchConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
 import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
+import cn.jasgroup.jasframework.base.annotation.UniqueConstraintStrategy;
+import cn.jasgroup.jasframework.base.annotation.UniqueConstraints;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 
 /**
@@ -33,6 +36,9 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 @CommonDeleteConfig(
 	scene = "/weldMeasuredResult/delete"
 )
+@CommonDeleteBatchConfig(
+		scene = "/weldMeasuredResult/deleteBatch"
+		)
 @Point(
 	x="pointx",
 	y="pointy" ,
@@ -44,6 +50,11 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 	anchorOid="medianStakeOid",
 	deviation="relativeMileage"
 )
+@UniqueConstraints(
+		strategys ={
+			@UniqueConstraintStrategy(columnNames={"pipeSegmentOrCrossOid","weldOid"},name="焊口编号")
+		}
+	)
 @JdbcEntity(name="daq_weld_measured_result")
 public class WeldMeasuredResult extends CommonJdbcEntity {
 

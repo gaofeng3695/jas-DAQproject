@@ -97,6 +97,31 @@ public class DaqPrivilegeController extends BaseController{
 		}
 		return result;
 	}
+	
+	/**
+	 * <p>功能描述：根据管线oid获取当前用户所在部门及下级部门的站场/阀室列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param request
+	  * @param param
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年9月17日 上午11:23:06。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="/getPipeStationListByPipelineOid",method = RequestMethod.POST)
+	@ResponseBody
+	public Object getPipeStationListByPipelineOid(HttpServletRequest request,@RequestBody Map<String,String> param){
+		ListResult<Map<String,Object>> result = null;
+		try {
+			String pipelineOid = param.get("pipelineOid");
+			List<Map<String,Object>> rows = this.daqPrivilegeService.getPipeStationList(pipelineOid);
+			result = new ListResult<>(1, "200", "ok", rows);
+		} catch (Exception e) {
+			result = new ListResult<>(-1, "400", "error");
+			e.printStackTrace();
+		}
+		return result;
+	}
 	/***
 	  * <p>功能描述：根据管线oid获取当前用户所在部门及一下部门所有的线路段和穿跨越列表。</p>
 	  * <p> 雷凯。</p>	
@@ -285,10 +310,11 @@ public class DaqPrivilegeController extends BaseController{
 	 */
 	@RequestMapping(value="/getConstructAndDetectionUnitList",method = RequestMethod.POST)
 	@ResponseBody
-	public Object getConstructAndDetectionUnitList(HttpServletRequest request){
+	public Object getConstructAndDetectionUnitList(HttpServletRequest request,@RequestBody Map<String,String> param){
 		ListResult<Map<String,Object>> result = null;
 		try {
-			List<Map<String,Object>> rows = this.daqPrivilegeService.getConstructAndDetectionUnitList();
+			String projectOid = param.get("projectOid");
+			List<Map<String,Object>> rows = this.daqPrivilegeService.getConstructAndDetectionUnitList(projectOid);
 			result = new ListResult<>(1, "200", "ok", rows);
 		} catch (Exception e) {
 			result = new ListResult<>(-1, "400", "error");

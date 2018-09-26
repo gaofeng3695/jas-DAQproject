@@ -2,7 +2,6 @@ package cn.jasgroup.jasframework.acquisitiondata.utils;
 
 import cn.jasgroup.framework.data.result.ErrorResult;
 import cn.jasgroup.framework.data.result.SimpleResult;
-import com.google.gson.Gson;
 import org.springframework.http.HttpStatus;
 
 /**
@@ -12,11 +11,6 @@ import org.springframework.http.HttpStatus;
  * 2018/3/21 10:08
  */
 public class ResultVOUtil {
-
-    public static void main(String[] args) {
-        Gson gson = new Gson();
-        System.out.println(gson.toJson(ofSuccess()));
-    }
 
     public static SimpleResult ofSuccess(Object data) {
         return new SimpleResult(data);
@@ -47,4 +41,36 @@ public class ResultVOUtil {
                 String.valueOf(httpStatus.value()), httpStatus.getReasonPhrase());
     }
 
+
+    public static ErrorResult ofEnum(ErrorEnum errorEnum) {
+        return ofError(errorEnum.getCode(), errorEnum.getMessage());
+    }
+
+    public enum ErrorEnum {
+
+        PARAMS_ERROR(4003, "参数错误"),
+
+        ;
+
+        private Integer code;
+
+        private String message;
+
+
+        ErrorEnum(Integer code, String message) {
+            this.code = code;
+            this.message = message;
+        }
+
+        public Integer getCode() {
+            return code;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+    }
+
 }
+
+
