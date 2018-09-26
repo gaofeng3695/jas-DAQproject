@@ -57,6 +57,12 @@
 							<el-input v-model="tableFormData.excelTemplateCode" clearable placeholder="请输入模板编号" size="small"></el-input>
 						</el-form-item>
 					</el-col>
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+						<el-form-item label="模板类型" prop="excelTemplateType" required>
+							<el-switch v-model="tableFormData.excelTemplateType" active-text="导入模板" inactive-text="导出模板" active-value="1" inactive-value="2">>
+							</el-switch>
+						</el-form-item>
+					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -68,7 +74,7 @@
 				<el-row>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 						<el-form-item label="模板上传" prop="file">
-							<el-upload ref="upload" class="upload-demo" accept=".xls,.xlsx" :limit="1" :auto-upload="false" :on-change="changeFiles"
+							<el-upload ref="upload" :data="uploadParam" class="upload-demo" accept=".xls,.xlsx" :limit="1" :auto-upload="false" :on-change="changeFiles"
 							  :file-list="fileList" :on-success="fileUploaded" :on-remove="removeFile" :on-exceed="uploaodNumberlimit" drag :action="uploadurl">
 								<i class="el-icon-upload"></i>
 								<div class="el-upload__text">将文件拖到此处，或
@@ -102,7 +108,6 @@
 			return {
 				uploadurl: jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token"),
 				fileList: [],
-
 				rules: {
 					excelTemplateName: [{
 						required: true,
@@ -125,8 +130,8 @@
 						}
 					}]
 				},
+				uploadParam: {},
 				tableFormData: {
-					// oid: null,
 					excelTemplateName: "",
 					excelTemplateCode: "",
 					excelTemplateType: "1",
@@ -147,8 +152,8 @@
 				this.tableFormData.excelTemplateName = decodeURI(param.excelTemplateName);
 				this.tableFormData.excelTemplateCode = decodeURI(param.excelTemplateCode);
 				this.tableFormData.remark = decodeURI(param.remark);
-				// this.getDetailByObjectId();
-				this.requestFiles();
+				// this.__getDetailByObjectId();
+				this.requestFiles(decodeURI(param.excelTemplatePath));
 			};
 
 		},
@@ -163,23 +168,16 @@
 					}
 				});
 			},
-			requestFiles: function () {
+			requestFiles: function (path) {
 				var that = this;
-				var url = jasTools.base.rootPath + "/attachment/getInfo.do";
-				jasTools.ajax.get(url, {
-					businessType: 'excelTemplate',
-					businessId: this.oid
-				}, function (data) {
-					data.rows.forEach(function (item) {
-						var file = {
-							name: item.fileName,
-							size: item.size,
-							oid: item.oid
-						};
-						that.fileList.push(file);
-					});
-					that.fileListlength = that.fileList.length;
-				});
+				var arr = path.split('/');
+				var name = arr[arr.length - 1];
+				var file = {
+					name: name,
+					oid: 'this is oid' // 仅用于判断是否是服务器上的文件
+				};
+				that.fileList.push(file);
+				that.fileListlength = that.fileList.length;
 			},
 			fileUploaded: function (response, file, fileList) {
 				top.Vue.prototype.$message({
@@ -213,24 +211,27 @@
 			},
 			uploadFile: function (oid) {
 				var that = this;
-
-				that.deleteFilesToServer(function () {
-					that.uploadurl = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") +
-						"&businessId=" + oid + "&businessType=excelTemplate";
-					that.$nextTick(function () {
-						var afileToSubmit = that.$refs.upload.uploadFiles.filter(function (item) {
-							return !item.oid
-						});
-						if (afileToSubmit.length > 0) {
-							that.$refs.upload.submit();
-						} else {
-							that.fileUploaded();
-						}
+				var excelTemplateType = this.tableFormData.excelTemplateType;
+				that.uploadurl = jasTools.base.rootPath + "/jasframework/excelTemplate/upload.do?token=" + localStorage.getItem(
+						"token") +
+					"&oid=" + oid + "&excelTemplateType=" + (excelTemplateType || 1);
+				that.uploadParam = {
+					excelTemplateType: excelTemplateType || 1,
+					oid: oid
+				};
+				that.$nextTick(function () {
+					var afileToSubmit = that.$refs.upload.uploadFiles.filter(function (item) {
+						return !item.oid
 					});
+					if (afileToSubmit.length > 0) {
+						that.$refs.upload.submit();
+					} else {
+						that.fileUploaded();
+					}
 				});
 
 			},
-			deleteFilesToServer: function (cb) {
+			__deleteFilesToServer: function (cb) {
 				var that = this;
 				if (!that.filesToBeDelete) {
 					cb && cb();
@@ -265,16 +266,16 @@
 				}
 				var url = jasTools.base.rootPath + '/jasframework/excelTemplate/checkNameOrCodeExist.do';
 				jasTools.ajax.get(url, that.tableFormData, function (data) {
-					console.log(data);
+					// console.log(data);
 					cb && cb();
 				});
 			},
 
-			getDetailByObjectId: function () {
+			__getDetailByObjectId: function () {
 				var that = this;
 
 				jasTools.ajax.get(url, that.tableFormData, function (data) {
-					console.log(data);
+					// console.log(data);
 					cb && cb();
 				});
 				$.ajax({

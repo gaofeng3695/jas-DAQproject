@@ -138,7 +138,8 @@
 
 
 				<jas-import-export-btns :is-import="privilege.join('').indexOf('bt_import')>-1" :is-export="privilege.join('').indexOf('bt_export')>-1"
-				  :form="searchTable" :oids="oids" :template-code="templateCode" :class-name="className"></jas-import-export-btns>
+				  :form="searchTable" :oids="oids" :template-code="templateCode" :function-code="menuCode" :export-template-code="exportTemplateCode"
+				  :class-name="className"></jas-import-export-btns>
 
 				<div style="display:inline-block;float:right">
 
@@ -202,6 +203,7 @@
 				},
 				isClosed: false,
 				templateCode: "",
+				exportTemplateCode: "",
 				className: '',
 				isApprove: '',
 				privilege: [], //权限数组 bt_add,bt_update,bt_delete,bt_select,bt_export,bt_import,bt_position
@@ -244,15 +246,16 @@
 			approveRows: function () {
 				var that = this;
 				return this.rows.filter(function (row) {
-					return row.approve_status == 1 ;
+					return row.approve_status == 1;
 				});
 			},
 		},
-		mounted: function () {
+		created: function () {
 			var param = window.jasTools.base.getParamsInUrl(location.href);
 			this.menuCode = param.menuCode;
 			this.isApprove = param.isApprove;
 			this.templateCode = param.templateCode;
+			this.exportTemplateCode = param.exportTemplateCode;
 			this.className = param.className;
 			//进行后台数据的请求
 			if (param.privilegeCode) {
@@ -261,6 +264,9 @@
 				this.privilege = ['bt_add', 'bt_update', 'bt_delete', 'bt_select', 'bt_export', 'bt_import', 'bt_position'];
 				this.requestConfig(); //请求模板的配置文件
 			}
+		},
+		mounted: function () {
+
 		},
 		methods: { //方法的写法
 			toggleSearch: function () {

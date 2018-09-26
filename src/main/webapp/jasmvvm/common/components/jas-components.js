@@ -697,7 +697,9 @@ Vue.component('jas-table-for-list', {
 			headStyle: {
 				'background-color': '#f5f7fa ',
 			},
+			functionCode: '',
 			_templateCode: '',
+			_exportTemplateCode: '',
 			_className: '',
 			_classNameQuery: '',
 			isApprove: '',
@@ -733,7 +735,7 @@ Vue.component('jas-table-for-list', {
 		'	<el-button size="small" plain type="primary" icon="fa fa-plus" v-if="isApprove&&isHasPrivilege(' + "'bt_report'" + ')"  :disabled="reportRows.length==0" @click="upcall">上报</el-button>',
 		'	<el-button size="small" plain type="primary" icon="fa fa-plus" v-if="isApprove&&isHasPrivilege(' + "'bt_approve'" + ')" :disabled="approveRows.length==0" @click="approve">审核</el-button>',
 		'<jas-import-export-btns :is-import="isHasPrivilege(' + "'bt_import'" + ')" :is-export="isHasPrivilege(' + "'bt_export'" + ')" ',
-		'		:form="form" :oids="oids" :template-code="_templateCode" :class-name="_classNameQuery"></jas-import-export-btns>',
+		'		:form="form" :oids="oids" :template-code="_templateCode" :export-template-code="_exportTemplateCode" :function-code="functionCode" :class-name="_classNameQuery"></jas-import-export-btns>',
 
 		'  <span class="fr">',
 		'		 <el-tooltip class="item" content="刷新" placement="top">',
@@ -783,7 +785,8 @@ Vue.component('jas-table-for-list', {
 		this._className = this.className || param.className;
 		this._classNameQuery = this.classNameQuery || param.classNameQuery;
 		this._templateCode = this.templateCode || param.templateCode;
-		this.functionCode = param.menuCode;
+		this._exportTemplateCode = this.exportTemplateCode || param.exportTemplateCode;
+		this.functionCode = param.menuCode || param.functionCode;
 	},
 	mounted: function () {
 		this._requestPrivilege(this.privilegeCode);
@@ -1191,7 +1194,10 @@ Vue.component('jas-import-export-btns', {
 		templateCode: { // horizontal
 			type: String,
 		},
-		className: {
+		exportTemplateCode: { // horizontal
+			type: String,
+		},
+		functionCode: {
 			type: String,
 		},
 		oids: {
@@ -1223,25 +1229,22 @@ Vue.component('jas-import-export-btns', {
 	methods: {
 		bt_import: function () { // 导入
 			var that = this;
-			var src = './pages/template/dialogs/upload.html';
+			var src = './pages/template/dialogs/upload.html?templateCode=' + this.templateCode;
 			top.jasTools.dialog.show({
 				title: '导入',
 				width: '600px',
 				height: '600px',
 				src: src,
-				cbForClose: function () {
-
-				}
+				cbForClose: function () {}
 			});
 		},
 		bt_export: function (obj) {
 			var that = this;
 			var url = jasTools.base.rootPath + '/importExcelController/exportExcel.do';
 			jasTools.ajax.post(url, {
-				templateCode: this.templateCode,
-				modelId: 'B', //【导出策略，现固定为B】
-				className: this.className, //【后台query类全路径】
-				keyWord: {
+				templateCode: this.exportTemplateCode,
+				functionCode: this.functionCode, //"F000043", // 自定义表单功能编码
+				keywords: {
 					oids: this.oids
 				}
 			}, function (data) {
@@ -1252,59 +1255,27 @@ Vue.component('jas-import-export-btns', {
 			var that = this;
 			var url = jasTools.base.rootPath + '/importExcelController/exportExcel.do';
 			jasTools.ajax.post(url, {
-				templateCode: this.templateCode,
-				modelId: 'B', //【导出策略，现固定为B】
-				className: this.className, //【后台query类全路径】
-				keyWord: this.form
+				templateCode: this.exportTemplateCode,
+				functionCode: this.functionCode, // 自定义表单功能编码
+				keywords: this.form
 			}, function (data) {
-				// return
 				that._downloadExportFile(data.data);
 			});
 		},
 		_downloadExportFile: function (id) {
 			var that = this;
-			var url = jasTools.base.rootPath + "/importExcelController/downLoadExel.do";
+			var url = jasTools.base.rootPath + "/importExcelController/downloadExcel.do";
 			jasTools.ajax.downloadByIframe('post', url, {
 				fileId: id
 			});
+			// jasTools.ajax.downloadByPost(url, {
+			// 	fileId: id
+			// });
 		},
 		bt_download: function () { // 下载模板
 			var that = this;
-			this._requestTemplateOid(this.templateCode, function (templateOid) {
-				that._requestTemplateFileOid(templateOid);
-			});
-		},
-		_requestTemplateOid: function (templateCode, cb) {
-			var that = this;
-			var url = jasTools.base.rootPath + "/jasframework/excelTemplate/getPage.do";
-			jasTools.ajax.post(url, {
-				excelTemplateName: '',
-				excelTemplateCode: templateCode,
-				pageNo: 1,
-				pageSize: 1,
-			}, function (data) {
-				that.templateOid = data.rows[0].oid;
-				cb && cb(that.templateOid);
-			});
-		},
-		_requestTemplateFileOid: function (templateOid) {
-			var that = this;
-			that._requestFileId(templateOid, function (id) {
-				jasTools.ajax.downloadByIframe('post', jasTools.base.rootPath + "/attachment/download.do", {
-					oid: id
-				});
-			});
-		},
-		_requestFileId: function (oid, cb) {
-			var that = this;
-			var url = jasTools.base.rootPath + "/attachment/getInfo.do";
-			jasTools.ajax.get(url, {
-				businessType: 'excelTemplate',
-				businessId: oid
-			}, function (data) {
-				if (data.rows[0].oid) {
-					cb && cb(data.rows[0].oid)
-				}
+			jasTools.ajax.downloadByIframe('post', jasTools.base.rootPath + "/jasframework/excelTemplate/download.do", {
+				excelTemplateCode: this.templateCode
 			});
 		},
 
@@ -1463,13 +1434,13 @@ Vue.component('jas-form-items', {
 			var fieldConfig = this.fieldsConfig[fatherField];
 			var form = this.form;
 			var setChildOptionsAndValue = function (childField, options) { // 入参下拉选项
-				if(that.form.weldOid!="" && childField=="weldOid"){
+				if (that.form.weldOid != "" && childField == "weldOid") {
 					options.push({
 						key: that.form.weldOid,
 						value: that.form.weldCode
 					});
 					that.fieldsConfig[childField].options = options;
-				}else{
+				} else {
 					that.fieldsConfig[childField].options = options;
 				}
 				var length = that.fieldsConfig[childField].options.length;
@@ -1971,7 +1942,7 @@ Vue.component('jas-approve-dialog', {
 		this._oid = param.oid || this.oid;
 		this._type = param.approveType || this.type;
 		this._className = param.className || this.className;
-		this._functionCode = param.menuCode || this.menuCode;
+		this._functionCode = param.menuCode || this.functionCode;
 	},
 	mounted: function () {
 

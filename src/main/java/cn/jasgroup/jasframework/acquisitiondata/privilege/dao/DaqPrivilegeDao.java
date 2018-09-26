@@ -1,8 +1,11 @@
 package cn.jasgroup.jasframework.acquisitiondata.privilege.dao;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Repository;
 
@@ -274,4 +277,30 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 		String sql = "select t.oid,t.user_name,t.login_name,t.password,t.unit_id,u.unit_name from pri_user t inner join (select oid,unit_name from pri_unit where hierarchy like 'Unit.0001.0005%' and active=1) u on u.oid=t.unit_id and t.active=1";
 		return this.queryForList(sql, null);
 	}
+
+	/**
+	 * <p>功能描述：根据管线oid获取当前用户所在部门及下级部门的站场/阀室列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param pipelineOid
+	  * @param unitOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年9月17日 上午11:25:27。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getPipeStationList(String pipelineOid, String unitOid) {
+		String sql = "with recursive pri_unit_temp(oid,parent_id) as ("
+				+ "select t.oid,t.parent_id from pri_unit t where t.oid='"+unitOid+"' and t.active=1 "
+				+ "union all "
+				+ "select t.oid,t.parent_id from pri_unit t inner join pri_unit_temp b on t.parent_id=b.oid and t.active=1 "
+				+ ")"
+				+ "select distinct t.oid as key,t.pipe_station_name as value,t.create_datetime from daq_implement_scope_ref s "
+				+ "left join (select oid,pipe_station_name,create_datetime from daq_pipe_station where active=1) t on t.oid=s.scope_oid where s.unit_oid in (select oid from pri_unit_temp)";
+		if (StringUtils.isNotBlank(pipelineOid)) {
+			sql += " and s.pipeline_oid='"+pipelineOid+"'";
+		}
+		sql += " order by t.create_datetime asc";
+		return this.queryForList(sql, null);
+	}
+
 }

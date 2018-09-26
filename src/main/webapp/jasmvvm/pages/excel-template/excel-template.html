@@ -81,6 +81,8 @@
 					</el-table-column>
 					<el-table-column label="模板编号" align="center" prop="excelTemplateCode">
 					</el-table-column>
+					<el-table-column label="模板类型" align="center" :formatter="formatter" prop="excelTemplateType">
+					</el-table-column>
 					<el-table-column label="创建时间" align="center" prop="createDatetime">
 					</el-table-column>
 					<el-table-column label="备注" align="center" prop="remark">
@@ -88,7 +90,7 @@
 					<el-table-column label="操作" align="center" width="240">
 						<template slot-scope="scope">
 							<el-button @click="download(scope.row)" type="text" size="small">下载</el-button>
-							<el-button @click="preview(scope.row)" type="text" size="small">预览</el-button>
+							<!-- <el-button @click="preview(scope.row)" type="text" size="small">预览</el-button> -->
 							<el-button @click="edit(scope.row)" type="text" size="small">编辑</el-button>
 							<el-button @click="deleteItem(scope.row)" type="text" size="small">删除</el-button>
 						</template>
@@ -127,7 +129,9 @@
 				total: 0,
 				loading: false,
 				tableData: [],
-
+				formatter: function (row, column, cellValue, index) {
+					return cellValue == 1 ? '导入' : '导出';
+				}
 			}
 		},
 		mounted: function () {
@@ -178,12 +182,9 @@
 			},
 			download: function (row) {
 				var that = this;
-				that.requestFiles(row.oid, function (oid) {
-					jasTools.ajax.downloadByIframe('post',jasTools.base.rootPath + "/attachment/download.do", {
-						oid: oid
-					});
+				jasTools.ajax.downloadByIframe('post', jasTools.base.rootPath + "/jasframework/excelTemplate/download.do", {
+					excelTemplateCode: row.excelTemplateCode
 				});
-
 			},
 			requestFiles: function (oid, cb) {
 				var that = this;
@@ -214,7 +215,7 @@
 			edit: function (row) {
 				var that = this;
 				console.log(row);
-				var url = jasTools.base.setParamsToUrl('./pages/excel-template/dialogs/add.html',row)
+				var url = jasTools.base.setParamsToUrl('./pages/excel-template/dialogs/add.html', row)
 				top.jasTools.dialog.show({
 					width: '600px',
 					height: '600px',
