@@ -158,14 +158,7 @@ public class DaqPrivilegeService extends BaseService{
 	 */
 	public List<Map<String,Object>>getConstructAndDetectionUnitList(){
 		String unitOid = ThreadLocalHolder.getCurrentUser().getUnitId();
-		List<Map<String, Object>> resultList = this.daqPrivilegeDao.getConstructAndDetectionUnitList(unitOid);
-
-		List<String> unitIds = resultList.stream().map(map -> String.valueOf(map.get("key"))).collect(Collectors.toList());
-        List<Map<String, String>> unitList = this.daqPrivilegeDao.getUnitInIds(unitIds);
-        Map<String, String> idToHierarchy = unitList.stream().collect(Collectors.toMap(mapObj -> mapObj.get("oid"), mapObj -> mapObj.get("hierarchy"), (a, b) -> b));
-        resultList.forEach(resultMap -> resultMap.put("hierarchy", idToHierarchy.get(resultMap.get("key"))));
-
-        return resultList;
+		return this.daqPrivilegeDao.getConstructAndDetectionUnitList(unitOid);
 	}
 
 
