@@ -291,16 +291,4 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 		return this.queryForList(sql, null);
 	}
 
-
-	/**
-	 * 根据ID集合查询部门集合
-	 * @param ids unit ID集合
-	 * @return List
-	 */
-	public List<Map<String, String>> getUnitInIds(Collection<String> ids) {
-        String params = "'" + Joiner.on("','").skipNulls().join(ids) + "'";
-	    String sql = "select oid, hierarchy from pri_unit where oid in (" + params + ")";
-        return this.queryForList(sql, null);
-	}
-
 }
