@@ -10,7 +10,6 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import cn.jasgroup.jasframework.dataaccess.base.BaseJdbcDao;
-import cn.jasgroup.jasopengis.util.StringUtil;
 
 @Repository
 public class DaqPrivilegeDao extends BaseJdbcDao{
@@ -51,7 +50,7 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 				+ "select t.oid,t.parent_id from pri_unit t inner join pri_unit_temp b on t.parent_id=b.oid and t.active=1 "
 				+ ")"
 				+ "select distinct tt.oid as key,tt.tenders_name as value,tt.create_datetime,tt.project_oid from daq_implement_scope_ref t left join (select oid,tenders_name,project_oid,create_datetime from daq_tenders where active=1) tt on t.tenders_oid=tt.oid where t.unit_oid in (select oid from pri_unit_temp)";
-				if(StringUtil.isNotBlank(projectOid)){
+				if(StringUtils.isNotBlank(projectOid)){
 					sql += " and tt.project_oid='"+projectOid+"'";
 				}
 				sql += " order by tt.create_datetime asc";
@@ -175,16 +174,26 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getMedianStakeList(String pipeSegmentOrCrossOid){
-		String sql ="select t.oid as key,t.median_stake_code as value,vv.oid as pipe_segment_or_cross_oid from ("
-				+ "select v.*,n.median_stake_code as start_median_stake_code,m.median_stake_code as end_median_stake_code "
-				+ "from v_daq_pipe_segment_cross v "
-				+ "left join (select oid,median_stake_code from daq_median_stake where active=1) n on n.oid=v.start_stake_oid "
-				+ "left join (select oid,median_stake_code from daq_median_stake where active=1) m on m.oid=v.end_stake_oid) vv "
-				+ "left join daq_median_stake t on t.median_stake_code>=vv.start_median_stake_code and t.median_stake_code<=vv.end_median_stake_code ";
-				if(StringUtil.isNotBlank(pipeSegmentOrCrossOid)){
-					sql +=" where vv.oid ='"+pipeSegmentOrCrossOid+"'";
-				}
-				sql += " order by t.create_datetime asc";
+//		String sql ="select t.oid as key,t.median_stake_code as value,vv.oid as pipe_segment_or_cross_oid,vv.start_median_stake_code,vv.end_median_stake_code from ("
+//				+ "select v.*,n.median_stake_code as start_median_stake_code,m.median_stake_code as end_median_stake_code "
+//				+ "from v_daq_pipe_segment_cross v "
+//				+ "left join (select oid,median_stake_code from daq_median_stake where active=1) n on n.oid=v.start_stake_oid "
+//				+ "left join (select oid,median_stake_code from daq_median_stake where active=1) m on m.oid=v.end_stake_oid) vv "
+//				+ "left join daq_median_stake t on t.median_stake_code>=vv.start_median_stake_code and t.median_stake_code<=vv.end_median_stake_code "
+//				+ "where vv.active=1";
+//				if(StringUtil.isNotBlank(pipeSegmentOrCrossOid)){
+//					sql +=" and vv.oid ='"+pipeSegmentOrCrossOid+"'";
+//				}
+//				sql += " order by t.create_datetime asc";
+		String sql = "select st.oid as key,st.median_stake_code as value,vt.start_stake_code,vt.end_stake_code "
+				+ "from daq_median_stake st "
+				+ "inner join ( "
+					+ "select t.median_stake_code as start_stake_code,tt.median_stake_code as end_stake_code,t.pipeline_oid "
+					+ "from v_daq_pipe_segment_cross v "
+					+ "left join (select oid,pipeline_oid,median_stake_code,mileage from daq_median_stake where active=1) t on t.oid=v.start_stake_oid "
+					+ "left join(select oid,median_stake_code,mileage from daq_median_stake where active=1) tt on tt.oid=v.end_stake_oid "
+					+ "where v.oid='"+pipeSegmentOrCrossOid+"') vt "
+					+ "on st.pipeline_oid=vt.pipeline_oid where st.active=1 order by st.mileage";
 		return this.queryForList(sql, new Object[]{});
 	}
 	
@@ -242,15 +251,18 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 	  * <p>创建日期:2018年8月30日 下午4:36:43。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public List<Map<String,Object>> getConstructAndDetectionUnitList(String unitOid){
-		String sql = "select distinct tt.unit_oid as key,pp.unit_name as value from daq_implement_scope_ref tt "
+	public List<Map<String,Object>> getConstructAndDetectionUnitList(String unitOid,String projectOid){
+		String sql = "select distinct tt.unit_oid as key,pp.unit_name as value,pp.type from daq_implement_scope_ref tt "
 				+ "left join( "
 					+ "select distinct t.tenders_oid from daq_implement_scope_ref t "
 					+ "left join("
 						+ "select p.oid from pri_unit p "
 						+ "inner join (select hierarchy from pri_unit where oid='"+unitOid+"') pp on p.hierarchy like pp.hierarchy||'%') pu on pu.oid = t.unit_oid) uu on uu.tenders_oid = tt.tenders_oid "
-				+ "inner join (select oid,unit_name,hierarchy from pri_unit where hierarchy like 'Unit.0001.0005%' or hierarchy like 'Unit.0001.0006%') pp on pp.oid=tt.unit_oid "
-				+ "order by pp.unit_name";
+				+ "inner join (select oid,unit_name,hierarchy,1 as type from pri_unit where hierarchy like 'Unit.0001.0005%' union all select oid,unit_name,hierarchy,2 as type from pri_unit where hierarchy like 'Unit.0001.0006%') pp on pp.oid=tt.unit_oid ";
+			if(StringUtils.isNotBlank(projectOid)){
+				sql +=" where tt.project_oid='"+projectOid+"' "; 
+			}
+			sql += "order by pp.unit_name";
 		return this.queryForList(sql, null);
 	}
 	/**

@@ -20,7 +20,10 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 /**
  * 
   *<p>类描述：焊口返修实体。
-  *{@link cn.jasgroup.jasframework.acquisitiondata.weld.reworkweld.service.ReworkWeldService #changeGeomColumn()}</p>
+  *{@link cn.jasgroup.jasframework.acquisitiondata.weld.reworkweld.service.ReworkWeldService #saveChangeWeldStatus()}</p>
+  *{@link cn.jasgroup.jasframework.acquisitiondata.weld.reworkweld.service.ReworkWeldService #updateChangeWeldStatusBeforeAdvice()}</p>
+  *{@link cn.jasgroup.jasframework.acquisitiondata.weld.reworkweld.service.ReworkWeldService #updateChangeWeldStatus()}</p>
+  *{@link cn.jasgroup.jasframework.acquisitiondata.weld.reworkweld.service.ReworkWeldService #deleteChangeWeldStatus()}</p>
   * @author 葛建 。
   * @version v1.0.0.1。
   * @since JDK1.8。
@@ -28,18 +31,24 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
  */
 @CommonSaveConfig(
 	scene = "/reworkWeld/save",
-			afterAdvice={
-					@Process(service = "reworkWeldService", method = "changeGeomColumn()")
-				}
+	afterAdvice={
+		@Process(service = "reworkWeldService", method = "saveChangeWeldStatus()")
+	}
 )
 @CommonUpdateConfig(
 	scene = "/reworkWeld/update",
-			afterAdvice={
-					@Process(service = "reworkWeldService", method = "changeGeomColumn()")
-				}
+	beforeAdvice={
+		@Process(service = "reworkWeldService", method = "updateChangeWeldStatusBeforeAdvice()")
+	},
+	afterAdvice={
+		@Process(service = "reworkWeldService", method = "updateChangeWeldStatus()")
+	}
 )
 @CommonDeleteConfig(
-	scene = "/reworkWeld/delete"
+	scene = "/reworkWeld/delete",
+	afterAdvice = {
+			@Process(service = "reworkWeldService", method = "deleteChangeWeldStatus()")
+	}
 )
 @UniqueConstraints(
 	strategys ={

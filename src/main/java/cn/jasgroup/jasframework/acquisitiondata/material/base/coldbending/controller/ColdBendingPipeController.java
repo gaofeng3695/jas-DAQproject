@@ -18,7 +18,6 @@ import cn.jasgroup.framework.data.result.SimpleResult;
 import cn.jasgroup.jasframework.acquisitiondata.material.base.coldbending.dao.entity.ColdBendingPipe;
 import cn.jasgroup.jasframework.acquisitiondata.material.base.coldbending.service.ColdBendingPipeService;
 import cn.jasgroup.jasframework.base.controller.BaseController;
-import cn.jasgroup.jasopengis.util.StringUtil;
 
 @RestController
 @RequestMapping("daq/clodBendingPipe")
