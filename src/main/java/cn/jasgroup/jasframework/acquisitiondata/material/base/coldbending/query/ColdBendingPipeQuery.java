@@ -1,12 +1,13 @@
 package cn.jasgroup.jasframework.acquisitiondata.material.base.coldbending.query;
 
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 
 import cn.jasgroup.jasframework.acquisitiondata.material.base.coldbending.service.bo.ColdBendingPipeBo;
 import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
-import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 
 /***
   * 
@@ -25,6 +26,12 @@ import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 		}
 )
 public class ColdBendingPipeQuery extends BaseJavaQuery{
+	
+	/**
+	 * oid 集合，用于导出选中
+	 */
+	private List<String> oids;
+	
 	/**
 	 * 唯一标识
 	 */
@@ -98,6 +105,9 @@ public class ColdBendingPipeQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(approveStatus)) {
 				sql += " and t.approve_status in ("+ approveStatus +")";
 			}
+			if(null != oids && oids.size()>0){
+				sql += " and t.oid in (:oids) ";
+			}
 			sql +=  this.dataAuthoritySql;
 		}
 		sql += " order by t.create_datetime desc";
@@ -163,6 +173,14 @@ public class ColdBendingPipeQuery extends BaseJavaQuery{
 
 	public void setApproveStatus(String approveStatus) {
 		this.approveStatus = approveStatus;
+	}
+
+	public List<String> getOids() {
+		return oids;
+	}
+
+	public void setOids(List<String> oids) {
+		this.oids = oids;
 	}
 	
 }
