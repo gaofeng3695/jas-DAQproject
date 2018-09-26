@@ -10,6 +10,7 @@ import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.DateStatsR
 import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.StatsResultBo;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.WeldInfoBo;
 import com.google.common.collect.*;
+import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,8 @@ public class OverallStatisticsService {
 
     private static final Logger logger = LoggerFactory.getLogger(OverallStatisticsService.class);
 
+    private static final String YYYY_MM = "yyyy-MM";
+
     @Autowired
     private OverallStatisticsDao overallStatisticsDao;
 
@@ -53,13 +56,18 @@ public class OverallStatisticsService {
         StatsResultBo pipeStatsResult = this.overallStatisticsDao.statsPipeLengthByType(projectIds, null);
         StatsResultBo weldStatsResult = this.statsPipeLengthByType(weldList, projectIds, StatsProcessEnum.WELD.getType());
         StatsResultBo patchStatsResult = this.statsPipeLengthByType(patchRelationWeldList, projectIds, StatsProcessEnum.PATCH.getType());
-        List<StatsResultBo> resultList = Lists.newArrayList(pipeStatsResult, weldStatsResult, patchStatsResult);
+
 
         // 统计测量放线, 管沟回填, 地貌恢复
         List<StatsResultBo> otherStatsResultBos = this.overallStatisticsDao.statsOtherLength(projectIds);
         otherStatsResultBos.stream().filter(bo -> bo.getStatsResult() == null).forEach(bo -> bo.setStatsResult(0));
+
+        List<StatsResultBo> resultList = Lists.newArrayList(pipeStatsResult, weldStatsResult, patchStatsResult);
         resultList.addAll(otherStatsResultBos);
-        return resultList;
+
+        // 矫正顺序
+        Map<String, Object> typeToBo = resultList.stream().collect(Collectors.toMap(StatsResultBo::getStatsType, StatsResultBo::getStatsResult, (a, b) -> b));
+        return Arrays.stream(StatsProcessEnum.values()).map(anEnum -> new StatsResultBo(anEnum.getType(), typeToBo.get(anEnum.getType()))).collect(Collectors.toList());
     }
 
 
@@ -100,26 +108,47 @@ public class OverallStatisticsService {
         resultBos.addAll(otherStatsResult);
 
         // 统计从开工年月开始: 找出最早的年月做统计开始日期
-        OptionalLong minTimestamp = resultBos.stream().mapToLong(value -> StatsUtils.strToDateLong(value.getStatsDate(), "yyyy-MM")).min();
+        OptionalLong minTimestamp = resultBos.stream().mapToLong(value -> StatsUtils.strToDateLong(value.getStatsDate(), YYYY_MM)).min();
 
         // 生成连续的年月集合: 根据统计开始日期和结束日期
-        List<String> monthlyList = StatsUtils.genContinuityYearMonthStr(new Date(minTimestamp.getAsLong()), new Date());
+        List<String> monthlyList = StatsUtils.genContinuityYearMonthStr(new Date(minTimestamp.getAsLong()), new Date(), YYYY_MM);
 
-        // 初始化table生成连续的月份
-        Table<String, String, Object> table = TreeBasedTable.create();
+        // 初始化table生成连续的月份(为了保证顺序, 这里用ArrayTable先初始化一下)
+        List<String> typeList = Arrays.stream(StatsProcessEnum.values()).map(StatsProcessEnum::getType).collect(Collectors.toList());
+        Table<String, String, Object> table = ArrayTable.create(typeList, monthlyList);
         initTable(monthlyList, table);
 
         // Table赋值
         resultBos.forEach(bo -> table.put(bo.getStatsType(), bo.getStatsDate(), bo.getStatsResult()==null?0:bo.getStatsResult()));
 
         // 计算累积结果: 每个统计类型下的年月统计值=之前月份累计只和
-        Table<String, String, Object> resultTable = HashBasedTable.create();
+        Table<String, String, Object> resultTable = ArrayTable.create(typeList, monthlyList);
         for (String statsType : table.rowKeySet()) {
             for (String yearMonth : monthlyList) {
                 resultTable.put(statsType, yearMonth, getCumulativeCount(table, monthlyList, statsType, yearMonth));
             }
         }
+
         return resultTable;
+    }
+
+    public static void main(String[] args) {
+
+//        Table<String, String, Integer> table = TreeBasedTable.create();
+//        Table<String, String, Integer> table = HashBasedTable.create();
+
+        List<String> typeList = Lists.newArrayList("c", "a", "b");
+        List<String> dateList = Lists.newArrayList("2018-09", "2018-08", "2018-10");
+
+        Table<String, String, Integer> table = ArrayTable.create(typeList, dateList);
+        for (String type : typeList) {
+            for (String date : dateList) {
+                System.out.println("type:"+type+ ", date:"+date);
+                table.put(type, date, 0);
+            }
+        }
+
+        System.out.println(new Gson().toJson(table.rowMap()));
     }
 
     /**
@@ -130,6 +159,7 @@ public class OverallStatisticsService {
     public void initTable(List<String> dateList, Table<String, String, Object> table) {
         for (StatsProcessEnum processEnum : StatsProcessEnum.values()) {
             for (String date : dateList) {
+                logger.info("process:{}, date:{}", processEnum.getType(), date);
                 table.put(processEnum.getType(), date, 0);
             }
         }

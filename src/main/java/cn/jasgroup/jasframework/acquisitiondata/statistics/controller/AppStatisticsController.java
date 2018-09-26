@@ -5,11 +5,9 @@ import cn.jasgroup.framework.data.result.BaseResult;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.StatsProcessForAppEnum;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.service.AppStatisticsService;
 import cn.jasgroup.jasframework.acquisitiondata.utils.ResultVOUtil;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ucar.units.Base;
 
 import java.util.Arrays;
 import java.util.List;
@@ -41,8 +39,8 @@ public class AppStatisticsController {
     public BaseResult dataEntry(@RequestBody Map<String, Object> params) {
         @SuppressWarnings("unchecked")
         List<String> stasticsTypes = (List<String>) params.get("stasticsTypes");
-        String objectOid = (String) params.get("projectOid");
-        return ResultVOUtil.ofSuccess(appStatisticsService.dataEntry(stasticsTypes, objectOid));
+        String projectId = (String) params.get("projectOid");
+        return ResultVOUtil.ofSuccess(appStatisticsService.dataEntry(stasticsTypes, projectId));
     }
 
 

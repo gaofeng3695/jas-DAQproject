@@ -47,6 +47,7 @@ public class AppStatisticsService {
 
     private static final String YYYY_MM_DD = "yyyy-MM-dd";
 
+    /** 射线检测类型: 一次性检测 */
     private static final String ONCE_DETECTION_QUALIFIED = "detection_type_code_001";
 
     /**
@@ -173,6 +174,11 @@ public class AppStatisticsService {
     }
 
 
+    /**
+     * 统计昨日工序完成情况
+     * @param projectId 项目ID
+     * @return List
+     */
     public List<StatsProcessResultBo> statsYesterdayProcess(String projectId) {
         String yesterday = LocalDate.now().minusDays(1).toString();
         StatsResultBo pipeResultBo = appStatisticsDao.statsPipeLengthByDate(projectId, yesterday, yesterday);
@@ -198,7 +204,7 @@ public class AppStatisticsService {
 
 
     /**
-     * 统计昨日工序进展情况详情(根据施工单位分组)
+     * 统计昨日工序完成情况详情(根据施工单位分组)
      * @param projectId 项目ID
      * @param statsType 统计类型
      * @return List
@@ -342,7 +348,6 @@ public class AppStatisticsService {
         countGroupUnitAndDate(weldStatsResult, weldInfoBos, pipeLengthMap);
         countGroupUnitAndDate(patchStatsResult, patchRelationWeldInfoBos, pipeLengthMap);
 
-
         // 包装施工单位中文名 & 填充统计结果(累积计算)
         List<Map<String, Object>> resultList = Lists.newArrayList();
         for (String unitId : unitMap.keySet()) {
@@ -358,7 +363,6 @@ public class AppStatisticsService {
             weldStatsResult.stream().filter(bo -> unitId.equals(bo.getStatsType())).forEach(bo -> table.put(StatsProcessForAppEnum.WELD.getType(), bo.getStatsDate(), bo.getStatsResult()));
             patchStatsResult.stream().filter(bo -> unitId.equals(bo.getStatsType())).forEach(bo -> table.put(StatsProcessForAppEnum.WELD.getType(), bo.getStatsDate(), bo.getStatsResult()));
 
-            // 累积计算
             // 计算累积结果: 每个统计类型下的日期统计值=之前月份累计之和
             Table<String, String, Object> resultTable = TreeBasedTable.create();
             for (String statsType : table.rowKeySet()) {
@@ -366,7 +370,6 @@ public class AppStatisticsService {
                     resultTable.put(statsType, date, overallStatisticsService.getCumulativeCount(table, dayList, statsType, date));
                 }
             }
-
 
             Map<String, Object> resultMap = Maps.newHashMap();
             resultMap.put("constructId", unitId);

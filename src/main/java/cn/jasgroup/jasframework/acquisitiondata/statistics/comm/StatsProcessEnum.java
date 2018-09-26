@@ -9,11 +9,11 @@ package cn.jasgroup.jasframework.acquisitiondata.statistics.comm;
 public enum StatsProcessEnum {
 
     PIPE("pipe", "管材"),
+    LAY_SURVEYING("lay_surveying", "测量放线"),
     WELD("weld", "焊接"),
     PATCH("patch", "补口"),
-    LAY_SURVEYING("lay_surveying", "测量放线"),
-    LAY_LAND_RESTORATION("lay_land_restoration", "地貌恢复"),
     LAY_PIPE_TRENCH_BACKFILL("lay_pipe_trench_backfill", "管沟回填"),
+    LAY_LAND_RESTORATION("lay_land_restoration", "地貌恢复"),
     ;
 
     private String type;

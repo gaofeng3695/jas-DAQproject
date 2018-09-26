@@ -1,8 +1,11 @@
 package cn.jasgroup.jasframework.acquisitiondata.privilege.dao;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Repository;
 
@@ -287,4 +290,17 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 		sql += " order by t.create_datetime asc";
 		return this.queryForList(sql, null);
 	}
+
+
+	/**
+	 * 根据ID集合查询部门集合
+	 * @param ids unit ID集合
+	 * @return List
+	 */
+	public List<Map<String, String>> getUnitInIds(Collection<String> ids) {
+        String params = "'" + Joiner.on("','").skipNulls().join(ids) + "'";
+	    String sql = "select oid, hierarchy from pri_unit where oid in (" + params + ")";
+        return this.queryForList(sql, null);
+	}
+
 }
