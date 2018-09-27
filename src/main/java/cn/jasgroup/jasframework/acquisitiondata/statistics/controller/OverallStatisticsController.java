@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -38,25 +37,27 @@ public class OverallStatisticsController {
      */
     @PostMapping("processCumulativeCompletion")
     public BaseResult processCumulativeCompletion(@RequestBody Map<String, Object> params) {
-        if (null == params.get("projectOids")) {
+        List<String> projectIds = (List<String>) params.get("projectOids");
+        if (CollectionUtils.isEmpty(projectIds)) {
             return ResultVOUtil.ofStatus(HttpStatus.BAD_REQUEST);
         }
-        return ResultVOUtil.ofSuccess(this.overallStatisticsService.processCumulativeCompletion((List<String>) params.get("projectOids")));
+        return ResultVOUtil.ofSuccess(this.overallStatisticsService.processCumulativeCompletion(projectIds));
     }
 
 
     /**
-     * 各工序分月完成情况对比
+     * 各工序自开工以来分月累计完成情况
      * @param params projectOids
      * @return {@link BaseResult}
      */
     @PostMapping("processMonthlyCompletion")
     public BaseResult processMonthlyCompletion(@RequestBody Map<String, Object> params) {
-        if (null == params.get("projectOids")) {
+        List<String> projectIds = (List<String>) params.get("projectOids");
+        if (CollectionUtils.isEmpty(projectIds)) {
             return ResultVOUtil.ofStatus(HttpStatus.BAD_REQUEST);
         }
 
-        Table<String, Integer, Object> resultTable = this.overallStatisticsService.processMonthlyCompletion((List<String>) params.get("projectOids"));
+        Table<String, String, Object> resultTable = this.overallStatisticsService.processMonthlyCompletion(projectIds);
         return ResultVOUtil.ofSuccess(resultTable.rowMap());
     }
 
@@ -68,11 +69,12 @@ public class OverallStatisticsController {
      */
     @PostMapping("statsDetectionRayPassCount")
     public BaseResult statsDetectionRayPassCount(@RequestBody Map<String, Object> params) {
-        if (CollectionUtils.isEmpty((Collection<?>) params.get("projectOids"))) {
+        List<String> projectIds = (List<String>) params.get("projectOids");
+        if (CollectionUtils.isEmpty(projectIds)) {
             return ResultVOUtil.ofStatus(HttpStatus.BAD_REQUEST);
         }
 
-        return ResultVOUtil.ofSuccess(this.overallStatisticsService.statsDetectionRayPassCount((List<String>) params.get("projectOids")));
+        return ResultVOUtil.ofSuccess(this.overallStatisticsService.statsDetectionRayPassCount(projectIds));
     }
 
 
@@ -87,11 +89,11 @@ public class OverallStatisticsController {
      */
     @PostMapping("dataEntryAudit")
     public BaseResult dataEntryAudit(@RequestBody Map<String, Object> params) {
-
-        if (null == params.get("projectOids")) {
+        List<String> projectIds = (List<String>) params.get("projectOids");
+        if (CollectionUtils.isEmpty(projectIds)) {
             return ResultVOUtil.ofStatus(HttpStatus.BAD_REQUEST);
         }
 
-        return ResultVOUtil.ofSuccess(overallStatisticsService.dataEntryAudit((List<String>) params.get("projectOids")));
+        return ResultVOUtil.ofSuccess(overallStatisticsService.dataEntryAudit((projectIds)));
     }
 }

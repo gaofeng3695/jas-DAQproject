@@ -241,5 +241,18 @@ public class PipeController {
 		}
 		return result;
 	}
-	
+	@RequestMapping(value="/getValveList",method = RequestMethod.POST)
+	@ResponseBody
+	public Object getValveList(HttpServletRequest request,@RequestBody Map<String,String> param){
+		ListResult<Map<String,Object>> result = null;
+		try {
+			String projectOid = param.get("projectOid");
+			List<Map<String,Object>> rows = this.pipeService.getValveList(projectOid);
+			result = new ListResult<>(1, "200", "ok", rows);
+		} catch (Exception e) {
+			result = new ListResult<>(-1, "400", "error");
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

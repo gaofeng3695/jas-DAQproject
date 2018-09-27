@@ -1,28 +1,26 @@
 package cn.jasgroup.jasframework.acquisitiondata.statistics.service;
 
 import cn.jasgroup.framework.data.exception.BusinessException;
-import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.MonthlyEnum;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.StatsPipeEnum;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.StatsProcessEnum;
+import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.StatsUtils;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.dao.OverallStatisticsDao;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.DataEntryAuditBo;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.DateStatsResultBo;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.StatsResultBo;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.WeldInfoBo;
 import com.google.common.collect.*;
+import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static cn.jasgroup.jasframework.acquisitiondata.statistics.comm.StatsPipeEnum.COLD_BEND;
-import static cn.jasgroup.jasframework.acquisitiondata.statistics.comm.StatsPipeEnum.HOT_BEND;
-import static cn.jasgroup.jasframework.acquisitiondata.statistics.comm.StatsPipeEnum.STRAIGHT_STEEL_PIPE;
+import static cn.jasgroup.jasframework.acquisitiondata.statistics.comm.StatsPipeEnum.*;
 
 /**
  * description: 总体统计业务逻辑
@@ -35,117 +33,235 @@ public class OverallStatisticsService {
 
     private static final Logger logger = LoggerFactory.getLogger(OverallStatisticsService.class);
 
+    private static final String YYYY_MM = "yyyy-MM";
+
     @Autowired
     private OverallStatisticsDao overallStatisticsDao;
 
 
     /**
      * 各工序累计完成情况
-     * @param projectOids 项目IDs
+     * @param projectIds 项目IDs
      * @return ProcessCompletionBo
      */
-    public List<StatsResultBo> processCumulativeCompletion(List<String> projectOids) {
+    public List<StatsResultBo> processCumulativeCompletion(List<String> projectIds) {
 
-        List<StatsResultBo> resultList = Lists.newArrayList();
+        // 查询管件信息集合: 焊接关联的
+        List<WeldInfoBo> weldList = this.overallStatisticsDao.listWeldInfo(projectIds);
 
-        // 焊接关联的管件信息
-        List<WeldInfoBo> weldList = this.overallStatisticsDao.listWeldInfo(projectOids);
+        // 查询管件信息集合: 补口关联的焊口关联的
+        List<WeldInfoBo> patchRelationWeldList = this.overallStatisticsDao.listPatchRelationWeldInfo(projectIds);
 
-        // 补口关联的焊口关联的管件信息
-        List<WeldInfoBo> patchRelaWeldList = this.overallStatisticsDao.listPatchRelaWeldInfo(projectOids);
+        // 统计管材, 焊口, 补口
+        StatsResultBo pipeStatsResult = this.overallStatisticsDao.statsPipeLengthByType(projectIds, null);
+        StatsResultBo weldStatsResult = this.statsPipeLengthByType(weldList, projectIds, StatsProcessEnum.WELD.getType());
+        StatsResultBo patchStatsResult = this.statsPipeLengthByType(patchRelationWeldList, projectIds, StatsProcessEnum.PATCH.getType());
 
-        // 管材
-        resultList.addAll(this.overallStatisticsDao.statsPipeLength(projectOids));
 
-        // 焊接/补口
-        resultList.addAll(statsPipeLength(weldList, projectOids, "weld"));
-        resultList.addAll(statsPipeLength(patchRelaWeldList, projectOids, "patch"));
+        // 统计测量放线, 管沟回填, 地貌恢复
+        List<StatsResultBo> otherStatsResultBos = this.overallStatisticsDao.statsOtherLength(projectIds);
+        otherStatsResultBos.stream().filter(bo -> bo.getStatsResult() == null).forEach(bo -> bo.setStatsResult(0));
 
-        // 测量放线, 管沟回填, 地貌恢复
-        resultList.addAll(this.overallStatisticsDao.statsOtherLength(projectOids));
+        List<StatsResultBo> resultList = Lists.newArrayList(pipeStatsResult, weldStatsResult, patchStatsResult);
+        resultList.addAll(otherStatsResultBos);
 
-        return resultList;
+        // 矫正顺序
+        Map<String, Object> typeToBo = resultList.stream().collect(Collectors.toMap(StatsResultBo::getStatsType, StatsResultBo::getStatsResult, (a, b) -> b));
+        return Arrays.stream(StatsProcessEnum.values()).map(anEnum -> new StatsResultBo(anEnum.getType(), typeToBo.get(anEnum.getType()))).collect(Collectors.toList());
     }
 
 
+
     /**
-     * 各工序当前年分月完成情况对比
+     * 各工序分月累计完成情况(自开工以来)
+     * @param projectIds 项目IDs
+     * @return Table<String, String, Object>: rowKey:统计类型, columnKey:月份, value: 长度
      */
-    public  Table<String, Integer, Object> processMonthlyCompletion(List<String> projectOids) {
+    public Table<String, String, Object> processMonthlyCompletion(List<String> projectIds) {
 
-        List<Integer> monthlys = Lists.newArrayList(MonthlyEnum.values()).stream().map(MonthlyEnum::getMonth).collect(Collectors.toList());
+        // 按年月统计: 管材
+        List<DateStatsResultBo> pipeStatsResult = this.overallStatisticsDao.statsPipeLengthMonthly(projectIds);
 
-        // TODO: 测量放线, 管沟回填, 地貌恢复
-        List<DateStatsResultBo> otherStatsResult = this.overallStatisticsDao.statsOtherLengthMonthly(projectOids);
+        // 按年月统计: 测量放线, 管够回填, 地貌回复
+        List<DateStatsResultBo> otherStatsResult = this.overallStatisticsDao.statsOtherLengthMonthly(projectIds);
 
-        // TODO: 管材
-        List<DateStatsResultBo> pipeStatsResult = this.overallStatisticsDao.statsPipeLengthMonthly(projectOids);
 
-        // TODO: 焊接
-        List<WeldInfoBo> weldInfoBos = this.overallStatisticsDao.listWeldInfoCurrentYear(projectOids);
-        List<DateStatsResultBo> weldStatsResult = getDateStatsResults(weldInfoBos);
+        // 查询管件信息集合: 焊口信息的
+        List<WeldInfoBo> weldInfoBos = this.overallStatisticsDao.listWeldInfoMonthly(projectIds);
 
-        // TODO: 补口
-        List<WeldInfoBo> patchRelaWelInfoBos = this.overallStatisticsDao.listPatchRelaWeldInfoByYear(projectOids);
-        List<DateStatsResultBo> patchStatsResult = getDateStatsResults(patchRelaWelInfoBos);
+        // 查询管件信息集合: 补口关联的焊口信息的
+        List<WeldInfoBo> patchRelationWelds = this.overallStatisticsDao.listPatchRelationWeldInfoByYear(projectIds);
 
-        List<DateStatsResultBo> statsResult = Lists.newArrayList();
-        statsResult.addAll(pipeStatsResult);
-        statsResult.addAll(weldStatsResult);
-        statsResult.addAll(patchStatsResult);
-        statsResult.addAll(otherStatsResult);
+        List<WeldInfoBo> totalWeldList = Lists.newArrayList(weldInfoBos);
+        totalWeldList.addAll(patchRelationWelds);
 
-        // 初始化table(rowKey:统计类型, columnKey:月份, value: 长度)
-        Table<String, Integer, Object> table = HashBasedTable.create();
+        // 查询要统计的管件长度Map
+        Map<String, Map<String, Double>> pipeLengthMap = this.getPipeLengthMap(totalWeldList);
 
-        // 初始化分月数据
-        for (StatsProcessEnum processEnum : StatsProcessEnum.values()) {
-            for (MonthlyEnum monthlyEnum : MonthlyEnum.values()) {
-                table.put(processEnum.getType(), monthlyEnum.getMonth(), 0);
-            }
-        }
+        List<DateStatsResultBo> weldStatsResult = getDateStatsResult(StatsProcessEnum.WELD.getType(), weldInfoBos, pipeLengthMap);
+        List<DateStatsResultBo> patchStatsResult = getDateStatsResult(StatsProcessEnum.PATCH.getType(), patchRelationWelds, pipeLengthMap);
 
-        statsResult.forEach(bo -> table.put(bo.getStatsType(), bo.getStatsMonth(), bo.getStatsResult()==null?0:bo.getStatsResult()));
+        List<DateStatsResultBo> resultBos = Lists.newArrayList();
+        resultBos.addAll(pipeStatsResult);
+        resultBos.addAll(weldStatsResult);
+        resultBos.addAll(patchStatsResult);
+        resultBos.addAll(otherStatsResult);
 
-        int currentMonth = LocalDate.now().getMonthValue();
-        // 计算累积结果
-        Table<String, Integer, Object> resultTable = HashBasedTable.create();
-        MonthlyEnum[] monthlyEnums = MonthlyEnum.values();
+        // 统计从开工年月开始: 找出最早的年月做统计开始日期
+        OptionalLong minTimestamp = resultBos.stream().mapToLong(value -> StatsUtils.strToDateLong(value.getStatsDate(), YYYY_MM)).min();
+
+        // 生成连续的年月集合: 根据统计开始日期和结束日期
+        List<String> monthlyList = StatsUtils.genContinuityYearMonthStr(new Date(minTimestamp.getAsLong()), new Date(), YYYY_MM);
+
+        // 初始化table生成连续的月份(为了保证顺序, 这里用ArrayTable先初始化一下)
+        List<String> typeList = Arrays.stream(StatsProcessEnum.values()).map(StatsProcessEnum::getType).collect(Collectors.toList());
+        Table<String, String, Object> table = ArrayTable.create(typeList, monthlyList);
+        initTable(monthlyList, table);
+
+        // Table赋值
+        resultBos.forEach(bo -> table.put(bo.getStatsType(), bo.getStatsDate(), bo.getStatsResult()==null?0:bo.getStatsResult()));
+
+        // 计算累积结果: 每个统计类型下的年月统计值=之前月份累计只和
+        Table<String, String, Object> resultTable = ArrayTable.create(typeList, monthlyList);
         for (String statsType : table.rowKeySet()) {
-            for (int i = 0; i < currentMonth; i++) {
-                resultTable.put(statsType, monthlyEnums[i].getMonth(), this.getCumulativeCount(table, statsType, monthlyEnums[i].getMonth()));
+            for (String yearMonth : monthlyList) {
+                resultTable.put(statsType, yearMonth, getCumulativeCount(table, monthlyList, statsType, yearMonth));
             }
         }
 
         return resultTable;
     }
 
-    private List<DateStatsResultBo> getDateStatsResults(List<WeldInfoBo> weldInfoBos) {
-        List<StatsResultBo> pipeLengthResult = getPipeLength(weldInfoBos);
-        Map<String, Double> idToLengthMap = new HashMap<>();
-        for (StatsResultBo bo : pipeLengthResult) {
-            Double pipeLength = bo.getStatsResult()==null ? 0d:Double.parseDouble(bo.getStatsResult().toString());
-            idToLengthMap.put(bo.getOid(), pipeLength);
+    public static void main(String[] args) {
+
+//        Table<String, String, Integer> table = TreeBasedTable.create();
+//        Table<String, String, Integer> table = HashBasedTable.create();
+
+        List<String> typeList = Lists.newArrayList("c", "a", "b");
+        List<String> dateList = Lists.newArrayList("2018-09", "2018-08", "2018-10");
+
+        Table<String, String, Integer> table = ArrayTable.create(typeList, dateList);
+        for (String type : typeList) {
+            for (String date : dateList) {
+                System.out.println("type:"+type+ ", date:"+date);
+                table.put(type, date, 0);
+            }
         }
 
-        Set<Integer> monthSet = weldInfoBos.stream().map(WeldInfoBo::getStatsMonth).collect(Collectors.toSet());
+        System.out.println(new Gson().toJson(table.rowMap()));
+    }
+
+    /**
+     * 初始化统计Table
+     * @param dateList 连续日期(横轴: column key)
+     * @param table Table
+     */
+    public void initTable(List<String> dateList, Table<String, String, Object> table) {
+        for (StatsProcessEnum processEnum : StatsProcessEnum.values()) {
+            for (String date : dateList) {
+                logger.info("process:{}, date:{}", processEnum.getType(), date);
+                table.put(processEnum.getType(), date, 0);
+            }
+        }
+    }
+
+
+    /**
+     * 计算累计值: 计算统计日期之前所有日期统计值之和
+     * @param table 统计Table
+     * @param dateList 连续年月日期(必须有序)
+     * @param rowKey 统计类型
+     * @param columnKey 统计日期
+     * @return Double
+     */
+    public Object getCumulativeCount(Table<String, String, Object> table, List<String> dateList, String rowKey, String columnKey) {
+        int index = dateList.indexOf(columnKey);
+        if (0 == index) {
+            return table.get(rowKey, columnKey);
+        }
+        Double count = 0d;
+        List<String> beforeYearMonths = Lists.partition(dateList, index).get(0);
+        for (String beforeYearMonth : beforeYearMonths) {
+            count = Double.sum(count, Double.parseDouble(table.get(rowKey, beforeYearMonth).toString()));
+        }
+
+        return Double.sum(count, Double.parseDouble(table.get(rowKey, columnKey).toString()));
+    }
+
+
+    /**
+     * 获取按年月分类的统计结果
+     * @param statsType 统计类型
+     * @param weldInfoBos 焊口信息集合
+     * @param pipeLengthMap 管材长度
+     * @return List
+     */
+    public List<DateStatsResultBo> getDateStatsResult(String statsType, List<WeldInfoBo> weldInfoBos, Map<String, Map<String, Double>> pipeLengthMap) {
+        // WeldInfoList根据年月字段分组(key: 日期, value: 焊口信息集合)
+        Map<String, List<WeldInfoBo>> dateToWeldInfoList = weldInfoBos.stream().collect(Collectors.groupingBy(WeldInfoBo::getStatsDate, Collectors.toList()));
         List<DateStatsResultBo> weldStatsResult = Lists.newArrayList();
-        for (Integer month : monthSet) {
-            Set<String> pipeOidsForMonth = this.getWeldPipeIdsByMonth(weldInfoBos, month);
-            weldStatsResult.add(new DateStatsResultBo("weld", this.sumPipeLength(idToLengthMap, pipeOidsForMonth), month));
+        for (String date : dateToWeldInfoList.keySet()) {
+            Double sumResult = this.statsPipeLength(pipeLengthMap, dateToWeldInfoList.get(date));
+            weldStatsResult.add(new DateStatsResultBo(statsType, date, sumResult));
         }
-
         return weldStatsResult;
     }
 
-    private List<StatsResultBo> getPipeLength(List<WeldInfoBo> weldInfoBos) {
-        List<String> pipeIds = getWeldPipeIdsByType(weldInfoBos, StatsPipeEnum.STRAIGHT_STEEL_PIPE);
-        List<String> hotIds = getWeldPipeIdsByType(weldInfoBos, StatsPipeEnum.HOT_BEND);
-        List<String> coldIds = getWeldPipeIdsByType(weldInfoBos, StatsPipeEnum.COLD_BEND);
-        return this.overallStatisticsDao.queryPipeLengthOidIn(ImmutableMap.of(
-                STRAIGHT_STEEL_PIPE.getCode(), pipeIds, HOT_BEND.getCode(), hotIds, COLD_BEND.getCode(), coldIds
-        ));
+
+    /**
+     * 获取每种类型管子的长度(直钢管, 热煨弯管, 冷弯管)
+     * @param weldInfoBos 焊口信息集合
+     * @return Map<String, Map<String, Double>> (key:管件类型, value:[Map：id-length])
+     */
+    public Map<String, Map<String, Double>> getPipeLengthMap( List<WeldInfoBo> weldInfoBos) {
+        Set<String> straightPipeIds = getWeldPipeIdsByType(weldInfoBos, STRAIGHT_STEEL_PIPE);
+        Set<String> hotBendIds = getWeldPipeIdsByType(weldInfoBos, HOT_BEND);
+        Set<String> coldBendIds = getWeldPipeIdsByType(weldInfoBos, COLD_BEND);
+
+        List<StatsResultBo> straightPipeLengthList = Lists.newArrayList();
+        List<StatsResultBo> hotBendLengthList = Lists.newArrayList();
+        List<StatsResultBo> coldBendLengthList = Lists.newArrayList();
+        if (!CollectionUtils.isEmpty(straightPipeIds)) {
+            straightPipeLengthList = this.overallStatisticsDao.queryStraightPipeLength(straightPipeIds);
+        }
+
+        if (!CollectionUtils.isEmpty(hotBendIds)) {
+            hotBendLengthList = this.overallStatisticsDao.queryHotBendLength(hotBendIds);
+        }
+
+        if (!CollectionUtils.isEmpty(coldBendIds)) {
+            coldBendLengthList = this.overallStatisticsDao.queryColdBendLength(coldBendIds);
+        }
+
+        Map<String, Double> straightLengthMap = straightPipeLengthList.stream().collect(Collectors.toMap(StatsResultBo::getStatsType, statsResultBo -> Double.parseDouble(statsResultBo.getStatsResult().toString()), (a, b) -> b));
+        Map<String, Double> hotBendLengthMap = hotBendLengthList.stream().collect(Collectors.toMap(StatsResultBo::getStatsType, statsResultBo -> Double.parseDouble(statsResultBo.getStatsResult().toString()) , (a, b) -> b));
+        Map<String, Double> coldBendLengthMap = coldBendLengthList.stream().collect(Collectors.toMap(StatsResultBo::getStatsType, statsResultBo -> Double.parseDouble(statsResultBo.getStatsResult().toString()), (a, b) -> b));
+
+        Map<String, Map<String, Double>> returnMap = Maps.newHashMap();
+        returnMap.put(STRAIGHT_STEEL_PIPE.getCode(), straightLengthMap);
+        returnMap.put(HOT_BEND.getCode(), hotBendLengthMap);
+        returnMap.put(COLD_BEND.getCode(), coldBendLengthMap);
+        return returnMap;
     }
+
+
+    /**
+     * 统计管件长度
+     * @param pipeLengthMap 管件长度Maps
+     * @param weldInfoBos 焊口信息集合
+     * @return Double
+     */
+    public Double statsPipeLength(Map<String, Map<String, Double>> pipeLengthMap, List<WeldInfoBo> weldInfoBos) {
+        Set<String> straightPipeIds = getWeldPipeIdsByType(weldInfoBos, STRAIGHT_STEEL_PIPE);
+        Set<String> hotBends = getWeldPipeIdsByType(weldInfoBos, HOT_BEND);
+        Set<String> coldBends = getWeldPipeIdsByType(weldInfoBos, COLD_BEND);
+
+        Double straightPipeLength = sumPipeLength(pipeLengthMap.get(STRAIGHT_STEEL_PIPE.getCode()), straightPipeIds);
+        Double hotBendLength = sumPipeLength(pipeLengthMap.get(HOT_BEND.getCode()), hotBends);
+        Double coldBendLength = sumPipeLength(pipeLengthMap.get(COLD_BEND.getCode()), coldBends);
+        return StatsUtils.sumExact(straightPipeLength, hotBendLength, coldBendLength);
+    }
+
 
 
     /**
@@ -156,80 +272,21 @@ public class OverallStatisticsService {
      */
     private Double sumPipeLength(Map<String, Double> idToLengthMap, Set<String> pipeIds) {
         List<Double> sumList = pipeIds.stream().map(idToLengthMap::get).collect(Collectors.toList());
-        return sumList.stream().mapToDouble(s -> (s == null ? 0 : s)).sum();
+        return StatsUtils.sumExact(sumList);
     }
 
-    private List<String> getWeldPipeIdsByType(List<WeldInfoBo> weldInfoBos, StatsPipeEnum statsPipeEnum) {
-        List<String> pipeOidList = Lists.newArrayList();
+    private Set<String> getWeldPipeIdsByType(List<WeldInfoBo> weldInfoBos, StatsPipeEnum statsPipeEnum) {
+        Set<String> pipeIds = new HashSet<>();
         for (WeldInfoBo weldInfoBo : weldInfoBos) {
             if (statsPipeEnum.getCode().equals(weldInfoBo.getFrontPipeType())) {
-                pipeOidList.add(weldInfoBo.getFrontPipeOid());
+                pipeIds.add(weldInfoBo.getFrontPipeOid());
             }
 
             if (statsPipeEnum.getCode().equals(weldInfoBo.getBackPipeType())) {
-                pipeOidList.add(weldInfoBo.getBackPipeOid());
+                pipeIds.add(weldInfoBo.getBackPipeOid());
             }
         }
-        return pipeOidList;
-    }
-
-    private Set<String> getWeldPipeIdsByMonth(List<WeldInfoBo> weldInfoBos, Integer month) {
-        Set<String> pipeOidList = Sets.newHashSet();
-        for (WeldInfoBo weldInfoBo : weldInfoBos) {
-            if (month.equals(weldInfoBo.getStatsMonth())) {
-                pipeOidList.add(weldInfoBo.getFrontPipeOid());
-                pipeOidList.add(weldInfoBo.getBackPipeOid());
-            }
-        }
-        return pipeOidList;
-    }
-
-    private Double getCumulativeCount(Table<String, Integer, Object> table, String rowKey, Integer columnKey) {
-        Double count = 0d;
-        for (Integer i = 0; i < columnKey; i++) {
-            count = Double.sum(count, Double.parseDouble(table.get(rowKey, i+1).toString()));
-        }
-        return count;
-    }
-
-
-
-
-    /**
-     * 统计焊口信息中前后管件长度(按月分类统计)
-     * 只计算{@link StatsPipeEnum} 这几种管子的长度)
-     * @param weldList 焊口信息集合
-     * @param projectOids 项目ID
-     * @param statsType 统计类型的标识(焊接和补口可以共用)
-     * @return List
-     */
-    private List<DateStatsResultBo> statsPipeLengthMonthly(List<WeldInfoBo> weldList, List<String> projectOids, String statsType) {
-        List<String> straightSteelPipes = Lists.newArrayList(), hotBends = Lists.newArrayList(), coldBends = Lists.newArrayList();
-        weldList.forEach(bo -> {
-            // 前管件
-            if (StatsPipeEnum.STRAIGHT_STEEL_PIPE.getCode().equals(bo.getFrontPipeType())) {
-                straightSteelPipes.add(bo.getFrontPipeOid());
-            } else if (StatsPipeEnum.HOT_BEND.getCode().equals(bo.getFrontPipeType())) {
-                hotBends.add(bo.getFrontPipeOid());
-            } else if (StatsPipeEnum.COLD_BEND.getCode().equals(bo.getFrontPipeType())) {
-                coldBends.add(bo.getFrontPipeOid());
-            }
-
-            // 后管件
-            if (StatsPipeEnum.STRAIGHT_STEEL_PIPE.getCode().equals(bo.getBackPipeType())) {
-                straightSteelPipes.add(bo.getBackPipeOid());
-            } else if (StatsPipeEnum.HOT_BEND.getCode().equals(bo.getBackPipeType())) {
-                hotBends.add(bo.getBackPipeOid());
-            } else if (StatsPipeEnum.COLD_BEND.getCode().equals(bo.getBackPipeType())) {
-                coldBends.add(bo.getBackPipeOid());
-            }
-        });
-
-        List<StatsResultBo> resultBos = this.overallStatisticsDao.statsPipeLength(statsType,
-                ImmutableMap.of("projectOids", projectOids, StatsPipeEnum.STRAIGHT_STEEL_PIPE.getCode(), straightSteelPipes,
-                        StatsPipeEnum.HOT_BEND.getCode(), hotBends, StatsPipeEnum.COLD_BEND.getCode(), coldBends));
-
-        return null;
+        return pipeIds;
     }
 
 
@@ -237,11 +294,14 @@ public class OverallStatisticsService {
      * 统计焊口信息中的前后管件长度
      * 只计算{@link StatsPipeEnum} 这几种管子的长度
      * @param weldList 焊口信息集合
-     * @param projectOids 项目ID
+     * @param projectIds 项目ID
      * @param statsType 统计类型的标识(焊接和补口可以共用)
      * @return List
      */
-    private List<StatsResultBo> statsPipeLength(List<WeldInfoBo> weldList, List<String> projectOids, String statsType) {
+    public StatsResultBo statsPipeLengthByType(List<WeldInfoBo> weldList, List<String> projectIds, String statsType) {
+        if (CollectionUtils.isEmpty(weldList)) {
+            return new StatsResultBo(statsType, 0);
+        }
         List<String> straightSteelPipes = Lists.newArrayList(), hotBends = Lists.newArrayList(), coldBends = Lists.newArrayList();
         weldList.forEach(bo -> {
             // 前管件
@@ -263,20 +323,21 @@ public class OverallStatisticsService {
             }
         });
 
-        List<StatsResultBo> resultBos = this.overallStatisticsDao.statsPipeLength(statsType,
-                ImmutableMap.of("projectOids", projectOids, StatsPipeEnum.STRAIGHT_STEEL_PIPE.getCode(), straightSteelPipes,
+        return this.overallStatisticsDao.statsPipeLengthByType(statsType,
+                ImmutableMap.of("projectOids", projectIds,
+                        StatsPipeEnum.STRAIGHT_STEEL_PIPE.getCode(), straightSteelPipes,
                         StatsPipeEnum.HOT_BEND.getCode(), hotBends, StatsPipeEnum.COLD_BEND.getCode(), coldBends));
-        if (CollectionUtils.isEmpty(resultBos)) {
-            logger.info("[工序累计统计]类型{}统计结果为空", statsType);
-            return Lists.newArrayList(new StatsResultBo(statsType, 0));
-        }
 
-        return resultBos;
     }
 
 
-    public Map<String, Integer> statsDetectionRayPassCount(List<String> projectOids) {
-        List<Map<String, Integer>> returnList = this.overallStatisticsDao.statsDetectionRayPassCount(projectOids);
+    /**
+     * 统计射线检测一次性合格率
+     * @param projectIds 项目IDs
+     * @return Map
+     */
+    public Map<String, Integer> statsDetectionRayPassCount(List<String> projectIds) {
+        List<Map<String, Integer>> returnList = this.overallStatisticsDao.statsDetectionRayPassCount(projectIds);
         if (CollectionUtils.isEmpty(returnList)) {
             throw new BusinessException("recourse not found", "404");
         }
@@ -291,11 +352,11 @@ public class OverallStatisticsService {
 
     /**
      * 数据录入/审核数量情况统计
-     * @param projectOids 项目IDs
+     * @param projectIds 项目IDs
      * @return DataEntryAuditBo
      */
-    public DataEntryAuditBo dataEntryAudit(List<String> projectOids) {
-        List<DataEntryAuditBo> dataEntryAuditBos = this.overallStatisticsDao.dataEntryAudit(projectOids);
+    public DataEntryAuditBo dataEntryAudit(List<String> projectIds) {
+        List<DataEntryAuditBo> dataEntryAuditBos = this.overallStatisticsDao.dataEntryAudit(projectIds);
         return new DataEntryAuditBo(
                 dataEntryAuditBos.stream().mapToInt(DataEntryAuditBo::getTotal).sum(),
                 dataEntryAuditBos.stream().mapToInt(DataEntryAuditBo::getNeedAudit).sum(),

@@ -37,7 +37,7 @@ public class MedianStakeDao extends BaseJdbcDao{
 		if(StringUtils.isNotBlank(pipelineOid)){
 			sql +=" and t.pipeline_oid='"+pipelineOid+"'";
 		}
-		sql += " order by t.median_stake_code";
+		sql += " order by t.mileage,t.median_stake_code";
 		return this.baseJdbcDao.queryForList(sql, null);
 	}
 	

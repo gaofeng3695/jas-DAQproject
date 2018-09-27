@@ -16,6 +16,7 @@
 	http://www.springframework.org/schema/rabbit 
 	http://www.springframework.org/schema/rabbit/spring-rabbit.xsd">
 
+	  
 	<!-- 注入ApplicationContext，开发人员可以使用 WebContextFactoryUtil提供的getBean方法获取注入的bean对象 -->
 	<bean class="cn.jasgroup.jasframework.utils.web.WebContextFactoryUtil"></bean>
 	
@@ -214,6 +215,22 @@
 	<!-- ==============异常处理切面配置 结束 ============== -->
 
 
+	<!-- gis  -->
+	<bean id="geodataProcessService" class="cn.jasgroup.gis.dataprocess.opengis.GeodataProcessService">
+	    <property name="geometryService" ref="geometryService" ></property>
+	    <property name="jdbcTemplate" ref="namedParameterJdbcTemplate" ></property>
+	</bean>
+	<bean id="geodataPersistenceService" class="cn.jasgroup.gis.data.opengis.GeodataPersistenceService" >
+	    <property name="geodataAccessService" ref="geodataAccessService" ></property>
+	    <property name="geodataProcessService" ref="geodataProcessService" ></property>
+	    <property name="jdbcTemplate" ref="namedParameterJdbcTemplate" ></property>
+	</bean>
+	<bean id="geometryService" class="cn.jasgroup.gis.geometryservice.opengis.GeometryService">
+	    <property name="jdbcTemplate" ref="namedParameterJdbcTemplate" ></property>
+	</bean>
+	<bean id="geodataAccessService" class="cn.jasgroup.gis.dataaccess.opengis.GeodataAccessService" init-method="init">
+	    <property name="jdbcTemplate" ref="namedParameterJdbcTemplate" ></property>
+	</bean>
 
 
 	<!-- redisTemplate配置开始 -->
@@ -265,8 +282,6 @@
 		 <property name="jdbcTemplate"  ref="baseNamedParameterJdbcTemplate" />  
 	</bean> 
 	
-	<bean id="geodataPersistenceService" class="cn.jasgroup.jasopengis.data.jdbc.GeodataPersistenceService"/>  
-    <bean id="geodataProcessService" class="cn.jasgroup.jasopengis.dataprocess.jdbc.GeodataProcessService"/> 
     <!--rabbit mq配置-->  
     <!--配置connection-factory，指定连接rabbit server参数 -->  
     <rabbit:connection-factory 
@@ -298,7 +313,7 @@
      
     
     <!-- 消息接收者 -->
-    <bean id="spatialListener" class="cn.jasgroup.jasopengis.data.jdbc.SpatialPersistenceListener"></bean>  
+    <bean id="spatialListener" class="cn.jasgroup.gis.data.opengis.SpatialPersistenceListener"></bean>
     <!-- queue litener 观察 监听模式 当有消息到达时会通知监听在对应的队列上的监听对象 -->  
     <rabbit:listener-container connection-factory="rabbitConnectionFactory" acknowledge="manual">  <!--  -->
          <rabbit:listener  queues="mq.spatial"  ref="spatialListener"/>  
