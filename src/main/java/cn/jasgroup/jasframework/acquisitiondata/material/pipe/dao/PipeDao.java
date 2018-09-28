@@ -51,7 +51,7 @@ public class PipeDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getMaterialPipeList(String projectOid){
-		String sql = "select oid as key,pipe_code as value,back_is_use,front_is_use,is_cold_bend from daq_material_pipe where active=1";
+		String sql = "select oid as key,pipe_code as value,back_is_use,front_is_use,is_cold_bend,project_oid from daq_material_pipe where active=1";
 		if(StringUtils.isNotBlank(projectOid)){
 			sql += " and project_oid='"+projectOid+"'";
 		}
@@ -67,7 +67,7 @@ public class PipeDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getMaterialPipeList(List<String> projectOids){
-		String sql = "select oid as key,pipe_code as value,back_is_use,front_is_use,is_cold_bend from daq_material_pipe where active=1";
+		String sql = "select oid as key,pipe_code as value,back_is_use,front_is_use,is_cold_bend,project_oid from daq_material_pipe where active=1";
 		Map<String,Object> param = new HashMap<String,Object>();
 		if(projectOids!=null && projectOids.size()>0){
 			sql += " and project_oid in (:projectOids)";
@@ -85,7 +85,7 @@ public class PipeDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getMaterialHotBendsList(String projectOid){
-		String sql = "select oid as key,hot_bends_code as value,back_is_use,front_is_use from daq_material_hot_bends where active=1";
+		String sql = "select oid as key,hot_bends_code as value,back_is_use,front_is_use,project_oid from daq_material_hot_bends where active=1";
 		if(StringUtils.isNotBlank(projectOid)){
 			sql += " and project_oid='"+projectOid+"'";
 		}
@@ -101,7 +101,7 @@ public class PipeDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getMaterialHotBendsList(List<String> projectOids){
-		String sql = "select oid as key,hot_bends_code as value,back_is_use,front_is_use from daq_material_hot_bends where active=1";
+		String sql = "select oid as key,hot_bends_code as value,back_is_use,front_is_use,project_oid from daq_material_hot_bends where active=1";
 		Map<String,Object> param = new HashMap<String,Object>();
 		if(projectOids!=null && projectOids.size()>0){
 			sql += " and project_oid in (:projectOids)";
@@ -119,7 +119,7 @@ public class PipeDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getMaterialTeeList(String projectOid){
-		String sql = "select oid as key,tee_code as value,is_use from daq_material_tee  t where active=1";
+		String sql = "select oid as key,tee_code as value,is_use from daq_material_tee,project_oid  t where active=1";
 		if(StringUtils.isNotBlank(projectOid)){
 			sql += " and project_oid='"+projectOid+"'";
 		}
@@ -135,7 +135,7 @@ public class PipeDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getMaterialTeeList(List<String> projectOids){
-		String sql = "select oid as key,tee_code as value,is_use from daq_material_tee  t where active=1";
+		String sql = "select oid as key,tee_code as value,is_use from daq_material_tee,project_oid  t where active=1";
 		Map<String,Object> param = new HashMap<String,Object>();
 		if(projectOids!=null && projectOids.size()>0){
 			sql += " and project_oid in (:projectOids)";
@@ -153,7 +153,7 @@ public class PipeDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getMaterialJnsulatedJointList(String projectOid){
-		String sql = "select oid as key,manufacturer_code as value,is_use from daq_material_insulated_joint t where active=1";
+		String sql = "select oid as key,manufacturer_code as value,is_use,project_oid from daq_material_insulated_joint t where active=1";
 		if(StringUtils.isNotBlank(projectOid)){
 			sql += " and project_oid='"+projectOid+"'";
 		}
@@ -169,7 +169,7 @@ public class PipeDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getMaterialJnsulatedJointList(List<String> projectOids){
-		String sql = "select oid as key,manufacturer_code as value,is_use from daq_material_insulated_joint t where active=1";
+		String sql = "select oid as key,manufacturer_code as value,is_use,project_oid from daq_material_insulated_joint t where active=1";
 		Map<String,Object> param = new HashMap<String,Object>();
 		if(projectOids!=null && projectOids.size()>0){
 			sql += " and project_oid in (:projectOids)";
@@ -187,7 +187,7 @@ public class PipeDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getMaterialReducerList(String projectOid){
-		String sql = "select oid as key,reducer_code as value,is_use from daq_material_reducer t where active=1";
+		String sql = "select oid as key,reducer_code as value,is_use,project_oid from daq_material_reducer t where active=1";
 		if(StringUtils.isNotBlank(projectOid)){
 			sql += " and project_oid='"+projectOid+"'";
 		}
@@ -203,7 +203,7 @@ public class PipeDao {
 	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getMaterialReducerList(List<String> projectOids){
-		String sql = "select oid as key,reducer_code as value,is_use from daq_material_reducer t where active=1";
+		String sql = "select oid as key,reducer_code as value,is_use,project_oid from daq_material_reducer t where active=1";
 		Map<String,Object> param = new HashMap<String,Object>();
 		if(projectOids!=null && projectOids.size()>0){
 			sql += " and project_oid in (:projectOids)";
@@ -221,7 +221,7 @@ public class PipeDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getMaterialClosureList(String projectOid){
-		String sql = "select oid as key,closure_code as value,is_use from daq_material_closure t where active=1";
+		String sql = "select oid as key,closure_code as value,is_use,project_oid from daq_material_closure t where active=1";
 		if(StringUtils.isNotBlank(projectOid)){
 			sql += " and project_oid='"+projectOid+"'";
 		}
@@ -237,7 +237,7 @@ public class PipeDao {
 	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getMaterialClosureList(List<String> projectOids){
-		String sql = "select oid as key,closure_code as value,is_use from daq_material_closure t where active=1";
+		String sql = "select oid as key,closure_code as value,is_use,project_oid from daq_material_closure t where active=1";
 		Map<String,Object> param = new HashMap<String,Object>();
 		if(projectOids!=null && projectOids.size()>0){
 			sql += " and project_oid in (:projectOids)";
@@ -254,7 +254,7 @@ public class PipeDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>>getPipeColdBendingList(List<String> projectOids){
-		String sql = "select t.oid as key,t.pipe_cold_bending_code as value,t.tenders_oid,t.front_is_use,back_is_use,t.approve_status,t.pipe_segment_or_cross_oid "
+		String sql = "select t.oid as key,t.pipe_cold_bending_code as value,t.tenders_oid,t.front_is_use,back_is_use,t.approve_status,t.pipe_segment_or_cross_oid,project_oid "
 				+ "from daq_material_pipe_cold_bending t "
 				+ "where t.active=1";
 		Map<String,Object> param = new HashMap<String,Object>();
@@ -275,7 +275,7 @@ public class PipeDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String, Object>> getValveList(String projectOid) {
-		String sql = "select oid as key,valve_name as value from daq_material_valve where active=1";
+		String sql = "select oid as key,valve_name as value,project_oid from daq_material_valve where active=1";
 		if(StringUtils.isNotBlank(projectOid)){
 			sql += " and project_oid='"+projectOid+"'";
 		}
@@ -292,7 +292,7 @@ public class PipeDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String, Object>> getValveList(List<String> projectOids) {
-		String sql = "select t.oid as key, t.valve_name as value, t.is_use from daq_material_valve t where t.active=1";
+		String sql = "select t.oid as key, t.valve_name as value, t.is_use,project_oid from daq_material_valve t where t.active=1";
 		Map<String,Object> param = new HashMap<String,Object>();
 		if(projectOids!=null && projectOids.size()>0){
 			sql += " and t.project_oid in (:projectOids)";
