@@ -119,7 +119,7 @@ public class PipeDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getMaterialTeeList(String projectOid){
-		String sql = "select oid as key,tee_code as value,is_use from daq_material_tee,project_oid  t where active=1";
+		String sql = "select oid as key,tee_code as value,is_use,project_oid from daq_material_tee t where active=1";
 		if(StringUtils.isNotBlank(projectOid)){
 			sql += " and project_oid='"+projectOid+"'";
 		}
@@ -135,7 +135,7 @@ public class PipeDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getMaterialTeeList(List<String> projectOids){
-		String sql = "select oid as key,tee_code as value,is_use from daq_material_tee,project_oid  t where active=1";
+		String sql = "select oid as key,tee_code as value,is_use,project_oid from daq_material_tee t where active=1";
 		Map<String,Object> param = new HashMap<String,Object>();
 		if(projectOids!=null && projectOids.size()>0){
 			sql += " and project_oid in (:projectOids)";
