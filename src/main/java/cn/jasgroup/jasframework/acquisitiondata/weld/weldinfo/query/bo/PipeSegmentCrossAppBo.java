@@ -5,16 +5,11 @@ import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 
 /**
  * 
- * <p>
- * 类描述：焊口信息。
- * </p>
- * 
- * @author 雷凯 。
- * @version v1.0.0.1。
- * @since JDK1.8。
- *        <p>
- * 		创建日期：2018年9月20日 上午10:28:52。
- *        </p>
+  *<p>类描述：。</p>
+  * @author 雷凯 。
+  * @version v1.0.0.1。
+  * @since JDK1.8。
+  *<p>创建日期：2018年9月27日 下午6:52:14。</p>
  */
 public class PipeSegmentCrossAppBo extends BaseBo {
 	/**
