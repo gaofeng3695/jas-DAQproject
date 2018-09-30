@@ -1,6 +1,5 @@
 package cn.jasgroup.jasframework.app.appversion.controller;
 
-import cn.jasgroup.framework.automation.base.utils.CollectionUtil;
 import cn.jasgroup.framework.data.exception.BusinessException;
 import cn.jasgroup.framework.data.result.BaseResult;
 import cn.jasgroup.jasframework.acquisitiondata.utils.ResultVOUtil;
