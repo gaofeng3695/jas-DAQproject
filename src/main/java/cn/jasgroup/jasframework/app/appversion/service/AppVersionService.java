@@ -19,7 +19,7 @@ public class AppVersionService {
     @Autowired
     private AppVersionDao appVersionDao;
 
-    public List<Map<String, Object>> getActiveVersion(String productId, String clientType) {
+    public List<AppVersionBo> getActiveVersion(String productId, String clientType) {
         return this.appVersionDao.getActiveVersion(productId, clientType);
     }
 }
