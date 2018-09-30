@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import java.text.NumberFormat;
 import java.time.LocalDate;
@@ -147,6 +146,12 @@ public class AppStatisticsService {
 
         List<DataApproveSubBo> dataApproveSubBos = this.appStatisticsDao.listDataAuditing(projectOid, supervisionUnits, unitIds, unitType);
 
+        if (UnitHierarchyEnum.construct_unit.getHierarchy().equals(unitType)) {
+            this.wrapperStatsInfo(dataApproveSubBos, ApproveStatisticsBlock.APPROVE_CATEGORY_DETECTION);
+        } else if (UnitHierarchyEnum.detection_unit.getHierarchy().equals(unitType)) {
+            this.wrapperStatsInfo(dataApproveSubBos, ApproveStatisticsBlock.APPROVE_CATEGORY_NON_DETECTION);
+        }
+
         // 包装统计结果的中文名
         dataApproveSubBos.forEach(bo -> bo.setCnName(ApproveStatisticsBlock.ALL.get(bo.getCode()).getCnName()));
 
@@ -167,6 +172,14 @@ public class AppStatisticsService {
         }
 
         return returnList;
+    }
+
+
+    private void wrapperStatsInfo(List<DataApproveSubBo> dataApproveSubBos, Map<String, Map<String, ApproveStatisticsBlock>> statsBlock) {
+        for (String categoryCode : statsBlock.keySet()) {
+            Map<String, ApproveStatisticsBlock> subCodes = statsBlock.get(categoryCode);
+            subCodes.keySet().stream().map(subCode -> new DataApproveSubBo(subCode, categoryCode, 0, 0)).forEach(dataApproveSubBos::add);
+        }
     }
 
 

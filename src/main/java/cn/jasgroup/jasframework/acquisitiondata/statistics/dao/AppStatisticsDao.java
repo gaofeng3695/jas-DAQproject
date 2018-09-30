@@ -85,12 +85,12 @@ public static void main(String[] args) {
     public List<DataApproveSubBo> listDataAuditing(String projectOid, List<String> supervisionUnits, List<String> unitIds, String unitType) {
 
         List<String> codeList;
-        // 施工单位
-        if (UnitHierarchyEnum.detection_unit.getHierarchy().equals(unitType)) {
+
+        if (UnitHierarchyEnum.detection_unit.getHierarchy().equals(unitType)) { // 检测单位
             codeList = new ArrayList<>(ApproveStatisticsBlock.PIPE_INSPECTION_BLOCK.keySet());
-        } else if (UnitHierarchyEnum.construct_unit.getHierarchy().equals(unitType)) {
+        } else if (UnitHierarchyEnum.construct_unit.getHierarchy().equals(unitType)) { // 检测单位
             codeList = new ArrayList<>(ApproveStatisticsBlock.NON_DETECTION.keySet());
-        } else {
+        } else { // 全部单位
             codeList = new ArrayList<>(ApproveStatisticsBlock.ALL.keySet());
         }
 
@@ -110,9 +110,9 @@ public static void main(String[] args) {
 
             // 如果是管道检测分类下的: 统计的字段是检测单位, 其他分类则是施工单位
             if (ApproveStatisticsBlock.PIPE_INSPECTION_BLOCK.containsKey(code)) {
-                sql.append(String.format(" and %s in (:unitIds) ", ApproveStatisticsBlock.DETECTION_UNIT));
+                sql.append(" and detection_unit in (:unitIds) ");
             } else {
-                sql.append(String.format(" and %s in (:unitIds) ", ApproveStatisticsBlock.CONSTRUCT_UNIT));
+                sql.append(" and construct_unit in (:unitIds) ");
             }
 
             sql.append(i<(codeList.size()-1) ? " UNION ALL ":"");
