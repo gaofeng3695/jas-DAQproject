@@ -113,8 +113,12 @@ public class AppStatisticsService {
             throw new BusinessException("unit Not Found", "404");
         }
         String unitHierarchy = priUnit.getHierarchy();
-
-        if (!unitHierarchy.startsWith(UnitHierarchyEnum.construct_unit.getHierarchy()) && !unitHierarchy.startsWith(UnitHierarchyEnum.detection_unit.getHierarchy())) {
+        String unitType = "";
+        if (unitHierarchy.startsWith(UnitHierarchyEnum.construct_unit.getHierarchy())) {
+            unitType = UnitHierarchyEnum.construct_unit.getHierarchy();
+        } else if (unitHierarchy.startsWith(UnitHierarchyEnum.detection_unit.getHierarchy())) {
+            unitType = UnitHierarchyEnum.detection_unit.getHierarchy();
+        } else {
             logger.error("施工/检测单位层级错误, hierarchy={}", unitHierarchy);
             throw new BusinessException("施工/检测单位层级错误", "403");
         }
@@ -141,7 +145,7 @@ public class AppStatisticsService {
             throw new BusinessException("currentUserUnits Not Found", "404");
         }
 
-        List<DataApproveSubBo> dataApproveSubBos = this.appStatisticsDao.listDataAuditing(projectOid, supervisionUnits, unitIds, "");
+        List<DataApproveSubBo> dataApproveSubBos = this.appStatisticsDao.listDataAuditing(projectOid, supervisionUnits, unitIds, unitType);
 
         // 包装统计结果的中文名
         dataApproveSubBos.forEach(bo -> bo.setCnName(ApproveStatisticsBlock.ALL.get(bo.getCode()).getCnName()));

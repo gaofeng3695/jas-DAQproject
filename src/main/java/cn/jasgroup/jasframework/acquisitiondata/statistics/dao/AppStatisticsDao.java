@@ -5,6 +5,7 @@ import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.ApproveStatusEnu
 import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.EntryStatisticsBlock;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.StatsPipeEnum;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.*;
+import cn.jasgroup.jasframework.acquisitiondata.variate.UnitHierarchyEnum;
 import cn.jasgroup.jasframework.dataaccess3.core.BaseNamedParameterJdbcTemplate;
 import cn.jasgroup.jasframework.engine.jdbc.dao.CommonDataJdbcDao;
 import cn.jasgroup.jasframework.support.ThreadLocalHolder;
@@ -85,9 +86,9 @@ public static void main(String[] args) {
 
         List<String> codeList;
         // 施工单位
-        if ("1".equals(unitType)) {
+        if (UnitHierarchyEnum.detection_unit.getHierarchy().equals(unitType)) {
             codeList = new ArrayList<>(ApproveStatisticsBlock.PIPE_INSPECTION_BLOCK.keySet());
-        } else if ("2".equals(unitType)) {
+        } else if (UnitHierarchyEnum.construct_unit.getHierarchy().equals(unitType)) {
             codeList = new ArrayList<>(ApproveStatisticsBlock.NON_DETECTION.keySet());
         } else {
             codeList = new ArrayList<>(ApproveStatisticsBlock.ALL.keySet());
