@@ -22,7 +22,7 @@ public class AppVersionDao {
 
     public List<Map<String, Object>> getActiveVersion(String productId, String clientType) {
 
-        String sql = " select * from app_version where product_id = :productId and client_type = :clientType where active = 1 ";
+        String sql = " select * from app_version where product_id = :productId and client_type = :clientType and active = 1 ";
         return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("productId", productId, "clientType", clientType));
     }
 }
