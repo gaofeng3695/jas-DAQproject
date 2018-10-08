@@ -65,7 +65,7 @@ public class CathodicCableProtectionQuery extends BaseJavaQuery{
 	@Override
 	public String getQuerySql() {
 		String sql = "SELECT pro.project_name, pi.pipeline_name, te.tenders_name,ps.pipe_segment_name, ms.median_stake_code,"
-					+ "d.code_name as cable_struction_name,	dm.code_name as cable_laying_method_name,dm.code_name as cable_use_name, "
+					+ "d.code_name as cable_struction_name,	dm.code_name as cable_laying_method_name,dom.code_name as cable_use_name, "
 					+ "cts.test_stake_code, csa.anode_code, csb.ground_bed,"
 					+ " u.unit_name as construct_unit_name, pu.unit_name as supervision_unit_name,"
 					+ " ccp.* FROM daq_cathodic_cable_protection ccp "
