@@ -97,7 +97,7 @@ public class StatsUtils {
 
 
     /**
-     * 生成连续的日期字符串集合
+     * 生成连续的日期(年月)字符串集合
      * @param startDate 开始日期
      * @param endDate 结束日期
      * @param format 日期格式化
@@ -134,6 +134,13 @@ public class StatsUtils {
         return new ArrayList<>();
     }
 
+    /**
+     * 生成连续的日期(年月日)字符串集合
+     * @param startDate 开始日期
+     * @param endDate 结束日期
+     * @param dateFormat 日期格式化
+     * @return 日期字符串集合
+     */
     public static List<String> genContinuityDayStr(Date startDate, Date endDate, String dateFormat) {
         LocalDate startLocalDate = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate endLocalDate = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
