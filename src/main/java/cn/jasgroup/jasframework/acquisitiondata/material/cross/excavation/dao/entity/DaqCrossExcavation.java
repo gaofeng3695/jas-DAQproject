@@ -196,8 +196,6 @@ public class DaqCrossExcavation extends CommonJdbcEntity {
 	 * 备注 
 	 */
 	private String remarks; 
-
-	private String geom; 
 	
 	public String getProjectOid() {
 		return projectOid;
@@ -457,13 +455,5 @@ public class DaqCrossExcavation extends CommonJdbcEntity {
 		super.setField("remarks");
 	}
 
-	public String getGeom() {
-		return geom; 
-	}
-
-	public void setGeom(String geom) {
-		this.geom = geom; 
-		super.setField("geom");
-	}
 
 }

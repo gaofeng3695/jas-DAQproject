@@ -188,8 +188,6 @@ public class DaqAppendagesHydraulicProtection extends CommonJdbcEntity {
 	 */
 	private String remarks; 
 
-	private String geom; 
-
 	public String getProjectOid() {
 		return projectOid; 
 	}
@@ -435,15 +433,6 @@ public class DaqAppendagesHydraulicProtection extends CommonJdbcEntity {
 	public void setRemarks(String remarks) {
 		this.remarks = remarks; 
 		super.setField("remarks");
-	}
-
-	public String getGeom() {
-		return geom; 
-	}
-
-	public void setGeom(String geom) {
-		this.geom = geom; 
-		super.setField("geom");
 	}
 
 }
