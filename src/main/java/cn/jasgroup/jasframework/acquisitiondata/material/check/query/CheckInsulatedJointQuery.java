@@ -1,5 +1,7 @@
 package cn.jasgroup.jasframework.acquisitiondata.material.check.query;
 
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 
 import cn.jasgroup.jasframework.acquisitiondata.material.check.query.bo.CheckInsulatedJointBo;
@@ -24,6 +26,11 @@ import cn.jasgroup.jasframework.base.annotation.Process;
 		}
 	)
 public class CheckInsulatedJointQuery extends BaseJavaQuery {
+	
+	/**
+	 * oid 集合（用于导出选中）
+	 */
+	private List<String> oids;
 	
 	/**
 	 * 唯一标识
@@ -78,6 +85,9 @@ public class CheckInsulatedJointQuery extends BaseJavaQuery {
 			if (StringUtils.isNotBlank(manufacturerCode)) {
 				conditionSql += " and manufacturer_code like :manufacturerCode";
 			}
+			if (null != oids && oids.size() > 0) {
+				conditionSql += " and cij.oid in (:oids)";
+			}
 		}
 		conditionSql += this.dataAuthoritySql;
 		conditionSql += " order by  cij.create_datetime desc";
@@ -125,6 +135,14 @@ public class CheckInsulatedJointQuery extends BaseJavaQuery {
 
 	public void setManufacturerCode(String manufacturerCode) {
 		this.manufacturerCode = manufacturerCode;
+	}
+
+	public List<String> getOids() {
+		return oids;
+	}
+
+	public void setOids(List<String> oids) {
+		this.oids = oids;
 	}
 
 }
