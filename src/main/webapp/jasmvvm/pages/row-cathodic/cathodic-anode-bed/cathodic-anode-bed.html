@@ -152,7 +152,15 @@
 						field: 'buriedDepth'
 					}, {
 						name: '是否临时',
-						field: 'isTemporary'
+						field: 'isTemporary',
+						formatter: function (a, b, value, c) {
+				
+							if (value == 0)
+								return '是';
+							if (value == 1)
+								return '否';
+						
+						}
 					}, {
 						name: '设计寿命(年)',
 						field: 'designLife',
@@ -187,11 +195,27 @@
 						field: 'anodeResistance'
 					}, {
 						name: '是否有注水系统',
-						field: 'isWaterInjection'
-					}, {
+						field: 'isWaterInjection',
+					 formatter: function (a, b, value, c) {
+						
+						if (value == 0)
+							return '是';
+						if (value == 1)
+							return '否';
+					
+					}
+				},{
 						name: '是否有排气孔',
-						field: 'isAirbleed'
-					}, {
+						field: 'isAirbleed',
+					formatter: function (a, b, value, c) {
+						
+						if (value == 0)
+							return '是';
+						if (value == 1)
+							return '否';
+					
+					}
+				}, {
 						name: '埋设日期',
 						field: 'burialDate',
 					}, {
@@ -215,6 +239,9 @@
 					}, {
 						name: '采集日期',
 						field: 'collectionDate'
+					}, {
+						name: '备注',
+						field: 'remarks'
 					}
 				],
 			}

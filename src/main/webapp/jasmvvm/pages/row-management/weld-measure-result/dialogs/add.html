@@ -50,28 +50,28 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="标段名称" prop="tendersOid" required>
-								<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
+								<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged" @visible-change="childChange($event,'projectOid','项目名称')">
 									<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="管线名称" prop="pipelineOid" required>
-								<el-select v-model="formData.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged">
+								<el-select v-model="formData.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged" @visible-change="childChange($event,'tendersOid','标段名称')">
 									<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="线路段/穿跨越" prop="pipeSegmentOrCrossOid" required>
-								<el-select v-model="formData.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small" @change="pipeSegmentChanged">
+								<el-select v-model="formData.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small" @change="pipeSegmentChanged"  @visible-change="childChange($event,'pipelineOid','管线名称')">
 									<el-option v-for="item in domain.pipeSegment" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="焊口编号">
-								<el-select v-model="formData.weldOid" clearable placeholder="请选择焊口编号" size="small">
+								<el-select v-model="formData.weldOid" clearable placeholder="请选择焊口编号" size="small" @visible-change="childChange($event,'pipeSegmentOrCrossOid','线路段/穿跨越')">
 									<el-option v-for="item in domain.welds" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
@@ -85,14 +85,14 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="施工机组代号" prop="workUnitOid" required>
-								<el-select v-model="formData.workUnitOid" placeholder="请选择施工机组代号" size="small">
+								<el-select v-model="formData.workUnitOid" placeholder="请选择施工机组代号" size="small" @visible-change="childChange($event,'projectOid','项目名称')">
 									<el-option v-for="item in domain.workUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="监理单位" prop="supervisionUnit" required>
-								<el-select v-model="formData.supervisionUnit" clearable placeholder="请选择监理单位" size="small">
+								<el-select v-model="formData.supervisionUnit" clearable placeholder="请选择监理单位" size="small"  @visible-change="childChange($event,'tendersOid','标段名称')">
 									<el-option v-for="item in domain.supervisionUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
@@ -132,7 +132,7 @@
 					<el-row>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="桩号" prop="medianStakeOid" required>
-								<el-select v-model="formData.medianStakeOid" clearable placeholder="请选择桩号" size="small">
+								<el-select v-model="formData.medianStakeOid" clearable placeholder="请选择桩号" size="small" @visible-change="childChange($event,'pipeSegmentOrCrossOid','线路段/穿跨越')">
 									<el-option v-for="item in domain.medianStakes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
@@ -146,13 +146,13 @@
 
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="坐标X">
-								<el-input-number :precision="3" :step="1" :max="10000000" controls-position="right" v-model="formData.pointx" clearable placeholder="请输入坐标X"
+								<el-input-number :precision="3" :step="1" :max="9999999" controls-position="right" v-model="formData.pointx" clearable placeholder="请输入坐标X"
 								  size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="坐标Y">
-								<el-input-number :precision="3" :step="1" :max="10000000" controls-position="right" v-model="formData.pointy" clearable placeholder="请输入坐标Y"
+								<el-input-number :precision="3" :step="1" :max="99999999" controls-position="right" v-model="formData.pointy" clearable placeholder="请输入坐标Y"
 								  size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
@@ -270,12 +270,12 @@
 					surveyCrew: [{
 						required: true,
 						message: '测量人为必填项',
-						trigger: 'change'
+						trigger: 'blur'
 					}],
 					surveyDate: [{
 						required: true,
 						message: '测量日期为必填项',
-						trigger: 'change'
+						trigger: 'blur'
 					}],
 
 					medianStakeOid: [{
@@ -294,6 +294,7 @@
 					pipelineOid: "",
 					tendersOid: "",
 					pipeSegmentOrCrossOid: "",
+					workUnitOid:"",
 					weldOid: "",
 					medianStakeOid: "",
 					relativeMileage: "",
@@ -340,6 +341,14 @@
 
 		},
 		methods: {
+			childChange: function (event, id, name) {
+				if (event && !this.formData[id]) {
+					top.Vue.prototype.$message({
+						type: 'warning',
+						message: "请先选择" + name
+					});
+				}
+			},
 			cancel: function (param) {
 				window.parent.jasTools.dialog.close(param);
 			},
@@ -377,7 +386,7 @@
 			getWorkUints: function (val) {
 				var that = this;
 				if (val) {
-					this.requestDomainFromBizTable(
+					that.requestDomainFromBizTable(
 						'/daq/workUnit/getWorkUnitList.do', {
 							projectOid: val,
 							types: "work_unit_type_code_001,work_unit_type_code_010,work_unit_type_code_012"
@@ -516,7 +525,6 @@
 					}
 					that.projectChanged(data.rows[0].projectOid);
 					that.tendersChanged(data.rows[0].tendersOid);
-
 					that.pipelineChanged(data.rows[0].pipelineOid);
 					that.pipeSegmentChanged(data.rows[0].pipeSegmentOrCrossOid);
 				});

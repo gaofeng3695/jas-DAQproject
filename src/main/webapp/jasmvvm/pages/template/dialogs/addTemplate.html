@@ -74,12 +74,15 @@
 				<template v-for="group in formAttr">
 					<jas-base-group-title v-if="group.groupName" :name="group.groupName"></jas-base-group-title>
 					<el-row>
-						<template v-for="item in group.data">
+						<template v-for="(item,index) in group.data">
 
 							<el-col v-if="item.type=='UT_13'" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 								<el-form-item :prop="item.id" :label="item.name" :rules="item.verify">
-									<el-input v-if="item.type=='UT_13'" :autosize="{ minRows: 2}" type="textarea" :rows="2" :size="item.size" v-model="formData[item.id]"
-									  :disabled="item.disabled"></el-input>
+									<!--<textarea  v-if="item.type=='UT_13'"  rows="2" v-model="formData[item.id]"></textarea>-->
+									<el-input v-if="item.type=='UT_13'" :autosize="{ minRows: 2}" type="textarea" :rows="2" v-model="formData[item.id]" :disabled="item.disabled"
+									  :maxLength="200" @input="instructionNum(item.id,index)">
+									</el-input>
+									<p v-show="item.id=='remarks'" style="text-align:right;color:#999;">您还可以输入<span v-text="remarks"></span>字</p>
 								</el-form-item>
 							</el-col>
 							<el-col v-else :xs="formConfig.xs" :sm="formConfig.sm" :md="formConfig.md" :lg="formConfig.lg" :xl="formConfig.xl" :class="{'height' : item.type=='UT_14'||item.type=='UT_05'||item.type=='UT_06'||item.type=='UT_07'||item.type=='UT_08' }">
@@ -157,6 +160,7 @@
 			return {
 				isLoading: true,
 				rules: [],
+				remarks: 200,
 				formData: {}, // 表单字段详情对象
 				formAttr: [], // 表单字段，分组排序，配置数组
 				// [{
@@ -198,6 +202,16 @@
 			this.requestFieldConfigByOid();
 		},
 		methods: {
+			instructionNum: function (id, index) {
+				var that = this;
+				if (that.formData[id]) {
+					if (that.formData[id].trim().length > 199) {
+						that.formData[id] = that.formData[id].trim().substring(0, 200); //截取正确 但是未改变
+					}
+				}
+				var num = 200 - that.formData[id].trim().length;
+				that.remarks = num;
+			}, //剩余字数计算
 			requestConfig: function () {
 				var that = this;
 				$.ajax({
@@ -302,7 +316,7 @@
 								verify: [],
 								requestUrl: item.requestPath,
 								childField: item.childField,
-								min: item.min || -Infinity,
+								min: item.min || item.min == 0 ? item.min : -Infinity,
 								max: item.max || Infinity,
 								index: item.rowIndex,
 							};
@@ -345,6 +359,10 @@
 									that.$set(that.formData, item.fieldName, obj.options[0].key);
 								}
 							}
+							if (item.uiType == 'UT_14') {
+								// 如果是数字，增加默认值
+								that.$set(that.formData, item.fieldName, obj.min || 0);
+							}
 							groupAttr.push(obj);
 						}
 					});
@@ -367,6 +385,7 @@
 						if (item.ifPrimaryKey) {
 							that.pkArray.push(item.fieldName);
 						}
+						console.log(that.pkArray);
 						if (item.domainList) {
 							item.domainList.forEach(function (child) {
 								var obj = {};
@@ -390,10 +409,11 @@
 								requestUrl: item.requestPath,
 								childField: item.childField,
 								index: item.rowIndex,
-								min: item.min || -Infinity,
+								min: item.min || item.min == 0 ? item.min : -Infinity,
 								max: item.max || Infinity,
 								disabled: false
 							};
+
 							if (item.updateable == '1') {
 								obj.disabled = true;
 							}
@@ -452,8 +472,6 @@
 						data: that._sortArray(groupAttr)
 					});
 				});
-
-
 				that.actionURL = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") +
 					"&businessId=" + that.formData[that.pkArray[0]] + "&businessType=file";
 				that.$nextTick(function () {
@@ -472,6 +490,7 @@
 						}
 					} */
 					that.formData = data.data;
+					console.log(that.formData);
 					that.getEditField(fieldsGrouped);
 				});
 			},
@@ -500,10 +519,11 @@
 				for (key in that.formData) {
 					if (that.formData[key] instanceof Array) {
 						that.formData[key] = that.formData[key].join(",")
-					}else if(that.formData[key]==''){
-						that.formData[key]=null;
+					} else if (that.formData[key] === '') {
+						that.formData[key] = null;
 					}
 				}
+
 				jasTools.ajax.post(url, that.formData, function () {
 					if (that.ifAttachment) {
 						that.$refs.upload.uploadFile(that.formData[that.pkArray[0]]); //触发上传附件
@@ -585,7 +605,7 @@
 				if (falg) {
 					that.formAttr.forEach(function (parent, index) {
 						parent.data.forEach(function (child) {
-							if(child.childField.indexOf(",")>-1){
+							if (child.childField.indexOf(",") > -1) {
 								if (child.childField.indexOf(item.id) > -1) {
 									if (!that.formData[child.id]) {
 										top.Vue.prototype.$message({
@@ -595,8 +615,8 @@
 									}
 									return;
 								}
-							}else{
-								if (child.childField==item.id) {
+							} else {
+								if (child.childField == item.id) {
 									if (!that.formData[child.id]) {
 										top.Vue.prototype.$message({
 											message: '请先选择' + child.name,

@@ -33,21 +33,21 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="标段名称" prop="tendersOid" required>
-							<el-select v-model="form.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
+							<el-select v-model="form.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged" @visible-change="childChange($event,'projectOid','项目名称')">
 								<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="管线名称" prop="pipelineOid" required>
-							<el-select v-model="form.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged">
+							<el-select v-model="form.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged" @visible-change="childChange($event,'tendersOid','标段名称')">
 								<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="线路段/穿跨越" prop="pipeSegmentOrCrossOid" required>
-							<el-select v-model="form.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small" @change="pipeSegmentChanged">
+							<el-select v-model="form.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small" @change="pipeSegmentChanged" @visible-change="childChange($event,'pipelineOid','管线名称')">
 								<el-option v-for="item in domain.pipeSegment" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
@@ -69,7 +69,7 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="监理单位">
-							<el-select v-model="form.supervisionUnit" clearable placeholder="请选择监理单位" size="small">
+							<el-select v-model="form.supervisionUnit" clearable placeholder="请选择监理单位" size="small" @visible-change="childChange($event,'tendersOid','标段名称')">
 								<el-option v-for="item in domain.supervisionUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
@@ -97,7 +97,7 @@
 				<el-row>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="桩号" prop="medianStakeOid" required>
-							<el-select v-model="form.medianStakeOid" clearable placeholder="请选择桩号" size="small">
+							<el-select v-model="form.medianStakeOid" clearable placeholder="请选择桩号" size="small" @visible-change="childChange($event,'pipeSegmentOrCrossOid','线路段/穿跨越')">
 								<el-option v-for="item in domain.medianStakes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
@@ -264,6 +264,14 @@
 				}, function () {
 					cb && cb([]);
 				});
+			},
+			childChange: function (event, id, name) {
+				if (event && !this.form[id]) {
+					top.Vue.prototype.$message({
+						type: 'warning',
+						message: "请先选择" + name
+					});
+				}
 			},
 			projectChanged: function (val) {
 				var that = this;

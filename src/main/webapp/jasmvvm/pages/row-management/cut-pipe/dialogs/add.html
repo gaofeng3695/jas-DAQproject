@@ -50,14 +50,14 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="标段名称" prop="tendersOid" required>
-								<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
+								<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged" @visible-change="childChange($event,'projectOid','项目名称')">
 									<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="管线名称" prop="pipelineOid" required>
-								<el-select v-model="formData.pipelineOid" clearable placeholder="请选择管线名称" size="small">
+								<el-select v-model="formData.pipelineOid" clearable placeholder="请选择管线名称" size="small" @visible-change="childChange($event,'tendersOid','标段名称')">
 									<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
@@ -201,6 +201,11 @@
 						required: true,
 						message: '第一段长度为必填项',
 						trigger: 'change'
+					}],
+					supervisionUnit:[{
+					    required: true,
+						message: '监理单位为必填项',
+						trigger: 'change'	
 					}]
 				},
 				formData: {
@@ -261,6 +266,14 @@
 			});
 		},
 		methods: {
+			childChange: function (event, id, name) {
+				if (event && !this.formData[id]) {
+					top.Vue.prototype.$message({
+						type: 'warning',
+						message: "请先选择" + name
+					});
+				}
+			},
 			changePipe: function () {
 				this.resetPipeData();
 				this.setPipeLength(this.formData.pipeOid);
@@ -279,6 +292,12 @@
 						return false;
 					}
 					total += this.formData[names[i]];
+				}
+				for(var i=names.length-1;i>num-1;i--){
+					console.log(names.length)
+					if(this.formData[names[i]]){
+						delete this.formData[names[i]];
+					}
 				}
 				if (total > this.formData.pipeLength) {
 					top.Vue.prototype.$message({
@@ -435,7 +454,6 @@
 					delete that.formData.isUse;
 					var url = jasTools.base.rootPath + "/jdbc/commonData/cutWeld/update.do";
 				}
-
 				jasTools.ajax.post(url, that.formData, function (data) {
 					that.$refs.upload.uploadFile(data.data || that.oid);
 				});

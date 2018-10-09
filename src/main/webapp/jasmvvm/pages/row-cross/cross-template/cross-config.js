@@ -35,6 +35,7 @@ var crossConfig = {
       'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
+      'remarks'
     ],
     addFields1: [ //
       "projectOid",
@@ -136,7 +137,7 @@ var crossConfig = {
       'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
-
+      'remarks'
     ],
     addFields1: [ //
       "projectOid",
@@ -235,7 +236,7 @@ var crossConfig = {
       'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
-
+      'remarks'
     ],
     addFields1: [ //
       "projectOid",
@@ -336,7 +337,7 @@ var crossConfig = {
       'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
-
+      'remarks'
     ],
     addFields1: [ //
       "projectOid",
@@ -439,7 +440,7 @@ var crossConfig = {
       'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
-
+      'remarks'
     ],
     addFields1: [ //
       "projectOid",
@@ -541,7 +542,7 @@ var crossConfig = {
       'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
-
+      'remarks'
     ],
     addFields1: [ //
       "projectOid",
@@ -647,7 +648,7 @@ var crossConfig = {
       'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
-
+      'remarks'
     ],
     addFields1: [ //
       "projectOid",
@@ -905,6 +906,10 @@ var crossConfig = {
         if (value == 2) return '通过';
         return '未上报';
       }
+    },
+    remarks:{
+    	name:"备注",
+    	type:"textarea"
     },
     steadyTubeMeasures: {
       name: '稳管措施',

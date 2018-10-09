@@ -48,20 +48,20 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<!--<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="标段名称" prop="tendersOid" required>
-							<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
+							<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged" @visible-change="childChange($event,'projectOid','项目名称')">
 								<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="管线名称" prop="pipelineOid" required>
-							<el-select v-model="formData.pipelineOid" clearable placeholder="请选择管线名称" size="small" >
+							<el-select v-model="formData.pipelineOid" clearable placeholder="请选择管线名称" size="small"  @visible-change="childChange($event,'tendersOid','标段名称')">
 								<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
-					</el-col>-->
+					</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="封堵物编号" prop="closureCode" required>
 								<el-input v-model="formData.closureCode" clearable placeholder="请输入封堵物编号" size="small"></el-input>
@@ -201,8 +201,8 @@
 					connectionMethodsArr: [],
 					coatingMethodsArr: [],
 					project: [],
-					// pipeline: [],
-					// tenders: [],
+					 pipeline: [],
+					 tenders: [],
 					//监理单位
 				},
 				ischoose: false,
@@ -220,13 +220,23 @@
 					closureType: [{
 						required: true,
 						message: '封堵物类型为必填项',
+						trigger: 'blur'
+					}],
+					tendersOid: [{
+						required: true,
+						message: '标段名称为必填项',
+						trigger: 'change'
+					}],
+					pipelineOid: [{
+						required: true,
+						message: '管线名称为必填项',
 						trigger: 'change'
 					}],
 				},
 				formData: {
 					projectOid: "",
-					// tendersOid: "",
-					// pipelineOid: "",
+					 tendersOid: "",
+					 pipelineOid: "",
 					closureCode: '',
 					closureType: '',
 					material: '',
@@ -254,7 +264,7 @@
 			that.requestDomainFromCommonTable("coating_methods_domain", function (arr) {
 				that.domain.coatingMethodsArr = arr;
 			});
-			that.requestDomainFromBizTable('daq/materialPipe/getPipeList.do', {}, function (arr) {
+			that.requestDomainFromBizTable('/daq/privilege/getProjectList.do', {}, function (arr) {
 				that.domain.project = arr;
 			});
 			if (param.oid) {
@@ -273,6 +283,14 @@
 		methods: {
 			cancel: function (param) {
 				window.parent.jasTools.dialog.close(param);
+			},
+			childChange: function (event, id, name) {
+				if (event && !this.formData[id]) {
+					top.Vue.prototype.$message({
+						type: 'warning',
+						message: "请先选择" + name
+					});
+				}
 			},
 			requestDomainFromBizTable: function (url, obj, cb) {
 				var that = this;
@@ -360,7 +378,6 @@
 					url = jasTools.base.rootPath +
 						"/jdbc/commonData/closure/update.do";
 				}
-
 				jasTools.ajax.post(url, that.formData, function (data) {
 					that.$refs.upload.uploadFile(data.data || that.oid);
 				});

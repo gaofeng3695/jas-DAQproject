@@ -1614,7 +1614,7 @@ Vue.component('jas-form-items-group', {
 
 					/* 设置验证规则 */
 					if (config.isRequired) {
-
+console.log(config);
 						config.rules = [{
 							required: true,
 							message: fieldNameArr[fieldIndex] + '为必填项',
