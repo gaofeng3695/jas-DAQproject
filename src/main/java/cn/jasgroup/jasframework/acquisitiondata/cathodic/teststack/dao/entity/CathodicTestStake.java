@@ -14,6 +14,8 @@ import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
 import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
+import cn.jasgroup.jasframework.base.annotation.UniqueConstraintStrategy;
+import cn.jasgroup.jasframework.base.annotation.UniqueConstraints;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 
 /**
@@ -31,6 +33,11 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 )
 @CommonDeleteConfig(
 	scene = "/cathodicTestStake/delete"
+)
+@UniqueConstraints(
+    strategys ={
+        @UniqueConstraintStrategy(columnNames={"testStakeCode"},name="测试桩编号"),
+    }
 )
 @Point(
 	x="pointx",
