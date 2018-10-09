@@ -63,7 +63,7 @@
 									<el-input v-if="item.type=='UT_01'" :placeholder="item.placeholder" v-model="searchTable[item.id]" size="small" clearable>
 									</el-input>
 									<el-select v-model="searchTable[item.id]" v-if="isSelect(item)" style="width:100%" size="small" @change="selectChange(item)"
-									  clearable>
+									  @visible-change="isChangeParent($event,item)" clearable>
 										<template v-for="option in item.options">
 											<el-option :key="option.value" :label="option.value" :value="option.key">
 											</el-option>
@@ -417,6 +417,23 @@
 			getSearchFieldAndList: function (data) {
 				var that = this;
 				var searchData = [];
+				var childAndparent = {};
+				data.functionFieldsBoList.forEach(function (item) {
+					if (item.ifQuery == "1" && item.childField) {
+						if (item.childField.split(",")) {
+							item.childField.split(",").forEach(function (s) {
+								var obj = {
+									id: "",
+									name: ""
+								};
+								obj.id = item.fieldName;
+								obj.name = item.fieldNameCn;
+								childAndparent[s] = obj;
+							});
+						}
+					}
+				}); //寻找子父之间关系
+
 				data.functionFieldsBoList.forEach(function (item) {
 					var options = [];
 					if (item.domainList) {
@@ -429,7 +446,7 @@
 						});
 					}
 					if (item.ifQuery == "1") {
-						that.searchData.push({
+						var obj = {
 							id: item.fieldName,
 							name: item.fieldNameCn,
 							type: item.uiType,
@@ -438,7 +455,13 @@
 							queryIndex: item.queryIndex,
 							childField: item.childField,
 							requestPath: item.requestPath,
-						});
+							// isPartant:
+						};
+						if (childAndparent[item.fieldName]) {
+							obj.isPartant = childAndparent[item.fieldName].id;
+							obj.isPartantName = childAndparent[item.fieldName].name;
+						}
+						that.searchData.push(obj);
 						that.searchUi.push({
 							id: item.fieldName,
 							type: item.uiType
@@ -676,6 +699,15 @@
 			handleCurrentChange: function (val) {
 				this.searchform.page = val;
 				this.requestTableList();
+			},
+			isChangeParent: function (e,item) {
+				var that = this;
+				if (e&&item.isPartant && !that.searchTable[item.isPartant]) {
+					top.Vue.prototype.$message({
+						type: 'warning',
+						message: '请先选择' + item.isPartantName
+					});
+				}
 			},
 			selectChange: function (item) { // 选择类型的控件触发的change事件
 				var that = this;

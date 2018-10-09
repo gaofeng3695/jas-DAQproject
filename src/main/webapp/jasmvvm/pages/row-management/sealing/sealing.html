@@ -37,14 +37,14 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
 						<el-form-item label="标段名称" prop="tendersOid">
-							<el-select v-model="topSearch.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
+							<el-select v-model="topSearch.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged" @visible-change="childChange($event,'projectOid','项目名称')">
 								<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
 						<el-form-item label="管线名称" prop="pipelineOid">
-							<el-select v-model="topSearch.pipelineOid" clearable placeholder="请选择管线名称" size="small">
+							<el-select v-model="topSearch.pipelineOid" clearable placeholder="请选择管线名称" size="small" @visible-change="childChange($event,'tendersOid','标段名称')">
 								<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
@@ -153,7 +153,8 @@
 					formatter:function(row,column,cellvalue,index){
 						if(cellvalue=='0'){
 							return '钢质';
-						}else{
+						} 
+						if(cellvalue=='1'){
 							return '其他';
 						}
 					}
@@ -188,10 +189,10 @@
 					pipeline: [], //管线
 					closureTypes: [{
 						key: '0',
-						value: '钢质'
+						value: '盲板'
 					}, {
 						key: '1',
-						value: '其他'
+						value: '封头'
 					}], //材质
 					isUses: [{
 						key: 0,
@@ -218,6 +219,14 @@
 				});
 		},
 		methods: {
+			childChange: function (event, id, name) {
+				if (event && !this.topSearch[id]) {
+					top.Vue.prototype.$message({
+						type: 'warning',
+						message: "请先选择" + name
+					});
+				}
+			},
 			requestDomainFromBizTable: function (url, obj, cb) {
 				var that = this;
 				var url = jasTools.base.rootPath + url;

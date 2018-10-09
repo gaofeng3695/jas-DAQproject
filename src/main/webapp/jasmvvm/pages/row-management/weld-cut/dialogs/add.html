@@ -122,7 +122,7 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="割口日期">
-								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择割口日期" v-model="formData.collectionDate" size="small"
+								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择割口日期" v-model="formData.cutWeldDate" size="small"
 								  style="width: 100%;">
 								</el-date-picker>
 							</el-form-item>
@@ -242,9 +242,9 @@
 					}],
 					supervisionUnit: [{
 						required: true,
-						message: '监理单位为必填项必填项',
+						message: '监理单位为必填项',
 						trigger: 'change'
-					}],
+					}]
 				},
 				formData: {
 					projectOid: "",
@@ -342,7 +342,7 @@
 					that.domain.pipeSegment = [];
 					that.formData.pipeSegmentOrCrossOid = '';
 					that.domain.supervisionUnits = [];
-					that.formData.supervisionUnit = '';
+					that.formData.supervisionUnit= '';
 				}
 				that.getWorkUints(val); //获取机组
 			},

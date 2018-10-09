@@ -37,21 +37,21 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
 						<el-form-item label="标段名称" prop="tendersOid">
-							<el-select v-model="topSearch.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
+							<el-select v-model="topSearch.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged" @visible-change="childChange($event,'projectOid','项目名称')">
 								<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
 						<el-form-item label="管线名称" prop="pipelineOid">
-							<el-select v-model="topSearch.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged">
+							<el-select v-model="topSearch.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged" @visible-change="childChange($event,'tendersOid','标段名称')">
 								<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
 						<el-form-item label="线路段/穿跨越" prop="pipeSegmentOrCrossOid">
-							<el-select v-model="topSearch.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small">
+							<el-select v-model="topSearch.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small"  @visible-change="childChange($event,'pipelineOid','管线名称')">
 								<el-option v-for="item in domain.pipeSegment" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
@@ -172,7 +172,7 @@
 				}, {
 					name: '壁厚(mm)',
 					field: 'wallThickness'
-				}, 
+				},
 				{
 					name: '制作时间',
 					field: 'produceDate'
@@ -189,7 +189,7 @@
 					name: '监理工程师',
 					field: 'supervisionEngineer'
 				}, {
-					name: '采集日期',
+					name: '采集时间',
 					field: 'collectionDate'
 				}],
 				domain: {
@@ -214,7 +214,7 @@
 				.getParamsInUrl(location.href);
 			this.privilegeCode = param.privilegeCode;
 			this.templateCode = param.templateCode; //|| "stake-2";
-			this.className = param.className; // || 'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';					
+			this.className = param.className; // || 'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';
 					this.requestDomainFromBizTable(
 				'/daq/privilege/getProjectList.do', {},
 				function (
@@ -223,6 +223,14 @@
 				});
 		},
 		methods: {
+			childChange: function (event, id, name) {
+				if (event && !this.topSearch[id]) {
+					top.Vue.prototype.$message({
+						type: 'warning',
+						message: "请先选择" + name
+					});
+				}
+			},
 			requestDomainFromBizTable: function (url, obj, cb) {
 				var that = this;
 				var url = jasTools.base.rootPath + url;

@@ -77,7 +77,7 @@
 			var that = this;
 			var param = window.jasTools.base.getParamsInUrl(location.href);
 			var userBo = JSON.parse(localStorage.getItem("user"));
-			that.form.constructUnit = userBo.unitId;
+			//that.form.constructUnit = userBo.unitId;
 			that.fieldsConfig.constructUnit.options = [{
 				key: userBo.unitId,
 				value: userBo.unitName

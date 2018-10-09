@@ -50,21 +50,21 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="标段名称" prop="tendersOid" required>
-								<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
+								<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged"  @visible-change="childChange($event,'projectOid','项目名称')">
 									<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="管线名称" prop="pipelineOid" required>
-								<el-select v-model="formData.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged">
+								<el-select v-model="formData.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged"  @visible-change="childChange($event,'tendersOid','标段名称')">
 									<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="线路段名称" prop="pipeSegmentOid" required>
-								<el-select v-model="formData.pipeSegmentOid" clearable placeholder="请选择线路段" size="small" @change="pipeSegmentChanged">
+								<el-select v-model="formData.pipeSegmentOid" clearable placeholder="请选择线路段" size="small" @change="pipeSegmentChanged" @visible-change="childChange($event,'pipelineOid','管线名称')">
 									<el-option v-for="item in domain.pipeSegment" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
@@ -86,7 +86,7 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="监理单位" prop="supervisionUnit" required>
-								<el-select v-model="formData.supervisionUnit" clearable placeholder="请选择监理单位" size="small">
+								<el-select v-model="formData.supervisionUnit" clearable placeholder="请选择监理单位" size="small"  @visible-change="childChange($event,'tendersOid','标段名称')">
 									<el-option v-for="item in domain.supervisionUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
@@ -115,7 +115,7 @@
 					<el-row>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="桩号" prop="medianStakeOid" required>
-								<el-select v-model="formData.medianStakeOid" clearable placeholder="请选择桩号" size="small">
+								<el-select v-model="formData.medianStakeOid" clearable placeholder="请选择桩号" size="small" @visible-change="childChange($event,'pipeSegmentOid','线路段名称')">
 									<el-option v-for="item in domain.medianStakes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
@@ -339,7 +339,7 @@
 					},
 					designLife: {
 						type: 'number',
-						max: 100,
+						max: 99,
 						precision: 0,
 					},
 					anodeMaterial: {
@@ -452,7 +452,15 @@
 				that.domain.pipeTypes = arr;
 			}); //查询管件类型
 		},
-		methods: {
+		methods : {
+			childChange : function(event, id, name) {
+				if (event && !this.formData[id]) {
+					top.Vue.prototype.$message({
+						type : 'warning',
+						message : "请先选择" + name
+					});
+				}
+			},
 			cancel: function (param) {
 				window.parent.jasTools.dialog.close(param);
 			},
