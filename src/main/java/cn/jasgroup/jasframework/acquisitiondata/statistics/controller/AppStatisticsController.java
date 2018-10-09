@@ -38,19 +38,21 @@ public class AppStatisticsController {
     @PostMapping("dataEntry")
     public BaseResult dataEntry(@RequestBody Map<String, Object> params) {
         @SuppressWarnings("unchecked")
-        List<String> stasticsTypes = (List<String>) params.get("statsTypes");
+        List<String> statsTypes = (List<String>) params.get("statsTypes");
         String projectId = (String) params.get("projectOid");
-        return ResultVOUtil.ofSuccess(appStatisticsService.dataEntry(stasticsTypes, projectId));
+        return ResultVOUtil.ofSuccess(appStatisticsService.dataEntry(statsTypes, projectId));
     }
 
 
     /**
      * 数据审核统计(app)
+     * @param unitId 单位ID
+     * @param projectOid 项目ID
      * @return {@link BaseResult}
      */
     @GetMapping("dataAuditing")
-    public BaseResult dataAuditing(@RequestParam String unitId, @RequestParam String unitType, @RequestParam String projectOid) {
-        return ResultVOUtil.ofSuccess(this.appStatisticsService.dataAuditing(projectOid, unitId, unitType));
+    public BaseResult dataAuditing(@RequestParam String unitId, @RequestParam String projectOid) {
+        return ResultVOUtil.ofSuccess(this.appStatisticsService.dataAuditing(projectOid, unitId));
     }
 
 

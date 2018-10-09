@@ -25,12 +25,12 @@ public class ApproveStatisticsBlock {
     /** 分类code */
     private String categoryCode;
 
-    public static final String CONSTRUCT_UNIT = "construct_unit";
-
-    public static final String DETECTION_UNIT = "detection_unit";
-
     /** 数据审核统计分类code与中文名 */
     public static final Map<String, String> APPROVE_CATEGORY;
+
+    public static final Map<String, Map<String, ApproveStatisticsBlock>> APPROVE_CATEGORY_NON_DETECTION;
+
+    public static final Map<String, Map<String, ApproveStatisticsBlock>> APPROVE_CATEGORY_DETECTION;
 
     /** 数据审核统计: 管道焊接/补口 */
     private static final Map<String, ApproveStatisticsBlock> PIPE_WELD_BLOCK;
@@ -53,6 +53,9 @@ public class ApproveStatisticsBlock {
     /** all */
     public static final Map<String, ApproveStatisticsBlock> ALL;
 
+    /** 非检测类的统计 */
+    public static final Map<String, ApproveStatisticsBlock> NON_DETECTION;
+
 
     static {
         APPROVE_CATEGORY = ImmutableMap.<String, String>builder()
@@ -60,6 +63,9 @@ public class ApproveStatisticsBlock {
                 .put("pipe_lay", "管道敷设").put("pipe_cross", "管道穿跨越")
                 .put("pipe_cathode_protection", "管道阴保").put("appendage", "附属物")
                 .build();
+
+
+
 
         PIPE_WELD_BLOCK = ImmutableMap.<String, ApproveStatisticsBlock>builder()
                 .put("material_pipe_cold_bending", new ApproveStatisticsBlock("material_pipe_cold_bending", "冷弯信息", "daq_material_pipe_cold_bending", "pipe_weld"))
@@ -135,6 +141,22 @@ public class ApproveStatisticsBlock {
                 .addAll(PIPE_CATHODE_PROTECTION_BLOCK.entrySet())
                 .addAll(APPENDAGE_BLOCK.entrySet())
                 .build());
+
+        NON_DETECTION = ImmutableMap.copyOf(ImmutableSet.<Map.Entry<String, ApproveStatisticsBlock>>builder()
+                .addAll(PIPE_WELD_BLOCK.entrySet())
+                .addAll(PIPE_LAY_BLOCK.entrySet())
+                .addAll(PIPE_CROSS_BLOCK.entrySet())
+                .addAll(PIPE_CATHODE_PROTECTION_BLOCK.entrySet())
+                .addAll(APPENDAGE_BLOCK.entrySet())
+                .build());
+
+        APPROVE_CATEGORY_NON_DETECTION = ImmutableMap.<String, Map<String, ApproveStatisticsBlock>>builder()
+                .put("pipe_weld", PIPE_WELD_BLOCK).put("pipe_lay", PIPE_LAY_BLOCK).put("pipe_cross", PIPE_CROSS_BLOCK)
+                .put("pipe_cathode_protection", PIPE_CATHODE_PROTECTION_BLOCK).put("appendage", APPENDAGE_BLOCK)
+                .build();
+
+        APPROVE_CATEGORY_DETECTION = ImmutableMap.of("pipe_inspection", PIPE_INSPECTION_BLOCK);
+
     }
 
 

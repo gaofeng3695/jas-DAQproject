@@ -109,7 +109,7 @@ public class PipeFittingDao{
 			sql = "update daq_material_pipe set tenders_oid='"+tendersOid+"',pipeline_oid='"+pipelineOid+"',back_is_use="+isUse+" where oid='"+pipeOid+"'";
 			break;
 		case "pipe_type_code_0021"://热煨弯管
-			sql = "update daq_material_hot_bends tenders_oid='"+tendersOid+"',pipeline_oid='"+pipelineOid+"',back_is_use="+isUse+" where oid='"+pipeOid+"'";
+			sql = "update daq_material_hot_bends set tenders_oid='"+tendersOid+"',pipeline_oid='"+pipelineOid+"',back_is_use="+isUse+" where oid='"+pipeOid+"'";
 			break;
 		case "pipe_type_code_0081"://冷弯管
 			sql = "update daq_material_pipe_cold_bending set back_is_use="+isUse+" where oid='"+pipeOid+"'";

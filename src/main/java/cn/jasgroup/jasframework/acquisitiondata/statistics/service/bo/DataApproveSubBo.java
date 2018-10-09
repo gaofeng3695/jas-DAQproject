@@ -23,6 +23,16 @@ public class DataApproveSubBo {
     /** 未审核数量 */
     private Integer unaudited ;
 
+    public DataApproveSubBo() {
+    }
+
+    public DataApproveSubBo(String code, String categoryCode, Integer total, Integer unaudited) {
+        this.code = code;
+        this.categoryCode = categoryCode;
+        this.total = total;
+        this.unaudited = unaudited;
+    }
+
     public String getCode() {
         return code;
     }

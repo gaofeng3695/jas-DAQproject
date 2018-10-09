@@ -13,7 +13,7 @@ import org.springframework.http.HttpStatus;
 public class ResultVOUtil {
 
     public static SimpleResult ofSuccess(Object data) {
-        return new SimpleResult(data);
+        return new SimpleResult<>(data);
     }
 
     public static SimpleResult ofSuccess() {
@@ -48,6 +48,9 @@ public class ResultVOUtil {
 
     public enum ErrorEnum {
 
+        /**
+         *
+         */
         PARAMS_ERROR(4003, "参数错误"),
 
         ;

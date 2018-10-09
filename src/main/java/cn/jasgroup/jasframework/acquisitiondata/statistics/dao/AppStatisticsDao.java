@@ -5,6 +5,7 @@ import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.ApproveStatusEnu
 import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.EntryStatisticsBlock;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.StatsPipeEnum;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.*;
+import cn.jasgroup.jasframework.acquisitiondata.variate.UnitHierarchyEnum;
 import cn.jasgroup.jasframework.dataaccess3.core.BaseNamedParameterJdbcTemplate;
 import cn.jasgroup.jasframework.engine.jdbc.dao.CommonDataJdbcDao;
 import cn.jasgroup.jasframework.support.ThreadLocalHolder;
@@ -71,6 +72,10 @@ public class AppStatisticsDao {
         return commonDataJdbcDao.queryForList(sql.toString(), variables, StatsResultBo.class);
     }
 
+public static void main(String[] args) {
+    List<String> codeList = new ArrayList<>(ApproveStatisticsBlock.ALL.keySet());
+    System.out.println(codeList);
+}
 
     /**
      * 数据审核统计 
@@ -78,46 +83,54 @@ public class AppStatisticsDao {
      * @return List
      */
     public List<DataApproveSubBo> listDataAuditing(String projectOid, List<String> supervisionUnits, List<String> unitIds, String unitType) {
-        List<String> codeList = new ArrayList<>(ApproveStatisticsBlock.ALL.keySet());
+
+        List<String> codeList;
+
+        if (UnitHierarchyEnum.detection_unit.getHierarchy().equals(unitType)) { // 检测单位
+            codeList = new ArrayList<>(ApproveStatisticsBlock.PIPE_INSPECTION_BLOCK.keySet());
+        } else if (UnitHierarchyEnum.construct_unit.getHierarchy().equals(unitType)) { // 检测单位
+            codeList = new ArrayList<>(ApproveStatisticsBlock.NON_DETECTION.keySet());
+        } else { // 全部单位
+            codeList = new ArrayList<>(ApproveStatisticsBlock.ALL.keySet());
+        }
+
         StringBuilder sql = new StringBuilder();
         String sqlTemplate = " " +
                 " select '%s' as code, '%s' as category_code, count(*) as total, " +
-                " sum(case when (approve_status=1) then 1 else 0 end) as unaudited " +
-                " from %s where active = 1 and approve_status!=0 and supervision_unit in (:supervisionUnits) ";
-
-        if (!StringUtils.isEmpty(projectOid)) {
-            sqlTemplate = sqlTemplate.concat(" and project_oid = :projectOid ");
-        }
+                " sum(case when (approve_status=1) then 1 else 0 end) as unaudited from %s " +
+                " where active = 1 and project_oid = :projectOid and approve_status!=0 and supervision_unit in (:supervisionUnits) ";
 
         // 拼接统计SQL
         for (int i = 0; i < codeList.size(); i++) {
             String code = codeList.get(i);
-            ApproveStatisticsBlock statisticsBlock = ApproveStatisticsBlock.ALL.get(code);
-            String tableName = statisticsBlock.getTableName();
-            String categoryCode = statisticsBlock.getCategoryCode();
+            ApproveStatisticsBlock statsBlock = ApproveStatisticsBlock.ALL.get(code);
+            String tableName = statsBlock.getTableName();
+            String categoryCode = statsBlock.getCategoryCode();
             sql.append(String.format(sqlTemplate, code, categoryCode, tableName));
 
             // 如果是管道检测分类下的: 统计的字段是检测单位, 其他分类则是施工单位
-            if (!CollectionUtils.isEmpty(unitIds)) {
-                if (ApproveStatisticsBlock.PIPE_INSPECTION_BLOCK.containsKey(code)) {
-                    sql.append(String.format(" and %s in (:constructUnitIds) ", ApproveStatisticsBlock.DETECTION_UNIT));
-                } else {
-                    sql.append(String.format(" and %s in (:constructUnitIds) ", ApproveStatisticsBlock.CONSTRUCT_UNIT));
-                }
+            if (ApproveStatisticsBlock.PIPE_INSPECTION_BLOCK.containsKey(code)) {
+                sql.append(" and detection_unit in (:unitIds) ");
+            } else {
+                sql.append(" and construct_unit in (:unitIds) ");
             }
 
             sql.append(i<(codeList.size()-1) ? " UNION ALL ":"");
         }
 
         Map<String, Object> variables = Maps.newHashMap();
-        variables.put("constructUnitIds", unitIds);
+        variables.put("unitIds", unitIds);
         variables.put("supervisionUnits", supervisionUnits);
         variables.put("projectOid", projectOid);
         return commonDataJdbcDao.queryForList(sql.toString(), variables, DataApproveSubBo.class);
     }
 
 
-
+    /**
+     * 查询该单位及该单位下级的所有单位ID集合
+     * @param hierarchy 单位层级
+     * @return List
+     */
     public List<String> queryConstructUnitByHierarchy(String hierarchy) {
         String sql = " select oid from pri_unit where active = 1 and hierarchy like :hierarchy ";
         List<Map<String, String>> list = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("hierarchy", hierarchy + "%"));

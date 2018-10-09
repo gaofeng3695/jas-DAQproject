@@ -255,9 +255,9 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 		String sql = "select distinct tt.unit_oid as key,pp.unit_name as value,pp.type from daq_implement_scope_ref tt "
 				+ "left join( "
 					+ "select distinct t.tenders_oid from daq_implement_scope_ref t "
-					+ "left join("
+					+ "inner join("
 						+ "select p.oid from pri_unit p "
-						+ "inner join (select hierarchy from pri_unit where oid='"+unitOid+"') pp on p.hierarchy like pp.hierarchy||'%') pu on pu.oid = t.unit_oid) uu on uu.tenders_oid = tt.tenders_oid "
+						+ "inner join (select hierarchy from pri_unit where oid='"+unitOid+"') pp on p.hierarchy like pp.hierarchy||'%' where p.active=1) pu on pu.oid = t.unit_oid) uu on uu.tenders_oid = tt.tenders_oid "
 				+ "inner join (select oid,unit_name,hierarchy,1 as type from pri_unit where hierarchy like 'Unit.0001.0005%' union all select oid,unit_name,hierarchy,2 as type from pri_unit where hierarchy like 'Unit.0001.0006%') pp on pp.oid=tt.unit_oid ";
 			if(StringUtils.isNotBlank(projectOid)){
 				sql +=" where tt.project_oid='"+projectOid+"' "; 
