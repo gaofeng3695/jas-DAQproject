@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,6 +21,8 @@ import cn.jasgroup.framework.data.result.SimpleResult;
 import cn.jasgroup.jasframework.acquisitiondata.privilege.service.DaqPrivilegeService;
 import cn.jasgroup.jasframework.base.controller.BaseController;
 import cn.jasgroup.jasframework.security.AuthUser;
+import cn.jasgroup.jasframework.security.service.UnitService;
+import cn.jasgroup.jasframework.security.service.bo.UnitBo;
 import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 
 @RestController
@@ -28,6 +31,15 @@ public class DaqPrivilegeController extends BaseController{
 	
 	@Resource(name="daqPrivilegeService")
 	private DaqPrivilegeService daqPrivilegeService;
+
+	@Autowired
+	private UnitService unitService;
+	
+	@RequestMapping("getUnitByCurrentUser")
+	public Object login(HttpServletRequest request){
+		AuthUser user = ThreadLocalHolder.getCurrentUser();
+		return unitService.getUnitBoByOid(user.getUnitId());
+	}
 	
 	/***
 	  * <p>功能描述：获取当前用户所在部门下的项目列表。</p>
