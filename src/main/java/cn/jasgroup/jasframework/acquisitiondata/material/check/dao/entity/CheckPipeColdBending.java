@@ -35,7 +35,7 @@ import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 )
 @UniqueConstraints(
 	strategys ={
-		@UniqueConstraintStrategy(columnNames={"certificateNum"})
+		@UniqueConstraintStrategy(columnNames={"certificateNum"},name="合格证编号")
 	}
 )
 @CommonDeleteBatchConfig(
