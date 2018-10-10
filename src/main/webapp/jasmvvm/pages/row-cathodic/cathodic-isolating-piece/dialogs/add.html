@@ -92,13 +92,13 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="监理工程师">
+							<el-form-item label="监理工程师" prop="supervisionEngineer">
 								<el-input v-model="formData.supervisionEngineer" clearable placeholder="请输入监理工程师" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="采集人员">
+							<el-form-item label="采集人员" prop="collectionPerson">
 								<el-input v-model="formData.collectionPerson" clearable placeholder="请输入采集人员" size="small"></el-input>
 							</el-form-item>
 						</el-col>
@@ -122,25 +122,25 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="相对桩位置(m)">
-								<el-input-number :precision="0" :step="1" :max="100000000" controls-position="right" v-model="formData.relativeMileage" clearable
+								<el-input-number :precision="0" :step="1" :max="99999999" controls-position="right" v-model="formData.relativeMileage" clearable
 								  placeholder="请输入相对桩位置" size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="X坐标">
-								<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData.pointx" clearable placeholder="请输入X坐标"
+								<el-input-number :precision="3" :step="1" :max="999999" controls-position="right" v-model="formData.pointx" clearable placeholder="请输入X坐标"
 								  size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="Y坐标">
-								<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData.pointy" clearable placeholder="请输入Y坐标"
+								<el-input-number :precision="3" :step="1" :max="999999" controls-position="right" v-model="formData.pointy" clearable placeholder="请输入Y坐标"
 								  size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="高程(m)">
-								<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData.pointz" clearable placeholder="请输入高程(m)"
+								<el-input-number :precision="3" :step="1" :max="999999" controls-position="right" v-model="formData.pointz" clearable placeholder="请输入高程(m)"
 								  size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
@@ -153,7 +153,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="名称">
+							<el-form-item label="名称" prop="isolatingPieceName">
 								<el-input v-model="formData.isolatingPieceName" clearable placeholder="请输入名称" size="small"></el-input>
 							</el-form-item>
 						</el-col>
@@ -166,7 +166,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="前管件编号">
+							<el-form-item label="前管件编号" prop="startPipeFittingNum">
 								<el-input v-model="formData.startPipeFittingNum" placeholder="请输入前管件编号" size="small"></el-input>
 							</el-form-item>
 						</el-col>
@@ -179,7 +179,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="后管件编号">
+							<el-form-item label="后管件编号" prop="endPipeFittingNum">
 								<el-input v-model="formData.endPipeFittingNum" placeholder="请输入后管件编号" size="small"></el-input>
 								<!--<el-select v-model="formData.endPipeFittingNum" clearable placeholder="请选择后管件编号" size="small">
 									<el-option v-for="item in domain.endPipeFittingNums" :key="item.key" :label="item.value" :value="item.key"> </el-option>
@@ -191,9 +191,10 @@
 					<jas-base-group-title name="其他信息"></jas-base-group-title>
 					<el-row>
 						<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-							<el-form-item label="备注" prop="remarks">
+							<jas-remarks :remarks="formData.remarks" @changevalue="changevalue"></jas-remarks>
+							<!--<el-form-item label="备注" prop="remarks">
 								<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"></el-input>
-							</el-form-item>
+							</el-form-item>-->
 						</el-col>
 					</el-row>
 					<!-- <el-row>
@@ -274,15 +275,44 @@
 						message: '监理单位为必填项',
 						trigger: 'change'
 					}],
-
+					isolatingPieceName: [{
+						min: "0",
+						max: 50,
+						message: "不能超过50个字"
+					}],
+					startPipeFittingNum: [{
+						min: "0",
+						max: 50,
+						message: "不能超过50个字"
+					}],
+					endPipeFittingNum: [{
+						min: "0",
+						max: 50,
+						message: "不能超过50个字"
+					}],
 					isolatingPieceCode: [{
 						required: true,
 						message: '绝缘件编号为必填项',
 						trigger: 'change'
+					}, {
+						min: "0",
+						max: 50,
+						message: "不能超过50个字"
 					}],
-
+					supervisionEngineer: [{
+						min: "0",
+						max: 50,
+						message: "不能超过50个字"
+					}],
+					collectionPerson: [{
+						min: "0",
+						max: 30,
+						message: "不能超过30个字"
+					}]
 				},
-				formData: {}
+				formData: {
+					pointx: ''
+				}
 			}
 		},
 
@@ -310,12 +340,15 @@
 				that.domain.pipeTypes = arr;
 			}); //查询管件类型
 		},
-		methods : {
-			childChange : function(event, id, name) {
+		methods: {
+			changevalue: function (msg) {
+				this.formData.remarks = msg;
+			},
+			childChange: function (event, id, name) {
 				if (event && !this.formData[id]) {
 					top.Vue.prototype.$message({
-						type : 'warning',
-						message : "请先选择" + name
+						type: 'warning',
+						message: "请先选择" + name
 					});
 				}
 			},

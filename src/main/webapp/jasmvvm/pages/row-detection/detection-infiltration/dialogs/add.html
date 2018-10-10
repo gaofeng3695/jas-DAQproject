@@ -32,9 +32,10 @@
 				<jas-base-group-title name="其他信息"></jas-base-group-title>
 				<el-row>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-						<el-form-item label="备注" prop="remarks">
+						<jas-remarks :remarks="form.remarks" @changevalue="changevalue"></jas-remarks>
+						<!--<el-form-item label="备注" prop="remarks">
 							<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="form.remarks"></el-input>
-						</el-form-item>
+						</el-form-item>-->
 					</el-col>
 				</el-row>
 				<jas-base-group-title name="附件信息"></jas-base-group-title>
@@ -153,7 +154,9 @@
 					weldOid: {
 						type: 'select',
 						isRequired: true,
-						requestParams:{detectionType:"3"}
+						requestParams: {
+							detectionType: "3"
+						}
 					},
 					weldCode: {
 						type: 'input',
@@ -161,6 +164,11 @@
 					},
 					detectionReportNum: {
 						type: 'input',
+						rules: [{
+							min: "0",
+							max: 60,
+							message: "不能超过60个字"
+						}]
 					},
 					detectionDeta: {
 						type: 'date',
@@ -178,7 +186,7 @@
 					},
 					detectionLength: {
 						type: 'number',
-						max: 100000000,
+						max: 999999,
 						precision: 3,
 					},
 					detectionDispose: {
@@ -198,12 +206,22 @@
 					},
 					detectionPerson: {
 						type: 'input',
+						rules: [{
+							min: "0",
+							max: 25,
+							message: "不能超过25个字"
+						}]
 					},
 					supervisionUnit: {
 						type: 'select',
 					},
 					supervisionEngineer: {
 						type: 'input',
+						rules: [{
+							min: "0",
+							max: 50,
+							message: "不能超过50个字"
+						}]
 					},
 					collectionDate: {
 						type: 'date',
@@ -212,6 +230,11 @@
 				sonFieldsConfig: {
 					defectPosition: {
 						type: 'input',
+						rules: [{
+							min: "0",
+							max: 60,
+							message: "不能超过60个字"
+						}]
 					},
 					defectProperties: {
 						type: 'select',
@@ -219,7 +242,7 @@
 					},
 					defectSize: {
 						type: 'number',
-						max: 100000000,
+						max: 999999,
 						precision: 3,
 					},
 				},
@@ -266,6 +289,9 @@
 
 		},
 		methods: {
+			changevalue: function (msg) {
+				this.form.remarks = msg;
+			},
 			cancel: function (param) {
 				window.parent.jasTools.dialog.close(param);
 			},

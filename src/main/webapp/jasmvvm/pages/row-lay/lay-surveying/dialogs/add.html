@@ -47,7 +47,8 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="线路段/穿跨越" prop="pipeSegmentOrCrossOid" required>
-							<el-select v-model="form.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small" @change="pipeSegmentChanged" @visible-change="childChange($event,'pipelineOid','管线名称')">
+							<el-select v-model="form.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small" @change="pipeSegmentChanged"
+							  @visible-change="childChange($event,'pipelineOid','管线名称')">
 								<el-option v-for="item in domain.pipeSegment" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
@@ -75,13 +76,13 @@
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="监理工程师">
+						<el-form-item label="监理工程师" prop="supervisionEngineer">
 							<el-input v-model="form.supervisionEngineer" clearable placeholder="请输入监理工程师" size="small"></el-input>
 						</el-form-item>
 					</el-col>
 
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="采集人员">
+						<el-form-item label="采集人员" prop="collectionPerson">
 							<el-input v-model="form.collectionPerson" clearable placeholder="请输入采集人员" size="small"></el-input>
 						</el-form-item>
 					</el-col>
@@ -110,9 +111,10 @@
 				<jas-base-group-title name="其他信息"></jas-base-group-title>
 				<el-row>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-						<el-form-item label="备注">
+						<jas-remarks :remarks="form.remarks" @changevalue="changevalue"></jas-remarks>
+						<!--<el-form-item label="备注">
 							<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="form.remarks"></el-input>
-						</el-form-item>
+						</el-form-item>-->
 					</el-col>
 				</el-row>
 				<jas-base-group-title name="附件信息"></jas-base-group-title>
@@ -165,27 +167,27 @@
 				sonFieldsConfig: {
 					relativeMileage: {
 						type: 'number',
-						max: 10000000,
+						max: 999999,
 						precision: 3,
 					},
 					measuredAngle: {
 						type: 'number',
-						max: 10000000,
+						max: 999999,
 						precision: 3,
 					},
 					drawingAngle: {
 						type: 'number',
-						max: 10000000,
+						max: 999999,
 						precision: 3,
 					},
 					leftWidth: {
 						type: 'number',
-						max: 1000000,
+						max: 99999,
 						precision: 3,
 					},
 					rightWidth: {
 						type: 'number',
-						max: 1000000,
+						max: 99999,
 						precision: 3,
 					},
 				},
@@ -225,7 +227,16 @@
 						message: '桩号为必填项',
 						trigger: 'change'
 					}],
-
+					supervisionEngineer: [{
+						min: "0",
+						max: 50,
+						message: "不能超过50个字"
+					}],
+					collectionPerson: [{
+						min: "0",
+						max: 30,
+						message: "不能超过30个字"
+					}]
 				},
 				form: {
 
@@ -256,6 +267,9 @@
 
 		},
 		methods: {
+			changevalue: function (msg) {
+				this.form.remarks = msg;
+			},
 			requestDomainFromBizTable: function (url, obj, cb) {
 				var that = this;
 				var url = jasTools.base.rootPath + url;

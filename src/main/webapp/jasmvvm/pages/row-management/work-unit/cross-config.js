@@ -66,12 +66,22 @@ var crossConfig = {
     workUnitName: {
       type: 'input',
       name: '机组名称',
-      isRequired: true
+      isRequired: true,
+      rules: [{
+        min: "0",
+        max: 50,
+        message: "不能超过50个字"
+      }]
     },
     workUnitCode: {
       type: 'input',
       name: '机组编号',
-      isRequired: true
+      isRequired: true,
+      rules: [{
+        min: "0",
+        max: 50,
+        message: "不能超过50个字"
+      }]
     },
     workUnitType: {
       type: 'select',

@@ -33,21 +33,22 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="标段名称" prop="tendersOid" required>
-							<el-select v-model="form.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged"  @visible-change="childChange($event,'projectOid','项目名称')">
+							<el-select v-model="form.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged" @visible-change="childChange($event,'projectOid','项目名称')">
 								<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="管线名称" prop="pipelineOid" required>
-							<el-select v-model="form.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged"  @visible-change="childChange($event,'tendersOid','标段名称')">
+							<el-select v-model="form.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged" @visible-change="childChange($event,'tendersOid','标段名称')">
 								<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="线路段/穿跨越" prop="pipeSegmentOrCrossOid" required>
-							<el-select v-model="form.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small" @change="pipeSegmentChanged" @visible-change="childChange($event,'pipelineOid','管线名称')">
+							<el-select v-model="form.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small" @change="pipeSegmentChanged"
+							  @visible-change="childChange($event,'pipelineOid','管线名称')">
 								<el-option v-for="item in domain.pipeSegment" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
@@ -68,20 +69,20 @@
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="监理单位" >
+						<el-form-item label="监理单位">
 							<el-select v-model="form.supervisionUnit" clearable placeholder="请选择监理单位" size="small" @visible-change="childChange($event,'tendersOid','标段名称')">
 								<el-option v-for="item in domain.supervisionUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="监理工程师">
+						<el-form-item label="监理工程师" prop="supervisionEngineer">
 							<el-input v-model="form.supervisionEngineer" clearable placeholder="请输入监理工程师" size="small"></el-input>
 						</el-form-item>
 					</el-col>
 
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="采集人员">
+						<el-form-item label="采集人员" prop="collectionPerson">
 							<el-input v-model="form.collectionPerson" clearable placeholder="请输入采集人员" size="small"></el-input>
 						</el-form-item>
 					</el-col>
@@ -111,14 +112,14 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="相对起始桩里程(m)">
-							<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="form.startRelativeMileage" clearable
+							<el-input-number :precision="3" :step="1" :max="999999" controls-position="right" v-model="form.startRelativeMileage" clearable
 							  placeholder="请输入相对起始桩里程(m)" size="small"></el-input-number>
 						</el-form-item>
 					</el-col>
 
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="相对结束桩里程(m)">
-							<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="form.endRelativeMileage" clearable
+							<el-input-number :precision="3" :step="1" :max="999999" controls-position="right" v-model="form.endRelativeMileage" clearable
 							  placeholder="请输入相对结束桩里程(m)" size="small"></el-input-number>
 						</el-form-item>
 						</el-form-item>
@@ -129,9 +130,10 @@
 				<jas-base-group-title name="其他信息"></jas-base-group-title>
 				<el-row>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-						<el-form-item label="备注">
+						<jas-remarks :remarks="form.remarks" @changevalue="changevalue"></jas-remarks>
+						<!--<el-form-item label="备注">
 							<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="form.remarks"></el-input>
-						</el-form-item>
+						</el-form-item>-->
 					</el-col>
 				</el-row>
 				<jas-base-group-title name="附件信息"></jas-base-group-title>
@@ -169,15 +171,25 @@
 				fieldsConfig: {
 					length: {
 						type: 'number',
-						max: 100000,
+						max: 999999,
 						precision: 3,
 					},
 					region: {
 						type: 'input',
+						rules: [{
+							min: "0",
+							max: 60,
+							message: "不能超过60个字"
+						}]
 					},
 					certificateNum: {
 						type: 'input',
 						isRequired: true,
+						rules: [{
+							min: "0",
+							max: 60,
+							message: "不能超过60个字"
+						}]
 					},
 				},
 				domain: {
@@ -244,7 +256,17 @@
 						required: true,
 						message: '相对结束桩里程为必填项',
 						trigger: 'change'
-					}]
+					}],
+					supervisionEngineer: [{
+						min: "0",
+						max: 50,
+						message: "不能超过50个字"
+					}],
+					collectionPerson: [{
+						min: "0",
+						max: 30,
+						message: "不能超过30个字"
+					}],
 
 				},
 				form: {
@@ -276,6 +298,9 @@
 
 		},
 		methods: {
+			changevalue: function (msg) {
+				this.form.remarks = msg;
+			},
 			requestDomainFromBizTable: function (url, obj, cb) {
 				var that = this;
 				var url = jasTools.base.rootPath + url;

@@ -76,33 +76,33 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="弯制单位">
+							<el-form-item label="弯制单位" prop="productionUnit">
 								<el-input v-model="formData.productionUnit" clearable placeholder="请输入弯制单位" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="弯管长度(m)">
-								<el-input-number :precision="3" :step="1" :max="100000" controls-position="right" v-model="formData.pipeLength" clearable
+								<el-input-number :precision="3" :step="1" :max="999999" controls-position="right" v-model="formData.pipeLength" clearable
 								  placeholder="弯管长度(m)" size="small"></el-input-number>
 								<!--<el-input v-model="formData.pipeLength" clearable placeholder="请输入弯道长度(m)" size="small"></el-input>-->
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="弯制角度(°)">
-								<el-input-number :precision="0" :step="1" :max="10000" controls-position="right" v-model="formData.bendAngle" clearable placeholder="弯制角度(°)"
+								<el-input-number :precision="0" :step="1" :max="9999" controls-position="right" v-model="formData.bendAngle" clearable placeholder="弯制角度(°)"
 								  size="small"></el-input-number>
 
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="管径(mm)">
-								<el-input-number :precision="3" :step="1" :max="100000" controls-position="right" v-model="formData.pipeDiameter" clearable
+								<el-input-number :precision="3" :step="1" :max="999999" controls-position="right" v-model="formData.pipeDiameter" clearable
 								  placeholder="请输入管径(mm)" size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="壁厚(mm)">
-								<el-input-number :precision="3" :step="1" :max="100000" controls-position="right" v-model="formData.wallThickness" clearable
+								<el-input-number :precision="3" :step="1" :max="999999" controls-position="right" v-model="formData.wallThickness" clearable
 								  placeholder="请输入壁厚(mm)" size="small"></el-input-number>
 
 							</el-form-item>
@@ -149,7 +149,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="检查人">
+							<el-form-item label="检查人" prop="checkedBy">
 								<el-input v-model="formData.checkedBy" clearable placeholder="请输入检查人" size="small"></el-input>
 							</el-form-item>
 						</el-col>
@@ -158,18 +158,14 @@
 					<el-row>
 						<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 							<el-form-item label="备注" prop="remarks">
-								<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"></el-input>
+								<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"  :maxLength="200"  @input="instructionNum"></el-input>
+							    <p style="text-align:right;color:#999;">您还可以输入<span v-text="remarksDesc"></span>字</p>
 							</el-form-item>
 						</el-col>
 					</el-row>
 					<jas-base-group-title name="附件信息"></jas-base-group-title>
 					<jas-file-upload ref="upload" @success="uploadSuccess"></jas-file-upload>
 				</el-form>
-
-
-
-
-
 			</div>
 			<div slot="footer" class="dialog-footer" style="text-align: center">
 				<el-button size="small" @click="cancel()">取 消</el-button>
@@ -190,6 +186,7 @@
 		data: function () {
 			var that = this;
 			return {
+				remarksDesc:200,
 				domain: {
 					isPass: [{
 						key: '0',
@@ -212,7 +209,21 @@
 					certificateNum: [{
 						required: true,
 						message: '合格编号为必填项',
-						trigger: 'change'
+						trigger: 'blur'
+					},{
+						min:"0",
+						max:60,
+						message:"不能超过60字"
+					}],
+					productionUnit:[{
+						min:"0",
+						max:60,
+						message:"不能超过60字"
+					}],
+					checkedBy:[{
+						min:"0",
+						max:20,
+						message:"不能超过20字"
 					}],
 					projectOid: [{
 						required: true,
@@ -275,7 +286,12 @@
 				});
 			this.getConstructUnit();
 		},
-		methods: {
+		methods: {		
+			instructionNum: function () {
+				var that = this;
+				var num = 200 - that.formData.remarks.trim().length;
+				that.remarksDesc = num;
+		     }, //剩余字数计算
 			childChange: function (event, id, name) {
 				if (event && !this.formData[id]) {
 					top.Vue.prototype.$message({

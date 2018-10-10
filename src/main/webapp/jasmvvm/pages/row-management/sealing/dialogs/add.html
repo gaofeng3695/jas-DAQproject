@@ -124,7 +124,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="生产厂家">
+							<el-form-item label="生产厂家" prop="manufacturer">
 								<el-input v-model="formData.manufacturer" clearable placeholder="请输入生产厂家" size="small"></el-input>
 							</el-form-item>
 						</el-col>
@@ -142,7 +142,8 @@
 					<el-row>
 						<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 							<el-form-item label="备注" prop="remarks">
-								<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"></el-input>
+								<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"  :maxLength="200"  @input="instructionNum"></el-input>
+							      <p style="text-align:right;color:#999;">您还可以输入<span v-text="remarksDesc"></span>字</p>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -210,7 +211,11 @@
 					closureCode: [{
 						required: true,
 						message: '封堵物编号为必填项',
-						trigger: 'change'
+						trigger: 'blur'
+					},{
+						min: "0",
+						max: 36,
+						message: "不能超过36字"
 					}],
 					projectOid: [{
 							required: true,
@@ -232,6 +237,11 @@
 						message: '管线名称为必填项',
 						trigger: 'change'
 					}],
+					manufacturer:[{
+						min: "0",
+						max: 50,
+						message: "不能超过50字"
+					}]
 				},
 				formData: {
 					projectOid: "",
@@ -249,7 +259,8 @@
 					manufacturerDate: '',
 					isUse: 0,
 					remarks: ""
-				}
+				},
+				remarksDesc:200
 			}
 		},
 		mounted: function () {
@@ -281,6 +292,11 @@
 
 		},
 		methods: {
+			instructionNum: function () {
+				var that = this;
+				var num = 200 - that.formData.remarks.trim().length;
+				that.remarksDesc = num;
+			}, //剩余字数计算
 			cancel: function (param) {
 				window.parent.jasTools.dialog.close(param);
 			},
