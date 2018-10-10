@@ -35,7 +35,7 @@ import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 )
 @UniqueConstraints(
 	strategys ={
-		@UniqueConstraintStrategy(columnNames={"closureCode"})
+		@UniqueConstraintStrategy(columnNames={"closureCode"},name="封堵物编号")
 	}
 )
 @JdbcEntity(name="daq_material_closure")
