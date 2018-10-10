@@ -770,6 +770,8 @@ var crossConfig = {
     startRelativeMileage: {
       type: 'number',
       name: '相对起始桩位置(m)',
+      max: 99999999,
+      precision: 0,
       isRequired: true
     },
     endMedianStakeOid: {
@@ -782,6 +784,8 @@ var crossConfig = {
     },
     endRelativeMileage: {
       type: 'number',
+      max: 99999999,
+      precision: 0,
       name: '相对结束桩位置(m)',
       isRequired: true
     },
@@ -813,10 +817,20 @@ var crossConfig = {
     supervisionEngineer: {
       type: 'input',
       name: '监理工程师',
+      rules: [{
+        min: "0",
+        max: 50,
+        message: "不能超过50个字"
+      }]
     },
     collectionPerson: {
       type: 'input',
       name: '采集人员',
+      rules: [{
+        min: "0",
+        max: 30,
+        message: "不能超过30个字"
+      }]
     },
     collectionDate: {
       type: 'date',
@@ -825,6 +839,8 @@ var crossConfig = {
     startPointx: {
       type: 'number',
       name: '起始点X坐标',
+      max: 999999,
+      precision: 3,
       nameConfig: {
         crossDrilling: '入土点X坐标'
       }
@@ -832,6 +848,8 @@ var crossConfig = {
     startPointy: {
       type: 'number',
       name: '起始点Y坐标',
+      max: 999999,
+      precision: 3,
       nameConfig: {
         crossDrilling: '入土点Y坐标'
       }
@@ -839,6 +857,8 @@ var crossConfig = {
     startPointz: {
       type: 'number',
       name: '起始点高程(m)',
+      max: 999999,
+      precision: 3,
       nameConfig: {
         crossDrilling: '入土点高程(m)'
       }
@@ -846,6 +866,8 @@ var crossConfig = {
     endPointx: {
       type: 'number',
       name: '结束点X坐标',
+      max: 999999,
+      precision: 3,
       nameConfig: {
         crossDrilling: '出土点X坐标'
       }
@@ -853,6 +875,8 @@ var crossConfig = {
     endPointy: {
       type: 'number',
       name: '结束点Y坐标',
+      max: 999999,
+      precision: 3,
       nameConfig: {
         crossDrilling: '出土点Y坐标'
       }
@@ -860,6 +884,8 @@ var crossConfig = {
     endPointz: {
       type: 'number',
       name: '结束点高程(m)',
+      max: 999999,
+      precision: 3,
       nameConfig: {
         crossDrilling: '出土点高程(m)'
       }
@@ -879,6 +905,11 @@ var crossConfig = {
     crossingDepartment: {
       type: 'input',
       name: '穿越物管理单位',
+      rules: [{
+        min: "0",
+        max: 50,
+        message: "不能超过50个字"
+      }]
     },
     crossLength: {
       type: 'number',
@@ -895,6 +926,11 @@ var crossConfig = {
     steadyTubeMeasures: {
       type: 'input',
       name: '稳管措施',
+      rules: [{
+        min: "0",
+        max: 200,
+        message: "不能超过200个字"
+      }]
     },
     approveStatus: {
       type: 'input',
@@ -902,26 +938,41 @@ var crossConfig = {
       formatter: function (a, b, value, c) {
         if (value == -1) return '驳回';
         // if (value == 0) return '未上报';
-        if (value == 1) return '审核中';
+        if (value == 1) return '待审核';
         if (value == 2) return '通过';
         return '未上报';
       }
     },
-    remarks:{
-    	name:"备注",
-    	type:"textarea"
+    remarks: {
+      name: "备注",
+      type: "textarea"
     },
     steadyTubeMeasures: {
       name: '稳管措施',
       type: 'input',
+      rules: [{
+        min: "0",
+        max: 200,
+        message: "不能超过200个字"
+      }]
     },
     cofferdamGrade: {
       name: '钻爆围堰等级',
       type: 'input',
+      rules: [{
+        min: "0",
+        max: 50,
+        message: "不能超过50个字"
+      }]
     },
     liningType: {
       name: '衬砌形式',
       type: 'input',
+      rules: [{
+        min: "0",
+        max: 50,
+        message: "不能超过50个字"
+      }]
     },
     acrossTypeName: {
       name: '跨越类型'

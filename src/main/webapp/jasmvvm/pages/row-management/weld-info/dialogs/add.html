@@ -122,13 +122,13 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="监理工程师">
+							<el-form-item label="监理工程师" prop="supervisionEngineer">
 								<el-input v-model="formData.supervisionEngineer" clearable placeholder="请输入监理工程师" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="采集人员">
+							<el-form-item label="采集人员" prop="collectionPerson">
 								<el-input v-model="formData.collectionPerson" clearable placeholder="请输入采集人员" size="small"></el-input>
 							</el-form-item>
 						</el-col>
@@ -152,7 +152,7 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="相对桩位置" prop="relativeMileage" required>
-								<el-input-number :precision="3" :step="1" :max="100000" controls-position="right" v-model="formData.relativeMileage" clearable
+								<el-input-number :precision="3" :step="1" :max="999999" controls-position="right" v-model="formData.relativeMileage" clearable
 								  placeholder="请输入相对桩位置" size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
@@ -212,12 +212,12 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="焊条批号">
+							<el-form-item label="焊条批号" prop="weldRodBatchNum">
 								<el-input v-model="formData.weldRodBatchNum" clearable placeholder="请输入焊条批号" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="焊丝批号">
+							<el-form-item label="焊丝批号" prop="weldWireBatchNum">
 								<el-input v-model="formData.weldWireBatchNum" clearable placeholder="请输入焊丝批号" size="small"></el-input>
 							</el-form-item>
 						</el-col>
@@ -254,9 +254,7 @@
 					<jas-base-group-title name="其他信息"></jas-base-group-title>
 					<el-row>
 						<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-							<el-form-item label="备注" prop="remarks">
-								<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"></el-input>
-							</el-form-item>
+							<jas-remarks :remarks="formData.remarks" @changevalue="changevalue"></jas-remarks>
 						</el-col>
 					</el-row>
 					<!-- <el-row>
@@ -325,7 +323,7 @@
 					}, {
 						key: 0,
 						value: '否'
-					}],//是否
+					}], //是否
 				},
 				rules: {
 					projectOid: [{
@@ -381,7 +379,11 @@
 					weldCode: [{
 						required: true,
 						message: '焊口编号',
-						trigger: 'change'
+						trigger: 'blur'
+					}, {
+						min: "0",
+						max: 50,
+						message: '不能超过50个字'
 					}],
 					frontPipeType: [{
 						required: true,
@@ -402,6 +404,26 @@
 						required: true,
 						message: '后管件编号为必填项',
 						trigger: 'change'
+					}],
+					supervisionEngineer: [{
+						min: "0",
+						max: 50,
+						message: '不能超过50个字'
+					}],
+					collectionPerson: [{
+						min: "0",
+						max: 30,
+						message: '不能超过30个字'
+					}],
+					weldRodBatchNum: [{
+						min: "0",
+						max: 60,
+						message: '不能超过60个字'
+					}],
+					weldWireBatchNum:[{
+							min: "0",
+						max: 60,
+						message: '不能超过60个字'
 					}]
 				},
 				formData: {
@@ -475,6 +497,9 @@
 			}); //查询管件类型
 		},
 		methods: {
+			changevalue: function (msg) {
+				this.formData.remarks = msg;
+			},
 			cancel: function (param) {
 				window.parent.jasTools.dialog.close(param);
 			},
@@ -700,22 +725,22 @@
 				}
 				var coverOid = that.formData.coverOid;
 				var coverOidStr = "";
-				for(var i=0;i<coverOid.length;i++){
-					coverOidStr+=coverOid[i]+",";
+				for (var i = 0; i < coverOid.length; i++) {
+					coverOidStr += coverOid[i] + ",";
 				}
 				var renderOid = that.formData.renderOid;
 				var renderOidStr = "";
-				for(var i=0;i<renderOid.length;i++){
-					renderOidStr+=renderOid[i]+",";
+				for (var i = 0; i < renderOid.length; i++) {
+					renderOidStr += renderOid[i] + ",";
 				}
 				var padderOid = that.formData.padderOid;
 				var padderOidStr = "";
-				for(var i=0;i<padderOid.length;i++){
-					padderOidStr+=padderOid[i]+",";
+				for (var i = 0; i < padderOid.length; i++) {
+					padderOidStr += padderOid[i] + ",";
 				}
-				that.formData.coverOid = coverOidStr.substr(0,coverOidStr.length-1)
-				that.formData.renderOid = renderOidStr.substr(0,renderOidStr.length-1)
-				that.formData.padderOid = padderOidStr.substr(0,padderOidStr.length-1)
+				that.formData.coverOid = coverOidStr.substr(0, coverOidStr.length - 1)
+				that.formData.renderOid = renderOidStr.substr(0, renderOidStr.length - 1)
+				that.formData.padderOid = padderOidStr.substr(0, padderOidStr.length - 1)
 				jasTools.ajax.post(url, that.formData, function (data) {
 					that.$refs.upload.uploadFile(data.data || that.oid);
 				});
@@ -738,25 +763,25 @@
 						that.formData[key] = data.rows[0][key];
 					} */
 					that.formData = data.rows[0];
-					
+
 					if (that.formData.coverOid.length == 0) {
 						that.formData.coverOid = [];
 					} else {
 						that.formData.coverOid = that.formData.coverOid.split(",");
 					}
-					
+
 					if (that.formData.renderOid.length == 0) {
 						that.formData.renderOid = [];
 					} else {
 						that.formData.renderOid = that.formData.renderOid.split(",");
 					}
-					
+
 					if (that.formData.padderOid.length == 0) {
 						that.formData.padderOid = [];
 					} else {
 						that.formData.padderOid = that.formData.padderOid.split(",");
 					}
-					
+
 					that.projectChanged(data.rows[0].projectOid);
 					that.tendersChanged(data.rows[0].tendersOid);
 					that.getSupervisionUnit(data.rows[0].tendersOid);

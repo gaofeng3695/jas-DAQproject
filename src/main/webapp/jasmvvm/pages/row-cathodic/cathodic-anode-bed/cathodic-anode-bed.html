@@ -106,9 +106,9 @@
 							if (value == -1)
 								return '驳回';
 							if (value == 0)
-								return '未提交';
+								return '未上报';
 							if (value == 1)
-								return '审核中';
+								return '待审核';
 							if (value == 2)
 								return '通过';
 							return value;
@@ -154,12 +154,12 @@
 						name: '是否临时',
 						field: 'isTemporary',
 						formatter: function (a, b, value, c) {
-				
+
 							if (value == 0)
 								return '是';
 							if (value == 1)
 								return '否';
-						
+
 						}
 					}, {
 						name: '设计寿命(年)',
@@ -197,23 +197,23 @@
 						name: '是否有注水系统',
 						field: 'isWaterInjection',
 					 formatter: function (a, b, value, c) {
-						
+
 						if (value == 0)
 							return '是';
 						if (value == 1)
 							return '否';
-					
+
 					}
 				},{
 						name: '是否有排气孔',
 						field: 'isAirbleed',
 					formatter: function (a, b, value, c) {
-						
+
 						if (value == 0)
 							return '是';
 						if (value == 1)
 							return '否';
-					
+
 					}
 				}, {
 						name: '埋设日期',

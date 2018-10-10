@@ -91,12 +91,12 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="监理工程师">
+							<el-form-item label="监理工程师" prop="supervisionEngineer">
 								<el-input v-model="formData.supervisionEngineer" clearable placeholder="请输入监理工程师" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="采集人员">
+							<el-form-item label="采集人员" prop="collectionPerson">
 								<el-input v-model="formData.collectionPerson" clearable placeholder="请输入采集人员" size="small"></el-input>
 							</el-form-item>
 						</el-col>
@@ -118,26 +118,26 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="相对桩位置(m)" prop="relativeMileage" required>
-								<el-input-number :precision="0" :step="1" :max="100000000" controls-position="right" v-model="formData.relativeMileage"
-								  clearable placeholder="请输入相对桩位置(m)" size="small"></el-input-number>
+								<el-input-number :precision="0" :step="1" :max="99999999" controls-position="right" v-model="formData.relativeMileage" clearable
+								  placeholder="请输入相对桩位置(m)" size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="X坐标">
-								<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData.pointx" clearable
-								  placeholder="请输入X坐标" size="small"></el-input-number>
+								<el-input-number :precision="3" :step="1" :max="999999" controls-position="right" v-model="formData.pointx" placeholder="请输入X坐标"
+								  size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="Y坐标">
-								<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData.pointy" clearable placeholder="请输入Y坐标"
+								<el-input-number :precision="3" :step="1" :max="999999" controls-position="right" v-model="formData.pointy" placeholder="请输入Y坐标"
 								  size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="高程(m)">
-								<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData.pointz" clearable
-								  placeholder="请输入高程(m)" size="small"></el-input-number>
+								<el-input-number :precision="3" :step="1" :max="999999" controls-position="right" v-model="formData.pointz" placeholder="请输入高程(m)"
+								  size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -146,9 +146,10 @@
 					<jas-base-group-title name="其他信息"></jas-base-group-title>
 					<el-row>
 						<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-							<el-form-item label="备注" prop="remarks">
+							<jas-remarks :remarks="formData.remarks" @changevalue="changevalue"></jas-remarks>
+							<!--<el-form-item label="备注" prop="remarks">
 								<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"></el-input>
-							</el-form-item>
+							</el-form-item>-->
 						</el-col>
 					</el-row>
 					<jas-base-group-title name="附件信息"></jas-base-group-title>
@@ -224,9 +225,21 @@
 						required: true,
 						message: '相对桩距离为必填项',
 						trigger: 'change'
+					}],
+					supervisionEngineer: [{
+						min: "0",
+						max: 50,
+						message: "不能超过50个字"
+					}],
+					collectionPerson: [{
+						min: "0",
+						max: 30,
+						message: "不能超过30个字"
 					}]
 				},
-				formData: {},
+				formData: {
+					projectOid: '',
+				},
 				fields: [{
 					name: "地床编号",
 					field: "groundBed"
@@ -285,14 +298,24 @@
 				fieldsConfig: {
 					groundBed: {
 						type: 'input',
-						isRequired: true
+						isRequired: true,
+						rules: [{
+							min: "0",
+							max: 50,
+							message: "不能超过50个字"
+						}]
 					},
 					installLocationDescription: {
-						type: 'input'
+						type: 'input',
+						rules: [{
+							min: "0",
+							max: 200,
+							message: "不能超过200个字"
+						}]
 					},
 					buriedDepth: {
 						type: 'number',
-						max: 1000000,
+						max: 999999,
 						precision: 2
 					},
 					isTemporary: {
@@ -307,7 +330,7 @@
 					},
 					designLife: {
 						type: 'number',
-						max: 1000,
+						max: 999,
 						precision: 0
 					},
 					backfillMaterial: {
@@ -325,28 +348,38 @@
 					},
 					totalWeight: {
 						type: 'number',
-						max: 1000000,
+						max: 999999,
 						precision: 1
 					},
 					cableLength: {
 						type: 'number',
-						max: 1000000,
+						max: 999999,
 						precision: 1
 					},
 					protectLength: {
 						type: 'number',
-						max: 1000000,
+						max: 999999,
 						precision: 2
 					},
 					anodeMaterialType: {
 						type: 'input',
+						rules: [{
+							min: "0",
+							max: 50,
+							message: "不能超过50个字"
+						}]
 					},
 					anodeMaterialSpec: {
-						type: 'input'
+						type: 'input',
+						rules: [{
+							min: "0",
+							max: 50,
+							message: "不能超过50个字"
+						}]
 					},
 					anodeResistance: {
 						type: 'number',
-						max: 1000000,
+						max: 999999,
 						precision: 1
 					},
 					isWaterInjection: {
@@ -373,12 +406,16 @@
 						type: 'date'
 					},
 					connectionPower: {
-						type: 'input'
+						type: 'input',
+						rules: [{
+							min: "0",
+							max: 35,
+							message: "不能超过35个字"
+						}]
 					}
 				}
 			}
 		},
-
 		mounted: function () {
 			var that = this;
 			var param = window.jasTools.base.getParamsInUrl(location.href);
@@ -401,6 +438,9 @@
 			});
 		},
 		methods: {
+			changevalue: function (msg) {
+				this.formData.remarks = msg;
+			},
 			childChange: function (event, id, name) {
 				if (event && !this.formData[id]) {
 					top.Vue.prototype.$message({
@@ -564,9 +604,7 @@
 				jasTools.ajax.post(url, {
 					oid: that.oid
 				}, function (data) {
-
 					that.formData = data.rows[0];
-
 					that.projectChanged(data.rows[0].projectOid);
 					that.tendersChanged(data.rows[0].tendersOid);
 					that.getSupervisionUnit(data.rows[0].tendersOid);
