@@ -19,10 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 import cn.jasgroup.framework.data.result.ListResult;
 import cn.jasgroup.framework.data.result.SimpleResult;
 import cn.jasgroup.jasframework.acquisitiondata.privilege.service.DaqPrivilegeService;
+import cn.jasgroup.jasframework.acquisitiondata.variate.UnitHierarchyEnum;
 import cn.jasgroup.jasframework.base.controller.BaseController;
 import cn.jasgroup.jasframework.security.AuthUser;
+import cn.jasgroup.jasframework.security.controller.LoginController;
+import cn.jasgroup.jasframework.security.dao.entity.PriUnit;
 import cn.jasgroup.jasframework.security.service.UnitService;
 import cn.jasgroup.jasframework.security.service.bo.UnitBo;
+import cn.jasgroup.jasframework.security.service.bo.UserBo;
 import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 
 @RestController
@@ -34,6 +38,9 @@ public class DaqPrivilegeController extends BaseController{
 
 	@Autowired
 	private UnitService unitService;
+	
+	@Autowired
+	private LoginController loginController;
 	
 	@RequestMapping("getUnitByCurrentUser")
 	public Object login(HttpServletRequest request){
@@ -388,6 +395,42 @@ public class DaqPrivilegeController extends BaseController{
 		}catch(Exception e){
 			result = new ListResult<>(-1, "400", e.getMessage());
 			e.printStackTrace();
+		}
+		return result;
+	}
+	/***
+	  * <p>功能描述：APP端登录。</p>
+	  * <p> 雷凯。</p>	
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年10月11日 下午3:38:53。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value="/appLogin",method = RequestMethod.POST)
+	@ResponseBody
+	public Object appLogin(HttpServletRequest request,@RequestBody Map<String,Object> paramMap){
+		Map<String, Object> result = (Map<String, Object>)loginController.login(request, paramMap);
+		UserBo userBo = (UserBo)result.get("user");
+		String unitOid = userBo.getUnitId();
+		PriUnit unitEntity = (PriUnit)unitService.get(PriUnit.class,unitOid);
+		if(unitEntity==null){
+			result.put("unitType", -1);
+			return result;
+		}
+		String hierarchy = unitEntity.getHierarchy();
+		if(hierarchy.startsWith(UnitHierarchyEnum.construct_unit.getHierarchy())){//施工单位
+			result.put("unitType", 1);
+		}else if(hierarchy.startsWith(UnitHierarchyEnum.supervision_unit.getHierarchy())){//监理单位
+			result.put("unitType", 2);
+		}else if(hierarchy.startsWith(UnitHierarchyEnum.detection_unit.getHierarchy())){//检测单位
+			result.put("unitType", 3);
+		}else if(hierarchy.startsWith(UnitHierarchyEnum.project_unit.getHierarchy())){//建设单位
+			result.put("unitType", 4);
+		}else if(hierarchy.startsWith(UnitHierarchyEnum.supplier.getHierarchy())){//厂商
+			result.put("unitType", 5);
+		}else{
+			result.put("unitType", 0);
 		}
 		return result;
 	}
