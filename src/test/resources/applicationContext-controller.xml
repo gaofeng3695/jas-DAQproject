@@ -53,6 +53,7 @@
 		<mvc:interceptor>
 			<mvc:mapping path="/**/*.do" />
 			<mvc:exclude-mapping path="/**/login.do"/>
+			<mvc:exclude-mapping path="/**/daq/privilege/getUserUnitType.do"/>
 			<bean class="cn.jasgroup.framework.script.interceptor.TokenInterceptor"/>
 	  	</mvc:interceptor>
 	</mvc:interceptors>
