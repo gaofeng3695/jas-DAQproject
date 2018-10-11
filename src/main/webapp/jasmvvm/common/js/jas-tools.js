@@ -365,6 +365,11 @@
 
 	var ajax = (function () {
 		var ajax = function (type, url, params, cb_success, cb_fail) {
+			for(var key in params){
+				if(params[key]==undefined){
+					params[key]=null;
+				}
+			}
 			var data = type === 'GET' ? params : JSON.stringify(params)
 			$.ajax({
 				type: type || "GET",
