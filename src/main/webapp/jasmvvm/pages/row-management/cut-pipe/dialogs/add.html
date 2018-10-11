@@ -303,9 +303,8 @@
 					total += this.formData[names[i]];
 				}
 				for (var i = names.length - 1; i > num - 1; i--) {
-					console.log(names.length)
 					if (this.formData[names[i]]) {
-						delete this.formData[names[i]];
+						this.formData[names[i]]="";
 					}
 				}
 				if (total > this.formData.pipeLength) {
