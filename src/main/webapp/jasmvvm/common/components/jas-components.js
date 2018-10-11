@@ -2027,11 +2027,6 @@ Vue.component('jas-remarks', {
 			remark:this.remarks
 		}
 	},
-	watch: {
-		remarks: function () {
-			console.log(this.remarks)
-		}
-	},
 	template: [
 		'<el-form-item label="备注">',
 		'<el-input type="textarea"  :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="remark"',
