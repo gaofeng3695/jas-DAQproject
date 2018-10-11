@@ -1366,6 +1366,8 @@ Vue.component('jas-form-items', {
 					/* 初始化赋值 */
 					if (!config.options) {
 						that.$set(config, 'options', []);
+					}
+					if(!config.rules){
 						that.$set(config, 'rules', []);
 					}
 					if (config.type === 'select' && config.childSelect && config.childSelect.length > 0) {
@@ -1375,13 +1377,13 @@ Vue.component('jas-form-items', {
 
 					/* 设置验证规则 */
 					if (config.isRequired) {
-
-						config.rules = [{
+						config.rules.push({
 							required: true,
 							message: fieldNameArr[fieldIndex] + '为必填项',
 							trigger: 'change'
-						}]
+						});
 					}
+			
 					/* 请求阈值 */
 					if (config.domainName) {
 						(function (field, config) {
@@ -1605,6 +1607,8 @@ Vue.component('jas-form-items-group', {
 					/* 初始化赋值 */
 					if (!config.options) {
 						that.$set(config, 'options', []);
+					}
+					if(!config.rules){
 						that.$set(config, 'rules', []);
 					}
 					if (config.type === 'select' && config.childSelect && config.childSelect.length > 0) {
@@ -1614,14 +1618,12 @@ Vue.component('jas-form-items-group', {
 
 					/* 设置验证规则 */
 					if (config.isRequired) {
-
-						config.rules = [{
+						config.rules.push({
 							required: true,
 							message: fieldNameArr[fieldIndex] + '为必填项',
 							trigger: 'change'
-						}]
+						})
 					}
-
 
 					/* 请求阈值 */
 					if (config.domainName) {
@@ -2011,3 +2013,35 @@ Vue.component('jas-approve-dialog', {
 		},
 	}
 });
+
+
+Vue.component('jas-remarks', {
+	props: {
+		remarks: {
+			type: String
+		}
+	},
+	data: function () {
+		return {
+			remarksDesc: 200,
+			remark:this.remarks
+		}
+	},
+	template: [
+		'<el-form-item label="备注">',
+		'<el-input type="textarea"  :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="remark"',
+		':maxLength="200"  @input="instructionNum"></el-input>',
+		'<p style="text-align:right;color:#999;">您还可以输入<span v-text="remarksDesc"></span>字</p>',
+		'</el-form-item>'
+	].join(''),
+	methods: {
+		instructionNum: function () {
+			if (this.remark) {
+				var num = 200 - this.remark.trim().length;
+				this.remarksDesc = num;
+				this.$emit('changevalue',this.remark);
+			}
+
+		}
+	}
+})

@@ -50,14 +50,14 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="标段名称" prop="tendersOid" required>
-								<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
+								<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged" @visible-change="childChange($event,'projectOid','项目名称')">
 									<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="管线名称" prop="pipelineOid" required>
-								<el-select v-model="formData.pipelineOid" clearable placeholder="请选择管线名称" size="small">
+								<el-select v-model="formData.pipelineOid" clearable placeholder="请选择管线名称" size="small" @visible-change="childChange($event,'tendersOid','标段名称')">
 									<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
@@ -79,14 +79,14 @@
 							<el-form-item label="管径(mm)">
 								<!-- <el-input-number :precision="3" :step="1" disabled :max="1000000" controls-position="right" v-model="formData.pipeDiameter" clearable
 								  placeholder="请输入管径(mm)" size="small"></el-input-number> -->
-								 <el-input v-model="formData.pipeDiameter" disabled size="small"></el-input>
+								<el-input v-model="formData.pipeDiameter" disabled size="small"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="壁厚(mm)">
 								<!-- <el-input-number :precision="3" :step="1" disabled :max="1000000" controls-position="right" v-model="formData.wallThickness" clearable
 								  placeholder="请输入壁厚(mm)" size="small"></el-input-number> -->
-							  	<el-input v-model="formData.wallThickness" disabled size="small"></el-input>
+								<el-input v-model="formData.wallThickness" disabled size="small"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
@@ -119,7 +119,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="监理工程师">
+							<el-form-item label="监理工程师" prop="supervisionEngineer">
 								<el-input v-model="formData.supervisionEngineer" clearable placeholder="请输入监理工程师" size="small"></el-input>
 							</el-form-item>
 						</el-col>
@@ -127,9 +127,10 @@
 					<jas-base-group-title name="其他信息"></jas-base-group-title>
 					<el-row>
 						<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-							<el-form-item label="备注" prop="remarks">
+							<jas-remarks :remarks="formData.remarks" @changevalue="changevalue"></jas-remarks>
+							<!--<el-form-item label="备注" prop="remarks">
 								<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"></el-input>
-							</el-form-item>
+							</el-form-item>-->
 						</el-col>
 					</el-row>
 
@@ -201,7 +202,17 @@
 						required: true,
 						message: '第一段长度为必填项',
 						trigger: 'change'
-					}]
+					}],
+					supervisionUnit: [{
+						required: true,
+						message: '监理单位为必填项',
+						trigger: 'change'
+					}],
+					supervisionEngineer: [{
+						min: "0",
+						max: 50,
+						message: '不能超过50个字'
+					}],
 				},
 				formData: {
 					pipeLength: '',
@@ -261,6 +272,17 @@
 			});
 		},
 		methods: {
+			changevalue: function (msg) {
+				this.formData.remarks = msg;
+			},
+			childChange: function (event, id, name) {
+				if (event && !this.formData[id]) {
+					top.Vue.prototype.$message({
+						type: 'warning',
+						message: "请先选择" + name
+					});
+				}
+			},
 			changePipe: function () {
 				this.resetPipeData();
 				this.setPipeLength(this.formData.pipeOid);
@@ -279,6 +301,11 @@
 						return false;
 					}
 					total += this.formData[names[i]];
+				}
+				for (var i = names.length - 1; i > num - 1; i--) {
+					if (this.formData[names[i]]) {
+						this.formData[names[i]]="";
+					}
 				}
 				if (total > this.formData.pipeLength) {
 					top.Vue.prototype.$message({
@@ -435,7 +462,6 @@
 					delete that.formData.isUse;
 					var url = jasTools.base.rootPath + "/jdbc/commonData/cutWeld/update.do";
 				}
-
 				jasTools.ajax.post(url, that.formData, function (data) {
 					that.$refs.upload.uploadFile(data.data || that.oid);
 				});

@@ -37,187 +37,188 @@
 <body>
 	<div id="app" v-cloak>
 		<jas-dialog-wrapper>
-		<div class="content">
-			<el-form ref="formData" :rules="rules" :model="formData" label-width="150px">
-				<jas-base-group-title name="基础数据"></jas-base-group-title>
-				<el-row :gutter="10">
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="项目名称" prop="projectOid" required>
-							<el-select v-model="formData.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
-								<el-option v-for="item in domain.project" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="标段名称" prop="tendersOid" required>
-							<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
-								<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="管线名称" prop="pipelineOid" required>
-							<el-select v-model="formData.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged">
-								<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="线路段/穿跨越" prop="pipeSegmentOrCrossOid" required>
-							<el-select v-model="formData.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small">
-								<el-option v-for="item in domain.pipeSegment" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="采集人员">
-							<el-input v-model="formData.collectionPerson" clearable placeholder="请输入采集人员" size="small"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="施工单位">
-							<el-select v-model="formData.constructUnit" disabled placeholder="请选择施工单位" size="small">
-								<el-option v-for="item in domain.constructUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="采集日期">
-							<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入采集日期" v-model="formData.collectionDate" size="small"
-							  style="width: 100%;">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="监理单位" prop="supervisionUnit" required>
-							<el-select v-model="formData.supervisionUnit" clearable placeholder="请选择监理单位" size="small">
-								<el-option v-for="item in domain.supervisionUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="监理工程师">
-							<el-input v-model="formData.supervisionEngineer" clearable placeholder="请输入监理工程师" size="small"></el-input>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<jas-base-group-title name="冷湾信息数据"></jas-base-group-title>
-				<el-row>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="原材料钢管编号" prop="pipeOid" required>
-							<el-select v-model="formData.pipeOid" placeholder="请选择原材料钢管编号" size="small" @change="pipeOidChanged">
-								<el-option v-for="item in domain.pipeOids" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="冷湾编号" prop="pipeColdBendingCode" required>
-							<el-input v-model="formData.pipeColdBendingCode" disabled placeholder="请输入冷湾编号" size="small"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="管子弯曲设计标准">
-							<el-input v-model="formData.pipeBendingStandards" placeholder="请输入管子弯曲设计标准" size="small"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="制作日期">
-							<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入制作日期" v-model="formData.produceDate" size="small" style="width: 100%;">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="曲率半径(mm)">
-							<el-input-number :precision="3" :step="1" :max="1000" controls-position="right" v-model="formData.bendingRadius" clearable placeholder="请输入曲率半径(mm)"
-							  size="small"></el-input-number>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="曲线长度(mm)">
-						<el-input-number :precision="3" :step="1" :max="10000" controls-position="right" v-model="formData.curveLength" clearable placeholder="请输入曲线长度"
-							  size="small"></el-input-number>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="弯曲角度(°)" prop="bendingAngle" required>
-							<el-input-number :precision="3" :step="1" :max="10000" controls-position="right" v-model="formData.bendingAngle" clearable placeholder="请输入弯曲角度"
-							  size="small"></el-input-number>
+			<div class="content">
+				<el-form ref="formData" :rules="rules" :model="formData" label-width="150px">
+					<jas-base-group-title name="基础数据"></jas-base-group-title>
+					<el-row :gutter="10">
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="项目名称" prop="projectOid" required>
+								<el-select v-model="formData.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
+									<el-option v-for="item in domain.project" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="标段名称" prop="tendersOid" required>
+								<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged" @visible-change="childChange($event,'projectOid','项目名称')">
+									<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="管线名称" prop="pipelineOid" required>
+								<el-select v-model="formData.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged" @visible-change="childChange($event,'tendersOid','标段名称')">
+									<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="线路段/穿跨越" prop="pipeSegmentOrCrossOid" required>
+								<el-select v-model="formData.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small" @visible-change="childChange($event,'pipelineOid','管线名称')">
+									<el-option v-for="item in domain.pipeSegment" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="采集人员" prop="collectionPerson">
+								<el-input v-model="formData.collectionPerson" clearable placeholder="请输入采集人员" size="small"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="施工单位">
+								<el-select v-model="formData.constructUnit" disabled placeholder="请选择施工单位" size="small">
+									<el-option v-for="item in domain.constructUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="采集时间">
+								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入采集时间" v-model="formData.collectionDate" size="small"
+								  style="width: 100%;">
+								</el-date-picker>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="监理单位" prop="supervisionUnit" required>
+								<el-select v-model="formData.supervisionUnit" clearable placeholder="请选择监理单位" size="small" @visible-change="childChange($event,'tendersOid','标段名称')">
+									<el-option v-for="item in domain.supervisionUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="监理工程师" prop="supervisionEngineer">
+								<el-input v-model="formData.supervisionEngineer" clearable placeholder="请输入监理工程师" size="small"></el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<jas-base-group-title name="冷湾信息数据"></jas-base-group-title>
+					<el-row>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="原材料钢管编号" prop="pipeOid" required>
+								<el-select v-model="formData.pipeOid" placeholder="请选择原材料钢管编号" size="small" @change="pipeOidChanged">
+									<el-option v-for="item in domain.pipeOids" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="冷湾编号" prop="pipeColdBendingCode" required>
+								<el-input v-model="formData.pipeColdBendingCode" disabled placeholder="请输入冷湾编号" size="small"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="管子弯曲设计标准" prop="pipeBendingStandards">
+								<el-input v-model="formData.pipeBendingStandards" placeholder="请输入管子弯曲设计标准" size="small"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="制作时间">
+								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入制作时间" v-model="formData.produceDate" size="small" style="width: 100%;">
+								</el-date-picker>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="曲率半径(mm)">
+								<el-input-number :precision="3" :step="1" :max="999" controls-position="right" v-model="formData.bendingRadius" clearable
+								  placeholder="请输入曲率半径(mm)" size="small"></el-input-number>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="曲线长度(m)">
+								<el-input-number :precision="3" :step="1" :max="9999" controls-position="right" v-model="formData.curveLength" clearable
+								  placeholder="请输入曲线长度" size="small"></el-input-number>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="弯曲角度(°)" prop="bendingAngle" required>
+								<el-input-number :precision="3" :step="1" :max="9999" controls-position="right" v-model="formData.bendingAngle" clearable
+								  placeholder="请输入弯曲角度" size="small"></el-input-number>
 
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="直管段最小长度(m)">
-						<el-input-number :precision="3" :step="1" :max="10000" controls-position="right" v-model="formData.straightPipeLength" clearable placeholder="请输入直管段最小长度"
-							  size="small"></el-input-number>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="直管段最小长度(m)">
+								<el-input-number :precision="3" :step="1" :max="9999" controls-position="right" v-model="formData.straightPipeLength" clearable
+								  placeholder="请输入直管段最小长度" size="small"></el-input-number>
 
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="椭圆率(%)">
-							<el-input-number :precision="3" :step="1" :max="1000" controls-position="right" v-model="formData.ellipticity" clearable placeholder="请输入椭圆率"
-							  size="small"></el-input-number>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="椭圆率(%)">
+								<el-input-number :precision="3" :step="1" :max="999" controls-position="right" v-model="formData.ellipticity" clearable
+								  placeholder="请输入椭圆率" size="small"></el-input-number>
 
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="壁厚减薄率(%)">
-						<el-input-number :precision="3" :step="1" :max="1000" controls-position="right" v-model="formData.wallThicknessRedurate" clearable placeholder="请输入壁厚减薄率(%)"
-							  size="small"></el-input-number>
-						</el-form-item>
-					</el-col>
-
-
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="长度(m)">
-						<el-input-number :precision="3" :step="1" :max="10000" controls-position="right" v-model="formData.pipeLength" clearable placeholder="请输入长度"
-							  size="small"></el-input-number>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="管径(mm)">
-						<el-input-number :precision="2" :step="1" :max="10000" controls-position="right" v-model="formData.pipeDiameter" clearable placeholder="请输入管径"
-							  size="small"></el-input-number>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="壁厚(mm)">
-						<el-input-number :precision="2" :step="1" :max="10000" controls-position="right" v-model="formData.wallThickness" clearable placeholder="请输入壁厚"
-							  size="small"></el-input-number>
-						</el-form-item>
-					</el-col>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="壁厚减薄率(%)">
+								<el-input-number :precision="3" :step="1" :max="999" controls-position="right" v-model="formData.wallThicknessRedurate"
+								  clearable placeholder="请输入壁厚减薄率(%)" size="small"></el-input-number>
+							</el-form-item>
+						</el-col>
 
 
-				</el-row>
-				<jas-base-group-title name="其他信息"></jas-base-group-title>
-				<el-row>
-					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-						<el-form-item label="备注" prop="remarks">
-							<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"></el-input>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<!-- <el-row>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="长度(m)">
+								<el-input-number :precision="3" :step="1" :max="9999" controls-position="right" v-model="formData.pipeLength" clearable
+								  placeholder="请输入长度" size="small"></el-input-number>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="管径(mm)">
+								<el-input-number :precision="2" :step="1" :max="9999" controls-position="right" v-model="formData.pipeDiameter" clearable
+								  placeholder="请输入管径" size="small"></el-input-number>
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+							<el-form-item label="壁厚(mm)">
+								<el-input-number :precision="2" :step="1" :max="9999" controls-position="right" v-model="formData.wallThickness" clearable
+								  placeholder="请输入壁厚" size="small"></el-input-number>
+							</el-form-item>
+						</el-col>
+
+
+					</el-row>
+					<jas-base-group-title name="其他信息"></jas-base-group-title>
+					<el-row>
+						<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+							<jas-remarks :remarks="formData.remarks" @changevalue="changevalue"></jas-remarks>
+							<!--<el-form-item label="备注">
+								<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"></el-input>
+							</el-form-item>-->
+						</el-col>
+					</el-row>
+					<!-- <el-row>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 						<el-form-item label="模板上传" prop="file">
 						</el-form-item>
 					</el-col>
 				</el-row> -->
-				<jas-base-group-title name="附件信息"></jas-base-group-title>
+					<jas-base-group-title name="附件信息"></jas-base-group-title>
 
-				<jas-file-upload ref="upload" @success="uploadSuccess"></jas-file-upload>
-			</el-form>
-
-
+					<jas-file-upload ref="upload" @success="uploadSuccess"></jas-file-upload>
+				</el-form>
 
 
 
-		</div>
-		<div slot="footer" class="dialog-footer" style="text-align: center">
-			<el-button size="small" @click="cancel()">取 消</el-button>
-			<el-button size="small" type="primary" @click="submit('formData')">确 定
-			</el-button>
-		</div>
-			</jas-dialog-wrapper>
+
+
+			</div>
+			<div slot="footer" class="dialog-footer" style="text-align: center">
+				<el-button size="small" @click="cancel()">取 消</el-button>
+				<el-button size="small" type="primary" @click="submit('formData')">确 定
+				</el-button>
+			</div>
+		</jas-dialog-wrapper>
 	</div>
 </body>
 <script src="./../../../../lib/jquery/jquery-1.12.4.min.js"></script>
@@ -277,11 +278,30 @@
 						required: true,
 						message: '冷湾编号为必填项',
 						trigger: 'change'
+					}, {
+						min: "0",
+						max: 53,
+						message: "不能超过53个字"
 					}],
 					bendingAngle: [{
 						required: true,
 						message: '弯曲角度为必填项',
 						trigger: 'change'
+					}],
+					collectionPerson: [{
+						min: "0",
+						max: 30,
+						message: '不能超过30个字'
+					}],
+					supervisionEngineer: [{
+						min: "0",
+						max: 50,
+						message: '不能超过50个字'
+					}],
+					pipeBendingStandards: [{
+						min: "0",
+						max: 60,
+						message: '不能超过60个字'
 					}]
 				},
 				formData: {
@@ -308,7 +328,7 @@
 					supervisionEngineer: "",
 					collectionPerson: "",
 					collectionDate: "",
-					isUse:0,
+					isUse: 0,
 					remarks: ""
 				}
 			}
@@ -338,12 +358,26 @@
 				that.domain.project = arr;
 			});
 			this.requestDomainFromBizTable(
-				'/daq/materialPipe/getCutAndNotUse.do', {type:"2"},
+				'/daq/materialPipe/getCutAndNotUse.do', {
+					type: "2"
+				},
 				function (arr) {
 					that.domain.pipeOids = that.domain.pipeOids.concat(arr);
 				});
 		},
 		methods: {
+
+			changevalue: function (msg) {
+				this.formData.remarks = msg;
+			},
+			childChange: function (event, id, name) {
+				if (event && !this.formData[id]) {
+					top.Vue.prototype.$message({
+						type: 'warning',
+						message: "请先选择" + name
+					});
+				}
+			},
 			cancel: function (param) {
 				window.parent.jasTools.dialog.close(param);
 			},
@@ -445,8 +479,8 @@
 			pipeOidChanged: function (val) {
 				var that = this;
 				let obj = {};
-				obj = that.domain.pipeOids.find((item)=>{//这里的userList就是上面遍历的数据源
-					return item.key === val;//筛选出匹配数据
+				obj = that.domain.pipeOids.find((item) => { //这里的userList就是上面遍历的数据源
+					return item.key === val; //筛选出匹配数据
 				});
 				this.formData.pipeColdBendingCode = obj.value + "-LW";
 			},
@@ -489,13 +523,17 @@
 			getDetailByObjectId: function () {
 				var that = this;
 				var url = jasTools.base.rootPath + "/jdbc/commonData/coldBendingPipe/getPage.do";
-				jasTools.ajax.post(url, {oid:that.oid}, function (data) {
+				jasTools.ajax.post(url, {
+					oid: that.oid
+				}, function (data) {
 					for (var key in that.formData) {
 						that.formData[key] = data.rows[0][key];
 					}
-					var item = {key:data.rows[0]["pipeOid"],value:data.rows[0]["pipeCode"]};
+					var item = {
+						key: data.rows[0]["pipeOid"],
+						value: data.rows[0]["pipeCode"]
+					};
 					that.domain.pipeOids.push(item);
-					console.log(that.domain.pipeOids);
 					that.projectChanged(data.rows[0].projectOid);
 					that.tendersChanged(data.rows[0].tendersOid);
 					that.getSupervisionUnit(data.rows[0].tendersOid);

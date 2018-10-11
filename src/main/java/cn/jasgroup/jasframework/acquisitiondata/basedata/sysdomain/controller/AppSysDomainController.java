@@ -34,7 +34,7 @@ public class AppSysDomainController {
 	public Object getOfflineSysdomainData(HttpServletRequest reques){
 		ListResult<Map<String, Object>> result= null;
 		Map<String,Object> dataMap = new HashMap<String,Object>();
-		String domainNames = "welding_method_temp_domain,weld_type_domain,pipe_type_domain,pipe_type_domain,buckle_anticorrosive_type_domain,anticorrosive_grade_domain,derusting_grade_domain";
+		String domainNames = "welding_method_temp_domain,weld_type_domain,pipe_type_domain,pipe_type_domain,buckle_anticorrosive_type_domain,anticorrosive_grade_domain,derusting_grade_domain,back_pipe_type_domain";
 		try{
 			List<Map<String, Object>> sysDomainData = this.sysdomainService.getListData(domainNames);
 			result = new ListResult<>(1,"200","ok",sysDomainData);

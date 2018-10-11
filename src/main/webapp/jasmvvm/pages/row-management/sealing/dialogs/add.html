@@ -48,20 +48,20 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<!--<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
+					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="标段名称" prop="tendersOid" required>
-							<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
+							<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged" @visible-change="childChange($event,'projectOid','项目名称')">
 								<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="管线名称" prop="pipelineOid" required>
-							<el-select v-model="formData.pipelineOid" clearable placeholder="请选择管线名称" size="small" >
+							<el-select v-model="formData.pipelineOid" clearable placeholder="请选择管线名称" size="small"  @visible-change="childChange($event,'tendersOid','标段名称')">
 								<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
-					</el-col>-->
+					</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="封堵物编号" prop="closureCode" required>
 								<el-input v-model="formData.closureCode" clearable placeholder="请输入封堵物编号" size="small"></el-input>
@@ -124,7 +124,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="生产厂家">
+							<el-form-item label="生产厂家" prop="manufacturer">
 								<el-input v-model="formData.manufacturer" clearable placeholder="请输入生产厂家" size="small"></el-input>
 							</el-form-item>
 						</el-col>
@@ -142,7 +142,8 @@
 					<el-row>
 						<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 							<el-form-item label="备注" prop="remarks">
-								<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"></el-input>
+								<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"  :maxLength="200"  @input="instructionNum"></el-input>
+							      <p style="text-align:right;color:#999;">您还可以输入<span v-text="remarksDesc"></span>字</p>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -201,8 +202,8 @@
 					connectionMethodsArr: [],
 					coatingMethodsArr: [],
 					project: [],
-					// pipeline: [],
-					// tenders: [],
+					 pipeline: [],
+					 tenders: [],
 					//监理单位
 				},
 				ischoose: false,
@@ -210,7 +211,11 @@
 					closureCode: [{
 						required: true,
 						message: '封堵物编号为必填项',
-						trigger: 'change'
+						trigger: 'blur'
+					},{
+						min: "0",
+						max: 36,
+						message: "不能超过36字"
 					}],
 					projectOid: [{
 							required: true,
@@ -220,13 +225,28 @@
 					closureType: [{
 						required: true,
 						message: '封堵物类型为必填项',
+						trigger: 'blur'
+					}],
+					tendersOid: [{
+						required: true,
+						message: '标段名称为必填项',
 						trigger: 'change'
 					}],
+					pipelineOid: [{
+						required: true,
+						message: '管线名称为必填项',
+						trigger: 'change'
+					}],
+					manufacturer:[{
+						min: "0",
+						max: 50,
+						message: "不能超过50字"
+					}]
 				},
 				formData: {
 					projectOid: "",
-					// tendersOid: "",
-					// pipelineOid: "",
+					 tendersOid: "",
+					 pipelineOid: "",
 					closureCode: '',
 					closureType: '',
 					material: '',
@@ -239,7 +259,8 @@
 					manufacturerDate: '',
 					isUse: 0,
 					remarks: ""
-				}
+				},
+				remarksDesc:200
 			}
 		},
 		mounted: function () {
@@ -254,7 +275,7 @@
 			that.requestDomainFromCommonTable("coating_methods_domain", function (arr) {
 				that.domain.coatingMethodsArr = arr;
 			});
-			that.requestDomainFromBizTable('daq/materialPipe/getPipeList.do', {}, function (arr) {
+			that.requestDomainFromBizTable('/daq/privilege/getProjectList.do', {}, function (arr) {
 				that.domain.project = arr;
 			});
 			if (param.oid) {
@@ -271,8 +292,21 @@
 
 		},
 		methods: {
+			instructionNum: function () {
+				var that = this;
+				var num = 200 - that.formData.remarks.trim().length;
+				that.remarksDesc = num;
+			}, //剩余字数计算
 			cancel: function (param) {
 				window.parent.jasTools.dialog.close(param);
+			},
+			childChange: function (event, id, name) {
+				if (event && !this.formData[id]) {
+					top.Vue.prototype.$message({
+						type: 'warning',
+						message: "请先选择" + name
+					});
+				}
 			},
 			requestDomainFromBizTable: function (url, obj, cb) {
 				var that = this;
@@ -360,7 +394,6 @@
 					url = jasTools.base.rootPath +
 						"/jdbc/commonData/closure/update.do";
 				}
-
 				jasTools.ajax.post(url, that.formData, function (data) {
 					that.$refs.upload.uploadFile(data.data || that.oid);
 				});

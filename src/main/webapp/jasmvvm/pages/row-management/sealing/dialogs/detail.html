@@ -15,7 +15,8 @@
 
 <body>
 	<div id="app" v-cloak>
-		</jas-dialog-wrapper>
+		<jas-dialog-wrapper>
+		<div>
 		<jas-base-group-title name="基础数据"></jas-base-group-title>
 		<jas-detail-table :titles="baseArr" :detail="detail"></jas-detail-table>
 		<jas-base-group-title name="其他信息"></jas-base-group-title>
@@ -23,6 +24,7 @@
 
 		<jas-base-group-title name="附件信息"></jas-base-group-title>
 		<jas-file-list :biz-id="oid"></jas-file-list>
+		</div>
 			</jas-dialog-wrapper>
 	</div>
 </body>
@@ -104,10 +106,15 @@
 			getDetailByObjectId: function () {
 				var that = this;
 				var url = jasTools.base.rootPath + "/jdbc/commonData/closure/getPage.do";
-				jasTools.ajax.post(url, this.params, function (data) {
+				jasTools.ajax.post(url, {oid:that.oid}, function (data) {
 					that.detail = data.rows[0];
 					that.detail.closureType=that.detail.closureType==0?'盲板':'封头';
-					that.detail.material=that.detail.material==0?'钢质':'其他';
+					if(that.detail.material=='0'){
+						that.detail.material='钢质';
+					}
+					if(that.detail.material=='1'){
+						that.detail.material='其他';
+					}
 				});
 			},
 		},

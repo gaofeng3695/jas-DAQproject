@@ -103,9 +103,9 @@
 							if (value == -1)
 								return '驳回';
 							if (value == 0)
-								return '未提交';
+								return '未上报';
 							if (value == 1)
-								return '审核中';
+								return '待审核';
 							if (value == 2)
 								return '通过';
 							return value;
@@ -153,6 +153,9 @@
 					}, {
 						name: '采集日期',
 						field: 'collectionDate'
+					}, {
+						name: '备注',
+						field: 'remarks'
 					}
 				],
 			}

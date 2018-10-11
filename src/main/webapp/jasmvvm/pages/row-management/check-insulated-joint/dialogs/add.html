@@ -50,7 +50,7 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="标段名称" prop="tendersOid" required>
-								<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
+								<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged" @visible-change="childChange($event,'projectOid','项目名称')">
 									<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
@@ -68,18 +68,18 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="生产厂家">
+							<el-form-item label="生产厂家" prop="manufacturer">
 								<el-input v-model="formData.manufacturer" clearable placeholder="请输入生产厂家" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="合格证编号">
+							<el-form-item label="合格证编号" prop="certificationNum">
 								<el-input v-model="formData.certificationNum" clearable placeholder="请输入合格证编号" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="公称直径(mm)">
-								<el-input-number :precision="3" :step="1" :max="100000" controls-position="right" v-model="formData.diameter" clearable placeholder="请输入公称直径(mm)"
+								<el-input-number :precision="3" :step="1" :max="999999" controls-position="right" v-model="formData.diameter" clearable placeholder="请输入公称直径(mm)"
 								  size="small"></el-input-number>
 
 								<!-- 	<el-input v-model="formData.diameter" clearable placeholder="请输入公称直径(mm)" size="small"></el-input> -->
@@ -87,29 +87,29 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="公称压力(mpa)">
-								<el-input-number :precision="3" :step="1" :max="100000" controls-position="right" v-model="formData.pressure" clearable placeholder="请输入公称压力(mpa)"
+								<el-input-number :precision="3" :step="1" :max="999999" controls-position="right" v-model="formData.pressure" clearable placeholder="请输入公称压力(mpa)"
 								  size="small"></el-input-number>
 
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="测试仪器">
+							<el-form-item label="测试仪器" prop='testEquipment'>
 								<el-input v-model="formData.testEquipment" clearable placeholder="请输入测试仪器" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="仪器规格型号">
+							<el-form-item label="仪器规格型号" prop='specandModel'>
 								<el-input v-model="formData.specandModel" clearable placeholder="请输入仪器规格型号" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="实用绝缘电阻值(MΩ)">
+							<el-form-item label="实用绝缘电阻值(MΩ)" prop="resistanceVal">
 								<el-input v-model="formData.resistanceVal" clearable placeholder="请输入实用绝缘电阻值(MΩ)" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="验收结论">
+							<el-form-item label="验收结论" prop="checkResults">
 								<el-input v-model="formData.checkResults" clearable placeholder="请输入验收结论" size="small"></el-input>
 							</el-form-item>
 						</el-col>
@@ -118,7 +118,8 @@
 					<el-row>
 						<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 							<el-form-item label="备注" prop="remarks">
-								<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"></el-input>
+								<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks" :maxLength="200"  @input="instructionNum"></el-input>
+							    <p style="text-align:right;color:#999;">您还可以输入<span v-text="remarksDesc"></span>字</p>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -156,7 +157,7 @@
 		el: "#app",
 		data: function () {
 			var that = this;
-			return {
+			return {remarksDesc:200,
 				domain: {
 					constructUnitArr: [],
 					project: [], //项目
@@ -166,7 +167,41 @@
 					manufacturerCode: [{
 						required: true,
 						message: '出厂编号为必填项',
-						trigger: 'change'
+						trigger: 'blur'
+					},{
+						min:"0",
+						max:36,
+						message:'不能超过36个字'
+					}],
+					manufacturer:[{
+						min:"0",
+						max:50,
+						message:'不能超过50个字'
+					}],
+					testEquipment:[{
+						min:"0",
+						max:50,
+						message:'不能超过50个字'
+					}],
+					specandModel:[{
+						min:"0",
+						max:30,
+						message:'不能超过30个字'
+					}],
+					resistanceVal:[{
+						min:"0",
+						max:20,
+						message:'不能超过20个字'
+					}],
+					certificationNum:[{
+						min:"0",
+						max:60,
+						message:'不能超过60个字'
+					}],
+					checkResults:[{
+						min:"0",
+						max:200,
+						message:'不能超过200个字'
 					}],
 					projectOid: [{
 						required: true,
@@ -225,7 +260,20 @@
 			this.tendersChanged("1");
 
 		},
-		methods: {
+		methods: {			
+			instructionNum: function () {
+			var that = this;
+			var num = 200 - that.formData.remarks.trim().length;
+			that.remarksDesc = num;
+	     }, //剩余字数计算
+			childChange: function (event, id, name) {
+				if (event && !this.formData[id]) {
+					top.Vue.prototype.$message({
+						type: 'warning',
+						message: "请先选择" + name
+					});
+				}
+			},
 			requestDomainFromBizTable: function (url, obj, cb) {
 				var that = this;
 				var url = jasTools.base.rootPath + url;
@@ -244,6 +292,10 @@
 						},
 						function (arr) {
 							that.domain.tenders = arr;
+							if (arr.length > 0) {
+								that.formData.tendersOid = arr[0].key;
+								that.tendersChanged(that.formData.tendersOid);
+							}
 						});
 				} else {
 					that.domain.tenders = [];
@@ -260,6 +312,9 @@
 							'/daq/privilege/getCurrentUnitId.do', {},
 							function (arr) {
 								that.domain.constructUnitArr = arr;
+								if (arr.length > 0) {
+									that.formData.constructUnit = arr[0].key;
+								}
 							});
 				} else {
 					that.domain.constructUnitArr = [];

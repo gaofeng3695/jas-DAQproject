@@ -95,7 +95,7 @@
 						field: 'coatingIoEndsCheck',
 					}, {
 						name: '检查人',
-						field: 'checkedby',
+						field: 'checkedBy',
 					}, {
 						name: '检查日期',
 						field: 'checkedDate',
@@ -125,7 +125,7 @@
 			getDetailByObjectId: function () {
 				var that = this;
 				var url = jasTools.base.rootPath + "/jdbc/commonData/checkPipeColdBending/getPage.do";
-				jasTools.ajax.post(url, this.params, function (data) {
+				jasTools.ajax.post(url,{oid:that.oid}, function (data) {
 					for (var key in data.rows[0]) {
 						if (key == 'weldPosition' || key == 'ovality' || key == 'grooveCheck' || key == 'coatingIoFaceCheck' || key ==
 							'coatingIoEndsCheck') {

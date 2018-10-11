@@ -59,69 +59,119 @@ button {
     position: relative;
     width: 100%;
     height: 100%;
-    background: url(../images/loginbg.png) no-repeat center center;
+    background: url(../images/login2.png) no-repeat center center;
     background-size: cover;
 }
 
-.mask {
-    position: absolute;
-    z-index: 99;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 70%;
-    background: #999;
-    opacity: 0.4;
-}
-
-.enterprise .tip01 {
-    text-align: center;
-    padding: 10px 0;
-}
-
-.tip01 .cardwrap {
+.content {
+    margin: 0 auto;
+    height: -webkit-calc(100% - 162px);
+    height: -moz-calc(100% - 162px);
+    height: calc(100% - 162px);
+    width: 900px;
     position: relative;
-    box-sizing: border-box;
-    height: 205px;
-    padding: 10px 0 20px 0;
 }
 
-.logowrap {
-    text-align: center;
+.content-bg {
+    width: 100%;
+    height: 400px;
+    margin: auto;
+    position: absolute;
+    top: 50%;
+    margin-top: -200px;
 }
 
-.logowrap img {
-    margin-top: 10px;
-    height: 90px;
-    width: 90px;
-}
-
-.el-carousel__mask {
-    opacity: 0.5;
-}
-
-.checkwrap {
-    padding-top: 10px;
-}
-
-.entername {
-    padding: 18px 0 8px 0;
-    text-align: center;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+.start {
+    float: left;
+    width: 400px;
+    height: 400px;
+    background: url(../images/pic.png) no-repeat center center;
+    background-size: 400px 400px;
 }
 
 .ms-login {
-    position: absolute;
-    left: 50%;
-    top: 50%;
+    float: right;
     width: 320px;
-    height: 320px;
-    margin: -260px 0 0 -200px;
-    padding: 40px;
-    border-radius: 12px;
-    background: #fff;
+    height: 380px;
+    background: #b9e6fb;
+    border-radius: 10px;
+}
+
+.logo {
+    width: 100%;
+    height: 60px;
+    padding-top: 35px;
+    background: url(../images/logo.png) no-repeat center 35px;
+    background-size: 60px 60px;
+}
+
+.title {
+    width: 100%;
+    font-size: 22px;
+    text-align: center;
+    color: #41464a;
+    line-height: 42px;
+}
+
+.bottom {
+    position: absolute;
+    bottom: 0px;
+    margin: 0 auto;
+    width: 100%;
+    height: 162px;
+    background: url(../images/bg1.png) no-repeat center center;
+    background-size: 100% 162px;
+    min-width: 1100px;
+}
+
+.bg1 {
+    position: absolute;
+    left: 15%;
+    top: 55px;
+    width: 55px;
+    height: 55px;
+    background: url(../images/27.png) no-repeat center center;
+    background-size: 55px 55px;
+}
+
+.bg2 {
+    position: absolute;
+    left: 37%;
+    top: 43px;
+    width: 85px;
+    height: 85px;
+    background: url(../images/29.png) no-repeat center center;
+    background-size: 85px 85px;
+}
+
+.bg3 {
+    position: absolute;
+    left: 54%;
+    top: 45px;
+    width: 65px;
+    height: 65px;
+    background: url(../images/28.png) no-repeat center center;
+    background-size: 65px 65px;
+}
+
+.bg4 {
+    position: absolute;
+    right: 30%;
+    top: 43px;
+    width: 40px;
+    height: 41px;
+    background: url(../images/26.png) no-repeat center center;
+    background-size: 40px 41px;
+}
+
+.bg5 {
+    position: absolute;
+    right: 15%;
+    top: 67px;
+    width: 57px;
+    height: 57px;
+    background: url(../images/30.png) no-repeat center center;
+    background-size: 57px 57px;
 }
 
 .login-btn {
@@ -134,11 +184,28 @@ button {
 }
 
 .form {
-    margin-top: 40px;
+    margin-top: 20px;
+    padding: 0px 30px;
+}
+
+.el-form-item {
+    margin-bottom: 15px !important;
 }
 
 .form .login-btn {
     padding-top: 20px;
+}
+.login-btn button{
+    background:#25a1fb;
+}
+.password {
+    font-size: 16px;
+    color: #178de4;
+    text-align: right;
+    height: 22px;
+    line-height: 22px;
+    padding-top: 10px;
+    cursor: pointer
 }
 
 .ms-title {

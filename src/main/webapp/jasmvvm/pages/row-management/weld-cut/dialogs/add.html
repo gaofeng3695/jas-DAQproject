@@ -92,13 +92,13 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="监理工程师">
+							<el-form-item label="监理工程师" prop="supervisionEngineer">
 								<el-input v-model="formData.supervisionEngineer" clearable placeholder="请输入监理工程师" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="采集人员">
+							<el-form-item label="采集人员" prop="collectionPerson">
 								<el-input v-model="formData.collectionPerson" clearable placeholder="请输入采集人员" size="small"></el-input>
 							</el-form-item>
 						</el-col>
@@ -122,8 +122,7 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="割口日期">
-								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择割口日期" v-model="formData.collectionDate" size="small"
-								  style="width: 100%;">
+								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择割口日期" v-model="formData.cutWeldDate" size="small" style="width: 100%;">
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
@@ -145,9 +144,10 @@
 					<jas-base-group-title name="其他信息"></jas-base-group-title>
 					<el-row>
 						<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-							<el-form-item label="备注" prop="remarks">
+							<jas-remarks :remarks="formData.remarks" @changevalue="changevalue"></jas-remarks>
+							<!--<el-form-item label="备注" prop="remarks">
 								<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"></el-input>
-							</el-form-item>
+							</el-form-item>-->
 						</el-col>
 					</el-row>
 					<!-- <el-row>
@@ -195,8 +195,8 @@
 					supervisionUnits: [], //监理单位
 					constructUnits: [], //施工单位
 					workUnits: [], //机组
-					frontWeldOids:[],//前焊口编号
-					backWeldOids:[]//后焊口编号
+					frontWeldOids: [], //前焊口编号
+					backWeldOids: [] //后焊口编号
 
 				},
 				rules: {
@@ -242,8 +242,18 @@
 					}],
 					supervisionUnit: [{
 						required: true,
-						message: '监理单位为必填项必填项',
+						message: '监理单位为必填项',
 						trigger: 'change'
+					}],
+					supervisionEngineer: [{
+						min: "0",
+						max: 50,
+						message: '不能超过50个字'
+					}],
+					collectionPerson: [{
+						min: "0",
+						max: 30,
+						message: '不能超过30个字'
 					}],
 				},
 				formData: {
@@ -296,6 +306,9 @@
 				});
 		},
 		methods: {
+			changevalue: function (msg) {
+				this.formData.remarks = msg;
+			},
 			cancel: function (param) {
 				window.parent.jasTools.dialog.close(param);
 			},
@@ -420,8 +433,11 @@
 							},
 							function (arr) {
 								that.domain.welds = arr;
-								if(that.formData.weldOid!=""){
-									that.domain.welds.push({key:that.formData.weldOid,value:that.formData.weldCode});
+								if (that.formData.weldOid != "") {
+									that.domain.welds.push({
+										key: that.formData.weldOid,
+										value: that.formData.weldCode
+									});
 								}
 							});
 				} else {
@@ -445,7 +461,7 @@
 					that.formData.frontWeldOid = '';
 				}
 			},
-			frontWeldChanged: function(val){
+			frontWeldChanged: function (val) {
 				var that = this;
 				if (val) {
 					this

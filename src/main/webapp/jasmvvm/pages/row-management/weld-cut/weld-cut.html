@@ -54,7 +54,7 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+					<el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
 						<el-form-item style="float: right;">
 							<el-button size="small" type="primary" @click="searchList">查询</el-button>
 							<el-button size="small" @click="reset">重置</el-button>
@@ -98,10 +98,10 @@
 						name: '审核状态',
 						formatter: function (a, b, value, c) {
 							if (value == -1) return '驳回';
-							else if (value == 0) return '未提交';
-							else if (value == 1) return '审核中';
+							else if (value == 0) return '未上报';
+							else if (value == 1) return '待审核';
 							else if (value == 2) return '通过';
-							else return '未提交';
+							else return '未上报';
 						}
 					}, {
 						name: '项目名称',

@@ -88,7 +88,10 @@
 			getDetailByObjectId: function () {
 				var that = this;
 				var url = jasTools.base.rootPath + "/daq/" + this.pageCode + "/get.do";
-				jasTools.ajax.get(url, this.params, function (data) {
+				var obj={
+						oid:that.oid
+				}
+				jasTools.ajax.get(url, obj, function (data) {
 					that.detail = data.data;
 				});
 			},

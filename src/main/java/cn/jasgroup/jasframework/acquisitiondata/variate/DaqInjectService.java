@@ -43,7 +43,8 @@ public class DaqInjectService {
 		}else if(hierarchy.startsWith(UnitHierarchyEnum.detection_unit.getHierarchy())){//检测单位
 			strategySql = " and detection_unit in (select uu.oid from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid='"+unitOid+"')";
 		}else if(hierarchy.startsWith(UnitHierarchyEnum.project_unit.getHierarchy())){//建设单位
-			strategySql = " and 1=1 ";
+			strategySql = " and project_oid in (select distinct t.project_oid from daq_implement_scope_ref t inner join(select oid from pri_unit p inner join "
+					+ "(select hierarchy from pri_unit where oid='"+unitOid+"') pp on p.hierarchy like pp.hierarchy||'%' where p.active=1) pu on pu.oid = t.unit_oid)";
 		}else if(hierarchy.startsWith(UnitHierarchyEnum.supplier.getHierarchy())){//厂商
 			strategySql = " and construct_unit in (select uu.oid from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid='"+unitOid+"')";
 		}else{
@@ -82,7 +83,8 @@ public class DaqInjectService {
 		}else if(hierarchy.startsWith(UnitHierarchyEnum.detection_unit.getHierarchy())){//检测单位
 			dataAuthoritySql = " and detection_unit in (select uu.oid from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid='"+unitOid+"')";
 		}else if(hierarchy.startsWith(UnitHierarchyEnum.project_unit.getHierarchy())){//建设单位
-			dataAuthoritySql = " and 1=1 ";
+			dataAuthoritySql = " and project_oid in (select distinct t.project_oid from daq_implement_scope_ref t inner join(select oid from pri_unit p "
+					+ "inner join (select hierarchy from pri_unit where oid='"+unitOid+"') pp on p.hierarchy like pp.hierarchy||'%' where p.active=1) pu on pu.oid = t.unit_oid)";
 		}else if(hierarchy.startsWith(UnitHierarchyEnum.supplier.getHierarchy())){//厂商
 			dataAuthoritySql = " and construct_unit in (select uu.oid from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid='"+unitOid+"')";
 		}else{

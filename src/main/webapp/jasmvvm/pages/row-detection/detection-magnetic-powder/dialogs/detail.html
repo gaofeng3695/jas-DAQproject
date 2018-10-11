@@ -122,7 +122,7 @@
 						formatter: function (a, b, value, c) {
 							if (value == -1) return '驳回';
 							// if (value == 0) return '未上报';
-							if (value == 1) return '审核中';
+							if (value == 1) return '待审核';
 							if (value == 2) return '通过';
 							return '未上报';
 						}
@@ -150,7 +150,10 @@
 			getDetailByObjectId: function () {
 				var that = this;
 				var url = jasTools.base.rootPath + "/daq/detectionMagneticPowder/get.do";
-				jasTools.ajax.get(url, this.params, function (data) {
+				var obj={
+						oid:that.oid
+				};
+				jasTools.ajax.get(url,obj, function (data) {
 					that.detail = data.data;
 				});
 			},

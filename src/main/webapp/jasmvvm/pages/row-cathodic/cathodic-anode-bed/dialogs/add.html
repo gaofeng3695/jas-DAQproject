@@ -50,26 +50,25 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="标段名称" prop="tendersOid" required>
-								<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
+								<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged" @visible-change="childChange($event,'projectOid','项目名称')">
 									<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="管线名称" prop="pipelineOid" required>
-								<el-select v-model="formData.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged">
+								<el-select v-model="formData.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged" @visible-change="childChange($event,'tendersOid','标段名称')">
 									<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="线路段名称" prop="pipeSegmentOid" required>
-								<el-select v-model="formData.pipeSegmentOid" clearable placeholder="请选择线路段" size="small" @change="pipeSegmentChanged">
+								<el-select v-model="formData.pipeSegmentOid" clearable placeholder="请选择线路段" size="small" @change="pipeSegmentChanged" @visible-change="childChange($event,'pipelineOid','管线名称')">
 									<el-option v-for="item in domain.pipeSegment" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
-
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="施工单位" prop="constructUnit" required>
 								<el-select v-model="formData.constructUnit" disabled placeholder="请选择施工单位" size="small">
@@ -86,28 +85,25 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="监理单位" prop="supervisionUnit" required>
-								<el-select v-model="formData.supervisionUnit" clearable placeholder="请选择监理单位" size="small">
+								<el-select v-model="formData.supervisionUnit" clearable placeholder="请选择监理单位" size="small" @visible-change="childChange($event,'tendersOid','标段名称')">
 									<el-option v-for="item in domain.supervisionUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="监理工程师">
+							<el-form-item label="监理工程师" prop="supervisionEngineer">
 								<el-input v-model="formData.supervisionEngineer" clearable placeholder="请输入监理工程师" size="small"></el-input>
 							</el-form-item>
 						</el-col>
-
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="采集人员">
+							<el-form-item label="采集人员" prop="collectionPerson">
 								<el-input v-model="formData.collectionPerson" clearable placeholder="请输入采集人员" size="small"></el-input>
 							</el-form-item>
 						</el-col>
-
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="采集日期">
 								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入采集日期" v-model="formData.collectionDate" size="small"
-								  style="width: 100%;">
-								</el-date-picker>
+								  style="width: 100%;"> </el-date-picker>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -115,32 +111,32 @@
 					<el-row>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="桩号" prop="medianStakeOid" required>
-								<el-select v-model="formData.medianStakeOid" clearable placeholder="请选择桩号" size="small">
+								<el-select v-model="formData.medianStakeOid" clearable placeholder="请选择桩号" size="small" @visible-change="childChange($event,'pipeSegmentOid','线路段名称')">
 									<el-option v-for="item in domain.medianStakes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="相对桩位置(m)" prop="relativeMileage" required>
-								<el-input-number :precision="0" :step="1" :max="100000000" controls-position="right" v-model="formData.relativeMileage" clearable
+								<el-input-number :precision="0" :step="1" :max="99999999" controls-position="right" v-model="formData.relativeMileage" clearable
 								  placeholder="请输入相对桩位置(m)" size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="X坐标">
-								<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData.pointx" clearable placeholder="请输入X坐标"
+								<el-input-number :precision="3" :step="1" :max="999999" controls-position="right" v-model="formData.pointx" placeholder="请输入X坐标"
 								  size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="Y坐标">
-								<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData.pointy" clearable placeholder="请输入Y坐标"
+								<el-input-number :precision="3" :step="1" :max="999999" controls-position="right" v-model="formData.pointy" placeholder="请输入Y坐标"
 								  size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="高程(m)">
-								<el-input-number :precision="3" :step="1" :max="1000000" controls-position="right" v-model="formData.pointz" clearable placeholder="请输入高程(m)"
+								<el-input-number :precision="3" :step="1" :max="999999" controls-position="right" v-model="formData.pointz" placeholder="请输入高程(m)"
 								  size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
@@ -150,20 +146,19 @@
 					<jas-base-group-title name="其他信息"></jas-base-group-title>
 					<el-row>
 						<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-							<el-form-item label="备注" prop="remarks">
+							<jas-remarks :remarks="formData.remarks" @changevalue="changevalue"></jas-remarks>
+							<!--<el-form-item label="备注" prop="remarks">
 								<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"></el-input>
-							</el-form-item>
+							</el-form-item>-->
 						</el-col>
 					</el-row>
 					<jas-base-group-title name="附件信息"></jas-base-group-title>
-
 					<jas-file-upload ref="upload" @success="uploadSuccess"></jas-file-upload>
 				</el-form>
 			</div>
 			<div slot="footer" class="dialog-footer" style="text-align: center">
 				<el-button size="small" @click="cancel()">取 消</el-button>
-				<el-button size="small" type="primary" @click="submit('formData')">确 定
-				</el-button>
+				<el-button size="small" type="primary" @click="submit('formData')">确 定 </el-button>
 			</div>
 		</jas-dialog-wrapper>
 	</div>
@@ -230,78 +225,97 @@
 						required: true,
 						message: '相对桩距离为必填项',
 						trigger: 'change'
+					}],
+					supervisionEngineer: [{
+						min: "0",
+						max: 50,
+						message: "不能超过50个字"
+					}],
+					collectionPerson: [{
+						min: "0",
+						max: 30,
+						message: "不能超过30个字"
 					}]
 				},
-				formData: {},
+				formData: {
+					projectOid: '',
+				},
 				fields: [{
-						name: "地床编号",
-						field: "groundBed"
-					}, {
-						name: '安装位置描述',
-						field: 'installLocationDescription'
-					}, {
-						name: '埋深(m)',
-						field: 'buriedDepth'
-					}, {
-						name: '是否临时',
-						field: 'isTemporary'
-					}, {
-						name: '设计寿命(年)',
-						field: 'designLife',
-					}, {
-						name: '回填材料',
-						field: 'backfillMaterial',
-					},
-					{
-						name: "辅助阳极数量(个)",
-						field: "quantity"
-					},
-					{
-						name: "埋设方式",
-						field: "burialWay"
-					}, {
-						name: '总重(kg)',
-						field: 'totalWeight'
-					}, {
-						name: '电缆长度(m)',
-						field: 'cableLength'
-					}, {
-						name: '保护长度(m)',
-						field: 'protectLength'
-					}, {
-						name: '阳极材料类型',
-						field: 'anodeMaterialType'
-					}, {
-						name: '阳极材料规格',
-						field: 'anodeMaterialSpec',
-					}, {
-						name: '阳极电阻(Ω)',
-						field: 'anodeResistance'
-					}, {
-						name: '是否有注水系统',
-						field: 'isWaterInjection'
-					}, {
-						name: '是否有排气孔',
-						field: 'isAirbleed'
-					}, {
-						name: '埋设日期',
-						field: 'burialDate',
-					}, {
-						name: '地床连接阴保电源',
-						field: 'connectionPower',
-					}
-				],
+					name: "地床编号",
+					field: "groundBed"
+				}, {
+					name: '安装位置描述',
+					field: 'installLocationDescription'
+				}, {
+					name: '埋深(m)',
+					field: 'buriedDepth'
+				}, {
+					name: '是否临时',
+					field: 'isTemporary'
+				}, {
+					name: '设计寿命(年)',
+					field: 'designLife',
+				}, {
+					name: '回填材料',
+					field: 'backfillMaterial',
+				}, {
+					name: "辅助阳极数量(个)",
+					field: "quantity"
+				}, {
+					name: "埋设方式",
+					field: "burialWay"
+				}, {
+					name: '总重(kg)',
+					field: 'totalWeight'
+				}, {
+					name: '电缆长度(m)',
+					field: 'cableLength'
+				}, {
+					name: '保护长度(m)',
+					field: 'protectLength'
+				}, {
+					name: '阳极材料类型',
+					field: 'anodeMaterialType'
+				}, {
+					name: '阳极材料规格',
+					field: 'anodeMaterialSpec',
+				}, {
+					name: '阳极电阻(Ω)',
+					field: 'anodeResistance'
+				}, {
+					name: '是否有注水系统',
+					field: 'isWaterInjection'
+				}, {
+					name: '是否有排气孔',
+					field: 'isAirbleed'
+				}, {
+					name: '埋设日期',
+					field: 'burialDate',
+				}, {
+					name: '地床连接阴保电源',
+					field: 'connectionPower',
+				}],
 				fieldsConfig: {
 					groundBed: {
 						type: 'input',
-						isRequired: true
+						isRequired: true,
+						rules: [{
+							min: "0",
+							max: 50,
+							message: "不能超过50个字"
+						}]
 					},
 					installLocationDescription: {
-						type: 'input'
+						type: 'input',
+						rules: [{
+							min: "0",
+							max: 200,
+							message: "不能超过200个字"
+						}]
 					},
 					buriedDepth: {
 						type: 'number',
-						max: 1000000,
+						max: 999999,
 						precision: 2
 					},
 					isTemporary: {
@@ -316,7 +330,7 @@
 					},
 					designLife: {
 						type: 'number',
-						max: 1000,
+						max: 999,
 						precision: 0
 					},
 					backfillMaterial: {
@@ -334,28 +348,38 @@
 					},
 					totalWeight: {
 						type: 'number',
-						max: 1000000,
+						max: 999999,
 						precision: 1
 					},
 					cableLength: {
 						type: 'number',
-						max: 1000000,
+						max: 999999,
 						precision: 1
 					},
 					protectLength: {
 						type: 'number',
-						max: 1000000,
+						max: 999999,
 						precision: 2
 					},
 					anodeMaterialType: {
 						type: 'input',
+						rules: [{
+							min: "0",
+							max: 50,
+							message: "不能超过50个字"
+						}]
 					},
 					anodeMaterialSpec: {
-						type: 'input'
+						type: 'input',
+						rules: [{
+							min: "0",
+							max: 50,
+							message: "不能超过50个字"
+						}]
 					},
 					anodeResistance: {
 						type: 'number',
-						max: 1000000,
+						max: 999999,
 						precision: 1
 					},
 					isWaterInjection: {
@@ -378,16 +402,20 @@
 							value: '否'
 						}]
 					},
-					burialDate:{
-						type:'date'
+					burialDate: {
+						type: 'date'
 					},
-					connectionPower:{
-						type:'input'
+					connectionPower: {
+						type: 'input',
+						rules: [{
+							min: "0",
+							max: 35,
+							message: "不能超过35个字"
+						}]
 					}
 				}
 			}
 		},
-
 		mounted: function () {
 			var that = this;
 			var param = window.jasTools.base.getParamsInUrl(location.href);
@@ -410,6 +438,17 @@
 			});
 		},
 		methods: {
+			changevalue: function (msg) {
+				this.formData.remarks = msg;
+			},
+			childChange: function (event, id, name) {
+				if (event && !this.formData[id]) {
+					top.Vue.prototype.$message({
+						type: 'warning',
+						message: "请先选择" + name
+					});
+				}
+			},
 			cancel: function (param) {
 				window.parent.jasTools.dialog.close(param);
 			},
@@ -560,13 +599,12 @@
 			},
 			getDetailByObjectId: function () {
 				var that = this;
-				var url = jasTools.base.rootPath + "/jdbc/commonData/cathodicAnodeBed/getPage.do";
+				var url = jasTools.base.rootPath +
+					"/jdbc/commonData/cathodicAnodeBed/getPage.do";
 				jasTools.ajax.post(url, {
 					oid: that.oid
 				}, function (data) {
-
 					that.formData = data.rows[0];
-
 					that.projectChanged(data.rows[0].projectOid);
 					that.tendersChanged(data.rows[0].tendersOid);
 					that.getSupervisionUnit(data.rows[0].tendersOid);

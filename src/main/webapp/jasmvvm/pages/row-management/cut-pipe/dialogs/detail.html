@@ -50,6 +50,17 @@
 						name: '管线名称',
 						field: 'pipelineName'
 					}, {
+						name: '施工单位',
+						field: 'constructUnitName'
+					},
+					{
+						name: '监理单位',
+						field: 'supervisionUnitName'
+					},
+					{
+						name: '监理工程师',
+						field: 'supervisionEngineer'
+					},{
 						name: "钢管编号",
 						field: "pipeCode"
 					}, {
@@ -62,6 +73,7 @@
 						name: '分割段数(段)',
 						field: 'segmentsNum'
 					}
+
 				],
 				otherArr: [{
 					name: '备注',
@@ -89,16 +101,16 @@
 				var that = this;
 				var url = jasTools.base.rootPath +
 					"/jdbc/commonData/cutWeld/getPage.do";
-				jasTools.ajax.post(url, this.params, function (data) {
+				jasTools.ajax.post(url, {oid:that.oid}, function (data) {
 					that.detail = data.rows[0];
 					if (that.detail.approveStatus == -1) {
 						that.detail.approveStatus = '驳回';
 					}
 					if (that.detail.approveStatus == 0) {
-						that.detail.approveStatus = '未提交';
+						that.detail.approveStatus = '未上报';
 					}
 					if (that.detail.approveStatus == 1) {
-						that.detail.approveStatus = '审核中';
+						that.detail.approveStatus = '待审核';
 					}
 					if (that.detail.approveStatus == 2) {
 						that.detail.approveStatus = '通过';

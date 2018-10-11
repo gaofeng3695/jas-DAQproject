@@ -99,7 +99,7 @@
 						formatter: function (a, b, value, c) {
 							if (value == -1) return '驳回';
 							// if (value == 0) return '未上报';
-							if (value == 1) return '审核中';
+							if (value == 1) return '待审核';
 							if (value == 2) return '通过';
 							return '未上报';
 						}
@@ -158,6 +158,9 @@
 					}, {
 						name: '采集日期',
 						field: 'collectionDate'
+					}, {
+						name: '备注',
+						field: 'remarks'
 					}
 				],
 			}

@@ -27,7 +27,7 @@ import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 )
 @UniqueConstraints(
 	strategys ={
-		@UniqueConstraintStrategy(columnNames={"manufacturerCode"})
+		@UniqueConstraintStrategy(columnNames={"manufacturerCode"},name="出厂编号 ")
 	}
 )
 @JdbcEntity(name="daq_check_insulated_joint")

@@ -16,27 +16,48 @@
 
 <body>
 	<div class="login-wrap">
-		<div class="ms-login">
-			<div class="ms-title maincolor">中盈安信研发平台</div>
-			<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" v-if="!logined" class="form">
-				<el-form-item prop="userid">
-					<el-input prefix-icon="fa fa-user" clearable v-model.number="ruleForm.userid" placeholder="请输入用户名称"></el-input>
-				</el-form-item>
-				<el-form-item prop="pass">
-					<el-input prefix-icon="fa fa-lock" clearable type="password" placeholder="请输入密码" v-model="ruleForm.pass" @keyup.enter.native="login('ruleForm')"></el-input>
-				</el-form-item>
-				<el-form-item>
-					<el-radio v-model="ruleForm.radio" label="1" border size="medium">左侧菜单</el-radio>
-					<el-radio v-model="ruleForm.radio" label="2" border size="medium">顶部菜单</el-radio>
-				</el-form-item>
-				<div class="login-btn">
-					<el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
+		<div class="content">
+			<div class="content-bg">
+				<div class="start">
 				</div>
-			</el-form>
+				<div class="ms-login">
+					<div class="logo">
+					</div>
+					<div class="title">
+						施工数据采集
+					</div>
+					<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" v-if="!logined" class="form">
+						<el-form-item prop="userid">
+							<el-input prefix-icon="fa fa-user" clearable v-model.number="ruleForm.userid" placeholder="请输入用户名称"></el-input>
+						</el-form-item>
+						<el-form-item prop="pass">
+							<el-input prefix-icon="fa fa-lock" clearable type="password" placeholder="请输入密码" v-model="ruleForm.pass" @keyup.enter.native="login('ruleForm')"></el-input>
+						</el-form-item>
+						<div class="login-btn">
+							<el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
+						</div>
+						<!--<div class="password" @click="forgetPass">
+							忘记密码
+						</div>-->
+					</el-form>
+				</div>
+			</div>
 		</div>
-		<p class="copyright">
+		<div class="bottom">
+			<div class="bg1">
+			</div>
+			<div class="bg2">
+			</div>
+			<div class="bg3">
+			</div>
+			<div class="bg4">
+			</div>
+			<div class="bg5">
+			</div>
+		</div>
+		<!--<p class="copyright">
 			版权所有：北京中盈安信技术服务股份有限公司 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;京ICP备12006059号-1
-		</p>
+		</p>-->
 	</div>
 
 
@@ -45,6 +66,7 @@
 <script src="./lib/vue/vue.js"></script>
 <script src="./lib/jquery/jquery-1.12.4.min.js"></script>
 <!-- import JavaScript -->
+<script src="./common/components/jas-components.js"></script>
 <script src="./lib/element-ui/v2.4.1/index.min.js"></script>
 <script src="./common/js/jas-tools.js"></script>
 
@@ -56,8 +78,8 @@
 				logined: 0,
 				isPersonal: false,
 				ruleForm: {
-					userid: 'admin',
-					pass: '111111',
+					userid: '',
+					pass: '',
 					logintype: 0,
 					radio: "1"
 				},
@@ -97,10 +119,10 @@
 						localStorage.setItem("token", data.token);
 						var userBo = data.user;
 						var unitName = userBo.unitName;
-						unitName = unitName.substr(unitName.lastIndexOf(">")+1,unitName.length);
-						userBo.unitName=unitName;
+						unitName = unitName.substr(unitName.lastIndexOf(">") + 1, unitName.length);
+						userBo.unitName = unitName;
 						localStorage.setItem("user", JSON.stringify(userBo));
-						localStorage.setItem("calculateType",1);//1-显示桩和偏移量  2显示坐标
+						localStorage.setItem("calculateType", 1); //1-显示桩和偏移量  2显示坐标
 						if (that.ruleForm.radio == '1') {
 							location.href = "./index.html";
 						} else {
@@ -108,6 +130,22 @@
 						}
 					});
 				});
+			},
+			forgetPass: function () {
+				//忘记密码
+				var that = this;
+				alert("忘记密码操作");
+				// jasTools.dialog.show({
+				// 	title: '修改密码',
+				// 	width: '530px',
+				// 	height: '530px',
+				// 	src: 'resetword.html',
+				// 	cbForClose: function (param) {
+				// 		if (param === 1) {
+
+				// 		}
+				// 	}
+				// });
 			}
 		}
 	});
