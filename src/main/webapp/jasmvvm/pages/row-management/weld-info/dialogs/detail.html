@@ -169,7 +169,7 @@
 				var that = this;
 				var url = jasTools.base.rootPath +
 					"/jdbc/commonData/constructionWeld/getPage.do";
-				jasTools.ajax.post(url, this.params, function (data) {
+				jasTools.ajax.post(url, {oid:that.oid}, function (data) {
 
 					that.detail = data.rows[0];
 					if(data.rows[0].isGoldeJoint == 1){
