@@ -104,7 +104,7 @@
 						</el-col>
 
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="采集日期">
+							<el-form-item label="采集日期" prop="collectionDate" required>
 								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入采集日期" v-model="formData.collectionDate" size="small"
 								  style="width: 100%;">
 								</el-date-picker>
@@ -147,7 +147,7 @@
 					</el-row>
 					<jas-base-group-title name="测试桩数据"></jas-base-group-title>
 					<jas-form-items ref="mainForm" :form="formData" :fields="fields" :fields-config="fieldsConfig"></jas-form-items>
-					<el-form-item label="桩功能">
+					<el-form-item label="桩功能" prop="stakeFunction" required>
 						<el-select multiple v-model="formData.stakeFunction" clearable placeholder="请选择桩功能" size="small">
 							<el-option v-for="item in domain.stakeFunctionArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 						</el-select>
@@ -202,6 +202,11 @@
 						message: '项目名称为必填项',
 						trigger: 'change'
 					}],
+					stakeFunction:[{
+						required: true,
+						message: '桩功能为必填项',
+						trigger: 'change'
+					}],
 					tendersOid: [{
 						required: true,
 						message: '标段名称为必填项',
@@ -226,6 +231,11 @@
 					supervisionUnit: [{
 						required: true,
 						message: '监理单位为必填项',
+						trigger: 'change'
+					}],
+					collectionDate:[{
+						required: true,
+						message: '采集日期为必填项',
 						trigger: 'change'
 					}],
 					medianStakeOid: [{
@@ -292,7 +302,8 @@
 						}]
 					},
 					burialDate: {
-						type: 'date'
+						type: 'date',
+						isRequired: true,
 					},
 					stakeTopHeight: {
 						type: 'number',

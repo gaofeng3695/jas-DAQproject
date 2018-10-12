@@ -104,7 +104,7 @@
 						</el-col>
 
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="采集日期">
+							<el-form-item label="采集日期"  prop="collectionDate" required>
 								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入采集日期" v-model="formData.collectionDate" size="small"
 								  style="width: 100%;">
 								</el-date-picker>
@@ -234,7 +234,11 @@
 						message: '监理单位为必填项',
 						trigger: 'change'
 					}],
-
+					collectionDate:[{
+						required: true,
+						message: '采集日期为必填项',
+						trigger: 'change'
+					}],
 					anodeCode: [{
 						required: true,
 						message: '阳极编号为必填项',
@@ -352,10 +356,10 @@
 					isTemporary: {
 						type: 'select',
 						options: [{
-							key: 0,
+							key: 1,
 							value: '是'
 						}, {
-							key: 1,
+							key: 0,
 							value: '否'
 						}]
 					},
@@ -434,10 +438,10 @@
 					tabletsCondition: {
 						type: 'select',
 						options: [{
-							key: 0,
+							key: 1,
 							value: '符合设计要求'
 						}, {
-							key: 1,
+							key: 0,
 							value: '不符合设计要求'
 						}]
 					},
@@ -452,10 +456,10 @@
 					conclusion: {
 						type: 'select',
 						options: [{
-							key: 0,
+							key: 1,
 							value: '合格'
 						}, {
-							key: 1,
+							key: 0,
 							value: '不合格'
 						}]
 					},

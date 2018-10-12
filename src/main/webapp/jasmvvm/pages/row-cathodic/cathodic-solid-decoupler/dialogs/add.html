@@ -104,7 +104,7 @@
 						</el-col>
 
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="采集日期">
+							<el-form-item label="采集日期" prop="collectionDate" required>
 								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入采集日期" v-model="formData.collectionDate" size="small"
 								  style="width: 100%;">
 								</el-date-picker>
@@ -121,7 +121,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="相对桩位置(m)">
+							<el-form-item label="相对桩位置(m)" prop="relativeMileage" required>
 								<el-input-number :precision="0" :step="1" :max="99999999" controls-position="right" v-model="formData.relativeMileage" clearable
 								  placeholder="请输入相对桩位置" size="small"></el-input-number>
 							</el-form-item>
@@ -204,9 +204,19 @@
 						message: '监理单位为必填项',
 						trigger: 'change'
 					}],
+					collectionDate:[{
+						required: true,
+						message: '采集日期为必填项',
+						trigger: 'change'
+					}],
 					medianStakeOid: [{
 						required: true,
 						message: '桩号为必填项',
+						trigger: 'change'
+					}],
+					relativeMileage:[{
+						required: true,
+						message: '相对桩位置为必填项',
 						trigger: 'change'
 					}],
 					supervisionEngineer: [{
