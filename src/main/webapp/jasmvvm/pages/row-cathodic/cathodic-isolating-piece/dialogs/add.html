@@ -78,7 +78,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="施工日期">
+							<el-form-item label="施工日期" prop="constructDate" required>
 								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入施工日期" v-model="formData.constructDate" size="small"
 								  style="width: 100%;">
 								</el-date-picker>
@@ -104,7 +104,7 @@
 						</el-col>
 
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="采集日期">
+							<el-form-item label="采集日期" prop="collectionDate" required>
 								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入采集日期" v-model="formData.collectionDate" size="small"
 								  style="width: 100%;">
 								</el-date-picker>
@@ -114,14 +114,14 @@
 					<jas-base-group-title name="位置数据"></jas-base-group-title>
 					<el-row>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="桩号">
+							<el-form-item label="桩号" prop="medianStakeOid" required>
 								<el-select v-model="formData.medianStakeOid" clearable placeholder="请选择桩号" size="small" @visible-change="childChange($event,'tendersOid','标段名称')">
 									<el-option v-for="item in domain.medianStakes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="相对桩位置(m)">
+							<el-form-item label="相对桩位置(m)"  prop="relativeMileage" required>
 								<el-input-number :precision="0" :step="1" :max="99999999" controls-position="right" v-model="formData.relativeMileage" clearable
 								  placeholder="请输入相对桩位置" size="small"></el-input-number>
 							</el-form-item>
@@ -158,7 +158,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="前管件类型">
+							<el-form-item label="前管件类型" prop="startPipeFittingType" required>
 								<el-select v-model="formData.startPipeFittingType" clearable placeholder="请选择前管件类型" size="small">
 									<el-option v-for="item in domain.pipeTypes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
@@ -166,12 +166,12 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="前管件编号" prop="startPipeFittingNum">
+							<el-form-item label="前管件编号" prop="startPipeFittingNum" required>
 								<el-input v-model="formData.startPipeFittingNum" placeholder="请输入前管件编号" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="后管件类型">
+							<el-form-item label="后管件类型" prop="endPipeFittingType" required>
 								<el-select v-model="formData.endPipeFittingType" clearable placeholder="请选择后管件类型" size="small">
 									<el-option v-for="item in domain.pipeTypes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
@@ -269,11 +269,35 @@
 						message: '施工单位为必填项',
 						trigger: 'change'
 					}],
-
+					constructDate:[{
+						required: true,
+						message: '施工日期为必填项',
+						trigger: 'change'
+					}],
 					supervisionUnit: [{
 						required: true,
 						message: '监理单位为必填项',
 						trigger: 'change'
+					}],
+					medianStakeOid:[{
+						required: true,
+						message: '桩号为必填项',
+						trigger: 'change'	
+					}],
+					relativeMileage:[{
+						required: true,
+						message: '相对桩位置为必填项',
+						trigger: 'change'		
+					}],
+					startPipeFittingType:[{
+						required: true,
+						message: '前管件类型为必填项',
+						trigger: 'change'		
+					}],
+					endPipeFittingType:[{
+						required: true,
+						message: '后管件类型为必填项',
+						trigger: 'change'		
 					}],
 					isolatingPieceName: [{
 						min: "0",
@@ -284,11 +308,19 @@
 						min: "0",
 						max: 50,
 						message: "不能超过50个字"
+					},{
+						required: true,
+						message: '前管件编号为必填项',
+						trigger: 'change'		
 					}],
 					endPipeFittingNum: [{
 						min: "0",
 						max: 50,
 						message: "不能超过50个字"
+					},{
+						required: true,
+						message: '后管件编号为必填项',
+						trigger: 'change'		
 					}],
 					isolatingPieceCode: [{
 						required: true,
@@ -303,6 +335,11 @@
 						min: "0",
 						max: 50,
 						message: "不能超过50个字"
+					}],
+					collectionDate:[{
+						required: true,
+						message: '采集日期为必填项',
+						trigger: 'change'
 					}],
 					collectionPerson: [{
 						min: "0",

@@ -51,7 +51,7 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
 						<el-form-item label="线路段/穿跨越" prop="pipeSegmentOrCrossOid">
-							<el-select v-model="topSearch.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small"  @visible-change="childChange($event,'pipelineOid','管线名称')">
+							<el-select v-model="topSearch.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small" @change="searchList" @visible-change="childChange($event,'pipelineOid','管线名称')">
 								<el-option v-for="item in domain.pipeSegment" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
@@ -63,7 +63,7 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
 						<el-form-item label="是否使用">
-							<el-select v-model="topSearch.isUse" clearable placeholder="请选择是否使用" size="small">
+							<el-select v-model="topSearch.isUse" clearable placeholder="请选择是否使用" size="small" @change="searchList">
 								<el-option v-for="item in domain.isUses" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
@@ -258,6 +258,7 @@
 					that.domain.pipeSegment = [];
 					that.topSearch.pipeSegmentOrCrossOid = '';
 				}
+				that.searchList();
 			},
 			tendersChanged: function (val) { //根据标段触发管线列表
 				var that = this;
@@ -276,6 +277,7 @@
 					that.domain.pipeSegment = [];
 					that.topSearch.pipeSegmentOrCrossOid = '';
 				}
+				that.searchList();
 			},
 			pipelineChanged: function (val) { //根据管线触发线路段/穿跨越
 				var that = this;
@@ -292,6 +294,7 @@
 					that.domain.pipeSegment = [];
 					that.topSearch.pipeSegmentOrCrossOid = '';
 				}
+				that.searchList();
 			},
 			searchList: function () {
 				this.$refs.table.search();

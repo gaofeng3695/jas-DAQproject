@@ -92,7 +92,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="监理工程师" prop="supervisionEngineer">
+							<el-form-item label="监理工程师" prop="supervisionEngineer" required>
 								<el-input v-model="formData.supervisionEngineer" clearable placeholder="请输入监理工程师" size="small"></el-input>
 							</el-form-item>
 						</el-col>
@@ -104,7 +104,7 @@
 						</el-col>
 
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="采集日期">
+							<el-form-item label="采集日期" prop="collectionDate" required>
 								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入采集日期" v-model="formData.collectionDate" size="small"
 								  style="width: 100%;">
 								</el-date-picker>
@@ -121,7 +121,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="割口日期">
+							<el-form-item label="割口日期" prop="cutWeldDate" required>
 								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择割口日期" v-model="formData.cutWeldDate" size="small" style="width: 100%;">
 								</el-date-picker>
 							</el-form-item>
@@ -134,7 +134,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="后焊口编号" prop="backWeldOid">
+							<el-form-item label="后焊口编号" prop="backWeldOid" required>
 								<el-select v-model="formData.backWeldOid" clearable placeholder="请选择后焊口编号" size="small">
 									<el-option v-for="item in domain.backWeldOids" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
@@ -205,6 +205,16 @@
 						message: '项目名称为必填项',
 						trigger: 'change'
 					}],
+					cutWeldDate:[{
+						required: true,
+						message: '割口日期为必填项',
+						trigger: 'change'	
+					}],
+					backWeldOid;[{
+						required: true,
+						message: '后焊口编号为必填项',
+						trigger: 'change'
+					}],
 					tendersOid: [{
 						required: true,
 						message: '标段名称为必填项',
@@ -245,10 +255,19 @@
 						message: '监理单位为必填项',
 						trigger: 'change'
 					}],
+					collectionDate:[{
+						required: true,
+						message: '采集日期为必填项',
+						trigger: 'change'
+					}],
 					supervisionEngineer: [{
 						min: "0",
 						max: 50,
 						message: '不能超过50个字'
+					},{
+						required: true,
+						message: '监理工程师为必填项',
+						trigger: 'change'	
 					}],
 					collectionPerson: [{
 						min: "0",

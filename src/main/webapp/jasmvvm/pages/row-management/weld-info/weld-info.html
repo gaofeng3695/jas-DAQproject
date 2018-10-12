@@ -285,6 +285,7 @@
 					that.domain.welds = [];
 					that.topSearch.weldOid = '';
 				}
+				that.searchList();
 			},
 			tendersChanged: function (val) { //根据标段触发管线列表
 				var that = this;
@@ -305,6 +306,7 @@
 					that.domain.welds = [];
 					that.topSearch.weldOid = '';
 				}
+				that.searchList();
 			},
 			pipelineChanged: function (val) { //根据管线触发线路段/穿跨越
 				var that = this;
@@ -323,6 +325,7 @@
 					that.domain.welds = [];
 					that.topSearch.weldOid = '';
 				}
+				that.searchList();
 			},
 			pipeSegmentChanged: function (val) {
 				var that = this;
@@ -339,6 +342,7 @@
 					that.domain.welds = [];
 					that.topSearch.weldOid = '';
 				}
+				that.searchList();
 			},
 			searchList: function () {
 				this.$refs.table.search();

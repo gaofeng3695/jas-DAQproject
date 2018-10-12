@@ -87,7 +87,7 @@
 						name: '评定结果',
 						formatter: function (row, column, cellValue, index) {
 							if (cellValue == 1) return '合格';
-							if (cellValue == 2) return '不合格';
+							if (cellValue == 0) return '不合格';
 							return cellValue;
 						}
 					}, {

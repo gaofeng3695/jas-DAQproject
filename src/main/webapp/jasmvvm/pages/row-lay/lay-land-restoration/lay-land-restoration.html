@@ -164,11 +164,8 @@
 
 		mounted: function () {
 			var that = this;
-			var param = window.jasTools.base
-				.getParamsInUrl(location.href);
-			this.privilegeCode = param.privilegeCode;
-			this.templateCode = param.templateCode; //|| "stake-2";
-			this.className = param.className; // || 'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';
+		
+			//privilegeCode=P-daq-hq-00100504&isApprove=1&className=cn.jasgroup.jasframework.acquisitiondata.lay.restoration.dao.entity.LayLandRestoration&templateCode=lay_land_restoration&exportTemplateCode=lay_land_restoration_export
 		},
 		methods: {
 			searchList: function () {

@@ -792,10 +792,12 @@ var crossConfig = {
     commencementDate: {
       type: 'date',
       name: '开工日期',
+      isRequired: true
     },
     completionDate: {
       type: 'date',
       name: '完工日期',
+      isRequired: true
     },
     constructUnit: {
       type: 'select',
@@ -805,14 +807,17 @@ var crossConfig = {
     constructUnitName: {
       type: 'input',
       name: '施工单位',
+      isRequired: true
     },
     supervisionUnit: {
       type: 'select',
       name: '监理单位',
+      isRequired: true
     },
     supervisionUnitName: {
       type: 'input',
       name: '监理单位',
+      isRequired: true
     },
     supervisionEngineer: {
       type: 'input',
@@ -835,6 +840,7 @@ var crossConfig = {
     collectionDate: {
       type: 'date',
       name: '采集日期',
+      isRequired: true
     },
     startPointx: {
       type: 'number',
@@ -915,7 +921,8 @@ var crossConfig = {
       type: 'number',
       name: '穿越长度(m)',
       max: 9999999,
-      precision: 2
+      precision: 2,
+      isRequired: true
     },
     crossMaxLength: {
       type: 'number',
