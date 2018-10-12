@@ -743,10 +743,12 @@ var crossConfig = {
     supervisionUnit: {
       type: 'select',
       name: '监理单位',
+      isRequired: true
     },
     supervisionUnitName: {
       type: 'input',
       name: '监理单位',
+      isRequired: true,
       rules: [{
         min: '0',
         max: 38,
@@ -774,6 +776,7 @@ var crossConfig = {
     collectionDate: {
       type: 'date',
       name: '采集日期',
+      isRequired: true
     },
 
     // 1111
@@ -834,6 +837,7 @@ var crossConfig = {
     burialDate: {
       type: 'date',
       name: '埋设日期',
+      isRequired: true
     }, //: "2017-08-11",
     stakeFunction: {
       type: 'multiSelect',
@@ -865,7 +869,7 @@ var crossConfig = {
     productNum: {
       name: '产品编号',
       type: 'input',
-      isRequired: true,
+     // isRequired: true,
       rules: [{
         min: '0',
         max: 60,
@@ -915,7 +919,7 @@ var crossConfig = {
       name: '孔类型',
       type: 'select',
       domainName: 'hand_hole_type_domain',
-      isRequired: true
+     // isRequired: true
     }, //: "hand_hole_type_code_002",
     "handHoleTypeName": {
       name: '孔类型',
@@ -1017,7 +1021,7 @@ var crossConfig = {
       type: 'select',
       name: '障碍物类型',
       domainName: 'obstacle_type_domain',
-      isRequired: true
+      //isRequired: true
     }, //: "obstacle_type_code_001",
     "obstacleTypeName": {
       name: '障碍物类型',
@@ -1094,7 +1098,7 @@ var crossConfig = {
       type: 'select',
       name: '水工保护类型',
       domainName: 'hydraulic_protection_type_domain',
-      isRequired: true
+     // isRequired: true
     },
     "hydraulicProtectionTypeName": {
       name: '水工保护类型',
@@ -1245,7 +1249,8 @@ var crossConfig = {
     }, //: "11",
     "constructDate": {
       type: 'date',
-      name: '施工日期'
+      name: '施工日期',
+      isRequired: true
     }, //: "2017-08-12",
 
 

@@ -99,7 +99,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="监理工程师" prop="supervisionEngineer">
+							<el-form-item label="监理工程师" prop="supervisionEngineer" required>
 								<el-input v-model="formData.supervisionEngineer" clearable placeholder="请输入监理工程师" size="small"></el-input>
 							</el-form-item>
 						</el-col>
@@ -289,6 +289,10 @@
 						message: "不能超过20个字"
 					}],
 					supervisionEngineer: [{
+						required: true,
+						message: '监理工程师为必填项',
+						trigger: 'blur'
+					},{
 						min: "0",
 						max: 50,
 						message: "不能超过50个字"

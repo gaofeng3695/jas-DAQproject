@@ -197,9 +197,15 @@
 					oid: that.oid
 				}, function (data) {
 					that.detail = data.rows[0];
-					that.detail.conclusion = that.detail.conclusion == 0 ? '合格' : '不合格';
-					that.detail.tabletsCondition = that.detail.tabletsCondition == 0 ? '符合设计要求' : '不符合设计要求';
-					that.detail.isTemporary = that.detail.isTemporary == 0 ? '是' : '否';
+					if(that.detail.conclusion!=null){
+						that.detail.conclusion = that.detail.conclusion == 1 ? '合格' : '不合格';
+					}
+					if(that.detail.tabletsCondition!=null){
+					that.detail.tabletsCondition = that.detail.tabletsCondition == 1 ? '符合设计要求' : '不符合设计要求';
+					}
+					if(that.detail.isTemporary!=null){
+					that.detail.isTemporary = that.detail.isTemporary == 1 ? '是' : '否';
+					}
 					if (that.detail.approveStatus == -1) {
 						that.detail.approveStatus = '驳回';
 					}
