@@ -164,6 +164,7 @@
 					},
 					detectionReportNum: {
 						type: 'input',
+						isRequired: true,
 						rules: [{
 							min: "0",
 							max: 60,
@@ -184,11 +185,12 @@
 					},
 					evaluationResult: {
 						type: 'select',
+						isRequired: true,
 						options: [{
 							key: 1,
 							value: '合格'
 						}, {
-							key: 2,
+							key: 0,
 							value: '不合格'
 						}],
 					},
@@ -222,6 +224,7 @@
 					},
 					supervisionUnit: {
 						type: 'select',
+						isRequired: true,
 					},
 					supervisionEngineer: {
 						type: 'input',
@@ -233,6 +236,7 @@
 					},
 					collectionDate: {
 						type: 'date',
+						isRequired: true,
 					}
 				},
 				sonFieldsConfig: {

@@ -56,7 +56,7 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
 						<el-form-item label="返修口编号">
-							<el-select v-model="topSearch.weldOid" clearable placeholder="请选择返修口编号" size="small">
+							<el-select v-model="topSearch.weldOid" clearable placeholder="请选择返修口编号" size="small" @change="searchList">
 								<el-option v-for="item in domain.welds" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
@@ -227,6 +227,7 @@
 					that.domain.welds = [];
 					that.topSearch.weldOid = '';
 				}
+				that.searchList();
 			},
 			tendersChanged: function (val) { //根据标段触发管线列表
 				var that = this;
@@ -247,6 +248,7 @@
 					that.domain.welds = [];
 					that.topSearch.weldOid = '';
 				}
+				that.searchList();
 			},
 			pipelineChanged: function (val) { //根据管线触发线路段/穿跨越
 				var that = this;
@@ -265,6 +267,7 @@
 					that.domain.welds = [];
 					that.topSearch.weldOid = '';
 				}
+				that.searchList();
 			},
 			pipeSegmentChanged: function (val) {
 				var that = this;
@@ -281,6 +284,7 @@
 					that.domain.welds = [];
 					that.topSearch.weldOid = '';
 				}
+				that.searchList();
 			},
 			searchList: function () {
 				this.$refs.table.search();

@@ -402,6 +402,13 @@
 						});
 						return;
 					}
+					if (data.status == -1 && data.code == "excel-400") { // token失效或者过期，会返回-1
+						window.top.Vue.prototype.$message({
+							message: '当前查询条件下无数据',
+							type: 'error'
+						});
+						return;
+					}
 					if (data.status == 1) {
 						cb_success && cb_success(data);
 					} else if (!data.status && data) {

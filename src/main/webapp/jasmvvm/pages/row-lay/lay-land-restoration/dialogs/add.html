@@ -55,7 +55,7 @@
 					</el-col>
 
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="施工单位">
+						<el-form-item label="施工单位" prop="constructUnit" required>
 							<el-select v-model="form.constructUnit" disabled placeholder="请选择施工单位" size="small">
 								<el-option v-for="item in domain.constructUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
@@ -63,13 +63,13 @@
 					</el-col>
 
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="施工日期">
+						<el-form-item label="施工日期" prop="constructDate" required>
 							<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入施工日期" v-model="form.constructDate" size="small" style="width: 100%;">
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="监理单位">
+						<el-form-item label="监理单位" prop="supervisionUnit" required>
 							<el-select v-model="form.supervisionUnit" clearable placeholder="请选择监理单位" size="small" @visible-change="childChange($event,'tendersOid','标段名称')">
 								<el-option v-for="item in domain.supervisionUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
@@ -88,7 +88,7 @@
 					</el-col>
 
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="采集日期">
+						<el-form-item label="采集日期" prop="collectionDate" required>
 							<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入采集日期" v-model="form.collectionDate" size="small" style="width: 100%;">
 							</el-date-picker>
 						</el-form-item>
@@ -97,28 +97,28 @@
 				<jas-base-group-title name="位置数据"></jas-base-group-title>
 				<el-row>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="起始桩号">
+						<el-form-item label="起始桩号" prop="startMedianStakeOid" required>
 							<el-select v-model="form.startMedianStakeOid" clearable placeholder="请选择起始桩号" size="small" @visible-change="childChange($event,'pipeSegmentOrCrossOid','线路段/穿跨越名称')">
 								<el-option v-for="item in domain.medianStakes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="结束桩号">
+						<el-form-item label="结束桩号" prop="endMedianStakeOid" required>
 							<el-select v-model="form.endMedianStakeOid" clearable placeholder="请选择结束桩号" size="small" @visible-change="childChange($event,'pipeSegmentOrCrossOid','线路段/穿跨越名称')">
 								<el-option v-for="item in domain.medianStakes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="相对起始桩里程(m)">
+						<el-form-item label="相对起始桩里程(m)" prop="startRelativeMileage" required>
 							<el-input-number :precision="3" :step="1" :max="999999" controls-position="right" v-model="form.startRelativeMileage" clearable
 							  placeholder="请输入相对起始桩里程(m)" size="small"></el-input-number>
 						</el-form-item>
 					</el-col>
 
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="相对结束桩里程(m)">
+						<el-form-item label="相对结束桩里程(m)" prop="endRelativeMileage" required>
 							<el-input-number :precision="3" :step="1" :max="999999" controls-position="right" v-model="form.endRelativeMileage" clearable
 							  placeholder="请输入相对结束桩里程(m)" size="small"></el-input-number>
 						</el-form-item>
@@ -173,6 +173,7 @@
 						type: 'number',
 						max: 999999,
 						precision: 3,
+						isRequired: true,
 					},
 					region: {
 						type: 'input',
@@ -235,6 +236,11 @@
 					supervisionUnit: [{
 						required: true,
 						message: '监理单位为必填项',
+						trigger: 'change'
+					}],
+					collectionDate:[{
+						required: true,
+						message: '采集日期为必填项',
 						trigger: 'change'
 					}],
 					startMedianStakeOid: [{

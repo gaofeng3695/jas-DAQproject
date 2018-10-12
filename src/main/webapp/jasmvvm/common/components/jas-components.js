@@ -1254,6 +1254,11 @@ Vue.component('jas-import-export-btns', {
 		bt_export_all: function (obj) { // 导出全部
 			var that = this;
 			var url = jasTools.base.rootPath + '/importExcelController/exportExcel.do';
+//			for(var key in this.form){
+//				if(this.form[key]&&JSON.stringify(this.form[key]).indexOf("min")>-1){
+//					this.form[key]=[Number(this.form[key].min),Number(this.form[key].max)];
+//				}
+//			}
 			jasTools.ajax.post(url, {
 				templateCode: this.exportTemplateCode,
 				functionCode: this.functionCode, // 自定义表单功能编码
@@ -1281,7 +1286,6 @@ Vue.component('jas-import-export-btns', {
 
 	},
 	mounted: function () {
-
 	}
 });
 

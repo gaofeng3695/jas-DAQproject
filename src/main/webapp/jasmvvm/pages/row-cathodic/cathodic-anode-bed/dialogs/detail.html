@@ -197,6 +197,24 @@
 					if (that.detail.approveStatus == 2) {
 						that.detail.approveStatus = '通过';
 					}
+					if(that.detail.isTemporary==0){
+						that.detail.isTemporary='否'
+					}
+					if(that.detail.isTemporary==1){
+						that.detail.isTemporary='是'
+					}
+					if(that.detail.isWaterInjection==0){
+						that.detail.isWaterInjection='否'
+					}
+					if(that.detail.isWaterInjection==1){
+						that.detail.isWaterInjection='是'
+					}
+					if(that.detail.isAirbleed==0){
+						that.detail.isAirbleed='否'
+					}
+					if(that.detail.isAirbleed==1){
+						that.detail.isAirbleed='是'
+					}
 
 				});
 			},
