@@ -230,10 +230,7 @@
 
 		mounted: function () {
 			var that = this;
-			var param = window.jasTools.base.getParamsInUrl(location.href);
-			this.privilegeCode = param.privilegeCode;
-			this.templateCode = param.templateCode; //|| "stake-2";
-			this.className = param.className; // || 'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';
+		
 		},
 		methods: {
 			searchList: function () {

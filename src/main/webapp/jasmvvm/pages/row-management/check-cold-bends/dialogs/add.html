@@ -143,7 +143,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="检查日期">
+							<el-form-item label="检查日期" prop="checkedDate">
 								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入检查日期" v-model="formData.checkedDate" size="small" style="width: 100%;">
 								</el-date-picker>
 							</el-form-item>
@@ -189,10 +189,10 @@
 				remarksDesc:200,
 				domain: {
 					isPass: [{
-						key: '0',
+						key: 1,
 						value: '合格'
 					}, {
-						key: '1',
+						key: 0,
 						value: '不合格'
 					}],
 					constructUnitArr: [],
@@ -239,6 +239,11 @@
 						required: true,
 						message: '施工单位为必填项',
 						trigger: 'change'
+					}],
+					checkedDate: [{
+						required: true,
+						message: '检查日期为必填项',
+						trigger: 'change'
 					}]
 				},
 				formData: {
@@ -252,11 +257,11 @@
 					"pipeDiameter": "",
 					"wallThickness": "",
 					"bendAngle": "",
-					"weldPosition": "0",
-					"ovality": "0",
-					"grooveCheck": "0",
-					"coatingIoFaceCheck": "0",
-					"coatingIoEndsCheck": "0",
+					"weldPosition": null,
+					"ovality": null,
+					"grooveCheck":null,
+					"coatingIoFaceCheck": null,
+					"coatingIoEndsCheck":null,
 					"checkedBy": "",
 					"checkedDate": "",
 					"remarks": ""

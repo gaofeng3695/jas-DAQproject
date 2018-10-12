@@ -55,7 +55,7 @@
 					</el-col>
 
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="施工单位">
+						<el-form-item label="施工单位" prop="constructUnit" required>
 							<el-select v-model="form.constructUnit" disabled placeholder="请选择施工单位" size="small">
 								<el-option v-for="item in domain.constructUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
@@ -69,7 +69,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="监理单位">
+						<el-form-item label="监理单位" prop="supervisionUnit" required>
 							<el-select v-model="form.supervisionUnit" clearable placeholder="请选择监理单位" size="small" @visible-change="childChange($event,'tendersOid','标段名称')">
 								<el-option v-for="item in domain.supervisionUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
@@ -88,7 +88,7 @@
 					</el-col>
 
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="采集日期">
+						<el-form-item label="采集日期" prop="collectionDate" required>
 							<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入采集日期" v-model="form.collectionDate" size="small" style="width: 100%;">
 							</el-date-picker>
 						</el-form-item>
@@ -211,6 +211,7 @@
 						type: 'number',
 						max: 99999,
 						precision: 3,
+						isRequired:true
 					},
 					slopeAngle: {
 						type: 'number',
@@ -230,10 +231,10 @@
 					conclusion: {
 						type: 'select',
 						options: [{
-							key: 0,
+							key: 1,
 							value: '合格'
 						}, {
-							key: 1,
+							key: 0,
 							value: '不合格'
 						}]
 					},
@@ -276,7 +277,21 @@
 						message: '线路段/穿跨越为必填项',
 						trigger: 'change'
 					}],
-
+					constructUnit:[{
+						required: true,
+						message: '施工单位为必填项',
+						trigger: 'change'
+					}],
+					supervisionUnit:[{
+						required: true,
+						message: '监理单位为必填项',
+						trigger: 'change'
+					}],
+					collectionDate:[{
+						required: true,
+						message: '采集日期为必填项',
+						trigger: 'change'
+					}],
 					startMedianStakeOid: [{
 						required: true,
 						message: '起始桩号为必填项',

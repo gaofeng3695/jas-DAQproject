@@ -85,7 +85,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="焊接日期">
+							<el-form-item label="焊接日期" prop="weldDate" required>
 								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入焊接日期" v-model="formData.weldDate" size="small" style="width: 100%;">
 								</el-date-picker>
 							</el-form-item>
@@ -121,7 +121,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="监理工程师" prop='supervisionEngineer'>
+							<el-form-item label="监理工程师" prop='supervisionEngineer' required>
 								<el-input v-model="formData.supervisionEngineer" clearable placeholder="请输入监理工程师" size="small"></el-input>
 							</el-form-item>
 						</el-col>
@@ -133,7 +133,7 @@
 						</el-col>
 
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="采集日期">
+							<el-form-item label="采集日期" prop="collectionDate">
 								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入采集日期" v-model="formData.collectionDate" size="small"
 								  style="width: 100%;">
 								</el-date-picker>
@@ -238,6 +238,11 @@
 						message: '项目名称为必填项',
 						trigger: 'change'
 					}],
+					weldDate:[{
+						required: true,
+						message: '焊接日期为必填项',
+						trigger: 'change'	
+					}],
 					tendersOid: [{
 						required: true,
 						message: '标段名称为必填项',
@@ -288,10 +293,19 @@
 						message: '焊接工艺规格为必填项',
 						trigger: 'change'
 					}],
+					collectionDate:[{
+						required: true,
+						message: '采集日期为必填项',
+						trigger: 'change'
+					}],
 					supervisionEngineer: [{
 						min: "0",
 						max: 50,
 						message: '不能超过50个字'
+					},{
+						required: true,
+						message: '监理工程师为必填项',
+						trigger: 'change'	
 					}],
 					collectionPerson: [{
 						min: "0",

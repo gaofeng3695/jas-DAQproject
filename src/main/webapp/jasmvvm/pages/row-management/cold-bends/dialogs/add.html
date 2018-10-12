@@ -82,7 +82,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="采集时间">
+							<el-form-item label="采集时间" prop="collectionDate" required>
 								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入采集时间" v-model="formData.collectionDate" size="small"
 								  style="width: 100%;">
 								</el-date-picker>
@@ -116,7 +116,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="管子弯曲设计标准" prop="pipeBendingStandards">
+							<el-form-item label="管子弯曲设计标准" prop="pipeBendingStandards" >
 								<el-input v-model="formData.pipeBendingStandards" placeholder="请输入管子弯曲设计标准" size="small"></el-input>
 							</el-form-item>
 						</el-col>
@@ -127,13 +127,13 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="曲率半径(mm)">
+							<el-form-item label="曲率半径(mm)" prop="bendingRadius" required>
 								<el-input-number :precision="3" :step="1" :max="999" controls-position="right" v-model="formData.bendingRadius" clearable
 								  placeholder="请输入曲率半径(mm)" size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="曲线长度(m)">
+							<el-form-item label="曲线长度(m)" prop="curveLength" required>
 								<el-input-number :precision="3" :step="1" :max="9999" controls-position="right" v-model="formData.curveLength" clearable
 								  placeholder="请输入曲线长度" size="small"></el-input-number>
 							</el-form-item>
@@ -146,7 +146,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="直管段最小长度(m)">
+							<el-form-item label="直管段最小长度(m)" prop="straightPipeLength" required>
 								<el-input-number :precision="3" :step="1" :max="9999" controls-position="right" v-model="formData.straightPipeLength" clearable
 								  placeholder="请输入直管段最小长度" size="small"></el-input-number>
 
@@ -274,6 +274,21 @@
 						message: '原材料钢管编号为必填项',
 						trigger: 'change'
 					}],
+					collectionDate:[{
+						required: true,
+						message: '采集时间为必填项',
+						trigger: 'change'
+					}],
+					bendingRadius:[{
+						required: true,
+						message: '曲率半径为必填项',
+						trigger: 'change'	
+					}],
+					curveLength:[{
+						required: true,
+						message: '曲线长度为必填项',
+						trigger: 'change'	
+					}],
 					pipeColdBendingCode: [{
 						required: true,
 						message: '冷湾编号为必填项',
@@ -286,6 +301,11 @@
 					bendingAngle: [{
 						required: true,
 						message: '弯曲角度为必填项',
+						trigger: 'change'
+					}],
+					straightPipeLength:[{
+						required: true,
+						message: '直管段最小长度为必填项',
 						trigger: 'change'
 					}],
 					collectionPerson: [{

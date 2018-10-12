@@ -71,7 +71,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="焊口编号">
+							<el-form-item label="焊口编号" prop="weldOid" required>
 								<el-select v-model="formData.weldOid" clearable placeholder="请选择焊口编号" size="small" @visible-change="childChange($event,'pipeSegmentOrCrossOid','线路段/穿跨越')">
 									<el-option v-for="item in domain.welds" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
@@ -122,7 +122,7 @@
 						</el-col>
 
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="采集日期">
+							<el-form-item label="采集日期" prop="collectionDate" required>
 								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入采集日期" v-model="formData.collectionDate" size="small"
 								  style="width: 100%;">
 								</el-date-picker>
@@ -252,6 +252,16 @@
 					pipeSegmentOrCrossOid: [{
 						required: true,
 						message: '线路段/穿跨越为必填项',
+						trigger: 'change'
+					}],
+					weldOid: [{
+						required: true,
+						message: '焊口编号为必填项',
+						trigger: 'change'
+					}],
+					collectionDate: [{
+						required: true,
+						message: '采集日期为必填项',
 						trigger: 'change'
 					}],
 					constructUnit: [{

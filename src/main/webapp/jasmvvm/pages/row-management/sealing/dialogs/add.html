@@ -68,7 +68,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="封堵物类型" prop="closureType" required>
+							<el-form-item label="封堵物类型" prop="closureType" >
 								<el-select v-model="formData.closureType" clearable placeholder="请选择封堵物类型" size="small">
 									<el-option v-for="item in domain.closureTypes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
@@ -222,11 +222,7 @@
 							message: '项目为必填项',
 							trigger: 'change'
 						}],
-					closureType: [{
-						required: true,
-						message: '封堵物类型为必填项',
-						trigger: 'blur'
-					}],
+			
 					tendersOid: [{
 						required: true,
 						message: '标段名称为必填项',

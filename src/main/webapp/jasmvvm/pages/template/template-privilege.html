@@ -60,7 +60,7 @@
 						<template v-for="item in searchData">
 							<el-col v-if="item.type!='opertion'" :xs="24" :sm="12" :md="12" :lg="6" :xl="6" :class="{'height' : item.type=='UT_03'||item.type=='UT_04'||item.type=='UT_02'||item.type=='UT_14'||item.type=='UT_05'||item.type=='UT_06'||item.type=='UT_07'||item.type=='UT_08' }">
 								<el-form-item :label="item.name">
-									<el-input v-if="item.type=='UT_01'" :placeholder="item.placeholder" v-model="searchTable[item.id]" size="small" clearable>
+									<el-input v-if="item.type=='UT_01'" :placeholder="item.placeholder" v-model="searchTable[item.id]" size="small" clearable >
 									</el-input>
 									<el-select v-model="searchTable[item.id]" v-if="isSelect(item)" style="width:100%" size="small" @change="selectChange(item)"
 									  @visible-change="isChangeParent($event,item)" clearable>
@@ -101,7 +101,7 @@
 									<div v-if="item.type=='UT_14'" style="height:41px;">
 										<div class="el-date-editor el-range-editor el-input__inner el-date-editor--datetimerange el-range-editor--small">
 											</i>
-											<input placeholder="最小值" v-model="searchTable[item.id].min" class="el-range-input" type="number">
+											<input placeholder="最小值" v-model="searchTable[item.id].min" class="el-range-input" type="number" >
 											<span class="el-range-separator">至</span>
 											<input v-model="searchTable[item.id].max" placeholder="最大值" class="el-range-input" type="number">
 											<i class="el-input__icon el-range__close-icon"></i>
@@ -138,7 +138,7 @@
 
 
 				<jas-import-export-btns :is-import="privilege.join('').indexOf('bt_import')>-1" :is-export="privilege.join('').indexOf('bt_export')>-1"
-				  :form="searchTable" :oids="oids" :template-code="templateCode" :function-code="menuCode" :export-template-code="exportTemplateCode"
+				  :form="searchform" :oids="oids" :template-code="templateCode" :function-code="menuCode" :export-template-code="exportTemplateCode"
 				  :class-name="className"></jas-import-export-btns>
 
 				<div style="display:inline-block;float:right">
@@ -812,6 +812,9 @@
 					return true;
 				}
 				return false
+			},
+			changeSearchTable:function(){
+				this.formatFormAndSearch();
 			},
 			formatFormAndSearch: function () {
 				var that = this;

@@ -70,7 +70,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="施工单位">
+							<el-form-item label="施工单位" prop="constructUnit" required>
 								<el-select v-model="formData.constructUnit" disabled placeholder="请选择施工单位" size="small">
 									<el-option v-for="item in domain.constructUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>

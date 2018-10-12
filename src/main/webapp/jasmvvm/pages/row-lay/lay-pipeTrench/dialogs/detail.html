@@ -162,6 +162,13 @@
 					if (that.detail.approveStatus == 2) {
 						that.detail.approveStatus = '通过';
 					}
+					if(that.detail.conclusion==0){
+						that.detail.conclusion='不合格';
+					}	
+					if(that.detail.conclusion == 1){
+					
+						that.detail.conclusion='合格';
+					}
 				});
 			},
 		},
