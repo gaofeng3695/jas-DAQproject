@@ -52,7 +52,17 @@ public class CheckPipeColdBendingQuery extends BaseJavaQuery {
 	
 	@Override
 	public String getQuerySql() {
-		String sql ="select cpcb.*, pro.project_name, pi.unit_name,pi.unit_name as construct_unit_name,te.tenders_name,cp.pipe_cold_bending_code from daq_check_pipe_cold_bending cpcb "
+		String sql ="select cpcb.oid, cpcb.project_oid, cpcb.tenders_oid, cpcb.construct_unit, cpcb.pipe_cold_bending_oid, cpcb.certificate_num, "
+				+ "cpcb.pipe_length, cpcb.pipe_diameter, cpcb.wall_thickness, cpcb.production_unit, cpcb.bend_angle, "
+				+ "case when cpcb.weld_position=1 then '合格' when cpcb.weld_position=0 then '不合格' end as weld_position, "
+				+ "case when cpcb.ovality=1 then '合格' when cpcb.ovality=0 then '不合格' end as ovality, "
+				+ "case when cpcb.groove_check=1 then '合格' when cpcb.groove_check=0 then '不合格' end as groove_check, "
+				+ "case when cpcb.coating_io_face_check=1 then '合格' when cpcb.coating_io_face_check=0 then '不合格' end as coating_io_face_check, "
+				+ "case when cpcb.coating_io_ends_check=1 then '合格' when cpcb.coating_io_ends_check=0 then '不合格' end as coating_io_ends_check, "
+				+ "cpcb.checked_by, cpcb.checked_date, cpcb.remarks, cpcb.create_user_id, cpcb.create_user_name, cpcb.create_datetime, cpcb.modify_user_id, "
+				+ "cpcb.modify_user_name, cpcb.modify_datetime, cpcb.active, pro.project_name, pi.unit_name,pi.unit_name as construct_unit_name,"
+				+ "te.tenders_name,cp.pipe_cold_bending_code "
+				+ "from daq_check_pipe_cold_bending cpcb "
 				+ "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = cpcb.project_oid "
 				+ "LEFT JOIN (SELECT oid, unit_name, active FROM pri_unit where active=1) pi ON pi.oid = cpcb.construct_unit "
 				+ "LEFT JOIN (SELECT oid, tenders_name, active FROM daq_tenders where active=1) te ON te.oid = cpcb.tenders_oid "
