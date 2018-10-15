@@ -1067,19 +1067,19 @@ union all
 select s.oid,s.cross_name as name,s.start_stake_oid,s.end_stake_oid, 2 as type,s.cross_code AS code,s.create_datetime,s.pipeline_oid from daq_cross s where s.active=1
 /**********线路物资基本信息end***************/
 /**********线路物资检查信息begin***************/
-CREATE TABLE daq_check_coating_pipe (
-	oid varchar(36) NOT NULL,
+create table daq_check_coating_pipe( 
+	oid varchar(36) not null,
 	project_oid varchar(36),
 	tenders_oid varchar(36),
 	construct_unit varchar(36),
 	pipe_oid varchar(50),
-	groove_check varchar(5),
-	pipe_end_proring_check varchar(5),
-	coating_io_face_check varchar(5),
-	diameter_check varchar(5),
-	coating_io_ends_check varchar(5),
-	excess_weld_metal varchar(5),
-	ovality varchar(5),
+	groove_check smallint,
+	pipe_end_proring_check smallint,
+	coating_io_face_check smallint,
+	diameter_check smallint,
+	coating_io_ends_check smallint,
+	excess_weld_metal smallint,
+	ovality smallint,
 	checked_by varchar(20),
 	checked_date timestamp(6),
 	remarks varchar(200),
@@ -1089,44 +1089,44 @@ CREATE TABLE daq_check_coating_pipe (
 	modify_user_id varchar(36),
 	modify_user_name varchar(50),
 	modify_datetime timestamp(6),
-	active SMALLINT NOT NULL
-);
-comment on table daq_check_coating_pipe IS '防腐管检查及信息记录表';
-comment on column daq_check_coating_pipe.oid IS '主键';
-comment on column daq_check_coating_pipe.project_oid IS '项目oid';
-comment on column daq_check_coating_pipe.tenders_oid IS '标段oid';
-comment on column daq_check_coating_pipe.pipe_oid IS '钢管编号';
-comment on column daq_check_coating_pipe.groove_check IS '坡口检查';
-comment on column daq_check_coating_pipe.pipe_end_proring_check IS '管端保护圈';
-comment on column daq_check_coating_pipe.coating_io_face_check IS '防腐层内外表面质量';
-comment on column daq_check_coating_pipe.diameter_check IS '管径偏差+0.2mm至-0.5mm';
-comment on column daq_check_coating_pipe.coating_io_ends_check IS '防腐层端部内外涂层';
-comment on column daq_check_coating_pipe.excess_weld_metal IS '管端焊缝余高（0mm）';
-comment on column daq_check_coating_pipe.ovality IS '椭圆度<0.6%D';
-comment on column daq_check_coating_pipe.construct_unit IS '施工单位';
-comment on column daq_check_coating_pipe.checked_by IS '检查人';
-comment on column daq_check_coating_pipe.checked_date IS '检查日期';
-comment on column daq_check_coating_pipe.remarks IS '备注';
-comment on column daq_check_coating_pipe.create_user_id IS '创建人id';
-comment on column daq_check_coating_pipe.create_user_name IS '创建人名称';
-comment on column daq_check_coating_pipe.create_datetime IS '创建时间';
-comment on column daq_check_coating_pipe.modify_user_id IS '修改人id';
-comment on column daq_check_coating_pipe.modify_user_name IS '修改人名称';
-comment on column daq_check_coating_pipe.modify_datetime IS '修改时间';
-comment on column daq_check_coating_pipe.active IS '有效标志';
+	active smallint not null  
+); 
+comment on table daq_check_coating_pipe is '防腐管检查及信息记录表';
+comment on column daq_check_coating_pipe.oid is '主键';
+comment on column daq_check_coating_pipe.project_oid is '项目oid';
+comment on column daq_check_coating_pipe.tenders_oid is '标段oid';
+comment on column daq_check_coating_pipe.pipe_oid is '钢管编号';
+comment on column daq_check_coating_pipe.groove_check is '坡口检查';
+comment on column daq_check_coating_pipe.pipe_end_proring_check is '管端保护圈';
+comment on column daq_check_coating_pipe.coating_io_face_check is '防腐层内外表面质量';
+comment on column daq_check_coating_pipe.diameter_check is '管径偏差+0.2mm至-0.5mm';
+comment on column daq_check_coating_pipe.coating_io_ends_check is '防腐层端部内外涂层';
+comment on column daq_check_coating_pipe.excess_weld_metal is '管端焊缝余高（0mm）';
+comment on column daq_check_coating_pipe.ovality is '椭圆度<0.6%D';
+comment on column daq_check_coating_pipe.construct_unit is '施工单位oid';
+comment on column daq_check_coating_pipe.checked_by is '检查人';
+comment on column daq_check_coating_pipe.checked_date is '检查日期';
+comment on column daq_check_coating_pipe.remarks is '备注';
+comment on column daq_check_coating_pipe.create_user_id is '创建人id';
+comment on column daq_check_coating_pipe.create_user_name is '创建人名称';
+comment on column daq_check_coating_pipe.create_datetime is '创建时间';
+comment on column daq_check_coating_pipe.modify_user_id is '修改人id';
+comment on column daq_check_coating_pipe.modify_user_name is '修改人名称';
+comment on column daq_check_coating_pipe.modify_datetime is '修改时间';
+comment on column daq_check_coating_pipe.active is '有效标志';
 
-CREATE TABLE daq_check_hot_bends (
-	oid varchar(36) NOT NULL,
+create table daq_check_hot_bends( 
+	oid varchar(36) not null,
 	project_oid varchar(36),
 	tenders_oid varchar(36),
 	construct_unit varchar(36),
 	hot_bends_oid varchar(50),
-	weld_position varchar(5),
-	pipe_length varchar(5),
-	ovality varchar(5),
-	groove_check varchar(5),
-	coating_io_face_check varchar(5),
-	coating_io_ends_check varchar(5),
+	weld_position smallint,
+	pipe_length smallint,
+	ovality smallint,
+	groove_check smallint,
+	coating_io_face_check smallint,
+	coating_io_ends_check smallint,
 	checked_by varchar(20),
 	checked_date timestamp(6),
 	remarks varchar(200),
@@ -1136,30 +1136,30 @@ CREATE TABLE daq_check_hot_bends (
 	modify_user_id varchar(36),
 	modify_user_name varchar(50),
 	modify_datetime timestamp(6),
-	active SMALLINT NOT NULL
+	active smallint not null
 );
-comment on table daq_check_hot_bends IS '热煨弯管检查信息记录表';
-comment on column daq_check_hot_bends.oid IS '主键';
-comment on column daq_check_hot_bends.project_oid IS '项目oid';
-comment on column daq_check_hot_bends.tenders_oid IS '标段oid';
-comment on column daq_check_hot_bends.hot_bends_oid IS '弯管oid';
-comment on column daq_check_hot_bends.weld_position IS '纵焊缝位置';
-comment on column daq_check_hot_bends.pipe_length IS '直管段长度';
-comment on column daq_check_hot_bends.ovality IS '椭圆度<0.6%D';
-comment on column daq_check_hot_bends.groove_check IS '坡口检查';
-comment on column daq_check_hot_bends.coating_io_face_check IS '防腐层内外表面质量';
-comment on column daq_check_hot_bends.coating_io_ends_check IS '防腐层端部内外涂层';
-comment on column daq_check_hot_bends.construct_unit IS '施工单位';
-comment on column daq_check_hot_bends.checked_by IS '检查人';
-comment on column daq_check_hot_bends.checked_date IS '检查日期';
-comment on column daq_check_hot_bends.remarks IS '备注';
-comment on column daq_check_hot_bends.create_user_id IS '创建人id';
-comment on column daq_check_hot_bends.create_user_name IS '创建人名称';
-comment on column daq_check_hot_bends.create_datetime IS '创建时间';
-comment on column daq_check_hot_bends.modify_user_id IS '修改人id';
-comment on column daq_check_hot_bends.modify_user_name IS '修改人名称';
-comment on column daq_check_hot_bends.modify_datetime IS '修改时间';
-comment on column daq_check_hot_bends.active IS '有效标志';
+comment on table daq_check_hot_bends is '热煨弯管检查信息记录表';
+comment on column daq_check_hot_bends.oid is '主键';
+comment on column daq_check_hot_bends.project_oid is '项目oid';
+comment on column daq_check_hot_bends.tenders_oid is '标段oid';
+comment on column daq_check_hot_bends.hot_bends_oid is '弯管编号';
+comment on column daq_check_hot_bends.weld_position is '纵焊缝位置';
+comment on column daq_check_hot_bends.pipe_length is '直管段长度';
+comment on column daq_check_hot_bends.ovality is '椭圆度<0.6%D';
+comment on column daq_check_hot_bends.groove_check is '坡口检查';
+comment on column daq_check_hot_bends.coating_io_face_check is '防腐层内外表面质量';
+comment on column daq_check_hot_bends.coating_io_ends_check is '防腐层端部内外涂层';
+comment on column daq_check_hot_bends.construct_unit is '施工单位oid';
+comment on column daq_check_hot_bends.checked_by is '检查人';
+comment on column daq_check_hot_bends.checked_date is '检查日期';
+comment on column daq_check_hot_bends.remarks is '备注';
+comment on column daq_check_hot_bends.create_user_id is '创建人id';
+comment on column daq_check_hot_bends.create_user_name is '创建人名称';
+comment on column daq_check_hot_bends.create_datetime is '创建时间';
+comment on column daq_check_hot_bends.modify_user_id is '修改人id';
+comment on column daq_check_hot_bends.modify_user_name is '修改人名称';
+comment on column daq_check_hot_bends.modify_datetime is '修改时间';
+comment on column daq_check_hot_bends.active is '有效标志';
 
 CREATE TABLE daq_check_insulated_joint (
 	oid varchar(36) NOT NULL,
@@ -1207,8 +1207,8 @@ comment on column daq_check_insulated_joint.modify_user_name IS '修改人名称
 comment on column daq_check_insulated_joint.modify_datetime IS '修改时间';
 comment on column daq_check_insulated_joint.active IS '有效标志';
 
-CREATE TABLE daq_check_pipe_cold_bending (
-	oid varchar(36) NOT NULL,
+create table daq_check_pipe_cold_bending( 
+	oid varchar(36) not null,
 	project_oid varchar(36),
 	tenders_oid varchar(36),
 	construct_unit varchar(36),
@@ -1218,12 +1218,12 @@ CREATE TABLE daq_check_pipe_cold_bending (
 	pipe_diameter numeric(9,3),
 	wall_thickness numeric(9,3),
 	production_unit varchar(60),
-	bend_angle numeric(4),
-	weld_position varchar(5),
-	ovality varchar(5),
-	groove_check varchar(5),
-	coating_io_face_check varchar(5),
-	coating_io_ends_check varchar(5),
+	bend_angle numeric(4,0),
+	weld_position smallint,
+	ovality smallint,
+	groove_check smallint,
+	coating_io_face_check smallint,
+	coating_io_ends_check smallint,
 	checked_by varchar(20),
 	checked_date timestamp(6),
 	remarks varchar(200),
@@ -1233,90 +1233,90 @@ CREATE TABLE daq_check_pipe_cold_bending (
 	modify_user_id varchar(36),
 	modify_user_name varchar(50),
 	modify_datetime timestamp(6),
-	active SMALLINT NOT NULL
-);
-comment on table daq_check_pipe_cold_bending IS '冷弯管检查及信息记录表';
-comment on column daq_check_pipe_cold_bending.oid IS '主键';
-comment on column daq_check_pipe_cold_bending.project_oid IS '项目oid';
-comment on column daq_check_pipe_cold_bending.tenders_oid IS '标段oid';
-comment on column daq_check_pipe_cold_bending.pipe_cold_bending_oid IS '冷弯管oid';
-comment on column daq_check_pipe_cold_bending.certificate_num IS '合格证编号';
-comment on column daq_check_pipe_cold_bending.pipe_length IS '弯管长度(m)';
-comment on column daq_check_pipe_cold_bending.pipe_diameter IS '管径(mm)';
-comment on column daq_check_pipe_cold_bending.wall_thickness IS '壁厚(mm）';
-comment on column daq_check_pipe_cold_bending.production_unit IS '弯制单位';
-comment on column daq_check_pipe_cold_bending.bend_angle IS '弯制角度(°）';
-comment on column daq_check_pipe_cold_bending.weld_position IS '纵焊缝位置';
-comment on column daq_check_pipe_cold_bending.ovality IS '椭圆度<0.6%D';
-comment on column daq_check_pipe_cold_bending.groove_check IS '坡口检查';
-comment on column daq_check_pipe_cold_bending.coating_io_face_check IS '防腐层内外表面质量';
-comment on column daq_check_pipe_cold_bending.coating_io_ends_check IS '防腐层端部内外涂层';
-comment on column daq_check_pipe_cold_bending.construct_unit IS '施工单位';
-comment on column daq_check_pipe_cold_bending.checked_by IS '检查人';
-comment on column daq_check_pipe_cold_bending.checked_date IS '检查日期';
-comment on column daq_check_pipe_cold_bending.remarks IS '备注';
-comment on column daq_check_pipe_cold_bending.create_user_id IS '创建人id';
-comment on column daq_check_pipe_cold_bending.create_user_name IS '创建人名称';
-comment on column daq_check_pipe_cold_bending.create_datetime IS '创建时间';
-comment on column daq_check_pipe_cold_bending.modify_user_id IS '修改人id';
-comment on column daq_check_pipe_cold_bending.modify_user_name IS '修改人名称';
-comment on column daq_check_pipe_cold_bending.modify_datetime IS '修改时间';
-comment on column daq_check_pipe_cold_bending.active IS '有效标志';
+	active smallint not null
+); 
+comment on table daq_check_pipe_cold_bending is '冷弯管检查及信息记录表';
+comment on column daq_check_pipe_cold_bending.oid is '主键';
+comment on column daq_check_pipe_cold_bending.project_oid is '项目oid';
+comment on column daq_check_pipe_cold_bending.tenders_oid is '标段oid';
+comment on column daq_check_pipe_cold_bending.pipe_cold_bending_oid is '冷弯管编号';
+comment on column daq_check_pipe_cold_bending.certificate_num is '合格证编号';
+comment on column daq_check_pipe_cold_bending.pipe_length is '弯管长度(m)';
+comment on column daq_check_pipe_cold_bending.pipe_diameter is '管径(mm)';
+comment on column daq_check_pipe_cold_bending.wall_thickness is '壁厚(mm）';
+comment on column daq_check_pipe_cold_bending.production_unit is '弯制单位';
+comment on column daq_check_pipe_cold_bending.bend_angle is '弯制角度(°）';
+comment on column daq_check_pipe_cold_bending.weld_position is '纵焊缝位置';
+comment on column daq_check_pipe_cold_bending.ovality is '椭圆度<0.6%D';
+comment on column daq_check_pipe_cold_bending.groove_check is '坡口检查';
+comment on column daq_check_pipe_cold_bending.coating_io_face_check is '防腐层内外表面质量';
+comment on column daq_check_pipe_cold_bending.coating_io_ends_check is '防腐层端部内外涂层';
+comment on column daq_check_pipe_cold_bending.construct_unit is '施工单位oid';
+comment on column daq_check_pipe_cold_bending.checked_by is '检查人';
+comment on column daq_check_pipe_cold_bending.checked_date is '检查日期';
+comment on column daq_check_pipe_cold_bending.remarks is '备注';
+comment on column daq_check_pipe_cold_bending.create_user_id is '创建人id';
+comment on column daq_check_pipe_cold_bending.create_user_name is '创建人名称';
+comment on column daq_check_pipe_cold_bending.create_datetime is '创建时间';
+comment on column daq_check_pipe_cold_bending.modify_user_id is '修改人id';
+comment on column daq_check_pipe_cold_bending.modify_user_name is '修改人名称';
+comment on column daq_check_pipe_cold_bending.modify_datetime is '修改时间';
+comment on column daq_check_pipe_cold_bending.active is '有效标志';
 
-CREATE TABLE daq_check_reducer (
-	oid varchar(36) NOT NULL,
+create table daq_check_reducer( 
+oid varchar(36) not null,
+project_oid varchar(36),
+tenders_oid varchar(36),
+construct_unit varchar(36),
+reducer_code_oid varchar(36),
+ovality smallint,
+groove_check smallint,
+coating_io_face_check smallint,
+coating_io_ends_check smallint,
+checked_by varchar(20),
+checked_date timestamp(6),
+remarks varchar(200),
+create_user_id varchar(36),
+create_user_name varchar(50),
+create_datetime timestamp(6),
+modify_user_id varchar(36),
+modify_user_name varchar(50),
+modify_datetime timestamp(6),
+active smallint not null
+); 
+comment on table daq_check_reducer is '大小头检查及信息记录表';
+comment on column daq_check_reducer.oid is '主键';
+comment on column daq_check_reducer.project_oid is '项目oid';
+comment on column daq_check_reducer.tenders_oid is '标段oid';
+comment on column daq_check_reducer.reducer_code_oid is '大小头编号';
+comment on column daq_check_reducer.ovality is '椭圆度<0.6%D';
+comment on column daq_check_reducer.groove_check is '坡口检查';
+comment on column daq_check_reducer.coating_io_face_check is '防腐层内外表面质量';
+comment on column daq_check_reducer.coating_io_ends_check is '防腐层端部内外涂层';
+comment on column daq_check_reducer.construct_unit is '施工单位oid';
+comment on column daq_check_reducer.checked_by is '检查人';
+comment on column daq_check_reducer.checked_date is '检查日期';
+comment on column daq_check_reducer.remarks is '备注';
+comment on column daq_check_reducer.create_user_id is '创建人id';
+comment on column daq_check_reducer.create_user_name is '创建人名称';
+comment on column daq_check_reducer.create_datetime is '创建时间';
+comment on column daq_check_reducer.modify_user_id is '修改人id';
+comment on column daq_check_reducer.modify_user_name is '修改人名称';
+comment on column daq_check_reducer.modify_datetime is '修改时间';
+comment on column daq_check_reducer.active is '有效标志';
+
+create table daq_check_tee( 
+	oid varchar(36) not null,
 	project_oid varchar(36),
 	tenders_oid varchar(36),
 	construct_unit varchar(36),
-	reducer_code varchar(36),
-	ovality varchar(5),
-	groove_check varchar(5),
-	coating_io_face_check varchar(5),
-	coating_io_ends_check varchar(5),
-	checked_by varchar(20),
-	checked_date timestamp(6),
-	remarks varchar(200),
-	create_user_id varchar(36),
-	create_user_name varchar(50),
-	create_datetime timestamp(6),
-	modify_user_id varchar(36),
-	modify_user_name varchar(50),
-	modify_datetime timestamp(6),
-	active SMALLINT NOT NULL
-);
-comment on table daq_check_reducer IS '大小头检查及信息记录表';
-comment on column daq_check_reducer.oid IS '主键';
-comment on column daq_check_reducer.project_oid IS '项目oid';
-comment on column daq_check_reducer.tenders_oid IS '标段oid';
-comment on column daq_check_reducer.reducer_code IS '大小头编号';
-comment on column daq_check_reducer.ovality IS '椭圆度<0.6%D';
-comment on column daq_check_reducer.groove_check IS '坡口检查';
-comment on column daq_check_reducer.coating_io_face_check IS '防腐层内外表面质量';
-comment on column daq_check_reducer.coating_io_ends_check IS '防腐层端部内外涂层';
-comment on column daq_check_reducer.construct_unit IS '施工单位';
-comment on column daq_check_reducer.checked_by IS '检查人';
-comment on column daq_check_reducer.checked_date IS '检查日期';
-comment on column daq_check_reducer.remarks IS '备注';
-comment on column daq_check_reducer.create_user_id IS '创建人id';
-comment on column daq_check_reducer.create_user_name IS '创建人名称';
-comment on column daq_check_reducer.create_datetime IS '创建时间';
-comment on column daq_check_reducer.modify_user_id IS '修改人id';
-comment on column daq_check_reducer.modify_user_name IS '修改人名称';
-comment on column daq_check_reducer.modify_datetime IS '修改时间';
-comment on column daq_check_reducer.active IS '有效标志';
-
-CREATE TABLE daq_check_tee (
-	oid varchar(36) NOT NULL,
-	project_oid varchar(36),
-	tenders_oid varchar(36),
-	construct_unit varchar(36),
-	tee_code varchar(36),
+	tee_code_oid varchar(36),
 	pipe_wall_thickness numeric(9,3),
 	branch_wall_thickness numeric(9,3),
-	ovality varchar(5),
-	groove_check varchar(5),
-	coating_io_face_check varchar(5),
-	coating_io_ends_check varchar(5),
+	ovality smallint,
+	groove_check smallint,
+	coating_io_face_check smallint,
+	coating_io_ends_check smallint,
 	checked_by varchar(20),
 	checked_date timestamp(6),
 	remarks varchar(200),
@@ -1326,42 +1326,43 @@ CREATE TABLE daq_check_tee (
 	modify_user_id varchar(36),
 	modify_user_name varchar(50),
 	modify_datetime timestamp(6),
-	active SMALLINT NOT NULL
-);
-comment on table daq_check_tee IS '三通检查及信息记录表';
-comment on column daq_check_tee.oid IS '主键';
-comment on column daq_check_tee.project_oid IS '项目oid';
-comment on column daq_check_tee.tenders_oid IS '标段oid';
-comment on column daq_check_tee.tee_code IS '三通编号';
-comment on column daq_check_tee.pipe_wall_thickness IS '管端壁厚(mm)';
-comment on column daq_check_tee.branch_wall_thickness IS '拔制端壁厚（mm）';
-comment on column daq_check_tee.ovality IS '椭圆度<0.6%D';
-comment on column daq_check_tee.groove_check IS '坡口检查';
-comment on column daq_check_tee.coating_io_face_check IS '防腐层内外表面质量';
-comment on column daq_check_tee.coating_io_ends_check IS '防腐层端部内外涂层';
-comment on column daq_check_tee.construct_unit IS '施工单位';
-comment on column daq_check_tee.checked_by IS '检查人';
-comment on column daq_check_tee.checked_date IS '检查日期';
-comment on column daq_check_tee.remarks IS '备注';
-comment on column daq_check_tee.create_user_id IS '创建人id';
-comment on column daq_check_tee.create_user_name IS '创建人名称';
-comment on column daq_check_tee.create_datetime IS '创建时间';
-comment on column daq_check_tee.modify_user_id IS '修改人id';
-comment on column daq_check_tee.modify_user_name IS '修改人名称';
-comment on column daq_check_tee.modify_datetime IS '修改时间';
-comment on column daq_check_tee.active IS '有效标志';
+	active smallint not null  
+); 
 
-CREATE INDEX index_daq_check_coating_pipe_pipe_code_5 ON daq_check_coating_pipe USING btree (pipe_code);
+comment on table daq_check_tee is '三通检查及信息记录表';
+comment on column daq_check_tee.oid is '主键';
+comment on column daq_check_tee.project_oid is '项目oid';
+comment on column daq_check_tee.tenders_oid is '标段oid';
+comment on column daq_check_tee.tee_code_oid is '三通编号';
+comment on column daq_check_tee.pipe_wall_thickness is '管端壁厚(mm)';
+comment on column daq_check_tee.branch_wall_thickness is '拔制端壁厚（mm）';
+comment on column daq_check_tee.ovality is '椭圆度<0.6%D';
+comment on column daq_check_tee.groove_check is '坡口检查';
+comment on column daq_check_tee.coating_io_face_check is '防腐层内外表面质量';
+comment on column daq_check_tee.coating_io_ends_check is '防腐层端部内外涂层';
+comment on column daq_check_tee.construct_unit is '施工单位oid';
+comment on column daq_check_tee.checked_by is '检查人';
+comment on column daq_check_tee.checked_date is '检查日期';
+comment on column daq_check_tee.remarks is '备注';
+comment on column daq_check_tee.create_user_id is '创建人id';
+comment on column daq_check_tee.create_user_name is '创建人名称';
+comment on column daq_check_tee.create_datetime is '创建时间';
+comment on column daq_check_tee.modify_user_id is '修改人id';
+comment on column daq_check_tee.modify_user_name is '修改人名称';
+comment on column daq_check_tee.modify_datetime is '修改时间';
+comment on column daq_check_tee.active is '有效标志';
+
+CREATE INDEX index_daq_check_coating_pipe_pipe_code_5 ON daq_check_coating_pipe USING btree (pipe_oid);
 ALTER TABLE daq_check_coating_pipe ADD PRIMARY KEY (oid);
-CREATE INDEX index_daq_check_hot_bends_hot_bends_code_5 ON daq_check_hot_bends USING btree (hot_bends_code);
+CREATE INDEX index_daq_check_hot_bends_hot_bends_code_5 ON daq_check_hot_bends USING btree (hot_bends_oid);
 ALTER TABLE daq_check_hot_bends ADD PRIMARY KEY (oid);
 CREATE INDEX index_daq_check_insulated_joint_manufacturer_code_5 ON daq_check_insulated_joint USING btree (manufacturer_code);
 ALTER TABLE daq_check_insulated_joint ADD PRIMARY KEY (oid);
-CREATE INDEX index_daq_check_pipe_cold_bending_pipe_cold_bending_code_5 ON daq_check_pipe_cold_bending USING btree (pipe_cold_bending_code);
+CREATE INDEX index_daq_check_pipe_cold_bending_pipe_cold_bending_code_5 ON daq_check_pipe_cold_bending USING btree (pipe_cold_bending_oid);
 ALTER TABLE daq_check_pipe_cold_bending ADD PRIMARY KEY (oid);
-CREATE INDEX index_daq_check_reducer_reducer_code_5 ON daq_check_reducer USING btree (reducer_code);
+CREATE INDEX index_daq_check_reducer_reducer_code_5 ON daq_check_reducer USING btree (reducer_code_oid);
 ALTER TABLE daq_check_reducer ADD PRIMARY KEY (oid);
-CREATE INDEX index_daq_check_tee_tee_code_5 ON daq_check_tee USING btree (tee_code);
+CREATE INDEX index_daq_check_tee_tee_code_5 ON daq_check_tee USING btree (tee_code_oid);
 ALTER TABLE daq_check_tee ADD PRIMARY KEY (oid);
 /**********线路物资检查信息end***************/
 /**********管道焊接信息begin***************/
