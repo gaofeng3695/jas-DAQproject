@@ -35,7 +35,8 @@ import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 )
 @UniqueConstraints(
 	strategys ={
-		@UniqueConstraintStrategy(columnNames={"certificateNum"},name="合格证编号")
+		@UniqueConstraintStrategy(columnNames={"certificateNum"},name="合格证编号"),
+		@UniqueConstraintStrategy(columnNames={"pipeColdBendingOid"},name="冷弯管编号 ")
 	}
 )
 @CommonDeleteBatchConfig(
