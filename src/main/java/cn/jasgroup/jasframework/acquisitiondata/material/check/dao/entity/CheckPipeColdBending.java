@@ -35,7 +35,8 @@ import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 )
 @UniqueConstraints(
 	strategys ={
-		@UniqueConstraintStrategy(columnNames={"certificateNum"},name="合格证编号")
+		@UniqueConstraintStrategy(columnNames={"certificateNum"},name="合格证编号"),
+		@UniqueConstraintStrategy(columnNames={"pipeColdBendingOid"},name="冷弯管编号 ")
 	}
 )
 @CommonDeleteBatchConfig(
@@ -97,27 +98,27 @@ public class CheckPipeColdBending extends CommonJdbcEntity{
 	/**
 	 *  纵焊缝位置 
 	 */
-	private String weldPosition; 
+	private Integer weldPosition; 
 
 	/** 
 	 * 椭圆度<0.6%D 
 	 */
-	private String ovality; 
+	private Integer ovality; 
 
 	/** 
 	 * 坡口检查
 	 */
-	private String grooveCheck; 
+	private Integer grooveCheck; 
 
 	/**
 	 *  防腐层内外表面质量
 	 */
-	private String coatingIoFaceCheck; 
+	private Integer coatingIoFaceCheck; 
 
 	/**
 	 *  防腐层端部内外涂层
 	 */
-	private String coatingIoEndsCheck; 
+	private Integer coatingIoEndsCheck; 
 
 	/** 
 	 * 检查人
@@ -214,47 +215,47 @@ public class CheckPipeColdBending extends CommonJdbcEntity{
 		super.setField("bendAngle");
 	}
 
-	public String getWeldPosition() {
+	public Integer getWeldPosition() {
 		return weldPosition; 
 	}
 
-	public void setWeldPosition(String weldPosition) {
+	public void setWeldPosition(Integer weldPosition) {
 		this.weldPosition = weldPosition; 
 		super.setField("weldPosition");
 	}
 
-	public String getOvality() {
+	public Integer getOvality() {
 		return ovality; 
 	}
 
-	public void setOvality(String ovality) {
+	public void setOvality(Integer ovality) {
 		this.ovality = ovality; 
 		super.setField("ovality");
 	}
 
-	public String getGrooveCheck() {
+	public Integer getGrooveCheck() {
 		return grooveCheck; 
 	}
 
-	public void setGrooveCheck(String grooveCheck) {
+	public void setGrooveCheck(Integer grooveCheck) {
 		this.grooveCheck = grooveCheck; 
 		super.setField("grooveCheck");
 	}
 
-	public String getCoatingIoFaceCheck() {
+	public Integer getCoatingIoFaceCheck() {
 		return coatingIoFaceCheck; 
 	}
 
-	public void setCoatingIoFaceCheck(String coatingIoFaceCheck) {
+	public void setCoatingIoFaceCheck(Integer coatingIoFaceCheck) {
 		this.coatingIoFaceCheck = coatingIoFaceCheck; 
 		super.setField("coatingIoFaceCheck");
 	}
 
-	public String getCoatingIoEndsCheck() {
+	public Integer getCoatingIoEndsCheck() {
 		return coatingIoEndsCheck; 
 	}
 
-	public void setCoatingIoEndsCheck(String coatingIoEndsCheck) {
+	public void setCoatingIoEndsCheck(Integer coatingIoEndsCheck) {
 		this.coatingIoEndsCheck = coatingIoEndsCheck; 
 		super.setField("coatingIoEndsCheck");
 	}
