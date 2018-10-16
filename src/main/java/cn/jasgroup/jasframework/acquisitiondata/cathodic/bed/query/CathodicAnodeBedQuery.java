@@ -66,7 +66,7 @@ public class CathodicAnodeBedQuery extends BaseJavaQuery{
 	public String getQuerySql() {
 		String sql = "SELECT pro.project_name, pi.pipeline_name, te.tenders_name,ps.pipe_segment_name, ms.median_stake_code,"
 				+ "u.unit_name as construct_unit_name, pu.unit_name as supervision_unit_name, d.code_name as backfill_material_name,"
-				+ "d.code_name as burial_way_name,cab.* FROM daq_cathodic_anode_bed cab "
+				+ "dm.code_name as burial_way_name,cab.* FROM daq_cathodic_anode_bed cab "
 				+ "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = cab.project_oid "
 				+ "LEFT JOIN (SELECT oid, pipeline_name, active FROM daq_pipeline where active=1) pi ON pi.oid = cab.pipeline_oid "
 				+ "LEFT JOIN (SELECT oid, tenders_name, active FROM daq_tenders where active=1) te ON te.oid = cab.tenders_oid "
