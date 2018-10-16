@@ -272,7 +272,7 @@
 					supervisionUnit:[{
 					    required: true,
 						message: '监理单位为必填项',
-						trigger: 'change'	
+						trigger: 'change'
 					}],
 					collectionDate:[{
 						 required: true,
@@ -287,17 +287,17 @@
 					endMedianStakeOid:[{
 						required: true,
 						 message: '结束桩号为必填项',
-						 trigger: 'change'	
+						 trigger: 'change'
 					}],
 					startRelativeMileage:[{
 					     required: true,
 						 message: '相对起始桩里程为必填项',
-						 trigger: 'change'	
+						 trigger: 'change'
 					}],
 					endRelativeMileage:[{
 						 required: true,
 						 message: '相对结束桩里程为必填项',
-						 trigger: 'change'	
+						 trigger: 'change'
 					}]
 				},
 				form: {
@@ -359,8 +359,9 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
-				} else {
-					that.domain.tenders = [];
+				}
+				//  else {
+					// that.domain.tenders = [];
 					that.form.tendersOid = '';
 					that.domain.pipeline = [];
 					that.form.pipelineOid = '';
@@ -368,7 +369,9 @@
 					that.form.pipeSegmentOrCrossOid = '';
 					that.domain.supervisionUnits = [];
 					that.form.supervisionUnit = '';
-				}
+					 that.domain.medianStakes = [];
+					that.form.medianStakeOid = '';
+				// }
 
 			},
 			tendersChanged: function (val) { //根据标段触发管线列表
@@ -381,12 +384,15 @@
 						function (arr) {
 							that.domain.pipeline = arr;
 						});
-				} else {
-					that.domain.pipeline = [];
+				}
+				//  else {
+					// that.domain.pipeline = [];
 					that.form.pipelineOid = '';
 					that.domain.pipeSegment = [];
 					that.form.pipeSegmentOrCrossOid = '';
-				}
+					 that.domain.medianStakes = [];
+					that.form.medianStakeOid = '';
+				// }
 				that.getSupervisionUnit(val); //根据标段获取监理单位
 			},
 			getSupervisionUnit: function (val) {
@@ -399,10 +405,11 @@
 						function (arr) {
 							that.domain.supervisionUnits = arr;
 						});
-				} else {
-					that.domain.supervisionUnits = [];
-					that.form.supervisionUnit = '';
 				}
+				//  else {
+					// that.domain.supervisionUnits = [];
+					that.form.supervisionUnit = '';
+				// }
 			},
 			pipelineChanged: function (val) { //根据管线触发线路段/穿跨越
 				var that = this;
@@ -414,10 +421,13 @@
 						function (arr) {
 							that.domain.pipeSegment = arr;
 						});
-				} else {
-					that.domain.pipeSegment = [];
-					that.form.pipeSegmentOrCrossOid = '';
 				}
+				// else {
+					// that.domain.pipeSegment = [];
+					that.form.pipeSegmentOrCrossOid = '';
+					 that.domain.medianStakes = [];
+					that.form.medianStakeOid = '';
+				// }
 			},
 			pipeSegmentChanged: function (val) {
 				var that = this;
@@ -429,10 +439,11 @@
 						function (arr) {
 							that.domain.medianStakes = arr;
 						});
-				} else {
-					that.domain.medianStakes = [];
-					that.form.medianStakeOid = '';
 				}
+				//  else {
+					// that.domain.medianStakes = [];
+					that.form.medianStakeOid = '';
+				// }
 			},
 			cancel: function (param) {
 				window.parent.jasTools.dialog.close(param);

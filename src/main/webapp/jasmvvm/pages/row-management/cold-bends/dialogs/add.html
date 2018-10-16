@@ -282,12 +282,12 @@
 					bendingRadius:[{
 						required: true,
 						message: '曲率半径为必填项',
-						trigger: 'change'	
+						trigger: 'change'
 					}],
 					curveLength:[{
 						required: true,
 						message: '曲线长度为必填项',
-						trigger: 'change'	
+						trigger: 'change'
 					}],
 					pipeColdBendingCode: [{
 						required: true,
@@ -436,8 +436,9 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
-				} else {
-					that.domain.tenders = [];
+				}
+				// else {
+					// that.domain.tenders = [];
 					that.formData.tendersOid = '';
 					that.domain.pipeline = [];
 					that.formData.pipelineOid = '';
@@ -446,7 +447,7 @@
 					that.domain.supervisionUnits = [];
 					that.formData.supervisionUnit = '';
 
-				}
+				// }
 			},
 			tendersChanged: function (val) { //根据标段触发管线列表
 				var that = this;
@@ -458,12 +459,13 @@
 						function (arr) {
 							that.domain.pipeline = arr;
 						});
-				} else {
-					that.domain.pipeline = [];
+				}
+				//  else {
+					// that.domain.pipeline = [];
 					that.formData.pipelineOid = '';
 					that.domain.pipeSegment = [];
 					that.formData.pipeSegmentOrCrossOid = '';
-				}
+				// }
 				that.getSupervisionUnit(val); //根据标段获取监理单位
 			},
 			getSupervisionUnit: function (val) {
@@ -476,10 +478,11 @@
 						function (arr) {
 							that.domain.supervisionUnits = arr;
 						});
-				} else {
-					that.domain.supervisionUnits = [];
-					that.formData.supervisionUnit = '';
 				}
+				// else {
+					// that.domain.supervisionUnits = [];
+					that.formData.supervisionUnit = '';
+				// }
 			},
 			pipelineChanged: function (val) { //根据管线触发线路段/穿跨越
 				var that = this;
@@ -491,10 +494,11 @@
 						function (arr) {
 							that.domain.pipeSegment = arr;
 						});
-				} else {
-					that.domain.pipeSegment = [];
-					that.formData.pipeSegmentOrCrossOid = '';
 				}
+				// else {
+					// that.domain.pipeSegment = [];
+					that.formData.pipeSegmentOrCrossOid = '';
+				// }
 			},
 			pipeOidChanged: function (val) {
 				var that = this;

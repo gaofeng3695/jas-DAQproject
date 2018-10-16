@@ -581,7 +581,8 @@ Vue.component('jas-search-for-list', {
 			var form = this.form;
 			var setChildOptionsAndValue = function (childField, options) { // 入参下拉选项
 				that.fieldsConfig[childField].options = options;
-				!isInit && (form[childField] = '');
+				form[childField] = ''
+				// !isInit && ();
 				// if (options.length === 1) { //只有一个选项就自动复制
 				// 	form[childField] = options[0].key;
 				// }
@@ -1387,7 +1388,7 @@ Vue.component('jas-form-items', {
 							trigger: 'change'
 						});
 					}
-			
+
 					/* 请求阈值 */
 					if (config.domainName) {
 						(function (field, config) {
@@ -1436,6 +1437,7 @@ Vue.component('jas-form-items', {
 			}
 		},
 		fatherSelectChanged: function (isInit, fatherField) {
+		//	console.log(isInit);
 			var that = this;
 			var fieldConfig = this.fieldsConfig[fatherField];
 			var form = this.form;
@@ -1450,7 +1452,8 @@ Vue.component('jas-form-items', {
 					that.fieldsConfig[childField].options = options;
 				}
 				var length = that.fieldsConfig[childField].options.length;
-				!isInit && (form[childField] = '');
+				//!isInit && (form[childField] = '');
+				form[childField] = '';
 				if (options.length === 1) { //只有一个选项就自动复制
 					form[childField] = options[0].key;
 				}
@@ -1686,9 +1689,12 @@ Vue.component('jas-form-items-group', {
 			var form = this.form;
 			var setChildOptionsAndValue = function (childField, options) { // 入参下拉选项
 				that.fieldsConfig[childField].options = options;
-				!isInit && (form[childField] = '');
+				// !isInit && (form[childField] = '');
+
 				if (options.length === 1) { //只有一个选项就自动复制
 					form[childField] = options[0].key;
+				}else{
+					form[childField] = '';
 				}
 				that.$refs[childField][0].$emit('change', isInit);
 			};

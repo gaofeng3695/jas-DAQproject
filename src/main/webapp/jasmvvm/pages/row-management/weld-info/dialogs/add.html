@@ -334,7 +334,7 @@
 					isGoldeJoint:[{
 						required: true,
 						message: '是否连头口为必填项',
-						trigger: 'change'	
+						trigger: 'change'
 					}],
 					tendersOid: [{
 						required: true,
@@ -413,7 +413,7 @@
 					collectionDate:[{
 						required: true,
 						message: '采集日期为必填项',
-						trigger: 'change'	
+						trigger: 'change'
 					}],
 					supervisionEngineer: [{
 						required: true,
@@ -552,8 +552,9 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
-				} else {
-					that.domain.tenders = [];
+				}
+				// else {
+					// that.domain.tenders = [];
 					that.formData.tendersOid = '';
 					that.domain.pipeline = [];
 					that.formData.pipelineOid = '';
@@ -561,7 +562,9 @@
 					that.formData.pipeSegmentOrCrossOid = '';
 					that.domain.supervisionUnits = [];
 					that.formData.supervisionUnit = '';
-				}
+					 that.domain.medianStakes = [];
+						that.formData.medianStakeOid = '';
+				// }
 				that.getWorkUints(val); //进行获取施工机组
 				that.getWeldproduct(val); //获取焊接工艺
 			},
@@ -576,10 +579,11 @@
 						function (arr) {
 							that.domain.weldProduces = arr;
 						});
-				} else {
-					that.domain.weldProduces = [];
-					that.formData.weldProduce = '';
 				}
+				// else {
+					// that.domain.weldProduces = [];
+					that.formData.weldProduce = '';
+				// }
 			},
 			getWorkUints: function (val) {
 				var that = this;
@@ -592,10 +596,11 @@
 						function (arr) {
 							that.domain.workUnits = arr;
 						});
-				} else {
-					that.domain.workUnits = [];
-					that.formData.workUnitOid = '';
 				}
+				//  else {
+					// that.domain.workUnits = [];
+					that.formData.workUnitOid = '';
+				// }
 			},
 			tendersChanged: function (val) { //根据标段触发管线列表
 				var that = this;
@@ -607,12 +612,15 @@
 						function (arr) {
 							that.domain.pipeline = arr;
 						});
-				} else {
-					that.domain.pipeline = [];
+				}
+				//  else {
+					// that.domain.pipeline = [];
 					that.formData.pipelineOid = '';
 					that.domain.pipeSegment = [];
 					that.formData.pipeSegmentOrCrossOid = '';
-				}
+					 that.domain.medianStakes = [];
+						that.formData.medianStakeOid = '';
+				// }
 				that.getSupervisionUnit(val); //根据标段获取监理单位
 			},
 			getSupervisionUnit: function (val) {
@@ -625,10 +633,11 @@
 						function (arr) {
 							that.domain.supervisionUnits = arr;
 						});
-				} else {
-					that.domain.supervisionUnits = [];
-					that.formData.supervisionUnit = '';
 				}
+				// else {
+					// that.domain.supervisionUnits = [];
+					that.formData.supervisionUnit = '';
+				// }
 			},
 			pipelineChanged: function (val) { //根据管线触发线路段/穿跨越
 				var that = this;
@@ -640,10 +649,13 @@
 						function (arr) {
 							that.domain.pipeSegment = arr;
 						});
-				} else {
-					that.domain.pipeSegment = [];
-					that.formData.pipeSegmentOrCrossOid = '';
 				}
+				// else {
+					// that.domain.pipeSegment = [];
+					that.formData.pipeSegmentOrCrossOid = '';
+					 that.domain.medianStakes = [];
+						that.formData.medianStakeOid = '';
+				// }
 			},
 			pipeSegmentChanged: function (val) {
 				var that = this;
@@ -655,10 +667,11 @@
 						function (arr) {
 							that.domain.medianStakes = arr;
 						});
-				} else {
-					that.domain.medianStakes = [];
-					that.formData.medianStakeOid = '';
 				}
+				//  else {
+					// that.domain.medianStakes = [];
+					that.formData.medianStakeOid = '';
+				// }
 			}, //获取桩号
 			getWorkPerson: function (val) {
 				var that = this;
@@ -672,12 +685,13 @@
 							function (arr) {
 								that.domain.persons = arr;
 							});
-				} else {
-					that.domain.persons = [];
+				}
+				// else {
+					// that.domain.persons = [];
 					that.formData.coverOid = '';
 					that.formData.padderOid = '';
 					that.formData.renderOid = '';
-				}
+				// }
 			},
 			frontpipeChange: function (val) { //触发前管件编号
 				var that = this;
@@ -692,10 +706,11 @@
 							function (arr) {
 								that.domain.frontPipeOids = arr;
 							});
-				} else {
-					that.domain.frontPipeOids = [];
-					that.formData.frontPipeOid = "";
 				}
+				// else {
+					// that.domain.frontPipeOids = [];
+					that.formData.frontPipeOid = "";
+				// }
 			},
 			backpipeChange: function (val) { //触发后管件编号
 				var that = this;
@@ -710,10 +725,11 @@
 							function (arr) {
 								that.domain.backPipeOids = arr;
 							});
-				} else {
-					that.domain.backPipeOids = [];
-					that.formData.backPipeOid = '';
 				}
+				//  else {
+					// that.domain.backPipeOids = [];
+					that.formData.backPipeOid = '';
+				// }
 			},
 			submit: function (formName) {
 				var that = this;

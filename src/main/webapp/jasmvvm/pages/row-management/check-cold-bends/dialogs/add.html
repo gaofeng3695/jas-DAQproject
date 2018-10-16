@@ -291,7 +291,7 @@
 				});
 			this.getConstructUnit();
 		},
-		methods: {		
+		methods: {
 			instructionNum: function () {
 				var that = this;
 				var num = 200 - that.formData.remarks.trim().length;
@@ -324,16 +324,17 @@
 						function (arr) {
 							that.domain.tenders = arr;
 							if (arr.length > 0) {
-								that.formData.tendersOid = arr[0].key;
+								// that.formData.tendersOid = arr[0].key;
 								that.tendersChanged(that.formData.tendersOid);
 							}
 						});
-				} else {
-					that.domain.tenders = [];
+				}
+				//  else {
+					// that.domain.tenders = [];
 					that.formData.tendersOid = '';
 					that.domain.constructUnitArr = [];
 					that.formData.constructUnit = '';
-				}
+				// }
 			},
 			tendersChanged: function (val) { //根据标段触发管线列表
 				var that = this;
@@ -345,15 +346,16 @@
 							},
 							function (arr) {
 								that.domain.pipeColdBendingOidArr = arr;
-								if (arr.length > 0) {
-									that.formData.pipeColdBendingOid = arr[0].key;
-								}
+								// if (arr.length > 0) {
+								// 	that.formData.pipeColdBendingOid = arr[0].key;
+								// }
 
 							});
-				} else {
-					that.domain.pipeColdBendingOidArr = [];
-					that.formData.pipeColdBendingOid = '';
 				}
+				// else {
+					// that.domain.pipeColdBendingOidArr = [];
+					that.formData.pipeColdBendingOid = '';
+				// }
 			},
 			cancel: function (param) {
 				window.parent.jasTools.dialog.close(param);

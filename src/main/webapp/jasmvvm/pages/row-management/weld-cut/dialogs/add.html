@@ -208,7 +208,7 @@
 					cutWeldDate:[{
 						required: true,
 						message: '割口日期为必填项',
-						trigger: 'change'	
+						trigger: 'change'
 					}],
 					backWeldOid:[{
 						required: true,
@@ -267,7 +267,7 @@
 					},{
 						required: true,
 						message: '监理工程师为必填项',
-						trigger: 'change'	
+						trigger: 'change'
 					}],
 					collectionPerson: [{
 						min: "0",
@@ -366,8 +366,9 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
-				} else {
-					that.domain.tenders = [];
+				}
+				// else {
+					// that.domain.tenders = [];
 					that.formData.tendersOid = '';
 					that.domain.pipeline = [];
 					that.formData.pipelineOid = '';
@@ -375,7 +376,7 @@
 					that.formData.pipeSegmentOrCrossOid = '';
 					that.domain.supervisionUnits = [];
 					that.formData.supervisionUnit = '';
-				}
+				// }
 				that.getWorkUints(val); //获取机组
 			},
 			getWorkUints: function (val) {
@@ -389,10 +390,11 @@
 						function (arr) {
 							that.domain.workUnits = arr;
 						});
-				} else {
-					that.domain.workUnits = [];
-					that.formData.workUnitOid = '';
 				}
+				// else {
+					// that.domain.workUnits = [];
+					that.formData.workUnitOid = '';
+				// }
 			},
 			tendersChanged: function (val) { //根据标段触发管线列表
 				var that = this;
@@ -404,12 +406,13 @@
 						function (arr) {
 							that.domain.pipeline = arr;
 						});
-				} else {
-					that.domain.pipeline = [];
+				}
+				//  else {
+					// that.domain.pipeline = [];
 					that.formData.pipelineOid = '';
 					that.domain.pipeSegment = [];
 					that.formData.pipeSegmentOrCrossOid = '';
-				}
+				// }
 				that.getSupervisionUnit(val); //根据标段获取监理单位
 			},
 			getSupervisionUnit: function (val) {
@@ -422,10 +425,11 @@
 						function (arr) {
 							that.domain.supervisionUnits = arr;
 						});
-				} else {
-					that.domain.supervisionUnits = [];
-					that.formData.supervisionUnit = '';
 				}
+				// else {
+					// that.domain.supervisionUnits = [];
+					that.formData.supervisionUnit = '';
+				// }
 			},
 			pipelineChanged: function (val) { //根据管线触发线路段/穿跨越
 				var that = this;
@@ -437,10 +441,11 @@
 						function (arr) {
 							that.domain.pipeSegment = arr;
 						});
-				} else {
-					that.domain.pipeSegment = [];
-					that.formData.pipeSegmentOrCrossOid = '';
 				}
+				//  else {
+					// that.domain.pipeSegment = [];
+					that.formData.pipeSegmentOrCrossOid = '';
+				// }
 			},
 			pipeSegmentChanged: function (val) {
 				var that = this;
@@ -459,10 +464,11 @@
 									});
 								}
 							});
-				} else {
-					that.domain.welds = [];
-					that.formData.weldOid = '';
 				}
+				// else {
+					// that.domain.welds = [];
+					that.formData.weldOid = '';
+				// }
 			},
 			weldChanged: function (val) {
 				var that = this;
@@ -475,10 +481,11 @@
 							function (arr) {
 								that.domain.frontWeldOids = arr;
 							});
-				} else {
-					that.domain.frontWeldOids = [];
-					that.formData.frontWeldOid = '';
 				}
+				//  else {
+					// that.domain.frontWeldOids = [];
+					that.formData.frontWeldOid = '';
+				// }
 			},
 			frontWeldChanged: function (val) {
 				var that = this;
@@ -491,10 +498,11 @@
 							function (arr) {
 								that.domain.backWeldOids = arr;
 							});
-				} else {
-					that.domain.backWeldOids = [];
-					that.formData.backWeldOid = '';
 				}
+				// else {
+					// that.domain.backWeldOids = [];
+					that.formData.backWeldOid = '';
+				// }
 			},
 			submit: function (formName) {
 				var that = this;
