@@ -97,14 +97,14 @@
 				<jas-base-group-title name="位置数据"></jas-base-group-title>
 				<el-row>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="起始桩号"  prop="startMedianStakeOid" required>
+						<el-form-item label="起始桩号" prop="startMedianStakeOid" required>
 							<el-select v-model="form.startMedianStakeOid" clearable placeholder="请选择起始桩号" size="small" @visible-change="childChange($event,'pipeSegmentOrCrossOid','线路段/穿跨越')">
 								<el-option v-for="item in domain.medianStakes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="结束桩号"  prop="endMedianStakeOid" required>
+						<el-form-item label="结束桩号" prop="endMedianStakeOid" required>
 							<el-select v-model="form.endMedianStakeOid" clearable placeholder="请选择结束桩号" size="small" @visible-change="childChange($event,'pipeSegmentOrCrossOid','线路段/穿跨越')">
 								<el-option v-for="item in domain.medianStakes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
@@ -259,49 +259,63 @@
 						max: 30,
 						message: "不能超过30个字"
 					}],
-					constructUnit:[{
+					constructUnit: [{
 						required: true,
 						message: '施工单位为必填项',
 						trigger: 'change'
 					}],
-					constructDate:[{
+					constructDate: [{
 						required: true,
 						message: '施工日期为必填项',
 						trigger: 'change'
 					}],
-					supervisionUnit:[{
-					    required: true,
+					supervisionUnit: [{
+						required: true,
 						message: '监理单位为必填项',
 						trigger: 'change'
 					}],
-					collectionDate:[{
-						 required: true,
-						 message: '采集日期为必填项',
-						 trigger: 'change'
-					}],
-					startMedianStakeOid:[{
+					collectionDate: [{
 						required: true,
-						 message: '起始桩号为必填项',
-						 trigger: 'change'
+						message: '采集日期为必填项',
+						trigger: 'change'
 					}],
-					endMedianStakeOid:[{
+					startMedianStakeOid: [{
 						required: true,
-						 message: '结束桩号为必填项',
-						 trigger: 'change'
+						message: '起始桩号为必填项',
+						trigger: 'change'
 					}],
-					startRelativeMileage:[{
-					     required: true,
-						 message: '相对起始桩里程为必填项',
-						 trigger: 'change'
+					endMedianStakeOid: [{
+						required: true,
+						message: '结束桩号为必填项',
+						trigger: 'change'
 					}],
-					endRelativeMileage:[{
-						 required: true,
-						 message: '相对结束桩里程为必填项',
-						 trigger: 'change'
+					startRelativeMileage: [{
+						required: true,
+						message: '相对起始桩里程为必填项',
+						trigger: 'change'
+					}],
+					endRelativeMileage: [{
+						required: true,
+						message: '相对结束桩里程为必填项',
+						trigger: 'change'
 					}]
 				},
 				form: {
-
+					projectOid: "",
+					tendersOid: "",
+					pipelineOid: "",
+					pipeSegmentOrCrossOid: "",
+					supervisionEngineer: "",
+					collectionPerson: "",
+					constructUnit: "",
+					constructDate: "",
+					supervisionUnit: "",
+					collectionDate: "",
+					startMedianStakeOid: "",
+					endMedianStakeOid: "",
+					startRelativeMileage: "",
+					endRelativeMileage: "",
+					remarks:""
 				},
 			}
 		},
@@ -349,7 +363,7 @@
 					cb && cb([]);
 				});
 			},
-			projectChanged: function (val) {
+			projectChanged: function (val, edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -360,8 +374,7 @@
 							that.domain.tenders = arr;
 						});
 				}
-				//  else {
-					// that.domain.tenders = [];
+				if (!edit) {
 					that.form.tendersOid = '';
 					that.domain.pipeline = [];
 					that.form.pipelineOid = '';
@@ -369,12 +382,11 @@
 					that.form.pipeSegmentOrCrossOid = '';
 					that.domain.supervisionUnits = [];
 					that.form.supervisionUnit = '';
-					 that.domain.medianStakes = [];
+					that.domain.medianStakes = [];
 					that.form.medianStakeOid = '';
-				// }
-
+				}
 			},
-			tendersChanged: function (val) { //根据标段触发管线列表
+			tendersChanged: function (val, edit) { //根据标段触发管线列表
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -385,17 +397,16 @@
 							that.domain.pipeline = arr;
 						});
 				}
-				//  else {
-					// that.domain.pipeline = [];
+				if (!edit) {
 					that.form.pipelineOid = '';
 					that.domain.pipeSegment = [];
 					that.form.pipeSegmentOrCrossOid = '';
-					 that.domain.medianStakes = [];
+					that.domain.medianStakes = [];
 					that.form.medianStakeOid = '';
-				// }
-				that.getSupervisionUnit(val); //根据标段获取监理单位
+				}
+				that.getSupervisionUnit(val, edit); //根据标段获取监理单位
 			},
-			getSupervisionUnit: function (val) {
+			getSupervisionUnit: function (val, edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -406,12 +417,11 @@
 							that.domain.supervisionUnits = arr;
 						});
 				}
-				//  else {
-					// that.domain.supervisionUnits = [];
+				if (!edit) {
 					that.form.supervisionUnit = '';
-				// }
+				}
 			},
-			pipelineChanged: function (val) { //根据管线触发线路段/穿跨越
+			pipelineChanged: function (val, edit) { //根据管线触发线路段/穿跨越
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -422,14 +432,13 @@
 							that.domain.pipeSegment = arr;
 						});
 				}
-				// else {
-					// that.domain.pipeSegment = [];
+				if (!edit) {
 					that.form.pipeSegmentOrCrossOid = '';
-					 that.domain.medianStakes = [];
+					that.domain.medianStakes = [];
 					that.form.medianStakeOid = '';
-				// }
+				}
 			},
-			pipeSegmentChanged: function (val) {
+			pipeSegmentChanged: function (val, edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -440,10 +449,9 @@
 							that.domain.medianStakes = arr;
 						});
 				}
-				//  else {
-					// that.domain.medianStakes = [];
+				if (!edit) {
 					that.form.medianStakeOid = '';
-				// }
+				}
 			},
 			cancel: function (param) {
 				window.parent.jasTools.dialog.close(param);
@@ -488,10 +496,10 @@
 					oid: that.oid
 				}, function (data) {
 					that.form = data.rows[0];
-					that.projectChanged(data.rows[0].projectOid);
-					that.tendersChanged(data.rows[0].tendersOid);
-					that.pipelineChanged(data.rows[0].pipelineOid);
-					that.pipeSegmentChanged(data.rows[0].pipeSegmentOrCrossOid);
+					that.projectChanged(data.rows[0].projectOid, true);
+					that.tendersChanged(data.rows[0].tendersOid, true);
+					that.pipelineChanged(data.rows[0].pipelineOid, true);
+					that.pipeSegmentChanged(data.rows[0].pipeSegmentOrCrossOid, true);
 
 				});
 			},

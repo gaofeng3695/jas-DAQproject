@@ -164,7 +164,7 @@
 					},
 					detectionReportNum: {
 						type: 'input',
-							isRequired: true,
+						isRequired: true,
 						rules: [{
 							min: "0",
 							max: 60,
@@ -177,7 +177,7 @@
 					},
 					evaluationResult: {
 						type: 'select',
-							isRequired: true,
+						isRequired: true,
 						options: [{
 							key: 1,
 							value: '合格'
@@ -216,7 +216,7 @@
 					},
 					supervisionUnit: {
 						type: 'select',
-							isRequired: true,
+						isRequired: true,
 					},
 					supervisionEngineer: {
 						type: 'input',
@@ -229,7 +229,7 @@
 					},
 					collectionDate: {
 						type: 'date',
-									isRequired: true,
+						isRequired: true,
 					}
 				},
 				sonFieldsConfig: {
@@ -256,7 +256,7 @@
 					tendersOid: '', // 标段名称'
 					pipelineOid: '', // 管线名称'
 					pipeSegmentOrCrossOid: '', // 线路段/穿跨越'
-					weldCode: '', // 焊口编号'
+					weldOid: '', // 焊口编号'
 					detectionReportNum: '', // 检测报告编号'
 					detectionDeta: '', // 检测日期'
 					evaluationResult: '', // 评定结果'
@@ -268,7 +268,10 @@
 					supervisionEngineer: '', // 监理工程师'
 					collectionDate: '', // 采集日期'
 					remarks: '',
-					infiltrationSubList: []
+					infiltrationSubList: [],
+					defectPosition: '', // 缺陷位置
+					defectProperties: '', //缺陷性质
+					defectSize: '' // 缺陷尺寸(mm/mm²/点)
 				},
 			}
 		},
