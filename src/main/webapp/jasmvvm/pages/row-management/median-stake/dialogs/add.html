@@ -78,14 +78,14 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="X坐标" prop="pointx">
-							<el-input-number :precision="9" :step="1" :max="99999999" controls-position="right" v-model="formData.pointx" clearable
-							  placeholder="请输入X坐标" size="small"></el-input-number>
+							<el-input-number :precision="9" :step="1" :max="99999999" controls-position="right" v-model="formData.pointx" clearable placeholder="请输入X坐标"
+							  size="small"></el-input-number>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="Y坐标" prop="pointy">
-							<el-input-number :precision="9" :step="1" :max="99999999" controls-position="right" v-model="formData.pointy" clearable
-							  placeholder="请输入Y坐标" size="small"></el-input-number>
+							<el-input-number :precision="9" :step="1" :max="99999999" controls-position="right" v-model="formData.pointy" clearable placeholder="请输入Y坐标"
+							  size="small"></el-input-number>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -93,8 +93,8 @@
 				<el-row>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 						<el-form-item label="备注" prop="remarks">
-							<el-input type="textarea"  :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"
-							 :maxLength="200"  @input="instructionNum"></el-input>
+							<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks" :maxLength="200"
+							  @input="instructionNum"></el-input>
 							<p style="text-align:right;color:#999;">您还可以输入<span v-text="remarks"></span>字</p>
 						</el-form-item>
 					</el-col>
@@ -246,7 +246,7 @@
 					cb && cb([]);
 				});
 			},
-			projectChanged: function (val) {
+			projectChanged: function (val, edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable('/daq/pipeline/getList.do', {
@@ -255,10 +255,9 @@
 						that.domain.pipeline = arr;
 					});
 				}
-				//  else {
-					// that.domain.pipeline = [];
+				if (edit) {
 					that.formData.pipelineOid = '';
-				// }
+				}
 			},
 			submit: function (formName) {
 				var that = this;
@@ -297,7 +296,7 @@
 				var url = jasTools.base.rootPath + "/daq/medianStake/get.do";
 				jasTools.ajax.get(url, that.formData, function (data) {
 					that.formData = data.data;
-					that.projectChanged(that.formData.projectOid);
+					that.projectChanged(that.formData.projectOid, true);
 				});
 			},
 			pipleChanged: function (e) {

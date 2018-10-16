@@ -86,7 +86,7 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="监理单位" prop="supervisionUnit" required>
-								<el-select v-model="formData.supervisionUnit" clearable placeholder="请选择监理单位" size="small" @visible-change="childChange($event,'pipeSegmentOid','线路段名称')">
+								<el-select v-model="formData.supervisionUnit" clearable placeholder="请选择监理单位" size="small" @visible-change="childChange($event,'tendersOid','标段名称')" >
 									<el-option v-for="item in domain.supervisionUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
@@ -115,7 +115,7 @@
 					<el-row>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="桩号" prop="medianStakeOid" required>
-								<el-select v-model="formData.medianStakeOid" clearable placeholder="请选择桩号" size="small" @visible-change="childChange($event,'tendersOid','标段名称')">
+								<el-select v-model="formData.medianStakeOid" clearable placeholder="请选择桩号" size="small" @visible-change="childChange($event,'pipeSegmentOid','线路段名称')">
 									<el-option v-for="item in domain.medianStakes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
@@ -348,7 +348,10 @@
 					}]
 				},
 				formData: {
-					pointx: ''
+					pointx: '',
+					supervisionUnit:"",
+					medianStakeOid:""
+					
 				}
 			}
 		},
@@ -417,7 +420,7 @@
 					cb && cb([]);
 				});
 			},
-			projectChanged: function (val) {
+			projectChanged: function (val,edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -428,8 +431,7 @@
 							that.domain.tenders = arr;
 						});
 				}
-				// else {
-				// 	that.domain.tenders = [];
+				if(!edit){
 					that.formData.tendersOid = '';
 					that.domain.pipeline = [];
 					that.formData.pipelineOid = '';
@@ -438,12 +440,11 @@
 					that.domain.supervisionUnits = [];
 					that.formData.supervisionUnit = '';
 					that.domain.medianStakes = [];
-					that.formData.medianStakeOid = '';
-				// }
-
+					that.formData.medianStakeOid = '';	
+				}
+					
 			},
-
-			tendersChanged: function (val) { //根据标段触发管线列表
+			tendersChanged: function (val,edit) { //根据标段触发管线列表
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -454,17 +455,18 @@
 							that.domain.pipeline = arr;
 						});
 				}
-				//  else {
-				// 	that.domain.pipeline = [];
+				if(!edit){
 					that.formData.pipelineOid = '';
 					that.domain.pipeSegment = [];
 					that.formData.pipeSegmentOid = '';
 					that.domain.medianStakes = [];
-					that.formData.medianStakeOid = '';
-				// }
-				that.getSupervisionUnit(val); //根据标段获取监理单位
+					that.formData.medianStakeOid = '';	
+				}
+					
+			
+				that.getSupervisionUnit(val,edit); //根据标段获取监理单位
 			},
-			getSupervisionUnit: function (val) {
+			getSupervisionUnit: function (val,edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -475,12 +477,11 @@
 							that.domain.supervisionUnits = arr;
 						});
 				}
-				//  else {
-				// 	that.domain.supervisionUnits = [];
-					that.formData.supervisionUnit = '';
-				// }
+				if(!edit){
+					that.formData.supervisionUnit = '';	
+				}
 			},
-			pipelineChanged: function (val) { //根据管线触发线路段/穿跨越
+			pipelineChanged: function (val,edit) { //根据管线触发线路段/穿跨越
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -491,14 +492,13 @@
 							that.domain.pipeSegment = arr;
 						});
 				}
-				// else {
-				// 	that.domain.pipeSegment = [];
+				if(!edit){
 					that.formData.pipeSegmentOid = '';
 					that.domain.medianStakes = [];
 					that.formData.medianStakeOid = '';
-				// }
+				 }
 			},
-			pipeSegmentChanged: function (val) {
+			pipeSegmentChanged: function (val,edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -509,10 +509,9 @@
 							that.domain.medianStakes = arr;
 						});
 				}
-				//else {
-					//that.domain.medianStakes = [];
-					that.formData.medianStakeOid = '';
-				//}
+				if(!edit){
+					that.formData.medianStakeOid = '';	
+				}
 			}, //获取桩号
 
 			submit: function (formName) {
@@ -554,14 +553,12 @@
 				jasTools.ajax.post(url, {
 					oid: that.oid
 				}, function (data) {
-
 					that.formData = data.rows[0];
-
-					that.projectChanged(data.rows[0].projectOid);
-					that.tendersChanged(data.rows[0].tendersOid);
-					that.getSupervisionUnit(data.rows[0].tendersOid);
-					that.pipelineChanged(data.rows[0].pipelineOid);
-					that.pipeSegmentChanged(data.rows[0].pipeSegmentOid);
+					that.projectChanged(data.rows[0].projectOid,true);
+					that.tendersChanged(data.rows[0].tendersOid,true);
+					that.getSupervisionUnit(data.rows[0].tendersOid,true);
+					that.pipelineChanged(data.rows[0].pipelineOid,true);
+					that.pipeSegmentChanged(data.rows[0].pipeSegmentOid,true);
 
 				});
 			},

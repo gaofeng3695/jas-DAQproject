@@ -283,7 +283,7 @@
 					cb && cb([]);
 				});
 			},
-			projectChanged: function (val) {
+			projectChanged: function (val,edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -298,14 +298,13 @@
 							}
 						});
 				}
-				// else {
-					// that.domain.tenders = [];
+					if(!edit){
 					that.formData.tendersOid = '';
 					that.domain.constructUnitArr = [];
 					that.formData.constructUnit = '';
-				// }
+				}
 			},
-			tendersChanged: function (val) { //根据标段触发管线列表
+			tendersChanged: function (val,edit) { //根据标段触发管线列表
 				var that = this;
 				if (val) {
 					this
@@ -318,10 +317,9 @@
 								}
 							});
 				}
-				// else {
-					// that.domain.constructUnitArr = [];
+			if(!edit){
 					that.formData.constructUnit = "";
-				// }
+				}
 			},
 			cancel: function (param) {
 				window.parent.jasTools.dialog.close(param);
@@ -369,8 +367,8 @@
 					for (var key in that.formData) {
 						that.formData[key] = data.rows[0][key];
 					}
-					that.projectChanged(data.rows[0].projectOid);
-					that.tendersChanged(data.rows[0].tendersOid);
+					that.projectChanged(data.rows[0].projectOid,true);
+					that.tendersChanged(data.rows[0].tendersOid,true);
 				});
 
 			},
