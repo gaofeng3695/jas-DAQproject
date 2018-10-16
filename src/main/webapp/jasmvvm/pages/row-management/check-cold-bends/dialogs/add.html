@@ -324,10 +324,10 @@
 						},
 						function (arr) {
 							that.domain.tenders = arr;
-							if (arr.length > 0) {
+							//if (arr.length > 0) {
 								// that.formData.tendersOid = arr[0].key;
-								that.tendersChanged(that.formData.tendersOid);
-							}
+								//that.tendersChanged(that.formData.tendersOid);
+							//}
 						});
 				}
 			if (!edit) {
@@ -354,6 +354,7 @@
 				}
 				if (!edit) {
 					that.formData.pipeColdBendingOid = '';
+					
 				}
 			},
 			cancel: function (param) {
@@ -398,9 +399,9 @@
 				var url = jasTools.base.rootPath +
 					"/jdbc/commonData/checkPipeColdBending/getPage.do";
 				jasTools.ajax.post(url, that.formData, function (data) {
-					for (var key in that.formData) {
-						that.formData[key] = data.rows[0][key];
-					}
+					
+						that.formData = data.rows[0];
+						console.log(that.formData.pipeColdBendingOid)
 					that.projectChanged(data.rows[0].projectOid, true);
 					that.tendersChanged(data.rows[0].tendersOid, true);
 				});
