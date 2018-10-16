@@ -37,7 +37,7 @@ public class WeldDao extends BaseJdbcDao{
 	 */
 	public List<Map<String,Object>> getOnlyWeldList(String pipeSegmentOrCrossOid){
 		String sql = "select oid as key,weld_code as value from daq_construction_weld t where t.is_rework=0 and t.approve_status=2 and t.pipe_segment_or_cross_oid=? and t.is_cut=0";
-		return this.queryForList(sql, new Object[]{pipeSegmentOrCrossOid,pipeSegmentOrCrossOid});
+		return this.queryForList(sql, new Object[]{pipeSegmentOrCrossOid});
 	}
 	/***
 	  * <p>功能描述：获取焊口列表（焊口+返修前焊口+返修后焊口-割口）。</p>

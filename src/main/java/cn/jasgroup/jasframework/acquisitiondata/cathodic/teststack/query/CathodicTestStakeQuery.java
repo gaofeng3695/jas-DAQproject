@@ -100,7 +100,7 @@ public class CathodicTestStakeQuery extends BaseJavaQuery{
 				conditionSql += " and cts.pipe_segment_oid = :pipeSegmentOid";
 			}
 			if (StringUtils.isNotBlank(testStakeCode)) {
-				conditionSql += " and cts.test_stack_code like :testStakeCode";
+				conditionSql += " and cts.test_stake_code like :testStakeCode";
 			}
 			if (StringUtils.isNotBlank(approveStatus)) {
 				conditionSql += " and cts.approve_status in ("+ approveStatus +")";
