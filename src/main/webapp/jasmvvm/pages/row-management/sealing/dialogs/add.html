@@ -222,7 +222,7 @@
 							message: '项目为必填项',
 							trigger: 'change'
 						}],
-			
+
 					tendersOid: [{
 						required: true,
 						message: '标段名称为必填项',
@@ -338,12 +338,13 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
-				} else {
-					that.domain.tenders = [];
+				}
+				// else {
+					// that.domain.tenders = [];
 					that.formData.tendersOid = '';
 					that.domain.pipeline = [];
 					that.formData.pipelineOid = '';
-				}
+				// }
 			},
 			tendersChanged: function (val) { //根据标段触发管线列表
 				var that = this;
@@ -355,10 +356,11 @@
 						function (arr) {
 							that.domain.pipeline = arr;
 						});
-				} else {
-					that.domain.pipeline = [];
-					that.formData.pipelineOid = '';
 				}
+				//  else {
+					// that.domain.pipeline = [];
+					that.formData.pipelineOid = '';
+				// }
 
 			},
 			materialChanged: function (val) {

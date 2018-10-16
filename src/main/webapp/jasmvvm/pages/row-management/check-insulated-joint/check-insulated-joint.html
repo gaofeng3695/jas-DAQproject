@@ -179,12 +179,13 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
-				} else {
-					that.domain.tenders = [];
+				}
+				// else {
+					// that.domain.tenders = [];
 					that.topSearch.tendersOid = '';
 					that.domain.constructUnitArr = [];
 					that.topSearch.constructUnit = "";
-				}
+				// }
 			},
 			tendersChanged: function (val) { //根据标段触发管线列表
 				var that = this;
@@ -195,10 +196,11 @@
 							function (arr) {
 								that.domain.constructUnitArr = arr;
 							});
-				} else {
-					that.domain.constructUnitArr = [];
-					that.topSearch.constructUnit = "";
 				}
+				//  else {
+					// that.domain.constructUnitArr = [];
+					that.topSearch.constructUnit = "";
+				// }
 			},
 			searchList: function () {
 				this.$refs.table.search();

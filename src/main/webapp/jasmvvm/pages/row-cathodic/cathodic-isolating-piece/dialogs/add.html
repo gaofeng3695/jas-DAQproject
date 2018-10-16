@@ -282,22 +282,22 @@
 					medianStakeOid:[{
 						required: true,
 						message: '桩号为必填项',
-						trigger: 'change'	
+						trigger: 'change'
 					}],
 					relativeMileage:[{
 						required: true,
 						message: '相对桩位置为必填项',
-						trigger: 'change'		
+						trigger: 'change'
 					}],
 					startPipeFittingType:[{
 						required: true,
 						message: '前管件类型为必填项',
-						trigger: 'change'		
+						trigger: 'change'
 					}],
 					endPipeFittingType:[{
 						required: true,
 						message: '后管件类型为必填项',
-						trigger: 'change'		
+						trigger: 'change'
 					}],
 					isolatingPieceName: [{
 						min: "0",
@@ -311,7 +311,7 @@
 					},{
 						required: true,
 						message: '前管件编号为必填项',
-						trigger: 'change'		
+						trigger: 'change'
 					}],
 					endPipeFittingNum: [{
 						min: "0",
@@ -320,7 +320,7 @@
 					},{
 						required: true,
 						message: '后管件编号为必填项',
-						trigger: 'change'		
+						trigger: 'change'
 					}],
 					isolatingPieceCode: [{
 						required: true,
@@ -427,8 +427,9 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
-				} else {
-					that.domain.tenders = [];
+				}
+				// else {
+				// 	that.domain.tenders = [];
 					that.formData.tendersOid = '';
 					that.domain.pipeline = [];
 					that.formData.pipelineOid = '';
@@ -436,7 +437,9 @@
 					that.formData.pipeSegmentOid = '';
 					that.domain.supervisionUnits = [];
 					that.formData.supervisionUnit = '';
-				}
+					that.domain.medianStakes = [];
+					that.formData.medianStakeOid = '';
+				// }
 
 			},
 
@@ -450,12 +453,15 @@
 						function (arr) {
 							that.domain.pipeline = arr;
 						});
-				} else {
-					that.domain.pipeline = [];
+				}
+				//  else {
+				// 	that.domain.pipeline = [];
 					that.formData.pipelineOid = '';
 					that.domain.pipeSegment = [];
 					that.formData.pipeSegmentOid = '';
-				}
+					that.domain.medianStakes = [];
+					that.formData.medianStakeOid = '';
+				// }
 				that.getSupervisionUnit(val); //根据标段获取监理单位
 			},
 			getSupervisionUnit: function (val) {
@@ -468,10 +474,11 @@
 						function (arr) {
 							that.domain.supervisionUnits = arr;
 						});
-				} else {
-					that.domain.supervisionUnits = [];
-					that.formData.supervisionUnit = '';
 				}
+				//  else {
+				// 	that.domain.supervisionUnits = [];
+					that.formData.supervisionUnit = '';
+				// }
 			},
 			pipelineChanged: function (val) { //根据管线触发线路段/穿跨越
 				var that = this;
@@ -483,10 +490,13 @@
 						function (arr) {
 							that.domain.pipeSegment = arr;
 						});
-				} else {
-					that.domain.pipeSegment = [];
-					that.formData.pipeSegmentOid = '';
 				}
+				// else {
+				// 	that.domain.pipeSegment = [];
+					that.formData.pipeSegmentOid = '';
+					that.domain.medianStakes = [];
+					that.formData.medianStakeOid = '';
+				// }
 			},
 			pipeSegmentChanged: function (val) {
 				var that = this;
@@ -498,10 +508,11 @@
 						function (arr) {
 							that.domain.medianStakes = arr;
 						});
-				} else {
-					that.domain.medianStakes = [];
-					that.formData.medianStakeOid = '';
 				}
+				//else {
+					//that.domain.medianStakes = [];
+					that.formData.medianStakeOid = '';
+				//}
 			}, //获取桩号
 
 			submit: function (formName) {

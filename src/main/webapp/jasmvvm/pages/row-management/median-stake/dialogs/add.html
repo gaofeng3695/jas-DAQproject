@@ -254,10 +254,11 @@
 					}, function (arr) {
 						that.domain.pipeline = arr;
 					});
-				} else {
-					that.domain.pipeline = [];
-					that.formData.pipelineOid = '';
 				}
+				//  else {
+					// that.domain.pipeline = [];
+					that.formData.pipelineOid = '';
+				// }
 			},
 			submit: function (formName) {
 				var that = this;
