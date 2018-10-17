@@ -521,7 +521,11 @@
 								}
 							}
 							for(var key in that.searchData){
-								that.searchData[key].options=[];
+								console.log(that.searchData[key].type!='opertion')
+								if(that.searchData[key].type!='opertion'){
+									that.searchData[key].options=[];	
+								}
+								
 							}
 							that.requestTableList();
 						}
