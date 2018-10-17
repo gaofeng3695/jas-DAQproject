@@ -125,43 +125,40 @@
 					name: '纵焊缝位置',
 					field: 'weldPosition',
 					formatter: function (row, column, cellvalue, index) {
-						if (cellvalue == '0') return '合格';
-						if (cellvalue == '1') return '不合格';
+						if (cellvalue == '1') return '合格';
+						if (cellvalue == '0') return '不合格';
 						return cellvalue;
 					}
 				}, {
 					name: '椭圆度<0.6%D',
 					field: 'ovality',
 					formatter: function (row, column, cellvalue, index) {
-						if (cellvalue == '0') return '合格';
-						if (cellvalue == '1') return '不合格';
+						if (cellvalue == '1') return '合格';
+						if (cellvalue == '0') return '不合格';
 						return cellvalue;
 					}
 				}, {
 					name: '坡口检查',
 					field: 'grooveCheck',
 					formatter: function (row, column, cellvalue, index) {
-						if (cellvalue == '0') return '合格';
-						if (cellvalue == '1') return '不合格';
+						if (cellvalue == '1') return '合格';
+						if (cellvalue == '0') return '不合格';
 						return cellvalue;
 					}
 				}, {
 					name: '防腐层内外表面质量',
 					field: 'coatingIoFaceCheck',
 					formatter: function (row, column, cellvalue, index) {
-						if (cellvalue == '0') return '合格';
-						if (cellvalue == '1') return '不合格';
+						if (cellvalue == '1') return '合格';
+						if (cellvalue == '0') return '不合格';
 						return cellvalue;
 					}
 				}, {
 					name: '防腐层端部内外涂层',
 					field: 'coatingIoEndsCheck',
 					formatter: function (row, column, cellvalue, index) {
-						if (cellvalue == '0') {
-							return '合格';
-						} else {
-							return '不合格';
-						}
+						if (cellvalue == '1') return '合格';
+						if (cellvalue == '0') return '不合格';
 					}
 				}, {
 					name: '检查人',
@@ -172,10 +169,10 @@
 				}],
 				domain: {
 					isPass: [{
-						key: '0',
+						key: '1',
 						value: '合格'
 					}, {
-						key: '1',
+						key: '0',
 						value: '不合格'
 					}],
 					constructUnitArr: [],
