@@ -45,7 +45,7 @@ public class DaqAppendagesCasingPipeQuery extends BaseJavaQuery {
 				+ "	dt.tenders_name,"
 				+ "	v.name as pipeSegmentOrCrossName,"
 				+ "	ms.median_stake_code as startMedianStakeCode, "
-				+ "	ms.median_stake_code as endMedianStakeCode, "
+				+ "	me.median_stake_code as endMedianStakeCode, "
 				+ "	u1.unit_name as constructUnitName,"
 				+ "	u2.unit_name as supervisionUnitName"				
 				+ " from daq_appendages_casing_pipe t "

@@ -460,9 +460,9 @@
 					surfaceCheck: null,
 					constructUnit: null,
 					workUnitOid: null,
-					coverOid: null,
-					padderOid: null,
-					renderOid: null,
+					coverOid: [],
+					padderOid: [],
+					renderOid: [],
 					isGoldeJoint: null,
 					isPipeHead: null,
 					constructDate: null,
@@ -680,9 +680,9 @@
 							});
 				}
 				if (!edit) {
-					that.formData.coverOid = '';
-					that.formData.padderOid = '';
-					that.formData.renderOid = '';
+					that.formData.coverOid = [];
+					that.formData.padderOid = [];
+					that.formData.renderOid =[];
 				}
 			},
 			frontpipeChange: function (val) { //触发前管件编号

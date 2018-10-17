@@ -331,9 +331,9 @@
 					constructUnit: '',
 					workUnitOid: "",
 					weldDate: "",
-					coverOid: "",
-					padderOid: "",
-					renderOid: "",
+					coverOid: [],
+					padderOid:  [],
+					renderOid:  [],
 					supervisionUnit: "",
 					supervisionEngineer: "",
 					collectionPerson: "",
@@ -552,9 +552,9 @@
 							});
 				}
 				if (!edit) {
-					that.formData.coverOid = '';
-					that.formData.padderOid = '';
-					that.formData.renderOid = '';
+					that.formData.coverOid = [];
+					that.formData.padderOid = [];
+					that.formData.renderOid = [];
 				}
 			},
 			submit: function (formName) {
