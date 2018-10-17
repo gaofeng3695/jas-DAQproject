@@ -410,28 +410,33 @@ public class DaqPrivilegeController extends BaseController{
 	@RequestMapping(value="/appLogin",method = RequestMethod.POST)
 	@ResponseBody
 	public Object appLogin(HttpServletRequest request,@RequestBody Map<String,Object> paramMap){
-		Map<String, Object> result = (Map<String, Object>)loginController.login(request, paramMap);
-		UserBo userBo = (UserBo)result.get("user");
-		String unitOid = userBo.getUnitId();
-		PriUnit unitEntity = (PriUnit)unitService.get(PriUnit.class,unitOid);
-		if(unitEntity==null){
-			result.put("unitType", -1);
+		Object resultData = loginController.login(request, paramMap);
+		try {
+			Map<String, Object> result = (Map<String, Object>)resultData;
+			UserBo userBo = (UserBo)result.get("user");
+			String unitOid = userBo.getUnitId();
+			PriUnit unitEntity = (PriUnit)unitService.get(PriUnit.class,unitOid);
+			if(unitEntity==null){
+				result.put("unitType", -1);
+				return result;
+			}
+			String hierarchy = unitEntity.getHierarchy();
+			if(hierarchy.startsWith(UnitHierarchyEnum.construct_unit.getHierarchy())){//施工单位
+				result.put("unitType", 1);
+			}else if(hierarchy.startsWith(UnitHierarchyEnum.supervision_unit.getHierarchy())){//监理单位
+				result.put("unitType", 2);
+			}else if(hierarchy.startsWith(UnitHierarchyEnum.detection_unit.getHierarchy())){//检测单位
+				result.put("unitType", 3);
+			}else if(hierarchy.startsWith(UnitHierarchyEnum.project_unit.getHierarchy())){//建设单位
+				result.put("unitType", 4);
+			}else if(hierarchy.startsWith(UnitHierarchyEnum.supplier.getHierarchy())){//厂商
+				result.put("unitType", 5);
+			}else{
+				result.put("unitType", 0);
+			}
 			return result;
+		} catch (Exception e) {
+			return resultData;
 		}
-		String hierarchy = unitEntity.getHierarchy();
-		if(hierarchy.startsWith(UnitHierarchyEnum.construct_unit.getHierarchy())){//施工单位
-			result.put("unitType", 1);
-		}else if(hierarchy.startsWith(UnitHierarchyEnum.supervision_unit.getHierarchy())){//监理单位
-			result.put("unitType", 2);
-		}else if(hierarchy.startsWith(UnitHierarchyEnum.detection_unit.getHierarchy())){//检测单位
-			result.put("unitType", 3);
-		}else if(hierarchy.startsWith(UnitHierarchyEnum.project_unit.getHierarchy())){//建设单位
-			result.put("unitType", 4);
-		}else if(hierarchy.startsWith(UnitHierarchyEnum.supplier.getHierarchy())){//厂商
-			result.put("unitType", 5);
-		}else{
-			result.put("unitType", 0);
-		}
-		return result;
 	}
 }
