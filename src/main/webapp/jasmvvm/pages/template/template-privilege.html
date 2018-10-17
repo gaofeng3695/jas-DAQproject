@@ -234,6 +234,7 @@
 				menuCode: "",
 				searchUi: [],
 				isShowSearch: false,
+			
 			}
 		},
 		computed: {
@@ -411,6 +412,7 @@
 						that.loading = false;
 						return;
 					}
+					
 					that.getSearchFieldAndList(data.data);
 				});
 			},
@@ -436,6 +438,7 @@
 
 				data.functionFieldsBoList.forEach(function (item) {
 					var options = [];
+					var optionsOrgin="domain";
 					if (item.domainList) {
 						item.domainList.forEach(function (child) {
 							var obj = {};
@@ -444,6 +447,8 @@
 							}
 							options.push(obj);
 						});
+					}else{
+						optionsOrgin="select";	
 					}
 					if (item.ifQuery == "1") {
 						var obj = {
@@ -452,6 +457,7 @@
 							type: item.uiType,
 							placeholder: item.plplaceholder,
 							options: options,
+							optionsOrgin:optionsOrgin,
 							queryIndex: item.queryIndex,
 							childField: item.childField,
 							requestPath: item.requestPath,
@@ -521,12 +527,12 @@
 								}
 							}
 							for(var key in that.searchData){
-								console.log(that.searchData[key].type!='opertion')
-								if(that.searchData[key].type!='opertion'){
+								if(that.searchData[key].type!='opertion'&&that.searchData[key].optionsOrgin!="domain"){
 									that.searchData[key].options=[];	
 								}
 								
 							}
+						
 							that.requestTableList();
 						}
 					}]
