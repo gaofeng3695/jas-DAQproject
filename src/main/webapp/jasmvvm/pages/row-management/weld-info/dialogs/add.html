@@ -551,6 +551,7 @@
 						},
 						function (arr) {
 							that.domain.tenders = arr;
+							
 						});
 				}
 				if (!edit) {
@@ -576,6 +577,7 @@
 
 						},
 						function (arr) {
+							
 							that.domain.weldProduces = arr;
 						});
 				}
@@ -593,6 +595,7 @@
 						},
 						function (arr) {
 							that.domain.workUnits = arr;
+						
 						});
 				}
 				if (!edit) {
@@ -607,6 +610,7 @@
 							tendersOid: val
 						},
 						function (arr) {
+							
 							that.domain.pipeline = arr;
 						});
 				}
@@ -627,6 +631,7 @@
 							tendersOid: val
 						},
 						function (arr) {
+							
 							that.domain.supervisionUnits = arr;
 						});
 				}
@@ -642,6 +647,7 @@
 							pipelineOid: val
 						},
 						function (arr) {
+							
 							that.domain.pipeSegment = arr;
 						});
 				}
@@ -659,6 +665,7 @@
 							pipeSegmentOrCrossOid: val
 						},
 						function (arr) {
+						
 							that.domain.medianStakes = arr;
 						});
 				}
@@ -685,7 +692,7 @@
 					that.formData.renderOid =[];
 				}
 			},
-			frontpipeChange: function (val) { //触发前管件编号
+			frontpipeChange: function (val,edit) { //触发前管件编号
 				var that = this;
 				if (val) {
 					this
@@ -697,19 +704,17 @@
 							},
 							function (arr) {
 								that.domain.frontPipeOids = arr;
+								if(!edit){
+									that.formData.frontPipeOid = "";	
+								}
 							});
 				}else{
 					that.formData.frontPipeOid = "";	
-				}
-				
-					
-				
+				}	
 			},
-			backpipeChange: function (val) { //触发后管件编号
+			backpipeChange: function (val,edit) { //触发后管件编号
 				var that = this;
 				if (val) {
-
-				
 					this
 						.requestDomainFromBizTable(
 							'/daq/pipefitting/getPipeFittingList.do', {
@@ -719,7 +724,9 @@
 							},
 							function (arr) {
 								that.domain.backPipeOids = arr;
-								
+								if(!edit){
+									that.formData.backPipeOid = "";	
+								}
 							});
 				}else{
 					that.formData.backPipeOid = "";	
@@ -812,8 +819,8 @@
 					that.pipelineChanged(data.rows[0].pipelineOid, true);
 					that.pipeSegmentChanged(data.rows[0].pipeSegmentOrCrossOid, true);
 					that.getWorkPerson(data.rows[0].workUnitOid, true);
-					that.backpipeChange(data.rows[0].backPipeType);
-					that.frontpipeChange(data.rows[0].frontPipeType);
+					that.backpipeChange(data.rows[0].backPipeType, true);
+					that.frontpipeChange(data.rows[0].frontPipeType, true);
 				});
 			},
 		},
