@@ -77,7 +77,7 @@ public class DaqAppendagesMarkStakeQuery extends BaseJavaQuery {
 			sql += " and t.pipe_segment_or_cross_oid = :pipeSegmentOrCrossOid ";
 		}
 		if(StringUtils.isNotBlank(markStakeCode)){
-			sql += " and t.mark_stake_oid like :markStakeCode ";
+			sql += " and t.mark_stake_code like '%"+markStakeCode+"%' ";
 		}
 		if(StringUtils.isNotBlank(medianStakeOid)){
 			sql += " and t.median_stake_oid = :medianStakeOid ";

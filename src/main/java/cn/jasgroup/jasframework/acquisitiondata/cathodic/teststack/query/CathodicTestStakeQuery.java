@@ -66,7 +66,7 @@ public class CathodicTestStakeQuery extends BaseJavaQuery{
 	public String getQuerySql() {
 		String sql = "select dd.* from (SELECT pro.project_name, pi.pipeline_name, te.tenders_name,ps.pipe_segment_name, ms.median_stake_code,"
 					+ "u.unit_name as construct_unit_name, pu.unit_name as supervision_unit_name, d.code_name as stake_structure_name,"
-					+ "array_to_string(array_agg(dm.code_name),',') as stake_function_name,cts.* FROM daq_cathodic_test_stake cts "
+					+ "array_to_string(array_agg(distinct dm.code_name),',') as stake_function_name,cts.* FROM daq_cathodic_test_stake cts "
 					+ "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = cts.project_oid "
 					+ "LEFT JOIN (SELECT oid, pipeline_name, active FROM daq_pipeline where active=1) pi ON pi.oid = cts.pipeline_oid "
 					+ "LEFT JOIN (SELECT oid, tenders_name, active FROM daq_tenders where active=1) te ON te.oid = cts.tenders_oid "
@@ -100,7 +100,7 @@ public class CathodicTestStakeQuery extends BaseJavaQuery{
 				conditionSql += " and cts.pipe_segment_oid = :pipeSegmentOid";
 			}
 			if (StringUtils.isNotBlank(testStakeCode)) {
-				conditionSql += " and cts.test_stack_code like :testStakeCode";
+				conditionSql += " and cts.test_stake_code like :testStakeCode";
 			}
 			if (StringUtils.isNotBlank(approveStatus)) {
 				conditionSql += " and cts.approve_status in ("+ approveStatus +")";

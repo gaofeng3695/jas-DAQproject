@@ -102,9 +102,9 @@
 							if (value == -1)
 								return '驳回';
 							if (value == 0)
-								return '未提交';
+								return '未上报';
 							if (value == 1)
-								return '审核中';
+								return '待审核';
 							if (value == 2)
 								return '通过';
 							return value;
@@ -146,11 +146,8 @@
 						name: '是否临时',
 						field: 'isTemporary',
 						formatter: function (a, b, c, d) {
-							if (c == 0) {
-								return '是';
-							} else {
-								return '否';
-							}
+							if (c == 1) return '是';
+							if(c==0) return '否';
 						}
 					}, {
 						name: '设计寿命(年)',
@@ -200,11 +197,9 @@
 						name: '检查片埋设情况',
 						field: 'tabletsCondition',
 						formatter: function (a, b, c, d) {
-							if (c == 0) {
-								return '符合设计要求';
-							} else {
-								return '不符合设计要求';
-							}
+							if (c == 1) return '符合设计要求';
+							if(c==0) return '不符合设计要求';
+							
 						}
 					},
 					{
@@ -214,11 +209,9 @@
 						name: '结论',
 						field: 'conclusion',
 						formatter: function (a, b, c, d) {
-							if (c == 0) {
-								return '合格';
-							} else {
-								return '不合格';
-							}
+							if (c == 1) return '合格';
+							if(c==0) return '不合格';
+							
 						}
 					}, {
 						name: '施工单位',
@@ -238,6 +231,9 @@
 					}, {
 						name: '采集日期',
 						field: 'collectionDate'
+					}, {
+						name: '备注',
+						field: 'remarks'
 					}
 				],
 			}
@@ -245,10 +241,7 @@
 
 		mounted: function () {
 			var that = this;
-			var param = window.jasTools.base.getParamsInUrl(location.href);
-			this.privilegeCode = param.privilegeCode;
-			this.templateCode = param.templateCode; //|| "stake-2";
-			this.className = param.className; // || 'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';
+			
 		},
 		methods: {
 			searchList: function () {

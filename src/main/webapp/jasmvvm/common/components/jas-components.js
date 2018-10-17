@@ -576,16 +576,21 @@ Vue.component('jas-search-for-list', {
 			}
 		},
 		fatherSelectChanged: function (isInit, fatherField) {
+			if(isInit!=true){
+				isInit=false;
+			}
 			var that = this;
 			var fieldConfig = this.fieldsConfig[fatherField];
 			var form = this.form;
 			var setChildOptionsAndValue = function (childField, options) { // 入参下拉选项
 				that.fieldsConfig[childField].options = options;
-				!isInit && (form[childField] = '');
+				//form[childField] = ''
+				 !isInit && (form[childField] = '');
 				// if (options.length === 1) { //只有一个选项就自动复制
 				// 	form[childField] = options[0].key;
-				// }
-				that.$refs[childField][0].$emit('change', isInit);
+					that.$refs[childField][0].$emit('change', isInit);
+				 //}
+
 			};
 
 			var getAndSet = function (fatherField, fatherValue, childField, requestUrl) {
@@ -1254,6 +1259,11 @@ Vue.component('jas-import-export-btns', {
 		bt_export_all: function (obj) { // 导出全部
 			var that = this;
 			var url = jasTools.base.rootPath + '/importExcelController/exportExcel.do';
+//			for(var key in this.form){
+//				if(this.form[key]&&JSON.stringify(this.form[key]).indexOf("min")>-1){
+//					this.form[key]=[Number(this.form[key].min),Number(this.form[key].max)];
+//				}
+//			}
 			jasTools.ajax.post(url, {
 				templateCode: this.exportTemplateCode,
 				functionCode: this.functionCode, // 自定义表单功能编码
@@ -1281,7 +1291,6 @@ Vue.component('jas-import-export-btns', {
 
 	},
 	mounted: function () {
-
 	}
 });
 
@@ -1366,6 +1375,8 @@ Vue.component('jas-form-items', {
 					/* 初始化赋值 */
 					if (!config.options) {
 						that.$set(config, 'options', []);
+					}
+					if(!config.rules){
 						that.$set(config, 'rules', []);
 					}
 					if (config.type === 'select' && config.childSelect && config.childSelect.length > 0) {
@@ -1375,13 +1386,13 @@ Vue.component('jas-form-items', {
 
 					/* 设置验证规则 */
 					if (config.isRequired) {
-
-						config.rules = [{
+						config.rules.push({
 							required: true,
 							message: fieldNameArr[fieldIndex] + '为必填项',
 							trigger: 'change'
-						}]
+						});
 					}
+
 					/* 请求阈值 */
 					if (config.domainName) {
 						(function (field, config) {
@@ -1430,6 +1441,9 @@ Vue.component('jas-form-items', {
 			}
 		},
 		fatherSelectChanged: function (isInit, fatherField) {
+			if(isInit!=true){
+				isInit=false;
+			}
 			var that = this;
 			var fieldConfig = this.fieldsConfig[fatherField];
 			var form = this.form;
@@ -1445,10 +1459,12 @@ Vue.component('jas-form-items', {
 				}
 				var length = that.fieldsConfig[childField].options.length;
 				!isInit && (form[childField] = '');
-				if (options.length === 1) { //只有一个选项就自动复制
-					form[childField] = options[0].key;
-				}
-				that.$refs[childField][0].$emit('change', isInit);
+				//form[childField] = '';
+				//if (options.length === 1) { //只有一个选项就自动复制
+					//form[childField] = options[0].key;
+					that.$refs[childField][0].$emit('change', isInit);
+				//}
+
 			};
 
 			var getAndSet = function (fatherField, fatherValue, childField, requestUrl) {
@@ -1605,6 +1621,8 @@ Vue.component('jas-form-items-group', {
 					/* 初始化赋值 */
 					if (!config.options) {
 						that.$set(config, 'options', []);
+					}
+					if(!config.rules){
 						that.$set(config, 'rules', []);
 					}
 					if (config.type === 'select' && config.childSelect && config.childSelect.length > 0) {
@@ -1614,14 +1632,12 @@ Vue.component('jas-form-items-group', {
 
 					/* 设置验证规则 */
 					if (config.isRequired) {
-
-						config.rules = [{
+						config.rules.push({
 							required: true,
 							message: fieldNameArr[fieldIndex] + '为必填项',
 							trigger: 'change'
-						}]
+						})
 					}
-
 
 					/* 请求阈值 */
 					if (config.domainName) {
@@ -1675,16 +1691,23 @@ Vue.component('jas-form-items-group', {
 			}
 		},
 		fatherSelectChanged: function (isInit, fatherField) {
+			if(isInit!=true){
+				isInit=false;
+			}
 			var that = this;
 			var fieldConfig = this.fieldsConfig[fatherField];
 			var form = this.form;
 			var setChildOptionsAndValue = function (childField, options) { // 入参下拉选项
 				that.fieldsConfig[childField].options = options;
 				!isInit && (form[childField] = '');
-				if (options.length === 1) { //只有一个选项就自动复制
-					form[childField] = options[0].key;
-				}
-				that.$refs[childField][0].$emit('change', isInit);
+
+				// if (options.length === 1) { //只有一个选项就自动复制
+				// 	form[childField] = options[0].key;
+
+				// }else{
+				// 	form[childField] = '';
+				// }
+	           that.$refs[childField][0].$emit('change', isInit);
 			};
 
 			var getAndSet = function (fatherField, fatherValue, childField, requestUrl) {
@@ -2011,3 +2034,43 @@ Vue.component('jas-approve-dialog', {
 		},
 	}
 });
+
+
+Vue.component('jas-remarks', {
+	props: {
+		remarks: {
+			type: String
+		}
+	},
+	data: function () {
+		return {
+			remarksDesc: 200,
+			remark:this.remarks
+		}
+	},
+	watch:{
+		remarks:function(){
+			this.remark=this.remarks;
+		}
+	},
+	template: [
+		'<el-form-item label="备注">',
+		'<el-input type="textarea"  :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="remark"',
+		':maxLength="200"  @input="instructionNum"></el-input>',
+		'<p style="text-align:right;color:#999;">您还可以输入<span v-text="remarksDesc"></span>字</p>',
+		'</el-form-item>'
+	].join(''),
+	mounted:function(){
+		console.log(this.remark);
+	},
+	methods: {
+		instructionNum: function () {
+			if (this.remark) {
+				var num = 200 - this.remark.trim().length;
+				this.remarksDesc = num;
+				this.$emit('changevalue',this.remark);
+			}
+
+		}
+	}
+})

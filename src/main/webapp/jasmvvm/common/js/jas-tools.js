@@ -365,6 +365,11 @@
 
 	var ajax = (function () {
 		var ajax = function (type, url, params, cb_success, cb_fail) {
+			for(var key in params){
+				if(params[key]==undefined){
+					params[key]=null;
+				}
+			}
 			var data = type === 'GET' ? params : JSON.stringify(params)
 			$.ajax({
 				type: type || "GET",
@@ -394,6 +399,13 @@
 									window.top.location.href = 'login.html';
 								}
 							}
+						});
+						return;
+					}
+					if (data.status == -1 && data.code == "excel-400") { // token失效或者过期，会返回-1
+						window.top.Vue.prototype.$message({
+							message: '当前查询条件下无数据',
+							type: 'error'
 						});
 						return;
 					}

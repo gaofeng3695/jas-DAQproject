@@ -96,9 +96,9 @@
 							if (value == -1)
 								return '驳回';
 							if (value == 0)
-								return '未提交';
+								return '未上报';
 							if (value == 1)
-								return '审核中';
+								return '待审核';
 							if (value == 2)
 								return '通过';
 							return value;
@@ -154,6 +154,9 @@
 					}, {
 						name: '采集日期',
 						field: 'collectionDate'
+					}, {
+						name: '备注',
+						field: 'remarks'
 					}
 				],
 			}
@@ -161,11 +164,8 @@
 
 		mounted: function () {
 			var that = this;
-			var param = window.jasTools.base
-				.getParamsInUrl(location.href);
-			this.privilegeCode = param.privilegeCode;
-			this.templateCode = param.templateCode; //|| "stake-2";
-			this.className = param.className; // || 'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';
+		
+			//privilegeCode=P-daq-hq-00100504&isApprove=1&className=cn.jasgroup.jasframework.acquisitiondata.lay.restoration.dao.entity.LayLandRestoration&templateCode=lay_land_restoration&exportTemplateCode=lay_land_restoration_export
 		},
 		methods: {
 			searchList: function () {

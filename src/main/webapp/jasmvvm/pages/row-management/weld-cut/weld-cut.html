@@ -49,12 +49,12 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
 						<el-form-item label="线路段/穿跨越" prop="pipeSegmentOrCrossOid">
-							<el-select v-model="topSearch.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small">
+							<el-select v-model="topSearch.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small" @change="searchList">
 								<el-option v-for="item in domain.pipeSegment" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+					<el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
 						<el-form-item style="float: right;">
 							<el-button size="small" type="primary" @click="searchList">查询</el-button>
 							<el-button size="small" @click="reset">重置</el-button>
@@ -98,10 +98,10 @@
 						name: '审核状态',
 						formatter: function (a, b, value, c) {
 							if (value == -1) return '驳回';
-							else if (value == 0) return '未提交';
-							else if (value == 1) return '审核中';
+							else if (value == 0) return '未上报';
+							else if (value == 1) return '待审核';
 							else if (value == 2) return '通过';
-							else return '未提交';
+							else return '未上报';
 						}
 					}, {
 						name: '项目名称',
@@ -193,8 +193,9 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
-				} else {
-					that.domain.tenders = [];
+				}
+				// else {
+					// that.domain.tenders = [];
 					that.topSearch.tendersOid = '';
 					that.domain.pipeline = [];
 					that.topSearch.pipelineOid = '';
@@ -202,7 +203,8 @@
 					that.topSearch.pipeSegmentOrCrossOid = '';
 					that.domain.welds = [];
 					that.topSearch.weldOid = '';
-				}
+				// }
+				that.searchList();
 			},
 			tendersChanged: function (val) { //根据标段触发管线列表
 				var that = this;
@@ -215,14 +217,16 @@
 							function (arr) {
 								that.domain.pipeline = arr;
 							});
-				} else {
-					that.domain.pipeline = [];
+				}
+				// else {
+					// that.domain.pipeline = [];
 					that.topSearch.pipelineOid = '';
 					that.domain.pipeSegment = [];
 					that.topSearch.pipeSegmentOrCrossOid = '';
 					that.domain.welds = [];
 					that.topSearch.weldOid = '';
-				}
+				// }
+				that.searchList();
 			},
 			pipelineChanged: function (val) { //根据管线触发线路段/穿跨越
 				var that = this;
@@ -235,12 +239,14 @@
 							function (arr) {
 								that.domain.pipeSegment = arr;
 							});
-				} else {
-					that.domain.pipeSegment = [];
+				}
+				//  else {
+					// that.domain.pipeSegment = [];
 					that.topSearch.pipeSegmentOrCrossOid = '';
 					that.domain.welds = [];
 					that.topSearch.weldOid = '';
-				}
+				// }
+				that.searchList();
 			},
 			/* pipeSegmentChanged: function (val) {
 				var that = this;

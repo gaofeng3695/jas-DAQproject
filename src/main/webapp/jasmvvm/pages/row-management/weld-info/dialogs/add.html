@@ -122,19 +122,19 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="监理工程师">
+							<el-form-item label="监理工程师" prop="supervisionEngineer" required>
 								<el-input v-model="formData.supervisionEngineer" clearable placeholder="请输入监理工程师" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="采集人员">
+							<el-form-item label="采集人员" prop="collectionPerson">
 								<el-input v-model="formData.collectionPerson" clearable placeholder="请输入采集人员" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="采集日期">
+							<el-form-item label="采集日期" prop="collectionDate" required>
 								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入采集日期" v-model="formData.collectionDate" size="small"
 								  style="width: 100%;">
 								</el-date-picker>
@@ -152,7 +152,7 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="相对桩位置" prop="relativeMileage" required>
-								<el-input-number :precision="3" :step="1" :max="100000" controls-position="right" v-model="formData.relativeMileage" clearable
+								<el-input-number :precision="3" :step="1" :max="999999" controls-position="right" v-model="formData.relativeMileage" clearable
 								  placeholder="请输入相对桩位置" size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
@@ -212,12 +212,12 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="焊条批号">
+							<el-form-item label="焊条批号" prop="weldRodBatchNum">
 								<el-input v-model="formData.weldRodBatchNum" clearable placeholder="请输入焊条批号" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="焊丝批号">
+							<el-form-item label="焊丝批号" prop="weldWireBatchNum">
 								<el-input v-model="formData.weldWireBatchNum" clearable placeholder="请输入焊丝批号" size="small"></el-input>
 							</el-form-item>
 						</el-col>
@@ -237,7 +237,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="是否金口">
+							<el-form-item label="是否金口" prop="isGoldeJoint" required>
 								<el-select v-model="formData.isGoldeJoint" clearable placeholder="请选择是否金口" size="small">
 									<el-option v-for="item in domain.isPass" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
@@ -254,9 +254,7 @@
 					<jas-base-group-title name="其他信息"></jas-base-group-title>
 					<el-row>
 						<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-							<el-form-item label="备注" prop="remarks">
-								<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"></el-input>
-							</el-form-item>
+							<jas-remarks :remarks="formData.remarks" @changevalue="changevalue"></jas-remarks>
 						</el-col>
 					</el-row>
 					<!-- <el-row>
@@ -325,12 +323,17 @@
 					}, {
 						key: 0,
 						value: '否'
-					}],//是否
+					}], //是否
 				},
 				rules: {
 					projectOid: [{
 						required: true,
 						message: '项目名称为必填项',
+						trigger: 'change'
+					}],
+					isGoldeJoint: [{
+						required: true,
+						message: '是否连头口为必填项',
 						trigger: 'change'
 					}],
 					tendersOid: [{
@@ -381,7 +384,11 @@
 					weldCode: [{
 						required: true,
 						message: '焊口编号',
-						trigger: 'change'
+						trigger: 'blur'
+					}, {
+						min: "0",
+						max: 50,
+						message: '不能超过50个字'
 					}],
 					frontPipeType: [{
 						required: true,
@@ -402,6 +409,35 @@
 						required: true,
 						message: '后管件编号为必填项',
 						trigger: 'change'
+					}],
+					collectionDate: [{
+						required: true,
+						message: '采集日期为必填项',
+						trigger: 'change'
+					}],
+					supervisionEngineer: [{
+						required: true,
+						message: '监理工程师为必填项',
+						trigger: 'change'
+					}, {
+						min: "0",
+						max: 50,
+						message: '不能超过50个字'
+					}],
+					collectionPerson: [{
+						min: "0",
+						max: 30,
+						message: '不能超过30个字'
+					}],
+					weldRodBatchNum: [{
+						min: "0",
+						max: 60,
+						message: '不能超过60个字'
+					}],
+					weldWireBatchNum: [{
+						min: "0",
+						max: 60,
+						message: '不能超过60个字'
 					}]
 				},
 				formData: {
@@ -415,18 +451,18 @@
 					medianStakeOid: "",
 					relativeMileage: "",
 					frontPipeType: "",
-					frontPipeOid: null,
+					frontPipeOid: "",
 					backPipeType: null,
-					backPipeOid: null,
+					backPipeOid: "",
 					weldRodBatchNum: null,
 					weldWireBatchNum: null,
 					weldProduce: null,
 					surfaceCheck: null,
 					constructUnit: null,
 					workUnitOid: null,
-					coverOid: null,
-					padderOid: null,
-					renderOid: null,
+					coverOid: [],
+					padderOid: [],
+					renderOid: [],
 					isGoldeJoint: null,
 					isPipeHead: null,
 					constructDate: null,
@@ -475,6 +511,9 @@
 			}); //查询管件类型
 		},
 		methods: {
+			changevalue: function (msg) {
+				this.formData.remarks = msg;
+			},
 			cancel: function (param) {
 				window.parent.jasTools.dialog.close(param);
 			},
@@ -503,7 +542,7 @@
 					cb && cb([]);
 				});
 			},
-			projectChanged: function (val) {
+			projectChanged: function (val, edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -513,8 +552,8 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
-				} else {
-					that.domain.tenders = [];
+				}
+				if (!edit) {
 					that.formData.tendersOid = '';
 					that.domain.pipeline = [];
 					that.formData.pipelineOid = '';
@@ -522,11 +561,13 @@
 					that.formData.pipeSegmentOrCrossOid = '';
 					that.domain.supervisionUnits = [];
 					that.formData.supervisionUnit = '';
+					that.domain.medianStakes = [];
+					that.formData.medianStakeOid = '';
 				}
-				that.getWorkUints(val); //进行获取施工机组
-				that.getWeldproduct(val); //获取焊接工艺
+				that.getWorkUints(val, edit); //进行获取施工机组
+				that.getWeldproduct(val, edit); //获取焊接工艺
 			},
-			getWeldproduct: function (val) {
+			getWeldproduct: function (val, edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -537,12 +578,12 @@
 						function (arr) {
 							that.domain.weldProduces = arr;
 						});
-				} else {
-					that.domain.weldProduces = [];
+				}
+				if (!edit) {
 					that.formData.weldProduce = '';
 				}
 			},
-			getWorkUints: function (val) {
+			getWorkUints: function (val, edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -553,12 +594,12 @@
 						function (arr) {
 							that.domain.workUnits = arr;
 						});
-				} else {
-					that.domain.workUnits = [];
+				}
+				if (!edit) {
 					that.formData.workUnitOid = '';
 				}
 			},
-			tendersChanged: function (val) { //根据标段触发管线列表
+			tendersChanged: function (val, edit) { //根据标段触发管线列表
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -568,15 +609,17 @@
 						function (arr) {
 							that.domain.pipeline = arr;
 						});
-				} else {
-					that.domain.pipeline = [];
+				}
+				if (!edit) {
 					that.formData.pipelineOid = '';
 					that.domain.pipeSegment = [];
 					that.formData.pipeSegmentOrCrossOid = '';
+					that.domain.medianStakes = [];
+					that.formData.medianStakeOid = '';
 				}
-				that.getSupervisionUnit(val); //根据标段获取监理单位
+				that.getSupervisionUnit(val, edit); //根据标段获取监理单位
 			},
-			getSupervisionUnit: function (val) {
+			getSupervisionUnit: function (val, edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -586,12 +629,12 @@
 						function (arr) {
 							that.domain.supervisionUnits = arr;
 						});
-				} else {
-					that.domain.supervisionUnits = [];
+				}
+				if (!edit) {
 					that.formData.supervisionUnit = '';
 				}
 			},
-			pipelineChanged: function (val) { //根据管线触发线路段/穿跨越
+			pipelineChanged: function (val, edit) { //根据管线触发线路段/穿跨越
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -601,12 +644,14 @@
 						function (arr) {
 							that.domain.pipeSegment = arr;
 						});
-				} else {
-					that.domain.pipeSegment = [];
+				}
+				if (!edit) {
 					that.formData.pipeSegmentOrCrossOid = '';
+					that.domain.medianStakes = [];
+					that.formData.medianStakeOid = '';
 				}
 			},
-			pipeSegmentChanged: function (val) {
+			pipeSegmentChanged: function (val, edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -616,12 +661,12 @@
 						function (arr) {
 							that.domain.medianStakes = arr;
 						});
-				} else {
-					that.domain.medianStakes = [];
+				}
+				if (!edit) {
 					that.formData.medianStakeOid = '';
 				}
 			}, //获取桩号
-			getWorkPerson: function (val) {
+			getWorkPerson: function (val, edit) {
 				var that = this;
 				if (val) {
 					this
@@ -633,11 +678,11 @@
 							function (arr) {
 								that.domain.persons = arr;
 							});
-				} else {
-					that.domain.persons = [];
-					that.formData.coverOid = '';
-					that.formData.padderOid = '';
-					that.formData.renderOid = '';
+				}
+				if (!edit) {
+					that.formData.coverOid = [];
+					that.formData.padderOid = [];
+					that.formData.renderOid =[];
 				}
 			},
 			frontpipeChange: function (val) { //触发前管件编号
@@ -653,14 +698,18 @@
 							function (arr) {
 								that.domain.frontPipeOids = arr;
 							});
-				} else {
-					that.domain.frontPipeOids = [];
-					that.formData.frontPipeOid = "";
+				}else{
+					that.formData.frontPipeOid = "";	
 				}
+				
+					
+				
 			},
 			backpipeChange: function (val) { //触发后管件编号
 				var that = this;
 				if (val) {
+
+				
 					this
 						.requestDomainFromBizTable(
 							'/daq/pipefitting/getPipeFittingList.do', {
@@ -670,11 +719,12 @@
 							},
 							function (arr) {
 								that.domain.backPipeOids = arr;
+								
 							});
-				} else {
-					that.domain.backPipeOids = [];
-					that.formData.backPipeOid = '';
+				}else{
+					that.formData.backPipeOid = "";	
 				}
+				
 			},
 			submit: function (formName) {
 				var that = this;
@@ -700,22 +750,22 @@
 				}
 				var coverOid = that.formData.coverOid;
 				var coverOidStr = "";
-				for(var i=0;i<coverOid.length;i++){
-					coverOidStr+=coverOid[i]+",";
+				for (var i = 0; i < coverOid.length; i++) {
+					coverOidStr += coverOid[i] + ",";
 				}
 				var renderOid = that.formData.renderOid;
 				var renderOidStr = "";
-				for(var i=0;i<renderOid.length;i++){
-					renderOidStr+=renderOid[i]+",";
+				for (var i = 0; i < renderOid.length; i++) {
+					renderOidStr += renderOid[i] + ",";
 				}
 				var padderOid = that.formData.padderOid;
 				var padderOidStr = "";
-				for(var i=0;i<padderOid.length;i++){
-					padderOidStr+=padderOid[i]+",";
+				for (var i = 0; i < padderOid.length; i++) {
+					padderOidStr += padderOid[i] + ",";
 				}
-				that.formData.coverOid = coverOidStr.substr(0,coverOidStr.length-1)
-				that.formData.renderOid = renderOidStr.substr(0,renderOidStr.length-1)
-				that.formData.padderOid = padderOidStr.substr(0,padderOidStr.length-1)
+				that.formData.coverOid = coverOidStr.substr(0, coverOidStr.length - 1)
+				that.formData.renderOid = renderOidStr.substr(0, renderOidStr.length - 1)
+				that.formData.padderOid = padderOidStr.substr(0, padderOidStr.length - 1)
 				jasTools.ajax.post(url, that.formData, function (data) {
 					that.$refs.upload.uploadFile(data.data || that.oid);
 				});
@@ -738,31 +788,30 @@
 						that.formData[key] = data.rows[0][key];
 					} */
 					that.formData = data.rows[0];
-					
+
 					if (that.formData.coverOid.length == 0) {
 						that.formData.coverOid = [];
 					} else {
 						that.formData.coverOid = that.formData.coverOid.split(",");
 					}
-					
+
 					if (that.formData.renderOid.length == 0) {
 						that.formData.renderOid = [];
 					} else {
 						that.formData.renderOid = that.formData.renderOid.split(",");
 					}
-					
+
 					if (that.formData.padderOid.length == 0) {
 						that.formData.padderOid = [];
 					} else {
 						that.formData.padderOid = that.formData.padderOid.split(",");
 					}
-					
-					that.projectChanged(data.rows[0].projectOid);
-					that.tendersChanged(data.rows[0].tendersOid);
-					that.getSupervisionUnit(data.rows[0].tendersOid);
-					that.pipelineChanged(data.rows[0].pipelineOid);
-					that.pipeSegmentChanged(data.rows[0].pipeSegmentOrCrossOid);
-					that.getWorkPerson(data.rows[0].workUnitOid);
+					that.projectChanged(data.rows[0].projectOid, true);
+					that.tendersChanged(data.rows[0].tendersOid, true);
+					that.getSupervisionUnit(data.rows[0].tendersOid, true);
+					that.pipelineChanged(data.rows[0].pipelineOid, true);
+					that.pipeSegmentChanged(data.rows[0].pipeSegmentOrCrossOid, true);
+					that.getWorkPerson(data.rows[0].workUnitOid, true);
 					that.backpipeChange(data.rows[0].backPipeType);
 					that.frontpipeChange(data.rows[0].frontPipeType);
 				});

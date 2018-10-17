@@ -327,7 +327,7 @@ public class ReworkWeld extends CommonJdbcEntity{
 
 	public void setCollectionPerson(String collectionPerson) {
 		this.collectionPerson = collectionPerson; 
-		super.setField("collectionDate");
+		super.setField("collectionPerson");
 	}
 
 	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")

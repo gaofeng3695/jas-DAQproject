@@ -32,9 +32,10 @@
 				<jas-base-group-title name="其他信息"></jas-base-group-title>
 				<el-row>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-						<el-form-item label="备注" prop="remarks">
+						<jas-remarks :remarks="form.remarks" @changevalue="changevalue"></jas-remarks>
+						<!--<el-form-item label="备注" prop="remarks">
 							<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="form.remarks"></el-input>
-						</el-form-item>
+						</el-form-item>-->
 					</el-col>
 				</el-row>
 				<jas-base-group-title name="附件信息"></jas-base-group-title>
@@ -91,9 +92,6 @@
 						field: "evaluationResult",
 						name: '评定结果'
 					}, {
-						field: "detectionLength",
-						name: '检测长度(mm)'
-					}, {
 						field: "detectionUnit",
 						name: '检测单位'
 					}, {
@@ -102,6 +100,9 @@
 					}, {
 						field: "supervisionUnit",
 						name: '监理单位'
+					}, {
+						field: "auditor",
+						name: "审核人员"
 					}, {
 						field: "supervisionEngineer",
 						name: '监理工程师'
@@ -164,14 +165,22 @@
 					weldOid: {
 						type: 'select',
 						isRequired: true,
-						requestParams:{detectionType:"5"}
+						requestParams: {
+							detectionType: "5"
+						}
 					},
 					weldCode: {
 						type: 'input',
-						isRequired: true,
+						isRequired: true
 					},
 					detectionReportNum: {
 						type: 'input',
+						isRequired: true,
+						rules: [{
+							min: "0",
+							max: 60,
+							message: "不能超过60个字"
+						}]
 					},
 					detectionDeta: {
 						type: 'date',
@@ -179,6 +188,7 @@
 					},
 					detectionType: {
 						type: 'select',
+						isRequired: true,
 						domainName: 'detection_type_domain',
 					},
 					evaluationGrade: {
@@ -188,18 +198,14 @@
 					evaluationResult: {
 						type: 'select',
 						options: [{
-							key: '1',
+							key: 1,
 							value: '合格'
 						}, {
-							key: '2',
+							key: 0,
 							value: '不合格'
 						}],
 					},
-					detectionLength: {
-						type: 'number',
-						max: 100000000,
-						precision: 3,
-					},
+
 					detectionDispose: {
 						type: 'select',
 						options: [{
@@ -217,37 +223,67 @@
 					},
 					detectionPerson: {
 						type: 'input',
+						rules: [{
+							min: "0",
+							max: 25,
+							message: "不能超过25个字"
+						}]
 					},
 					supervisionUnit: {
 						type: 'select',
+						isRequired: true,
 					},
 					supervisionEngineer: {
 						type: 'input',
+						rules: [{
+							min: "0",
+							max: 50,
+							message: "不能超过50个字"
+						}]
 					},
 					collectionDate: {
 						type: 'date',
+						isRequired: true,
+					},
+					auditor: {
+						type: "input",
+						rules: [{
+							min: "0",
+							max: 20,
+							message: "不能超过20个字"
+						}]
 					}
 				},
 				sonFieldsConfig: {
 					defectPosition: {
 						type: 'input',
+						rules: [{
+							min: "0",
+							max: 60,
+							message: "不能超过60个字"
+						}]
 					},
 					amplitudeRegion: {
 						type: 'input',
+						rules: [{
+							min: "0",
+							max: 60,
+							message: "不能超过60个字"
+						}]
 					},
 					defectSize: {
 						type: 'number',
-						max: 100000000,
+						max: 999999,
 						precision: 3,
 					},
 					defectDepth: {
 						type: 'number',
-						max: 100000000,
+						max: 999999,
 						precision: 3,
 					},
 					height: {
 						type: 'number',
-						max: 100000000,
+						max: 999999,
 						precision: 3,
 					},
 				},
@@ -271,7 +307,12 @@
 					collectionDate: "",
 					approveStatus: '',
 					remarks: '',
-					faUltrasonicSubList: []
+					faUltrasonicSubList: [],
+					defectPosition: "",
+					amplitudeRegion: "",
+					defectSize: "",
+					defectDepth: "",
+					height: "",
 				},
 			}
 		},
@@ -297,6 +338,9 @@
 
 		},
 		methods: {
+			changevalue: function (msg) {
+				this.form.remarks = msg;
+			},
 			cancel: function (param) {
 				window.parent.jasTools.dialog.close(param);
 			},

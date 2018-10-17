@@ -96,9 +96,9 @@
 							if (value == -1)
 								return '驳回';
 							if (value == 0)
-								return '未提交';
+								return '未上报';
 							if (value == 1)
-								return '审核中';
+								return '待审核';
 							if (value == 2)
 								return '通过';
 							return value;
@@ -152,11 +152,9 @@
 						name: '结论',
 						field: 'conclusion',
 						formatter: function (row, column, val, index) {
-							if (val == 0) {
-								return '合格'
-							} else {
-								return '不合格'
-							}
+							if (val == 1) return '合格';
+							if (val == 0) return '不合格';
+							else val;
 						}
 					}, {
 						name: '检查验收意见',
@@ -179,6 +177,9 @@
 					}, {
 						name: '采集日期',
 						field: 'collectionDate'
+					}, {
+						name: '备注',
+						field: 'remarks'
 					}
 				],
 			}
@@ -186,10 +187,7 @@
 
 		mounted: function () {
 			var that = this;
-			var param = window.jasTools.base.getParamsInUrl(location.href);
-			this.privilegeCode = param.privilegeCode;
-			this.templateCode = param.templateCode; //|| "stake-2";
-			this.className = param.className; // || 'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';
+			
 		},
 		methods: {
 			searchList: function () {

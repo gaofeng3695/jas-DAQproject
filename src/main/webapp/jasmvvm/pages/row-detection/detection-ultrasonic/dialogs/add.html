@@ -32,9 +32,10 @@
 				<jas-base-group-title name="其他信息"></jas-base-group-title>
 				<el-row>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-						<el-form-item label="备注" prop="remarks">
+						<jas-remarks :remarks="form.remarks" @changevalue="changevalue"></jas-remarks>
+						<!--<el-form-item label="备注" prop="remarks">
 							<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="form.remarks"></el-input>
-						</el-form-item>
+						</el-form-item>-->
 					</el-col>
 				</el-row>
 				<jas-base-group-title name="附件信息"></jas-base-group-title>
@@ -159,7 +160,9 @@
 					weldOid: {
 						type: 'select',
 						isRequired: true,
-						requestParams:{detectionType:"2"}
+						requestParams: {
+							detectionType: "2"
+						}
 					},
 					weldCode: {
 						type: 'input',
@@ -167,32 +170,41 @@
 					},
 					detectionReportNum: {
 						type: 'input',
+						isRequired: true,
+						rules: [{
+							min: "0",
+							max: 60,
+							message: '不能超过60个字'
+						}]
 					},
 					detectionDeta: {
 						type: 'date',
 						isRequired: true,
 					},
 					detectionType: {
+						isRequired: true,
 						type: 'select',
 						domainName: 'detection_type_domain',
 					},
 					evaluationGrade: {
 						type: 'select',
+						isRequired: true,
 						domainName: 'evaluation_grade_domain',
 					},
 					evaluationResult: {
 						type: 'select',
+						isRequired: true,
 						options: [{
-							key: '1',
+							key: 1,
 							value: '合格'
 						}, {
-							key: '2',
+							key: 0,
 							value: '不合格'
 						}],
 					},
 					detectionLength: {
 						type: 'number',
-						max: 100000000,
+						max: 999999,
 						precision: 3,
 					},
 					detectionDispose: {
@@ -212,20 +224,37 @@
 					},
 					detectionPerson: {
 						type: 'input',
+						rules: [{
+							min: "0",
+							max: 25,
+							message: '不能超过25个字'
+						}]
 					},
 					supervisionUnit: {
 						type: 'select',
+						isRequired: true,
 					},
 					supervisionEngineer: {
 						type: 'input',
+						rules: [{
+							min: "0",
+							max: 50,
+							message: '不能超过50个字'
+						}]
 					},
 					collectionDate: {
 						type: 'date',
+						isRequired: true,
 					}
 				},
 				sonFieldsConfig: {
 					defectPosition: {
 						type: 'input',
+						rules: [{
+							min: "0",
+							max: 60,
+							message: '不能超过60个字'
+						}]
 					},
 					defectProperties: {
 						type: 'select',
@@ -233,7 +262,7 @@
 					},
 					defectSize: {
 						type: 'number',
-						max: 100000000,
+						max: 999999,
 						precision: 3,
 					},
 				},
@@ -242,7 +271,7 @@
 					tendersOid: '', // '标段名称'
 					pipelineOid: '', // '管线名称'
 					pipeSegmentOrCrossOid: '', // '线路段/穿跨越'
-					weldCode: '', // '焊口编号'
+					weldOid: '', // '焊口编号'
 					detectionReportNum: '', // '检测报告编号'
 					detectionDeta: '', // '检测日期'
 					detectionType: '', // '检测类型'
@@ -256,7 +285,10 @@
 					supervisionEngineer: '', // '监理工程师'
 					collectionDate: '', // '采集日期'
 					remarks: '',
-					ultrasonicSubList: []
+					ultrasonicSubList: [],
+					defectPosition: '', // 缺陷位置
+					defectProperties: '', //缺陷性质
+					defectSize: '' // 缺陷尺寸(mm/mm²/点)
 				},
 			}
 		},
@@ -282,6 +314,9 @@
 
 		},
 		methods: {
+			changevalue: function (msg) {
+				this.form.remarks = msg;
+			},
 			cancel: function (param) {
 				window.parent.jasTools.dialog.close(param);
 			},

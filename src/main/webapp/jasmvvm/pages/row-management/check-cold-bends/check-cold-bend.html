@@ -35,7 +35,7 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
 						<el-form-item label="标段名称" prop="tendersOid">
-							<el-select v-model="topSearch.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
+							<el-select v-model="topSearch.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged" @visible-change="childChange">
 								<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
@@ -50,7 +50,7 @@
 					<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
 						<el-form-item label="冷弯管编号">
 							<!-- <el-input v-model="topSearch.pipeColdBendingCode" clearable placeholder="请输入冷弯管编号" size="small"></el-input> -->
-							<el-select v-model="topSearch.pipeColdBendingOid" clearable placeholder="请输入冷弯管 " size="small">
+							<el-select v-model="topSearch.pipeColdBendingOid" clearable placeholder="请输入冷弯管 " size="small" @visible-change="pipeCodeChange">
 								<el-option v-for="item in domain.pipeColdBendingOidArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
@@ -110,7 +110,7 @@
 					name: '弯制单位',
 					field: 'productionUnit'
 				}, {
-					name: "弯道长度(m)",
+					name: "弯管长度(m)",
 					field: "pipeLength"
 				}, {
 					name: "弯制角度(°)",
@@ -189,7 +189,7 @@
 					constructUnitArr: [],
 					project: [], //项目
 					tenders: [], //标段
-					pipeColdBendingOidArr:[]
+					pipeColdBendingOidArr: []
 				}
 			}
 		},
@@ -209,6 +209,22 @@
 			this.getConstructUnit();
 		},
 		methods: {
+			childChange: function (e) {
+				if (e && !this.topSearch.projectOid) {
+					top.Vue.prototype.$message({
+						message: '请先选择项目名称',
+						type: 'warning'
+					});
+				}
+			},
+			pipeCodeChange: function (e) {
+				if (e && !this.topSearch.tendersOid) {
+					top.Vue.prototype.$message({
+						message: '请先选择标段名称',
+						type: 'warning'
+					});
+				}
+			},
 			requestDomainFromBizTable: function (url, obj, cb) {
 				var that = this;
 				var url = jasTools.base.rootPath + url;
@@ -228,40 +244,39 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
-				} else {
-					that.domain.tenders = [];
+				}
+				// else {
+					// that.domain.tenders = [];
 					that.topSearch.tendersOid = '';
 					that.domain.pipeColdBendingOidArr = [];
 					that.topSearch.pipeColdBendingOid = '';
-				}
+				// }
 			},
 			tendersChanged: function (val) { //根据标段触发管线列表
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
-							'/daq/clodBendingPipe/getList.do', {
-								tendersOid:val
-							},
-							function (arr) {
-								console.log(arr);
-								that.domain.pipeColdBendingOidArr = arr;
-								console.log(that.domain.pipeColdBendingOidArr);
-							});
-				} else {
-					that.domain.pipeColdBendingOidArr = [];
-					that.topSearch.pipeColdBendingOid = '';
+						'/daq/clodBendingPipe/getList.do', {
+							tendersOid: val
+						},
+						function (arr) {
+							that.domain.pipeColdBendingOidArr = arr;
+						});
 				}
+				//  else {
+					// that.domain.pipeColdBendingOidArr = [];
+					that.topSearch.pipeColdBendingOid = '';
+				// }
 			},
-			getConstructUnit: function(){
+			getConstructUnit: function () {
 				var that = this;
 				this.requestDomainFromBizTable(
-					'/daq/privilege/getCurrentUnitId.do', {
-					},
+					'/daq/privilege/getCurrentUnitId.do', {},
 					function (arr) {
 						that.domain.constructUnitArr = arr;
 					}
 				);
-				
+
 			},
 			searchList: function () {
 				this.$refs.table.search();

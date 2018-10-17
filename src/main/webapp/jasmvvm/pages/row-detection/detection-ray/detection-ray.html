@@ -98,7 +98,7 @@
 						field: 'approveStatus',
 						formatter: function (a, b, value) {
 							// if (value == 0) return '未上报';
-							if (value == 1) return '审核中';
+							if (value == 1) return '待审核';
 							if (value == 2) return '通过';
 							if (value == -1) return '驳回';
 							return '未上报';
@@ -135,7 +135,7 @@
 						field: 'evaluationResult',
 						formatter: function (row, column, cellValue, index) {
 							if (cellValue == 1) return '合格';
-							if (cellValue == 2) return '不合格';
+							if (cellValue == 0) return '不合格';
 							return cellValue;
 						}
 					}, {
@@ -161,6 +161,9 @@
 					}, {
 						name: '采集日期',
 						field: 'collectionDate'
+					}, {
+						name: '备注',
+						field: 'remarks'
 					}
 				],
 			}

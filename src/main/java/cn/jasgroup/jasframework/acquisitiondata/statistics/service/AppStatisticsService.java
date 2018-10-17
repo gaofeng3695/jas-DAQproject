@@ -448,15 +448,15 @@ public class AppStatisticsService {
      */
     public WeldCheckInfoBo statsWeldCheck(String projectId) {
 
-        WeldCheckInfoBo weldCheckInofo = this.appStatisticsDao.countWeldDetectionInfo(projectId);
+        WeldCheckInfoBo weldCheckInfo = this.appStatisticsDao.countWeldDetectionInfo(projectId);
         WeldCheckInfoBo rayDetectionInfo = this.appStatisticsDao.countRayDetection(projectId);
 
         WeldCheckInfoBo resultBo = new WeldCheckInfoBo();
-        resultBo.setWeldCount(weldCheckInofo.getWeldCount());
-        resultBo.setCheckedCount(weldCheckInofo.getCheckedCount());
-        resultBo.setUncheckedCount(weldCheckInofo.getWeldCount() - weldCheckInofo.getCheckedCount());
-        resultBo.setDetectionRayCount(rayDetectionInfo.getDetectionRayCount());
-        resultBo.setQualifiedCount(rayDetectionInfo.getQualifiedCount());
+        resultBo.setWeldCount(weldCheckInfo.getWeldCount()==null?0:weldCheckInfo.getWeldCount());
+        resultBo.setCheckedCount(weldCheckInfo.getCheckedCount()==null?0:weldCheckInfo.getCheckedCount());
+        resultBo.setUncheckedCount(resultBo.getWeldCount() - resultBo.getCheckedCount());
+        resultBo.setDetectionRayCount(rayDetectionInfo.getDetectionRayCount()==null?0:rayDetectionInfo.getDetectionRayCount());
+        resultBo.setQualifiedCount(rayDetectionInfo.getQualifiedCount()==null?0:rayDetectionInfo.getQualifiedCount());
 
         return resultBo;
     }

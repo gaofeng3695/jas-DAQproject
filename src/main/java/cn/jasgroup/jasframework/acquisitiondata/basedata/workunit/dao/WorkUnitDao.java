@@ -25,7 +25,7 @@ public class WorkUnitDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String, Object>> getListByCondition(String projectOid, String types) {
-		String sql = "select oid as key, work_unit_name as value from daq_work_unit where active=1 and project_oid='"+projectOid+"' and work_unit_type in ("+types+");";
+		String sql = "select oid as key, work_unit_code as value from daq_work_unit where active=1 and project_oid='"+projectOid+"' and work_unit_type in ("+types+");";
 		return baseJdbcDao.queryForList(sql, null);
 	}
 	/***
@@ -37,7 +37,7 @@ public class WorkUnitDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String, Object>> getListByCondition() {
-		String sql = "select oid as key, work_unit_name as value,project_oid,work_unit_type from daq_work_unit where active=1";
+		String sql = "select oid as key, work_unit_code as value,project_oid,work_unit_type from daq_work_unit where active=1";
 		return baseJdbcDao.queryForList(sql, null);
 	}
 	

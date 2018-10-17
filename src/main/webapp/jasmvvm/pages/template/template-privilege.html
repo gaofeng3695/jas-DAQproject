@@ -60,10 +60,10 @@
 						<template v-for="item in searchData">
 							<el-col v-if="item.type!='opertion'" :xs="24" :sm="12" :md="12" :lg="6" :xl="6" :class="{'height' : item.type=='UT_03'||item.type=='UT_04'||item.type=='UT_02'||item.type=='UT_14'||item.type=='UT_05'||item.type=='UT_06'||item.type=='UT_07'||item.type=='UT_08' }">
 								<el-form-item :label="item.name">
-									<el-input v-if="item.type=='UT_01'" :placeholder="item.placeholder" v-model="searchTable[item.id]" size="small" clearable>
+									<el-input v-if="item.type=='UT_01'" :placeholder="item.placeholder" v-model="searchTable[item.id]" size="small" clearable >
 									</el-input>
 									<el-select v-model="searchTable[item.id]" v-if="isSelect(item)" style="width:100%" size="small" @change="selectChange(item)"
-									  clearable>
+									  @visible-change="isChangeParent($event,item)" clearable>
 										<template v-for="option in item.options">
 											<el-option :key="option.value" :label="option.value" :value="option.key">
 											</el-option>
@@ -101,7 +101,7 @@
 									<div v-if="item.type=='UT_14'" style="height:41px;">
 										<div class="el-date-editor el-range-editor el-input__inner el-date-editor--datetimerange el-range-editor--small">
 											</i>
-											<input placeholder="最小值" v-model="searchTable[item.id].min" class="el-range-input" type="number">
+											<input placeholder="最小值" v-model="searchTable[item.id].min" class="el-range-input" type="number" >
 											<span class="el-range-separator">至</span>
 											<input v-model="searchTable[item.id].max" placeholder="最大值" class="el-range-input" type="number">
 											<i class="el-input__icon el-range__close-icon"></i>
@@ -138,7 +138,7 @@
 
 
 				<jas-import-export-btns :is-import="privilege.join('').indexOf('bt_import')>-1" :is-export="privilege.join('').indexOf('bt_export')>-1"
-				  :form="searchTable" :oids="oids" :template-code="templateCode" :function-code="menuCode" :export-template-code="exportTemplateCode"
+				  :form="searchform" :oids="oids" :template-code="templateCode" :function-code="menuCode" :export-template-code="exportTemplateCode"
 				  :class-name="className"></jas-import-export-btns>
 
 				<div style="display:inline-block;float:right">
@@ -417,6 +417,23 @@
 			getSearchFieldAndList: function (data) {
 				var that = this;
 				var searchData = [];
+				var childAndparent = {};
+				data.functionFieldsBoList.forEach(function (item) {
+					if (item.ifQuery == "1" && item.childField) {
+						if (item.childField.split(",")) {
+							item.childField.split(",").forEach(function (s) {
+								var obj = {
+									id: "",
+									name: ""
+								};
+								obj.id = item.fieldName;
+								obj.name = item.fieldNameCn;
+								childAndparent[s] = obj;
+							});
+						}
+					}
+				}); //寻找子父之间关系
+
 				data.functionFieldsBoList.forEach(function (item) {
 					var options = [];
 					if (item.domainList) {
@@ -429,7 +446,7 @@
 						});
 					}
 					if (item.ifQuery == "1") {
-						that.searchData.push({
+						var obj = {
 							id: item.fieldName,
 							name: item.fieldNameCn,
 							type: item.uiType,
@@ -438,7 +455,13 @@
 							queryIndex: item.queryIndex,
 							childField: item.childField,
 							requestPath: item.requestPath,
-						});
+							// isPartant:
+						};
+						if (childAndparent[item.fieldName]) {
+							obj.isPartant = childAndparent[item.fieldName].id;
+							obj.isPartantName = childAndparent[item.fieldName].name;
+						}
+						that.searchData.push(obj);
 						that.searchUi.push({
 							id: item.fieldName,
 							type: item.uiType
@@ -496,6 +519,9 @@
 								} else {
 									that.searchTable[key] = "";
 								}
+							}
+							for(var key in that.searchData){
+								that.searchData[key].options=[];
 							}
 							that.requestTableList();
 						}
@@ -677,6 +703,15 @@
 				this.searchform.page = val;
 				this.requestTableList();
 			},
+			isChangeParent: function (e, item) {
+				var that = this;
+				if (e && item.isPartant && !that.searchTable[item.isPartant]) {
+					top.Vue.prototype.$message({
+						type: 'warning',
+						message: '请先选择' + item.isPartantName
+					});
+				}
+			},
 			selectChange: function (item) { // 选择类型的控件触发的change事件
 				var that = this;
 				if (item.childField && item.requestPath) {
@@ -693,8 +728,32 @@
 					that.formatFormAndSearch();
 				}
 			},
+			setClearChildValue: function (fatherField) {
+				var that=this;
+			//	if (!that.searchTable[fatherField]) { //该父级没有值
+					that.searchData.forEach(function (item) {
+						if (item.id == fatherField) { //查询它的子集id
+							if (item.childField) {
+								item.childField.split(",").forEach(function (child) {
+									that.searchData.forEach(function (childItem) {
+										if (child == childItem.id) {
+											childItem.options = [];
+											that.searchTable[childItem.id] = '';
+											that.setClearChildValue(childItem.id);//对子集继续寻找子集
+										}
+
+									});
+								});
+							}
+						}
+					});
+				//}
+			}, //清除子集的值
 			setChildSelectOption: function (fatherField, childField, requestPath, fn) {
 				var that = this;
+				/*数据清空 临时增加  此时方法有可能消耗时间，快速就是增加配置*/
+				that.setClearChildValue(fatherField);
+				/*数据清空 临时增加*/
 				var setOptionsAndValue = function (options) {
 					that.searchData.forEach(function (item) {
 						if (childField.indexOf(item.id) !== -1) { // 子集字段
@@ -756,6 +815,9 @@
 					return true;
 				}
 				return false
+			},
+			changeSearchTable:function(){
+				this.formatFormAndSearch();
 			},
 			formatFormAndSearch: function () {
 				var that = this;

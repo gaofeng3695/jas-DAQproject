@@ -734,33 +734,61 @@ var crossConfig = {
     constructUnitName: {
       type: 'input',
       name: '施工单位',
+      rules: [{
+        min: '0',
+        max: 36,
+        message: "不能超过36个字"
+      }]
     },
     supervisionUnit: {
       type: 'select',
       name: '监理单位',
+      isRequired: true
     },
     supervisionUnitName: {
       type: 'input',
       name: '监理单位',
+      isRequired: true,
+      rules: [{
+        min: '0',
+        max: 38,
+        message: "不能超过38个字"
+      }]
     },
     supervisionEngineer: {
       type: 'input',
       name: '监理工程师',
+      rules: [{
+        min: '0',
+        max: 50,
+        message: "不能超过50个字"
+      }]
     },
     collectionPerson: {
       type: 'input',
       name: '采集人员',
+      rules: [{
+        min: '0',
+        max: 30,
+        message: "不能超过30个字"
+      }]
     },
     collectionDate: {
       type: 'date',
       name: '采集日期',
+      isRequired: true
     },
 
     // 1111
     markStakeCode: {
       name: '标志桩编号',
       type: 'input',
-      isRequired: true
+      isRequired: true,
+      rules: [{
+        min: '0',
+        max: 36,
+        message: "不能超过36个字"
+      }]
     }, //: "test-1",
 
     medianStakeOid: {
@@ -809,6 +837,7 @@ var crossConfig = {
     burialDate: {
       type: 'date',
       name: '埋设日期',
+      isRequired: true
     }, //: "2017-08-11",
     stakeFunction: {
       type: 'multiSelect',
@@ -830,12 +859,22 @@ var crossConfig = {
     electronicLabelCode: {
       name: '电子标签编号',
       type: 'input',
-      isRequired: true
+      isRequired: true,
+      rules: [{
+        min: '0',
+        max: 50,
+        message: "不能超过50个字"
+      }]
     }, //: "test-1",
     productNum: {
       name: '产品编号',
       type: 'input',
-      isRequired: true
+     // isRequired: true,
+      rules: [{
+        min: '0',
+        max: 60,
+        message: "不能超过60个字"
+      }]
     }, //: "test-1",
     pointz: {
       name: '高程(m)',
@@ -860,7 +899,12 @@ var crossConfig = {
     "handHoleCode": {
       name: '孔编号',
       type: 'input',
-      isRequired: true
+      isRequired: true,
+      rules: [{
+        min: '0',
+        max: 50,
+        message: "不能超过50个字"
+      }]
     }, //: "SK-median_stake_004-2",
     "handHoleName": {
       type: 'select',
@@ -875,7 +919,7 @@ var crossConfig = {
       name: '孔类型',
       type: 'select',
       domainName: 'hand_hole_type_domain',
-      isRequired: true
+     // isRequired: true
     }, //: "hand_hole_type_code_002",
     "handHoleTypeName": {
       name: '孔类型',
@@ -883,18 +927,38 @@ var crossConfig = {
     "handHoleSpecifications": {
       name: '规格型号',
       type: 'input',
+      rules: [{
+        min: '0',
+        max: 50,
+        message: "不能超过50个字"
+      }]
     }, //: "12*24",
     "baseInstallSituation": {
       name: '基础制造及安装情况',
       type: 'input',
+      rules: [{
+        min: '0',
+        max: 60,
+        message: "不能超过60个字"
+      }]
     }, //: "良好",
     "circleInstallSituation": {
       name: '口圈及安装情况',
       type: 'input',
+      rules: [{
+        min: '0',
+        max: 60,
+        message: "不能超过60个字"
+      }]
     }, //: "良好",
     "materialType": {
       name: '材料类型',
       type: 'input',
+      rules: [{
+        min: '0',
+        max: 40,
+        message: "不能超过40个字"
+      }]
     }, //: "混凝土",
     "stayLong": {
       name: '光缆盘留长度(m)',
@@ -936,18 +1000,28 @@ var crossConfig = {
     "obstacleCode": {
       name: '障碍物编号',
       type: 'input',
-      isRequired: true
+      isRequired: true,
+      rules: [{
+        min: '0',
+        max: 45,
+        message: "不能超过45个字"
+      }]
     }, //: "ss031",
     "obstacleName": {
       name: '障碍物名称',
       type: 'input',
-      isRequired: true
+      isRequired: true,
+      rules: [{
+        min: '0',
+        max: 45,
+        message: "不能超过45个字"
+      }]
     }, //: "test",
     "obstacleType": {
       type: 'select',
       name: '障碍物类型',
       domainName: 'obstacle_type_domain',
-      isRequired: true
+      //isRequired: true
     }, //: "obstacle_type_code_001",
     "obstacleTypeName": {
       name: '障碍物类型',
@@ -955,18 +1029,38 @@ var crossConfig = {
     "subordinateUnit": {
       name: '所属单位',
       type: 'input',
+       rules: [{
+        min: '0',
+        max:50,
+        message: "不能超过50个字"
+      }]
     }, //: "zz",
     "address": {
       name: '地址',
       type: 'input',
+      rules: [{
+        min: '0',
+        max: 75,
+        message: "不能超过75个字"
+      }]
     }, //: null,
     "contacts": {
       name: '联系人',
       type: 'input',
+      rules: [{
+        min: '0',
+        max: 20,
+        message: "不能超过20个字"
+      }]
     }, //: null,
     "telephone": {
       name: '电话',
       type: 'input',
+      rules: [{
+        min: '0',
+        max: 15,
+        message: "不能超过15个字"
+      }]
     }, //: null,
     "minDistance": {
       name: '最小间距(m)',
@@ -993,13 +1087,18 @@ var crossConfig = {
     "hydraulicProtectionCode": {
       name: '水工保护编号',
       type: 'input',
-      isRequired: true
+      isRequired: true,
+      rules: [{
+        min: '0',
+        max: 45,
+        message: "不能超过45个字"
+      }]
     }, //: "ss",
     "hydraulicProtectionType": {
       type: 'select',
       name: '水工保护类型',
       domainName: 'hydraulic_protection_type_domain',
-      isRequired: true
+     // isRequired: true
     },
     "hydraulicProtectionTypeName": {
       name: '水工保护类型',
@@ -1007,39 +1106,49 @@ var crossConfig = {
     "hydraulicProtectionName": {
       name: '水工保护名称',
       type: 'input',
-      isRequired: true
+      isRequired: true,
+      rules: [{
+        min: '0',
+        max: 45,
+        message: "不能超过45个字"
+      }]
     }, //: "test",
 
     "startPointx": {
       name: '起点X坐标',
       type: 'number',
-      max: 999999,
+      max: 9999999,
       precision: 3,
     }, //: 115.005,
     "startPointy": {
       name: '起点Y坐标',
       type: 'number',
-      max: 9999999,
+      max: 99999999,
       precision: 3,
     }, //: 38.153,
     "endPointx": {
       name: '终点X坐标',
       type: 'number',
-      max: 999999,
+      max: 9999999,
       precision: 3,
     }, //: 115.005,
     "endPointy": {
       name: '终点Y坐标',
       type: 'number',
-      max: 9999999,
+      max: 99999999,
       precision: 3,
     }, //: 38.152,
     "structureSize": {
       name: '结构尺寸',
       type: 'input',
+      rules: [{
+        min: '0',
+        max: 45,
+        message: "不能超过45个字"
+      }]
     }, //: "12.15",
     "engineerQuatity": {
-      name: '光缆盘留长度(m)',
+      name: '工程量(m³)',
       type: 'number',
       max: 99999,
       precision: 3,
@@ -1126,16 +1235,22 @@ var crossConfig = {
     "casingPipeLength": {
       name: '套管长度(m)',
       type: 'number',
-      max: 9999999,
+      max: 99999999,
       precision: 2,
     }, //: 12.15,
     "casingPipeSpecifications": {
       name: '套管规格',
       type: 'input',
+      rules:[{
+        min:"0",
+        max:40,
+        message:"不能超过40个字"
+      }]
     }, //: "11",
     "constructDate": {
       type: 'date',
-      name: '施工日期'
+      name: '施工日期',
+      isRequired: true
     }, //: "2017-08-12",
 
 
@@ -1146,7 +1261,7 @@ var crossConfig = {
       formatter: function (a, b, value, c) {
         if (value == -1) return '驳回';
         if (value == 0) return '未上报';
-        if (value == 1) return '审核中';
+        if (value == 1) return '待审核';
         if (value == 2) return '通过';
         return value;
       }

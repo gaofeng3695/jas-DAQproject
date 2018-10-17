@@ -38,6 +38,7 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 @UniqueConstraints(
     strategys ={
         @UniqueConstraintStrategy(columnNames={"equipmentCode"},name="设备编号"),
+        @UniqueConstraintStrategy(columnNames={"equipmentName"},name="名称"),
     }
 )
 @Point(

@@ -104,8 +104,8 @@
 						name: '审核状态',
 						formatter: function (a, b, value, c) {
 							if (value == -1) return '驳回';
-							if (value == 0) return '未提交';
-							if (value == 1) return '审核中';
+							if (value == 0) return '未上报';
+							if (value == 1) return '待审核';
 							if (value == 2) return '通过';
 							return value;
 						}
@@ -119,7 +119,7 @@
 						name: '管线名称',
 						field: 'pipelineName'
 					}, {
-						name: "线路段名称",
+						name: "线路段/穿跨越名称",
 						field: "pipeSegmentOrCrossName"
 					}, {
 						name: '焊口编号',
@@ -226,6 +226,9 @@
 					}, {
 						name: '采集日期',
 						field: 'collectionDate'
+					}, {
+						name: '备注',
+						field: 'remarks'
 					}
 				],
 				domain: {
@@ -272,8 +275,9 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
-				} else {
-					that.domain.tenders = [];
+				} 
+				//else {
+					//that.domain.tenders = [];
 					that.topSearch.tendersOid = '';
 					that.domain.pipeline = [];
 					that.topSearch.pipelineOid = '';
@@ -281,7 +285,8 @@
 					that.topSearch.pipeSegmentOrCrossOid = '';
 					that.domain.welds = [];
 					that.topSearch.weldOid = '';
-				}
+				//}
+				that.searchList();
 			},
 			tendersChanged: function (val) { //根据标段触发管线列表
 				var that = this;
@@ -294,14 +299,16 @@
 							function (arr) {
 								that.domain.pipeline = arr;
 							});
-				} else {
-					that.domain.pipeline = [];
+				} 
+				//else {
+					//that.domain.pipeline = [];
 					that.topSearch.pipelineOid = '';
 					that.domain.pipeSegment = [];
 					that.topSearch.pipeSegmentOrCrossOid = '';
 					that.domain.welds = [];
 					that.topSearch.weldOid = '';
-				}
+				//}
+				that.searchList();
 			},
 			pipelineChanged: function (val) { //根据管线触发线路段/穿跨越
 				var that = this;
@@ -314,12 +321,14 @@
 							function (arr) {
 								that.domain.pipeSegment = arr;
 							});
-				} else {
-					that.domain.pipeSegment = [];
+				}
+				//else {
+					//that.domain.pipeSegment = [];
 					that.topSearch.pipeSegmentOrCrossOid = '';
 					that.domain.welds = [];
 					that.topSearch.weldOid = '';
-				}
+				//}
+				that.searchList();
 			},
 			pipeSegmentChanged: function (val) {
 				var that = this;
@@ -332,10 +341,12 @@
 							function (arr) {
 								that.domain.welds = arr;
 							});
-				} else {
-					that.domain.welds = [];
-					that.topSearch.weldOid = '';
 				}
+				//else {
+					//that.domain.welds = [];
+					that.topSearch.weldOid = '';
+				//}
+				that.searchList();
 			},
 			searchList: function () {
 				this.$refs.table.search();

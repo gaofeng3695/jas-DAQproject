@@ -253,6 +253,7 @@ public class CathodicIsolatingPiece extends CommonJdbcEntity {
 
 	public void setPointx(Double pointx) {
 		this.pointx = pointx;
+		super.setField("pointx");
 	}
 
 	public Double getPointy() {
@@ -261,6 +262,7 @@ public class CathodicIsolatingPiece extends CommonJdbcEntity {
 
 	public void setPointy(Double pointy) {
 		this.pointy = pointy;
+		super.setField("pointy");
 	}
 
 	public Double getPointz() {
@@ -269,6 +271,7 @@ public class CathodicIsolatingPiece extends CommonJdbcEntity {
 
 	public void setPointz(Double pointz) {
 		this.pointz = pointz;
+		super.setField("pointz");
 	}
 
 	public String getStartPipeFittingNum() {
