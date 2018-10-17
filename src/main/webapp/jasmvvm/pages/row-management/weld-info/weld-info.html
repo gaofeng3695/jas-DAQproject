@@ -275,8 +275,9 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
-				} else {
-					that.domain.tenders = [];
+				} 
+				//else {
+					//that.domain.tenders = [];
 					that.topSearch.tendersOid = '';
 					that.domain.pipeline = [];
 					that.topSearch.pipelineOid = '';
@@ -284,7 +285,7 @@
 					that.topSearch.pipeSegmentOrCrossOid = '';
 					that.domain.welds = [];
 					that.topSearch.weldOid = '';
-				}
+				//}
 				that.searchList();
 			},
 			tendersChanged: function (val) { //根据标段触发管线列表
@@ -298,14 +299,15 @@
 							function (arr) {
 								that.domain.pipeline = arr;
 							});
-				} else {
-					that.domain.pipeline = [];
+				} 
+				//else {
+					//that.domain.pipeline = [];
 					that.topSearch.pipelineOid = '';
 					that.domain.pipeSegment = [];
 					that.topSearch.pipeSegmentOrCrossOid = '';
 					that.domain.welds = [];
 					that.topSearch.weldOid = '';
-				}
+				//}
 				that.searchList();
 			},
 			pipelineChanged: function (val) { //根据管线触发线路段/穿跨越
@@ -319,12 +321,13 @@
 							function (arr) {
 								that.domain.pipeSegment = arr;
 							});
-				} else {
-					that.domain.pipeSegment = [];
+				}
+				//else {
+					//that.domain.pipeSegment = [];
 					that.topSearch.pipeSegmentOrCrossOid = '';
 					that.domain.welds = [];
 					that.topSearch.weldOid = '';
-				}
+				//}
 				that.searchList();
 			},
 			pipeSegmentChanged: function (val) {
@@ -338,10 +341,11 @@
 							function (arr) {
 								that.domain.welds = arr;
 							});
-				} else {
-					that.domain.welds = [];
-					that.topSearch.weldOid = '';
 				}
+				//else {
+					//that.domain.welds = [];
+					that.topSearch.weldOid = '';
+				//}
 				that.searchList();
 			},
 			searchList: function () {

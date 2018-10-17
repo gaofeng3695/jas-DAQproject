@@ -238,10 +238,10 @@
 						message: '项目名称为必填项',
 						trigger: 'change'
 					}],
-					weldDate:[{
+					weldDate: [{
 						required: true,
 						message: '焊接日期为必填项',
-						trigger: 'change'	
+						trigger: 'change'
 					}],
 					tendersOid: [{
 						required: true,
@@ -293,7 +293,7 @@
 						message: '焊接工艺规格为必填项',
 						trigger: 'change'
 					}],
-					collectionDate:[{
+					collectionDate: [{
 						required: true,
 						message: '采集日期为必填项',
 						trigger: 'change'
@@ -302,10 +302,10 @@
 						min: "0",
 						max: 50,
 						message: '不能超过50个字'
-					},{
+					}, {
 						required: true,
 						message: '监理工程师为必填项',
-						trigger: 'change'	
+						trigger: 'change'
 					}],
 					collectionPerson: [{
 						min: "0",
@@ -331,9 +331,9 @@
 					constructUnit: '',
 					workUnitOid: "",
 					weldDate: "",
-					coverOid: "",
-					padderOid: "",
-					renderOid: "",
+					coverOid: [],
+					padderOid:  [],
+					renderOid:  [],
 					supervisionUnit: "",
 					supervisionEngineer: "",
 					collectionPerson: "",
@@ -409,7 +409,7 @@
 					cb && cb([]);
 				});
 			},
-			projectChanged: function (val) {
+			projectChanged: function (val, edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -419,8 +419,8 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
-				} else {
-					that.domain.tenders = [];
+				}
+				if (!edit) {
 					that.formData.tendersOid = '';
 					that.domain.pipeline = [];
 					that.formData.pipelineOid = '';
@@ -429,10 +429,10 @@
 					that.domain.supervisionUnits = [];
 					that.formData.supervisionUnit = '';
 				}
-				that.getWorkUints(val); //获取机组
-				that.getWeldproduct(val); //获取焊接工艺
+				that.getWorkUints(val, edit); //获取机组
+				that.getWeldproduct(val, edit); //获取焊接工艺
 			},
-			getWeldproduct: function (val) {
+			getWeldproduct: function (val, edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -443,12 +443,12 @@
 						function (arr) {
 							that.domain.weldProduces = arr;
 						});
-				} else {
-					that.domain.weldProduces = [];
+				}
+				if (!edit) {
 					that.formData.weldProduce = '';
 				}
 			},
-			getWorkUints: function (val) {
+			getWorkUints: function (val, edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -459,12 +459,12 @@
 						function (arr) {
 							that.domain.workUnits = arr;
 						});
-				} else {
-					that.domain.workUnits = [];
+				}
+				if (!edit) {
 					that.formData.workUnitOid = '';
 				}
 			},
-			tendersChanged: function (val) { //根据标段触发管线列表
+			tendersChanged: function (val, edit) { //根据标段触发管线列表
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -474,15 +474,15 @@
 						function (arr) {
 							that.domain.pipeline = arr;
 						});
-				} else {
-					that.domain.pipeline = [];
+				}
+				if (!edit) {
 					that.formData.pipelineOid = '';
 					that.domain.pipeSegment = [];
 					that.formData.pipeSegmentOrCrossOid = '';
 				}
-				that.getSupervisionUnit(val); //根据标段获取监理单位
+				that.getSupervisionUnit(val, edit); //根据标段获取监理单位
 			},
-			getSupervisionUnit: function (val) {
+			getSupervisionUnit: function (val, edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -492,12 +492,12 @@
 						function (arr) {
 							that.domain.supervisionUnits = arr;
 						});
-				} else {
-					that.domain.supervisionUnits = [];
+				}
+				if (!edit) {
 					that.formData.supervisionUnit = '';
 				}
 			},
-			pipelineChanged: function (val) { //根据管线触发线路段/穿跨越
+			pipelineChanged: function (val, edit) { //根据管线触发线路段/穿跨越
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -507,12 +507,12 @@
 						function (arr) {
 							that.domain.pipeSegment = arr;
 						});
-				} else {
-					that.domain.pipeSegment = [];
+				}
+				if (!edit) {
 					that.formData.pipeSegmentOrCrossOid = '';
 				}
 			},
-			pipeSegmentChanged: function (val) {
+			pipeSegmentChanged: function (val, edit) {
 				var that = this;
 				if (val) {
 					this
@@ -523,8 +523,8 @@
 							function (arr) {
 								that.domain.welds = arr;
 							});
-				} else {
-					that.domain.welds = [];
+				}
+				if (!edit) {
 					that.formData.weldOid = '';
 				}
 			},
@@ -538,7 +538,7 @@
 				});
 
 			},
-			workUnitChange: function (val) {
+			workUnitChange: function (val, edit) {
 				var that = this;
 				if (val) {
 					this
@@ -550,11 +550,11 @@
 							function (arr) {
 								that.domain.persons = arr;
 							});
-				} else {
-					that.domain.persons = [];
-					that.formData.coverOid = '';
-					that.formData.padderOid = '';
-					that.formData.renderOid = '';
+				}
+				if (!edit) {
+					that.formData.coverOid = [];
+					that.formData.padderOid = [];
+					that.formData.renderOid = [];
 				}
 			},
 			submit: function (formName) {
@@ -637,11 +637,11 @@
 					} else {
 						that.formData.padderOid = that.formData.padderOid.split(",");
 					}
-					that.projectChanged(data.rows[0].projectOid);
-					that.tendersChanged(data.rows[0].tendersOid);
-					that.pipelineChanged(data.rows[0].pipelineOid);
-					that.pipeSegmentChanged(data.rows[0].pipeSegmentOrCrossOid);
-					that.workUnitChange(data.rows[0].workUnitOid);
+					that.projectChanged(data.rows[0].projectOid, true);
+					that.tendersChanged(data.rows[0].tendersOid, true);;
+					that.pipelineChanged(data.rows[0].pipelineOid, true);
+					that.pipeSegmentChanged(data.rows[0].pipeSegmentOrCrossOid, true);
+					that.workUnitChange(data.rows[0].workUnitOid, true);
 				});
 			},
 		},

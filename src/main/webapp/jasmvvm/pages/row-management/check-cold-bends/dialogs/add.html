@@ -158,8 +158,9 @@
 					<el-row>
 						<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 							<el-form-item label="备注" prop="remarks">
-								<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"  :maxLength="200"  @input="instructionNum"></el-input>
-							    <p style="text-align:right;color:#999;">您还可以输入<span v-text="remarksDesc"></span>字</p>
+								<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks" :maxLength="200"
+								  @input="instructionNum"></el-input>
+								<p style="text-align:right;color:#999;">您还可以输入<span v-text="remarksDesc"></span>字</p>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -186,7 +187,7 @@
 		data: function () {
 			var that = this;
 			return {
-				remarksDesc:200,
+				remarksDesc: 200,
 				domain: {
 					isPass: [{
 						key: 1,
@@ -210,20 +211,20 @@
 						required: true,
 						message: '合格编号为必填项',
 						trigger: 'blur'
-					},{
-						min:"0",
-						max:60,
-						message:"不能超过60字"
+					}, {
+						min: "0",
+						max: 60,
+						message: "不能超过60字"
 					}],
-					productionUnit:[{
-						min:"0",
-						max:60,
-						message:"不能超过60字"
+					productionUnit: [{
+						min: "0",
+						max: 60,
+						message: "不能超过60字"
 					}],
-					checkedBy:[{
-						min:"0",
-						max:20,
-						message:"不能超过20字"
+					checkedBy: [{
+						min: "0",
+						max: 20,
+						message: "不能超过20字"
 					}],
 					projectOid: [{
 						required: true,
@@ -259,9 +260,9 @@
 					"bendAngle": "",
 					"weldPosition": null,
 					"ovality": null,
-					"grooveCheck":null,
+					"grooveCheck": null,
 					"coatingIoFaceCheck": null,
-					"coatingIoEndsCheck":null,
+					"coatingIoEndsCheck": null,
 					"checkedBy": "",
 					"checkedDate": "",
 					"remarks": ""
@@ -291,12 +292,12 @@
 				});
 			this.getConstructUnit();
 		},
-		methods: {		
+		methods: {
 			instructionNum: function () {
 				var that = this;
 				var num = 200 - that.formData.remarks.trim().length;
 				that.remarksDesc = num;
-		     }, //剩余字数计算
+			}, //剩余字数计算
 			childChange: function (event, id, name) {
 				if (event && !this.formData[id]) {
 					top.Vue.prototype.$message({
@@ -314,7 +315,7 @@
 					cb && cb([]);
 				});
 			},
-			projectChanged: function (val) {
+			projectChanged: function (val,edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -323,19 +324,19 @@
 						},
 						function (arr) {
 							that.domain.tenders = arr;
-							if (arr.length > 0) {
-								that.formData.tendersOid = arr[0].key;
-								that.tendersChanged(that.formData.tendersOid);
-							}
+							//if (arr.length > 0) {
+								// that.formData.tendersOid = arr[0].key;
+								//that.tendersChanged(that.formData.tendersOid);
+							//}
 						});
-				} else {
-					that.domain.tenders = [];
-					that.formData.tendersOid = '';
-					that.domain.constructUnitArr = [];
-					that.formData.constructUnit = '';
 				}
+			if (!edit) {
+				that.formData.tendersOid = '';
+				that.domain.constructUnitArr = [];
+				that.formData.constructUnit = '';
+				 }
 			},
-			tendersChanged: function (val) { //根据标段触发管线列表
+			tendersChanged: function (val, edit) { //根据标段触发管线列表
 				var that = this;
 				if (val) {
 					this
@@ -345,14 +346,15 @@
 							},
 							function (arr) {
 								that.domain.pipeColdBendingOidArr = arr;
-								if (arr.length > 0) {
-									that.formData.pipeColdBendingOid = arr[0].key;
-								}
+								// if (arr.length > 0) {
+								// 	that.formData.pipeColdBendingOid = arr[0].key;
+								// }
 
 							});
-				} else {
-					that.domain.pipeColdBendingOidArr = [];
+				}
+				if (!edit) {
 					that.formData.pipeColdBendingOid = '';
+					
 				}
 			},
 			cancel: function (param) {
@@ -397,11 +399,11 @@
 				var url = jasTools.base.rootPath +
 					"/jdbc/commonData/checkPipeColdBending/getPage.do";
 				jasTools.ajax.post(url, that.formData, function (data) {
-					for (var key in that.formData) {
-						that.formData[key] = data.rows[0][key];
-					}
-					that.projectChanged(data.rows[0].projectOid);
-					that.tendersChanged(data.rows[0].tendersOid);
+					
+						that.formData = data.rows[0];
+						console.log(that.formData.pipeColdBendingOid)
+					that.projectChanged(data.rows[0].projectOid, true);
+					that.tendersChanged(data.rows[0].tendersOid, true);
 				});
 
 			},

@@ -104,7 +104,7 @@
 						</el-col>
 
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="采集日期"  prop="collectionDate" required>
+							<el-form-item label="采集日期" prop="collectionDate" required>
 								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入采集日期" v-model="formData.collectionDate" size="small"
 								  style="width: 100%;">
 								</el-date-picker>
@@ -234,7 +234,7 @@
 						message: '监理单位为必填项',
 						trigger: 'change'
 					}],
-					collectionDate:[{
+					collectionDate: [{
 						required: true,
 						message: '采集日期为必填项',
 						trigger: 'change'
@@ -464,7 +464,40 @@
 						}]
 					},
 				},
-				formData: {}
+				formData: {
+					projectOid: "",
+					tendersOid: "",
+					pipelineOid: "",
+					pipeSegmentOid: "",
+					constructUnit: "",
+					supervisionUnit: "",
+					collectionDate: "",
+					anodeCode: "",
+					medianStakeOid: "",
+					relativeMileage: "",
+					supervisionEngineer: "",
+					collectionPerson: "",
+					anodeCode: "",
+					protectObject: "",
+					isTemporary: "",
+					designLife: "",
+					anodeMaterial: "",
+					anodeSpecification: "",
+					andoeQuantity: "",
+					andoeWeight: "",
+					totalWeight: "",
+					anodeDistance: "",
+					pipeDistance: "",
+					manufacture: "",
+					burialDate: "",
+					anodeBuriedDepth: "",
+					layLength: "",
+					fillWeight: "",
+					insulationQuality: "",
+					tabletsCondition: "",
+					installLocationDescription: "",
+					conclusion: ""
+				}
 			}
 		},
 
@@ -533,7 +566,7 @@
 					cb && cb([]);
 				});
 			},
-			projectChanged: function (val) {
+			projectChanged: function (val, edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -543,8 +576,8 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
-				} else {
-					that.domain.tenders = [];
+				}
+				if (!edit) {
 					that.formData.tendersOid = '';
 					that.domain.pipeline = [];
 					that.formData.pipelineOid = '';
@@ -552,11 +585,13 @@
 					that.formData.pipeSegmentOid = '';
 					that.domain.supervisionUnits = [];
 					that.formData.supervisionUnit = '';
+					that.domain.medianStakes = [];
+					that.formData.medianStakeOid = '';
 				}
 
 			},
 
-			tendersChanged: function (val) { //根据标段触发管线列表
+			tendersChanged: function (val, edit) { //根据标段触发管线列表
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -566,15 +601,17 @@
 						function (arr) {
 							that.domain.pipeline = arr;
 						});
-				} else {
-					that.domain.pipeline = [];
+				}
+				if (!edit) {
 					that.formData.pipelineOid = '';
 					that.domain.pipeSegment = [];
 					that.formData.pipeSegmentOid = '';
+					that.domain.medianStakes = [];
+					that.formData.medianStakeOid = '';
 				}
-				that.getSupervisionUnit(val); //根据标段获取监理单位
+				that.getSupervisionUnit(val, edit); //根据标段获取监理单位
 			},
-			getSupervisionUnit: function (val) {
+			getSupervisionUnit: function (val, edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -584,12 +621,12 @@
 						function (arr) {
 							that.domain.supervisionUnits = arr;
 						});
-				} else {
-					that.domain.supervisionUnits = [];
+				}
+				if (!edit) {
 					that.formData.supervisionUnit = '';
 				}
 			},
-			pipelineChanged: function (val) { //根据管线触发线路段/穿跨越
+			pipelineChanged: function (val, edit) { //根据管线触发线路段/穿跨越
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -599,12 +636,17 @@
 						function (arr) {
 							that.domain.pipeSegment = arr;
 						});
-				} else {
-					that.domain.pipeSegment = [];
-					that.formData.pipeSegmentOid = '';
 				}
+				if (!edit) {
+					that.formData.pipeSegmentOid = '';
+					that.domain.medianStakes = [];
+					that.formData.medianStakeOid = '';
+				}
+
+
+				// }
 			},
-			pipeSegmentChanged: function (val) {
+			pipeSegmentChanged: function (val, edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -614,10 +656,12 @@
 						function (arr) {
 							that.domain.medianStakes = arr;
 						});
-				} else {
-					that.domain.medianStakes = [];
+				}
+				if (!edit) {
 					that.formData.medianStakeOid = '';
 				}
+
+				// }
 			}, //获取桩号
 
 			submit: function (formName) {
@@ -662,11 +706,11 @@
 
 					that.formData = data.rows[0];
 
-					that.projectChanged(data.rows[0].projectOid);
-					that.tendersChanged(data.rows[0].tendersOid);
-					that.getSupervisionUnit(data.rows[0].tendersOid);
-					that.pipelineChanged(data.rows[0].pipelineOid);
-					that.pipeSegmentChanged(data.rows[0].pipeSegmentOid);
+					that.projectChanged(data.rows[0].projectOid, true);
+					that.tendersChanged(data.rows[0].tendersOid, true);
+					that.getSupervisionUnit(data.rows[0].tendersOid, true);
+					that.pipelineChanged(data.rows[0].pipelineOid, true);
+					that.pipeSegmentChanged(data.rows[0].pipeSegmentOid, true);
 
 				});
 			},

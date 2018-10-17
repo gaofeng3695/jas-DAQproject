@@ -80,7 +80,7 @@
 					</el-col>
 				</el-row>
 			</el-form>
-			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" 
+			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch"
 			  search-path="/jdbc/commonData/closure/getPage.do" :add-url="addUrl" :detail-url="detailUrl" delete-path="/jdbc/commonData/closure/delete.do"
 			  :class-name="className" :template-code="templateCode"></jas-table-for-list>
 		</jas-list-wrapper>
@@ -153,7 +153,7 @@
 					formatter:function(row,column,cellvalue,index){
 						if(cellvalue=='0'){
 							return '钢质';
-						} 
+						}
 						if(cellvalue=='1'){
 							return '其他';
 						}
@@ -246,12 +246,13 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
-				} else {
-					that.domain.tenders = [];
+				}
+				// else {
+					// that.domain.tenders = [];
 					that.topSearch.tendersOid = '';
 					that.domain.pipeline = [];
 					that.topSearch.pipelineOid = '';
-				}
+				// }
 			},
 			tendersChanged: function (val) { //根据标段触发管线列表
 				var that = this;
@@ -264,10 +265,11 @@
 							function (arr) {
 								that.domain.pipeline = arr;
 							});
-				} else {
-					that.domain.pipeline = [];
-					that.topSearch.pipelineOid = '';
 				}
+				// else {
+					// that.domain.pipeline = [];
+					that.topSearch.pipelineOid = '';
+				// }
 			},
 
 			searchList: function () {

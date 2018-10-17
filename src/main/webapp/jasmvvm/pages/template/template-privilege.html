@@ -520,6 +520,9 @@
 									that.searchTable[key] = "";
 								}
 							}
+							for(var key in that.searchData){
+								that.searchData[key].options=[];
+							}
 							that.requestTableList();
 						}
 					}]
@@ -727,7 +730,7 @@
 			},
 			setClearChildValue: function (fatherField) {
 				var that=this;
-				if (!that.searchTable[fatherField]) { //该父级没有值
+			//	if (!that.searchTable[fatherField]) { //该父级没有值
 					that.searchData.forEach(function (item) {
 						if (item.id == fatherField) { //查询它的子集id
 							if (item.childField) {
@@ -744,7 +747,7 @@
 							}
 						}
 					});
-				}
+				//}
 			}, //清除子集的值
 			setChildSelectOption: function (fatherField, childField, requestPath, fn) {
 				var that = this;

@@ -77,7 +77,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="施工日期"  prop="constructDate" required>
+							<el-form-item label="施工日期" prop="constructDate" required>
 								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入施工日期" v-model="formData.constructDate" size="small"
 								  style="width: 100%;">
 								</el-date-picker>
@@ -210,17 +210,17 @@
 						message: '施工单位为必填项',
 						trigger: 'change'
 					}],
-					constructDate:[{
+					constructDate: [{
 						required: true,
 						message: '施工日期为必填项',
-						trigger: 'change'	
+						trigger: 'change'
 					}],
 					supervisionUnit: [{
 						required: true,
 						message: '监理单位为必填项',
 						trigger: 'change'
 					}],
-					collectionDate:[{
+					collectionDate: [{
 						required: true,
 						message: '采集日期为必填项',
 						trigger: 'change'
@@ -248,6 +248,36 @@
 				},
 				formData: {
 					projectOid: '',
+					tendersOid: "",
+					pipelineOid: '',
+					pipeSegmentOid: '',
+					constructUnit: '',
+					constructDate: '',
+					supervisionUnit: '',
+					collectionDate: '',
+					medianStakeOid: "",
+					relativeMileage: '',
+					supervisionEngineer: '',
+					collectionPerson: '',
+					groundBed: '',
+					installLocationDescription: '',
+					buriedDepth: '',
+					isTemporary: '',
+					designLife: '',
+					backfillMaterial: '',
+					quantity: '',
+					burialWay: '',
+					totalWeight: '',
+					cableLength: '',
+					protectLength: '',
+					anodeMaterialType: '',
+					anodeMaterialSpec: '',
+					anodeResistance: '',
+					isWaterInjection: '',
+					isAirbleed: '',
+					burialDate: '',
+					connectionPower: '',
+					remarks:""
 				},
 				fields: [{
 					name: "地床编号",
@@ -487,7 +517,7 @@
 					cb && cb([]);
 				});
 			},
-			projectChanged: function (val) {
+			projectChanged: function (val, edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -497,8 +527,8 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
-				} else {
-					that.domain.tenders = [];
+				}
+				if (!edit) {
 					that.formData.tendersOid = '';
 					that.domain.pipeline = [];
 					that.formData.pipelineOid = '';
@@ -506,11 +536,15 @@
 					that.formData.pipeSegmentOid = '';
 					that.domain.supervisionUnits = [];
 					that.formData.supervisionUnit = '';
+					that.domain.medianStakes = [];
+					that.formData.medianStakeOid = '';
 				}
+
+				// }
 
 			},
 
-			tendersChanged: function (val) { //根据标段触发管线列表
+			tendersChanged: function (val, edit) { //根据标段触发管线列表
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -520,15 +554,17 @@
 						function (arr) {
 							that.domain.pipeline = arr;
 						});
-				} else {
-					that.domain.pipeline = [];
+				}
+				if (!edit) {
 					that.formData.pipelineOid = '';
 					that.domain.pipeSegment = [];
 					that.formData.pipeSegmentOid = '';
+					that.domain.medianStakes = [];
+					that.formData.medianStakeOid = '';
 				}
-				that.getSupervisionUnit(val); //根据标段获取监理单位
+				that.getSupervisionUnit(val, edit); //根据标段获取监理单位
 			},
-			getSupervisionUnit: function (val) {
+			getSupervisionUnit: function (val, edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -538,12 +574,12 @@
 						function (arr) {
 							that.domain.supervisionUnits = arr;
 						});
-				} else {
-					that.domain.supervisionUnits = [];
+				}
+				if (!edit) {
 					that.formData.supervisionUnit = '';
 				}
 			},
-			pipelineChanged: function (val) { //根据管线触发线路段/穿跨越
+			pipelineChanged: function (val, edit) { //根据管线触发线路段/穿跨越
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -553,12 +589,12 @@
 						function (arr) {
 							that.domain.pipeSegment = arr;
 						});
-				} else {
-					that.domain.pipeSegment = [];
+				}
+				if (!edit) {
 					that.formData.pipeSegmentOid = '';
 				}
 			},
-			pipeSegmentChanged: function (val) {
+			pipeSegmentChanged: function (val, edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -568,8 +604,9 @@
 						function (arr) {
 							that.domain.medianStakes = arr;
 						});
-				} else {
-					that.domain.medianStakes = [];
+				}
+				if (!edit) {
+
 					that.formData.medianStakeOid = '';
 				}
 			}, //获取桩号
@@ -615,11 +652,11 @@
 					oid: that.oid
 				}, function (data) {
 					that.formData = data.rows[0];
-					that.projectChanged(data.rows[0].projectOid);
-					that.tendersChanged(data.rows[0].tendersOid);
-					that.getSupervisionUnit(data.rows[0].tendersOid);
-					that.pipelineChanged(data.rows[0].pipelineOid);
-					that.pipeSegmentChanged(data.rows[0].pipeSegmentOid);
+					that.projectChanged(data.rows[0].projectOid,true);
+					that.tendersChanged(data.rows[0].tendersOid,true);
+					that.getSupervisionUnit(data.rows[0].tendersOid,true);
+					that.pipelineChanged(data.rows[0].pipelineOid,true);
+					that.pipeSegmentChanged(data.rows[0].pipeSegmentOid,true);
 
 				});
 			},

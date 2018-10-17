@@ -238,7 +238,7 @@
 						message: '监理单位为必填项',
 						trigger: 'change'
 					}],
-					collectionDate:[{
+					collectionDate: [{
 						required: true,
 						message: '采集日期为必填项',
 						trigger: 'change'
@@ -276,7 +276,21 @@
 
 				},
 				form: {
-
+					projectOid: "",
+					tendersOid: "",
+					pipelineOid: "",
+					pipeSegmentOrCrossOid: "",
+					constructUnit: "",
+					constructDate: "",
+					supervisionUnit: "",
+					collectionDate: "",
+					startMedianStakeOid: "",
+					startRelativeMileage: "",
+					endMedianStakeOid: "",
+					endRelativeMileage: "",
+					supervisionEngineer:"",
+					collectionPerson:"",
+					remarks:""
 				},
 			}
 		},
@@ -324,7 +338,7 @@
 					});
 				}
 			},
-			projectChanged: function (val) {
+			projectChanged: function (val, edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -334,8 +348,8 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
-				} else {
-					that.domain.tenders = [];
+				}
+				if (!edit) {
 					that.form.tendersOid = '';
 					that.domain.pipeline = [];
 					that.form.pipelineOid = '';
@@ -343,10 +357,12 @@
 					that.form.pipeSegmentOrCrossOid = '';
 					that.domain.supervisionUnits = [];
 					that.form.supervisionUnit = '';
+					that.domain.medianStakes = [];
+					that.form.medianStakeOid = '';
 				}
 
 			},
-			tendersChanged: function (val) { //根据标段触发管线列表
+			tendersChanged: function (val, edit) { //根据标段触发管线列表
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -356,15 +372,17 @@
 						function (arr) {
 							that.domain.pipeline = arr;
 						});
-				} else {
-					that.domain.pipeline = [];
+				}
+				if (!edit) {
 					that.form.pipelineOid = '';
 					that.domain.pipeSegment = [];
 					that.form.pipeSegmentOrCrossOid = '';
+					that.domain.medianStakes = [];
+					that.form.medianStakeOid = '';
 				}
-				that.getSupervisionUnit(val); //根据标段获取监理单位
+				that.getSupervisionUnit(val, edit); //根据标段获取监理单位
 			},
-			getSupervisionUnit: function (val) {
+			getSupervisionUnit: function (val, edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -374,12 +392,12 @@
 						function (arr) {
 							that.domain.supervisionUnits = arr;
 						});
-				} else {
-					that.domain.supervisionUnits = [];
+				}
+				if (!edit) {
 					that.form.supervisionUnit = '';
 				}
 			},
-			pipelineChanged: function (val) { //根据管线触发线路段/穿跨越
+			pipelineChanged: function (val, edit) { //根据管线触发线路段/穿跨越
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -389,12 +407,14 @@
 						function (arr) {
 							that.domain.pipeSegment = arr;
 						});
-				} else {
-					that.domain.pipeSegment = [];
+				}
+				if (!edit) {
 					that.form.pipeSegmentOrCrossOid = '';
+					that.domain.medianStakes = [];
+					that.form.medianStakeOid = '';
 				}
 			},
-			pipeSegmentChanged: function (val) {
+			pipeSegmentChanged: function (val, edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -404,8 +424,8 @@
 						function (arr) {
 							that.domain.medianStakes = arr;
 						});
-				} else {
-					that.domain.medianStakes = [];
+				}
+				if (!edit) {
 					that.form.medianStakeOid = '';
 				}
 			},
@@ -453,10 +473,10 @@
 					oid: that.oid
 				}, function (data) {
 					that.form = data.rows[0];
-					that.projectChanged(data.rows[0].projectOid);
-					that.tendersChanged(data.rows[0].tendersOid);
-					that.pipelineChanged(data.rows[0].pipelineOid);
-					that.pipeSegmentChanged(data.rows[0].pipeSegmentOrCrossOid);
+					that.projectChanged(data.rows[0].projectOid, true);
+					that.tendersChanged(data.rows[0].tendersOid, true);
+					that.pipelineChanged(data.rows[0].pipelineOid, true);
+					that.pipeSegmentChanged(data.rows[0].pipeSegmentOrCrossOid, true);
 
 				});
 			},

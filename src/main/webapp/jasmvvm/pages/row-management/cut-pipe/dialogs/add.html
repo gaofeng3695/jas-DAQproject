@@ -304,7 +304,7 @@
 				}
 				for (var i = names.length - 1; i > num - 1; i--) {
 					if (this.formData[names[i]]) {
-						this.formData[names[i]]="";
+						this.formData[names[i]] = "";
 					}
 				}
 				if (total > this.formData.pipeLength) {
@@ -397,7 +397,7 @@
 					cb && cb([]);
 				});
 			},
-			projectChanged: function (val) {
+			projectChanged: function (val, edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -407,14 +407,14 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
-				} else {
-					that.domain.tenders = [];
+				}
+				if (!edit) {
 					that.formData.tendersOid = '';
 					that.domain.pipeline = [];
 					that.formData.pipelineOid = '';
 				}
 			},
-			tendersChanged: function (val) { //根据标段触发管线列表
+			tendersChanged: function (val, edit) { //根据标段触发管线列表
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable('/daq/privilege/getPipelineListByTendersOid.do', {
@@ -423,14 +423,14 @@
 						function (arr) {
 							that.domain.pipeline = arr;
 						});
-				} else {
-					that.domain.pipeline = [];
+				}
+				if (!edit) {
 					that.formData.pipelineOid = '';
 
 				}
-				that.getSupervisionUnit(val); //根据标段获取监理单位
+				that.getSupervisionUnit(val, edit); //根据标段获取监理单位
 			},
-			getSupervisionUnit: function (val) {
+			getSupervisionUnit: function (val, edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -440,8 +440,8 @@
 						function (arr) {
 							that.domain.supervisionUnits = arr;
 						});
-				} else {
-					that.domain.supervisionUnits = [];
+				}
+				if (!edit) {
 					that.formData.supervisionUnit = '';
 				}
 			},
@@ -505,8 +505,8 @@
 						value: data.rows[0].pipeCode
 					}); //"678be0f2-3b5f-49f7-95b5-cc5efb2e0c74"
 
-					that.projectChanged(data.rows[0].projectOid);
-					that.tendersChanged(data.rows[0].tendersOid);
+					that.projectChanged(data.rows[0].projectOid, true);
+					that.tendersChanged(data.rows[0].tendersOid, true);
 
 				});
 			},

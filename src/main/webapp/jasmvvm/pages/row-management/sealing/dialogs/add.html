@@ -222,7 +222,7 @@
 							message: '项目为必填项',
 							trigger: 'change'
 						}],
-			
+
 					tendersOid: [{
 						required: true,
 						message: '标段名称为必填项',
@@ -328,7 +328,7 @@
 					cb && cb(aDomain);
 				});
 			},
-			projectChanged: function (val) {
+			projectChanged: function (val,edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -338,14 +338,14 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
-				} else {
-					that.domain.tenders = [];
+				}
+						if(!edit){
 					that.formData.tendersOid = '';
 					that.domain.pipeline = [];
 					that.formData.pipelineOid = '';
 				}
 			},
-			tendersChanged: function (val) { //根据标段触发管线列表
+			tendersChanged: function (val,edit) { //根据标段触发管线列表
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -355,8 +355,8 @@
 						function (arr) {
 							that.domain.pipeline = arr;
 						});
-				} else {
-					that.domain.pipeline = [];
+				}
+			if(!edit){
 					that.formData.pipelineOid = '';
 				}
 
@@ -410,8 +410,8 @@
 						that.formData[key] = data.rows[0][key];
 					}
 					that.materialChanged(that.formData.material);
-					that.projectChanged(that.formData.projectOid);
-					that.tendersChanged(that.formData.tendersOid);
+					that.projectChanged(that.formData.projectOid,true);
+					that.tendersChanged(that.formData.tendersOid,true);
 				});
 			},
 		},
