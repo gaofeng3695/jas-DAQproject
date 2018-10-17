@@ -25,8 +25,8 @@ public class PipeService {
 	  * <p>创建日期:2018年8月30日 下午3:22:51。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public List<Map<String, Object>> getPipeList(String type) {
-		return pipeDao.getPipeList(type);
+	public List<Map<String, Object>> getPipeList(String type,String projectOid) {
+		return pipeDao.getPipeList(type,projectOid);
 	}
 	/**
 	  * <p>功能描述：根据项目获取所有的钢管列表。</p>

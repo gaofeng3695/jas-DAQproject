@@ -22,12 +22,12 @@ public class PipeDao {
 	private BaseNamedParameterJdbcTemplate baseNamedParameterJdbcTemplate;
 	
 	//查询未使用且长度大于1的钢管
-	public List<Map<String, Object>> getPipeList(String type) {
+	public List<Map<String, Object>> getPipeList(String type,String projectOid) {
 		String sql = null;
 		if(type.equals("1")){
-			sql ="select oid as key,pipe_code as value,pipe_length as length,pipe_diameter,wall_thickness from daq_material_pipe where active=1 and is_use=0 and pipe_length >= 1";
+			sql ="select oid as key,pipe_code as value,pipe_length as length,pipe_diameter,wall_thickness from daq_material_pipe where active=1 and is_use=0 and pipe_length >= 1 and project_oid='"+projectOid+"'";
 		}else{
-			sql ="select oid as key,pipe_code as value,pipe_length as length,pipe_diameter,wall_thickness from daq_material_pipe where active=1 and is_use=0 and is_cold_bend=0 and pipe_length >= 1";
+			sql ="select oid as key,pipe_code as value,pipe_length as length,pipe_diameter,wall_thickness from daq_material_pipe where active=1 and is_use=0 and is_cold_bend=0 and pipe_length >= 1 and project_oid='"+projectOid+"'";
 		}
 		return baseJdbcDao.queryForList(sql, null);
 	}
