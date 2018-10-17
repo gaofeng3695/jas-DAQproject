@@ -108,7 +108,7 @@ Vue.directive('tabclose', {
                     }
                 });
                 that.tabs = tab;
-                that.currentTap = app.tabs[0].name;
+                if(app.tabs.length>0)  that.currentTap = app.tabs[0].name;
                 clickItem.style.display = "none";
             };
             window.addEventListener('click', function () {
