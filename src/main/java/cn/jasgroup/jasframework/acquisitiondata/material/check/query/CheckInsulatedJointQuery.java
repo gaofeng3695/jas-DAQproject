@@ -59,10 +59,11 @@ public class CheckInsulatedJointQuery extends BaseJavaQuery {
 	
 	@Override
 	public String getQuerySql() {
-		String sql ="select cij.*,pro.project_name, pi.unit_name,te.tenders_name from daq_check_insulated_joint cij "
-				+ " LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = cij.project_oid "
+		String sql ="select cij.*,pro.project_name, pi.unit_name,te.tenders_name,mij.manufacturer_code as manufacturer_code_name from daq_check_insulated_joint cij "
+				+ "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = cij.project_oid "
 				+ "LEFT JOIN (SELECT oid, unit_name, active FROM pri_unit where active=1) pi ON pi.oid = cij.construct_unit "
 				+ "LEFT JOIN (SELECT oid, tenders_name, active FROM daq_tenders where active=1) te ON te.oid = cij.tenders_oid "
+				+ "LEFT JOIN (select oid,manufacturer_code from daq_material_insulated_joint where active=1) mij ON mij.oid=cij.manufacturer_code "
 				+ "where cij.active=1 ";
 		sql += getConditionSql();
 		return sql;
@@ -83,7 +84,7 @@ public class CheckInsulatedJointQuery extends BaseJavaQuery {
 				conditionSql += " and cij.construct_unit = :constructUnit";
 			}
 			if (StringUtils.isNotBlank(manufacturerCode)) {
-				conditionSql += " and manufacturer_code like :manufacturerCode";
+				conditionSql += " and manufacturer_code = :manufacturerCode";
 			}
 			if (null != oids && oids.size() > 0) {
 				conditionSql += " and cij.oid in (:oids)";
@@ -127,10 +128,7 @@ public class CheckInsulatedJointQuery extends BaseJavaQuery {
 	}
 
 	public String getManufacturerCode() {
-		if(StringUtils.isNotBlank(manufacturerCode)){
-			return "%"+manufacturerCode+"%";
-		}
-		return null;
+		return manufacturerCode;
 	}
 
 	public void setManufacturerCode(String manufacturerCode) {
