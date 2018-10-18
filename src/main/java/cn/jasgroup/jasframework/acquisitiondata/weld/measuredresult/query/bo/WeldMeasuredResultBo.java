@@ -132,7 +132,7 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 	/**
 	 * 施工机组代号
 	 */
-	private String workUnitName;
+	private String workUnitCode;
 
 	/**
 	 * 施工单位
@@ -363,12 +363,12 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 		this.workUnitOid = workUnitOid;
 	}
 
-	public String getWorkUnitName() {
-		return workUnitName;
+	public String getWorkUnitCode() {
+		return workUnitCode;
 	}
 
-	public void setWorkUnitName(String workUnitName) {
-		this.workUnitName = workUnitName;
+	public void setWorkUnitCode(String workUnitCode) {
+		this.workUnitCode = workUnitCode;
 	}
 
 	public String getConstructUnit() {
