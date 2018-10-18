@@ -25,11 +25,6 @@ import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 @CommonDeleteConfig(
 	scene = "/checkInsulatedJoint/delete"
 )
-@UniqueConstraints(
-	strategys ={
-		@UniqueConstraintStrategy(columnNames={"manufacturerCode"},name="出厂编号 ")
-	}
-)
 @JdbcEntity(name="daq_check_insulated_joint")
 public class CheckInsulatedJoint extends CommonJdbcEntity{
 

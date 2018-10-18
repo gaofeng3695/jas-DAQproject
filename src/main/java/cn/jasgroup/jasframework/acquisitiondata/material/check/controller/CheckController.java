@@ -22,7 +22,15 @@ public class CheckController extends BaseController{
 	@Autowired
 	private CheckService checkService;
 	
-	
+	/**
+	 * <p>功能描述：获取绝缘接头的出厂编号。</p>
+	  * <p> 葛建。</p>	
+	  * @param request
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年10月17日 下午3:28:59。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
 	@RequestMapping(value="getManufacturerCode",method = RequestMethod.POST)
 	@ResponseBody
 	public Object getAllWeldList(HttpServletRequest request){

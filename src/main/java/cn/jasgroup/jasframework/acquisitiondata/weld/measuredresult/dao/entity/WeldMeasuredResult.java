@@ -52,7 +52,7 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 )
 @UniqueConstraints(
 		strategys ={
-			@UniqueConstraintStrategy(columnNames={"pipeSegmentOrCrossOid","weldOid"},name="焊口编号")
+			@UniqueConstraintStrategy(columnNames={"pipeSegmentOrCrossOid","weldOid"},name="同一线路段/穿跨越下焊口编号不能重复")
 		}
 	)
 @JdbcEntity(name="daq_weld_measured_result")
