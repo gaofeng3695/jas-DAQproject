@@ -261,11 +261,12 @@
 				this.getDetailByObjectId();
 				this.$refs.upload.requestFile(this.oid);
 
-			} else {
-				this.requestDomainFromBizTable('/daq/materialPipe/getCutAndNotUse.do', {}, function (arr) {
-					that.domain.pipes = arr;
-				});
 			}
+			//else {
+				//this.requestDomainFromBizTable('/daq/materialPipe/getCutAndNotUse.do', {}, function (arr) {
+					//that.domain.pipes = arr;
+				//});
+			//}
 
 			this.requestDomainFromBizTable('/daq/privilege/getProjectList.do', {}, function (arr) {
 				that.domain.project = arr;
@@ -412,6 +413,23 @@
 					that.formData.tendersOid = '';
 					that.domain.pipeline = [];
 					that.formData.pipelineOid = '';
+					that.domain.pipes=[];
+					that.formData.pipeOid='';
+				}
+				that.getPipeCode(val,edit);
+			},
+			getPipeCode:function(val,edit){
+				var that=this;
+				this.requestDomainFromBizTable(
+						'/daq/materialPipe/getCutAndNotUse.do', {
+						
+							projectOid:val
+						},
+						function (arr) {
+							that.domain.pipes = arr;
+					});
+				if(!edit){
+					that.changePipe();
 				}
 			},
 			tendersChanged: function (val, edit) { //根据标段触发管线列表

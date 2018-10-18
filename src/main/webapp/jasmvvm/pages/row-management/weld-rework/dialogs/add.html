@@ -371,11 +371,11 @@
 			this.requestDomainFromBizTable('/daq/privilege/getProjectList.do', {}, function (arr) {
 				that.domain.project = arr;
 			});
-			this.requestDomainFromBizTable(
-				'/daq/materialPipe/getCutAndNotUse.do', {},
-				function (arr) {
-					that.domain.pipeCodes = arr;
-				});
+			//this.requestDomainFromBizTable(
+				//'/daq/materialPipe/getCutAndNotUse.do', {},
+				//function (arr) {
+					//that.domain.pipeCodes = arr;
+				//});
 		},
 		methods: {
 			changevalue: function (msg) {
@@ -431,6 +431,18 @@
 				}
 				that.getWorkUints(val, edit); //获取机组
 				that.getWeldproduct(val, edit); //获取焊接工艺
+				that.getPipeCode(val,edit);
+			},
+			getPipeCode:function(val,edit){
+				var that=this;
+				this.requestDomainFromBizTable(
+						'/daq/materialPipe/getCutAndNotUse.do', {
+						
+							projectOid:val
+						},
+						function (arr) {
+							that.domain.pipeCodes = arr;
+					});
 			},
 			getWeldproduct: function (val, edit) {
 				var that = this;

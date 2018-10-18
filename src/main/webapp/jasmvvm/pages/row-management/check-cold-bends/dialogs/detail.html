@@ -79,20 +79,20 @@
 						field: 'wallThickness',
 					}, {
 						name: '纵焊缝位置',
-						field: 'weldPosition',
+						field: 'weldPositionName',
 					}, {
 						name: '椭圆度<0.6%D',
-						field: 'ovality',
+						field: 'ovalityName',
 					}, {
 						name: '坡口检查',
-						field: 'grooveCheck',
+						field: 'grooveCheckName',
 					}, {
 						name: '防腐层内外表面质量',
-						field: 'coatingIoFaceCheck',
+						field: 'coatingIoFaceCheckName',
 					},
 					{
 						name: '防腐层端部内外涂层',
-						field: 'coatingIoEndsCheck',
+						field: 'coatingIoEndsCheckName',
 					}, {
 						name: '检查人',
 						field: 'checkedBy',
@@ -126,12 +126,12 @@
 				var that = this;
 				var url = jasTools.base.rootPath + "/jdbc/commonData/checkPipeColdBending/getPage.do";
 				jasTools.ajax.post(url,{oid:that.oid}, function (data) {
-					for (var key in data.rows[0]) {
-						if (key == 'weldPosition' || key == 'ovality' || key == 'grooveCheck' || key == 'coatingIoFaceCheck' || key ==
-							'coatingIoEndsCheck') {
-							data.rows[0][key] = data.rows[0][key] == '0' ? '合格' : '不合格';
-						}
-					}
+					////for (var key in data.rows[0]) {
+						//if (key == 'weldPosition' || key == 'ovality' || key == 'grooveCheck' || key == 'coatingIoFaceCheck' || key ==
+							//'coatingIoEndsCheck') {
+							//data.rows[0][key] = data.rows[0][key] == '0' ? '合格' : '不合格';
+						//}
+					//}
 					that.detail = data.rows[0];
 
 				});

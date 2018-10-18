@@ -119,7 +119,7 @@
 						field: "amplitudeRegion",
 						name: '振幅区域'
 					}, {
-						field: "defectSize",
+						field: "defectLength",
 						name: '缺陷长度(mm)'
 					}, {
 						field: "defectDepth",
@@ -132,7 +132,7 @@
 				sonFormDefault: {
 					defectPosition: '', // 缺陷位置
 					amplitudeRegion: '', //缺陷性质
-					defectSize: '', // 缺陷尺寸(mm/mm²/点)
+					defectLength: '', // 缺陷尺寸(mm/mm²/点)
 					defectDepth: '', // 缺陷尺寸(mm/mm²/点)
 					height: '', // 缺陷尺寸(mm/mm²/点)
 				},
@@ -271,7 +271,7 @@
 							message: "不能超过60个字"
 						}]
 					},
-					defectSize: {
+					defectLength: {
 						type: 'number',
 						max: 999999,
 						precision: 3,
@@ -310,7 +310,7 @@
 					faUltrasonicSubList: [],
 					defectPosition: "",
 					amplitudeRegion: "",
-					defectSize: "",
+					defectLength: "",
 					defectDepth: "",
 					height: "",
 				},

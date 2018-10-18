@@ -260,58 +260,58 @@
 					projectOid: [{
 						required: true,
 						message: '项目名称为必填项',
-						trigger: 'change'
+					//	trigger: 'change'
 					}],
 					tendersOid: [{
 						required: true,
 						message: '标段名称为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					pipelineOid: [{
 						required: true,
 						message: '管线名称为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					pipeSegmentOid: [{
 						required: true,
 						message: '线路段必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					constructUnit: [{
 						required: true,
 						message: '施工单位为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					collectionDate: [{
 						required: true,
 						message: '采集日期为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					supervisionUnit: [{
 						required: true,
 						message: '监理单位为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 
 					medianStakeOid: [{
 						required: true,
 						message: '桩号为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					relativeMileage: [{
 						required: true,
 						message: '相对桩位置(m)为必填项',
-						trigger: 'blur'
+						//trigger: 'blur'
 					}],
 					cableLength: [{
 						required: true,
 						message: '电缆长度为必填项',
-						trigger: 'blur'
+					//	trigger: 'blur'
 					}],
 					cableCode: [{
 						required: true,
 						message: '阴保电缆编号为必填项',
-						trigger: 'blur'
+					//	trigger: 'blur'
 					}, {
 						min: "0",
 						max: 50,
@@ -372,7 +372,11 @@
 					cableBatche: "",
 					cableLayoutCode: "",
 					supervisionEngineer: "",
-					collectionPerson: ""
+					collectionPerson: "",
+					auxiliaryAnodeBedOid: "",
+				    testStakeOid:"",
+				    sacrificeAnodeOid:"",
+				    cableProtectionCode:""
 				}
 			}
 		},
@@ -586,17 +590,20 @@
 					that.getSupervisionUnit(data.rows[0].tendersOid,true);
 					that.pipelineChanged(data.rows[0].pipelineOid,true);
 					that.pipeSegmentChanged(data.rows[0].pipeSegmentOid,true);
-					that.isShow(data.rows[0].cableUse)
+					that.isShow(data.rows[0].cableUse,true)
 				});
 			},
-			isShow: function (val) {
+			isShow: function (val,edit) {
 				var that = this;
-				if (!val) {
-					that.isSelected.isShow = false;
+				if(!edit){
 					that.formData.auxiliaryAnodeBedOid = "";
 					that.formData.testStakeOid = "";
 					that.formData.sacrificeAnodeOid = "";
-					that.formData.cableProtectionCode = "";
+					that.formData.cableProtectionCode = "";	
+				}
+				
+				if (!val) {
+					that.isSelected.isShow = false;
 					return;
 				}
 				var url = jasTools.base.rootPath + "/daq/cathodicCableProtection/queryForSelect.do";
