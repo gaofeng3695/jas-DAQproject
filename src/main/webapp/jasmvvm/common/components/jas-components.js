@@ -1389,7 +1389,7 @@ Vue.component('jas-form-items', {
 						config.rules.push({
 							required: true,
 							message: fieldNameArr[fieldIndex] + '为必填项',
-							trigger: 'change'
+							//trigger: 'change'
 						});
 					}
 
@@ -1635,7 +1635,7 @@ Vue.component('jas-form-items-group', {
 						config.rules.push({
 							required: true,
 							message: fieldNameArr[fieldIndex] + '为必填项',
-							trigger: 'change'
+						//	trigger: 'change'
 						})
 					}
 
