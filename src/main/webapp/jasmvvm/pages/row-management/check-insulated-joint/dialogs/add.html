@@ -50,7 +50,7 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="标段名称" prop="tendersOid" required>
-								<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
+								<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged" @visible-change="childChange($event,'projectOid','项目名称')">
 									<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
@@ -235,6 +235,14 @@
 			this.tendersChanged("1");
 		},
 		methods: {
+			childChange: function (event, id, name) {
+				if (event && !this.formData[id]) {
+					top.Vue.prototype.$message({
+						type: 'warning',
+						message: "请先选择" + name
+					});
+				}
+			},
 			requestDomainFromBizTable: function (url, obj, cb) {
 				var that = this;
 				var url = jasTools.base.rootPath + url;
@@ -244,7 +252,7 @@
 					cb && cb([]);
 				});
 			},
-			projectChanged: function (val) {
+			projectChanged: function (val,edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -256,12 +264,14 @@
 						});
 				} else {
 					that.domain.tenders = [];
+				}
+				if(!edit){
 					that.formData.tendersOid = '';
 					that.domain.constructUnitArr = [];
 					that.formData.constructUnit = '';
 				}
 			},
-			tendersChanged: function (val) { //根据标段触发管线列表
+			tendersChanged: function (val,edit) { //根据标段触发管线列表
 				var that = this;
 				if (val) {
 					this
@@ -272,6 +282,9 @@
 							});
 				} else {
 					that.domain.constructUnitArr = [];
+				
+				}
+				if(!edit){
 					that.formData.constructUnit = "";
 				}
 			},
@@ -324,8 +337,8 @@
 					for (var key in that.formData) {
 						that.formData[key] = data.rows[0][key];
 					}
-					that.projectChanged(data.rows[0].projectOid);
-					that.tendersChanged(data.rows[0].tendersOid);
+					that.projectChanged(data.rows[0].projectOid,true);
+					that.tendersChanged(data.rows[0].tendersOid,true);
 				});
 
 			},

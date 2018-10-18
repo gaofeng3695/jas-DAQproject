@@ -371,9 +371,11 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
-				}
-				if (!edit||!val) {
+				}else{
 					that.domain.tenders=[];
+				}
+				if (!edit) {
+				
 					that.formData.tendersOid = '';
 					that.domain.pipeline = [];
 					that.formData.pipelineOid = '';
@@ -397,10 +399,12 @@
 						function (arr) {
 							that.domain.workUnits = arr;
 						});
+				}else{
+					that.formData.workUnits=[];
 				}
-				if (!edit||!val) {
+				if (!edit) {
 					that.formData.workUnitOid = '';
-					that.formData.workUnits=[];	
+						
 			
 				}
 			},
@@ -414,9 +418,11 @@
 						function (arr) {
 							that.domain.pipeline = arr;
 						});
-				}
-				if (!edit||!val) {
+				}else{
 					that.domain.pipeline=[];
+				}
+				if (!edit) {
+					
 					that.formData.pipelineOid = '';
 					that.domain.pipeSegment = [];
 					that.formData.pipeSegmentOrCrossOid = '';
@@ -433,6 +439,8 @@
 						function (arr) {
 							that.domain.supervisionUnits = arr;
 						});
+				}else{
+					that.domain.supervisionUnits=[];
 				}
 				if (!edit) {
 					that.formData.supervisionUnit = '';
@@ -448,10 +456,12 @@
 						function (arr) {
 							that.domain.pipeSegment = arr;
 						});
-				}
-				if (!edit||!val) {
-					that.formData.pipeSegmentOrCrossOid = '';
+				}else{
 					that.domain.pipeSegment=[];
+				}
+				if (!edit) {
+					that.formData.pipeSegmentOrCrossOid = '';
+				
 					that.domain.welds=[];
 					that.formData.weldOid = '';
 				}
@@ -473,9 +483,11 @@
 									});
 								}
 							});
+				}else{
+					that.domain.welds=[];
 				}
 				if (!edit||!val) {
-					that.domain.welds=[];
+					
 					that.formData.weldOid = '';
 				}
 			},
@@ -490,6 +502,8 @@
 							function (arr) {
 								that.domain.frontWeldOids = arr;
 							});
+				}else{
+					that.domain.frontWeldOids=[];
 				}
 				if (!edit) {
 					that.formData.frontWeldOid = '';
@@ -506,6 +520,8 @@
 							function (arr) {
 								that.domain.backWeldOids = arr;
 							});
+				}else{
+					that.domain.backWeldOids=[];
 				}
 				if (!edit) {
 					that.formData.backWeldOid = '';

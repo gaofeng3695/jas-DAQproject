@@ -338,8 +338,10 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
+				}else{
+					that.domain.tenders=[];	
 				}
-						if(!edit){
+			   if(!edit){
 					that.formData.tendersOid = '';
 					that.domain.pipeline = [];
 					that.formData.pipelineOid = '';
@@ -355,6 +357,8 @@
 						function (arr) {
 							that.domain.pipeline = arr;
 						});
+				}else{
+					that.domain.pipeline=[];	
 				}
 			if(!edit){
 					that.formData.pipelineOid = '';
