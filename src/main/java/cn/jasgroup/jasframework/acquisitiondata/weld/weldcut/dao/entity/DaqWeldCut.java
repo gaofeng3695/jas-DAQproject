@@ -19,6 +19,7 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
   *{@link cn.jasgroup.jasframework.acquisitiondata.weld.weldcut.service.WeldCutService #updateChanageWledStatusBeforeAdvice()}
   *{@link cn.jasgroup.jasframework.acquisitiondata.weld.weldcut.service.WeldCutService #updateChanageWledStatus()}
   *{@link cn.jasgroup.jasframework.acquisitiondata.weld.weldcut.service.WeldCutService #deleteChanageWledStatus()}
+  *{@link cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.service.WeldService #formatting()}
   * @author 雷凯 。
   * @version v1.0.0.1。
   * @since JDK1.8。
@@ -43,9 +44,10 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 	strategys ={
 		@UniqueConstraintStrategy(
 			columnNames={"pipeSegmentOrCrossOid","weldOid"},
-			name="同一线路段/穿跨越下割口编号不能重复"
+			name="同一线路段/穿跨越下割口编号"
 		)
-	}
+	},
+	formatter = @Process(service = "weldService" , method = "formatting()")
 )
 @JdbcEntity(name="daq_weld_cut")
 public class DaqWeldCut extends CommonJdbcEntity {
