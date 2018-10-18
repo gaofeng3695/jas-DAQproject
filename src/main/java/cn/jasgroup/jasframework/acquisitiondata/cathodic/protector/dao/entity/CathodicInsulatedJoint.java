@@ -37,7 +37,7 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 )
 @UniqueConstraints(
     strategys ={
-        @UniqueConstraintStrategy(columnNames={"equipmentCode"},name="设备编号"),
+        @UniqueConstraintStrategy(columnNames={"pipeSegmentOid","equipmentCode"},name="同一线路段下设备编号不能重复"),
     }
 )
 @Point(

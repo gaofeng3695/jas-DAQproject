@@ -2,11 +2,14 @@ package cn.jasgroup.jasframework.acquisitiondata.weld.weldcut.dao.entity;
 
 import java.util.Date;
 
+import cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.dao.entity.ConstructionWeld;
 import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
 import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
 import cn.jasgroup.jasframework.base.annotation.Process;
+import cn.jasgroup.jasframework.base.annotation.UniqueConstraintStrategy;
+import cn.jasgroup.jasframework.base.annotation.UniqueConstraints;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 
 /**
@@ -36,6 +39,14 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 	afterAdvice = {
 		@Process(service = "weldCutService", method = "deleteChanageWledStatus()")
 })
+@UniqueConstraints(
+	strategys ={
+		@UniqueConstraintStrategy(
+			columnNames={"pipeSegmentOrCrossOid","weldOid"},
+			name="同一线路段/穿跨越下割口编号不能重复"
+		)
+	}
+)
 @JdbcEntity(name="daq_weld_cut")
 public class DaqWeldCut extends CommonJdbcEntity {
 

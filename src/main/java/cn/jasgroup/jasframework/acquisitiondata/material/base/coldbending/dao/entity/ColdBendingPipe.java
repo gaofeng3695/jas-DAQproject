@@ -9,10 +9,13 @@ import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.dao.entity.ConstructionWeld;
 import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
 import cn.jasgroup.jasframework.base.annotation.Process;
+import cn.jasgroup.jasframework.base.annotation.UniqueConstraintStrategy;
+import cn.jasgroup.jasframework.base.annotation.UniqueConstraints;
 import cn.jasgroup.jasframework.base.annotation.UpdateDeleteSet;
 import cn.jasgroup.jasframework.engine.hibernate.entity.CommonHibernateEntity;
 
@@ -34,18 +37,26 @@ import cn.jasgroup.jasframework.engine.hibernate.entity.CommonHibernateEntity;
     }
 )
 @CommonUpdateConfig(
-		beforeAdvice={
-				@Process(service = "coldBendingPipeService", method = "updateChanageBeforeAdvice()")
-			},
-		afterAdvice={
-				@Process(service = "coldBendingPipeService", method = "updateChanageOriginalPipeUseState()")
-			}
+	beforeAdvice={
+			@Process(service = "coldBendingPipeService", method = "updateChanageBeforeAdvice()")
+		},
+	afterAdvice={
+			@Process(service = "coldBendingPipeService", method = "updateChanageOriginalPipeUseState()")
+	}
 )
 @CommonDeleteConfig(
-		afterAdvice={
-				@Process(service = "coldBendingPipeService", method = "deleteChanageOriginalPipeUseState()")
-			}
-	)
+	afterAdvice={
+			@Process(service = "coldBendingPipeService", method = "deleteChanageOriginalPipeUseState()")
+		}
+)
+@UniqueConstraints(
+	strategys ={
+		@UniqueConstraintStrategy(	
+			columnNames={"pipeSegmentOrCrossOid","pipeColdBendingCode"},
+			name="同一线路段/穿跨越下返修口编号不能重复"
+		)
+	}
+)
 @Entity(name="daq_material_pipe_cold_bending")
 public class ColdBendingPipe extends CommonHibernateEntity{
 	/** 项目oid */

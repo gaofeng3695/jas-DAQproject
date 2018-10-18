@@ -15,6 +15,7 @@ import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
 import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
+import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.UniqueConstraintStrategy;
 import cn.jasgroup.jasframework.base.annotation.UniqueConstraints;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
@@ -37,7 +38,7 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 )
 @UniqueConstraints(
     strategys ={
-        @UniqueConstraintStrategy(columnNames={"cableCode"},name="阴保电缆编号"),
+        @UniqueConstraintStrategy(columnNames={"pipeSegmentOid","cableCode"},name="同一线路段下阴保电缆编号不能重复"),
     }
 )
 @Point(
