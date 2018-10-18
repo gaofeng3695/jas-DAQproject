@@ -408,6 +408,8 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
+				}else{
+					that.domain.tenders=[];
 				}
 				if (!edit) {
 					that.formData.tendersOid = '';
@@ -420,14 +422,19 @@
 			},
 			getPipeCode:function(val,edit){
 				var that=this;
-				this.requestDomainFromBizTable(
-						'/daq/materialPipe/getCutAndNotUse.do', {
-						
-							projectOid:val
-						},
-						function (arr) {
-							that.domain.pipes = arr;
-					});
+				if(val){
+					this.requestDomainFromBizTable(
+							'/daq/materialPipe/getCutAndNotUse.do', {
+							
+								projectOid:val
+							},
+							function (arr) {
+								that.domain.pipes = arr;
+						});	
+				}else{
+					that.domain.pipes=[];
+				}
+				
 				if(!edit){
 					that.changePipe();
 				}
@@ -441,6 +448,8 @@
 						function (arr) {
 							that.domain.pipeline = arr;
 						});
+				}else{
+					that.domain.pipeline=[];
 				}
 				if (!edit) {
 					that.formData.pipelineOid = '';
@@ -458,6 +467,8 @@
 						function (arr) {
 							that.domain.supervisionUnits = arr;
 						});
+				}else{
+					that.domain.supervisionUnits=[];
 				}
 				if (!edit) {
 					that.formData.supervisionUnit = '';

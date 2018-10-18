@@ -329,10 +329,13 @@
 								//that.tendersChanged(that.formData.tendersOid);
 							//}
 						});
+				}else{
+					that.domain.tenders=[];
 				}
 			if (!edit) {
 				that.formData.tendersOid = '';
-			
+				that.formData.pipeColdBendingOid = '';
+				that.domain.pipeColdBendingOidArr=[];
 				 }
 			},
 			tendersChanged: function (val, edit) { //根据标段触发管线列表
@@ -350,6 +353,8 @@
 								// }
 
 							});
+				}else{
+					that.domain.pipeColdBendingOidArr=[];
 				}
 				if (!edit) {
 					that.formData.pipeColdBendingOid = '';

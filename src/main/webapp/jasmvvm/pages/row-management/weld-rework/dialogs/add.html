@@ -419,6 +419,8 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
+				}else{
+					that.domain.tenders=[];
 				}
 				if (!edit) {
 					that.formData.tendersOid = '';
@@ -446,14 +448,19 @@
 			},
 			getPipeCode:function(val,edit){
 				var that=this;
-				this.requestDomainFromBizTable(
-						'/daq/materialPipe/getCutAndNotUse.do', {
-						
-							projectOid:val
-						},
-						function (arr) {
-							that.domain.pipeCodes = arr;
-					});
+				if(val){
+					this.requestDomainFromBizTable(
+							'/daq/materialPipe/getCutAndNotUse.do', {
+							
+								projectOid:val
+							},
+							function (arr) {
+								that.domain.pipeCodes = arr;
+						});	
+				}else{
+					that.domain.pipeCodes=[];
+				}
+			
 			},
 			getWeldproduct: function (val, edit) {
 				var that = this;
@@ -466,6 +473,8 @@
 						function (arr) {
 							that.domain.weldProduces = arr;
 						});
+				}else{
+					that.domain.weldProduces=[];
 				}
 				if (!edit) {
 					that.formData.weldProduce = '';
@@ -482,6 +491,8 @@
 						function (arr) {
 							that.domain.workUnits = arr;
 						});
+				}else{
+					that.domain.workUnits=[];
 				}
 				if (!edit) {
 					that.formData.workUnitOid = '';
@@ -497,6 +508,8 @@
 						function (arr) {
 							that.domain.pipeline = arr;
 						});
+				}else{
+					that.domain.pipeline=[];
 				}
 				if (!edit) {
 					that.formData.pipelineOid = '';
@@ -518,6 +531,8 @@
 						function (arr) {
 							that.domain.supervisionUnits = arr;
 						});
+				}else{
+					that.domain.supervisionUnits=[];
 				}
 				if (!edit) {
 					that.formData.supervisionUnit = '';
@@ -533,6 +548,8 @@
 						function (arr) {
 							that.domain.pipeSegment = arr;
 						});
+				}else{
+					that.domain.pipeSegment=[];
 				}
 				if (!edit) {
 					that.formData.pipeSegmentOrCrossOid = '';
@@ -552,6 +569,8 @@
 							function (arr) {
 								that.domain.welds = arr;
 							});
+				}else{
+					that.domain.welds=[];
 				}
 				if (!edit) {
 					that.formData.weldOid = '';
@@ -580,6 +599,8 @@
 							function (arr) {
 								that.domain.persons = arr;
 							});
+				}else{
+					that.domain.persons=[];
 				}
 				if (!edit) {
 					that.formData.coverOid = [];
