@@ -120,9 +120,10 @@
 					<jas-base-group-title name="其他信息"></jas-base-group-title>
 					<el-row>
 						<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-							<el-form-item label="备注" prop="remarks">
-								<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"></el-input>
-							</el-form-item>
+							<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+						<jas-remarks :remarks="formData.remarks" @changevalue="changevalue"></jas-remarks>
+							
+						</el-col>
 						</el-col>
 					</el-row>
 					<!-- <el-row>
@@ -235,6 +236,9 @@
 			this.tendersChanged("1");
 		},
 		methods: {
+			changevalue: function (msg) {
+				this.formData.remarks = msg;
+			},
 			childChange: function (event, id, name) {
 				if (event && !this.formData[id]) {
 					top.Vue.prototype.$message({

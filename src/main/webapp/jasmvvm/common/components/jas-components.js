@@ -2051,6 +2051,7 @@ Vue.component('jas-remarks', {
 	watch:{
 		remarks:function(){
 			this.remark=this.remarks;
+			this.remarksDesc=200-this.remarks.length;
 		}
 	},
 	template: [
@@ -2061,14 +2062,15 @@ Vue.component('jas-remarks', {
 		'</el-form-item>'
 	].join(''),
 	mounted:function(){
-		console.log(this.remark);
+	
+		
 	},
 	methods: {
 		instructionNum: function () {
 			if (this.remark) {
 				var num = 200 - this.remark.trim().length;
 				this.remarksDesc = num;
-				this.$emit('changevalue',this.remark);
+				this.$emit('changevalue',this.remark.trim());
 			}
 
 		}
