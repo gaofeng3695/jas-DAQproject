@@ -16,6 +16,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 统计相关的工具类
@@ -53,6 +54,7 @@ public class StatsUtils {
      * @return Double
      */
     public static Double sumExact(List<Double> values) {
+        values.removeIf(Objects::isNull);
         return values.stream().map(BigDecimal::new).reduce(BigDecimal::add).map(BigDecimal::doubleValue).orElse(0d);
     }
 
