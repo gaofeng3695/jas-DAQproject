@@ -157,11 +157,8 @@
 					<jas-base-group-title name="其他信息"></jas-base-group-title>
 					<el-row>
 						<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-							<el-form-item label="备注" prop="remarks">
-								<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks" :maxLength="200"
-								  @input="instructionNum"></el-input>
-								<p style="text-align:right;color:#999;">您还可以输入<span v-text="remarksDesc"></span>字</p>
-							</el-form-item>
+						<jas-remarks :remarks="formData.remarks" @changevalue="changevalue"></jas-remarks>
+							
 						</el-col>
 					</el-row>
 					<jas-base-group-title name="附件信息"></jas-base-group-title>
@@ -187,7 +184,7 @@
 		data: function () {
 			var that = this;
 			return {
-				remarksDesc: 200,
+			
 				domain: {
 					isPass: [{
 						key: 1,
@@ -293,11 +290,9 @@
 			this.getConstructUnit();
 		},
 		methods: {
-			instructionNum: function () {
-				var that = this;
-				var num = 200 - that.formData.remarks.trim().length;
-				that.remarksDesc = num;
-			}, //剩余字数计算
+			changevalue: function (msg) {
+				this.formData.remarks = msg;
+			},
 			childChange: function (event, id, name) {
 				if (event && !this.formData[id]) {
 					top.Vue.prototype.$message({
@@ -405,7 +400,7 @@
 				jasTools.ajax.post(url, that.formData, function (data) {
 					
 						that.formData = data.rows[0];
-						console.log(that.formData.pipeColdBendingOid)
+						
 					that.projectChanged(data.rows[0].projectOid, true);
 					that.tendersChanged(data.rows[0].tendersOid, true);
 				});
