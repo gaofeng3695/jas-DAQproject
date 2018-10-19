@@ -163,7 +163,7 @@
 			getDetailByObjectId: function () {
 				var that = this;
 				var url = jasTools.base.rootPath + "/daq/crossExcavation/get.do";
-				jasTools.ajax.get(url, this.params, function (data) {
+				jasTools.ajax.get(url, {oid:that.oid}, function (data) {
 					that.detail = data.data;
 				});
 			},

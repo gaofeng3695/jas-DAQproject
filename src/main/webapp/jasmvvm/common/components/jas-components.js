@@ -913,7 +913,6 @@ Vue.component('jas-table-for-list', {
 			this._requestTable();
 		},
 		refresh: function () {
-			console.log("子触发父");
 			this.search();
 		},
 		add: function () {
