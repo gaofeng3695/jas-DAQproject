@@ -53,7 +53,7 @@ import cn.jasgroup.jasframework.engine.hibernate.entity.CommonHibernateEntity;
 	strategys ={
 		@UniqueConstraintStrategy(	
 			columnNames={"pipeSegmentOrCrossOid","pipeColdBendingCode"},
-			name="同一线路段/穿跨越下返修口编号不能重复"
+			name="同一线路段/穿跨越下冷弯管编号不能重复"
 		)
 	}
 )
