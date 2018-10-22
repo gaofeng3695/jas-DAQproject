@@ -353,7 +353,10 @@
 				this.topSearch.tendersOid = '';
 				this.topSearch.weldCode = '';
 				this.topSearch.pipeSegmentOrCrossOid = '';
-
+				this.domain.welds = [];
+				this.domain.pipeSegment = [];
+				this.domain.tenders = [];
+				this.domain.pipeline = [];
 				this.$refs.table.search();
 			},
 			locate: function (row) {
