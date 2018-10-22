@@ -241,10 +241,11 @@
 						});
 				} else {
 					that.domain.tenders = [];
-					that.topSearch.tendersOid = '';
-					that.domain.pipeline = [];
-					that.topSearch.pipelineOid = '';
+
 				}
+				that.topSearch.tendersOid = '';
+				that.domain.pipeline = [];
+				that.topSearch.pipelineOid = '';
 				that.searchList();
 			},
 			tendersChanged: function (val) { //根据标段触发管线列表
@@ -259,9 +260,10 @@
 								that.domain.pipeline = arr;
 							});
 				} else {
-					that.domain.pipeline = [];
+
 					that.topSearch.pipelineOid = '';
 				}
+				that.domain.pipeline = [];
 				that.searchList();
 			},
 
