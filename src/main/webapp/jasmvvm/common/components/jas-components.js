@@ -1237,9 +1237,9 @@ Vue.component('jas-import-export-btns', {
 		bt_import: function () { // 导入
 			var that = this;
 			var src = './pages/template/dialogs/upload.html?templateCode=' + this.templateCode;
-			if(that.importConfig.importUrl){
-				src+="&importUrl="+that.importConfig.importUrl;
-			}
+			//if(that.importConfig.importUrl){
+				//src+="&importUrl="+that.importConfig.importUrl;
+			//}
 			top.jasTools.dialog.show({
 				title: '导入',
 				width: '600px',
