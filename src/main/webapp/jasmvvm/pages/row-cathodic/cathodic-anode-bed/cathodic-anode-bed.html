@@ -159,7 +159,7 @@
 								return '是';
 							if (value == 0)
 								return '否';
-
+                            return value;
 						}
 					}, {
 						name: '设计寿命(年)',
@@ -198,10 +198,11 @@
 						field: 'isWaterInjection',
 					 formatter: function (a, b, value, c) {
 
-						if (value == 1)
-							return '是';
-						if (value == 0)
-							return '否';
+						 if (value == 1)
+								return '是';
+							if (value == 0)
+								return '否';
+                         return value;
 						
 
 					}
@@ -214,6 +215,7 @@
 							return '是';
 						if (value == 0)
 							return '否';
+                        return value;
 
 					}
 				}, {

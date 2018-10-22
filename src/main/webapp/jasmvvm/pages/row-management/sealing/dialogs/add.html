@@ -211,7 +211,7 @@
 					closureCode: [{
 						required: true,
 						message: '封堵物编号为必填项',
-						trigger: 'blur'
+						//trigger: 'blur'
 					},{
 						min: "0",
 						max: 36,
@@ -220,18 +220,18 @@
 					projectOid: [{
 							required: true,
 							message: '项目为必填项',
-							trigger: 'change'
+							//trigger: 'change'
 						}],
 
 					tendersOid: [{
 						required: true,
 						message: '标段名称为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					pipelineOid: [{
 						required: true,
 						message: '管线名称为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					manufacturer:[{
 						min: "0",
@@ -338,8 +338,10 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
+				}else{
+					that.domain.tenders=[];	
 				}
-						if(!edit){
+			   if(!edit){
 					that.formData.tendersOid = '';
 					that.domain.pipeline = [];
 					that.formData.pipelineOid = '';
@@ -355,6 +357,8 @@
 						function (arr) {
 							that.domain.pipeline = arr;
 						});
+				}else{
+					that.domain.pipeline=[];	
 				}
 			if(!edit){
 					that.formData.pipelineOid = '';
@@ -405,7 +409,7 @@
 			getDetailByObjectId: function () {
 				var that = this;
 				var url = jasTools.base.rootPath + "/jdbc/commonData/closure/getPage.do";
-				jasTools.ajax.post(url, that.formData, function (data) {
+				jasTools.ajax.post(url,{oid:that.oid}, function (data) {
 					for (var key in that.formData) {
 						that.formData[key] = data.rows[0][key];
 					}

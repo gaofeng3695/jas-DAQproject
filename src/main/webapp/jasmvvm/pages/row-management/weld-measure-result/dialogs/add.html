@@ -237,52 +237,52 @@
 					projectOid: [{
 						required: true,
 						message: '项目名称为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					tendersOid: [{
 						required: true,
 						message: '标段名称为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					pipelineOid: [{
 						required: true,
 						message: '管线名称为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					pipeSegmentOrCrossOid: [{
 						required: true,
 						message: '线路段/穿跨越为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					weldOid: [{
 						required: true,
 						message: '焊口编号为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					collectionDate: [{
 						required: true,
 						message: '采集日期为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					constructUnit: [{
 						required: true,
 						message: '施工单位为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					workUnitOid: [{
 						required: true,
 						message: '施工机组代号为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					supervisionUnit: [{
 						required: true,
 						message: '监理单位为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					surveyCrew: [{
 						required: true,
 						message: '测量人为必填项',
-						trigger: 'blur'
+						//trigger: 'blur'
 					}, {
 						min: "0",
 						max: 20,
@@ -291,7 +291,7 @@
 					supervisionEngineer: [{
 						required: true,
 						message: '监理工程师为必填项',
-						trigger: 'blur'
+						//trigger: 'blur'
 					}, {
 						min: "0",
 						max: 50,
@@ -305,18 +305,18 @@
 					surveyDate: [{
 						required: true,
 						message: '测量日期为必填项',
-						trigger: 'blur'
+						//trigger: 'blur'
 					}],
 
 					medianStakeOid: [{
 						required: true,
 						message: '桩号为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					relativeMileage: [{
 						required: true,
 						message: '相对位置为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 				},
 				formData: {
@@ -404,6 +404,8 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
+				}else{
+					that.domain.tenders=[];
 				}
 				if (!edit) {
 					that.formData.tendersOid = '';
@@ -427,6 +429,8 @@
 						function (arr) {
 							that.domain.workUnits = arr;
 						});
+				}else{
+					that.domain.workUnits=[];
 				}
 				if (!edit) {
 					that.formData.workUnitOid = '';
@@ -442,6 +446,8 @@
 						function (arr) {
 							that.domain.pipeline = arr;
 						});
+				}else{
+					that.domain.pipeline=[];
 				}
 				if (!edit) {
 					that.formData.pipelineOid = '';
@@ -460,6 +466,8 @@
 						function (arr) {
 							that.domain.supervisionUnits = arr;
 						});
+				}else{
+					that.domain.supervisionUnits=[];
 				}
 				if (!edit) {
 					that.formData.supervisionUnit = '';
@@ -475,6 +483,8 @@
 						function (arr) {
 							that.domain.pipeSegment = arr;
 						});
+				}else{
+					that.domain.pipeSegment=[];
 				}
 				if (!edit) {
 					that.formData.pipeSegmentOrCrossOid = '';
@@ -490,6 +500,8 @@
 						function (arr) {
 							that.domain.medianStakes = arr;
 						});
+				}else{
+					that.domain.medianStakes=[];
 				}
 				if (!edit) {
 					that.formData.medianStakeOid = '';
@@ -507,6 +519,8 @@
 							function (arr) {
 								that.domain.welds = arr;
 							});
+				}else{
+					that.domain.welds=[];
 				}
 				if (!edit) {
 					that.topSearch.weldOid = '';

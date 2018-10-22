@@ -385,7 +385,7 @@
 						if (item.ifPrimaryKey) {
 							that.pkArray.push(item.fieldName);
 						}
-						console.log(that.pkArray);
+					//	console.log(that.pkArray);
 						if (item.domainList) {
 							item.domainList.forEach(function (child) {
 								var obj = {};
@@ -490,7 +490,10 @@
 						}
 					} */
 					that.formData = data.data;
-					console.log(that.formData);
+				//	console.log(that.formData);
+				if(that.formData.remarks){
+					 that.remarks=200-that.formData.remarks.length;//表示备注长度 此时不具备通用性 必须名称为 remarks
+				}
 					that.getEditField(fieldsGrouped);
 				});
 			},
@@ -563,9 +566,9 @@
 								if (!isInit) { // 不是初始化
 									that.$set(that.formData, child.id, ""); // 清空子级联的value
 								}
-								if (options.length === 1) { //只有一个选项就自动复制
-									that.$set(that.formData, child.id, options[0].key); // 赋值 子级联的value
-								}
+								//if (options.length === 1) { //只有一个选项就自动复制
+									//that.$set(that.formData, child.id, options[0].key); // 赋值 子级联的value
+							//	}
 								that.$refs[child.id][0].$emit('change', { // 触发子级联的change事件
 									value: that.formData[child.id],
 									isInit: isInit

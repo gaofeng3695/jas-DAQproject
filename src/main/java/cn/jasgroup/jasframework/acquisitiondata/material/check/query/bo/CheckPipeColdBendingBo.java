@@ -90,27 +90,52 @@ public class CheckPipeColdBendingBo extends CommonBaseBo{
 	/**
 	 *  纵焊缝位置 
 	 */
-	private String weldPosition; 
+	private Integer weldPosition;
+
+	/**
+	 *  纵焊缝位置 
+	 */
+	private String weldPositionName; 
 
 	/** 
 	 * 椭圆度<0.6%D 
 	 */
-	private String ovality; 
+	private String ovalityName; 
+
+	/** 
+	 * 椭圆度<0.6%D 
+	 */
+	private Integer ovality; 
 
 	/** 
 	 * 坡口检查
 	 */
-	private String grooveCheck; 
+	private Integer grooveCheck; 
+
+	/** 
+	 * 坡口检查
+	 */
+	private String grooveCheckName; 
 
 	/**
 	 *  防腐层内外表面质量
 	 */
-	private String coatingIoFaceCheck; 
+	private Integer coatingIoFaceCheck; 
+
+	/**
+	 *  防腐层内外表面质量
+	 */
+	private String coatingIoFaceCheckName; 
 
 	/**
 	 *  防腐层端部内外涂层
 	 */
-	private String coatingIoEndsCheck; 
+	private Integer coatingIoEndsCheck; 
+
+	/**
+	 *  防腐层端部内外涂层
+	 */
+	private String coatingIoEndsCheckName; 
 
 	/** 
 	 * 检查人
@@ -239,44 +264,84 @@ public class CheckPipeColdBendingBo extends CommonBaseBo{
 		this.bendAngle = bendAngle;
 	}
 
-	public String getWeldPosition() {
+	public Integer getWeldPosition() {
 		return weldPosition;
 	}
 
-	public void setWeldPosition(String weldPosition) {
+	public void setWeldPosition(Integer weldPosition) {
 		this.weldPosition = weldPosition;
 	}
 
-	public String getOvality() {
+	public String getWeldPositionName() {
+		return weldPositionName;
+	}
+
+	public void setWeldPositionName(String weldPositionName) {
+		this.weldPositionName = weldPositionName;
+	}
+
+	public String getOvalityName() {
+		return ovalityName;
+	}
+
+	public void setOvalityName(String ovalityName) {
+		this.ovalityName = ovalityName;
+	}
+
+	public Integer getOvality() {
 		return ovality;
 	}
 
-	public void setOvality(String ovality) {
+	public void setOvality(Integer ovality) {
 		this.ovality = ovality;
 	}
 
-	public String getGrooveCheck() {
+	public Integer getGrooveCheck() {
 		return grooveCheck;
 	}
 
-	public void setGrooveCheck(String grooveCheck) {
+	public void setGrooveCheck(Integer grooveCheck) {
 		this.grooveCheck = grooveCheck;
 	}
 
-	public String getCoatingIoFaceCheck() {
+	public String getGrooveCheckName() {
+		return grooveCheckName;
+	}
+
+	public void setGrooveCheckName(String grooveCheckName) {
+		this.grooveCheckName = grooveCheckName;
+	}
+
+	public Integer getCoatingIoFaceCheck() {
 		return coatingIoFaceCheck;
 	}
 
-	public void setCoatingIoFaceCheck(String coatingIoFaceCheck) {
+	public void setCoatingIoFaceCheck(Integer coatingIoFaceCheck) {
 		this.coatingIoFaceCheck = coatingIoFaceCheck;
 	}
 
-	public String getCoatingIoEndsCheck() {
+	public String getCoatingIoFaceCheckName() {
+		return coatingIoFaceCheckName;
+	}
+
+	public void setCoatingIoFaceCheckName(String coatingIoFaceCheckName) {
+		this.coatingIoFaceCheckName = coatingIoFaceCheckName;
+	}
+
+	public Integer getCoatingIoEndsCheck() {
 		return coatingIoEndsCheck;
 	}
 
-	public void setCoatingIoEndsCheck(String coatingIoEndsCheck) {
+	public void setCoatingIoEndsCheck(Integer coatingIoEndsCheck) {
 		this.coatingIoEndsCheck = coatingIoEndsCheck;
+	}
+
+	public String getCoatingIoEndsCheckName() {
+		return coatingIoEndsCheckName;
+	}
+
+	public void setCoatingIoEndsCheckName(String coatingIoEndsCheckName) {
+		this.coatingIoEndsCheckName = coatingIoEndsCheckName;
 	}
 
 	public String getCheckedBy() {

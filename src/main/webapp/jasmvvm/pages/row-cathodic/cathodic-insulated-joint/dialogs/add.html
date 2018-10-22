@@ -194,53 +194,53 @@
 					projectOid: [{
 						required: true,
 						message: '项目名称为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					tendersOid: [{
 						required: true,
 						message: '标段名称为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					pipelineOid: [{
 						required: true,
 						message: '管线名称为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					pipeSegmentOid: [{
 						required: true,
 						message: '线路段必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					constructUnit: [{
 						required: true,
 						message: '施工单位为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 
 					supervisionUnit: [{
 						required: true,
 						message: '监理单位为必填项',
-						trigger: 'change'
+					//	trigger: 'change'
 					}],
 					constructDate: [{
 						required: true,
 						message: '施工日期为必填项',
-						trigger: 'change'
+					//	trigger: 'change'
 					}],
 					collectionDate: [{
 						required: true,
 						message: '采集日期为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					medianStakeOid: [{
 						required: true,
 						message: '桩号为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					relativeMileage: [{
 						required: true,
 						message: '相对桩位置为必填项',
-						trigger: 'change'
+					//	trigger: 'change'
 					}],
 					supervisionEngineer: [{
 						min: "0",
@@ -370,6 +370,8 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
+				}else{
+					that.domain.tenders=[];
 				}
 				if (!edit) {
 					that.formData.tendersOid = '';
@@ -395,6 +397,8 @@
 						function (arr) {
 							that.domain.pipeline = arr;
 						});
+				}else{
+					that.domain.pipeline=[];
 				}
 				if (!edit) {
 					that.formData.pipelineOid = '';
@@ -415,6 +419,8 @@
 						function (arr) {
 							that.domain.supervisionUnits = arr;
 						});
+				}else{
+					that.domain.supervisionUnits=[];
 				}
 				if (!edit) {
 					that.formData.supervisionUnit = '';
@@ -430,6 +436,8 @@
 						function (arr) {
 							that.domain.pipeSegment = arr;
 						});
+				}else{
+					that.domain.pipeSegment=[];
 				}
 				if (!edit) {
 					that.formData.pipeSegmentOid = '';
@@ -447,6 +455,8 @@
 						function (arr) {
 							that.domain.medianStakes = arr;
 						});
+				}else{
+					that.domain.medianStakes=[];
 				}
 				if (!edit) {
 					that.formData.medianStakeOid = '';

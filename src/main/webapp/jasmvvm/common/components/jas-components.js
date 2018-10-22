@@ -739,7 +739,7 @@ Vue.component('jas-table-for-list', {
 		'	<el-button size="small" plain type="primary" icon="fa fa-plus" v-if="isHasPrivilege(' + "'bt_add'" + ')"  @click="add">增加</el-button>',
 		'	<el-button size="small" plain type="primary" icon="fa fa-plus" v-if="isApprove&&isHasPrivilege(' + "'bt_report'" + ')"  :disabled="reportRows.length==0" @click="upcall">上报</el-button>',
 		'	<el-button size="small" plain type="primary" icon="fa fa-plus" v-if="isApprove&&isHasPrivilege(' + "'bt_approve'" + ')" :disabled="approveRows.length==0" @click="approve">审核</el-button>',
-		'<jas-import-export-btns :is-import="isHasPrivilege(' + "'bt_import'" + ')" :is-export="isHasPrivilege(' + "'bt_export'" + ')" ',
+		'<jas-import-export-btns  @refreshtable="refresh" :is-import="isHasPrivilege(' + "'bt_import'" + ')" :is-export="isHasPrivilege(' + "'bt_export'" + ')" ',
 		'		:form="form" :oids="oids" :template-code="_templateCode" :export-template-code="_exportTemplateCode" :function-code="functionCode" :class-name="_classNameQuery"></jas-import-export-btns>',
 
 		'  <span class="fr">',
@@ -1234,13 +1234,16 @@ Vue.component('jas-import-export-btns', {
 	methods: {
 		bt_import: function () { // 导入
 			var that = this;
+			
 			var src = './pages/template/dialogs/upload.html?templateCode=' + this.templateCode;
 			top.jasTools.dialog.show({
 				title: '导入',
 				width: '600px',
 				height: '600px',
 				src: src,
-				cbForClose: function () {}
+				cbForClose: function () {
+					that.$emit('refreshtable');
+				}
 			});
 		},
 		bt_export: function (obj) {
@@ -1291,6 +1294,7 @@ Vue.component('jas-import-export-btns', {
 
 	},
 	mounted: function () {
+		
 	}
 });
 
@@ -1389,7 +1393,7 @@ Vue.component('jas-form-items', {
 						config.rules.push({
 							required: true,
 							message: fieldNameArr[fieldIndex] + '为必填项',
-							trigger: 'change'
+							//trigger: 'change'
 						});
 					}
 
@@ -1635,7 +1639,7 @@ Vue.component('jas-form-items-group', {
 						config.rules.push({
 							required: true,
 							message: fieldNameArr[fieldIndex] + '为必填项',
-							trigger: 'change'
+						//	trigger: 'change'
 						})
 					}
 
@@ -2051,6 +2055,7 @@ Vue.component('jas-remarks', {
 	watch:{
 		remarks:function(){
 			this.remark=this.remarks;
+			this.remarksDesc=200-this.remarks.length;
 		}
 	},
 	template: [
@@ -2061,14 +2066,15 @@ Vue.component('jas-remarks', {
 		'</el-form-item>'
 	].join(''),
 	mounted:function(){
-		console.log(this.remark);
+	
+		
 	},
 	methods: {
 		instructionNum: function () {
 			if (this.remark) {
 				var num = 200 - this.remark.trim().length;
 				this.remarksDesc = num;
-				this.$emit('changevalue',this.remark);
+				this.$emit('changevalue',this.remark.trim());
 			}
 
 		}

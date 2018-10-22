@@ -15,6 +15,7 @@ import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
 import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
+import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.UniqueConstraintStrategy;
 import cn.jasgroup.jasframework.base.annotation.UniqueConstraints;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
@@ -52,8 +53,9 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 )
 @UniqueConstraints(
 		strategys ={
-			@UniqueConstraintStrategy(columnNames={"pipeSegmentOrCrossOid","weldOid"},name="焊口编号")
-		}
+			@UniqueConstraintStrategy(columnNames={"pipeSegmentOrCrossOid","weldOid"},name="同一线路段/穿跨越下焊口编号")
+		},
+		formatter = @Process(service = "weldService" , method = "formatting()")
 	)
 @JdbcEntity(name="daq_weld_measured_result")
 public class WeldMeasuredResult extends CommonJdbcEntity {

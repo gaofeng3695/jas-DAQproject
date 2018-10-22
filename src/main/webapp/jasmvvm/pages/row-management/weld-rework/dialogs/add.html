@@ -50,21 +50,21 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="标段名称" prop="tendersOid" required>
-								<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
+								<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged" @visible-change="childChange($event,'projectOid','项目名称')">
 									<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="管线名称" prop="pipelineOid" required>
-								<el-select v-model="formData.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged">
+								<el-select v-model="formData.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged" @visible-change="childChange($event,'tendersOid','标段名称')">
 									<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="线路段/穿跨越" prop="pipeSegmentOrCrossOid" required>
-								<el-select v-model="formData.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small" @change="pipeSegmentChanged">
+								<el-select v-model="formData.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small" @change="pipeSegmentChanged" @visible-change="childChange($event,'pipelineOid','管线名称')">
 									<el-option v-for="item in domain.pipeSegment" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
@@ -144,7 +144,7 @@
 					<el-row>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="返修口编号" prop="weldOid" required>
-								<el-select v-model="formData.weldOid" clearable placeholder="请选择返修口编号" size="small" @change="weldChanged">
+								<el-select v-model="formData.weldOid" clearable placeholder="请选择返修口编号" size="small" @change="weldChanged"  @visible-change="childChange($event,'pipeSegmentOrCrossOid','线路段/穿跨越')">
 									<el-option v-for="item in domain.welds" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
@@ -236,67 +236,67 @@
 					projectOid: [{
 						required: true,
 						message: '项目名称为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					weldDate: [{
 						required: true,
 						message: '焊接日期为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					tendersOid: [{
 						required: true,
 						message: '标段名称为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					pipelineOid: [{
 						required: true,
 						message: '管线名称为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					pipeSegmentOrCrossOid: [{
 						required: true,
 						message: '线路段/穿跨越为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					weldOid: [{
 						required: true,
 						message: '返修口编号',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					reworkWeldCode: [{
 						required: true,
 						message: '返修后焊口编号',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					weldProduce: [{
 						required: true,
 						message: '焊接工艺规格',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					constructUnit: [{
 						required: true,
 						message: '施工单位',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					workUnitOid: [{
 						required: true,
 						message: '施工机组代号',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					supervisionUnit: [{
 						required: true,
 						message: '监理单位为必填项',
-						trigger: 'change'
+					//	trigger: 'change'
 					}],
 					weldProduce: [{
 						required: true,
 						message: '焊接工艺规格为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					collectionDate: [{
 						required: true,
 						message: '采集日期为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					supervisionEngineer: [{
 						min: "0",
@@ -305,7 +305,7 @@
 					}, {
 						required: true,
 						message: '监理工程师为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					collectionPerson: [{
 						min: "0",
@@ -371,11 +371,11 @@
 			this.requestDomainFromBizTable('/daq/privilege/getProjectList.do', {}, function (arr) {
 				that.domain.project = arr;
 			});
-			this.requestDomainFromBizTable(
-				'/daq/materialPipe/getCutAndNotUse.do', {},
-				function (arr) {
-					that.domain.pipeCodes = arr;
-				});
+			//this.requestDomainFromBizTable(
+				//'/daq/materialPipe/getCutAndNotUse.do', {},
+				//function (arr) {
+					//that.domain.pipeCodes = arr;
+				//});
 		},
 		methods: {
 			changevalue: function (msg) {
@@ -419,6 +419,8 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
+				}else{
+					that.domain.tenders=[];
 				}
 				if (!edit) {
 					that.formData.tendersOid = '';
@@ -428,9 +430,37 @@
 					that.formData.pipeSegmentOrCrossOid = '';
 					that.domain.supervisionUnits = [];
 					that.formData.supervisionUnit = '';
+					that.formData.weldOid = '';
+					that.formData.reworkWeldCode='';
+					that.domain.welds = [];
 				}
 				that.getWorkUints(val, edit); //获取机组
 				that.getWeldproduct(val, edit); //获取焊接工艺
+				that.getPipeCode(val,edit);
+			},
+			childChange: function (event, id, name) {
+				if (event && !this.formData[id]) {
+					top.Vue.prototype.$message({
+						type: 'warning',
+						message: "请先选择" + name
+					});
+				}
+			},
+			getPipeCode:function(val,edit){
+				var that=this;
+				if(val){
+					this.requestDomainFromBizTable(
+							'/daq/materialPipe/getCutAndNotUse.do', {
+							
+								projectOid:val
+							},
+							function (arr) {
+								that.domain.pipeCodes = arr;
+						});	
+				}else{
+					that.domain.pipeCodes=[];
+				}
+			
 			},
 			getWeldproduct: function (val, edit) {
 				var that = this;
@@ -443,6 +473,8 @@
 						function (arr) {
 							that.domain.weldProduces = arr;
 						});
+				}else{
+					that.domain.weldProduces=[];
 				}
 				if (!edit) {
 					that.formData.weldProduce = '';
@@ -459,6 +491,8 @@
 						function (arr) {
 							that.domain.workUnits = arr;
 						});
+				}else{
+					that.domain.workUnits=[];
 				}
 				if (!edit) {
 					that.formData.workUnitOid = '';
@@ -474,11 +508,16 @@
 						function (arr) {
 							that.domain.pipeline = arr;
 						});
+				}else{
+					that.domain.pipeline=[];
 				}
 				if (!edit) {
 					that.formData.pipelineOid = '';
 					that.domain.pipeSegment = [];
 					that.formData.pipeSegmentOrCrossOid = '';
+					that.formData.weldOid = '';
+					that.formData.reworkWeldCode='';
+					that.domain.welds = [];
 				}
 				that.getSupervisionUnit(val, edit); //根据标段获取监理单位
 			},
@@ -492,6 +531,8 @@
 						function (arr) {
 							that.domain.supervisionUnits = arr;
 						});
+				}else{
+					that.domain.supervisionUnits=[];
 				}
 				if (!edit) {
 					that.formData.supervisionUnit = '';
@@ -507,9 +548,14 @@
 						function (arr) {
 							that.domain.pipeSegment = arr;
 						});
+				}else{
+					that.domain.pipeSegment=[];
 				}
 				if (!edit) {
 					that.formData.pipeSegmentOrCrossOid = '';
+					that.formData.weldOid = '';
+					that.formData.reworkWeldCode='';
+					that.domain.welds = [];
 				}
 			},
 			pipeSegmentChanged: function (val, edit) {
@@ -523,9 +569,12 @@
 							function (arr) {
 								that.domain.welds = arr;
 							});
+				}else{
+					that.domain.welds=[];
 				}
 				if (!edit) {
 					that.formData.weldOid = '';
+					that.formData.reworkWeldCode='';
 				}
 			},
 			weldChanged: function (val) {
@@ -550,6 +599,8 @@
 							function (arr) {
 								that.domain.persons = arr;
 							});
+				}else{
+					that.domain.persons=[];
 				}
 				if (!edit) {
 					that.formData.coverOid = [];

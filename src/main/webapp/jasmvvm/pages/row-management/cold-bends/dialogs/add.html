@@ -105,7 +105,7 @@
 					<el-row>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="原材料钢管编号" prop="pipeOid" required>
-								<el-select v-model="formData.pipeOid" placeholder="请选择原材料钢管编号" size="small" @change="pipeOidChanged">
+								<el-select v-model="formData.pipeOid" placeholder="请选择原材料钢管编号" size="small" @change="pipeOidChanged"  @visible-change="childChange($event,'projectOid','项目名称')">
 									<el-option v-for="item in domain.pipeOids" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
@@ -247,52 +247,52 @@
 					projectOid: [{
 						required: true,
 						message: '项目名称为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					tendersOid: [{
 						required: true,
 						message: '标段名称为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					pipelineOid: [{
 						required: true,
 						message: '管线名称为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					pipeSegmentOrCrossOid: [{
 						required: true,
 						message: '线路段/穿跨越为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					supervisionUnit: [{
 						required: true,
 						message: '监理单位为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					pipeOid: [{
 						required: true,
 						message: '原材料钢管编号为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					collectionDate:[{
 						required: true,
 						message: '采集时间为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					bendingRadius:[{
 						required: true,
 						message: '曲率半径为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					curveLength:[{
 						required: true,
 						message: '曲线长度为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					pipeColdBendingCode: [{
 						required: true,
 						message: '冷湾编号为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}, {
 						min: "0",
 						max: 53,
@@ -301,12 +301,12 @@
 					bendingAngle: [{
 						required: true,
 						message: '弯曲角度为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					straightPipeLength:[{
 						required: true,
 						message: '直管段最小长度为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					collectionPerson: [{
 						min: "0",
@@ -377,13 +377,7 @@
 			this.requestDomainFromBizTable('/daq/privilege/getProjectList.do', {}, function (arr) {
 				that.domain.project = arr;
 			});
-			this.requestDomainFromBizTable(
-				'/daq/materialPipe/getCutAndNotUse.do', {
-					type: "2"
-				},
-				function (arr) {
-					that.domain.pipeOids = that.domain.pipeOids.concat(arr);
-				});
+		
 		},
 		methods: {
 
@@ -436,6 +430,8 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
+				}else{
+					that.domain.tenders=[];
 				}
 				if(!edit){
 					that.formData.tendersOid = '';
@@ -447,6 +443,24 @@
 					that.formData.supervisionUnit = '';
 
 				}
+				that.getPipeCode(val,edit);
+			},
+			getPipeCode:function(val,edit){
+				var that=this;
+				if(val){
+					this.requestDomainFromBizTable(
+							'/daq/materialPipe/getCutAndNotUse.do', {
+								type: "2",
+								projectOid:val
+							},
+							function (arr) {
+								that.domain.pipeOids = arr;
+						});	
+				}else{
+					that.domain.pipeOids=[];
+					that.formData.pipeOid="";
+				}
+				
 			},
 			tendersChanged: function (val,edit) { //根据标段触发管线列表
 				var that = this;
@@ -458,7 +472,10 @@
 						function (arr) {
 							that.domain.pipeline = arr;
 						});
+				}else{
+					that.domain.pipeline=[];	
 				}
+				
 					if(!edit){
 					that.formData.pipelineOid = '';
 					that.domain.pipeSegment = [];
@@ -476,6 +493,8 @@
 						function (arr) {
 							that.domain.supervisionUnits = arr;
 						});
+				}else{
+					that.domain.supervisionUnits=[];	
 				}
 				if(!edit){
 					that.formData.supervisionUnit = '';
@@ -491,6 +510,8 @@
 						function (arr) {
 							that.domain.pipeSegment = arr;
 						});
+				}else{
+					that.domain.pipeSegment=[];	
 				}
 				if(!edit){
 					that.formData.pipeSegmentOrCrossOid = '';
@@ -553,7 +574,7 @@
 						key: data.rows[0]["pipeOid"],
 						value: data.rows[0]["pipeCode"]
 					};
-					that.domain.pipeOids.push(item);
+				//	that.domain.pipeOids.push(item);
 					that.projectChanged(data.rows[0].projectOid,true);
 					that.tendersChanged(data.rows[0].tendersOid,true);
 					that.getSupervisionUnit(data.rows[0].tendersOid,true);

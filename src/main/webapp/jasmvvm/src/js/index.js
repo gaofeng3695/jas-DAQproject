@@ -172,11 +172,12 @@ window.app = new Vue({
 			});
 		},
 		_listenWindowClose: function () {
+			var that=this;
 			$(window).bind("beforeunload", function (e) {
 				var e = window.event || e;　　
 				console.log(e)
 				// e.returnValue = ("确定离开当前页面吗？");
-				_loginOut();
+				//that._loginOut();
 			});
 		},
 		_loginOut: function () {
