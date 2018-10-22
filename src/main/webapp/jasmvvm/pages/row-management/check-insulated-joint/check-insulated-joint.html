@@ -49,7 +49,9 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
 						<el-form-item label="出厂编号">
-							<el-input v-model="topSearch.manufacturerCode" clearable placeholder="请输入出厂编号" size="small"></el-input>
+								<el-select v-model="topSearch.manufacturerCode" clearable placeholder="请选择出厂编号" size="small" @visible-change="childChange($event,'projectOid','项目名称')">
+									<el-option v-for="item in domain.manufacturerCodeArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+								</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -179,12 +181,28 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
+				}else {
+					that.domain.tenders = [];
 				}
-				 else {
-					 that.domain.tenders = [];
-					that.topSearch.tendersOid = '';
-				}
+				that.topSearch.tendersOid = '';
+				that.getCode(val);
 				that.searchList();
+			},
+			getCode:function(val){
+				var that=this;
+				if(val){
+					this.requestDomainFromBizTable(
+							'/daq/check/getManufacturerCode.do', {
+								projectOid:val
+							},
+							function (
+								arr) {
+								that.domain.manufacturerCodeArr = arr;
+							});	
+				}else{
+					that.domain.manufacturerCodeArr=[];
+				}
+				  that.topSearch.manufacturerCode = '';
 			},
 			getConstructUnit: function () { //根据标段触发管线列表
 				var that = this;				
@@ -205,6 +223,7 @@
 				this.topSearch.projectOid = '';
 				this.topSearch.tendersOid = '';
 				this.domain.tenders = [];
+				this.domain.manufacturerCodeArr=[];
 				this.$refs.table.search();
 			}
 		},
