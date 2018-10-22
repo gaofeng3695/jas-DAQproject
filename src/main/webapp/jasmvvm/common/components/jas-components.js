@@ -696,6 +696,7 @@ Vue.component('jas-table-for-list', {
 		editUrl: {},
 		templateCode: {},
 		className: {},
+		importConfig:{}
 	},
 	data: function () {
 		return {
@@ -740,7 +741,7 @@ Vue.component('jas-table-for-list', {
 		'	<el-button size="small" plain type="primary" icon="fa fa-plus" v-if="isApprove&&isHasPrivilege(' + "'bt_report'" + ')"  :disabled="reportRows.length==0" @click="upcall">上报</el-button>',
 		'	<el-button size="small" plain type="primary" icon="fa fa-plus" v-if="isApprove&&isHasPrivilege(' + "'bt_approve'" + ')" :disabled="approveRows.length==0" @click="approve">审核</el-button>',
 		'<jas-import-export-btns  @refreshtable="refresh" :is-import="isHasPrivilege(' + "'bt_import'" + ')" :is-export="isHasPrivilege(' + "'bt_export'" + ')" ',
-		'		:form="form" :oids="oids" :template-code="_templateCode" :export-template-code="_exportTemplateCode" :function-code="functionCode" :class-name="_classNameQuery"></jas-import-export-btns>',
+		'		:form="form" :oids="oids" :import-config="importConfig" :template-code="_templateCode" :export-template-code="_exportTemplateCode" :function-code="functionCode" :class-name="_classNameQuery"></jas-import-export-btns>',
 
 		'  <span class="fr">',
 		'		 <el-tooltip class="item" content="刷新" placement="top">',
@@ -1219,6 +1220,7 @@ Vue.component('jas-import-export-btns', {
 			type: Boolean,
 			default: true,
 		},
+		importConfig:{}
 	},
 	data: function () {
 		return {}
@@ -1234,8 +1236,10 @@ Vue.component('jas-import-export-btns', {
 	methods: {
 		bt_import: function () { // 导入
 			var that = this;
-			
 			var src = './pages/template/dialogs/upload.html?templateCode=' + this.templateCode;
+			if(that.importConfig.importUrl){
+				src+="&importUrl="+that.importConfig.importUrl;
+			}
 			top.jasTools.dialog.show({
 				title: '导入',
 				width: '600px',
@@ -1294,7 +1298,7 @@ Vue.component('jas-import-export-btns', {
 
 	},
 	mounted: function () {
-		
+		console.log(this.importConfig);
 	}
 });
 

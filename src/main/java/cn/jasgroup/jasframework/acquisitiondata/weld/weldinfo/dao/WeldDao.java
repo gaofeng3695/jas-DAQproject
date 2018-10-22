@@ -100,7 +100,7 @@ public class WeldDao extends BaseJdbcDao{
 			return weld.getWeldCode();
 		}else {
 			String sql1 = "select rework_weld_code from daq_weld_rework_weld where oid='"+weldOid+"'";
-			List reworkList = this.queryForList(sql, null, ReworkWeld.class);
+			List reworkList = this.queryForList(sql1, null, ReworkWeld.class);
 			ReworkWeld reworkWeld = (ReworkWeld)reworkList.get(0);
 			return reworkWeld.getReworkWeldCode();
 		}
