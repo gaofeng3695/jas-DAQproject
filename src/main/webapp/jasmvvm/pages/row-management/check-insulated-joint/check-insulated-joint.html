@@ -35,14 +35,14 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
 						<el-form-item label="标段名称" prop="tendersOid">
-							<el-select v-model="topSearch.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged" @visible-change="childChange">
+							<el-select v-model="topSearch.tendersOid" clearable placeholder="请选择标段名称" size="small"  @change="searchList" @visible-change="childChange">
 								<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
 						<el-form-item label="施工单位" prop="constructUnit">
-							<el-select v-model="topSearch.constructUnit" clearable placeholder="请选择施工单位" size="small">
+							<el-select v-model="topSearch.constructUnit" clearable placeholder="请选择施工单位" size="small"  @change="searchList">
 								<el-option v-for="item in domain.constructUnitArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
@@ -143,13 +143,13 @@
 			this.privilegeCode = param.privilegeCode;
 			this.templateCode = param.templateCode; //|| "stake-2";
 			this.className = param.className; // || 'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';
-			this.tendersChanged("1");
 			this.requestDomainFromBizTable(
 				'/daq/privilege/getProjectList.do', {},
 				function (
 					arr) {
 					that.domain.project = arr;
 				});
+			this.getConstructUnit();
 		},
 		methods: {
 			childChange: function (e) {
@@ -180,27 +180,21 @@
 							that.domain.tenders = arr;
 						});
 				}
-				// else {
-					// that.domain.tenders = [];
+				 else {
+					 that.domain.tenders = [];
 					that.topSearch.tendersOid = '';
-					that.domain.constructUnitArr = [];
-					that.topSearch.constructUnit = "";
-				// }
+				}
+				that.searchList();
 			},
-			tendersChanged: function (val) { //根据标段触发管线列表
-				var that = this;
-				if (val) {
+			getConstructUnit: function () { //根据标段触发管线列表
+				var that = this;				
 					this
 						.requestDomainFromBizTable(
 							'/daq/privilege/getCurrentUnitId.do', {},
 							function (arr) {
 								that.domain.constructUnitArr = arr;
 							});
-				}
-				//  else {
-					// that.domain.constructUnitArr = [];
-					that.topSearch.constructUnit = "";
-				// }
+			
 			},
 			searchList: function () {
 				this.$refs.table.search();
@@ -210,6 +204,7 @@
 				this.topSearch.constructUnit = '';
 				this.topSearch.projectOid = '';
 				this.topSearch.tendersOid = '';
+				this.domain.tenders = [];
 				this.$refs.table.search();
 			}
 		},
