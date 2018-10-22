@@ -3,6 +3,7 @@ package cn.jasgroup.jasframework.acquisitiondata.material.base.closure.query;
 import org.apache.commons.lang.StringUtils;
 
 import cn.jasgroup.jasframework.acquisitiondata.material.base.closure.query.bo.ClosureBo;
+import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 
@@ -14,7 +15,11 @@ import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
   * @since JDK1.8。
   *<p>创建日期：2018年7月6日 下午5:38:09。</p>
  */
-@QueryConfig(scene = "/closure/getPage", resultClass = ClosureBo.class)
+@QueryConfig(scene = "/closure/getPage", resultClass = ClosureBo.class,
+	queryBeforeProcess = {
+		@Process(service = "daqInjectService" , method = "injectDataAuthoritySql(dataAuthoritySql)")
+	}
+)
 public class ClosureQuery extends BaseJavaQuery {
 	
 	/**
@@ -94,6 +99,7 @@ public class ClosureQuery extends BaseJavaQuery {
 			if ( isUse != null ){
 				conditionSql += " and mc.is_use = :isUse";
 			}
+			conditionSql +=  this.dataAuthoritySql;
 		}
 		conditionSql += " order by mc.create_datetime desc";
 		return conditionSql;
