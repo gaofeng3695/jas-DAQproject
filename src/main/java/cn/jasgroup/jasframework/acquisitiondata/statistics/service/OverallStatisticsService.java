@@ -9,6 +9,7 @@ import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.DataEntryA
 import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.DateStatsResultBo;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.StatsResultBo;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.WeldInfoBo;
+import com.alibaba.druid.sql.visitor.functions.Char;
 import com.google.common.collect.*;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
@@ -132,23 +133,31 @@ public class OverallStatisticsService {
         return resultTable;
     }
 
-    public static void main(String[] args) {
 
-//        Table<String, String, Integer> table = TreeBasedTable.create();
-//        Table<String, String, Integer> table = HashBasedTable.create();
-
-        List<String> typeList = Lists.newArrayList("c", "a", "b");
-        List<String> dateList = Lists.newArrayList("2018-09", "2018-08", "2018-10");
-
-        Table<String, String, Integer> table = ArrayTable.create(typeList, dateList);
-        for (String type : typeList) {
-            for (String date : dateList) {
-                System.out.println("type:"+type+ ", date:"+date);
-                table.put(type, date, 0);
+    private static int lengthOfLongestSubStr(String s) {
+        Map<Integer, Integer> lastOccurredMap = Maps.newHashMap();
+        int start = 0;
+        int maxLength = 0;
+        char[] charArray = s.toCharArray();
+        for (int i = 0; i < charArray.length; i++) {
+            char c = charArray[i];
+            Integer lastI = lastOccurredMap.get((int)c);
+            if (lastOccurredMap.containsKey((int)c) && lastI >= start) {
+                start = lastI + 1;
             }
+            if (i-start+1 > maxLength) {
+                maxLength = i - start + 1;
+            }
+            lastOccurredMap.put((int) c, i);
         }
 
-        System.out.println(new Gson().toJson(table.rowMap()));
+        System.out.println(lastOccurredMap);
+        return maxLength;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(lengthOfLongestSubStr("票我我看额我"));
+
     }
 
     /**

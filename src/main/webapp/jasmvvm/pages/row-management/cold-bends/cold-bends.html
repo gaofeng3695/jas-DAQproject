@@ -251,14 +251,14 @@
 							that.domain.tenders = arr;
 						});
 				}
-				//  else {
-					// that.domain.tenders = [];
-					that.topSearch.tendersOid = '';
-					that.domain.pipeline = [];
-					that.topSearch.pipelineOid = '';
-					that.domain.pipeSegment = [];
-					that.topSearch.pipeSegmentOrCrossOid = '';
-				// }
+				  else {
+					 that.domain.tenders = [];
+				 }
+				that.topSearch.tendersOid = '';
+				that.domain.pipeline = [];
+				that.topSearch.pipelineOid = '';
+				that.domain.pipeSegment = [];
+				that.topSearch.pipeSegmentOrCrossOid = '';
 				that.searchList();
 			},
 			tendersChanged: function (val) { //根据标段触发管线列表
@@ -273,12 +273,12 @@
 								that.domain.pipeline = arr;
 							});
 				}
-				// else {
-					// that.domain.pipeline = [];
-					that.topSearch.pipelineOid = '';
-					that.domain.pipeSegment = [];
-					that.topSearch.pipeSegmentOrCrossOid = '';
-				// }
+				else {
+					 that.domain.pipeline = [];
+				 }
+				that.topSearch.pipelineOid = '';
+				that.domain.pipeSegment = [];
+				that.topSearch.pipeSegmentOrCrossOid = '';
 				that.searchList();
 			},
 			pipelineChanged: function (val) { //根据管线触发线路段/穿跨越
@@ -293,10 +293,11 @@
 								that.domain.pipeSegment = arr;
 							});
 				}
-				// else {
-					// that.domain.pipeSegment = [];
-					that.topSearch.pipeSegmentOrCrossOid = '';
-				// }
+				 else {
+					that.domain.pipeSegment = [];
+	
+				 }
+				that.topSearch.pipeSegmentOrCrossOid = '';
 				that.searchList();
 			},
 			searchList: function () {
@@ -309,6 +310,9 @@
 				this.topSearch.pipeSegmentOrCrossOid = '';
 				this.topSearch.pipeColdBendingCode = '';
 				this.topSearch.isUse='';
+				this.domain.tenders = [];
+				this.domain.pipeline = [];
+				this.domain.pipeSegment = [];
 				this.$refs.table.search();
 			},
 		},

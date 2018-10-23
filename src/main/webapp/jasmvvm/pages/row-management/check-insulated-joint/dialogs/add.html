@@ -50,7 +50,7 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="标段名称" prop="tendersOid" required>
-								<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged" @visible-change="childChange($event,'projectOid','项目名称')">
+								<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @visible-change="childChange($event,'projectOid','项目名称')">
 									<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
@@ -65,7 +65,7 @@
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="出厂编号" prop="manufacturerCode" required>
 								<!--<el-input v-model="formData.manufacturerCode" clearable placeholder="请输入出厂编号" size="small"></el-input>-->
-								<el-select v-model="formData.manufacturerCode" clearable placeholder="请选择出厂编号" size="small">
+								<el-select v-model="formData.manufacturerCode" clearable placeholder="请选择出厂编号" size="small" @visible-change="childChange($event,'projectOid','项目名称')">
 									<el-option v-for="item in domain.manufacturerCodeArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
@@ -120,9 +120,10 @@
 					<jas-base-group-title name="其他信息"></jas-base-group-title>
 					<el-row>
 						<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-							<el-form-item label="备注" prop="remarks">
-								<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks"></el-input>
-							</el-form-item>
+							<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+						<jas-remarks :remarks="formData.remarks" @changevalue="changevalue"></jas-remarks>
+							
+						</el-col>
 						</el-col>
 					</el-row>
 					<!-- <el-row>
@@ -226,15 +227,13 @@
 					arr) {
 					that.domain.project = arr;
 				});
-			this.requestDomainFromBizTable(
-				'/daq/check/getManufacturerCode.do', {},
-				function (
-					arr) {
-					that.domain.manufacturerCodeArr = arr;
-				});
-			this.tendersChanged("1");
+		
+			this.getconstructUnit();
 		},
 		methods: {
+			changevalue: function (msg) {
+				this.formData.remarks = msg;
+			},
 			childChange: function (event, id, name) {
 				if (event && !this.formData[id]) {
 					top.Vue.prototype.$message({
@@ -267,26 +266,39 @@
 				}
 				if(!edit){
 					that.formData.tendersOid = '';
-					that.domain.constructUnitArr = [];
-					that.formData.constructUnit = '';
+				
 				}
+				that.getCode(val,edit);
 			},
-			tendersChanged: function (val,edit) { //根据标段触发管线列表
+			getconstructUnit: function () { //根据标段触发管线列表
 				var that = this;
-				if (val) {
+			
 					this
 						.requestDomainFromBizTable(
 							'/daq/privilege/getCurrentUnitId.do', {},
 							function (arr) {
 								that.domain.constructUnitArr = arr;
 							});
-				} else {
-					that.domain.constructUnitArr = [];
-				
+			
+			},
+			getCode:function(val,edit){
+				var that=this;
+				if(val){
+					this.requestDomainFromBizTable(
+							'/daq/check/getManufacturerCode.do', {
+								projectOid:val
+							},
+							function (
+								arr) {
+								that.domain.manufacturerCodeArr = arr;
+							});	
+				}else{
+					that.domain.manufacturerCodeArr=[];
 				}
 				if(!edit){
-					that.formData.constructUnit = "";
+					that.formData.manufacturerCode = '';
 				}
+				
 			},
 			cancel: function (param) {
 				window.parent.jasTools.dialog.close(param);
@@ -333,12 +345,12 @@
 				var that = this;
 				var url = jasTools.base.rootPath +
 					"/jdbc/commonData/checkInsulatedJoint/getPage.do";
-				jasTools.ajax.post(url, that.formData, function (data) {
+				jasTools.ajax.post(url, {oid:that.oid}, function (data) {
 					for (var key in that.formData) {
 						that.formData[key] = data.rows[0][key];
 					}
 					that.projectChanged(data.rows[0].projectOid,true);
-					that.tendersChanged(data.rows[0].tendersOid,true);
+					that.getCode(data.rows[0].projectOid,true);
 				});
 
 			},

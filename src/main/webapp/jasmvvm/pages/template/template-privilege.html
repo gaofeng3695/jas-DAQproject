@@ -137,7 +137,7 @@
 				  :disabled="approveRows.length==0" @click="approve">审核</el-button>
 
 
-				<jas-import-export-btns :is-import="privilege.join('').indexOf('bt_import')>-1" :is-export="privilege.join('').indexOf('bt_export')>-1"
+				<jas-import-export-btns  @refreshtable="refresh" :is-import="privilege.join('').indexOf('bt_import')>-1" :is-export="privilege.join('').indexOf('bt_export')>-1"
 				  :form="searchform" :oids="oids" :template-code="templateCode" :function-code="menuCode" :export-template-code="exportTemplateCode"
 				  :class-name="className"></jas-import-export-btns>
 
@@ -612,7 +612,8 @@
 			},
 			locateRow: function (row) {
 				var that = this;
-				alert('定位');
+			    var code="daq_"+that.templateCode;
+				top.app.locate(row.oid,code);
 			},
 			scopeRow: function (row) {
 				var that = this;

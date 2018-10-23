@@ -491,6 +491,9 @@
 					} */
 					that.formData = data.data;
 				//	console.log(that.formData);
+				if(that.formData.remarks){
+					 that.remarks=200-that.formData.remarks.length;//表示备注长度 此时不具备通用性 必须名称为 remarks
+				}
 					that.getEditField(fieldsGrouped);
 				});
 			},

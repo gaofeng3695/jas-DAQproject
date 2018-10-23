@@ -11,10 +11,11 @@ window.app = new Vue({
 			panelShowed: false,
 			isExpend: true,
 			menuWith: 200,
-			menusOpened: ['P-daq-scope-0001'],
-			currentTap: 'P-daq-scope-0001',
+			menusOpened: ['P-hq-weld-0001'],
+			currentTap: 'P-hq-weld-0001',
 			tabs: [], // 打开的标签页
-			items: [] //菜单数组
+			items: [], //菜单数组
+			isMapInited:false//地图未初始化
 		}
 	},
 	computed: {
@@ -172,7 +173,7 @@ window.app = new Vue({
 			});
 		},
 		_listenWindowClose: function () {
-			var that=this;
+			var that = this;
 			$(window).bind("beforeunload", function (e) {
 				var e = window.event || e;　　
 				console.log(e)
@@ -332,9 +333,10 @@ window.app = new Vue({
 		},
 		locate: function (id, tableCode) {
 			var that = this;
+			console.log(that.isMapInited);
 			if (!this.$refs.resizer.panelShowed) {
 				this.$refs.resizer.panelShowed = true;
-				setTimeout(function () {
+				//setTimeout(function () {
 					if (!that.isMapInited) {
 						that.isMapInited = true;
 						that.initJasMap();
@@ -345,7 +347,7 @@ window.app = new Vue({
 					} else {
 						that.jasMap.flashGraphic(id, tableCode);
 					}
-				}, 300);
+				//}, 300);
 			} else {
 				this.jasMap.flashGraphic(id, tableCode);
 			}

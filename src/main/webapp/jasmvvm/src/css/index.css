@@ -13,7 +13,7 @@ body,
 	height: 100%;
 }
 
-/* header开始 */
+/* header寮�濮� */
 
 .headerwrapper {
 	background: #409EFF;
@@ -100,9 +100,9 @@ body,
 	line-height: 20px;
 }
 
-/* header开始 */
+/* header寮�濮� */
 
-/* header-top-menu 开始 */
+/* header-top-menu 寮�濮� */
 
 .header-top-menu {
 	position: relative;
@@ -166,9 +166,9 @@ body,
 	color: inherit;
 }
 
-/* header-top-menu 结束 */
+/* header-top-menu 缁撴潫 */
 
-/* sider开始 */
+/* sider寮�濮� */
 
 .menuwrapper {
 	border-right: solid 1px #e6e6e6;
@@ -198,7 +198,7 @@ body,
 	border-top: solid 1px #e6e6e6;
 }
 
-/* sider结束 */
+/* sider缁撴潫 */
 
 .iframewrapper {
 	width: 100%;
@@ -219,7 +219,7 @@ body,
 	height: 100%;
 }
 
-/* tabs开始 */
+/* tabs寮�濮� */
 
 .el-main {
 	padding: 0;
@@ -228,6 +228,7 @@ body,
 .tabswrapper {
 	height: 100%;
 	width: 100%;
+	background:#fff;
 }
 
 .tabswrapper .el-tabs__header {
@@ -235,6 +236,7 @@ body,
 	box-sizing: border-box;
 	width: 100%;
 	margin: 0;
+	background:#fff;
 }
 
 .tabswrapper .el-tabs__content {
@@ -248,7 +250,7 @@ body,
 	height: 100%;
 }
 
-/* tabs开始 */
+/* tabs寮�濮� */
 
 /*! Copyright (c) 2016 Naufal Rabbani (http://github.com/BosNaufal)
   * Licensed Under MIT (http://opensource.org/licenses/MIT)

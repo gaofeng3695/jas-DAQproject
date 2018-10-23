@@ -44,7 +44,7 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
 						<el-form-item label="管线名称" prop="pipelineOid">
-							<el-select v-model="topSearch.pipelineOid" clearable placeholder="请选择管线名称" size="small"  @visible-change="childChange($event,'tendersOid','标段名称')">
+							<el-select v-model="topSearch.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="searchList"  @visible-change="childChange($event,'tendersOid','标段名称')">
 								<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
@@ -57,7 +57,7 @@
 
 					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
 						<el-form-item label="封堵物类型" prop="closureType">
-							<el-select v-model="topSearch.closureType" clearable placeholder="请选择封堵物类型" size="small">
+							<el-select v-model="topSearch.closureType" clearable placeholder="请选择封堵物类型" size="small" @change="searchList">
 								<el-option v-for="item in domain.closureTypes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
@@ -65,7 +65,7 @@
 
 					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
 						<el-form-item label="是否使用" prop="isUse">
-							<el-select v-model="topSearch.isUse" clearable placeholder="请选择管线名称" size="small">
+							<el-select v-model="topSearch.isUse" clearable placeholder="请选择是否使用" size="small" @change="searchList">
 								<el-option v-for="item in domain.isUses" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 							</el-select>
 						</el-form-item>
@@ -115,9 +115,6 @@
 					"rows": 10
 				},
 				tableFields: [{
-					name: '封堵物编号',
-					field: 'closureCode',
-				}, {
 					name: '项目名称',
 					field: 'projectName'
 				}, {
@@ -127,13 +124,8 @@
 					name: '标段名称',
 					field: 'tendersName'
 				}, {
-					name: '是否使用',
-					field: 'isUse',
-					formatter: function (row, column, cellvalue, index) {
-						if (cellvalue == '0') return '否';
-						if (cellvalue == '1') return '是';
-						return cellvalue;						
-					}
+					name: '封堵物编号',
+					field: 'closureCode',
 				}, {
 					name: '封堵物类型',
 					field: 'closureType',
@@ -162,16 +154,24 @@
 					field: 'wallThickness'
 				}, {
 					name: '连接方式',
-					field: 'coatingMethodsName'
+					field: 'connectionMethodsName'
 				}, {
 					name: '防腐方式',
-					field: 'connectionMethodsName'
+					field: 'coatingMethodsName'
 				}, {
 					name: '生产厂家',
 					field: 'manufacturer'
 				}, {
 					name: '生产日期',
 					field: 'manufacturerDate'
+				}, {
+					name: '是否使用',
+					field: 'isUse',
+					formatter: function (row, column, cellvalue, index) {
+						if (cellvalue == '0') return '否';
+						if (cellvalue == '1') return '是';
+						return cellvalue;						
+					}
 				}, {
 					name: '备注',
 					field: 'remarks'
@@ -241,10 +241,12 @@
 						});
 				} else {
 					that.domain.tenders = [];
-					that.topSearch.tendersOid = '';
-					that.domain.pipeline = [];
-					that.topSearch.pipelineOid = '';
+
 				}
+				that.topSearch.tendersOid = '';
+				that.domain.pipeline = [];
+				that.topSearch.pipelineOid = '';
+				that.searchList();
 			},
 			tendersChanged: function (val) { //根据标段触发管线列表
 				var that = this;
@@ -258,9 +260,11 @@
 								that.domain.pipeline = arr;
 							});
 				} else {
-					that.domain.pipeline = [];
+
 					that.topSearch.pipelineOid = '';
 				}
+				that.domain.pipeline = [];
+				that.searchList();
 			},
 
 			searchList: function () {
@@ -273,6 +277,8 @@
 				this.topSearch.closureCode = '';
 				this.topSearch.closureType = '';
 				this.topSearch.isUse = '';
+				this.domain.tenders = [];
+				this.domain.pipeline = [];
 				this.$refs.table.search();
 			},
 		},
