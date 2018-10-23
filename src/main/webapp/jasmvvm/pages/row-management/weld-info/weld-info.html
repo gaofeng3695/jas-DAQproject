@@ -162,8 +162,8 @@
 						name: '外观质量检查',
 						field: 'surfaceCheck',
 						formatter: function (row, column, cellvalue, index) {
-							if (cellvalue == '0') return '否';
-							if (cellvalue == '1') return '是';
+							if (cellvalue == '0') return '不合格';
+							if (cellvalue == '1') return '合格';
 							return cellvalue;
 						}
 					}, {
