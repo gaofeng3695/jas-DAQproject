@@ -718,6 +718,7 @@ Vue.component('jas-table-for-list', {
 			oids: [],
 			rows: [],
 			isClosed: false,
+			_privilegeCode:''
 		}
 	},
 	computed: {
@@ -781,7 +782,7 @@ Vue.component('jas-table-for-list', {
 	].join(''),
 	watch: {
 		privilegeCode: function () {
-			this._requestPrivilege(this.privilegeCode);
+			this._requestPrivilege(this._privilegeCode);
 			// this.search();
 		}
 	},
@@ -793,9 +794,11 @@ Vue.component('jas-table-for-list', {
 		this._templateCode = this.templateCode || param.templateCode;
 		this._exportTemplateCode = this.exportTemplateCode || param.exportTemplateCode;
 		this.functionCode = param.menuCode || param.functionCode;
+		this._privilegeCode=this.privilegeCode||param.privilegeCode;
 	},
 	mounted: function () {
-		this._requestPrivilege(this.privilegeCode);
+		
+		this._requestPrivilege(this._privilegeCode);
 		this.search();
 	},
 	methods: {
@@ -888,7 +891,8 @@ Vue.component('jas-table-for-list', {
 			this.$emit('locate', item)
 		},
 		isHasPrivilege: function (sName) {
-			if (this.privilegeCode && this.privilege.indexOf(sName) === -1) {
+			//console.log(sName);
+			if (this._privilegeCode && this.privilege.indexOf(sName) === -1) {
 				return false;
 			}
 			return true;
