@@ -12,6 +12,7 @@ import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
 import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
+import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.UniqueConstraintStrategy;
 import cn.jasgroup.jasframework.base.annotation.UniqueConstraints;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
@@ -32,12 +33,6 @@ import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 )
 @CommonDeleteConfig(
 	scene = "/checkPipeColdBending/delete"
-)
-@UniqueConstraints(
-	strategys ={
-		@UniqueConstraintStrategy(columnNames={"certificateNum"},name="合格证编号"),
-		@UniqueConstraintStrategy(columnNames={"pipeColdBendingOid"},name="冷弯管编号 ")
-	}
 )
 @CommonDeleteBatchConfig(
 		scene = "/checkPipeColdBending/deleteBatch"
@@ -159,6 +154,7 @@ public class CheckPipeColdBending extends CommonJdbcEntity{
 
 	public void setPipeColdBendingOid(String pipeColdBendingOid) {
 		this.pipeColdBendingOid = pipeColdBendingOid;
+		super.setField("pipeColdBendingOid");
 	}
 
 	public String getCertificateNum() {

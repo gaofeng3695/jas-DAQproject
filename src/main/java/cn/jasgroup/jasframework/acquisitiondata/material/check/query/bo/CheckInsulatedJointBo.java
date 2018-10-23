@@ -41,6 +41,11 @@ public class CheckInsulatedJointBo {
 	 *  出厂编号 
 	 */
 	private String manufacturerCode; 
+	
+	/**
+	 *  出厂编号名称 
+	 */
+	private String manufacturerCodeName; 
 
 	/**
 	 *  合格证编号 
@@ -149,6 +154,14 @@ public class CheckInsulatedJointBo {
 
 	public void setManufacturerCode(String manufacturerCode) {
 		this.manufacturerCode = manufacturerCode;
+	}
+
+	public String getManufacturerCodeName() {
+		return manufacturerCodeName;
+	}
+
+	public void setManufacturerCodeName(String manufacturerCodeName) {
+		this.manufacturerCodeName = manufacturerCodeName;
 	}
 
 	public String getCertificationNum() {

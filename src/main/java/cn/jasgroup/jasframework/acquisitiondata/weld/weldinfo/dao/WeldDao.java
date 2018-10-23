@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
+import cn.jasgroup.jasframework.acquisitiondata.weld.reworkweld.dao.entity.ReworkWeld;
 import cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.dao.entity.ConstructionWeld;
 import cn.jasgroup.jasframework.dataaccess.base.BaseJdbcDao;
 
@@ -88,6 +89,20 @@ public class WeldDao extends BaseJdbcDao{
 			return list.get(0);
 		}else{
 			return null;
+		}
+	}
+	
+	public String getWeldCodeByOid(String weldOid) {
+		String sql = "select weld_code from daq_construction_weld where oid='"+weldOid+"'";
+		List weldList = this.queryForList(sql, null, ConstructionWeld.class);
+		if (weldList.size() > 0) {
+			ConstructionWeld weld = (ConstructionWeld)weldList.get(0);
+			return weld.getWeldCode();
+		}else {
+			String sql1 = "select rework_weld_code from daq_weld_rework_weld where oid='"+weldOid+"'";
+			List reworkList = this.queryForList(sql1, null, ReworkWeld.class);
+			ReworkWeld reworkWeld = (ReworkWeld)reworkList.get(0);
+			return reworkWeld.getReworkWeldCode();
 		}
 	}
 }

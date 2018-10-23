@@ -7,6 +7,7 @@ import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.dao.entity.ConstructionWeld;
 import cn.jasgroup.jasframework.base.annotation.CommonDeleteBatchConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
@@ -52,7 +53,12 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 )
 @UniqueConstraints(
 	strategys ={
-		@UniqueConstraintStrategy(columnNames={"pipeSegmentOrCrossOid","reworkWeldCode"})
+		@UniqueConstraintStrategy(	
+			columnNames={"pipeSegmentOrCrossOid","reworkWeldCode"},
+			name="同一线路段/穿跨越下返修口编号不能重复",
+			foreignClass=ConstructionWeld.class,
+			foreignField="weldCode"
+		)
 	}
 )
 @CommonDeleteBatchConfig(

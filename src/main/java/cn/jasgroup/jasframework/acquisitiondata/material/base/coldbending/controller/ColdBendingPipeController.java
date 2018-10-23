@@ -13,15 +13,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import cn.jasgroup.framework.data.result.BaseResult;
+import cn.jasgroup.framework.data.result.ErrorResult;
 import cn.jasgroup.framework.data.result.ListResult;
 import cn.jasgroup.framework.data.result.SimpleResult;
+import cn.jasgroup.framework.script.controller.CommonController;
 import cn.jasgroup.jasframework.acquisitiondata.material.base.coldbending.dao.entity.ColdBendingPipe;
 import cn.jasgroup.jasframework.acquisitiondata.material.base.coldbending.service.ColdBendingPipeService;
-import cn.jasgroup.jasframework.base.controller.BaseController;
+import cn.jasgroup.jasframework.exception.DataflowException;
 
 @RestController
 @RequestMapping("daq/clodBendingPipe")
-public class ColdBendingPipeController extends BaseController{
+public class ColdBendingPipeController extends CommonController{
 	
 	@Resource(name="coldBendingPipeService")
 	private ColdBendingPipeService coldBendingPipeService;
@@ -43,6 +45,9 @@ public class ColdBendingPipeController extends BaseController{
 		try{
 			String oid = this.coldBendingPipeService.save(coldBendingPipe);
 			result = new SimpleResult<>(1, "200", "ok",oid);
+		}catch (DataflowException e) {
+			ErrorResult errorResult = super.processException(e);
+			return errorResult;
 		}catch (Exception e) {
 			e.printStackTrace();
 			result = new SimpleResult<>(-1, "400", "error");

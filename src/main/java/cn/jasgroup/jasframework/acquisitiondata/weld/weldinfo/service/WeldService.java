@@ -6,10 +6,12 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.dao.WeldDao;
 import cn.jasgroup.jasframework.engine.hibernate.service.CommonDataHibernateService;
+import cn.jasgroup.jasframework.unique.UniqueResult;
 
 @Service
 @Transactional
@@ -53,5 +55,35 @@ public class WeldService extends CommonDataHibernateService{
 	 */
 	public List<Map<String,Object>> getAllWeldList(String pipeSegmentOrCrossOid,String detectionType){
 		return this.weldDao.getAllWeldList(pipeSegmentOrCrossOid,detectionType);
+	}
+	
+	
+	
+  	/**
+  	 * <p>功能描述：唯一性校验提示信息。</p>
+  	  * <p> 葛建。</p>	
+  	  * @param uniqueResultList
+  	  * @return
+  	  * @since JDK1.8。
+  	  * <p>创建日期:2018年10月18日 上午10:52:20。</p>
+  	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+  	 */
+	public String formatting(List<UniqueResult> uniqueResultList){
+		String msg = "";
+		String name = "";
+		for(UniqueResult uniqueResult : uniqueResultList){
+			if(StringUtils.isNotBlank(uniqueResult.getName())){
+				name = uniqueResult.getName();
+			}else{
+				name = uniqueResult.getFieldName();
+			}
+			//获取对应的oid,查出对应的code
+			String weldCode = "";
+			if (StringUtils.isNotBlank(uniqueResult.getValue())) {
+				weldCode = weldDao.getWeldCodeByOid(uniqueResult.getValue());
+			}
+			msg +=name+"重复:"+weldCode+"<br>"; 		
+		}	
+		return msg;
 	}
 }

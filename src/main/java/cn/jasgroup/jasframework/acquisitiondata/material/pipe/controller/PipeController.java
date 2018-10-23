@@ -45,10 +45,11 @@ public class PipeController {
 		ListResult<Map<String, Object>> result= null;
 		try{
 			String type = param.get("type");
+			String projectOid = param.get("projectOid");
 			if(StringUtils.isBlank(type)){
 				type = "1";
 			}
-			List<Map<String, Object>> rows = this.pipeService.getPipeList(type);
+			List<Map<String, Object>> rows = this.pipeService.getPipeList(type,projectOid);
 			result = new ListResult<>(1,"200","ok",rows);
 		}catch(Exception e){
 			result = new ListResult<>(-1,"400","error");

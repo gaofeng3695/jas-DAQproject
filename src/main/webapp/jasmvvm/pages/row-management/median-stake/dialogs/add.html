@@ -136,17 +136,17 @@
 					projectOid: [{
 						required: true,
 						message: '项目名称为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					pipelineOid: [{
 						required: true,
 						message: '管线名称为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					medianStakeCode: [{
 						required: true,
 						message: '中线桩编号为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}, {
 						min: "0",
 						max: 50,
@@ -155,22 +155,22 @@
 					mileage: [{
 						required: true,
 						message: '里程为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					pointz: [{
 						required: true,
 						message: '高程为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					pointx: [{
 						required: true,
 						message: 'X坐标为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					pointy: [{
 						required: true,
 						message: 'Y坐标为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 				},
 				formData: {
@@ -254,8 +254,10 @@
 					}, function (arr) {
 						that.domain.pipeline = arr;
 					});
+				}else{
+					that.domain.pipeline=[];
 				}
-				if (edit) {
+				if (!edit) {
 					that.formData.pipelineOid = '';
 				}
 			},
@@ -294,7 +296,7 @@
 			getDetailByObjectId: function () {
 				var that = this;
 				var url = jasTools.base.rootPath + "/daq/medianStake/get.do";
-				jasTools.ajax.get(url, that.formData, function (data) {
+				jasTools.ajax.get(url, {oid:that.oid}, function (data) {
 					that.formData = data.data;
 					that.projectChanged(that.formData.projectOid, true);
 				});

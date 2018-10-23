@@ -176,37 +176,37 @@
 					projectOid: [{
 						required: true,
 						message: '项目名称为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					tendersOid: [{
 						required: true,
 						message: '标段名称为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					pipelineOid: [{
 						required: true,
 						message: '管线名称为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					pipeOid: [{
 						required: true,
 						message: '钢管编号必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					segmentsNum: [{
 						required: true,
 						message: '分割段数为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					firstParagraphLength: [{
 						required: true,
 						message: '第一段长度为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					supervisionUnit: [{
 						required: true,
 						message: '监理单位为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					supervisionEngineer: [{
 						min: "0",
@@ -261,11 +261,12 @@
 				this.getDetailByObjectId();
 				this.$refs.upload.requestFile(this.oid);
 
-			} else {
-				this.requestDomainFromBizTable('/daq/materialPipe/getCutAndNotUse.do', {}, function (arr) {
-					that.domain.pipes = arr;
-				});
 			}
+			//else {
+				//this.requestDomainFromBizTable('/daq/materialPipe/getCutAndNotUse.do', {}, function (arr) {
+					//that.domain.pipes = arr;
+				//});
+			//}
 
 			this.requestDomainFromBizTable('/daq/privilege/getProjectList.do', {}, function (arr) {
 				that.domain.project = arr;
@@ -407,11 +408,35 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
+				}else{
+					that.domain.tenders=[];
 				}
 				if (!edit) {
 					that.formData.tendersOid = '';
 					that.domain.pipeline = [];
 					that.formData.pipelineOid = '';
+					that.domain.pipes=[];
+					that.formData.pipeOid='';
+				}
+				that.getPipeCode(val,edit);
+			},
+			getPipeCode:function(val,edit){
+				var that=this;
+				if(val){
+					this.requestDomainFromBizTable(
+							'/daq/materialPipe/getCutAndNotUse.do', {
+							
+								projectOid:val
+							},
+							function (arr) {
+								that.domain.pipes = arr;
+						});	
+				}else{
+					that.domain.pipes=[];
+				}
+				
+				if(!edit){
+					that.changePipe();
 				}
 			},
 			tendersChanged: function (val, edit) { //根据标段触发管线列表
@@ -423,6 +448,8 @@
 						function (arr) {
 							that.domain.pipeline = arr;
 						});
+				}else{
+					that.domain.pipeline=[];
 				}
 				if (!edit) {
 					that.formData.pipelineOid = '';
@@ -440,6 +467,8 @@
 						function (arr) {
 							that.domain.supervisionUnits = arr;
 						});
+				}else{
+					that.domain.supervisionUnits=[];
 				}
 				if (!edit) {
 					that.formData.supervisionUnit = '';

@@ -157,11 +157,8 @@
 					<jas-base-group-title name="其他信息"></jas-base-group-title>
 					<el-row>
 						<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-							<el-form-item label="备注" prop="remarks">
-								<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks" :maxLength="200"
-								  @input="instructionNum"></el-input>
-								<p style="text-align:right;color:#999;">您还可以输入<span v-text="remarksDesc"></span>字</p>
-							</el-form-item>
+						<jas-remarks :remarks="formData.remarks" @changevalue="changevalue"></jas-remarks>
+							
 						</el-col>
 					</el-row>
 					<jas-base-group-title name="附件信息"></jas-base-group-title>
@@ -187,7 +184,7 @@
 		data: function () {
 			var that = this;
 			return {
-				remarksDesc: 200,
+			
 				domain: {
 					isPass: [{
 						key: 1,
@@ -205,12 +202,12 @@
 					pipeColdBendingOid: [{
 						required: true,
 						message: '冷弯管编号为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					certificateNum: [{
 						required: true,
 						message: '合格编号为必填项',
-						trigger: 'blur'
+						//trigger: 'blur'
 					}, {
 						min: "0",
 						max: 60,
@@ -229,22 +226,22 @@
 					projectOid: [{
 						required: true,
 						message: '项目名称为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					tendersOid: [{
 						required: true,
 						message: '标段名称为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					constructUnit: [{
 						required: true,
 						message: '施工单位为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}],
 					checkedDate: [{
 						required: true,
 						message: '检查日期为必填项',
-						trigger: 'change'
+						//trigger: 'change'
 					}]
 				},
 				formData: {
@@ -293,11 +290,9 @@
 			this.getConstructUnit();
 		},
 		methods: {
-			instructionNum: function () {
-				var that = this;
-				var num = 200 - that.formData.remarks.trim().length;
-				that.remarksDesc = num;
-			}, //剩余字数计算
+			changevalue: function (msg) {
+				this.formData.remarks = msg;
+			},
 			childChange: function (event, id, name) {
 				if (event && !this.formData[id]) {
 					top.Vue.prototype.$message({
@@ -329,11 +324,13 @@
 								//that.tendersChanged(that.formData.tendersOid);
 							//}
 						});
+				}else{
+					that.domain.tenders=[];
 				}
 			if (!edit) {
 				that.formData.tendersOid = '';
-				that.domain.constructUnitArr = [];
-				that.formData.constructUnit = '';
+				that.formData.pipeColdBendingOid = '';
+				that.domain.pipeColdBendingOidArr=[];
 				 }
 			},
 			tendersChanged: function (val, edit) { //根据标段触发管线列表
@@ -351,6 +348,8 @@
 								// }
 
 							});
+				}else{
+					that.domain.pipeColdBendingOidArr=[];
 				}
 				if (!edit) {
 					that.formData.pipeColdBendingOid = '';
@@ -401,7 +400,7 @@
 				jasTools.ajax.post(url, that.formData, function (data) {
 					
 						that.formData = data.rows[0];
-						console.log(that.formData.pipeColdBendingOid)
+						
 					that.projectChanged(data.rows[0].projectOid, true);
 					that.tendersChanged(data.rows[0].tendersOid, true);
 				});

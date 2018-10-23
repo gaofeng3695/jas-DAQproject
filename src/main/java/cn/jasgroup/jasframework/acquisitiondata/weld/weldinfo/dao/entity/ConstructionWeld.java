@@ -65,10 +65,13 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 	deviation="relativeMileage"
 )
 @UniqueConstraints(
-		strategys ={
-			@UniqueConstraintStrategy(columnNames={"pipeSegmentOrCrossOid","weldCode"},name="焊口编号")
-		}
-	)
+	strategys ={
+		@UniqueConstraintStrategy(
+			columnNames={"pipeSegmentOrCrossOid","weldCode"},
+			name="同一线路段/穿跨越下焊口编号不能重复"
+		)
+	}
+)
 @JdbcEntity(name="daq_construction_weld")
 public class ConstructionWeld extends CommonJdbcEntity {
 

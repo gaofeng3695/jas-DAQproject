@@ -140,6 +140,10 @@
       var param = window.jasTools.base.getParamsInUrl(location.href);
       this.templateCode = param.templateCode;
       this.baseUploadUrl += param.templateCode;
+    //  if(param.importUrl){
+    //	  this.baseUploadUrl = jasTools.base.rootPath +param.importUrl+ '?token=' + localStorage.getItem('token') ;
+      //}
+      //console.log(this.baseUploadUrl)
     },
     methods: {
       closeDialog: function () {
