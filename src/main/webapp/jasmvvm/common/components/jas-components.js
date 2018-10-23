@@ -1241,9 +1241,9 @@ Vue.component('jas-import-export-btns', {
 		bt_import: function () { // 导入
 			var that = this;
 			var src = './pages/template/dialogs/upload.html?templateCode=' + this.templateCode;
-			//if(that.importConfig.importUrl){
-				//src+="&importUrl="+that.importConfig.importUrl;
-			//}
+			if(that.importConfig&&that.importConfig.importUrl){
+				src+="&importUrl="+that.importConfig.importUrl;
+			}
 			top.jasTools.dialog.show({
 				title: '导入',
 				width: '600px',
@@ -1257,6 +1257,9 @@ Vue.component('jas-import-export-btns', {
 		bt_export: function (obj) {
 			var that = this;
 			var url = jasTools.base.rootPath + '/importExcelController/exportExcel.do';
+			if(that.importConfig&&that.importConfig.exportUrl){
+				url=jasTools.base.rootPath + that.importConfig.exportUrl;
+			}
 			jasTools.ajax.post(url, {
 				templateCode: this.exportTemplateCode,
 				functionCode: this.functionCode, //"F000043", // 自定义表单功能编码
@@ -1275,6 +1278,9 @@ Vue.component('jas-import-export-btns', {
 			//					this.form[key]=[Number(this.form[key].min),Number(this.form[key].max)];
 			//				}
 			//			}
+			if(that.importConfig&&that.importConfig.exportUrl){
+				url=jasTools.base.rootPath + that.importConfig.exportUrl;
+			}
 			jasTools.ajax.post(url, {
 				templateCode: this.exportTemplateCode,
 				functionCode: this.functionCode, // 自定义表单功能编码
