@@ -11,8 +11,8 @@ window.app = new Vue({
 			panelShowed: false,
 			isExpend: true,
 			menuWith: 200,
-			menusOpened: ['P-daq-scope-0001'],
-			currentTap: 'P-daq-scope-0001',
+			menusOpened: ['P-hq-weld-0001'],
+			currentTap: 'P-hq-weld-0001',
 			tabs: [], // 打开的标签页
 			items: [] //菜单数组
 		}
@@ -172,7 +172,7 @@ window.app = new Vue({
 			});
 		},
 		_listenWindowClose: function () {
-			var that=this;
+			var that = this;
 			$(window).bind("beforeunload", function (e) {
 				var e = window.event || e;　　
 				console.log(e)
