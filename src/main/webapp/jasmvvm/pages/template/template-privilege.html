@@ -612,7 +612,8 @@
 			},
 			locateRow: function (row) {
 				var that = this;
-				alert('定位');
+			    var code="daq_"+that.templateCode;
+				top.app.locate(row.oid,code);
 			},
 			scopeRow: function (row) {
 				var that = this;
