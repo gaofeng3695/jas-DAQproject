@@ -5031,19 +5031,19 @@ select AddGeometryColumn('public', 'daq_weld_rework_weld', 'geom', 4490, 'POINT'
 CREATE INDEX daq_weld_rework_weld_idx ON public.daq_weld_rework_weld USING gist (geom);
 /*********空间数据相关end*********/
 create or replace view v_daq_material as
-select oid,pipe_code as code from daq_material_pipe where active=1
+select oid,pipe_code as code,pipe_length as length from daq_material_pipe where active=1
 union all
-select oid,hot_bends_code as code from daq_material_hot_bends where active=1
+select oid,hot_bends_code as code,pipe_length as length from daq_material_hot_bends where active=1
 union all 
-select oid,tee_code as code from daq_material_tee  t where active=1
+select oid,tee_code as code,null as length from daq_material_tee  t where active=1
 union all 
-select oid,manufacturer_code as code from daq_material_insulated_joint where active=1
+select oid,manufacturer_code as code,null as length from daq_material_insulated_joint where active=1
 union all
-select oid,reducer_code as code from daq_material_reducer where active=1
+select oid,reducer_code as code,null as length from daq_material_reducer where active=1
 union all
-select oid,closure_code as code from daq_material_closure where active=1
+select oid,closure_code as code,null as length from daq_material_closure where active=1
 union all
-select oid,pipe_cold_bending_code as code from daq_material_pipe_cold_bending where active=1
+select oid,pipe_cold_bending_code as code,pipe_length as length from daq_material_pipe_cold_bending where active=1
 
 /***************添加字段*****************/
 alter table daq_material_pipe_cold_bending add column front_is_use smallint DEFAULT 0;

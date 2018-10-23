@@ -1,12 +1,10 @@
 package cn.jasgroup.jasframework.acquisitiondata.statistics.dao;
 
 import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.ApproveStatisticsBlock;
-import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.ApproveStatusEnum;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.EntryStatisticsBlock;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.comm.StatsPipeEnum;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.*;
 import cn.jasgroup.jasframework.acquisitiondata.variate.UnitHierarchyEnum;
-import cn.jasgroup.jasframework.dataaccess3.core.BaseNamedParameterJdbcTemplate;
 import cn.jasgroup.jasframework.engine.jdbc.dao.CommonDataJdbcDao;
 import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 import com.google.common.collect.ImmutableList;
@@ -35,12 +33,12 @@ public class AppStatisticsDao {
 
     /**
      * 数据录入统计
-     * @param statisTypeList 统计类型来源
+     * @param statsTypeList 统计类型来源
      * @return List
      */
-    public List<StatsResultBo> listDataEntry(List<String> statisTypeList, String projectOid) {
+    public List<StatsResultBo> listDataEntry(List<String> statsTypeList, String projectOid) {
         StringBuilder sql = new StringBuilder();
-        if (CollectionUtils.isEmpty(statisTypeList)) {
+        if (CollectionUtils.isEmpty(statsTypeList)) {
             return Lists.newArrayList();
         }
 
@@ -50,8 +48,8 @@ public class AppStatisticsDao {
         Map<String, String> pipeCheckedBlock = EntryStatisticsBlock.getPipeCheckedBlock();
         Map<String, String> weldApproveBlock = EntryStatisticsBlock.getWeldApproveBlock();
 
-        for (int i = 0; i < statisTypeList.size(); i++) {
-            String statType = statisTypeList.get(i);
+        for (int i = 0; i < statsTypeList.size(); i++) {
+            String statType = statsTypeList.get(i);
 
             if (pipeCheckedBlock.containsKey(statType)) {
                 String tableName = pipeCheckedBlock.get(statType);
@@ -66,7 +64,7 @@ public class AppStatisticsDao {
                 variables.put("projectOid", projectOid);
             }
 
-            sql.append(i<(statisTypeList.size()-1) ? " UNION ALL ":"");
+            sql.append(i<(statsTypeList.size()-1) ? " UNION ALL ":"");
         }
 
         return commonDataJdbcDao.queryForList(sql.toString(), variables, StatsResultBo.class);

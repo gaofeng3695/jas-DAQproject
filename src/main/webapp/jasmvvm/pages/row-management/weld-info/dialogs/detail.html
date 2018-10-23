@@ -22,7 +22,7 @@
 				<jas-base-group-title name="位置数据"></jas-base-group-title>
 				<jas-detail-table :titles="addressArr" :detail="detail"></jas-detail-table>
 				<jas-base-group-title name="焊口数据"></jas-base-group-title>
-				<jas-detail-table :titles="busArr" :detail="detail"></jas-detail-table>
+				<jas-detail-table ref="weldDetail" :titles="busArr" :detail="detail"></jas-detail-table>
 				<jas-base-group-title name="其他信息"></jas-base-group-title>
 				<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
 				<jas-base-group-title name="附件信息"></jas-base-group-title>
@@ -169,23 +169,25 @@
 				var that = this;
 				var url = jasTools.base.rootPath +
 					"/jdbc/commonData/constructionWeld/getPage.do";
-				jasTools.ajax.post(url, {oid:that.oid}, function (data) {
+				jasTools.ajax.post(url, {
+					oid: that.oid
+				}, function (data) {
 
 					that.detail = data.rows[0];
-					if(data.rows[0].isGoldeJoint == 1){
+					if (data.rows[0].isGoldeJoint == 1) {
 						that.detail.isGoldeJoint = '是';
 
-					}else if(data.rows[0].isGoldeJoint == 0){
+					} else if (data.rows[0].isGoldeJoint == 0) {
 						that.detail.isGoldeJoint = '否';
 					}
-					if(data.rows[0].isPipeHead == 1){
-						that.detail.isPipeHead =  '是';
-					}else if(data.rows[0].isPipeHead == 0){
-						that.detail.isPipeHead =  '否';
+					if (data.rows[0].isPipeHead == 1) {
+						that.detail.isPipeHead = '是';
+					} else if (data.rows[0].isPipeHead == 0) {
+						that.detail.isPipeHead = '否';
 					}
-					if(data.rows[0].surfaceCheck == 1){
+					if (data.rows[0].surfaceCheck == 1) {
 						that.detail.surfaceCheck = '合格';
-					}else if(data.rows[0].surfaceCheck == 0){
+					} else if (data.rows[0].surfaceCheck == 0) {
 						that.detail.surfaceCheck = '不合格';
 					}
 					if (that.detail.approveStatus == -1) {
@@ -200,8 +202,50 @@
 					if (that.detail.approveStatus == 2) {
 						that.detail.approveStatus = '通过';
 					}
+					that.addPipeEvent();
 				});
 			},
+			addPipeEvent: function () {
+				var that = this;
+				var arr = that.$refs.weldDetail;
+				var urlMap = {
+					'冷弯管': 'pages/row-management/cold-bends/dialogs/detail.html',
+					'封堵物': 'pages/row-management/sealing/dialogs/detail.html',
+					'直钢管': 'pages/template/dialogs/viewTemplate.html?menuCode=F000024',
+					'热煨弯管': 'pages/template/dialogs/viewTemplate.html?menuCode=F000025',
+					'三通': 'pages/template/dialogs/viewTemplate.html?menuCode=F000026',
+					'绝缘接头': 'pages/template/dialogs/viewTemplate.html?menuCode=F000027',
+					'大小头': 'pages/template/dialogs/viewTemplate.html?menuCode=F000028',
+					'阀门': 'pages/template/dialogs/viewTemplate.html?menuCode=F000044',
+				};
+				var frontDom = arr.$refs['frontPipeCode'];
+				var backDom = arr.$refs['backPipeCode'];
+
+				$(frontDom).css('color', 'blue').css('cursor', 'pointer').click(function () {
+					// console.log(that.detail.frontPipeTypeName + ' ' + that.detail.frontPipeOid);
+					var url = jasTools.base.setParamsToUrl(urlMap[that.detail.frontPipeTypeName], {
+						oid: that.detail.frontPipeOid
+					});
+					top.jasTools.dialog.show({
+						width: '50%',
+						height: '80%',
+						title: that.detail.frontPipeTypeName + '详情',
+						src: url,
+					});
+				});
+				$(backDom).css('color', 'blue').css('cursor', 'pointer').click(function () {
+					// console.log(that.detail.backPipeTypeName + ' ' + that.detail.backPipeOid);
+					var url = jasTools.base.setParamsToUrl(urlMap[that.detail.backPipeTypeName], {
+						oid: that.detail.backPipeOid
+					});
+					top.jasTools.dialog.show({
+						width: '50%',
+						height: '80%',
+						title: that.detail.backPipeTypeName + '详情',
+						src: url,
+					});
+				});
+			}
 		},
 	});
 </script>
