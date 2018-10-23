@@ -82,8 +82,8 @@ public class CutWeldController {
 			e.printStackTrace();
 			baseResult = new SimpleResult<>(-1, "500", "导入程序异常！");
 		}
-
-		return null;
+		baseResult = new SimpleResult<>(1, "200", "导入成功！");
+		return baseResult;
 	}
 	
 
