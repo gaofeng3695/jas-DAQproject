@@ -33,6 +33,26 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 				+ "and p.pipe_network_type_code=? order by p.create_datetime asc";
 		return this.queryForList(sql, new Object[]{unitOid,pipeNetworkTypeCode});
 	}
+
+
+    /**
+     * 根据部门oid获取该部门及部门一下的项目列表
+     * @param unitOid 组织结构ID
+     * @return 项目集合(id, name, network_type_code)
+     */
+	public List<Map<String, Object>> getProjectList(String unitOid) {
+		String sql = "" +
+				" with recursive pri_unit_temp(oid,parent_id) as ( " +
+				"   select t.oid,t.parent_id from pri_unit t where t.oid = ? and t.active=1 " +
+				"   union all " +
+				"   select t.oid,t.parent_id from pri_unit t inner join pri_unit_temp b on t.parent_id=b.oid and t.active=1 " +
+				" ) " +
+				" select distinct p.oid, p.project_name as name, p.pipe_network_type_code from daq_implement_scope_ref s " +
+				" left join ( " +
+				"   select oid,project_name,pipe_network_type_code,create_datetime from daq_project where active=1 " +
+				" ) p on s.project_oid=p.oid where s.unit_oid in (select oid from pri_unit_temp) ";
+        return this.queryForList(sql, new Object[]{unitOid});
+	}
 	
 	/***
 	  * <p>功能描述：根据部门oid获取干部们及一下部门的标段列表。</p>

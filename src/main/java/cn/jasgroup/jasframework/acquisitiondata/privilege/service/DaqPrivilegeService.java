@@ -36,6 +36,17 @@ public class DaqPrivilegeService extends BaseService{
 		String unitOid = ThreadLocalHolder.getCurrentUser().getUnitId();
 		return this.daqPrivilegeDao.getProjectList(unitOid,pipeNetworkTypeCode);
 	}
+
+
+	/**
+	 * 功能描述：获取当前用户所在部门下的项目列表
+	 * @return 项目集合(id, name, network_type_code)
+	 */
+	public List<Map<String,Object>>getProject(){
+		String unitOid = ThreadLocalHolder.getCurrentUser().getUnitId();
+		return this.daqPrivilegeDao.getProjectList(unitOid);
+	}
+
 	/***
 	  * <p>功能描述：获取当前用户所在部门下的标段列表。</p>
 	  * <p> 雷凯。</p>	
