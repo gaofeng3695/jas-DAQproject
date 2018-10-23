@@ -162,8 +162,8 @@
 						name: '外观质量检查',
 						field: 'surfaceCheck',
 						formatter: function (row, column, cellvalue, index) {
-							if (cellvalue == '0') return '否';
-							if (cellvalue == '1') return '是';
+							if (cellvalue == '0') return '不合格';
+							if (cellvalue == '1') return '合格';
 							return cellvalue;
 						}
 					}, {
@@ -353,7 +353,10 @@
 				this.topSearch.tendersOid = '';
 				this.topSearch.weldCode = '';
 				this.topSearch.pipeSegmentOrCrossOid = '';
-
+				this.domain.welds = [];
+				this.domain.pipeSegment = [];
+				this.domain.tenders = [];
+				this.domain.pipeline = [];
 				this.$refs.table.search();
 			},
 			locate: function (row) {

@@ -154,6 +154,7 @@ public class CheckPipeColdBending extends CommonJdbcEntity{
 
 	public void setPipeColdBendingOid(String pipeColdBendingOid) {
 		this.pipeColdBendingOid = pipeColdBendingOid;
+		super.setField("pipeColdBendingOid");
 	}
 
 	public String getCertificateNum() {

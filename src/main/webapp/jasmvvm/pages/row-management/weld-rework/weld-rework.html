@@ -228,14 +228,14 @@
 				}
 				  else {
 					 that.domain.tenders = [];
-					that.topSearch.tendersOid = '';
-					that.domain.pipeline = [];
-					that.topSearch.pipelineOid = '';
-					that.domain.pipeSegment = [];
-					that.topSearch.pipeSegmentOrCrossOid = '';
-					that.domain.welds = [];
-					that.topSearch.weldOid = '';
 				 }
+				that.topSearch.tendersOid = '';
+				that.domain.pipeline = [];
+				that.topSearch.pipelineOid = '';
+				that.domain.pipeSegment = [];
+				that.topSearch.pipeSegmentOrCrossOid = '';
+				that.domain.welds = [];
+				that.topSearch.weldOid = '';
 				that.searchList();
 			},
 			tendersChanged: function (val) { //根据标段触发管线列表
@@ -252,12 +252,12 @@
 				}
 				 else {
 					 that.domain.pipeline = [];
-					that.topSearch.pipelineOid = '';
-					that.domain.pipeSegment = [];
-					that.topSearch.pipeSegmentOrCrossOid = '';
-					that.domain.welds = [];
-					that.topSearch.weldOid = '';
 				}
+				that.topSearch.pipelineOid = '';
+				that.domain.pipeSegment = [];
+				that.topSearch.pipeSegmentOrCrossOid = '';
+				that.domain.welds = [];
+				that.topSearch.weldOid = '';
 				that.searchList();
 			},
 			pipelineChanged: function (val) { //根据管线触发线路段/穿跨越
@@ -274,10 +274,10 @@
 				}
 				 else {
 					 that.domain.pipeSegment = [];
-					that.topSearch.pipeSegmentOrCrossOid = '';
-					that.domain.welds = [];
-					that.topSearch.weldOid = '';
 				 }
+				that.topSearch.pipeSegmentOrCrossOid = '';
+				that.domain.welds = [];
+				that.topSearch.weldOid = '';
 				that.searchList();
 			},
 			pipeSegmentChanged: function (val) {
@@ -294,8 +294,9 @@
 				}
 				 else {
 					 that.domain.welds = [];
-					that.topSearch.weldOid = '';
+	
 				}
+				that.topSearch.weldOid = '';
 				that.searchList();
 			},
 			searchList: function () {
@@ -307,7 +308,10 @@
 				this.topSearch.tendersOid = '';
 				this.topSearch.weldOid = '';
 				this.topSearch.pipeSegmentOrCrossOid = '';
-
+				this.domain.tenders = [];
+				this.domain.pipeline = [];
+				this.domain.pipeSegment = [];
+			    this.domain.welds = [];
 				this.$refs.table.search();
 			},
 			locate: function (row) {

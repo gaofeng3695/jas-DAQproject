@@ -237,14 +237,14 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="是否金口" prop="isGoldeJoint" required>
+							<el-form-item label="是否金口">
 								<el-select v-model="formData.isGoldeJoint" clearable placeholder="请选择是否金口" size="small">
 									<el-option v-for="item in domain.isPass" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="是否连头口">
+							<el-form-item label="是否连头口"  prop="isPipeHead" required>
 								<el-select v-model="formData.isPipeHead" clearable placeholder="请选择是否连头口" size="small">
 									<el-option v-for="item in domain.isPass" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
@@ -331,7 +331,7 @@
 						message: '项目名称为必填项',
 						//trigger: 'change'
 					}],
-					isGoldeJoint: [{
+					isPipeHead: [{
 						required: true,
 						message: '是否连头口为必填项',
 						//trigger: 'change'
