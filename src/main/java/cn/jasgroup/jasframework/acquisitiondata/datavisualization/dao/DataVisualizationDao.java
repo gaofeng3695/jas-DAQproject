@@ -78,8 +78,8 @@ public class DataVisualizationDao {
                 " from %s where active = 1 and project_oid = :projectId \n";
 
         String uncheckSqlFormat = "" +
-                " select '%s' as stats_type, count(*) as entry_count, null as checked_count, COALESCE(sum(case when (is_use=1) then 1 else 0 end), 0) as used_count, \n" +
-                " null as checked_unused_count from %s where active = 1 and project_oid = :projectId ";
+                " select '%s' as stats_type, count(*) as entry_count, 0 as checked_count, COALESCE(sum(case when (is_use=1) then 1 else 0 end), 0) as used_count, \n" +
+                " 0 as checked_unused_count from %s where active = 1 and project_oid = :projectId ";
 
         StringBuilder sql = new StringBuilder();
         List<String> statsTypes = Lists.newArrayList(materialInfo.keySet());
