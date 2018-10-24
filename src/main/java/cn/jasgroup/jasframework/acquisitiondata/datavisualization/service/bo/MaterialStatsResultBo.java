@@ -11,6 +11,8 @@ public class MaterialStatsResultBo {
     /** 统计类型 */
     private String statsType;
 
+    private String cnName;
+
     /** 录入数量 */
     private Integer entryCount;
 
@@ -22,6 +24,9 @@ public class MaterialStatsResultBo {
 
     /** 已检查未使用数量 */
     private Integer checkedUnusedCount;
+
+    /** 未检查已使用数量 */
+    private Integer uncheckedUsedCount;
 
     public String getStatsType() {
         return statsType;
@@ -61,5 +66,21 @@ public class MaterialStatsResultBo {
 
     public void setCheckedUnusedCount(Integer checkedUnusedCount) {
         this.checkedUnusedCount = checkedUnusedCount;
+    }
+
+    public String getCnName() {
+        return cnName;
+    }
+
+    public void setCnName(String cnName) {
+        this.cnName = cnName;
+    }
+
+    public Integer getUncheckedUsedCount() {
+        return uncheckedUsedCount;
+    }
+
+    public void setUncheckedUsedCount(Integer uncheckedUsedCount) {
+        this.uncheckedUsedCount = uncheckedUsedCount;
     }
 }
