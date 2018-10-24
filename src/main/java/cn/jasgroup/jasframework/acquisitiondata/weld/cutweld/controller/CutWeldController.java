@@ -78,11 +78,11 @@ public class CutWeldController {
 				}
 				cutWeldService.insertDataToDB(workbook);
 			}
+			baseResult = new SimpleResult<>(1, "200", "导入成功！");
 		} catch (Exception e) {
 			e.printStackTrace();
 			baseResult = new SimpleResult<>(-1, "500", "导入程序异常！");
 		}
-		baseResult = new SimpleResult<>(1, "200", "导入成功！");
 		return baseResult;
 	}
 	
