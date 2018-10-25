@@ -111,7 +111,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="冷湾编号" prop="pipeColdBendingCode" required>
+							<el-form-item label="冷弯编号" prop="pipeColdBendingCode" required>
 								<el-input v-model="formData.pipeColdBendingCode" disabled placeholder="请输入冷湾编号" size="small"></el-input>
 							</el-form-item>
 						</el-col>
@@ -377,7 +377,7 @@
 			this.requestDomainFromBizTable('/daq/privilege/getProjectList.do', {}, function (arr) {
 				that.domain.project = arr;
 			});
-		
+
 		},
 		methods: {
 
@@ -455,12 +455,12 @@
 							},
 							function (arr) {
 								that.domain.pipeOids = arr;
-						});	
+						});
 				}else{
 					that.domain.pipeOids=[];
 					that.formData.pipeOid="";
 				}
-				
+
 			},
 			tendersChanged: function (val,edit) { //根据标段触发管线列表
 				var that = this;
@@ -473,9 +473,9 @@
 							that.domain.pipeline = arr;
 						});
 				}else{
-					that.domain.pipeline=[];	
+					that.domain.pipeline=[];
 				}
-				
+
 					if(!edit){
 					that.formData.pipelineOid = '';
 					that.domain.pipeSegment = [];
@@ -494,7 +494,7 @@
 							that.domain.supervisionUnits = arr;
 						});
 				}else{
-					that.domain.supervisionUnits=[];	
+					that.domain.supervisionUnits=[];
 				}
 				if(!edit){
 					that.formData.supervisionUnit = '';
@@ -511,7 +511,7 @@
 							that.domain.pipeSegment = arr;
 						});
 				}else{
-					that.domain.pipeSegment=[];	
+					that.domain.pipeSegment=[];
 				}
 				if(!edit){
 					that.formData.pipeSegmentOrCrossOid = '';
