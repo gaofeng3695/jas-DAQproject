@@ -1,5 +1,6 @@
 {
-  "description": "地图应用配置",
+  "description":"基于产品 JasOpenGIS 1.0",
+  "mapStyle":"lightblue",
   "basePath": "",
   "resources": [{
       "type": "css",
@@ -10,23 +11,23 @@
       "url": "basepath:../lib/openlayer_v5.0.2/ol.js",
       "id": "ol.js"
     },
+        { "type":"css","url":"basepath:../lib/jquery-easyui/1.5.2/themes/icon.css"},
+    { "type":"css","url":"basepath:../lib/jquery-easyui/1.5.2/themes/default/easyui.css"},
+    { "type":"js","url":"basepath:../lib/jquery/jquery-1.12.4.min.js","id":"jquery.js"  },
+    { "type":"js","url":"basepath:../lib/jquery-easyui/1.5.2/jquery.easyui.min.js","relyOn":"jquery.js" ,"id":"easyui.js"  },
+    { "type":"js","url":"basepath:../lib/jquery-easyui/1.5.2/locale/easyui-lang-zh_CN.js","relyOn":"easyui.js" ,"id":"easyui-lang.js"  },
     {
       "type": "js",
       "url": "basepath:../lib/proj4js/proj4_2.4.4.js"
     },
-    {
-      "type": "css",
-      "url": "basepath:style/default.css"
-    },
+       { "type":"js","url":"basepath:../lib/FileSaver.min.js"},
+    
     {
       "type": "js",
-      "url": "basepath:modules.js"
+      "url": "basepath:mapmodules.js"
     },
-    {
-      "type": "js",
-      "url": "basepath:mapstyles.js",
-      "relyOn": "ol.js"
-    }
+        { "type":"js","url":"basepath:mapstyles/default.js" ,"relyOn":"ol.js"  }
+    
   ],
   "services": {},
   "map": {
@@ -78,7 +79,7 @@
         "id": "china_shp",
         "index": 0,
         "label": "行政区划图",
-        "icon": "basepath:images/basemaps/basemap_shp.png",
+        "icon": "stylepath:images/basemap_shp.png",
         "visible": false,
         "type": "Tile",
         "source": "TileWMS",
@@ -90,7 +91,7 @@
         "id": "china_shp2",
         "index": 1,
         "label": "中国行政区划图",
-        "icon": "basepath:images/basemaps/basemap_shp.png",
+        "icon": "stylepath:images/basemap_shp.png",
         "visible": false,
         "type": "Tile",
         "source": "TileArcGISRest",
@@ -100,7 +101,7 @@
         "index": 2,
         "visible": true,
         "label": "中国影像图",
-        "icon": "basepath:images/basemaps/basemap_img.png",
+        "icon": "stylepath:images/basemap_img.png",
         "type": "Tile",
         "source": "WMTS",
         "url": "http://192.168.40.228:8080/geoserver/gwc/service/wmts",
@@ -118,7 +119,7 @@
         "index": 3,
         "visible": false,
         "label": "中国政区图",
-        "icon": "basepath:images/basemaps/basemap_img.png",
+        "icon": "stylepath:images/basemap_img.png",
         "type": "VectorTile",
         "source": "VectorTile",
         "url": "http://192.168.40.228:8080/geoserver/gwc/service/wmts",
@@ -514,149 +515,109 @@
   },
   "proxy": [],
   "modules": [{
-    "id": "baseMapToolsBar",
-    "label": "地图工具条",
-    "class": "BaseMapToolsBar",
-    "icon": "",
-    "controller": true,
-    "container": "map",
-    "moduleSet": [{
-      "type": "api",
-      "target": "zoomHome",
-      "label": "地图复位",
-      "index": "",
-      "icon": "basepath:images/dock/locate.png"
-    }, {
-      "type": "api",
-      "target": "startPanMode",
-      "label": "地图导航",
-      "index": "",
-      "icon": "basepath:images/dock/mapPan.png"
-    }, {
-      "type": "api",
-      "target": "zoomIn",
-      "label": "放大地图",
-      "index": "",
-      "icon": "basepath:images/dock/zoomIn.png"
-    }, {
-      "type": "api",
-      "target": "zoomOut",
-      "label": "缩小地图",
-      "index": "",
-      "icon": "basepath:images/dock/zoomOut.png"
-    }, {
-      "type": "api",
-      "target": "drawLineAndGetLength",
-      "label": "距离测量",
-      "index": "",
-      "icon": "basepath:images/dock/measureDistance.png",
-      "toggle": true
-    }, {
-      "type": "api",
-      "target": "drawPolygonAndGetArea",
-      "label": "面积测量",
-      "index": "",
-      "icon": "basepath:images/dock/measureArea.png",
-      "toggle": true
-    }, {
-      "type": "api",
-      "target": "clearAllGraphics",
-      "label": "清除标记",
-      "index": "",
-      "icon": "basepath:images/dock/clear.png"
-    }, {
-      "type": "module",
-      "target": "coorsPosition",
-      "index": "",
-      "toggle": true
-    }, {
-      "type": "module",
-      "target": "queryByPolygon",
-      "index": "",
-      "toggle": true
-    }, {
-      "type": "module",
-      "target": "queryByCircle",
-      "index": "",
-      "toggle": true
-    }, {
-      "type": "module",
-      "target": "drawBox",
-      "index": "",
-      "toggle": true
-    }, {
-      "type": "module",
-      "target": "layerListTree",
-      "index": "",
-      "toggle": true
-    }, {
-      "type": "module",
-      "target": "mapExport",
-      "index": "",
-      "toggle": true
-    }, {
-      "type": "module",
-      "target": "mapPrint",
-      "index": "",
-      "toggle": true
+    "id":"baseMapToolsBar","label":"地图工具条","class":"BaseMapToolsBar","icon":"","controller":true,"container":"map",
+    "moduleSet":[{
+      "type":"api","target":"zoomHome","label":"地图复位","index":"","icon":"stylepath:images/reset.png"
+    },{
+      "type":"api","target":"startPanMode","label":"地图导航","index":"","icon":"stylepath:images/mapPan.png"
+    },{
+      "type":"api","target":"zoomIn","label":"拖拽放大地图","index":"","icon":"stylepath:images/zoomIn.png"
+    },{
+      "type":"api","target":"zoomOut","label":"拖拽缩小地图","index":"","icon":"stylepath:images/zoomOut.png"
+    },{
+      "type":"api","target":"drawLineAndGetLength","label":"距离测量","index":"","icon":"stylepath:images/measureDistance.png","toggle":true
+    },{
+      "type":"api","target":"drawPolygonAndGetArea","label":"面积测量","index":"","icon":"stylepath:images/measureArea.png","toggle":true
+    },{
+      "type":"api","target":"clearAllGraphics","label":"清除标记","index":"","icon":"stylepath:images/clear.png"
+    },{
+      "type":"module","target":"coorsPosition","index":"","toggle":true
+    },{
+      "type":"module","target":"drawBox","index":"","toggle":true
+    },{
+      "type":"module","target":"layerListTree","index":"","toggle":true
+    },{
+      "type":"module","target":"circleQuery","index":"","toggle":true
+    },{
+      "type":"module","target":"polygonQuery","index":"","toggle":true
+    },{
+      "type":"api","target":"export","label":"导出图片","index":"","toggle":true,"icon":"stylepath:images/export.png"
     }]
-  }, {
-    "id": "layerListTree",
-    "label": "图层控制",
-    "class": "LayerListTree",
-    "icon": "basepath:images/dock/layers.png",
-    "enable": true,
-    "container": "map"
-  }, {
-    "id": "drawBox",
-    "label": "标绘",
-    "class": "DrawBox",
-    "icon": "basepath:images/dock/draw.png",
-    "enable": true
-  }, {
-    "id": "coorsPosition",
-    "label": "坐标定位",
-    "class": "CoorsPosition",
-    "icon": "basepath:images/dock/quicklocate.png",
-    "enable": true
-  }, {
-    "id": "queryByCircle",
-    "label": "圆查询",
-    "class": "QueryByGeometry",
-    "icon": "basepath:images/dock/queryByCircle.png",
-    "enable": false
-  }, {
-    "id": "queryByPolygon",
-    "label": "面查询",
-    "class": "QueryByGeometry",
-    "icon": "basepath:images/dock/queryByPolygon.png",
-    "enable": false
-  }, {
-    "id": "baseMapsGallary",
-    "label": "底图切换",
-    "class": "BaseMapsGallary",
-    "icon": "basepath:images/dock/queryByPolygon.png",
-    "enable": true
-  }, {
-    "id": "overViewMap",
-    "label": "鹰眼图",
-    "class": "OverViewMap",
-    "icon": "basepath:images/dock/queryByPolygon.png",
-    "enable": true,
-    "options": {
-      "url": "http://192.168.100.51:6080/arcgis/rest/services/%E8%A1%8C%E6%94%BF%E5%8C%BA%E5%88%92/MapServer"
+  },{
+    "id":"layerListTree","label":"图层控制","class":"LayerListTree","icon":"stylepath:images/layers.png","enable":true,"container":"map"
+  },{
+    "id":"drawBox","label":"标绘","class":"DrawBox","icon":"stylepath:images/draw.png","enable":true
+  },{
+    "id":"coorsPosition","label":"坐标定位","class":"CoorsPosition","icon":"stylepath:images/quicklocate.png","enable":true
+  },{
+    "id":"baseMapsGallary","label":"底图切换","class":"BaseMapsGallary","icon":"stylepath:images/queryByPolygon.png","enable":true,
+    "options":{
+      "folded":false
     }
-  }, {
-    "id": "mapPrint",
-    "label": "地图打印",
-    "class": "MapPrint",
-    "icon": "basepath:images/dock/queryByPolygon.png",
-    "enable": false
-  }, {
-    "id": "mapExport",
-    "label": "地图导出",
-    "class": "MapExport",
-    "icon": "basepath:images/dock/queryByPolygon.png",
-    "enable": false
+  },{
+    "id":"overViewMap","label":"鹰眼图","class":"OverViewMap","icon":"stylepath:images/queryByPolygon.png","enable":true,
+    "options":{
+      "url":"http://192.168.100.51:6080/arcgis/rest/services/%E8%A1%8C%E6%94%BF%E5%8C%BA%E5%88%92/MapServer"
+    }
+  },{
+    "id":"mapPrint","label":"地图打印","class":"MapPrint","icon":"stylepath:images/queryByPolygon.png","enable":false
+  },{
+    "id":"mapExport","label":"地图导出","class":"MapExport","icon":"stylepath:images/export.png","enable":true
+  },{
+    "id":"circleQuery","label":"圆查询","class":"CircleQuery",
+    "options":{
+      "showResultPanel":true,
+      "indexEnable":true,
+      "positionEnable":true,
+      "columns":[{
+        "field":"name","title":"名称","width":100,"align":"center"
+      },{
+        "field":"pipeline_oid","title":"线路段","width":100,"align":"center"
+      }],
+      "query":[{
+        "source":"pd_centerlinestake",
+        "sourceLabel":"中线桩",
+        "columnFields":"name,pipeline_oid",
+        "outFields":"stakenumber,lineid"
+      },{
+        "source":"pd_station",
+        "sourceLabel":"站场",
+        "columnFields":"name,pipeline_oid",
+        "outFields":"name,lineid"
+      },{
+        "source":"pd_valveroom",
+        "sourceLabel":"阀室",
+        "columnFields":"name,pipeline_oid",
+        "outFields":"name,lineid"
+      }]
+    }
+  },{
+    "id":"polygonQuery","class":"PolygonQuery",
+    "options":{
+      "showResultPanel":true,
+      "indexEnable":true,
+      "positionEnable":true,
+      "columns":[{
+        "field":"name","title":"名称","width":100,"align":"center"
+      },{
+        "field":"pipeline_oid","title":"线路段","width":100,"align":"center"
+      }],
+      "query":[{
+        "source":"pd_centerlinestake",
+        "sourceLabel":"中线桩",
+        "columnFields":"name,pipeline_oid",
+        "outFields":"stakenumber,lineid"
+      },{
+        "source":"pd_station",
+        "sourceLabel":"站场",
+        "columnFields":"name,pipeline_oid",
+        "outFields":"name,lineid"
+      },{
+        "source":"pd_valveroom",
+        "sourceLabel":"阀室",
+        "columnFields":"name,pipeline_oid",
+        "outFields":"name,lineid"
+      }]
+    }
   }]
 }

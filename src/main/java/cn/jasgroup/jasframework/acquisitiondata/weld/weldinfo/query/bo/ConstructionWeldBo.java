@@ -270,7 +270,26 @@ public class ConstructionWeldBo extends CommonBaseBo {
 	 * 备注
 	 */
 	private String remarks;
-
+	
+	private String fOid;
+	private String fWeldCode;
+	private String fFrontPipeOid;
+	private String fFrontPipeType;
+	private String fFrontPipeCode;
+	
+	private String bOid;
+	private String bWeldCode;
+	private String bBackPipeOid;
+	private String bBackPipeCode;
+	private String bBackPipeType;
+	
+	private String frontPipeLength;
+	private String backPipeLength;
+	
+	private String fFrontPipeLength;
+	private String bBackPipeLength;
+	
+	
 	public String getOid() {
 		return oid;
 	}
@@ -682,5 +701,118 @@ public class ConstructionWeldBo extends CommonBaseBo {
 	public void setBackPipeOid(String backPipeOid) {
 		this.backPipeOid = backPipeOid;
 	}
+
+	public String getFOid() {
+		return fOid;
+	}
+
+	public void setFOid(String fOid) {
+		this.fOid = fOid;
+	}
+
+	public String getFWeldCode() {
+		return fWeldCode;
+	}
+
+	public void setFWeldCode(String fWeldCode) {
+		this.fWeldCode = fWeldCode;
+	}
+
+	public String getFFrontPipeOid() {
+		return fFrontPipeOid;
+	}
+
+	public void setFFrontPipeOid(String fFrontPipeOid) {
+		this.fFrontPipeOid = fFrontPipeOid;
+	}
+
+	public String getFFrontPipeType() {
+		return fFrontPipeType;
+	}
+
+	public void setFFrontPipeType(String fFrontPipeType) {
+		this.fFrontPipeType = fFrontPipeType;
+	}
+
+	public String getFFrontPipeCode() {
+		return fFrontPipeCode;
+	}
+
+	public void setFFrontPipeCode(String fFrontPipeCode) {
+		this.fFrontPipeCode = fFrontPipeCode;
+	}
+
+	public String getBOid() {
+		return bOid;
+	}
+
+	public void setBOid(String bOid) {
+		this.bOid = bOid;
+	}
+
+	public String getBWeldCode() {
+		return bWeldCode;
+	}
+
+	public void setBWeldCode(String bWeldCode) {
+		this.bWeldCode = bWeldCode;
+	}
+
+	public String getBBackPipeOid() {
+		return bBackPipeOid;
+	}
+
+	public void setBBackPipeOid(String bBackPipeOid) {
+		this.bBackPipeOid = bBackPipeOid;
+	}
+
+	public String getBBackPipeCode() {
+		return bBackPipeCode;
+	}
+
+	public void setBBackPipeCode(String bBackPipeCode) {
+		this.bBackPipeCode = bBackPipeCode;
+	}
+
+	public String getBBackPipeType() {
+		return bBackPipeType;
+	}
+
+	public void setBBackPipeType(String bBackPipeType) {
+		this.bBackPipeType = bBackPipeType;
+	}
+
+	public String getFrontPipeLength() {
+		return frontPipeLength;
+	}
+
+	public void setFrontPipeLength(String frontPipeLength) {
+		this.frontPipeLength = frontPipeLength;
+	}
+
+	public String getBackPipeLength() {
+		return backPipeLength;
+	}
+
+	public void setBackPipeLength(String backPipeLength) {
+		this.backPipeLength = backPipeLength;
+	}
+
+	public String getFFrontPipeLength() {
+		return fFrontPipeLength;
+	}
+
+	public void setFFrontPipeLength(String fFrontPipeLength) {
+		this.fFrontPipeLength = fFrontPipeLength;
+	}
+
+	public String getBBackPipeLength() {
+		return bBackPipeLength;
+	}
+
+	public void setBBackPipeLength(String bBackPipeLength) {
+		this.bBackPipeLength = bBackPipeLength;
+	}
+	
 	
 }

@@ -724,6 +724,7 @@ Vue.component('jas-table-for-list', {
 			oids: [],
 			rows: [],
 			isClosed: false,
+			_privilegeCode:''
 		}
 	},
 	computed: {
@@ -787,7 +788,7 @@ Vue.component('jas-table-for-list', {
 	].join(''),
 	watch: {
 		privilegeCode: function () {
-			this._requestPrivilege(this.privilegeCode);
+			this._requestPrivilege(this._privilegeCode);
 			// this.search();
 		}
 	},
@@ -799,9 +800,11 @@ Vue.component('jas-table-for-list', {
 		this._templateCode = this.templateCode || param.templateCode;
 		this._exportTemplateCode = this.exportTemplateCode || param.exportTemplateCode;
 		this.functionCode = param.menuCode || param.functionCode;
+		this._privilegeCode=this.privilegeCode||param.privilegeCode;
 	},
 	mounted: function () {
-		this._requestPrivilege(this.privilegeCode);
+		
+		this._requestPrivilege(this._privilegeCode);
 		this.search();
 	},
 	methods: {
@@ -894,7 +897,8 @@ Vue.component('jas-table-for-list', {
 			this.$emit('locate', item)
 		},
 		isHasPrivilege: function (sName) {
-			if (this.privilegeCode && this.privilege.indexOf(sName) === -1) {
+			//console.log(sName);
+			if (this._privilegeCode && this.privilege.indexOf(sName) === -1) {
 				return false;
 			}
 			return true;
@@ -1243,9 +1247,15 @@ Vue.component('jas-import-export-btns', {
 		bt_import: function () { // 导入
 			var that = this;
 			var src = './pages/template/dialogs/upload.html?templateCode=' + this.templateCode;
+<<<<<<< HEAD
 			//if(that.importConfig.importUrl){
 			//src+="&importUrl="+that.importConfig.importUrl;
 			//}
+=======
+			if(that.importConfig&&that.importConfig.importUrl){
+				src+="&importUrl="+that.importConfig.importUrl;
+			}
+>>>>>>> v1.0
 			top.jasTools.dialog.show({
 				title: '导入',
 				width: '600px',
@@ -1259,6 +1269,9 @@ Vue.component('jas-import-export-btns', {
 		bt_export: function (obj) {
 			var that = this;
 			var url = jasTools.base.rootPath + '/importExcelController/exportExcel.do';
+			if(that.importConfig&&that.importConfig.exportUrl){
+				url=jasTools.base.rootPath + that.importConfig.exportUrl;
+			}
 			jasTools.ajax.post(url, {
 				templateCode: this.exportTemplateCode,
 				functionCode: this.functionCode, //"F000043", // 自定义表单功能编码
@@ -1277,6 +1290,9 @@ Vue.component('jas-import-export-btns', {
 			//					this.form[key]=[Number(this.form[key].min),Number(this.form[key].max)];
 			//				}
 			//			}
+			if(that.importConfig&&that.importConfig.exportUrl){
+				url=jasTools.base.rootPath + that.importConfig.exportUrl;
+			}
 			jasTools.ajax.post(url, {
 				templateCode: this.exportTemplateCode,
 				functionCode: this.functionCode, // 自定义表单功能编码

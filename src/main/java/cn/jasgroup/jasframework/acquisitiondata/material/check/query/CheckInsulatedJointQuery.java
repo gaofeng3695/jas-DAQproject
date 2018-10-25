@@ -84,7 +84,7 @@ public class CheckInsulatedJointQuery extends BaseJavaQuery {
 				conditionSql += " and cij.construct_unit = :constructUnit";
 			}
 			if (StringUtils.isNotBlank(manufacturerCode)) {
-				conditionSql += " and manufacturer_code = :manufacturerCode";
+				conditionSql += " and cij.manufacturer_code = :manufacturerCode";
 			}
 			if (null != oids && oids.size() > 0) {
 				conditionSql += " and cij.oid in (:oids)";
