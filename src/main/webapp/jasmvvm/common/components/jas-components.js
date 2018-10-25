@@ -803,7 +803,7 @@ Vue.component('jas-table-for-list', {
 		this._privilegeCode=this.privilegeCode||param.privilegeCode;
 	},
 	mounted: function () {
-		
+
 		this._requestPrivilege(this._privilegeCode);
 		this.search();
 	},
@@ -1247,15 +1247,9 @@ Vue.component('jas-import-export-btns', {
 		bt_import: function () { // 导入
 			var that = this;
 			var src = './pages/template/dialogs/upload.html?templateCode=' + this.templateCode;
-<<<<<<< HEAD
-			//if(that.importConfig.importUrl){
-			//src+="&importUrl="+that.importConfig.importUrl;
-			//}
-=======
 			if(that.importConfig&&that.importConfig.importUrl){
 				src+="&importUrl="+that.importConfig.importUrl;
 			}
->>>>>>> v1.0
 			top.jasTools.dialog.show({
 				title: '导入',
 				width: '600px',
