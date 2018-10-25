@@ -207,14 +207,16 @@ public class CutWeldService {
 		List<Map<String, Object>> projectList = daqPrivilegeService.getProject("pipe_network_code_001");
 		Sheet sheet = workbook.getSheet("切管信息表");
 		if (sheet == null) {
-			msgMap.put("getSheet", "没有名为‘切管信息表’的sheet页");
+			msgMap.put("getSheet", "没有名为‘切管信息表’的sheet页;<br>");
 			return msgMap;
 		}
 		int lastRowNum = sheet.getLastRowNum();
-		if (lastRowNum < 2) {
-			msgMap.put("getData", "excel表中数据为空");
-			return msgMap;
-		}
+//		Row row3 = sheet.getRow(2);
+//		boolean row3Blank = DataCheckUtil.isRowBlank(row3, 1, 15);
+//		if (row3Blank) {
+//			msgMap.put("getData", "excel表中数据为空;<br>");
+//			return msgMap;
+//		}
 		// 封装违反唯一性字段
 		List<String> uniqueList = new ArrayList<String>();
 		StringBuffer nullBuffer = null;
@@ -249,7 +251,7 @@ public class CutWeldService {
 					// ---------------------------判断非空----------------------
 					if (StringUtils.isBlank(cellValue)) {
 						if (j < 4 || j == 10 || j == 11) {
-							nullBuffer.append("第" + (1 + i) + "行，第" + (j + 1) + "列数据不能为空;");
+							nullBuffer.append("第" + (1 + i) + "行，第" + ((char)(j + 65)) + "列数据不能为空;<br>");
 						}
 					}
 
@@ -258,14 +260,14 @@ public class CutWeldService {
 						numericValue = (int) row.getCell(j).getNumericCellValue();
 						// ---------------------------判断非空----------------------
 						if (numericValue <= 0) {
-							nullBuffer.append("第" + (1 + i) + "行，第" + (j + 1) + "列数据不能为空;");
+							nullBuffer.append("第" + (1 + i) + "行，第" + ((char)(j + 65)) + "列数据不能为空;<br>");
 						}
 					} else if (j == 5) {
 						doubleValue = row.getCell(j).getNumericCellValue();
 						// ---------------------------判断非空----------------------
 						if (doubleValue <= 0) {
 							if (j == 4 || j == 5) {
-								nullBuffer.append("第" + (1 + i) + "行，第" + (j + 1) + "列数据不能为空;");
+								nullBuffer.append("第" + (1 + i) + "行，第" + ((char)(j + 65)) + "列数据不能为空;<br>");
 							}
 						}
 					}
@@ -285,7 +287,7 @@ public class CutWeldService {
 					// }
 					if (j == 4) {
 						if (numericValue >= 6 || numericValue <= 0) {
-							effectiveBuffer.append("第" + (1 + i) + "行，第" + (j + 1) + "列数据应大于等于小于等于5;");
+							effectiveBuffer.append("第" + (1 + i) + "行，第" + ((char)(j + 65)) + "列数据应大于等于1小于等于5;<br>");
 						}
 						double first = row.getCell(5).getNumericCellValue();
 						double second = row.getCell(6).getNumericCellValue();
@@ -295,22 +297,22 @@ public class CutWeldService {
 						switch (numericValue) {
 						case 1:
 							if (second>0 || third>0 || fourth>0 || fifth>0) {
-								effectiveBuffer.append("第" + (1 + i) + "行，第7-10列数据应为空;");
+								effectiveBuffer.append("第" + (1 + i) + "行，第G-J列数据应为空;<br>");
 							}
 							break;
 						case 2:
 							if (third>0 || fourth>0 || fifth>0) {
-								effectiveBuffer.append("第" + (1 + i) + "行，第8-10列数据应为空;");
+								effectiveBuffer.append("第" + (1 + i) + "行，第H-J列数据应为空;<br>");
 							}
 							break;
 						case 3:
 							if (fourth>0 || fifth>0) {
-								effectiveBuffer.append("第" + (1 + i) + "行，第9-10列数据应为空;");
+								effectiveBuffer.append("第" + (1 + i) + "行，第I-J列数据应为空;<br>");
 							}
 							break;
 						case 4:
 							if (fifth>0) {
-								effectiveBuffer.append("第" + (1 + i) + "行，第10列数据应为空;");
+								effectiveBuffer.append("第" + (1 + i) + "行，第J列数据应为空;<br>");
 							}
 							break;
 						default:
@@ -319,16 +321,16 @@ public class CutWeldService {
 					} else {
 						Object cellData = ExcelParseUtil.getCellData(row.getCell(j));
 						if (doubleValue < 0 || doubleValue > 999999) {
-							effectiveBuffer.append("第" + (1 + i) + "行，第" + (j + 1) + "列数据应大于0小于999999.999;");
+							effectiveBuffer.append("第" + (1 + i) + "行，第" + ((char)(j + 65)) + "列数据应大于0小于999999.999;<br>");
 						}
 					}
 				} else if (j == 13) {
 					if (StringUtils.isNotBlank(cellValue) && cellValue.length() > 200) {
-						effectiveBuffer.append("第" + (1 + i) + "行，第" + (j + 1) + "列数据长度应小于200个字符;");
+						effectiveBuffer.append("第" + (1 + i) + "行，第" + ((char)(j + 65)) + "列数据长度应小于200个字符;<br>");
 					}
 				} else {
 					if (StringUtils.isNotBlank(cellValue) && cellValue.length() > 50) {
-						effectiveBuffer.append("第" + (1 + i) + "行，第" + (j + 1) + "列数据长度应小于50个字符;");
+						effectiveBuffer.append("第" + (1 + i) + "行，第" + ((char)(j + 65)) + "列数据长度应小于50个字符;<br>");
 					}
 				}
 
@@ -340,18 +342,18 @@ public class CutWeldService {
 					// ----------------------------施工单位有效性
 					cellValue = cutWeldDao.getOidByCode(cellValue, "pri_unit", "unit_code");
 					if (StringUtils.isBlank(cellValue)) {
-						effectiveBuffer.append("第" + (1 + i) + "行，第" + (j + 1) + "列数据有误;");
+						effectiveBuffer.append("第" + (1 + i) + "行，第" + ((char)(j + 65)) + "列数据有误;<br>");
 					}
 					String unitOid = ThreadLocalHolder.getCurrentUser().getUnitId();
 					if (!unitOid.equals(cellValue)) {
-						effectiveBuffer.append("第" + (1 + i) + "行，第" + (j + 1) + "列数据有误,请填写登录用户所在部门编码;");
+						effectiveBuffer.append("第" + (1 + i) + "行，第" + ((char)(j + 65)) + "列数据有误,请填写登录用户所在部门编码;<br>");
 						
 					}
 					break;
 				case 0:
 					cellValue = cutWeldDao.getOidByCode(cellValue, "daq_project", "project_code");
 					if (StringUtils.isBlank(cellValue)) {
-						effectiveBuffer.append("第" + (1 + i) + "行，第" + (j + 1) + "列数据有误;");
+						effectiveBuffer.append("第" + (1 + i) + "行，第" + ((char)(j + 65)) + "列数据有误;<br>");
 					}
 					// ----------------------------项目有效性
 					flag = false;
@@ -362,7 +364,7 @@ public class CutWeldService {
 
 					}
 					if (flag == false) {
-						effectiveBuffer.append("第" + (1 + i) + "行，第" + (j + 1) + "列数据有误，请填写登录用户所拥有的项目;");
+						effectiveBuffer.append("第" + (1 + i) + "行，第" + ((char)(j + 65)) + "列数据有误，请填写登录用户所拥有的项目;<br>");
 					}
 					// 查询项目下的标段
 					tendersList = daqPrivilegeService.getTendersList(cellValue);
@@ -372,7 +374,7 @@ public class CutWeldService {
 				case 1:
 					cellValue = cutWeldDao.getOidByCode(cellValue, "daq_tenders", "tenders_code");
 					if (StringUtils.isBlank(cellValue)) {
-						effectiveBuffer.append("第" + (1 + i) + "行，第" + (j + 1) + "列数据有误;");
+						effectiveBuffer.append("第" + (1 + i) + "行，第" + ((char)(j + 65)) + "列数据有误;<br>");
 					}
 					// ----------------------------标段有效性
 					flag = false;
@@ -383,7 +385,7 @@ public class CutWeldService {
 
 					}
 					if (flag == false) {
-						effectiveBuffer.append("第" + (1 + i) + "行，第" + (j + 1) + "列数据有误，请填写对应项目下的标段;");
+						effectiveBuffer.append("第" + (1 + i) + "行，第" + ((char)(j + 65)) + "列数据有误，请填写对应项目下的标段;<br>");
 					}
 					// 查询标段下的管线
 					pipelineList = daqPrivilegeService.getPipelineList(cellValue);
@@ -394,7 +396,7 @@ public class CutWeldService {
 				case 2:
 					cellValue = cutWeldDao.getOidByCode(cellValue, "daq_pipeline", "pipeline_code");
 					if (StringUtils.isBlank(cellValue)) {
-						effectiveBuffer.append("第" + (1 + i) + "行，第" + (j + 1) + "列数据有误;");
+						effectiveBuffer.append("第" + (1 + i) + "行，第" + ((char)(j + 65)) + "列数据有误;<br>");
 					}
 					// ----------------------------管线有效性
 					flag = false;
@@ -405,13 +407,13 @@ public class CutWeldService {
 
 					}
 					if (flag == false) {
-						effectiveBuffer.append("第" + (1 + i) + "行，第" + (j + 1) + "列数据有误，请填写对应标段下的管线;");
+						effectiveBuffer.append("第" + (1 + i) + "行，第" + ((char)(j + 65)) + "列数据有误，请填写对应标段下的管线;<br>");
 					}
 					break;
 				case 3:
 					cellValue = cutWeldDao.getOidByCode(cellValue, "daq_material_pipe", "pipe_code");
 					if (StringUtils.isBlank(cellValue)) {
-						effectiveBuffer.append("第" + (1 + i) + "行，第" + (j + 1) + "列数据有误;");
+						effectiveBuffer.append("第" + (1 + i) + "行，第" + ((char)(j + 65)) + "列数据有误;<br>");
 					}
 					// ----------------------------钢管有效性
 					flag = false;
@@ -422,7 +424,7 @@ public class CutWeldService {
 
 					}
 					if (flag == false) {
-						effectiveBuffer.append("第" + (1 + i) + "行，第" + (j + 1) + "列数据有误，请填写对应项目下未被使用的的钢管;");
+						effectiveBuffer.append("第" + (1 + i) + "行，第" + ((char)(j + 65)) + "列数据有误，请填写对应项目下未被使用的的钢管;<br>");
 					}
 					// //钢管长度有效性
 					Object pipeLengthObj = cutWeldDao.getPipeInfo(cellValue).get(0).get("pipe_length");
@@ -435,14 +437,14 @@ public class CutWeldService {
 						double fourth = row.getCell(8).getNumericCellValue();
 						double fifth = row.getCell(9).getNumericCellValue();
 						if (pipeLength != (first + second + third + fourth + fifth)) {
-							effectiveBuffer.append("第" + (1 + i) + "行数据有误，钢管总长度应为" + pipeLength + ";");
+							effectiveBuffer.append("第" + (1 + i) + "行数据有误，钢管总长度应为" + pipeLength + ";<br>");
 						}
 					}
 					break;
 				case 11:
 					cellValue = cutWeldDao.getOidByCode(cellValue, "pri_unit", "unit_code");
 					if (StringUtils.isBlank(cellValue)) {
-						effectiveBuffer.append("第" + (1 + i) + "行，第" + (j + 1) + "列数据有误;");
+						effectiveBuffer.append("第" + (1 + i) + "行，第" + ((char)(j + 65)) + "列数据有误;<br>");
 					}
 					// ----------------------------监理单位有效性
 					flag = false;
@@ -452,7 +454,7 @@ public class CutWeldService {
 						}
 					}
 					if (flag == false) {
-						effectiveBuffer.append("第" + (1 + i) + "行，第" + (j + 1) + "列数据有误，请填写对应标段下的监理单位;");
+						effectiveBuffer.append("第" + (1 + i) + "行，第" + ((char)(j + 65)) + "列数据有误，请填写对应标段下的监理单位;<br>");
 					}
 					;
 					break;
@@ -468,7 +470,7 @@ public class CutWeldService {
 				// 判断表中数据是否重复
 				if (uniqueList.contains(row.getCell(3).getStringCellValue())
 						&& uniqueList.get(k++).equals(row.getCell(0).getStringCellValue())) {
-					uniqueBuffer.append("第" + (1 + i) + "行，第3列数据与表中第三列其他数据重复;");
+					uniqueBuffer.append("第" + (1 + i) + "行，第C列数据与表中第三列其他数据重复;<br>");
 				}
 			}
 			uniqueList.add(row.getCell(3).getStringCellValue());
@@ -478,7 +480,7 @@ public class CutWeldService {
 				String projectCode = (String) pipeListInCut.get(k).get("project_code");
 				if ((row.getCell(3).getStringCellValue().equals(pipeCode))
 						&& (row.getCell(0).getStringCellValue().equals(projectCode))) {
-					uniqueBuffer.append("第" + (1 + i) + "行，第3列数据与数据库中其他数据重复;");
+					uniqueBuffer.append("第" + (1 + i) + "行，第C列数据与数据库中其他数据重复;<br>");
 				}
 			}
 
