@@ -138,7 +138,11 @@ Vue.component('jas-file-upload', {
 			});
 		},
 		fileUploaded: function (response, file, fileList) {
-			this.$emit('success', response, file, fileList)
+			var that = this;
+			that.indexOfFileToSubmit++;
+			if (that.indexOfFileToSubmit >= that.lengthOfFileToSubmit) {
+				this.$emit('success', response, file, fileList)
+			}
 		},
 		removeFile: function (file, fileList) {
 			if (file.status === 'success' && file.oid) {
@@ -158,6 +162,8 @@ Vue.component('jas-file-upload', {
 					var afileToSubmit = that.$refs.upload.uploadFiles.filter(function (item) {
 						return !item.oid
 					});
+					that.lengthOfFileToSubmit = afileToSubmit.length;
+					that.indexOfFileToSubmit = 0;
 					if (afileToSubmit.length > 0) {
 						that.$refs.upload.submit();
 					} else {
@@ -696,7 +702,7 @@ Vue.component('jas-table-for-list', {
 		editUrl: {},
 		templateCode: {},
 		className: {},
-		importConfig:{}
+		importConfig: {}
 	},
 	data: function () {
 		return {
@@ -1220,7 +1226,7 @@ Vue.component('jas-import-export-btns', {
 			type: Boolean,
 			default: true,
 		},
-		importConfig:{}
+		importConfig: {}
 	},
 	data: function () {
 		return {}
@@ -1238,7 +1244,7 @@ Vue.component('jas-import-export-btns', {
 			var that = this;
 			var src = './pages/template/dialogs/upload.html?templateCode=' + this.templateCode;
 			//if(that.importConfig.importUrl){
-				//src+="&importUrl="+that.importConfig.importUrl;
+			//src+="&importUrl="+that.importConfig.importUrl;
 			//}
 			top.jasTools.dialog.show({
 				title: '导入',
