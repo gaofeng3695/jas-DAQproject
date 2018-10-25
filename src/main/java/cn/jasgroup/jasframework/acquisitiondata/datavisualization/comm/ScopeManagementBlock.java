@@ -1,11 +1,13 @@
 package cn.jasgroup.jasframework.acquisitiondata.datavisualization.comm;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
+import java.util.List;
 import java.util.Map;
 
 /**
- * description: none
+ * description: 范围管理统计类型
  *
  * @author xiefayang
  * 2018/10/22 14:03
@@ -18,6 +20,8 @@ public class ScopeManagementBlock {
 
     private static final Map<String, ScopeManagementBlock> SCOPE_MANAGEMENT_BLOCK;
 
+    public static final Map<String, String> MAP = ImmutableMap.of("pipe_station", "station_classification_code01", "pipe_valve_room", "station_classification_code02");
+
     static {
         SCOPE_MANAGEMENT_BLOCK = ImmutableMap.<String, ScopeManagementBlock>builder()
                 .put("pipeline", new ScopeManagementBlock("daq_pipeline", "管线"))
@@ -25,9 +29,10 @@ public class ScopeManagementBlock {
                 .put("pipe_segment", new ScopeManagementBlock("daq_pipe_segment", "线路段"))
 
                 .put("cross", new ScopeManagementBlock("daq_cross", "穿跨越"))
-                .put("pipe_station", new ScopeManagementBlock("daq_pipe_station", "站场阀室"))
-                .put("maintenance_road", new ScopeManagementBlock("daq_maintenance_road", "伴行道路"))
+                .put("pipe_station", new ScopeManagementBlock("daq_pipe_station", "站场"))
+                .put("pipe_valve_room", new ScopeManagementBlock("daq_pipe_station", "阀室"))
 
+                .put("maintenance_road", new ScopeManagementBlock("daq_maintenance_road", "伴行道路"))
                 .put("power_line", new ScopeManagementBlock("daq_power_line", "外供电线路"))
                 .put("tenders", new ScopeManagementBlock("daq_tenders", "标段"))
                 .build();

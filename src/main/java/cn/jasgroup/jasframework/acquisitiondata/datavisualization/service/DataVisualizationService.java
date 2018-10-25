@@ -68,4 +68,10 @@ public class DataVisualizationService {
         returnList.forEach(bo -> bo.setCnName(block.get(bo.getStatsType()).getCnName()));
         return returnList;
     }
+
+
+    public List steelPipeUsage(List<String> projectIds) {
+
+        return null;
+    }
 }

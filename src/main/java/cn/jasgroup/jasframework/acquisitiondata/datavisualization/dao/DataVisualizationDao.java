@@ -13,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * description: none
@@ -46,15 +43,22 @@ public class DataVisualizationDao {
 
     public List<ScopeStatsResultBo> countScopeManagement(String projectId) {
         String sqlFormat = " select '%s' as stats_type, count(*) as stats_result from %s where active = 1 and project_oid = :projectId ";
-
+        String stationSqlFormat = " select '%s' as stats_type, count(*) as stats_result from %s where active = 1 and project_oid = :projectId and pipe_station_classification = '%s' ";
         StringBuilder sql = new StringBuilder();
         Map<String, ScopeManagementBlock> block = ScopeManagementBlock.getScopeManagementBlock();
         List<String> statsTypes = new ArrayList<>(block.keySet());
 
         for (int i = 0; i < statsTypes.size(); i++) {
             String statsType = statsTypes.get(i);
-            sql.append(String.format(sqlFormat, statsType, block.get(statsType).getTableName()));
+
+            // 站场/阀室 同表分类型统计
+            if (ScopeManagementBlock.MAP.containsKey(statsType)) {
+                sql.append(String.format(stationSqlFormat, statsType, block.get(statsType).getTableName(), ScopeManagementBlock.MAP.get(statsType)));
+            } else {
+                sql.append(String.format(sqlFormat, statsType, block.get(statsType).getTableName()));
+            }
             sql.append(i<(statsTypes.size()-1) ? " UNION ALL ":"");
+
         }
 
         return commonDataJdbcDao.queryForList(sql.toString() , ImmutableMap.of("projectId", projectId), ScopeStatsResultBo.class);
@@ -71,34 +75,34 @@ public class DataVisualizationDao {
         Map<String, MaterialBlock> materialInfo = MaterialBlock.getMaterialInfo();
 
         String pipelineSqlFormat = "" +
-                " select 'material_pipe' as stats_type, (select count(*) from daq_material_pipe where active = 1 and project_oid = :projectId) as entry_count,\n" +
-                "  count(*) as checked_count,\n" +
-                "  (select sum(case when (is_use=1) then 1 else 0 end) from daq_material_pipe where active = 1 and project_oid = :projectId) as used_count,\n" +
-                "  sum(case when (is_use=1) then 1 else 0 end) as checked_unused_count,\n" +
-                "  (\n" +
-                "    select count(*)from daq_material_pipe where active = 1 and project_oid = :projectId\n" +
+                " select 'material_pipe' as stats_type, (select sum(pipe_length) from daq_material_pipe where active = 1 and project_oid = :projectId) as entry_count_or_length,\n" +
+                "   sum(pipe_length) as checked_count_or_length,\n" +
+                "   (select sum(pipe_length) from daq_material_pipe where active = 1 and project_oid = :projectId and is_use=1) as used_count_or_length,\n" +
+                "   sum(case when (is_use=1) then pipe_length else 0 end ) as checked_unused_count_or_length,\n" +
+                "   (select sum(pipe_length) from daq_material_pipe where active = 1 and project_oid = :projectId\n" +
                 "    and oid not in (select distinct pipe_oid from daq_check_coating_pipe where active=1 and project_oid = :projectId)\n" +
                 "    and oid not in (select pipe_oid from daq_material_pipe_cold_bending where active=1 and project_oid = :projectId and oid in (\n" +
                 "      select pipe_cold_bending_oid from daq_check_pipe_cold_bending where project_oid = :projectId\n" +
-                "    ))) as unchecked_used_count\n" +
+                "    ))) as unchecked_used_count_or_length\n" +
                 " from daq_material_pipe where active = 1 and project_oid = :projectId and\n" +
                 " (oid in (select distinct pipe_oid from daq_check_coating_pipe where active=1 and project_oid = :projectId)) or\n" +
                 " (oid in (select pipe_oid from daq_material_pipe_cold_bending where active=1 and project_oid = :projectId and oid in (\n" +
-                "   select pipe_cold_bending_oid from daq_check_pipe_cold_bending where active=1 and project_oid = :projectId)))";
+                "   select pipe_cold_bending_oid from daq_check_pipe_cold_bending where active=1 and project_oid = :projectId))) ";
 
         String checkSqlFormat = "" +
-                " select '%s' as stats_type, count(*) as entry_count, " +
-                " (select count(distinct %s) from %s where active = 1 and project_oid = :projectId) as checked_count, \n" +
-                " COALESCE(sum(case when (is_use=1) then 1 else 0 end), 0) as used_count, \n" +
+                " select '%s' as stats_type, count(*) as entry_count_or_length, " +
+                " (select count(distinct %s) from %s where active = 1 and project_oid = :projectId) as checked_count_or_length, \n" +
+                " COALESCE(sum(case when (is_use=1) then 1 else 0 end), 0) as used_count_or_length, \n" +
                 " (select count(*) from %s where active =1 and project_oid = :projectId and is_use = 0 and oid in ( \n" +
-                "   select distinct %s from %s where active =1 and project_oid = :projectId)) as checked_unused_count, \n" +
+                "   select distinct %s from %s where active =1 and project_oid = :projectId)) as checked_unused_count_or_length, \n" +
                 " (select count(*) from %s where active =1 and project_oid = :projectId and is_use = 1 and oid not in ( \n" +
-                "   select distinct %s from %s where active =1 and project_oid = :projectId)) as unchecked_used_count \n" +
+                "   select distinct %s from %s where active =1 and project_oid = :projectId)) as unchecked_used_count_or_length \n" +
                 " from %s where active = 1 and project_oid = :projectId \n";
 
         String uncheckSqlFormat = "" +
-                " select '%s' as stats_type, count(*) as entry_count, 0 as checked_count, COALESCE(sum(case when (is_use=1) then 1 else 0 end), 0) as used_count, \n" +
-                " 0 as checked_unused_count, 0 as unchecked_used_count from %s where active = 1 and project_oid = :projectId ";
+                " select '%s' as stats_type, count(*) as entry_count_or_length, 0 as checked_count_or_length, " +
+                " COALESCE(sum(case when (is_use=1) then 1 else 0 end), 0) as used_count_or_length, \n" +
+                " 0 as checked_unused_count_or_length, 0 as unchecked_used_count_or_length from %s where active = 1 and project_oid = :projectId ";
 
         StringBuilder sql = new StringBuilder();
         List<String> statsTypes = Lists.newArrayList(materialInfo.keySet());
@@ -124,4 +128,8 @@ public class DataVisualizationDao {
         return commonDataJdbcDao.queryForList(sql.toString(), ImmutableMap.of("projectId", projectId), MaterialStatsResultBo.class);
     }
 
+
+    public void countAndSumPipeUsage(List<String> projectIds) {
+
+    }
 }

@@ -5,7 +5,10 @@ import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 
 /**
- * 物资
+ * description: 物资检查统计类型
+ *
+ * @author xiefayang
+ * 2018/10/22 14:03
  */
 public class MaterialBlock {
 

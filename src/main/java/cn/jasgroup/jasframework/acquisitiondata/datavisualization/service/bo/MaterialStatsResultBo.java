@@ -14,19 +14,19 @@ public class MaterialStatsResultBo {
     private String cnName;
 
     /** 录入数量 */
-    private Integer entryCount;
+    private Double entryCountOrLength;
 
     /** 已检查数量 */
-    private Integer checkedCount;
+    private Double checkedCountOrLength;
 
     /** 已使用数量 */
-    private Integer usedCount;
+    private Double usedCountOrLength;
 
     /** 已检查未使用数量 */
-    private Integer checkedUnusedCount;
+    private Double checkedUnusedCountOrLength;
 
     /** 未检查已使用数量 */
-    private Integer uncheckedUsedCount;
+    private Double uncheckedUsedCountOrLength;
 
     public String getStatsType() {
         return statsType;
@@ -34,38 +34,6 @@ public class MaterialStatsResultBo {
 
     public void setStatsType(String statsType) {
         this.statsType = statsType;
-    }
-
-    public Integer getEntryCount() {
-        return entryCount;
-    }
-
-    public void setEntryCount(Integer entryCount) {
-        this.entryCount = entryCount;
-    }
-
-    public Integer getCheckedCount() {
-        return checkedCount;
-    }
-
-    public void setCheckedCount(Integer checkedCount) {
-        this.checkedCount = checkedCount;
-    }
-
-    public Integer getUsedCount() {
-        return usedCount;
-    }
-
-    public void setUsedCount(Integer usedCount) {
-        this.usedCount = usedCount;
-    }
-
-    public Integer getCheckedUnusedCount() {
-        return checkedUnusedCount;
-    }
-
-    public void setCheckedUnusedCount(Integer checkedUnusedCount) {
-        this.checkedUnusedCount = checkedUnusedCount;
     }
 
     public String getCnName() {
@@ -76,11 +44,43 @@ public class MaterialStatsResultBo {
         this.cnName = cnName;
     }
 
-    public Integer getUncheckedUsedCount() {
-        return uncheckedUsedCount;
+    public Double getEntryCountOrLength() {
+        return entryCountOrLength;
     }
 
-    public void setUncheckedUsedCount(Integer uncheckedUsedCount) {
-        this.uncheckedUsedCount = uncheckedUsedCount;
+    public void setEntryCountOrLength(Double entryCountOrLength) {
+        this.entryCountOrLength = entryCountOrLength;
+    }
+
+    public Double getCheckedCountOrLength() {
+        return checkedCountOrLength;
+    }
+
+    public void setCheckedCountOrLength(Double checkedCountOrLength) {
+        this.checkedCountOrLength = checkedCountOrLength;
+    }
+
+    public Double getUsedCountOrLength() {
+        return usedCountOrLength;
+    }
+
+    public void setUsedCountOrLength(Double usedCountOrLength) {
+        this.usedCountOrLength = usedCountOrLength;
+    }
+
+    public Double getCheckedUnusedCountOrLength() {
+        return checkedUnusedCountOrLength;
+    }
+
+    public void setCheckedUnusedCountOrLength(Double checkedUnusedCountOrLength) {
+        this.checkedUnusedCountOrLength = checkedUnusedCountOrLength;
+    }
+
+    public Double getUncheckedUsedCountOrLength() {
+        return uncheckedUsedCountOrLength;
+    }
+
+    public void setUncheckedUsedCountOrLength(Double uncheckedUsedCountOrLength) {
+        this.uncheckedUsedCountOrLength = uncheckedUsedCountOrLength;
     }
 }
