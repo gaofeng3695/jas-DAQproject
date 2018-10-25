@@ -284,11 +284,39 @@ public class CutWeldService {
 					// e.printStackTrace();
 					// }
 					if (j == 4) {
-						if (numericValue >= 6 || numericValue < 0) {
-							effectiveBuffer.append("第" + (1 + i) + "行，第" + (j + 1) + "列数据应大于1小于5;");
+						if (numericValue >= 6 || numericValue <= 0) {
+							effectiveBuffer.append("第" + (1 + i) + "行，第" + (j + 1) + "列数据应大于等于小于等于5;");
+						}
+						double first = row.getCell(5).getNumericCellValue();
+						double second = row.getCell(6).getNumericCellValue();
+						double third = row.getCell(7).getNumericCellValue();
+						double fourth = row.getCell(8).getNumericCellValue();
+						double fifth = row.getCell(9).getNumericCellValue();
+						switch (numericValue) {
+						case 1:
+							if (second>0 || third>0 || fourth>0 || fifth>0) {
+								effectiveBuffer.append("第" + (1 + i) + "行，第7-10列数据应为空;");
+							}
+							break;
+						case 2:
+							if (third>0 || fourth>0 || fifth>0) {
+								effectiveBuffer.append("第" + (1 + i) + "行，第8-10列数据应为空;");
+							}
+							break;
+						case 3:
+							if (fourth>0 || fifth>0) {
+								effectiveBuffer.append("第" + (1 + i) + "行，第9-10列数据应为空;");
+							}
+							break;
+						case 4:
+							if (fifth>0) {
+								effectiveBuffer.append("第" + (1 + i) + "行，第10列数据应为空;");
+							}
+							break;
+						default:
+							break;
 						}
 					} else {
-
 						Object cellData = ExcelParseUtil.getCellData(row.getCell(j));
 						if (doubleValue < 0 || doubleValue > 999999) {
 							effectiveBuffer.append("第" + (1 + i) + "行，第" + (j + 1) + "列数据应大于0小于999999.999;");
@@ -317,6 +345,7 @@ public class CutWeldService {
 					String unitOid = ThreadLocalHolder.getCurrentUser().getUnitId();
 					if (!unitOid.equals(cellValue)) {
 						effectiveBuffer.append("第" + (1 + i) + "行，第" + (j + 1) + "列数据有误,请填写登录用户所在部门编码;");
+						
 					}
 					break;
 				case 0:
