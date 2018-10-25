@@ -65,7 +65,7 @@
 
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="钢管编号" prop="pipeOid" required>
-								<el-select v-model="formData.pipeOid" clearable :disabled="isEdit" placeholder="请选择钢管编号" size="small" @change="changePipe">
+								<el-select v-model="formData.pipeOid" clearable :disabled="isEdit&&isInit" placeholder="请选择钢管编号" size="small" @change="changePipe">
 									<el-option v-for="item in domain.pipes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
@@ -158,6 +158,7 @@
 		data: function () {
 			var that = this;
 			return {
+				isInit:false,
 				isEdit: false,
 				segmentArrs: [{
 					label: "第一段长度(m)",
@@ -421,6 +422,7 @@
 					that.domain.tenders = [];
 				}
 				if (!edit) {
+					that.isInit=false;
 					that.formData.tendersOid = '';
 					that.domain.pipeline = [];
 					that.formData.pipelineOid = '';
@@ -527,6 +529,7 @@
 			},
 			getDetailByObjectId: function () {
 				var that = this;
+				that.isInit=true;
 				var url = jasTools.base.rootPath + "/jdbc/commonData/cutWeld/getPage.do";
 				jasTools.ajax.post(url, {
 					oid: that.oid
@@ -539,13 +542,11 @@
 					data.rows[0].fifthParagraphLength = data.rows[0].fifthParagraphLength+'';
 					that.projectChanged(data.rows[0].projectOid, true);
 					that.tendersChanged(data.rows[0].tendersOid, true);
+					that.domain.pipes.push({
+						key: data.rows[0].pipeOid,
+						value: data.rows[0].pipeCode
+					}); //"678b
 					that.getPipeLengthById(data.rows[0].pipeOid,function(){
-						that.domain.pipes.push({
-							key: data.rows[0].pipeOid,
-							value: data.rows[0].pipeCode
-						}); //"678be0f2-3b5f-49f7-95b5-cc5efb2e0c74"
-
-					
 						that.resetSegmentFields(data.rows[0].segmentsNum, data.rows[0]);
 					});
 				
