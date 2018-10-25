@@ -48,18 +48,20 @@ var Constants = {
         "layerListenerConfigError": "图层监听配置出错！",
         "eventNotRegister": "事件没有注册，回调函数无法执行",
         "eventNameRepeatError": "事件名称已经存在！",
-        "graphicCreateError": "图形创建出错 ，请检查数据结构",
+        "graphicCreateError": "图形创建出错 ，请检查数据结构！",
         "getDistanceError": "计算距离出错！",
         "getAreaError": "计算面积出错！",
-        "invalidFlashData": "无效的闪烁规则",
-        "featureNotFound": "没有查询到目标",
-        "queryError": "查询出错",
+        "invalidFlashData": "无效的闪烁规则！",
+        "featureNotFound": "没有查询到目标要素，请检查查询条件！",
+        "geometryNotFound": "没有查询到空间坐标数据！",
+        "queryError": "查询出错！",
         "layerSetNotFound": "没有找到对应的layerSet",
         "repeatIdError": "重复ID",
         "hasNoIdError": "ID不存在",
         "hasNoLabelPropertyError": "图层没有包含标注所需要的属性字段，请检查图层的outFields配置",
         "hasNoStyleError": "样式不存在",
         "hasNoProj4js": "自定义投影需要引入proj4.js",
+        "hasNoJqueryEasyUILib": "需要引入jquery easyUI依赖",
         "hasNoConfigDataError":"配置不存在",
         "callbackConfigNeeded":"需要配置callback参数",
         "exportResourceNeeded":"地图导出功能需要引入FileSaver.js"
@@ -121,7 +123,7 @@ var JasMap = null ,M = null;
             sphereRadius:6378137.0,//4490、4326、3857
             appName:"",
             mapStyle:"default",
-            dpi:window.screen.deviceXDPI ?window.screen.deviceXDPI :96 ,
+            dpi:window.screen.deviceXDPI ? window.screen.deviceXDPI :96 ,
             duration:500,
             drawLayerId:"drawLayer",
             dragLayerId:"drawLayer_drag",
@@ -170,13 +172,7 @@ var JasMap = null ,M = null;
         var styleManager = new StyleManager();//图层样式管理器
 
         //
-        var apiInit = function(){
-            eventManager.startup();
-            styleManager.startup();
-            mapManager.startup();
-            moduleManager.startup();
-            layerManager.startup();
-            configManager.startup();//这里配置加载最后启动
+        var startup = function(){
 
             _this.subscribe( _this.Events .ConfigLoadedEvent ,apiDefaults.onConfigLoaded);
             _this.subscribe( _this.Events .MapLoadedEvent ,apiDefaults.onMapLoaded);
@@ -185,6 +181,14 @@ var JasMap = null ,M = null;
             _this.subscribe( _this.Events .ModuleStartupEvent ,apiDefaults.onModuleStartup);
             _this.subscribe( _this.Events .OptionalLayerAddedEvent ,apiDefaults.onLayerAdded);
             _this.subscribe( _this.Events .MapResizedEvent ,apiDefaults.onMapResized);
+
+            eventManager.startup();
+            styleManager.startup();
+            mapManager.startup();
+            moduleManager.startup();
+            layerManager.startup();
+            configManager.startup();//这里配置加载最后启动
+
         };//
         _this.map = null;
         _this.apiConfig = null;
@@ -197,7 +201,7 @@ var JasMap = null ,M = null;
             info.currentZoom = view.getZoom();
             console.log("MapInfo:" + JSON.stringify(info));
         };
-        /*********导航类*********/
+        //------------导航类--------------//
         _this.centerAt = function(x, y ){
             //_this.map.getView().centerOn(x,y);
             if(!isNaN(x) && !isNaN(y) ){
@@ -209,7 +213,6 @@ var JasMap = null ,M = null;
         };
         _this.startPanMode = function(){
             mapManager.active(MapManager.NAVIGATOR);
-
         };
         _this.levelUp = function(){
             var level = _this.map.getView().getZoom();
@@ -291,7 +294,7 @@ var JasMap = null ,M = null;
         _this.hideZoomSlider = function(){
             //console.info("开发中...");
         };
-        /*********信息获取类********/
+        //------------信息获取类------------//
         _this.getLayerById = function(layerId){
             layerId = layerId.toLowerCase();
             var collection = _this.map.getLayers();
@@ -380,13 +383,75 @@ var JasMap = null ,M = null;
             var params = commonUtil.extend(defaults , obj);
             return new ol.style.Style(params);
         };
+        //-----------弹出窗口----------//
         _this.showInfoWindow = function(x, y ,content ,title ,width ,height){
-            mapManager.updateInfoWindow.apply(this,arguments);
+            mapManager.showInfoWindow.apply(this,arguments);
         };
-        _this.showDialog = function(title,url,width,height){
-            mapManager.showDialog.apply(this,arguments);
+
+        _this.dialog = function(options){
+            if(!$ ){
+                eventManager.publishError(_this.Strings.hasNoJqueryEasyUILib);
+            }
+            var defaults = {
+                title : "信息窗口" ,
+                width :  550 ,
+                height : 500 ,
+                left: null,
+                top: null,
+                modal :true ,
+                draggable :true ,
+                inline: false ,
+                resizable :true ,
+                collapsible :true ,//可折叠的
+                constrain :true,
+                href : "",
+                $dom :null,
+                container :"body", //inline :true 条件下可配置"map"|"body"|"#id"
+                onClose: function () {//弹出层关闭事件
+                    $(this).dialog('destroy');
+                },
+                onLoad: function () {//弹出层加载事件
+
+                }
+            };
+            var container = options.container ;
+            var $dom = options.$dom;
+            container && delete options.container;
+            $dom && delete options.$dom;
+
+            var params = commonUtil.extend(defaults , options);
+
+            if($dom){
+                return $dom.dialog(params);
+            }
+            var inline = options.inline;
+            var $dialog = null;
+            if(container instanceof Node){
+                $dialog =  $('<div id="map-dialog"/>',container);
+            }else if(inline && container === "map"){
+                $dialog =  $('<div id="map-dialog"/>',_this.map.getTargetElement());
+            }else{
+                $dialog = $('<div id="map-dialog"/>');
+            }
+            return $dialog.dialog(params);
         };
-        /********图层操作类********/
+        _this.moduleDialog = function(options, $dom ,parent){
+            options.resizable = true;
+            options.modal = false;
+            options.collapsible = true;
+            options.constrain = true;
+            options.inline = true;
+            if(options.right){
+                options.left = parent.offsetWidth - options.width - options.right;
+            }
+            if(options.bottom){
+                options.top = parent.offsetHeight - options.height  - options.bottom;
+            }
+            options.container = parent;
+            options.$dom = $dom;
+            return _this.dialog(options );
+        };
+        //-------------图层操作类----------//
         _this.addLayer = function(layer ){
             _this.map.addLayer(layer);
             //layerAddedEvent
@@ -415,7 +480,7 @@ var JasMap = null ,M = null;
             layer  = layerManager.createLayer(params);
             _this.addLayer(layer);
             return layer;
-        };   //new
+        };
         _this.clearAllGraphics = function(layerId){
             if(layerId){
                 _this.clearGraphicsLayer(layerId);
@@ -842,7 +907,14 @@ var JasMap = null ,M = null;
             var doPosition = function(){
                 //取得多个要素的分布范围
                 var feature0 = features[0];
-                if(!feature0) return false ;
+                if(!feature0 ){
+                    eventManager.publishError(_this.Strings.featureNotFound);
+                    return false ;
+                }
+                if( !feature0.getGeometry()){
+                    eventManager.publishError(_this.Strings.geometryNotFound);
+                    return false ;
+                }
                 var extent = feature0.getGeometry().getExtent();//要素的分布范围
                 for(var i = 1 ; i < features.length ; i++){
                     var featureI = features[i];
@@ -962,7 +1034,7 @@ var JasMap = null ,M = null;
             });
             _this.map.renderSync();
         };
-        /********标绘********/
+        //---------------标绘--------------//
         _this.getXY = function(callback){
             if(typeof callback === "function"){
                 _this.map.once("click",function(e){
@@ -1072,7 +1144,7 @@ var JasMap = null ,M = null;
                 }
             });
         };
-        /*******事件方法******/
+        //---------------事件方法------------//
         _this.publish = function(eventType , data){
             eventManager.publishEvent.apply(this,arguments);
         };
@@ -1092,21 +1164,9 @@ var JasMap = null ,M = null;
         _this.resizeMap = function(){
             _this.map.updateSize();
         };
-        _this.dialog = function($dom,options){
-            options.resizable = true;
-            options.collapsible = true;
-            options.constrain = true;
-            options.inline = true;
-            var container = this.container;
-            var dom = this.dom;
-            if(options.right){
-                options.left = container.offsetWidth - options.width - options.right;
-            }
-            if(options.bottom){
-                options.top = container.offsetHeight - options.height  - options.bottom;
-            }
-            return $dom.dialog(options);
-        };
+
+
+        //-----------几个管理器------------//
         function MapManager(){
             MapManager.NAVIGATOR = "navigator" ;
             MapManager.DRAW = "draw" ;
@@ -1142,10 +1202,6 @@ var JasMap = null ,M = null;
                         "units":"metric",
                         "topOutUnits":"千米",
                         "topInUnits":"米"
-                        //,
-                        // "render":function(){
-                        //
-                        // }
                     });
                     _this.map.getControls().push(scaleLineControl);
                 }
@@ -1301,7 +1357,7 @@ var JasMap = null ,M = null;
                             output = measureParams.labelStyleFunc(area);
                             tooltipCoord = geom.getInteriorPoint().getCoordinates();
                         } else if (geom instanceof ol.geom.LineString) {
-                            length = Math.abs(ol.sphere.getLength(geom,sphereMetricOptions));
+                            var length = Math.abs(ol.sphere.getLength(geom,sphereMetricOptions));
                             output = measureParams.labelStyleFunc(length);
                             tooltipCoord = geom.getLastCoordinate();
                         }
@@ -1360,18 +1416,21 @@ var JasMap = null ,M = null;
                 //添加交互对象
                 _class.flashSelectInteracting = new ol.interaction.Select({
                     style:function(feature){
+                        var layerId = feature._layerId ;
                         var style = feature.getStyle();
-                        var lStyle = null;
-                        if(!style){
-                            var fId = feature.getId();
-                            var layerId = fId .substring(0,fId.indexOf("."));
-                            var layer = _this.getLayerById(layerId);
-                            layer && ( lStyle = layer.getStyle());
-                        }
+                        var lStyle = styleManager.layerStyles[layerId];
                         return styleManager.getBoldStyle(style,lStyle,feature);
                     },
                     condition: ol.events.condition.pointerMove,
                     layers:flashLayers
+                });
+                _class.flashSelectInteracting.on("select",function(e){
+                    var features = e.selected;
+                    for(var i = 0 ; i < features.length ;i++){
+                        var feature = features[i];
+                        var layerId = e.target.getLayer(feature).get("id");
+                        feature._layerId = layerId;
+                    }
                 });
                 _this.map.addInteraction(_class.flashSelectInteracting);
             };
@@ -1401,17 +1460,16 @@ var JasMap = null ,M = null;
                         var feature = features[i];
                         //默认的样式设置 ？
                         var layerId = e.target.getLayer(feature).get("id");
-                        var featureId = feature.getId();
-                        var dotIndex = featureId.indexOf ? featureId.indexOf("."):-1;
-                        var id = featureId;
-                        if(dotIndex >= 0 ){
-                            id = featureId.substring( dotIndex + 1);
-                        }
-                        var attributes = feature.getProperties();
-                        attributes.id = id;
+                        layerManager.writeFeatureId(feature);
                         var ly = clickListenedLayers[layerId];
                         if(ly && ly.callback){
-                            ly.callback({layerId:layerId,attributes:attributes ,feature:feature,pixel:pixel ,coordinate:coordinate});
+                            ly.callback({
+                                layerId:layerId,
+                                attributes:feature.getProperties() ,
+                                feature:feature,
+                                pixel:pixel ,
+                                coordinate:coordinate
+                            });
                         }
                     }
                 });
@@ -1441,7 +1499,8 @@ var JasMap = null ,M = null;
             var contentContainer = null;
             var contentElement = null;
             var titleCloser = null;
-            _class.updateInfoWindow = function(x,y,content,title,width,height){
+
+            _class.showInfoWindow = function(x,y,content,title,width,height){
                 if(!infoWindowOverlay){
                     popupElement = document.createElement("div");
                     popupElement.className = "map-popup";
@@ -1497,22 +1556,7 @@ var JasMap = null ,M = null;
                 }
                 infoWindowOverlay.setPosition([ x, y ]);
             };
-            _class.showDialog = function(title,url,width,height){
-                $('<div id="map-dialog"/>').dialog({
-                    href: url,
-                    width: width,
-                    height:height,
-                    modal: true,
-                    draggable: true,
-                    title: title,
-                    onClose: function () {//弹出层关闭事件
-                        $(this).dialog('destroy');
-                    },
-                    onLoad: function () {//弹出层加载事件
 
-                    }
-                })
-            };
             _class.defineProjection = function(epsgString){
                 if(epsgString === "EPSG:4326" || epsgString === "EPSG:3857"){
                     return epsgString;
@@ -1592,15 +1636,11 @@ var JasMap = null ,M = null;
                 var listenerConfig = layerManager.onListeners;
                 layerTipInteracting = new ol.interaction.Select({
                     style:function(feature){
-                        var style = feature.getStyle();
-                        var lStyle = null;
-                        if(!style){
-                            var fId = feature.getId();
-                            var layerId = fId .substring(0,fId.indexOf("."));
-                            var layer = _this.getLayerById(layerId);
-                            layer && ( lStyle = layer.getStyle());
-                        }
-                        return styleManager.getBoldStyle(style,lStyle,feature);
+                        var layerId = feature._layerId ;
+                        //var style = feature.getStyle();
+                        var lStyle = styleManager.layerStyles[layerId];
+                        //return styleManager.getBoldStyle(style,lStyle,feature);
+                        return typeof lStyle === "function" ? lStyle(feature) : lStyle ;
                     },
                     condition: ol.events.condition.pointerMove,
                     layers:layers
@@ -1608,9 +1648,11 @@ var JasMap = null ,M = null;
                 layerTipInteracting.on("select",function(e){
                     var feature = e.selected[0];
                     if(feature){
-                        var layerId = feature.getId().split(".")[0];
+                        var layer = e.target.getLayer(feature);
+                        var layerId = layer.get("id");
                         var coors = e.mapBrowserEvent.coordinate;
                         var conf = listenerConfig[layerId];
+                        feature._layerId = layerId;
                         parseListenerParams(layerId,feature,coors,conf.onHover);
                     }else{
                         layerTipOverLay && layerTipOverLay.setPosition();
@@ -1627,7 +1669,8 @@ var JasMap = null ,M = null;
                 layerClickInteracting.on("select",function(e){
                     var feature = e.selected[0];
                     if(feature){
-                        var layerId = feature.getId().split(".")[0];
+                        var layer = e.target.getLayer(feature);
+                        var layerId = layer.get("id");
                         var coors = e.mapBrowserEvent.coordinate;
                         var conf = listenerConfig[layerId];
                         parseListenerParams(layerId,feature,coors,conf.onClick);
@@ -1644,7 +1687,8 @@ var JasMap = null ,M = null;
                 layerDbClickInteracting.on("select",function(e){
                     var feature = e.selected[0];
                     if(feature){
-                        var layerId = feature.getId().split(".")[0];
+                        var layer = e.target.getLayer(feature);
+                        var layerId = layer.get("id");
                         var coors = e.mapBrowserEvent.coordinate;
                         var conf = listenerConfig[layerId];
                         parseListenerParams(layerId,feature,coors,conf.onDbClick);
@@ -1693,7 +1737,14 @@ var JasMap = null ,M = null;
                         var height = param.height ? param.height:450 ;
                         var width = param.width ? param.width:550 ;
                         var url = param.url ;
-                        _this.showDialog(title,url,width,height);
+                        //
+                        _this.dialog({
+                            open:true,
+                            title:title,
+                            href:url ,
+                            width : width,
+                            height : height
+                        });
                     }
                     if(responseType.toLowerCase()==="function"){
                         var callback = param.callback;
@@ -1884,6 +1935,7 @@ var JasMap = null ,M = null;
             _class.mapHeight = 0;
             _class.mapWidth = 0;
             _class.mapStyleTemplates = {};
+            _class.layerStyles = {};
             _class.drawStyle = function(param){
                 var defaultStyleClone = commonUtil.extend({},defaultStyle);
                 if( typeof param === "string"  ){
@@ -1998,20 +2050,22 @@ var JasMap = null ,M = null;
                             style = lStyle.clone();
                     }
                 }
-                if(style.getFill()){
-                    var fill = style.getFill();
-                    fill.setColor(apiDefaults.defaultHighlightColor);
-                }
-                if(style.getStroke()){
-                    var stroke = style.getStroke();
-                    var width = stroke.getWidth() + 2;
-                    stroke.setWidth(width);
-                    stroke.setColor(apiDefaults.defaultHighlightColor);
-                }
-                if(style.getImage()){
-                    var image = style.getImage();
-                    var scale = image.getScale() * 1.5;
-                    image.setScale(scale);
+                if(style){
+                    if(style.getFill()){
+                        var fill = style.getFill();
+                        fill.setColor(apiDefaults.defaultHighlightColor);
+                    }
+                    if(style.getStroke()){
+                        var stroke = style.getStroke();
+                        var width = stroke.getWidth() + 2;
+                        stroke.setWidth(width);
+                        stroke.setColor(apiDefaults.defaultHighlightColor);
+                    }
+                    if(style.getImage()){
+                        var image = style.getImage();
+                        var scale = image.getScale() * 1.5;
+                        image.setScale(scale);
+                    }
                 }
                 return style;
             };
@@ -2137,36 +2191,52 @@ var JasMap = null ,M = null;
                     if(config.url){
                         sourceConfig.url = config.url;
                     }
+                    //format
                     if(config.format){
                         if(config.format === "GeoJSON" ){
                             sourceConfig.format = new ol.format.GeoJSON();
                         }else if(config.format === "WKT"){
                             sourceConfig.format = new ol.format.WKT();
+                        }else if(config.format === "EsriJSON"){
+                            sourceConfig.format = new ol.format.EsriJSON();
                         }
                     }else{
                         sourceConfig.format = new ol.format.GeoJSON();
                     }
+                    //strategy
                     if(config.strategy){
                         if(config.strategy === "all"){
                             sourceConfig.strategy = ol.loadingstrategy.all;
                         }else if(config.strategy === "bbox"){
                             sourceConfig.strategy = ol.loadingstrategy.bbox;
+                        }else if(config.strategy === "tile"){ // arcgis feature server
+                            sourceConfig.strategy = ol.loadingstrategy.tile(ol.tilegrid.createXYZ({
+                                tileSize:512
+                            }));
                         }
                     }else{
                         sourceConfig.strategy = ol.loadingstrategy.all;
                     }
+                    //serverType
                     if(config.serverType){
                         sourceConfig.serverType = config.serverType;
                     }else{
                         sourceConfig.serverType = "geoserver";
                     }
+                    // ?
                     if(config.params){
                         sourceConfig.params = config.params;
                     }
+                    // loader (要素服务回调函数）
                     var loader = null;
                     if(config.loader){
+                        //通用查询参数
                         if(!sourceConfig.url ){
                             sourceConfig.url = commonUtil.getDefaultLayerQueryUrl(config.id);
+                        }
+                        if(config.loader === "arcgis"){
+                            sourceConfig.url += "/query";
+                            config.outFields = config.outFields ? config.outFields.toUpperCase() : "";
                         }
                         if(config.where){
                             var encodeUrl = config.where.replace("=", '%3D');
@@ -2175,13 +2245,14 @@ var JasMap = null ,M = null;
                         if(config.outFields){
                             sourceConfig.url = commonUtil.appendUrl( sourceConfig.url ,"outFields", config.outFields);
                         }
-                        //添加token参数
-                        var token = localStorage.getItem(_this.Keys.token);
-                        if(token ){
-                            sourceConfig.url  = commonUtil.appendUrl(sourceConfig.url ,_this.Keys.token,token);
-                        }
+                        //jasopengis
                         if("jas" === config.loader){
                             var strategy = config.strategy;
+                            //添加token参数
+                            var token = localStorage.getItem(_this.Keys.token);
+                            if(token ){
+                                sourceConfig.url  = commonUtil.appendUrl(sourceConfig.url ,_this.Keys.token,token);
+                            }
                             loader = function(extent, resolution, projection) {
                                 var proj = projection.getCode();
                                 var source = this;
@@ -2206,6 +2277,32 @@ var JasMap = null ,M = null;
                                     }
                                 });
                             };
+                        }else if(config.loader === "arcgis"){ // arcserver loader
+                            var url = sourceConfig .url;
+                            url  = commonUtil.appendUrl(url,"f", "json");
+                            url  = commonUtil.appendUrl(url,"geometryType", "esriGeometryEnvelope");
+                            url  = commonUtil.appendUrl(url,"returnGeometry", true);
+                            sourceConfig.url  = commonUtil.appendUrl(url,"spatialRel", "esriSpatialRelIntersects");
+                            loader = function(extent, resolution, projection) {
+                                var projCode = projection.getCode().split(":")[1];
+                                var source = this;
+                                var url = source.getUrl();
+                                var geometry = encodeURIComponent('{"xmin":' + extent[0] + ',"ymin":' +
+                                    extent[1] + ',"xmax":' + extent[2] + ',"ymax":' + extent[3] +
+                                    ',"spatialReference":{"wkid":'+ projCode +'}}');
+                                url  = commonUtil.appendUrl(url,"geometry", geometry);
+                                commonUtil.simpleAjaxLoader({
+                                    url: url ,
+                                    onSuccess:function(result){
+                                        var obj = JSON.parse(result);
+                                        source.addFeatures( source.getFormat().readFeatures(obj));
+                                    },
+                                    onError:function(err){
+                                        eventManager.publishError(_this.Strings.layerLoadError,err);
+                                        source.removeLoadedExtent(extent);
+                                    }
+                                });
+                            }
                         }
                         sourceConfig.loader = loader;
                     }
@@ -2279,6 +2376,10 @@ var JasMap = null ,M = null;
                     //后置处理
                     if(config.listener){
                         _class.onListeners[layerConfig.id] = config.listener;
+                    }
+                    //保存图层样式
+                    if(layerConfig.style){
+                        styleManager.layerStyles[layerConfig.id] = layerConfig.style;
                     }
                     return {
                         layerConfig:layerConfig,
@@ -2467,6 +2568,20 @@ var JasMap = null ,M = null;
                 }
                 return layer;
             };
+            _class.writeFeatureId = function(feature){
+                var featureId = feature.getId();
+                var dotIndex = featureId.indexOf ? featureId.indexOf("."):-1;
+                var id = "";
+                if(dotIndex >= 0 ){
+                    id = featureId.substring( dotIndex + 1);
+                }               var attributes = feature.getProperties();
+                attributes.id = id;
+            };
+            _class.getLayerIdByFeature = function(feature){
+                var fId = feature.getId();
+                var dotIndex = fId.indexOf ? fId.indexOf(".") : -1 ;
+                return dotIndex >= 0 ? fId .substring(0,dotIndex) : "";
+            };
             //创建天地图图层
             var createTdtLayerSource = function(type){
                 //
@@ -2558,18 +2673,21 @@ var JasMap = null ,M = null;
                 }
                 _class.publishEvent( _this.Events .ErrorEvent , { message:msg , type:"info"});
             };
-            _class.publishWarn = function(msg){
+            _class.publishWarn = function(msg ,e){
                 if(msg){
                     console.warn(msg);
+                }
+                if(e){
+                    console.warn(e);
                 }
                 _class.publishEvent( _this.Events .ErrorEvent , { message:msg , type:"warn"});
             };
             _class.publishError = function(msg ,e){
-                if(e){
-                    console.error(e);
-                }
                 if(msg){
                     console.error(msg);
+                }
+                if(e){
+                    console.error(e);
                 }
                 _class.publishEvent( _this.Events .ErrorEvent , { message:msg , type:"error"});
             };
@@ -2763,10 +2881,10 @@ var JasMap = null ,M = null;
                 var module = e.data.target;
                 module.startup && module.startup();
             };
-            var setModuleContainer = function(container){
+            _class.getContainerDom = function(container){
                 if(container==="map"){
                     return _this.map.getTargetElement();
-                }else if(container === "html"){
+                }else if(container === "html" || container === "body" ){
                     return document.body;
                 }else if(container.indexOf("#") >=0 ){
                     var domId = container.substring(1);
@@ -2809,7 +2927,7 @@ var JasMap = null ,M = null;
                         }
                         conf.style && ( module.style = conf.style );
                         ( conf.moduleSet && conf.moduleSet.length > 0 ) && ( module.moduleSet = conf.moduleSet );
-                        module.container = setModuleContainer( conf.container );
+                        module.container = _class.getContainerDom( conf.container );
 
                         if( module && conf.enable!==false ){
                             module.domCreate();
@@ -3251,7 +3369,8 @@ var JasMap = null ,M = null;
             }
 
         }
-        apiInit();
+
+        startup();
     };
 
 })(window);

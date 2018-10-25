@@ -637,8 +637,8 @@ input[type="number"] {
 .ol-scale-line-inner {
   font-weight: bold;
   color: #c6cbd3 !important;
-  height: 18px;
-  line-height: 15px;
+  height: 12px;
+  line-height: 12px;
   border: 1px solid black;
   border-top: none;
 }
