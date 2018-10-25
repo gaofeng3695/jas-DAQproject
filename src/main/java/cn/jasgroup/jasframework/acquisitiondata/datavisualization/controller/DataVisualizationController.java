@@ -4,10 +4,12 @@ import cn.jasgroup.framework.data.result.BaseResult;
 import cn.jasgroup.jasframework.acquisitiondata.datavisualization.service.DataVisualizationService;
 import cn.jasgroup.jasframework.acquisitiondata.utils.ResultVOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * description: none
@@ -56,21 +58,21 @@ public class DataVisualizationController {
         return ResultVOUtil.ofSuccess(dataVisualizationService.statsQuantityOfMaterial(projectId));
     }
 
-    @Deprecated
-    @GetMapping("statsMaterialCheck")
-    public BaseResult statsMaterialPresentCheck(@RequestParam String projectId) {
+
+    /**
+     * 统计钢管使用情况: 防腐管, 直管, 冷弯管
+     * - 使用数量
+     * - 使用长度
+     * @param params projectIds
+     * @return {@link BaseResult}
+     */
+    @GetMapping("steelPipeUsage")
+    public BaseResult steelPipeUsage(@RequestBody Map<String, Object> params) {
+        List<String> projectIds = (List<String>) params.get("projectIds");
+        if (CollectionUtils.isEmpty(projectIds)) {
+            return ResultVOUtil.ofStatus(HttpStatus.BAD_REQUEST);
+        }
         return ResultVOUtil.ofSuccess();
     }
 
-    @Deprecated
-    @GetMapping("statsMaterialUsage")
-    public BaseResult statsMaterialUsage(@RequestParam String projectId) {
-        return ResultVOUtil.ofSuccess();
-    }
-
-    @Deprecated
-    @GetMapping("statsMaterialCheckedUnchecked")
-    public BaseResult statsMaterialCheckedUnchecked(@RequestParam String projectId) {
-        return ResultVOUtil.ofSuccess();
-    }
 }

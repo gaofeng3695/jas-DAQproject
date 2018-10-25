@@ -1,7 +1,10 @@
 package cn.jasgroup.jasframework.acquisitiondata.datavisualization.service;
 
+import cn.jasgroup.jasframework.acquisitiondata.datavisualization.comm.MaterialBlock;
+import cn.jasgroup.jasframework.acquisitiondata.datavisualization.comm.ScopeManagementBlock;
 import cn.jasgroup.jasframework.acquisitiondata.datavisualization.dao.DataVisualizationDao;
 import cn.jasgroup.jasframework.acquisitiondata.datavisualization.service.bo.MaterialStatsResultBo;
+import cn.jasgroup.jasframework.acquisitiondata.datavisualization.service.bo.ScopeStatsResultBo;
 import cn.jasgroup.jasframework.acquisitiondata.privilege.service.DaqPrivilegeService;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.service.bo.StatsResultBo;
 import cn.jasgroup.jasframework.domain.utils.DomainUtil;
@@ -50,13 +53,25 @@ public class DataVisualizationService {
      * 统计在某一个项目下的管线、中线桩、线路段、穿跨越、站场、阀室、伴行路、外供电线路、标段的数量。
      * @param projectId 项目ID
      */
-    public List<StatsResultBo> statsScopeManagement(String projectId) {
-        return this.dataVisualizationDao.countScopeManagement(projectId);
+    public List<ScopeStatsResultBo> statsScopeManagement(String projectId) {
+        List<ScopeStatsResultBo> returnList = this.dataVisualizationDao.countScopeManagement(projectId);
+        Map<String, ScopeManagementBlock> block = ScopeManagementBlock.getScopeManagementBlock();
+        returnList.forEach(bo -> bo.setCnName(block.get(bo.getStatsType()).getCnName()));
+        return returnList;
     }
 
 
 
     public List<MaterialStatsResultBo> statsQuantityOfMaterial(String projectId) {
-        return this.dataVisualizationDao.countMaterial(projectId);
+        List<MaterialStatsResultBo> returnList = this.dataVisualizationDao.countMaterial(projectId);
+        Map<String, MaterialBlock> block = MaterialBlock.getMaterialInfo();
+        returnList.forEach(bo -> bo.setCnName(block.get(bo.getStatsType()).getCnName()));
+        return returnList;
+    }
+
+
+    public List steelPipeUsage(List<String> projectIds) {
+
+        return null;
     }
 }

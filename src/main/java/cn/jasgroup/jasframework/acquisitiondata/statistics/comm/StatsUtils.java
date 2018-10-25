@@ -1,6 +1,7 @@
 package cn.jasgroup.jasframework.acquisitiondata.statistics.comm;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 
 import java.math.BigDecimal;
@@ -13,10 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * 统计相关的工具类
@@ -183,5 +181,19 @@ public class StatsUtils {
         TemporalAdjuster lastOfWeek = TemporalAdjusters.ofDateAdjuster(localDate -> localDate.plusDays(DayOfWeek.SUNDAY.getValue() - localDate.getDayOfWeek().getValue()));
         return DateTimeFormatter.ofPattern(format).format(inputDate.with(lastOfWeek));
     }
+
+
+    /**
+     * 模拟postgresql的COALESCE()函数功能
+     * - (expression_1, expression_2, ...,expression_n)依次参考各参数表达式，遇到非null值即停止并返回该值
+     * @param values params
+     * @param <T> params and return type
+     * @return T
+     */
+    @SafeVarargs
+    public static  <T> T coalesce(T... values) {
+        return Arrays.stream(values).filter(Objects::nonNull).findFirst().orElse(null);
+    }
+
 
 }

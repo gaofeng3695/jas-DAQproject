@@ -453,11 +453,11 @@ public class AppStatisticsService {
         WeldCheckInfoBo rayDetectionInfo = this.appStatisticsDao.countRayDetection(projectId);
 
         WeldCheckInfoBo resultBo = new WeldCheckInfoBo();
-        resultBo.setWeldCount(weldCheckInfo.getWeldCount()==null?0:weldCheckInfo.getWeldCount());
-        resultBo.setCheckedCount(weldCheckInfo.getCheckedCount()==null?0:weldCheckInfo.getCheckedCount());
+        resultBo.setWeldCount(StatsUtils.coalesce(weldCheckInfo.getWeldCount(), 0));
+        resultBo.setCheckedCount(StatsUtils.coalesce(weldCheckInfo.getCheckedCount(), 0));
         resultBo.setUncheckedCount(resultBo.getWeldCount() - resultBo.getCheckedCount());
-        resultBo.setDetectionRayCount(rayDetectionInfo.getDetectionRayCount()==null?0:rayDetectionInfo.getDetectionRayCount());
-        resultBo.setQualifiedCount(rayDetectionInfo.getQualifiedCount()==null?0:rayDetectionInfo.getQualifiedCount());
+        resultBo.setDetectionRayCount(StatsUtils.coalesce(rayDetectionInfo.getDetectionRayCount(), 0));
+        resultBo.setQualifiedCount(StatsUtils.coalesce(rayDetectionInfo.getQualifiedCount(), 0));
 
         return resultBo;
     }
@@ -523,18 +523,6 @@ public class AppStatisticsService {
         return resultBoList;
     }
 
-
-
-    public static void main(String[] args) {
-        List<StatsProcessResultBo> returnList = Lists.newArrayList(
-                new StatsProcessResultBo("", 0, 2.32),
-                new StatsProcessResultBo("", 0, 3.323),
-                new StatsProcessResultBo("", 0, 6.30),
-                new StatsProcessResultBo("", 0, 1.32)
-        );
-
-        returnList.forEach(bo -> System.out.println(bo.getStatsResult()));
-    }
 
 
     /**

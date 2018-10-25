@@ -28,7 +28,7 @@
 
 			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" search-path="/jdbc/commonData/cutWeld/getPage.do"
 			  :add-url="addUrl" :detail-url="detailUrl" :import-config="importConfig" delete-path="/jdbc/commonData/cutWeld/delete.do" :class-name="className"
-			  :template-code="templateCode"></jas-table-for-list>
+			  :template-code="templateCode" ></jas-table-for-list>
 		</jas-list-wrapper>
 	</div>
 </body>
@@ -50,7 +50,7 @@
 				detailUrl: './pages/row-management/cut-pipe/dialogs/detail.html',
 				privilegeCode: '',
 				importConfig:{
-					importUrl:"xx.do",
+					importUrl:"/daq/weldcut/importExcelData.do",
 					exportUrl:"export.do"
 				},
 				topSearch: {
@@ -162,7 +162,7 @@
 
 			var param = window.jasTools.base
 				.getParamsInUrl(location.href);
-			//this.privilegeCode = param.privilegeCode;
+			this.privilegeCode = param.privilegeCode;
 			//this.templateCode = param.templateCode; //|| "stake-2";
 			//this.className = param.className; // || 'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';
 		},
@@ -177,6 +177,10 @@
 				this.topSearch.pipeOid = '';
 				this.$refs.table.search();
 			},
+			locate: function (row) {
+				var code = this.tableName;
+				top.app.locate(row.oid, code);
+			}
 		},
 	});
 </script>
