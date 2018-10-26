@@ -211,12 +211,12 @@ public class CutWeldService {
 			return msgMap;
 		}
 		int lastRowNum = sheet.getLastRowNum();
-//		Row row3 = sheet.getRow(2);
-//		boolean row3Blank = DataCheckUtil.isRowBlank(row3, 1, 15);
-//		if (row3Blank) {
-//			msgMap.put("getData", "excel表中数据为空;<br>");
-//			return msgMap;
-//		}
+		Row row3 = sheet.getRow(2);
+		boolean row3Blank = DataCheckUtil.isRowBlank(row3, 1, 15);
+		if (row3Blank) {
+			msgMap.put("getData", "excel表中数据为空;<br>");
+			return msgMap;
+		}
 		// 封装违反唯一性字段
 		List<String> uniqueList = new ArrayList<String>();
 		StringBuffer nullBuffer = null;
