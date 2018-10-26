@@ -22,55 +22,57 @@ body,
 .header {
 	position: relative;
 	box-sizing: border-box;
-	height: 80px;
+	height: 60px;
 	font-size: 22px;
-	line-height: 80px;
+	/*line-height: 80px;*/
 	color: #fff;
 	margin: 0 -20px 0 -20px;
 	overflow: hidden;
 }
 
 .logo {
-	width: 60px;
+	width: 50px;
 	background: url(./../images/logo.png) no-repeat center right;
 	margin: 0 10px 0 0px;
 }
 
 .name .china {
-	height: 50px;
+	height: 30px;
 	font-size: 24px;
 	font-weight: 600;
-	line-height: 74px;
+	line-height: 42px;
 	letter-spacing: 18px;
 }
 
 .name .english {
 	font-weight: 700;
 	text-align: center;
-	line-height: 16px;
+	line-height: 30px;
+	height: 30px;
 	font-size: 8px;
 	letter-spacing: 1px;
 }
 
 .item {
-	height: 80px;
-	line-height: 80px;
+	height: 60px;
+	/*line-height: 60px;*/
 	color: white;
 	float: left;
 }
 
 .user-info {
 	float: right;
-	padding-right: 30px;
+	/*padding-right: 30px;*/
 	font-size: 16px;
 	color: #fff;
-	line-height: 40px;
+	/*line-height: 40px;*/
+	height: 60px;
 }
 
 .user-info .dropdown-wrapper {
-	margin-top: 20px;
-	height: 40px;
-	line-height: 40px;
+	/*margin-top: 20px;*/
+	height: 60px;
+	/*line-height: 40px;*/
 }
 
 .user-info .el-dropdown-link {
@@ -85,10 +87,68 @@ body,
 .user-info .user-logo {
 	position: absolute;
 	left: 0;
-	top: 0;
+	top: 10px;
 	width: 40px;
 	height: 40px;
 	border-radius: 50%;
+}
+
+
+
+.user-info
+li {
+	list-style: none;
+	display: inline-block;
+	float: right;
+}
+
+a {
+	color: #fff;
+}
+
+a:hover {
+	background: #328bdd;
+}
+
+.user-info .quit {
+	height: 60px;
+	line-height: 60px;
+	/*padding: 0px 10px;*/
+	/*margin: 10px 0px;
+
+	border-left: 2px solid #5fb8ff;*/
+	cursor: pointer;
+}
+
+.border {
+	height: 30px;
+	margin: 15px 0px;
+	line-height: 30px;
+	color: #5fb8ff;
+	border-left:2px solid #5fb8ff;
+	width:2px;
+}
+
+.user-info .fullscreen {
+	height: 60px;
+	line-height: 60px;
+	/*padding: 0px 10px;*/
+	/*margin: 10px 0px;
+
+	border-left: 2px solid #5fb8ff;*/
+	cursor: pointer;
+}
+
+.userInfo {
+	height: 40px;
+	padding: 10px 10px 10px 0px;
+}
+
+.username,
+.userunit {
+	height: 20px;
+	line-height: 20px;
+
 }
 
 .el-dropdown-menu__item {
@@ -228,7 +288,7 @@ body,
 .tabswrapper {
 	height: 100%;
 	width: 100%;
-	background:#fff;
+	background: #fff;
 }
 
 .tabswrapper .el-tabs__header {
@@ -236,7 +296,7 @@ body,
 	box-sizing: border-box;
 	width: 100%;
 	margin: 0;
-	background:#fff;
+	background: #fff;
 }
 
 .tabswrapper .el-tabs__content {

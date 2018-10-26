@@ -5,6 +5,8 @@ window.app = new Vue({
 	data: function () {
 		return {
 			username: localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')).userName,
+			userunit: localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')).unitName,
+			userImg:'./src/images/enterlogo.png',
 			progress: 0,
 			error: false,
 			direction: 'right',
@@ -45,6 +47,7 @@ window.app = new Vue({
 		this._listenWindowClose();
 		this._setWindowResizeEventToCloseMenu();
 		this._requestLoginInfo();
+		this.requestFile();
 	},
 	methods: {
 		_queryMenuData: function () {
@@ -333,7 +336,6 @@ window.app = new Vue({
 		},
 		locate: function (id, tableCode) {
 			var that = this;
-			console.log(that.isMapInited);
 			if (!this.$refs.resizer.panelShowed) {
 				this.$refs.resizer.panelShowed = true;
 				//setTimeout(function () {
@@ -351,6 +353,21 @@ window.app = new Vue({
 			} else {
 				this.jasMap.flashGraphic(id, tableCode);
 			}
-		}
+		},
+		//获取附件文件
+	requestFile:function(){
+		var that=this;
+		var url = jasTools.base.rootPath + '/attachment/getInfo.do';
+		var sBizId = JSON.parse(localStorage.getItem('user')).oid;
+		jasTools.ajax.get(url, {
+			businessType: 'photo',
+			businessId: sBizId,}, function (data) {
+			 var arr = data.rows;
+			 if(data.rows.length > 0){
+				 that.userImg=jasTools.base.rootPath+'/attachment/app/getImageBySize.do?oid='+data.rows[0].oid+"&token="+localStorage.getItem("token"); 
+			 }  
+			
+		});
 	},
+},
 })
