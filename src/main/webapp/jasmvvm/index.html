@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="renderer" content="webkit">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>中盈安信研发平台</title>
+	<title>施工数据采集</title>
 
 	<!-- 老框架的样式依赖 -->
 	<link rel="stylesheet" href="../jasframework/common/css/jasframework-layout.css" />
@@ -30,7 +30,7 @@
 	<div id="app" v-cloak>
 		<el-container class="outerwrapper">
 
-			<el-header height="80px" class="headerwrapper">
+			<el-header class="headerwrapper">
 				<!-- header 开始 -->
 				<div class="header">
 					<div class="logo item">
@@ -39,29 +39,39 @@
 						<div class="china">施工数据采集</div>
 						<div class="english">CONSTRUCTION DATA COLLECTION</div>
 					</div>
-
-					<div class="user-info">
-						<!-- <div style="height:40px;">
-							<i class="fa fa-arrows-alt" aria-hidden="true"></i>
-							<i class="fa fa-unlock-alt" aria-hidden="true"></i>
-							<i style="font-size: 18px;" class="fa fa-sign-out" aria-hidden="true"></i>
-
-						</div>
-						<div style="height:40px;">
-							<i style="font-size: 18px;" class="fa fa-user-circle-o" aria-hidden="true"></i>
-							<span>{{username}}</span>
-						</div> -->
-						<el-dropdown class="dropdown-wrapper" trigger="click" @command="handleCommand">
-							<span class="el-dropdown-link">
-								<img class="user-logo" src="./src/images/enterlogo.png"> {{username}}
+					<ul class="user-info">
+						<li class="items quit">
+							<a href="#" @click="_loginOut" style="display:block;padding:0px 10px">
+								<i class="fa fa-sign-out"></i> 退出
+							</a>
+						</li>
+						<li class="border"></li>
+						<li class="items fullscreen">
+							<a href="#" @click="_goFullscreen" style="display:block;padding:0px 10px">
+								<i class="fa fa-arrows-alt"></i> 全屏
+							</a>
+						</li>
+						<li class="border"></li>
+						<li class="items">
+							<a href="#" style="display:block">
+								<el-dropdown class="dropdown-wrapper" trigger="click" @command="handleCommand">
+									<span class="el-dropdown-link">
+								<img class="user-logo" :src="userImg">
+								<div class="userInfo">
+	                                <div class="username">{{username}}</div>
+									<div class="userunit">{{userunit}}</div>
+								</div>
 							</span>
-							<el-dropdown-menu slot="dropdown">
-								<el-dropdown-item command="fullscreen">切换全屏</el-dropdown-item>
-								<el-dropdown-item command="resetPassword">修改密码</el-dropdown-item>
-								<el-dropdown-item command="loginout">退出登录</el-dropdown-item>
-							</el-dropdown-menu>
-						</el-dropdown>
-					</div>
+									<el-dropdown-menu slot="dropdown">
+										<!--<el-dropdown-item command="fullscreen">切换全屏</el-dropdown-item>-->
+										<el-dropdown-item command="resetPassword">修改密码</el-dropdown-item>
+										<!--<el-dropdown-item command="loginout">退出登录</el-dropdown-item>-->
+									</el-dropdown-menu>
+								</el-dropdown>
+							</a>
+						</li>
+
+					</ul>
 				</div>
 				<!-- header 结束 -->
 
@@ -80,14 +90,14 @@
 								<template v-for="item in items">
 									<el-submenu v-if="item.subs" :index="item.index">
 										<template slot="title">
-											<i :class=" 'fa fa-folder' || item.icon"></i>
+											<i :class="item.icon||'fa fa-folder' "></i>
 											<span slot="title">{{ item.title }}</span>
 										</template>
 										<!-- 第二层菜单开始 -->
 										<template v-for="subitem in item.subs">
 											<el-submenu v-if="subitem.subs" :index="subitem.index">
 												<template slot="title">
-													<i :class="  'fa fa-bars' || subitem.icon"></i>
+													<i :class=" subitem.icon || 'fa fa-bars' "></i>
 													<span slot="title">{{ subitem.title }}</span>
 												</template>
 
@@ -140,7 +150,7 @@
 
 											</el-submenu>
 											<el-menu-item :index="subitem.index" v-else>
-												<i :class=" 'fa fa-bars' || subitem.icon"></i>
+												<i :class="subitem.icon||'fa fa-bars' "></i>
 												<span slot="title">{{ subitem.title }}</span>
 											</el-menu-item>
 										</template>
@@ -148,7 +158,7 @@
 
 									</el-submenu>
 									<el-menu-item :index="item.index" v-else>
-										<i :class=" 'fa fa-folder' || item.icon"></i>
+										<i :class=" item.icon||'fa fa-folder' "></i>
 										<span slot="title">{{ item.title }}</span>
 									</el-menu-item>
 								</template>
@@ -190,9 +200,9 @@
 				</el-main>
 			</el-container>
 
-			 <el-footer height="30px"  class="headerwrapper">
-				 <div style="text-align: center;height:30px;line-height: 30px;color:#fff">@Copyright北京中盈安信技术服务股份有限公司</div>
-			 </el-footer>
+			<el-footer style="height:25px;">
+				<div style="text-align: center;height:25px;">@Copyright北京中盈安信技术服务股份有限公司</div>
+			</el-footer>
 			<!-- <nav-menu :nav-menus="item.subs" /> -->
 		</el-container>
 

@@ -451,7 +451,7 @@ var LayerListTree = function (options) {
                 _self.refreshState("closed");
             }
         };
-        _self.mapApi.dialog.call(_self,$(_self.dom) ,options);
+        _self.mapApi.moduleDialog(options,$(_self.dom) ,_self.container);
     };
     _self.destroy = function () {
         $(_self.dom).parent().remove();
@@ -1008,8 +1008,7 @@ var DrawBox = function (options) {
                 _self.mapApi.startPanMode();
             }
         };
-        _self.mapApi.dialog.call(_self,$(_self.dom),options);
-
+        _self.mapApi.moduleDialog(options,$(_self.dom) ,_self.container);
         activeDrawStyle(_self.currentDrawType);
 
     };
@@ -1206,8 +1205,8 @@ var CoorsPosition = function (options) {
         "<tr><td colspan='2' class='title'><label>当前位置：</label></td></tr>" +
         "<tr><td colspan='2' class='location'><label id='currentPosition' >0,0</label></td></tr>" +
         "<tr><td colspan='2'><label class='title' title='单击鼠标左键获取当前位置'>坐标拾取：</label></td></tr>" +
-        "<tr><td class='tr_title'><span class='style_title'>经度：</span></td><td><input id='p_x' class='loaction_input' type='number' value=''><i>*</i></td></tr>" +
-        "<tr><td class='tr_title'><span class='style_title'>纬度：</span></td><td><input id='p_y' class='loaction_input' type='number' value=''><i>*</i></td></tr>" +
+        "<tr><td class='tr_title'><span class='style_title'>经度：</span></td><td><input id='p_x' class='loaction_input' type='number' value=''><i class='required'>*</i></td></tr>" +
+        "<tr><td class='tr_title'><span class='style_title'>纬度：</span></td><td><input id='p_y' class='loaction_input' type='number' value=''><i class='required'>*</i></td></tr>" +
         "</table>" +
         "<div class='buttons'  align='center'>" +
         "<input class='btn qbt' type='button' value='定位' >" +
@@ -1344,7 +1343,7 @@ var CoorsPosition = function (options) {
                 _self.refreshState("closed");
             }
         };
-        _self.mapApi.dialog.call(_self,$(_self.dom),options);
+        _self.mapApi.moduleDialog(options,$(_self.dom) ,_self.container);
 
         if(params.overlayEnabled === true){
             var cls =  _self.moduleClass +  "-overlay";
@@ -1854,7 +1853,9 @@ var CircleQuery = function (options) {
                 _self.refreshState("closed");
             }
         };
-        _self.mapApi.dialog.call(_self,$(_self.dom), options);
+        _self.mapApi.moduleDialog(options, $(_self.dom) ,_self.container);
+
+
     }
 
 };
@@ -2137,7 +2138,7 @@ var PolygonQuery = function (options) {
                 _self.refreshState("closed");
             }
         };
-        _self.mapApi.dialog.call(_self,$(_self.dom),options);
+        _self.mapApi.moduleDialog(options,$(_self.dom) ,_self.container);
     };
 
 };

@@ -14,7 +14,7 @@ body {
   position: relative;
 }
 
-i {
+.required {
   color: red;
 }
 
@@ -221,7 +221,7 @@ i {
    border:none ;
 }
 .map-module-drawbox .style input.color:hover{
- border:none !important;	
+ border:none !important;
 }
 
 .map-module-drawbox .style input.progressbar {
@@ -620,8 +620,8 @@ input[type="color"]::-webkit-color-swatch{
 .ol-scale-line-inner {
   font-weight: bold;
   color: #082242 !important;
-  height: 18px;
-  line-height: 15px;
+  height: 12px;
+  line-height: 12px;
   border: 1px solid black;
   border-top: none;
 }
