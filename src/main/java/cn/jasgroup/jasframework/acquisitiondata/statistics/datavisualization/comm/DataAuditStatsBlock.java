@@ -34,12 +34,10 @@ public class DataAuditStatsBlock {
                 .put("weld_measured_result", new DataAuditStatsBlock("weld_measured_result", "焊口测量", "daq_weld_measured_result", "pipe_weld"))
                 .put("weld_anticorrosion_check", new DataAuditStatsBlock("weld_anticorrosion_check", "防腐补口检查", "daq_weld_anticorrosion_check", "pipe_weld"))
 
-
                 .put("detection_ray", new DataAuditStatsBlock("detection_ray", "射线检测", "daq_detection_ray", "pipe_inspection"))
                 .put("detection_ultrasonic", new DataAuditStatsBlock("detection_ultrasonic", "超声波检测", "daq_detection_ultrasonic", "pipe_inspection"))
                 .put("detection_magnetic_powder", new DataAuditStatsBlock("detection_magnetic_powder", "磁粉检测", "daq_detection_magnetic_powder", "pipe_inspection"))
                 .build();
-
 
     }
 

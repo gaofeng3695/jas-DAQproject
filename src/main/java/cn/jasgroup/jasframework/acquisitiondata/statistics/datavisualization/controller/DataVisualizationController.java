@@ -175,7 +175,6 @@ public class DataVisualizationController {
 
 
     /**
-     * // TODO 1.哪些数据源 2. 单位怎么拿
      * 统计人员填报情况
      * @param params projectIds
      * @return {@link BaseResult}
@@ -183,13 +182,15 @@ public class DataVisualizationController {
     @PostMapping("statsPersonFill")
     public BaseResult statsPersonFill(@RequestBody Map<String, Object> params) {
         List<String> projectIds = (List<String>) params.get("projectIds");
-        Integer topNum = Integer.valueOf(String.valueOf(params.get("topNum")));
-        if (topNum < 1) {
-            topNum = 10;
-        }
+
         if (CollectionUtils.isEmpty(projectIds)) {
             return ResultVOUtil.ofStatus(HttpStatus.BAD_REQUEST);
         }
+        Integer topNum = Integer.valueOf(String.valueOf(params.get("topNum")==null?10:params.get("topNum")));
+        if (topNum < 1) {
+            return ResultVOUtil.ofStatus(HttpStatus.BAD_REQUEST);
+        }
+
         return ResultVOUtil.ofSuccess(dataVisualizationService.statsPersonFill(projectIds, topNum));
     }
 }

@@ -4,10 +4,7 @@ import cn.jasgroup.framework.data.exception.BusinessException;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.datavisualization.comm.MaterialBlock;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.datavisualization.comm.ScopeManagementBlock;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.datavisualization.dao.DataVisualizationDao;
-import cn.jasgroup.jasframework.acquisitiondata.statistics.datavisualization.service.bo.DataEntryAndAuditBo;
-import cn.jasgroup.jasframework.acquisitiondata.statistics.datavisualization.service.bo.MaterialStatsResultBo;
-import cn.jasgroup.jasframework.acquisitiondata.statistics.datavisualization.service.bo.StatsResultWithNameBo;
-import cn.jasgroup.jasframework.acquisitiondata.statistics.datavisualization.service.bo.StatsPipeCuttingBo;
+import cn.jasgroup.jasframework.acquisitiondata.statistics.datavisualization.service.bo.*;
 import cn.jasgroup.jasframework.acquisitiondata.privilege.service.DaqPrivilegeService;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.StatsProcessEnum;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.StatsUtils;
@@ -17,6 +14,7 @@ import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.service.bo.Sta
 import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.service.bo.WeldInfoBo;
 import cn.jasgroup.jasframework.domain.utils.DomainUtil;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -169,7 +167,24 @@ public class DataVisualizationService {
     }
 
 
-    public List statsPersonFill(List<String> projectIds, Integer topNum) {
-        return null;
+    public List<PersonFillBo> statsPersonFill(List<String> projectIds, Integer topNum) {
+        List<StatsResultBo> statsResultBos = this.dataVisualizationDao.countPersonFillTopNum(projectIds, topNum);
+        List<String> userIdCollect = statsResultBos.stream().map(StatsResultBo::getStatsType).collect(Collectors.toList());
+
+        List<PersonFillBo> userAndUnitMapList = this.dataVisualizationDao.queryUserAndUnit(userIdCollect);
+        Map<String, PersonFillBo> userIdToName = userAndUnitMapList.stream().collect(Collectors.toMap(PersonFillBo::getUserId, bo -> bo, (a, b) -> b));
+
+        List<PersonFillBo> resultList = Lists.newArrayList();
+        for (int i = 0; i < statsResultBos.size(); i++) {
+            StatsResultBo bo = statsResultBos.get(i);
+            PersonFillBo personFillBo = new PersonFillBo();
+            personFillBo.setNo(i+1);
+            personFillBo.setEntryCount(Integer.valueOf(bo.getStatsResult().toString()));
+            String userId = bo.getStatsType();
+            personFillBo.setUserName(userIdToName.get(userId).getUserName());
+            personFillBo.setUnitName(userIdToName.get(userId).getUnitName());
+            resultList.add(personFillBo);
+        }
+        return resultList;
     }
 }

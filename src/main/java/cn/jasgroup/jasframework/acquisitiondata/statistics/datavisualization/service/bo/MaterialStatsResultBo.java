@@ -45,7 +45,7 @@ public class MaterialStatsResultBo {
     }
 
     public Double getEntryCountOrLength() {
-        return entryCountOrLength;
+        return entryCountOrLength==null?0:entryCountOrLength;
     }
 
     public void setEntryCountOrLength(Double entryCountOrLength) {
@@ -53,7 +53,7 @@ public class MaterialStatsResultBo {
     }
 
     public Double getCheckedCountOrLength() {
-        return checkedCountOrLength;
+        return checkedCountOrLength==null?0:checkedCountOrLength;
     }
 
     public void setCheckedCountOrLength(Double checkedCountOrLength) {
@@ -61,7 +61,7 @@ public class MaterialStatsResultBo {
     }
 
     public Double getUsedCountOrLength() {
-        return usedCountOrLength;
+        return usedCountOrLength==null?0:usedCountOrLength;
     }
 
     public void setUsedCountOrLength(Double usedCountOrLength) {
@@ -69,7 +69,7 @@ public class MaterialStatsResultBo {
     }
 
     public Double getCheckedUnusedCountOrLength() {
-        return checkedUnusedCountOrLength;
+        return checkedUnusedCountOrLength==null?0:checkedUnusedCountOrLength;
     }
 
     public void setCheckedUnusedCountOrLength(Double checkedUnusedCountOrLength) {
@@ -77,7 +77,7 @@ public class MaterialStatsResultBo {
     }
 
     public Double getUncheckedUsedCountOrLength() {
-        return uncheckedUsedCountOrLength;
+        return uncheckedUsedCountOrLength==null?0:uncheckedUsedCountOrLength;
     }
 
     public void setUncheckedUsedCountOrLength(Double uncheckedUsedCountOrLength) {

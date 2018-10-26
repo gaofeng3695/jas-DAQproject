@@ -205,9 +205,32 @@ public class DataVisualizationDao {
         return this.commonDataJdbcDao.queryForList(sql.toString(), ImmutableMap.of("projectIds", projectIds), DataEntryAndAuditBo.class);
     }
 
-    public void countPersonFillTopNum(List<String> projectIds, Integer topNum) {
+    public List<StatsResultBo> countPersonFillTopNum(List<String> projectIds, Integer topNum) {
         String sqlFormat = "" +
-                "select create_user_id, create_user_name, count(*) from table where active = 1 and project_oid in (:projectIds)" +
-                "group by create_user_id";
+                " select create_user_id, count(*) as result from %s where active = 1 " +
+                " and project_oid in (:projectIds) group by create_user_id\n ";
+
+        StringBuilder sql = new StringBuilder();
+        Map<String, DataAuditStatsBlock> statsBlock = DataAuditStatsBlock.getStatsBlock();
+        List<String> statsTypes = new ArrayList<>(statsBlock.keySet());
+        for (int i = 0; i < statsTypes.size(); i++) {
+            DataAuditStatsBlock block = statsBlock.get(statsTypes.get(i));
+            sql.append(String.format(sqlFormat, block.getTableName()));
+            sql.append(i<(statsTypes.size()-1) ? " UNION ALL\n ":"");
+        }
+
+        sql.insert(0, " select t.create_user_id as stats_type, sum(result) as stats_result from (\n")
+                .append(" ) as t group by stats_type order by stats_result desc limit :topNum ");
+
+        return this.commonDataJdbcDao.queryForList(sql.toString(), ImmutableMap.of("projectIds", projectIds, "topNum", topNum), StatsResultBo.class);
+    }
+
+
+    public List<PersonFillBo> queryUserAndUnit(List<String> userIds) {
+        String sql = "" +
+                " select u.oid as user_id, u.user_name as user_name, unit.unit_name as unit_name from pri_user u\n" +
+                " left join pri_unit unit on u.unit_id = unit.oid\n" +
+                " where u.active = 1 and unit.active = 1 and u.oid in (:userIds)";
+        return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("userIds", userIds), PersonFillBo.class);
     }
 }
