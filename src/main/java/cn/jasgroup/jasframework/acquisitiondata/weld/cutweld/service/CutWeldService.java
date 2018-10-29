@@ -68,6 +68,8 @@ public class CutWeldService {
 	public void savePipeAfterCut(CutWeld cutWeld) {
 		// 获取原钢管对象
 		SteelPipe pipe = (SteelPipe) commonDataJdbcService.get(SteelPipe.class, cutWeld.getPipeOid());
+		pipe.setTendersOid(cutWeld.getTendersOid());
+		pipe.setPipelineOid(cutWeld.getPipelineOid());
 		pipe.setIsCut(1);
 		pipe.setIsUse(1);
 		// 将原钢管对象设置成已切管已使用
@@ -97,6 +99,8 @@ public class CutWeldService {
 	public void updatePipeAfterCut(CutWeld cutWeld) {
 		// 获取原钢管对象
 		SteelPipe pipe = (SteelPipe) commonDataJdbcService.get(SteelPipe.class, cutWeld.getPipeOid());
+		pipe.setTendersOid(cutWeld.getTendersOid());
+		pipe.setPipelineOid(cutWeld.getPipelineOid());
 		// 删除原段钢管信息
 		pipeDao.deleteSegmentPipe(pipe.getPipeCode(), pipe.getOid());
 		// 保存新的段钢管信息
@@ -111,6 +115,8 @@ public class CutWeldService {
 		pipeDao.deleteSegmentPipe(pipe.getPipeCode(), pipe.getOid());
 		pipe.setIsCut(0);
 		pipe.setIsUse(0);
+		pipe.setTendersOid("");
+		pipe.setPipelineOid("");
 		// 将原钢管对象设置成未切管未使用
 		commonDataJdbcService.update(pipe);
 	}
@@ -145,11 +151,14 @@ public class CutWeldService {
 			}
 			cutedPipe.setOid(UUID.randomUUID().toString());
 			cutedPipe.setProjectOid(pipe.getProjectOid());
+			cutedPipe.setTendersOid("");
+			cutedPipe.setPipelineOid("");
 			cutedPipe.setPipeCode(pipe.getPipeCode() + "-" + (i + 1));
 			setLengthAndWeight(cutedPipe, cutWeld, i, pipe);
 			cutedPipe.setIsCut(0);
 			cutedPipe.setIsUse(0);
 			cutedPipe.setIsColdBend(0);
+			cutedPipe.setIsChild(1);
 			// 设置创建和修改信息
 			cutedPipe.setCreateDatetime(new Date());
 			cutedPipe.setCreateUserId(ThreadLocalHolder.getCurrentUserId());

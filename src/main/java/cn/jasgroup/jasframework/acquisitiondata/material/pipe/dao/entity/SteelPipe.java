@@ -171,6 +171,11 @@ public class SteelPipe extends CommonJdbcEntity{
 	private Integer isColdBend; 
 
 	/** 
+	 * 是否是子管
+	 */
+	private Integer isChild; 
+
+	/** 
 	 * 备注
 	 */
 	private String remarks; 
@@ -437,6 +442,16 @@ public class SteelPipe extends CommonJdbcEntity{
 
 	public void setIsColdBend(Integer isColdBend) {
 		this.isColdBend = isColdBend;
+		super.setField("isColdBend");
+	}
+	
+	public Integer getIsChild() {
+		return isChild;
+	}
+	
+	public void setIsChild(Integer isChild) {
+		this.isChild = isChild;
+		super.setField("isChild");
 	}
 
 	public String getRemarks() {
