@@ -176,7 +176,7 @@ public class DataVisualizationController {
 
     /**
      * 统计人员填报情况
-     * @param params projectIds
+     * @param params projectIds, topNum(统计前几个)
      * @return {@link BaseResult}
      */
     @PostMapping("statsPersonFill")
