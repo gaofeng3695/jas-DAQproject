@@ -190,8 +190,9 @@ public class DataVisualizationDao {
 
     public List<DataEntryAndAuditBo> countDataEntryAndAudit(List<String> projectIds) {
         String sqlFormat = "" +
-                " select '%s' as stats_type, '%s' as cn_name, count(*) as total_count, sum(case when (approve_status=2) then 1 else 0 end) as audit_passed_count,\n " +
-                " sum(case when (approve_status=1) then 1 else 0 end) as wait_audit_count\n " +
+                " select '%s' as stats_type, '%s' as cn_name, count(*) as total_count,\n " +
+                " COALESCE(sum(case when (approve_status=2) then 1 else 0 end), 0) as audit_passed_count,\n " +
+                " COALESCE(sum(case when (approve_status=1) then 1 else 0 end), 0) as wait_audit_count\n " +
                 " from %s where active = 1 and project_oid in (:projectIds) and approve_status!=0\n ";
 
         StringBuilder sql = new StringBuilder();
