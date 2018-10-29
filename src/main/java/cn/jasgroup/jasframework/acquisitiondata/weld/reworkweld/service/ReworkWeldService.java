@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import cn.jasgroup.jasframework.acquisitiondata.weld.reworkweld.dao.ReworkWeldDao;
 import cn.jasgroup.jasframework.acquisitiondata.weld.reworkweld.dao.entity.ReworkWeld;
+import cn.jasgroup.jasframework.base.data.BaseEntity;
 import cn.jasgroup.jasframework.engine.jdbc.service.CommonDataJdbcService;
 import cn.jasgroup.jasframework.support.BaseEntityThreadLocalHolder;
 
@@ -65,6 +66,7 @@ public class ReworkWeldService extends CommonDataJdbcService {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public void deleteChangeWeldStatus(ReworkWeld reworkWeld) {
+		reworkWeld = (ReworkWeld)this.get(ReworkWeld.class, reworkWeld.getOid());
 		reworkWeldDao.changeWeldStatus(reworkWeld.getWeldOid(), 0);
 	}
 }
