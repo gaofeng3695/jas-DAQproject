@@ -116,8 +116,9 @@ public class DataVisualizationService {
         continuityDates.forEach(date -> {
             if (dateToResult.containsKey(date)) {
                 returnList.add(dateToResult.get(date));
+            } else {
+                returnList.add(new StatsResultBo(date, 0));
             }
-            returnList.add(new StatsResultBo(date, 0));
         });
 
         return returnList;
