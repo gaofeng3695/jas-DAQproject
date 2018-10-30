@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * 人员填报情况DTO
+ * @author xiefayang
  */
 public class PersonFillBo {
 

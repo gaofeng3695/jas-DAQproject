@@ -145,12 +145,24 @@ public class DataVisualizationDao {
         return commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectIds", projectIds), SteelPipeUsageBo.class);
     }
 
+    /**
 
+p1(10)[cut=1, child=0]
+
+p1-1(3)[cut=0, child=1]    p1-2(7)[cut=1, child=1]
+
+p1-1(3)[cut=0, child=1]    p1-2-1(2)[cut=0, child=1],   p1-2-2(5)[cut=0, child=1]
+
+----------------------------------------------------------------------------------------
+
+p1-1(3)[cut=0, child=1]    p1-2-1(2)[cut=0, child=1],   p1-2-2-1(1)[cut=0, child=1],  p1-2-2-1(4)[cut=0, child=1]
+
+     */
     public StatsPipeCuttingBo statsPipeCutting(List<String> projectIds) {
         String sql = "" +
                 " select sum(case when (is_cut=1) then 1 else 0 end ) as cut_count,\n" +
                 "   sum(case when (is_cut=0) then pipe_length else 0 end) as total_length,\n" +
-                "   sum(case when (is_cut=1) then pipe_length else 0 end) as cut_length,\n" +
+                "   sum(case when (is_cut=0 and is_child=1) then pipe_length else 0 end) as cut_length,\n" +
                 "   sum(case when (is_cut=0 and is_use=1) then pipe_length else 0 end ) used_length,\n" +
                 "   sum(case when (is_cut=0 and is_use=0) then pipe_length else 0 end ) un_used_length\n" +
                 " from daq_material_pipe where active = 1 and project_oid in (:projectIds) ";
@@ -190,8 +202,9 @@ public class DataVisualizationDao {
 
     public List<DataEntryAndAuditBo> countDataEntryAndAudit(List<String> projectIds) {
         String sqlFormat = "" +
-                " select '%s' as stats_type, '%s' as cn_name, count(*) as total_count, sum(case when (approve_status=2) then 1 else 0 end) as audit_passed_count,\n " +
-                " sum(case when (approve_status=1) then 1 else 0 end) as wait_audit_count\n " +
+                " select '%s' as stats_type, '%s' as cn_name, count(*) as total_count,\n " +
+                " COALESCE(sum(case when (approve_status=2) then 1 else 0 end), 0) as audit_passed_count,\n " +
+                " COALESCE(sum(case when (approve_status=1) then 1 else 0 end), 0) as wait_audit_count\n " +
                 " from %s where active = 1 and project_oid in (:projectIds) and approve_status!=0\n ";
 
         StringBuilder sql = new StringBuilder();
