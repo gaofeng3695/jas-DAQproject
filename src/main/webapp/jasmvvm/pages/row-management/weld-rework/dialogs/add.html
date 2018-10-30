@@ -436,7 +436,7 @@
 				}
 				that.getWorkUints(val, edit); //获取机组
 				that.getWeldproduct(val, edit); //获取焊接工艺
-				that.getPipeCode(val,edit);
+				//that.getPipeCode(val,edit);
 			},
 			childChange: function (event, id, name) {
 				if (event && !this.formData[id]) {
@@ -567,7 +567,14 @@
 								pipeSegmentOrCrossOid: val
 							},
 							function (arr) {
-								that.domain.welds = arr;
+								if(edit){
+									arr.forEach(function(item){
+										that.domain.welds.push(item);
+									});
+								}else{
+									that.domain.welds = arr;	
+								}
+								
 							});
 				}else{
 					that.domain.welds=[];
@@ -688,6 +695,10 @@
 					} else {
 						that.formData.padderOid = that.formData.padderOid.split(",");
 					}
+					that.domain.welds.push({
+						key:that.formData.weldOid,
+						value:that.formData.weldCode
+					});
 					that.projectChanged(data.rows[0].projectOid, true);
 					that.tendersChanged(data.rows[0].tendersOid, true);;
 					that.pipelineChanged(data.rows[0].pipelineOid, true);

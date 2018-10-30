@@ -80,7 +80,7 @@
 			<el-container style="height: 0%;">
 				<loading-bar :on-error-done="errorDone" :on-progress-done="progressDone" :progress="progress" :direction="direction" :error="error">
 				</loading-bar>
-				<el-aside style="background-color: #fff;width:auto;" class="jas-flex-box is-vertical menuwrapper">
+				<el-aside id="aside" style="background-color: #fff;width:auto;" class="jas-flex-box is-vertical menuwrapper">
 					<!-- sider 结束 -->
 					<div class="is-grown menusubwrap" :style="menuStyle" ref="menubar" v-bar>
 						<div>
@@ -176,33 +176,35 @@
 					<!-- sider 结束 -->
 				</el-aside>
 				<el-main>
-					<div v-tabclose></div>
+					<el-container style="height:100%">
+						<el-main style="height:100%">
+							
+							<jas-two-panel-resizer :showed="panelShowed" ref="resizer" layout="horizontal" length="40%" @paneresize="paneresize" @statuschanged="statuschanged">
+								<div slot="closePanel" id="jasMap" class="jasmap" style="height:100%;"> </div>
+								<el-tabs id="tabs"style="position:relative"slot="mainPanel" class="tabswrapper jas-flex-box" v-model="currentTap" type="card" @tab-remove="removeTab">
+									<el-tab-pane v-for="(item, index) in tabs" :key="item.link" :name="item.name" :closable="item.closable">
+										<span slot="label">
+											<i :class="item.icon||'el-icon-date'"></i> {{item.title}}
+								       </span>
+										<div class="iframewrapper">
+											<div class="iframesubwrapper">
+												<iframe class="iframe" :src="item.link" frameborder="0" height="100%"></iframe>
+											</div>
+										</div>
+									</el-tab-pane>
+									<div v-tabclose></div>
+								</el-tabs>
 
-					<jas-two-panel-resizer :showed="panelShowed" ref="resizer" layout="horizontal" length="40%" @paneresize="paneresize" @statuschanged="statuschanged">
-						<div slot="closePanel" id="jasMap" class="jasmap" style="height:100%;"> </div>
-
-						<el-tabs slot="mainPanel" class="tabswrapper jas-flex-box" v-model="currentTap" type="card" @tab-remove="removeTab">
-							<el-tab-pane v-for="(item, index) in tabs" :key="item.link" :name="item.name" :closable="item.closable">
-								<span slot="label">
-									<i :class="item.icon||'el-icon-date'"></i> {{item.title}}
-								</span>
-								<div class="iframewrapper">
-									<div class="iframesubwrapper">
-										<iframe class="iframe" :src="item.link" frameborder="0" height="100%"></iframe>
-									</div>
-								</div>
-							</el-tab-pane>
-						</el-tabs>
-
-					</jas-two-panel-resizer>
-
-
+							</jas-two-panel-resizer>
+						</el-main>
+						<el-footer style="height:25px;">
+							<div style="text-align: center;height:25px;">@Copyright北京中盈安信技术服务股份有限公司</div>
+						</el-footer>
+					</el-container>
 				</el-main>
 			</el-container>
 
-			<el-footer style="height:25px;">
-				<div style="text-align: center;height:25px;">@Copyright北京中盈安信技术服务股份有限公司</div>
-			</el-footer>
+
 			<!-- <nav-menu :nav-menus="item.subs" /> -->
 		</el-container>
 

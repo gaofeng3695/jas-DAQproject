@@ -486,14 +486,6 @@
 				key: userBo.unitId,
 				value: userBo.unitName
 			});
-			if (param.oid) {
-				this.oid = param.oid;
-				this.formData.oid = this.oid;
-				this.isEdit = true;
-				this.getDetailByObjectId();
-				this.$refs.upload.requestFile(this.oid);
-			};
-
 			this.requestDomainFromBizTable('/daq/privilege/getProjectList.do', {}, function (arr) {
 				that.domain.project = arr;
 			});
@@ -509,6 +501,13 @@
 			this.requestDomainFromDomainTable('back_pipe_type_domain', function (arr) {
 				that.domain.backpipeTypes = arr;
 			}); //查询管件类型
+			if (param.oid) {
+				this.oid = param.oid;
+				this.formData.oid = this.oid;
+				this.isEdit = true;
+				this.getDetailByObjectId();
+				this.$refs.upload.requestFile(this.oid);
+			};
 		},
 		methods: {
 			childChange: function (event, id, name) {
@@ -728,11 +727,16 @@
 								pipeTypeCode: val
 							},
 							function (arr) {
-								that.domain.frontPipeOids = arr;
+								if(edit){
+									arr.forEach(function(item){
+										that.domain.frontPipeOids.push(item);	
+									});
+								}else{
+								 that.domain.frontPipeOids = arr;
+								}
 								
 							});
 				}else{
-				
 					that.domain.frontPipeOids=[];
 				}
 				if(!edit){
@@ -750,8 +754,13 @@
 								pipeTypeCode: val
 							},
 							function (arr) {
-								that.domain.backPipeOids = arr;
-								
+								if(edit){
+									arr.forEach(function(item){
+										that.domain.backPipeOids.push(item);	
+									});
+								}else{
+									that.domain.backPipeOids = arr;
+								}	
 							});
 				}else{
 					that.domain.backPipeOids = [];	
@@ -822,7 +831,14 @@
 						that.formData[key] = data.rows[0][key];
 					} */
 					that.formData = data.rows[0];
-
+					that.domain.frontPipeOids.push({
+						value:that.formData.frontPipeCode,
+						key:that.formData.frontPipeOid
+					});
+					that.domain.backPipeOids.push({
+						value:that.formData.backPipeCode,
+						key:that.formData.backPipeOid
+					});
 					if (that.formData.coverOid.length == 0) {
 						that.formData.coverOid = [];
 					} else {

@@ -8,7 +8,7 @@ Vue.directive('tabclose', {
         clickItem.style.border = "1px solid #e4e7ed";
         clickItem.style.position = "absolute";
         clickItem.style.top = "120px";
-        clickItem.style.right = "10px";
+      
         clickItem.style.zIndex = "4000";
         clickItem.style.background = "#fff";
         clickItem.style.borderRadius = "5px";
@@ -52,12 +52,13 @@ Vue.directive('tabclose', {
         clickItem.append(item4);
         el.append(clickItem);
         setTimeout(function () {
-            document.oncontextmenu = function (event) {
+            document.getElementById("tabs").oncontextmenu = function (event) {
                 var ev = event || window.event;
                 var mX = event.clientX;
                 var mY = event.clientY;
-                clickItem.style.left = mX + "px";
-                clickItem.style.top = mY + "px";
+                var w=document.getElementById("aside").offsetWidth;
+                clickItem.style.left = (mX-w) + "px";
+                clickItem.style.top ="0px";
                 clickItem.style.display = "block";
                 return false; //取消window自带的菜单弹出来
             };
