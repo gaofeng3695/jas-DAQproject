@@ -23,6 +23,11 @@ import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 			 }
 )
 public class ConstructionWeldQuery extends BaseJavaQuery{
+	
+	/**
+	 * oid
+	 */
+	private String oid;
 
 	/**
 	 * 项目oid
@@ -155,6 +160,14 @@ public class ConstructionWeldQuery extends BaseJavaQuery{
 		}
 		conditionSql += " order by cw.create_datetime desc";
 		return conditionSql;
+	}
+
+	public String getOid() {
+		return oid;
+	}
+
+	public void setOid(String oid) {
+		this.oid = oid;
 	}
 
 	public String getProjectOid() {
