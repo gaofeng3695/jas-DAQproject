@@ -454,13 +454,21 @@
 								projectOid:val
 							},
 							function (arr) {
-								that.domain.pipeOids = arr;
+								//if(edit){
+									//arr.forEach(function(item){
+										//that.domain.pipeOids.push(item);
+									//});
+								//}else{
+									that.domain.pipeOids = arr;
+								//}
 						});
 				}else{
 					that.domain.pipeOids=[];
 					that.formData.pipeOid="";
 				}
-
+				if(!edit){
+					that.formData.pipeOid="";
+				}
 			},
 			tendersChanged: function (val,edit) { //根据标段触发管线列表
 				var that = this;
@@ -567,14 +575,12 @@
 				jasTools.ajax.post(url, {
 					oid: that.oid
 				}, function (data) {
-					for (var key in that.formData) {
-						that.formData[key] = data.rows[0][key];
-					}
-					var item = {
-						key: data.rows[0]["pipeOid"],
-						value: data.rows[0]["pipeCode"]
-					};
-				//	that.domain.pipeOids.push(item);
+					that.formData= data.rows[0];
+					//that.domain.pipeOids.push({
+						//key: that.formData.pipeOid,
+						//value: that.formData.pipeCode
+					//});
+					//console.log(that.domain.pipeOids);
 					that.projectChanged(data.rows[0].projectOid,true);
 					that.tendersChanged(data.rows[0].tendersOid,true);
 					that.getSupervisionUnit(data.rows[0].tendersOid,true);
