@@ -226,4 +226,43 @@ public class DaqPrivilegeService extends BaseService{
 		String unitOid = ThreadLocalHolder.getCurrentUser().getUnitId();
 		return this.daqPrivilegeDao.getPipeStationList(pipelineOid,unitOid);
 	}
+	
+	/***
+	  * <p>功能描述：添加人脸信息。</p>
+	  * <p> 雷凯。</p>	
+	  * @param userId
+	  * @param base64Image
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年10月29日 上午11:12:28。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public boolean addFaceInfo(String loginName,String base64Image){
+		return this.daqPrivilegeDao.addFaceInfo(loginName,base64Image);
+	}
+	
+	/**
+	 * <p>功能描述：根据登录名获取用户人脸信息。</p>
+	  * <p> 雷凯。</p>	
+	  * @param loginName
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年10月29日 上午11:16:41。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public String getFaceInfo(String loginName){
+		return this.daqPrivilegeDao.getFaceInfo(loginName);
+	}
+	/***
+	  * <p>功能描述：根据用户名获取用户信息。</p>
+	  * <p> 雷凯。</p>	
+	  * @param loginName
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年10月29日 下午2:37:29。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public Map<String,Object> getFaceInfoByLoginName(String loginName){
+		return this.daqPrivilegeDao.getFaceInfoByLoginName(loginName);
+	}
 }
