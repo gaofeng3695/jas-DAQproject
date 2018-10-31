@@ -197,6 +197,9 @@ window.app = new Vue({
 				location.href = './login.html';
 			});
 		},
+		_goPage:function(){
+			location.href = './onepage.html';	
+		},
 		_createTabsArr: function (aIndex, aMenu) {
 			var that = this;
 
