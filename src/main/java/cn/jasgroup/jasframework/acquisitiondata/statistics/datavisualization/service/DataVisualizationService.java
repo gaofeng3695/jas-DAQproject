@@ -126,7 +126,11 @@ public class DataVisualizationService {
 
 
     public List<StatsResultBo> statsTypeOfPersonnel(List<String> projectIds) {
-        return this.dataVisualizationDao.countWeldUnitAndPerson(projectIds);
+        List<StatsResultBo> returnList = this.dataVisualizationDao.countWeldUnitAndPerson(projectIds);
+        List<Map<String, Integer>> constructorAndSupervisor = this.dataVisualizationDao.countConstructorAndSupervisor(projectIds);
+        Map<String, Integer> map = constructorAndSupervisor.get(0);
+        map.keySet().stream().map(key -> new StatsResultBo(key, map.get(key))).forEach(returnList::add);
+        return returnList;
     }
 
     public List<StatsResultWithNameBo> statsProcessCompletion(List<String> projectIds) {
