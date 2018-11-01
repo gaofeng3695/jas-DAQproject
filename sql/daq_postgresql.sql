@@ -1365,6 +1365,77 @@ ALTER TABLE daq_check_reducer ADD PRIMARY KEY (oid);
 CREATE INDEX index_daq_check_tee_tee_code_5 ON daq_check_tee USING btree (tee_code_oid);
 ALTER TABLE daq_check_tee ADD PRIMARY KEY (oid);
 /**********线路物资检查信息end***************/
+/**********站/阀/井物资基本信息begin***************/
+create table daq_material_valve( 
+	oid varchar(36) not null primary key,
+	project_oid varchar(36)  ,
+	pipeline_oid varchar(36)  ,
+	tenders_oid varchar(36)  ,
+	valve_name varchar(50)  ,
+	valve_type varchar(50)  ,
+	material_code varchar(50)  ,
+	valve_model varchar(50)  ,
+	valve_axial_size numeric(3,1)  ,
+	valve_weight numeric(6,1)  ,
+	torque numeric(6,1)  ,
+	valve_body_seal_type varchar(50)  ,
+	valve_body_hard_seal_material varchar(50)  ,
+	valve_body_soft_seal_material varchar(50)  ,
+	valve_handle_diameter numeric(6,1)  ,
+	valve_handle_seal_type varchar(50)  ,
+	valve_handle_seal_material varchar(50)  ,
+	flange_standard varchar(50)  ,
+	flange_sealing_surface_type varchar(50)  ,
+	manufacture_number varchar(50)  ,
+	manufacturer varchar(60)  ,
+	manufacture_date timestamp(6)  ,
+	guarantee_period smallint  ,
+	contract_number varchar(60)  ,
+	is_use smallint  default 0 ,
+	remarks varchar(200)  ,
+	create_user_id varchar(36)  ,
+	create_user_name varchar(50)  ,
+	create_datetime timestamp(6)  ,
+	modify_user_id varchar(36)  ,
+	modify_user_name varchar(50)  ,
+	modify_datetime timestamp(6)  ,
+	active smallint  default 1  
+); 
+comment on table daq_material_valve is '阀门表';
+comment on column daq_material_valve.oid is '主键';
+comment on column daq_material_valve.project_oid is '项目oid';
+comment on column daq_material_valve.pipeline_oid is '管线oid';
+comment on column daq_material_valve.tenders_oid is '标段oid';
+comment on column daq_material_valve.valve_name is '阀门名称';
+comment on column daq_material_valve.valve_type is '阀门类型';
+comment on column daq_material_valve.material_code is '物料码';
+comment on column daq_material_valve.valve_model is '规格型号';
+comment on column daq_material_valve.valve_axial_size is '阀门轴向尺寸(M)';
+comment on column daq_material_valve.valve_weight is '阀门重量(Kg)';
+comment on column daq_material_valve.torque is '扭矩(Nm)';
+comment on column daq_material_valve.valve_body_seal_type is '阀体密封形式';
+comment on column daq_material_valve.valve_body_hard_seal_material is '阀体硬密封材质';
+comment on column daq_material_valve.valve_body_soft_seal_material is '阀体软密封材质';
+comment on column daq_material_valve.valve_handle_diameter is '阀杆直径(mm)';
+comment on column daq_material_valve.valve_handle_seal_type is '阀杆密封形式';
+comment on column daq_material_valve.valve_handle_seal_material is '阀杆密封材质';
+comment on column daq_material_valve.flange_standard is '法兰标准';
+comment on column daq_material_valve.flange_sealing_surface_type is '法兰密封面型式';
+comment on column daq_material_valve.manufacture_number is '出厂编号';
+comment on column daq_material_valve.manufacturer is '生产厂家';
+comment on column daq_material_valve.manufacture_date is '出厂时间';
+comment on column daq_material_valve.guarantee_period is '质保期(月)';
+comment on column daq_material_valve.contract_number is '合同号';
+comment on column daq_material_valve.is_use is '是否使用';
+comment on column daq_material_valve.remarks is '备注';
+comment on column daq_material_valve.create_user_id is '创建人id';
+comment on column daq_material_valve.create_user_name is '创建人名称';
+comment on column daq_material_valve.create_datetime is '创建时间';
+comment on column daq_material_valve.modify_user_id is '修改人id';
+comment on column daq_material_valve.modify_user_name is '修改人名称';
+comment on column daq_material_valve.modify_datetime is '修改时间';
+comment on column daq_material_valve.active is '有效标志';
+/**********站/阀/井物资基本信息end***************/
 /**********管道焊接信息begin***************/
 CREATE TABLE daq_construction_weld (
 	oid varchar(36) NOT NULL,
@@ -4106,6 +4177,65 @@ comment on column daq_cathodic_impressed_current_test.modify_datetime is '修改
 comment on column daq_cathodic_impressed_current_test.active is '有效标志';
 create index INDEX_DAQ_CATHODIC_IMPRESSED_CURRENT_TEST_TEST_STAKE_OID_5 ON daq_cathodic_impressed_current_test ( test_stake_oid );
 /**********管道阴保end***************/
+/**********站/阀/井设备安装begin***************/
+create table daq_test_valve( 
+	oid varchar(36) not null primary key,
+	project_oid varchar(36)  ,
+	tenders_oid varchar(36)  ,
+	pipeline_oid varchar(36)  ,
+	pipe_station_oid varchar(36)  ,
+	valve_oid varchar(36)  ,
+	test_date timestamp(6)  ,
+	filler varchar(50)  ,
+	test_medium varchar(50)  ,
+	strength_test_pressure numeric(6,3)  ,
+	strength_test_time smallint  ,
+	tightness_test_pressure numeric(6,3)  ,
+	tightness_test_time smallint  ,
+	test_condition_and_apparent_check varchar(50)  ,
+	construct_date timestamp(6)  ,
+	construct_unit varchar(36)  ,
+	collection_person varchar(50)  ,
+	collection_date timestamp(6)  ,
+	supervision_unit varchar(36)  ,
+	supervision_engineer varchar(50)  ,
+	create_user_id varchar(36)  ,
+	create_user_name varchar(50)  ,
+	create_datetime timestamp(6)  ,
+	modify_user_id varchar(36)  ,
+	modify_user_name varchar(50)  ,
+	modify_datetime timestamp(6)  ,
+	active smallint not null default 1  
+); 
+comment on table daq_test_valve is '阀门试验表';
+comment on column daq_test_valve.oid is '主键';
+comment on column daq_test_valve.project_oid is '项目oid';
+comment on column daq_test_valve.tenders_oid is '标段oid';
+comment on column daq_test_valve.pipeline_oid is '管线oid';
+comment on column daq_test_valve.pipe_station_oid is '站场/阀室oid';
+comment on column daq_test_valve.valve_oid is '设备编号';
+comment on column daq_test_valve.test_date is '试验日期';
+comment on column daq_test_valve.filler is '填料';
+comment on column daq_test_valve.test_medium is '试验介质';
+comment on column daq_test_valve.strength_test_pressure is '强度试验压力(Mpa)';
+comment on column daq_test_valve.strength_test_time is '强度试验时间(min)';
+comment on column daq_test_valve.tightness_test_pressure is '严密性试验压力(Mpa)';
+comment on column daq_test_valve.tightness_test_time is '严密性试验时间(min)';
+comment on column daq_test_valve.test_condition_and_apparent_check is '试验情况及外观检查';
+comment on column daq_test_valve.construct_date is '施工日期';
+comment on column daq_test_valve.construct_unit is '施工单位';
+comment on column daq_test_valve.collection_person is '数据采集人';
+comment on column daq_test_valve.collection_date is '采集日期';
+comment on column daq_test_valve.supervision_unit is '监理单位';
+comment on column daq_test_valve.supervision_engineer is '监理工程师';
+comment on column daq_test_valve.create_user_id is '创建人id';
+comment on column daq_test_valve.create_user_name is '创建人名称';
+comment on column daq_test_valve.create_datetime is '创建时间';
+comment on column daq_test_valve.modify_user_id is '修改人id';
+comment on column daq_test_valve.modify_user_name is '修改人名称';
+comment on column daq_test_valve.modify_datetime is '修改时间';
+comment on column daq_test_valve.active is '有效标志';
+/**********站/阀/井设备安装end***************/
 /**********管道附属物begin***************/
 CREATE TABLE daq_appendages_mark_stake (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
