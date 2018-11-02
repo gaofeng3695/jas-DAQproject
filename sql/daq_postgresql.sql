@@ -353,6 +353,7 @@ CREATE TABLE daq_implement_scope_ref (
 	unit_oid VARCHAR (36),
 	project_oid VARCHAR (36),
 	pipeline_oid VARCHAR (36),
+	tenders_oid varchar(36) ,
 	scope_oid VARCHAR (36),
 	scope_type VARCHAR (10),
 	create_user_id VARCHAR (36),
@@ -369,6 +370,7 @@ comment on column daq_implement_scope_ref.oid is '主键';
 comment on column daq_implement_scope_ref.unit_oid is '部门oid';
 comment on column daq_implement_scope_ref.project_oid is '项目oid';
 comment on column daq_implement_scope_ref.pipeline_oid is '管线oid';
+COMMENT ON COLUMN daq_implement_scope_ref.tenders_oid IS '标段oid';
 comment on column daq_implement_scope_ref.scope_oid is '实体oid（即线路段oid或者站场oid等）';
 comment on column daq_implement_scope_ref.scope_type is '实体类型（1：线路段，2：创跨越，3：站场/阀室，4：伴行道路，5：外供电线路）';
 comment on column daq_implement_scope_ref.create_user_id is '创建人id';
@@ -5179,9 +5181,9 @@ INSERT INTO app_version VALUES ('1', 'V1.1.0', '施工数据采集测试版本&�
  * 人脸信息保存表
  */
 CREATE TABLE daq_user_face_info (
-oid varchar(38) COLLATE default,
-login_name varchar(50) COLLATE default NOT NULL,
-base64_image text COLLATE default,
+oid varchar(38) ,
+login_name varchar(50)  NOT NULL,
+base64_image text ,
 CONSTRAINT daq_user_face_info_pkey PRIMARY KEY (login_name)
 )
 WITH (OIDS=FALSE);
@@ -5398,8 +5400,7 @@ comment on column custom_fun_function.update_sql is '更新sql';
 comment on column custom_fun_function.delete_sql is '删除sql';
 comment on column custom_fun_function.query_sql is '列表查询sql';
 comment on column custom_fun_function.details_sql is '详情查询sql';
-comment on column custom_db_table_fields.row_index is '排序';
-comment on column custom_db_table_fields.if_attachment is '是否支持附件';
+comment on column custom_fun_function.if_attachment is '是否支持附件';
 
 
 /** 自定义表单-功能配置-字段 */
@@ -5428,7 +5429,7 @@ create table custom_fun_fields(
 	max smallint  ,
 	placeholder varchar(50)  ,
 	child_field varchar(50)  ,
-	request_path varchar(100)  ,
+	request_path varchar(500)  ,
 	query_index smallint ,
 	list_index smallint ,
 	create_user_id varchar(36) not null ,
@@ -5468,6 +5469,7 @@ comment on column custom_fun_fields.child_field is '子级字段';
 comment on column custom_fun_fields.request_path is '请求路径';
 comment on column custom_fun_fields.query_index is '查询条件排序序号';
 comment on column custom_fun_fields.list_index is '列表排序序号';
+comment on column custom_db_table_fields.row_index is '排序';
 
 
 /** 自定义表单-数据字典 */
@@ -5585,16 +5587,16 @@ comment on column custom_fun_unique_validate.condition_expression is '表达式'
 comment on column custom_fun_unique_validate.logical_del_field is '逻辑有效字段(默认为active)';
 
 CREATE TABLE pri_application (
-oid varchar(36) COLLATE default NOT NULL,
-app_name varchar(50) COLLATE default NOT NULL,
-description varchar(200) COLLATE default,
-role_id varchar(36) COLLATE default,
-app_url varchar(200) COLLATE default,
-create_user_id varchar(36) COLLATE default,
-create_user_name varchar(50) COLLATE default,
+oid varchar(36)  NOT NULL,
+app_name varchar(50)  NOT NULL,
+description varchar(200) ,
+role_id varchar(36) ,
+app_url varchar(200) ,
+create_user_id varchar(36) ,
+create_user_name varchar(50) ,
 create_datetime timestamp(6),
-modify_user_id varchar(36) COLLATE default,
-modify_user_name varchar(50) COLLATE default,
+modify_user_id varchar(36) ,
+modify_user_name varchar(50) ,
 modify_datetime timestamp(6),
 active int2 DEFAULT 1 NOT NULL,
 CONSTRAINT pri_application_pkey PRIMARY KEY (oid)
@@ -5631,28 +5633,28 @@ COMMENT ON COLUMN pri_application.modify_datetime IS '最近修改时间';
 COMMENT ON COLUMN pri_application.active IS '数据有效标识：1有效 0无效';
 
 CREATE TABLE pri_func_privilege (
-oid varchar(36) COLLATE default NOT NULL,
-parent_id varchar(36) COLLATE default,
-privilege_name varchar(50) COLLATE default NOT NULL,
-privilege_code varchar(50) COLLATE default NOT NULL,
-privilege_type varchar(20) COLLATE default NOT NULL,
-open_type varchar(20) COLLATE default,
-url varchar(2000) COLLATE default,
-description varchar(200) COLLATE default,
-app_id varchar(36) COLLATE default NOT NULL,
-hierarchy varchar(200) COLLATE default NOT NULL,
-hlevel varchar(20) COLLATE default NOT NULL,
+oid varchar(36)  NOT NULL,
+parent_id varchar(36) ,
+privilege_name varchar(50)  NOT NULL,
+privilege_code varchar(50)  NOT NULL,
+privilege_type varchar(20)  NOT NULL,
+open_type varchar(20) ,
+url varchar(2000) ,
+description varchar(200) ,
+app_id varchar(36)  NOT NULL,
+hierarchy varchar(200)  NOT NULL,
+hlevel varchar(20)  NOT NULL,
 order_num int2 NOT NULL,
-create_user_id varchar(36) COLLATE default,
-create_user_name varchar(50) COLLATE default,
+create_user_id varchar(36) ,
+create_user_name varchar(50) ,
 create_datetime timestamp(6),
-modify_user_id varchar(36) COLLATE default,
-modify_user_name varchar(50) COLLATE default,
+modify_user_id varchar(36) ,
+modify_user_name varchar(50) ,
 modify_datetime timestamp(6),
 active int2 DEFAULT 1 NOT NULL,
-icon varchar(50) COLLATE default,
-function_type varchar(50) COLLATE default,
-query_name varchar(200) COLLATE default,
+icon varchar(50) ,
+function_type varchar(50) ,
+query_name varchar(200) ,
 CONSTRAINT pri_func_privilege_pkey PRIMARY KEY (oid)
 )
 WITH (OIDS=FALSE)
@@ -5703,16 +5705,16 @@ COMMENT ON COLUMN pri_func_privilege.active IS '数据有效标识：1有效 0�
 COMMENT ON COLUMN pri_func_privilege.function_type IS '功能点类型';
 
 CREATE TABLE pri_role (
-oid varchar(36) COLLATE default NOT NULL,
-role_name varchar(50) COLLATE default NOT NULL,
-role_type varchar(20) COLLATE default NOT NULL,
-unit_id varchar(36) COLLATE default NOT NULL,
-description varchar(200) COLLATE default,
-create_user_id varchar(36) COLLATE default,
-create_user_name varchar(50) COLLATE default,
+oid varchar(36)  NOT NULL,
+role_name varchar(50)  NOT NULL,
+role_type varchar(20)  NOT NULL,
+unit_id varchar(36)  NOT NULL,
+description varchar(200) ,
+create_user_id varchar(36) ,
+create_user_name varchar(50) ,
 create_datetime timestamp(6),
-modify_user_id varchar(36) COLLATE default,
-modify_user_name varchar(50) COLLATE default,
+modify_user_id varchar(36) ,
+modify_user_name varchar(50) ,
 modify_datetime timestamp(6),
 active int2 DEFAULT 1 NOT NULL,
 CONSTRAINT pri_role_pkey PRIMARY KEY (oid)
@@ -5749,17 +5751,17 @@ COMMENT ON COLUMN pri_role.modify_datetime IS '最近修改时间';
 COMMENT ON COLUMN pri_role.active IS '数据有效标识：1有效 0无效';
 
 CREATE TABLE pri_role_func_privilege_ref (
-oid varchar(36) COLLATE default NOT NULL,
-role_id varchar(36) COLLATE default NOT NULL,
-func_privilege_id varchar(36) COLLATE default NOT NULL,
-create_user_id varchar(36) COLLATE default,
-create_user_name varchar(50) COLLATE default,
+oid varchar(36)  NOT NULL,
+role_id varchar(36)  NOT NULL,
+func_privilege_id varchar(36)  NOT NULL,
+create_user_id varchar(36) ,
+create_user_name varchar(50) ,
 create_datetime timestamp(6),
-modify_user_id varchar(36) COLLATE default,
-modify_user_name varchar(50) COLLATE default,
+modify_user_id varchar(36) ,
+modify_user_name varchar(50) ,
 modify_datetime timestamp(6),
 active int2 DEFAULT 1 NOT NULL,
-app_id varchar(36) COLLATE default NOT NULL,
+app_id varchar(36)  NOT NULL,
 CONSTRAINT pri_role_func_privilege_ref_pkey PRIMARY KEY (oid)
 )
 WITH (OIDS=FALSE)
@@ -5790,28 +5792,28 @@ COMMENT ON COLUMN pri_role_func_privilege_ref.modify_datetime IS '最近修改�
 COMMENT ON COLUMN pri_role_func_privilege_ref.active IS '数据有效标识：1有效 0无效';
 
 CREATE TABLE pri_unit (
-oid varchar(36) COLLATE default NOT NULL,
-parent_id varchar(36) COLLATE default,
-unit_name varchar(50) COLLATE default NOT NULL,
-unit_code varchar(50) COLLATE default NOT NULL,
-description varchar(200) COLLATE default,
-unit_type varchar(20) COLLATE default NOT NULL,
-address varchar(200) COLLATE default,
-phone varchar(50) COLLATE default,
+oid varchar(36)  NOT NULL,
+parent_id varchar(36) ,
+unit_name varchar(50)  NOT NULL,
+unit_code varchar(50)  NOT NULL,
+description varchar(200) ,
+unit_type varchar(20)  NOT NULL,
+address varchar(200) ,
+phone varchar(50) ,
 addata int2,
-ext_field1 varchar(500) COLLATE default,
-ext_field2 varchar(500) COLLATE default,
-ext_field3 varchar(500) COLLATE default,
-ext_field4 varchar(500) COLLATE default,
-ext_field5 varchar(500) COLLATE default,
-hierarchy varchar(200) COLLATE default NOT NULL,
-hlevel varchar(20) COLLATE default NOT NULL,
+ext_field1 varchar(500) ,
+ext_field2 varchar(500) ,
+ext_field3 varchar(500) ,
+ext_field4 varchar(500) ,
+ext_field5 varchar(500) ,
+hierarchy varchar(200)  NOT NULL,
+hlevel varchar(20)  NOT NULL,
 order_num int2 NOT NULL,
-create_user_id varchar(36) COLLATE default,
-create_user_name varchar(50) COLLATE default,
+create_user_id varchar(36) ,
+create_user_name varchar(50) ,
 create_datetime timestamp(6),
-modify_user_id varchar(36) COLLATE default,
-modify_user_name varchar(50) COLLATE default,
+modify_user_id varchar(36) ,
+modify_user_name varchar(50) ,
 modify_datetime timestamp(6),
 active int2 DEFAULT 1 NOT NULL,
 CONSTRAINT pri_unit_pkey PRIMARY KEY (oid)
@@ -5872,31 +5874,31 @@ COMMENT ON COLUMN pri_unit.modify_datetime IS '最近修改时间';
 COMMENT ON COLUMN pri_unit.active IS '数据有效标识：1有效 0无效';
 
 CREATE TABLE pri_user (
-oid varchar(36) COLLATE default NOT NULL,
-user_name varchar(50) COLLATE default NOT NULL,
-login_name varchar(50) COLLATE default NOT NULL,
-password varchar(100) COLLATE default NOT NULL,
+oid varchar(36)  NOT NULL,
+user_name varchar(50)  NOT NULL,
+login_name varchar(50)  NOT NULL,
+password varchar(100)  NOT NULL,
 password_expired_date timestamp(6),
 validdate timestamp(6),
-address varchar(200) COLLATE default,
-phone varchar(50) COLLATE default,
-email varchar(100) COLLATE default,
-unit_id varchar(36) COLLATE default NOT NULL,
-user_type varchar(20) COLLATE default,
+address varchar(200) ,
+phone varchar(50) ,
+email varchar(100) ,
+unit_id varchar(36)  NOT NULL,
+user_type varchar(20) ,
 addata int2,
-description varchar(200) COLLATE default,
-ext_field1 varchar(500) COLLATE default,
-ext_field2 varchar(500) COLLATE default,
-ext_field3 varchar(500) COLLATE default,
-ext_field4 varchar(500) COLLATE default,
-ext_field5 varchar(500) COLLATE default,
-find_pass_validcode varchar(50) COLLATE default,
+description varchar(200) ,
+ext_field1 varchar(500) ,
+ext_field2 varchar(500) ,
+ext_field3 varchar(500) ,
+ext_field4 varchar(500) ,
+ext_field5 varchar(500) ,
+find_pass_validcode varchar(50) ,
 find_pass_validtime timestamp(6),
-create_user_id varchar(36) COLLATE default,
-create_user_name varchar(50) COLLATE default,
+create_user_id varchar(36) ,
+create_user_name varchar(50) ,
 create_datetime timestamp(6),
-modify_user_id varchar(36) COLLATE default,
-modify_user_name varchar(50) COLLATE default,
+modify_user_id varchar(36) ,
+modify_user_name varchar(50) ,
 modify_datetime timestamp(6),
 active int2 DEFAULT 1 NOT NULL,
 CONSTRAINT pri_user_pkey PRIMARY KEY (oid)
@@ -5963,14 +5965,14 @@ COMMENT ON COLUMN pri_user.modify_datetime IS '最近修改时间';
 COMMENT ON COLUMN pri_user.active IS '数据有效标识：1有效 0无效';
 
 CREATE TABLE pri_user_role_ref (
-oid varchar(36) COLLATE default NOT NULL,
-user_id varchar(36) COLLATE default NOT NULL,
-role_id varchar(36) COLLATE default NOT NULL,
-create_user_id varchar(36) COLLATE default,
-create_user_name varchar(50) COLLATE default,
+oid varchar(36)  NOT NULL,
+user_id varchar(36)  NOT NULL,
+role_id varchar(36)  NOT NULL,
+create_user_id varchar(36) ,
+create_user_name varchar(50) ,
 create_datetime timestamp(6),
-modify_user_id varchar(36) COLLATE default,
-modify_user_name varchar(50) COLLATE default,
+modify_user_id varchar(36) ,
+modify_user_name varchar(50) ,
 modify_datetime timestamp(6),
 active int2 DEFAULT 1 NOT NULL,
 CONSTRAINT pri_user_role_ref_pkey PRIMARY KEY (oid)
@@ -6003,18 +6005,18 @@ COMMENT ON COLUMN pri_user_role_ref.modify_datetime IS '最近修改时间';
 COMMENT ON COLUMN pri_user_role_ref.active IS '数据有效标识：1有效 0无效';
 
 CREATE TABLE sys_domain (
-oid varchar(36) COLLATE default NOT NULL,
-domain_name varchar(50) COLLATE default NOT NULL,
-code_id varchar(50) COLLATE default,
-parent_code_id varchar(36) COLLATE default,
-code_name varchar(50) COLLATE default,
+oid varchar(36)  NOT NULL,
+domain_name varchar(50)  NOT NULL,
+code_id varchar(50) ,
+parent_code_id varchar(36) ,
+code_name varchar(50) ,
 ordinal int2,
-description varchar COLLATE default,
-create_user_id varchar(36) COLLATE default,
-create_user_name varchar(50) COLLATE default,
+description varchar ,
+create_user_id varchar(36) ,
+create_user_name varchar(50) ,
 create_datetime timestamp(6),
-modify_user_id varchar(36) COLLATE default,
-modify_user_name varchar(50) COLLATE default,
+modify_user_id varchar(36) ,
+modify_user_name varchar(50) ,
 modify_datetime timestamp(6),
 active int2 NOT NULL,
 CONSTRAINT sys_domain_pkey PRIMARY KEY (oid)
@@ -6043,19 +6045,19 @@ COMMENT ON COLUMN sys_domain.description IS '描述';
 CREATE INDEX index_sys_domain_domain_name_5 ON sys_domain USING btree (domain_name);
 
 CREATE TABLE sys_excel_template (
-oid varchar(36) COLLATE default NOT NULL,
-excel_template_name varchar(50) COLLATE default,
-excel_template_code varchar(50) COLLATE default NOT NULL,
-excel_template_type varchar(36) COLLATE default,
-remark varchar(200) COLLATE default,
-create_user_id varchar(36) COLLATE default,
-create_user_name varchar(50) COLLATE default,
+oid varchar(36)  NOT NULL,
+excel_template_name varchar(50) ,
+excel_template_code varchar(50)  NOT NULL,
+excel_template_type varchar(36) ,
+remark varchar(200) ,
+create_user_id varchar(36) ,
+create_user_name varchar(50) ,
 create_datetime timestamp(6),
-modify_user_id varchar(36) COLLATE default,
-modify_user_name varchar(50) COLLATE default,
+modify_user_id varchar(36) ,
+modify_user_name varchar(50) ,
 modify_datetime timestamp(6),
 active int2 NOT NULL,
-excel_template_path varchar(255) COLLATE default,
+excel_template_path varchar(255) ,
 CONSTRAINT sys_excel_template_pkey PRIMARY KEY (oid)
 )
 WITH (OIDS=FALSE)
@@ -6082,24 +6084,24 @@ CREATE INDEX index_sys_excel_template_excel_template_code_6 ON sys_excel_templat
 CREATE INDEX index_sys_excel_template_excel_template_name_5 ON sys_excel_template USING btree (excel_template_name);
 
 CREATE TABLE sys_login_log (
-oid varchar(36) COLLATE default NOT NULL,
-user_id varchar(36) COLLATE default NOT NULL,
-user_name varchar(50) COLLATE default NOT NULL,
-login_name varchar(50) COLLATE default NOT NULL,
-unit_id varchar(36) COLLATE default NOT NULL,
-unit_name varchar(50) COLLATE default NOT NULL,
-unit_name_fullpath varchar(200) COLLATE default,
-token varchar(100) COLLATE default NOT NULL,
-app_id varchar(36) COLLATE default,
-app_name varchar(50) COLLATE default,
+oid varchar(36)  NOT NULL,
+user_id varchar(36)  NOT NULL,
+user_name varchar(50)  NOT NULL,
+login_name varchar(50)  NOT NULL,
+unit_id varchar(36)  NOT NULL,
+unit_name varchar(50)  NOT NULL,
+unit_name_fullpath varchar(200) ,
+token varchar(100)  NOT NULL,
+app_id varchar(36) ,
+app_name varchar(50) ,
 login_datetime timestamp(6) NOT NULL,
 exit_datetime timestamp(6),
-server_ip varchar(25) COLLATE default,
-client_ip varchar(25) COLLATE default,
-os_type varchar(20) COLLATE default,
-browser_type varchar(20) COLLATE default,
-browser_ver varchar(20) COLLATE default,
-screen_dpi varchar(20) COLLATE default,
+server_ip varchar(25) ,
+client_ip varchar(25) ,
+os_type varchar(20) ,
+browser_type varchar(20) ,
+browser_ver varchar(20) ,
+screen_dpi varchar(20) ,
 CONSTRAINT sys_login_log_pkey PRIMARY KEY (oid)
 )
 WITH (OIDS=FALSE)
@@ -6149,13 +6151,13 @@ COMMENT ON COLUMN sys_login_log.screen_dpi IS '屏幕分辨率';
 CREATE INDEX index_sys_login_log_oid_140 ON sys_login_log USING btree (oid);
 
 CREATE TABLE log_business (
-oid varchar(36) COLLATE default NOT NULL,
-business_id varchar(36) COLLATE default NOT NULL,
-opt_type varchar(50) COLLATE default NOT NULL,
-detail text COLLATE default,
-remark varchar(2000) COLLATE default,
-create_user_id varchar(36) COLLATE default NOT NULL,
-create_user_name varchar(50) COLLATE default NOT NULL,
+oid varchar(36)  NOT NULL,
+business_id varchar(36)  NOT NULL,
+opt_type varchar(50)  NOT NULL,
+detail text ,
+remark varchar(2000) ,
+create_user_id varchar(36)  NOT NULL,
+create_user_name varchar(50)  NOT NULL,
 create_time timestamp(6),
 CONSTRAINT log_business_pkey PRIMARY KEY (oid)
 )
@@ -6177,18 +6179,18 @@ COMMENT ON COLUMN log_business.detail IS '详情。详情。若是更新，必�
 COMMENT ON COLUMN log_business.remark IS '备注';
 
 CREATE TABLE log_operate (
-oid varchar(36) COLLATE default NOT NULL,
-business_id varchar(36) COLLATE default,
-business_name varchar(50) COLLATE default,
-table_name varchar(200) COLLATE default,
-opt_type varchar(50) COLLATE default NOT NULL,
-detail varchar(2000) COLLATE default,
-remark varchar(2000) COLLATE default,
-create_user_id varchar(36) COLLATE default NOT NULL,
-create_user_name varchar(50) COLLATE default NOT NULL,
+oid varchar(36)  NOT NULL,
+business_id varchar(36) ,
+business_name varchar(50) ,
+table_name varchar(200) ,
+opt_type varchar(50)  NOT NULL,
+detail varchar(2000) ,
+remark varchar(2000) ,
+create_user_id varchar(36)  NOT NULL,
+create_user_name varchar(50)  NOT NULL,
 create_time timestamp(6),
-app_id varchar(36) COLLATE default,
-app_name varchar(50) COLLATE default,
+app_id varchar(36) ,
+app_name varchar(50) ,
 CONSTRAINT log_operate_pkey PRIMARY KEY (oid)
 )
 WITH (OIDS=FALSE)
