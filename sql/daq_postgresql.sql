@@ -769,6 +769,7 @@ CREATE TABLE daq_material_pipe (
 	is_cut SMALLINT DEFAULT 0,
 	is_use SMALLINT DEFAULT 0,
 	is_cold_bend SMALLINT DEFAULT 0,
+	is_child SMALLINT DEFAULT 0,
 	construct_unit varchar(36),
 	remarks varchar(200),
 	create_user_id varchar(36),
@@ -810,6 +811,7 @@ comment on column daq_material_pipe.coating_factory IS '防腐加工厂家';
 comment on column daq_material_pipe.is_cut IS '是否切管';
 comment on column daq_material_pipe.is_use IS '是否使用';
 comment on column daq_material_pipe.is_cold_bend IS '是否冷弯';
+COMMENT ON COLUMN daq_material_pipe.is_child IS '是否是子管，1为是，0为否';
 comment on column daq_material_pipe.construct_unit IS '施工单位';
 comment on column daq_material_pipe.remarks IS '备注';
 comment on column daq_material_pipe.create_user_id IS '创建人id';
