@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>施工数据采集</title>
+
+	<!-- 老框架的样式依赖 -->
+	<!-- <link rel="stylesheet" href="../jasframework/common/css/jasframework-layout.css" />
+	<link rel="stylesheet" href="../jasframework/common/lib/easyui/themes/default/easyui.css" />
+	<link rel="stylesheet" href="../jasframework/common/lib/easyui/themes/icon.css" />
+	<link rel="stylesheet" href="../jasframework/common/css/common.css" /> -->
+	<!-- <link rel="stylesheet" href="../jasframework/common/css/main.css" type="text/css" /> -->
+	<!-- 老框架的样式依赖END -->
+
+	<link rel="stylesheet" href="./lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./lib/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="./src/css/main.css">
+	<style>
+		.bsb {
+			box-sizing: border-box;
+		}
+
+		.lh24 {
+			line-height: 24px;
+		}
+
+		.clr01 {
+			color: #999;
+		}
+
+		.mb5 {
+			margin-bottom: 5px;
+		}
+
+		.mb10 {
+			margin-bottom: 10px;
+		}
+
+		.mt10 {
+			margin-top: 10px;
+		}
+
+
+		.mb15 {
+			margin-bottom: 10px;
+		}
+
+		.fs10 {
+			font-size: 10px;
+		}
+
+		.fs12 {
+			font-size: 12px;
+		}
+
+		.tac {
+			text-align: center;
+		}
+
+		#app {
+			overflow: auto;
+			background: #0c0026;
+			color: #f1f1f1;
+			min-width: 1320px;
+		}
+
+		.header {
+			height: 60px;
+
+		}
+
+		.headertop {
+			width: 1200px;
+			height: 3px;
+			background: #125895;
+			margin: 0 auto;
+			/* box-shadow:  */
+			background-image: linear-gradient( 90deg, #0c0026 10%, #125895 50%, #0c0026 100%);
+
+		}
+
+		.headerbottom {
+			width: 1200px;
+			height: 3px;
+			background: #2b50b3;
+			margin: 0 auto;
+			/* box-shadow:  */
+			background-image: linear-gradient( 90deg, #0c0026 10%, #2b50b3 50%, #0c0026 100%);
+
+		}
+
+		.headerdate {
+			float: left;
+			line-height: 54px;
+			padding-left: 10px;
+		}
+
+		.headerright {
+			float: right;
+			line-height: 54px;
+			padding-right: 10px;
+			cursor: pointer;
+		}
+
+		.headertitle {
+			line-height: 54px;
+			text-align: center;
+			font-size: 32px;
+			width: 300px;
+			margin: 0 auto;
+			background: linear-gradient( #64ebf7 20%, #3543a5 100%);
+			background-clip: text;
+			-webkit-background-clip: text;
+			color: transparent;
+			font-weight: bold;
+		}
+
+		.box_wrap {
+			height: calc(100% - 60px);
+			min-height: 800px;
+			min-width: 1320px;
+		}
+
+		.sidebox {
+			padding: 5px 10px;
+			box-sizing: border-box;
+		}
+
+		.boxtitle {
+			height: 20px;
+			color: #fff;
+		}
+
+		.boxmain {
+			height: calc(100% - 20px);
+
+			/* font-size: 12px; */
+		}
+
+		.contentBox {
+			color: #dadada;
+		}
+
+		/* right---begin */
+
+		.peoplebox {
+			float: left;
+			width: 170px;
+			height: 80px;
+			margin: 5px;
+			background: #f90;
+			border-radius: 4px;
+		}
+
+		.peoplebox .peotitle {
+			padding: 0 0 0 5px;
+		}
+
+		.peoplenum {
+			text-align: center;
+			font-size: 34px;
+			height: 50px;
+			line-height: 50px;
+		}
+
+		/* right---end */
+
+		/* middle---start */
+
+		.headerbtn {
+			width: 30px;
+			height: 30px;
+			background: #fff;
+			opacity: 0.2;
+			border-radius: 50%;
+			cursor: pointer;
+			margin: 5px 10px 0;
+			font-size: 20px;
+			line-height: 30px;
+			color: #000;
+		}
+
+		.headerbtn:hover {
+			opacity: 0.5;
+		}
+
+		.headerbtn.disable {
+			opacity: 0.2;
+		}
+
+		.projectspan {
+			padding: 0 10px 0 0;
+		}
+
+		.tipspan {
+			padding: 1px 6px;
+			background-color: #f56c6c;
+			border-radius: 2px;
+		}
+
+		.statsScopeItem {
+			float: left;
+			width: 11.11%;
+
+			text-align: center;
+			padding: 5px;
+			box-sizing: border-box;
+		}
+
+
+		/* middle---end */
+
+		.linemsg {
+			font-size: 12px;
+		}
+
+		.personlist {
+			height: 32px;
+			overflow: hidden;
+			line-height: 24px;
+		}
+
+		.personlist span {
+			text-align: center;
+			float: left;
+			height: 30px;
+			width: 70px;
+		}
+
+		.ellipsis {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		.bggrad {
+			background-image: linear-gradient( 135deg, #123597 10%, #607ae8 100%);
+		}
+
+		.bggrad02 {
+			background-image: linear-gradient( 135deg, #9708CC 10%, #b77fe2 100%);
+			color: #fff;
+		}
+
+		.br04 {
+			border-radius: 4px;
+		}
+
+		.el-progress-bar__outer {
+			background-color: #11224a;
+		}
+	</style>
+
+
+
+</head>
+
+<body>
+	<div id="app" v-cloak>
+		<div class="header">
+			<div class="headertop"></div>
+			<div>
+				<span class="headerdate">{{dateStr}}</span>
+				<span class="headerright" @click="returnIndex">返回</span>
+				<div class="headertitle">施工数据可视化一览</div>
+			</div>
+			<div class="headerbottom"></div>
+		</div>
+		<div class="box_wrap">
+			<div style="width:380px;float: left;height:100%;">
+				<div class="sidebox" style="height:210px;">
+					<div class="boxtitle">钢管使用情况</div>
+					<div class="boxmain">
+						<div style="width:350px;" class="peoplebox bggrad br04">
+							<div class="peotitle">防腐管</div>
+							<div class="tac mb5">
+								<span style="font-size: 28px;">{{steelPipeUsage[0].usedLength}}</span>
+								<span>Km</span>
+							</div>
+							<div class="tac fs12">
+								<span>{{steelPipeUsage[0].usedCount || 0}}</span>
+								<span>/</span>
+								<span>{{steelPipeUsage[0].totalCount || 0}}</span>
+							</div>
+						</div>
+						<div class="peoplebox bggrad br04">
+							<div class="peotitle">直管</div>
+							<div class="tac mb5">
+								<span style="font-size: 28px;">{{steelPipeUsage[1].usedLength||0}}</span>
+								<span>Km</span>
+							</div>
+							<div class="tac fs12">
+								<span>{{steelPipeUsage[1].usedCount || 0}}</span>
+								<span>/</span>
+								<span>{{steelPipeUsage[1].totalCount || 0}}</span>
+							</div>
+						</div>
+						<div class="peoplebox bggrad br04">
+							<div class="peotitle">冷弯管</div>
+							<div class="tac mb5">
+								<span style="font-size: 28px;">{{steelPipeUsage[2].usedLength || 0}}</span>
+								<span>Km</span>
+							</div>
+							<div class="tac fs12">
+								<span>{{steelPipeUsage[2].usedCount || 0}}</span>
+								<span>/</span>
+								<span>{{steelPipeUsage[2].totalCount || 0}}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div style="height:calc(100% - 210px);">
+					<div class="sidebox" style="height:33.33%;">
+						<div class="boxtitle">切管情况</div>
+						<div class="contentBox" style="height:calc(100% - 20px);">
+							<div id="pipeCutting" style="width:50%;height:100%;float: left;">
+							</div>
+							<div class="bsb" style="width:50%;height:100%;float: left;padding:20px 0 0 20px;">
+								<div class="lh24">
+									<span>总长度：</span>
+									<span>{{pipeCutting.totalLength}}</span>
+								</div>
+								<div class="lh24">
+									<span>使用长度：</span>
+									<span>{{pipeCutting.usedLength}}</span>
+								</div>
+								<div class="lh24">
+									<span>未使用长度：</span>
+									<span>{{pipeCutting.unUsedLength}}</span>
+								</div>
+								<div class="lh24">
+									<span>切管次数：</span>
+									<span>{{pipeCutting.cutCount}}</span>
+								</div>
+								<div class="lh24">
+									<span>切管长度：</span>
+									<span>{{pipeCutting.cutLength}}</span>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<div class="sidebox" style="height:33.33%;">
+						<div class="boxtitle">焊口一次性合格率</div>
+						<div class="contentBox" style="height:calc(100% - 20px);">
+							<div id="weldOnce" style="width:50%;height:100%;float: left;">
+							</div>
+							<div class="bsb" style="width:50%;height:100%;float: left;padding:20px 0 0 20px;">
+								<div class="lh24">
+									<span>总数量：</span>
+									<span>{{weldOnce.count}}</span>
+								</div>
+								<div class="lh24">
+									<span>合格数量</span>
+									<span>{{weldOnce.passCount}}</span>
+								</div>
+								<div class="lh24">
+									<span>不合格数量</span>
+									<span>{{weldOnce.unPassCount}}</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 焊口返修情况 -->
+					<div class="sidebox" style="height:33.33%;">
+						<div class="boxtitle">焊口返修情况</div>
+						<div class="contentBox" style="height:calc(100% - 20px);">
+							<div id="weldRework" style="height:100%;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- 中间部分  开始 -->
+
+			<div style="width:calc(100% - 760px);float: left;height:100%;">
+				<div style="height:120px;">
+					<div style="overflow: hidden;margin:0 5px;padding:5px 0 0 0;">
+						<div style="height:40px;text-align: center;line-height:40px;">
+							<span :class="{disable:projectInfo.index == 0}" class="headerbtn" style="float:left;" @click="lastProject">
+								<i class="fa fa-angle-left" aria-hidden="true"></i>
+							</span>
+							<span :class="{disable:projectInfo.index > projectInfo.list.length-2}" class="headerbtn" style="float:right;" @click="nextProject">
+								<i class="fa fa-angle-right" aria-hidden="true"></i>
+							</span>
+							<div style="overflow: hidden;height: 40px;width:300px;margin:0 auto;">
+								<span class="projectspan" style="font-size:22px;" v-text="projectNow.name"></span>
+								<span class="tipspan" style="font-size:10px;" v-text="projectNow.pipeNetworkTypeName">高压管网</span>
+								<span class="tipspan" style="font-size:10px;" v-text="projectNow.pipelineLength + 'km'"></span>
+							</div>
+
+						</div>
+						<div v-for="item in statsScope" class="statsScopeItem">
+							<div class="bggrad02" style="padding:5px 0;border-radius: 2px;">
+								<div style="font-size: 10px;line-height: 20px;height:20px;overflow: hidden;" v-text="item.cnName"></div>
+								<div style="font-size: 18px;line-height: 30px;height:30px;overflow: hidden;" v-text="item.statsResult"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div style="height:calc(100% - 410px);background: #0f64c4;"></div>
+				<div style="height:280px;padding: 5px 10px;">
+					<div style="height:270px;">
+						<div class="boxtitle">线路物资概况</div>
+						<div class="contentBox" style="overflow: hidden;">
+							<div v-for="item in quantityOfMaterial" style="float:left;width:14.285%;text-align: center;padding-top:10px;box-sizing: border-box;">
+								<div class="mb5" v-text="item.cnName || 0"></div>
+								<div class="mb10" v-text="item.entryCountOrLength || 0" style="font-size: 22px;"></div>
+								<div class="mb5 fs10 clr01">已检查</div>
+								<el-progress type="circle" :color="pgClr(per(item.checkedCountOrLength,item.entryCountOrLength))" :width="60" :percentage="per(item.checkedCountOrLength,item.entryCountOrLength)"></el-progress>
+								<div class="mb5  mt10 fs10 clr01">已使用</div>
+								<el-progress type="circle" :color="pgClr(per(item.usedCountOrLength,item.entryCountOrLength))" :width="60" :percentage="per(item.usedCountOrLength,item.entryCountOrLength)"></el-progress>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- 中间部分  结束 -->
+			<div style="width:380px;float: left;height:100%;">
+				<div class="sidebox" style="height:210px;">
+					<div class="boxtitle">项目人员统计</div>
+					<div class="boxmain">
+						<div class="peoplebox bggrad">
+							<div class="peotitle">焊接机组</div>
+							<div class="peoplenum">{{personCount[0].statsResult}}</div>
+						</div>
+						<div class="peoplebox bggrad">
+							<div class="peotitle">焊工</div>
+							<div class="peoplenum">{{personCount[1].statsResult}}</div>
+						</div>
+						<div class="peoplebox bggrad">
+							<div class="peotitle">数据采集人员</div>
+							<div class="peoplenum">0</div>
+						</div>
+						<div class="peoplebox bggrad">
+							<div class="peotitle">监理人员</div>
+							<div class="peoplenum">0</div>
+						</div>
+					</div>
+				</div>
+				<div style="height:calc(100% - 210px);">
+					<div class="sidebox" style="height:33.33%;">
+						<div class="boxtitle">各工序完成情况</div>
+						<div style="height:calc(100% - 20px);">
+							<div id="processCompletion" style="height:100%;"></div>
+						</div>
+					</div>
+					<div class="sidebox" style="height:33.33%;">
+						<div class="boxtitle">数据采集审核通过情况</div>
+						<div class="contentBox" style="height:calc(100% - 25px);margin-top:10px;">
+							<div style="height:25%;padding:0 10px;" v-for="item in dataAudit">
+								<div style="line-height: 24px;">
+									<span>{{item.cnName}}</span>
+									<div style="float:right;">{{item.value}}</div>
+								</div>
+								<el-progress :color="pgClr(item.percent)" :percentage="item.percent||0" :show-text="false"></el-progress>
+							</div>
+
+						</div>
+					</div>
+					<div class="sidebox" style="height:33.33%;">
+						<div class="boxtitle">人员填报情况</div>
+						<div class="contentBox" style="height:calc(100% - 25px);margin-top:10px;">
+							<div v-for="item in personFill" class="personlist">
+								<span style="width:30px;">{{item.no}}</span>
+								<span>{{item.userName}}</span>
+								<span>{{item.entryCount + '条'}}</span>
+								<span class="ellipsis" style="width:180px;text-align: left;">{{item.unitName}}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	</div>
+
+</body>
+<!-- import Vue before Element -->
+<script src="./lib/vue/vue.js"></script>
+<script src="./lib/jquery/jquery-1.12.4.min.js"></script>
+
+<!-- 老框架的JS依赖END -->
+<!-- <script type="text/javascript" src="../jasframework/common/lib/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../jasframework/common/js/AppConfig.js"></script>
+<script type="text/javascript" src="../jasframework/common/js/common.js"></script> -->
+<!-- 老框架的JS依赖END -->
+
+<!-- import JavaScript -->
+<script src="./lib/element-ui/v2.4.1/index.stroke.min.js"></script>
+<script src="./lib/echarts/echarts.min.js"></script>
+<script src="./lib/echarts/chalk.js"></script>
+
+
+<script src="./common/components/jas-components.js"></script>
+<script src="./common/js/jas-tools.js"></script>
+
+<script>
+</script>
+<script>
+	var vm = new Vue({
+		el: "#app",
+		data: function () {
+			return {
+				nowdate: new Date(),
+				projectId: '',
+				projectInfo: {
+					list: [],
+					index: 0,
+				},
+				quantityOfMaterial: [],
+				steelPipeUsage: [{}, {}, {}],
+				pipeCutting: {},
+				weldOnce: {}, //count   passCount
+				personCount: [{}, {}],
+				dataAudit: [],
+				personFill: [],
+				statsScope: [ //
+					{
+						"statsType": "pipeline",
+						"statsResult": 3,
+						"cnName": "管线"
+					}, {
+						"statsType": "median_stake",
+						"statsResult": 355,
+						"cnName": "中线桩"
+					}, {
+						"statsType": "pipe_segment",
+						"statsResult": 11,
+						"cnName": "线路段"
+					}, {
+						"statsType": "cross",
+						"statsResult": 5,
+						"cnName": "穿跨越"
+					}, {
+						"statsType": "pipe_station",
+						"statsResult": 4,
+						"cnName": "站场"
+					}, {
+						"statsType": "pipe_valve_room",
+						"statsResult": 7,
+						"cnName": "阀室"
+					}, {
+						"statsType": "maintenance_road",
+						"statsResult": 0,
+						"cnName": "伴行道路"
+					}, {
+						"statsType": "power_line",
+						"statsResult": 0,
+						"cnName": "外供电线路"
+					}, {
+						"statsType": "tenders",
+						"statsResult": 4,
+						"cnName": "标段"
+					}
+				]
+			};
+		},
+		computed: {
+			projectNow: function () {
+				var index = this.projectInfo.index;
+				var list = this.projectInfo.list;
+				if (list[index]) {
+					this.projectId = list[index].oid;
+					return {
+						name: list[index].name,
+						oid: list[index].oid,
+						pipeNetworkTypeName: list[index].pipeNetworkTypeName,
+						pipe_network_type_code: list[index].pipe_network_type_code,
+						pipelineLength: list[index].pipelineLength,
+					}
+				}
+				return {};
+			},
+			dateStr: function () {
+				var date = this.nowdate;
+				var seperator1 = "-";
+				var year = date.getFullYear();
+				var month = date.getMonth() + 1;
+				var strDate = date.getDate();
+				if (month >= 1 && month <= 9) {
+					month = "0" + month;
+				}
+				if (strDate >= 0 && strDate <= 9) {
+					strDate = "0" + strDate;
+				}
+				var currentdate = year + '年' + month + '月' + strDate + '日';
+				var days = date.getDay();
+
+
+				var aMap = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+				var day = aMap[days];
+				return currentdate + ' ' + day;
+			}
+		},
+		created: function () {
+			this.login();
+
+		},
+		watch: {
+			projectId: function (val) {
+				if (!val) return;
+				this.getStatsScope();
+				this.getStatsQuantityOfMaterial();
+				this.getSteelPipeUsage();
+				this.getPipeCutting();
+				this.getWeldOnce();
+				this.getWeldRework();
+
+				this.getPersonCount();
+				this.getProcessCompletion();
+				this.getDataAudit();
+				this.getPersonFill();
+			}
+		},
+		methods: {
+			pgClr: function (per) {
+				if (per < 30) return '#67c23a';
+				if (per < 80) return '#409eff';
+				return '#f56c6c';
+			},
+			per: function (num, total) {
+				if (!num || !total) return 0;
+				return +(num / total * 100).toFixed(1);
+			},
+			login: function () {
+				var that = this;
+				var url = jasTools.base.rootPath + "/jasframework/login/login.do";
+				jasTools.ajax.post(url, {
+					"logintype": "0",
+					"loginNum": 'zhangyi',
+					"pass": '111111',
+					"i18n": "zh_CN",
+					"appId": "402894a152681ba30152681e8b320003"
+				}, function (data) {
+					localStorage.setItem("token", data.token);
+					var userBo = data.user;
+					var unitName = userBo.unitName;
+					unitName = unitName.substr(unitName.lastIndexOf(">") + 1, unitName.length);
+					userBo.unitName = unitName;
+					localStorage.setItem("user", JSON.stringify(userBo));
+					localStorage.setItem("calculateType", 1); //1-显示桩和偏移量  2显示坐标
+					that.getProject();
+				});
+			},
+			getProject: function () {
+				var that = this;
+				var url = jasTools.base.rootPath + '/dataVisualization/getProjectInfoByUserId.do';
+				jasTools.ajax.get(url, {}, function (data) {
+					that.projectInfo.list = data.data;
+				});
+			},
+			getStatsScope: function () {
+				var that = this;
+				var url = jasTools.base.rootPath + '/dataVisualization/statsScopeManagement.do';
+				jasTools.ajax.get(url, {
+					projectId: this.projectId
+				}, function (data) {
+					that.statsScope = data.data;
+				});
+			},
+			getStatsQuantityOfMaterial: function () {
+				var that = this;
+				var url = jasTools.base.rootPath + '/dataVisualization/statsQuantityOfMaterial.do';
+				jasTools.ajax.get(url, {
+					projectId: this.projectId
+				}, function (data) {
+					that.quantityOfMaterial = data.data;
+				});
+			},
+			getSteelPipeUsage: function () {
+				var that = this;
+				var url = jasTools.base.rootPath + '/dataVisualization/steelPipeUsage.do';
+				jasTools.ajax.post(url, {
+					projectIds: [this.projectId]
+				}, function (data) {
+					that.steelPipeUsage = data.data;
+				});
+			},
+			getPipeCutting: function () {
+				var that = this;
+				var url = jasTools.base.rootPath + '/dataVisualization/statsPipeCutting.do';
+				jasTools.ajax.post(url, {
+					projectIds: [this.projectId]
+				}, function (data) {
+					that.pipeCutting = data.data;
+					that.renderPipeCutting();
+				});
+			},
+			renderPipeCutting: function () {
+				var that = this;
+				if (!this.chartPipeCutting) {
+					this.chartPipeCutting = echarts.init(document.getElementById('pipeCutting'), 'chalk');
+					$(window).resize(function () {
+						that.chartPipeCutting.resize();
+					});
+				}
+				// 指定图表的配置项和数据
+				var option = {
+					legend: {
+						bottom: '10px',
+						data: ['已使用', '未使用'],
+					},
+					series: [{
+						type: 'pie',
+						center: ['50%', '40%'],
+						radius: ['50%', '70%'],
+						avoidLabelOverlap: false,
+						label: {
+							normal: {
+								show: false,
+								position: 'center'
+							},
+							emphasis: {
+								show: true,
+								textStyle: {
+									fontSize: '16',
+									fontWeight: 'bold'
+								}
+							}
+						},
+						labelLine: {
+							normal: {
+								show: false
+							}
+						},
+						data: [{
+							value: this.pipeCutting.usedLength || 0,
+							name: '已使用'
+						}, {
+							value: this.pipeCutting.unUsedLength || 0,
+							name: '未使用'
+						}]
+					}]
+				};
+				// 使用刚指定的配置项和数据显示图表。
+				this.chartPipeCutting.setOption(option);
+			},
+			getWeldOnce: function () {
+				var that = this;
+				var url = jasTools.base.rootPath + '/dataVisualization/statsWeldOnceQualifiedRate.do';
+				jasTools.ajax.post(url, {
+					projectIds: [this.projectId]
+				}, function (data) {
+					that.weldOnce = data.data;
+					that.weldOnce.unPassCount = data.data.count - data.data.passCount;
+					that.renderWeldOnce();
+				});
+			},
+			renderWeldOnce: function () {
+				var that = this;
+				if (!this.chartWeldOnce) {
+					this.chartWeldOnce = echarts.init(document.getElementById('weldOnce'), 'chalk');
+					$(window).resize(function () {
+						that.chartWeldOnce.resize();
+					});
+				}
+				// 指定图表的配置项和数据
+				var option = {
+					legend: {
+						bottom: '10px',
+						data: ['合格', '不合格'],
+					},
+					series: [{
+						type: 'pie',
+						center: ['50%', '40%'],
+						radius: ['50%', '70%'],
+						avoidLabelOverlap: false,
+						label: {
+							normal: {
+								show: false,
+								// position: 'center'
+							},
+						},
+						data: [{
+							value: this.weldOnce.passCount || 0,
+							name: '合格'
+						}, {
+							value: this.weldOnce.unPassCount || 0,
+							name: '不合格'
+						}]
+					}]
+				};
+				// 使用刚指定的配置项和数据显示图表。
+				this.chartWeldOnce.setOption(option);
+			},
+
+			getWeldRework: function () {
+				var that = this;
+				var url = jasTools.base.rootPath + '/dataVisualization/statsWeldRework.do';
+				jasTools.ajax.post(url, {
+					projectIds: [this.projectId],
+					statsDays: 30
+				}, function (data) {
+					that.weldRework = data.data;
+					that.renderWeldRework();
+				});
+			},
+			renderWeldRework: function () {
+				var that = this;
+				if (!this.chartWeldRework) {
+					this.chartWeldRework = echarts.init(document.getElementById('weldRework'), 'chalk');
+					$(window).resize(function () {
+						that.chartWeldRework.resize();
+					});
+				}
+				// 指定图表的配置项和数据
+				var option = {
+					grid: {
+						left: '3%',
+						right: '10%',
+						bottom: '3%',
+						top: '14%',
+						containLabel: true
+					},
+					xAxis: {
+						type: 'time',
+					},
+					yAxis: {
+						type: 'value',
+					},
+					series: [{
+						data: this.weldRework.map(function (item) {
+							return [item.statsType, item.statsResult]
+						}),
+						showSymbol: false,
+						hoverAnimation: false,
+						type: 'line',
+						smooth: true
+					}]
+				};
+				// 使用刚指定的配置项和数据显示图表。
+				this.chartWeldRework.setOption(option);
+			},
+
+			getPersonCount: function () {
+				var that = this;
+				var url = jasTools.base.rootPath + '/dataVisualization/statsTypeOfPersonCount.do';
+				jasTools.ajax.post(url, {
+					projectIds: [this.projectId]
+				}, function (data) {
+					that.personCount = data.data;
+				});
+			},
+			getProcessCompletion: function () {
+				var that = this;
+				var url = jasTools.base.rootPath + '/dataVisualization/statsProcessCompletion.do';
+				jasTools.ajax.post(url, {
+					projectIds: [this.projectId],
+				}, function (data) {
+					that.processCompletion = data.data.map(function (item) {
+
+						return item;
+					});
+					that.renderProcessCompletion();
+				});
+			},
+			renderProcessCompletion: function () {
+				var that = this;
+				if (!this.chartProcessCompletion) {
+					this.chartProcessCompletion = echarts.init(document.getElementById('processCompletion'), 'chalk');
+					$(window).resize(function () {
+						that.chartProcessCompletion.resize();
+					});
+				}
+				var types = [];
+				var values = [];
+				this.processCompletion.forEach(function (item) {
+					types.push(item.cnName);
+					values.push((item.statsResult / 1000).toFixed(3) || 0);
+				});
+
+				// 指定图表的配置项和数据
+				var option = {
+					grid: {
+						left: '3%',
+						right: '4%',
+						bottom: '3%',
+						top: '14%',
+						containLabel: true
+					},
+					xAxis: {
+						type: 'category',
+						data: types,
+						axisLabel: {
+							interval: 0,
+						},
+						axisTick: {
+							alignWithLabel: true
+						},
+					},
+					yAxis: {
+						type: 'value',
+					},
+					series: [{
+						data: values,
+						type: 'bar',
+						barWidth: 20,
+					}]
+				};
+
+				// 使用刚指定的配置项和数据显示图表。
+				this.chartProcessCompletion.setOption(option);
+			},
+
+			getDataAudit: function () {
+				var that = this;
+				var url = jasTools.base.rootPath + '/dataVisualization/statsDataAcquisitionAndAudit.do';
+				jasTools.ajax.post(url, {
+					projectIds: [this.projectId],
+				}, function (data) {
+					data.data.length = 4;
+
+					that.dataAudit = data.data.map(function (item) {
+						item.auditPassedCount = item.auditPassedCount || 0;
+						item.percent = +((item.auditPassedCount / item.totalCount).toFixed(2)) * 100;
+						item.value = (item.auditPassedCount + '/' + item.totalCount);
+						return item;
+					});
+
+				});
+			},
+			getPersonFill: function () {
+				var that = this;
+				var url = jasTools.base.rootPath + '/dataVisualization/statsPersonFill.do';
+				jasTools.ajax.post(url, {
+					projectIds: [this.projectId],
+					topNum: 5
+				}, function (data) {
+
+					that.personFill = data.data;
+				});
+			},
+			lastProject: function () {
+				var index = this.projectInfo.index;
+				var list = this.projectInfo.list;
+				if (index > 0) {
+					this.projectInfo.index--;
+				}
+			},
+			nextProject: function () {
+				var index = this.projectInfo.index;
+				var list = this.projectInfo.list;
+				if (index < list.length - 1) {
+					this.projectInfo.index++;
+				}
+			},
+			returnIndex: function () {
+				location.href = 'index.html';
+			}
+		}
+	});
+</script>
+
+</html>

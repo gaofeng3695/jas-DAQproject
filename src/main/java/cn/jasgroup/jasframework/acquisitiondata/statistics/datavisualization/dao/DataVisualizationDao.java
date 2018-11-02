@@ -21,6 +21,7 @@ import java.util.*;
  *
  * @author xiefayang
  * 2018/10/22 10:42
+ * @
  */
 @Repository
 public class DataVisualizationDao {
@@ -146,11 +147,12 @@ public class DataVisualizationDao {
     }
 
 
+
     public StatsPipeCuttingBo statsPipeCutting(List<String> projectIds) {
         String sql = "" +
                 " select sum(case when (is_cut=1) then 1 else 0 end ) as cut_count,\n" +
                 "   sum(case when (is_cut=0) then pipe_length else 0 end) as total_length,\n" +
-                "   sum(case when (is_cut=1) then pipe_length else 0 end) as cut_length,\n" +
+                "   sum(case when (is_cut=0 and is_child=1) then pipe_length else 0 end) as cut_length,\n" +
                 "   sum(case when (is_cut=0 and is_use=1) then pipe_length else 0 end ) used_length,\n" +
                 "   sum(case when (is_cut=0 and is_use=0) then pipe_length else 0 end ) un_used_length\n" +
                 " from daq_material_pipe where active = 1 and project_oid in (:projectIds) ";
@@ -188,10 +190,24 @@ public class DataVisualizationDao {
     }
 
 
+    public List<Map<String, Integer>> countConstructorAndSupervisor(Collection<String> projectIds) {
+        String sql = "" +
+                " select coalesce(sum(case when hierarchy like 'Unit.0001.0005%' then 1 else 0 end), 0) as constructor,\n" +
+                "   coalesce(sum(case when hierarchy like 'Unit.0001.0004%' then 1 else 0 end), 0) as supervisor from pri_unit unit\n" +
+                " left join pri_user u on unit.oid = u.unit_id\n" +
+                " where unit.active = 1 and u.active=1 and unit.oid in (\n" +
+                "     select distinct unit_oid from daq_implement_scope_ref where active = 1 and project_oid in(:projectIds)\n" +
+                " ) and (hierarchy like 'Unit.0001.0005%' or hierarchy like 'Unit.0001.0004%')";
+
+        return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectIds", projectIds), Map.class);
+    }
+
+
     public List<DataEntryAndAuditBo> countDataEntryAndAudit(List<String> projectIds) {
         String sqlFormat = "" +
-                " select '%s' as stats_type, '%s' as cn_name, count(*) as total_count, sum(case when (approve_status=2) then 1 else 0 end) as audit_passed_count,\n " +
-                " sum(case when (approve_status=1) then 1 else 0 end) as wait_audit_count\n " +
+                " select '%s' as stats_type, '%s' as cn_name, count(*) as total_count,\n " +
+                " COALESCE(sum(case when (approve_status=2) then 1 else 0 end), 0) as audit_passed_count,\n " +
+                " COALESCE(sum(case when (approve_status=1) then 1 else 0 end), 0) as wait_audit_count\n " +
                 " from %s where active = 1 and project_oid in (:projectIds) and approve_status!=0\n ";
 
         StringBuilder sql = new StringBuilder();

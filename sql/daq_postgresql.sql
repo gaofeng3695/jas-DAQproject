@@ -5152,6 +5152,28 @@ alter table daq_construction_weld add column is_rework smallint DEFAULT 0;
 comment on column daq_construction_weld.is_anticorrosion_check IS '是否补扣';
 comment on column daq_construction_weld.is_rework IS '是否返修';
 
+-- ----------------------------
+-- T: app版本表
+-- ----------------------------
+DROP TABLE IF EXISTS app_version;
+CREATE TABLE app_version (
+	oid varchar(36) NOT NULL PRIMARY KEY,
+	version_number varchar(100) NOT NULL,
+	version_desc varchar(2000) ,
+	version_time timestamp(6),
+	appcan_version varchar(200) ,
+	product_id varchar(200) ,
+	product_name varchar(200) ,
+	update_model SMALLINT,
+	url varchar(500) ,
+	client_type varchar(100) ,
+	active SMALLINT
+);
+
+-- ----------------------------
+-- Records of app_version
+-- ----------------------------
+INSERT INTO app_version VALUES ('1', 'V1.1.0', '施工数据采集测试版本&优化部分功能&修改部分Bug', '2018-09-30 10:24:05', '0.0.23', 'daq', '施工数据采集', 1, 'http://pipeline.zyax.cn:10080/巡线卫士.apk', 'Android', 1);
 
 
 

@@ -1,8 +1,12 @@
 package cn.jasgroup.jasframework.acquisitiondata.privilege.dao;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+
+import javax.annotation.Resource;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
@@ -10,10 +14,13 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import cn.jasgroup.jasframework.dataaccess.base.BaseJdbcDao;
+import cn.jasgroup.jasframework.dataaccess3.core.BaseJdbcTemplate;
 
 @Repository
 public class DaqPrivilegeDao extends BaseJdbcDao{
 	
+	@Resource
+	private BaseJdbcTemplate baseJdbcTemplate;
 	/***
 	  * <p>功能描述：根据部门oid获取该部门及部门一下的项目列表。</p>
 	  * <p> 雷凯。</p>	
@@ -322,5 +329,58 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 		sql += " order by t.create_datetime asc";
 		return this.queryForList(sql, null);
 	}
-
+	/**
+	  * <p>功能描述：添加人脸信息。</p>
+	  * <p> 雷凯。</p>	
+	  * @param userId
+	  * @param base64Image
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年10月29日 上午11:03:59。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public boolean addFaceInfo(String loginName,String base64Image){
+		try {
+			String oid = UUID.randomUUID().toString();
+			String sql = "insert into daq_user_face_info (oid,login_name,base64_image) values ('"+oid+"','"+loginName+"','"+base64Image+"');";
+			this.execute(sql);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	/***
+	  * <p>功能描述：获取人脸信息。</p>
+	  * <p> 雷凯。</p>	
+	  * @param userId
+	  * @param base64Image
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年10月29日 上午11:06:12。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public String getFaceInfo(String loginName){
+		String result=null;
+		try {
+			String sql = "select t.base64_image as base64Image from daq_user_face_info t where t.login_name='"+loginName+"'";
+			Map<String,Object> map = this.queryForMap(sql, null);
+			if(map!=null && map.containsKey("base64Image")){
+				result = map.get("base64Image").toString();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	public Map<String,Object> getFaceInfoByLoginName(String loginName){
+		 Map<String,Object> result= new HashMap<>();
+		try {
+			String sql = "select u.oid,u.login_name,u.unit_id,u.user_name,u.user_type,u.password,b.base64_image from pri_user u left join (select login_name,base64_image from daq_user_face_info) b on u.login_name=b.login_name where u.active=1 and u.login_name='"+loginName+"'";
+			result = this.baseJdbcTemplate.queryForMapHump(sql, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

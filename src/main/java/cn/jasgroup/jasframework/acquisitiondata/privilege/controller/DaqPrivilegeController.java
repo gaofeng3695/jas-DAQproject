@@ -1,12 +1,17 @@
 package cn.jasgroup.jasframework.acquisitiondata.privilege.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,18 +21,29 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import cn.jasgroup.framework.data.result.BaseResult;
 import cn.jasgroup.framework.data.result.ListResult;
 import cn.jasgroup.framework.data.result.SimpleResult;
 import cn.jasgroup.jasframework.acquisitiondata.privilege.service.DaqPrivilegeService;
 import cn.jasgroup.jasframework.acquisitiondata.variate.UnitHierarchyEnum;
 import cn.jasgroup.jasframework.base.controller.BaseController;
+import cn.jasgroup.jasframework.base.service.RedisService;
+import cn.jasgroup.jasframework.i18n.service.I18nService;
+import cn.jasgroup.jasframework.log.client.support.LogTemplateFactory;
 import cn.jasgroup.jasframework.security.AuthUser;
 import cn.jasgroup.jasframework.security.controller.LoginController;
 import cn.jasgroup.jasframework.security.dao.entity.PriUnit;
+import cn.jasgroup.jasframework.security.dao.entity.SysLoginLog;
+import cn.jasgroup.jasframework.security.service.LoginLogService;
+import cn.jasgroup.jasframework.security.service.RoleService;
 import cn.jasgroup.jasframework.security.service.UnitService;
+import cn.jasgroup.jasframework.security.service.bo.RoleBo;
 import cn.jasgroup.jasframework.security.service.bo.UnitBo;
 import cn.jasgroup.jasframework.security.service.bo.UserBo;
+import cn.jasgroup.jasframework.security.support.Constants;
 import cn.jasgroup.jasframework.support.ThreadLocalHolder;
+import cn.jasgroup.jasframework.utils.ReadConfigUtil;
+import cn.jasgroup.jasframework.utils.StringUtil;
 
 @RestController
 @RequestMapping(value="daq/privilege")
@@ -41,6 +57,43 @@ public class DaqPrivilegeController extends BaseController{
 	
 	@Autowired
 	private LoginController loginController;
+	
+	@Resource(name="i18nService")
+	private I18nService m_I18nService;
+	
+	@Autowired
+	private RoleService roleService;
+	
+	@Autowired
+	private RedisService redisService;
+	
+	@Resource(name="loginLogService")
+	private LoginLogService loginLogService;
+	
+	
+	/**
+	 * token过期的时间量（默认5）
+	 */
+	private Long expireTime = 5L;
+	
+	/**
+	 * token过期的时间单位（默认小时）  token过期的默认时间是5小时
+	 */
+	private TimeUnit expireTimeUnit = TimeUnit.HOURS;
+	
+	@PostConstruct
+	public void init(){
+		String expireTimeStr = ReadConfigUtil.getPlatformConfig("redis.token.expireTime");
+		
+		String expireTimeUnitStr = ReadConfigUtil.getPlatformConfig("redis.token.expireTimeUnit");
+		
+		if(StringUtils.isNotBlank(expireTimeStr)){
+			expireTime = Long.parseLong(expireTimeStr);
+		}
+		if(StringUtils.isNotBlank(expireTimeUnitStr)){
+			expireTimeUnit =  TimeUnit.valueOf(expireTimeUnitStr);
+		}
+	}
 	
 	@RequestMapping("getUnitByCurrentUser")
 	public Object login(HttpServletRequest request){
@@ -439,4 +492,217 @@ public class DaqPrivilegeController extends BaseController{
 			return resultData;
 		}
 	}
+	/***
+	  * <p>功能描述：添加人脸信息。</p>
+	  * <p> 雷凯。</p>	
+	  * @param request
+	  * @param paramMap
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年10月29日 上午11:28:02。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="/addFaceInfo",method = RequestMethod.POST)
+	@ResponseBody
+	public Object addFaceInfo(HttpServletRequest request,@RequestBody Map<String,String> paramMap){
+		BaseResult result = null;
+		try {
+			String loginName = ThreadLocalHolder.getCurrentUserLoginName();
+			String base64Image = paramMap.get("base64Image");
+			boolean info = this.daqPrivilegeService.addFaceInfo(loginName, base64Image);
+			if(info){
+				result = new BaseResult(0, "200", "ok");
+			}else{
+				result = new BaseResult(-1, "400", "error");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = new BaseResult(-1, "400", e.getMessage());
+		}
+		return result;
+	}
+	/**
+	  * <p>功能描述：获取人脸BASE64图片。</p>
+	  * <p> 雷凯。</p>	
+	  * @param request
+	  * @param paramMap
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年10月29日 上午11:30:51。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value="/getFaceInfo",method = RequestMethod.POST)
+	@ResponseBody
+	public Object getFaceInfo(HttpServletRequest request,@RequestBody Map<String,String> paramMap){
+		try {
+			String loginName = paramMap.get("loginNum");
+			String base64Image = this.daqPrivilegeService.getFaceInfo(loginName);
+			paramMap.put("base64Image", base64Image);
+			Object resultData = this.faceLogin(request, paramMap);
+			
+			try {
+				Map<String, Object> result = (Map<String, Object>)resultData;
+				result.put("base64Image", base64Image);
+				return result;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return resultData;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new BaseResult(0, "400", e.getMessage());
+		}
+	}
+	@RequestMapping(value="/faceLogin",method = RequestMethod.POST)
+	@ResponseBody
+	public Object faceLogin(HttpServletRequest request,@RequestBody Map<String,String> paramMap){
+		Map<String,Object> result = new HashMap<String,Object>();
+		try {
+			String loginName = paramMap.get("loginNum");
+			String base64Image = paramMap.get("base64Image");
+			
+			String i18n = (String) paramMap.get("i18n");// 获取登录语言
+			if(!StringUtil.hasText(i18n)){
+				i18n = "zh_CN";
+			}
+			Map<String,Object> userMap = this.daqPrivilegeService.getFaceInfoByLoginName(loginName);
+			if(userMap==null){
+				return new BaseResult(-1, "PU03012", m_I18nService.getI18NByModuleid(Constants.I18N_USER_PROPERTIES, "user.usernamenotexist", i18n));
+			}
+			
+			if(!userMap.containsKey("base64Image") || userMap.get("base64Image")==null){
+				return new BaseResult(-1,"PU06000","用户未设置人脸识别");
+			}
+			if(StringUtils.isBlank(base64Image)){
+				return new BaseResult(-1,"PU06000","用户未设置人脸识别");
+			}
+			if(!userMap.get("base64Image").toString().equals(base64Image)){
+				return new BaseResult(-1,"PU06001","服务器人脸识别失败");
+			}
+			Map<String,Object> attributes =new HashMap<String, Object>();
+			attributes.put("superadmin", false);  //是否超级管理员
+			//1.设置用户角色
+			List<RoleBo> userRoleList = roleService.queryPriRole(userMap.get("oid").toString());
+			Map<String,Object> userRoleMap = new HashMap<String,Object>(); 
+			userRoleMap.put("roleIds", "");
+			userRoleMap.put("roleNames", "");
+			for(RoleBo role : userRoleList){
+				if(!StringUtil.hasText(userRoleMap.get("roleIds").toString())){
+					userRoleMap.put("roleIds",role.getOid());
+					userRoleMap.put("roleNames",role.getRoleName());
+					continue;
+				}
+				if((Boolean)attributes.get("superadmin")==false){
+					if("superadmin".equals(role.getRoleName())){
+						attributes.put("superadmin", true);
+					}
+				}
+				userRoleMap.put("roleIds",userRoleMap.get("roleIds")+","+role.getOid());
+				userRoleMap.put("roleNames",userRoleMap.get("roleNames")+","+role.getRoleName());
+			}
+			userMap.put("roleIds", userRoleMap.get("roleIds"));
+			userMap.put("roleNames", userRoleMap.get("roleNames"));
+			AuthUser authUser = new AuthUser();
+			authUser.setUid(userMap.get("oid").toString());
+			authUser.setLoginName(loginName);
+			authUser.setUname(userMap.get("userName").toString());
+			authUser.setUnitId(userMap.get("unitId").toString());
+			
+			//2.设置用户部门
+			List<String> userUnitList = getUserDeptInfo(userMap.get("unitId").toString());
+			String userUnitInfo = "";
+	        if (userUnitList.size()>0) {
+	        	for (int i = userUnitList.size()-1; i >0; i--) {
+	    			userUnitInfo += userUnitList.get(i) + "-->"; 
+	    		}
+	        	authUser.setUnitName(userUnitList.get(0));
+			}
+	        userUnitInfo += userUnitList.get(0);
+	        userMap.put("unitName", userUnitInfo);
+	        authUser.setUnitNameFullpath(userUnitInfo); 
+	        
+	      //3.设置用户其他信息
+			String token = UUID.randomUUID().toString();
+			attributes.put("token", token);
+			attributes.put("password", userMap.get("password").toString());
+			attributes.put(Constants.LOGIN_I18N, i18n);  //国际化语言
+			attributes.put(Constants.LOGIN_ROLES, userRoleMap); //角色
+			authUser.setAttributes(attributes);
+			
+			//4.将用户信息存储到redis中
+			redisService.putValue(token, authUser);
+			redisService.expirse(token, expireTime, expireTimeUnit);
+
+			//5.将线程参数存储到redis中
+			Map<String, Object> threadRedisParamMap = new HashMap<String, Object>();
+			threadRedisParamMap.put("IP", request.getServerName());
+			redisService.putValue(token+"_threadRedisParamMap", threadRedisParamMap);
+			redisService.expirse(token+"_threadRedisParamMap", expireTime, expireTimeUnit);
+			
+			//7.构造返回结果
+			userMap.put("password", null);
+			userMap.remove("base64Image");
+			result.put("status", 1);
+			result.put("user", userMap);
+			result.put("token", token);
+			//6.记录登录日志
+			try{
+				SysLoginLog loginLog = new SysLoginLog();
+				loginLog.setUserId(userMap.get("oid").toString()); // 记录用户ID
+				loginLog.setUserName(userMap.get("userName").toString());
+				loginLog.setLoginName(loginName);
+				loginLog.setUnitId(userMap.get("unitId").toString());
+				loginLog.setUnitName(authUser.getUnitName());
+				loginLog.setUnitNameFullpath(authUser.getUnitNameFullpath());
+				loginLog.setLoginDatetime(new Date()); // 记录登陆时间
+				loginLog.setClientIp(request.getRemoteAddr()); // 记录登陆Ip
+				loginLog.setServerIp(request.getLocalAddr());
+				loginLog.setToken(token);
+				loginLog.setAppId((String)attributes.get("login_appid"));
+				loginLog.setAppName((String)attributes.get("login_appname"));
+				loginLogService.saveLoginLog(loginLog);
+			}catch(Exception e){
+				log.error("Logging Login Log Error: token--"+token+e.getMessage());
+			}
+			//7.记录操作日志
+			LogTemplateFactory.getOptLogger().log(userMap.get("oid").toString(), "用户", "pri_user", "登录系统", authUser.getUid(), authUser.getUname(), loginName, "", 
+					new String[]{(String)attributes.get("login_appid"),(String)attributes.get("login_appname")});
+			
+			PriUnit unitEntity = (PriUnit)unitService.get(PriUnit.class,userMap.get("unitId").toString());
+			if(unitEntity==null){
+				result.put("unitType", -1);
+				return result;
+			}
+			String hierarchy = unitEntity.getHierarchy();
+			if(hierarchy.startsWith(UnitHierarchyEnum.construct_unit.getHierarchy())){//施工单位
+				result.put("unitType", 1);
+			}else if(hierarchy.startsWith(UnitHierarchyEnum.supervision_unit.getHierarchy())){//监理单位
+				result.put("unitType", 2);
+			}else if(hierarchy.startsWith(UnitHierarchyEnum.detection_unit.getHierarchy())){//检测单位
+				result.put("unitType", 3);
+			}else if(hierarchy.startsWith(UnitHierarchyEnum.project_unit.getHierarchy())){//建设单位
+				result.put("unitType", 4);
+			}else if(hierarchy.startsWith(UnitHierarchyEnum.supplier.getHierarchy())){//厂商
+				result.put("unitType", 5);
+			}else{
+				result.put("unitType", 0);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	private List<String> getUserDeptInfo(String unitId) {
+		   List<String> unitList = new ArrayList<String>();
+		   UnitBo unitBo = unitService.queryById(unitId);
+		   unitList.add(unitBo.getUnitName());
+		   String parentId = unitBo.getParentId();
+		   if (parentId!=null) {
+			   unitList.addAll(getUserDeptInfo(parentId));
+		   }
+		   return unitList;
+		}
 }
