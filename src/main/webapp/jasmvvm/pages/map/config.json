@@ -1,6 +1,6 @@
 {
   "description":"基于产品 JasOpenGIS 1.0",
-  "mapStyle":"lightblue",
+  "style":"lightblue",
   "basePath": "",
   "resources": [{
       "type": "css",
@@ -21,13 +21,13 @@
       "url": "basepath:../lib/proj4js/proj4_2.4.4.js"
     },
        { "type":"js","url":"basepath:../lib/FileSaver.min.js"},
-    
+
     {
       "type": "js",
       "url": "basepath:mapmodules.js"
     },
         { "type":"js","url":"basepath:mapstyles/default.js" ,"relyOn":"ol.js"  }
-    
+
   ],
   "services": {},
   "map": {
@@ -134,7 +134,11 @@
         "id": "daq_median_stake",
         "label": "中线桩",
         "index": 30,
-        "style": "centerlinestake",
+        "renderer":{
+          "style":"centerlinestake" ,
+          "labelStyle":"",
+          "labelField":""
+        },
         "type": "Vector",
         "source": "Vector",
         "flash": true,
@@ -552,7 +556,7 @@
   },{
     "id":"baseMapsGallary","label":"底图切换","class":"BaseMapsGallary","icon":"stylepath:images/queryByPolygon.png","enable":true,
     "options":{
-      "folded":false
+      "folded":true
     }
   },{
     "id":"overViewMap","label":"鹰眼图","class":"OverViewMap","icon":"stylepath:images/queryByPolygon.png","enable":true,

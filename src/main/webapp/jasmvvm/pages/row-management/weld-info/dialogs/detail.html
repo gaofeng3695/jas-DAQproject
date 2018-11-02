@@ -88,9 +88,9 @@
 				<jas-detail-table :titles="addressArr" :detail="detail"></jas-detail-table>
 				<jas-base-group-title name="焊口链接图"></jas-base-group-title>
 				<div class="pipe_wrap">
-					<div v-if="detail.fweldCode" class="pipe" @click="openPipeDialog(detail.ffrontPipeOid, detail.ffrontPipeType, '前前管件')">
+					<div v-if="detail.fweldCode" class="pipe" @click="openPipeDialog(detail.ffrontPipeOid, detail.ffrontPipeType, '前前管件',detail.ffrontPipeCode)">
 						<div class="pipeTip">前前管件</div>
-						<div class="pipecode">{{detail.ffrontPipeLength + ' m' }}</div>
+						<div class="pipecode">{{(detail.ffrontPipeLength || 0) + ' m' }}</div>
 						<div class="pipeTip link">{{detail.ffrontPipeCode}}</div>
 					</div>
 					<div v-if="detail.fweldCode" class="weld" @click="openWeldDialog(detail.foid)">
@@ -98,10 +98,10 @@
 						<div class="weldcode"></div>
 						<div class="pipeTip link">{{detail.fweldCode}}</div>
 					</div>
-					<div class="pipe" @click="openPipeDialog(detail.frontPipeOid, detail.frontPipeType, '前管件')">
+					<div class="pipe" @click="openPipeDialog(detail.frontPipeOid, detail.frontPipeType, '前管件',detail.frontPipeCode)">
 						<div class="pipeTip">前管件</div>
 
-						<div class="pipecode">{{detail.frontPipeLength + ' m'}}</div>
+						<div class="pipecode">{{(detail.frontPipeLength || 0) + ' m'}}</div>
 						<div class="pipeTip link">{{detail.frontPipeCode}}</div>
 					</div>
 					<div class="weld">
@@ -109,9 +109,9 @@
 						<div class="weldcode" style="cursor: auto;"></div>
 						<div class="pipeTip link notlink">{{detail.weldCode}}</div>
 					</div>
-					<div class="pipe" @click="openPipeDialog(detail.backPipeOid, detail.backPipeType, '后管件')">
+					<div class="pipe" @click="openPipeDialog(detail.backPipeOid, detail.backPipeType, '后管件',detail.backPipeCode)">
 						<div class="pipeTip">后管件</div>
-						<div class="pipecode">{{detail.backPipeLength + ' m'}}</div>
+						<div class="pipecode">{{(detail.backPipeLength || 0) + ' m'}}</div>
 						<div class="pipeTip link">{{detail.backPipeCode}}</div>
 					</div>
 					<div v-if="detail.bweldCode" class="weld" @click="openWeldDialog(detail.boid)">
@@ -119,9 +119,10 @@
 						<div class="weldcode"></div>
 						<div class="pipeTip  link">{{detail.bweldCode}}</div>
 					</div>
-					<div v-if="detail.bweldCode" @click="openPipeDialog(detail.bbackPipeOid, detail.bbackPipeType, '后后管件')" class="pipe">
+					<div v-if="detail.bweldCode" @click="openPipeDialog(detail.bbackPipeOid, detail.bbackPipeType, '后后管件',detail.bbackPipeCode)"
+					  class="pipe">
 						<div class="pipeTip">后后管件</div>
-						<div class="pipecode">{{detail.bbackPipeLength + ' m'}}</div>
+						<div class="pipecode">{{(detail.bbackPipeLength || 0) + ' m'}}</div>
 						<div class="pipeTip  link">{{detail.bbackPipeCode}}</div>
 					</div>
 				</div>
@@ -308,6 +309,7 @@
 				});
 			},
 			openWeldDialog: function (oid) {
+				if (!oid) return;
 				var url = jasTools.base.setParamsToUrl('pages/row-management/weld-info/dialogs/detail.html', {
 					oid: oid
 				});
@@ -318,7 +320,8 @@
 					src: url,
 				});
 			},
-			openPipeDialog: function (oid, type, name) {
+			openPipeDialog: function (oid, type, name, code) {
+				if (!code) return;
 				var urlMap = {
 					pipe_type_code_001: 'pages/template/dialogs/viewTemplate.html?menuCode=F000024', //直钢管",
 					pipe_type_code_0011: 'pages/template/dialogs/viewTemplate.html?menuCode=F000024', //后直钢管",
@@ -350,11 +353,13 @@
 
 				$(frontDom).css('color', 'blue').css('cursor', 'pointer').click(function () {
 					// console.log(that.detail.frontPipeTypeName + ' ' + that.detail.frontPipeOid);
-					that.openPipeDialog(that.detail.frontPipeOid, that.detail.frontPipeType, that.detail.frontPipeTypeName)
+					that.openPipeDialog(that.detail.frontPipeOid, that.detail.frontPipeType, that.detail.frontPipeTypeName, that.detail
+						.frontPipeCode)
 				});
 				$(backDom).css('color', 'blue').css('cursor', 'pointer').click(function () {
 					// console.log(that.detail.backPipeTypeName + ' ' + that.detail.backPipeOid);
-					that.openPipeDialog(that.detail.backPipeOid, that.detail.backPipeType, that.detail.backPipeTypeName)
+					that.openPipeDialog(that.detail.backPipeOid, that.detail.backPipeType, that.detail.backPipeTypeName, that.detail
+						.backPipeCode)
 
 				});
 			}

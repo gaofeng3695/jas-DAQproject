@@ -238,11 +238,13 @@
 		}
 
 		.bggrad {
-			background-image: linear-gradient( 135deg, #123597 10%, #607ae8 100%);
+			/* background-image: linear-gradient( 135deg, #123597 10%, #607ae8 100%); */
+			background-image: linear-gradient( 135deg, #72a8fb 10%, #87f7cf 100%);
 		}
 
 		.bggrad02 {
-			background-image: linear-gradient( 135deg, #9708CC 10%, #b77fe2 100%);
+			/* background-image: linear-gradient( 135deg, #9708CC 10%, #b77fe2 100%); */
+			background-image: linear-gradient( 135deg, #f235fe 10%, #52b2fe 100%);
 			color: #fff;
 		}
 
@@ -252,6 +254,10 @@
 
 		.el-progress-bar__outer {
 			background-color: #11224a;
+		}
+
+		.el-progress__text {
+			color: #999;
 		}
 	</style>
 
@@ -265,7 +271,7 @@
 			<div class="headertop"></div>
 			<div>
 				<span class="headerdate">{{dateStr}}</span>
-				<span class="headerright" @click="returnIndex">返回</span>
+				<span class="headerright" @click="returnIndex">管理端</span>
 				<div class="headertitle">施工数据可视化一览</div>
 			</div>
 			<div class="headerbottom"></div>
@@ -401,7 +407,9 @@
 						</div>
 					</div>
 				</div>
-				<div style="height:calc(100% - 410px);background: #0f64c4;"></div>
+				<div style="height:calc(100% - 410px);background: #0f64c4;">
+					<div id="jasMap" class="jasmap" style="height:100%;width:100%;background-color: #0c0026;"></div>
+				</div>
 				<div style="height:280px;padding: 5px 10px;">
 					<div style="height:270px;">
 						<div class="boxtitle">线路物资概况</div>
@@ -425,19 +433,19 @@
 					<div class="boxmain">
 						<div class="peoplebox bggrad">
 							<div class="peotitle">焊接机组</div>
-							<div class="peoplenum">{{personCount[0].statsResult}}</div>
+							<div class="peoplenum">{{personCount.weld_work_unit}}</div>
 						</div>
 						<div class="peoplebox bggrad">
 							<div class="peotitle">焊工</div>
-							<div class="peoplenum">{{personCount[1].statsResult}}</div>
+							<div class="peoplenum">{{personCount.welder}}</div>
 						</div>
 						<div class="peoplebox bggrad">
 							<div class="peotitle">数据采集人员</div>
-							<div class="peoplenum">0</div>
+							<div class="peoplenum">{{personCount._constructor||0}}</div>
 						</div>
 						<div class="peoplebox bggrad">
 							<div class="peotitle">监理人员</div>
-							<div class="peoplenum">0</div>
+							<div class="peoplenum">{{personCount.supervisor||0}}</div>
 						</div>
 					</div>
 				</div>
@@ -451,21 +459,23 @@
 					<div class="sidebox" style="height:33.33%;">
 						<div class="boxtitle">数据采集审核通过情况</div>
 						<div class="contentBox" style="height:calc(100% - 25px);margin-top:10px;">
-							<div style="height:25%;padding:0 10px;" v-for="item in dataAudit">
+							<div style="height:40px;width:50%;float: left;padding:0 5px;" class="bsb" v-for="item in dataAudit">
 								<div style="line-height: 24px;">
-									<span>{{item.cnName}}</span>
+									<span class="fs12">{{item.cnName}}</span>
 									<div style="float:right;">{{item.value}}</div>
 								</div>
 								<el-progress :color="pgClr(item.percent)" :percentage="item.percent||0" :show-text="false"></el-progress>
 							</div>
-
 						</div>
 					</div>
 					<div class="sidebox" style="height:33.33%;">
 						<div class="boxtitle">人员填报情况</div>
 						<div class="contentBox" style="height:calc(100% - 25px);margin-top:10px;">
-							<div v-for="item in personFill" class="personlist">
-								<span style="width:30px;">{{item.no}}</span>
+							<div v-for="item,index in personFill" class="personlist">
+								<span style="width:20px;">
+									<i v-show="index <3" :style="listclr(index)" class="fa fa-bookmark" aria-hidden="true"></i>
+								</span>
+								<span style="width:20px;">{{item.no}}</span>
 								<span>{{item.userName}}</span>
 								<span>{{item.entryCount + '条'}}</span>
 								<span class="ellipsis" style="width:180px;text-align: left;">{{item.unitName}}</span>
@@ -495,11 +505,86 @@
 <script src="./lib/echarts/echarts.min.js"></script>
 <script src="./lib/echarts/chalk.js"></script>
 
+<script id="mapApi" src="./pages/map/mapjs/jasopengis.js"></script>
+
 
 <script src="./common/components/jas-components.js"></script>
 <script src="./common/js/jas-tools.js"></script>
 
 <script>
+	var gisMap = {
+		drawLineByStakes: function (source, jasMap) {
+			var that = this;
+			var features = source.getFeatures();
+
+			var dataArray = [];
+			var currentPipelineOid = null;
+			var pipelineArray = [];
+
+			for (var i = 0; i < features.length; i++) {
+				var obj = {};
+				var feature = features[i];
+				var properties = feature.getProperties(); //属性信息
+				// console.log(properties);
+				var geom = feature.getGeometry(); // Point
+				//
+				var lineId = properties.pipeline_oid;
+				obj.mileage = properties.mileage; //里程值
+				obj.lineId = lineId; //线路段
+				obj.coor = geom.getCoordinates(); //
+
+				if (lineId !== currentPipelineOid) {
+					pipelineArray.length && dataArray.push(pipelineArray);
+					currentPipelineOid = lineId;
+					pipelineArray = [];
+				}
+				pipelineArray.push(obj);
+				//
+				if (i === features.length - 1) {
+					dataArray.push(pipelineArray);
+				}
+			}
+			//各个线路段按照里程排序
+			for (i = 0; i < dataArray.length; i++) {
+				var pipeArr = dataArray[i];
+				dataArray[i] = pipeArr.sort(that.compare("mileage"));
+			}
+			jasMap.clearMapGraphics();
+
+			//生成线
+			for (i = 0; i < dataArray.length; i++) {
+				var stakes = dataArray[i];
+				var coors = [];
+				for (var j = 0; j < stakes.length; j++) {
+					var stake = stakes[j];
+					coors.push(stake.coor);
+				}
+				jasMap.addPolylineGraphic(coors, {
+					color: [233, 123, 255, 1],
+					width: 4
+				});
+			}
+
+		},
+
+		compare: function (prop) {
+			return function (obj1, obj2) {
+				var val1 = obj1[prop];
+				var val2 = obj2[prop];
+				if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
+					val1 = Number(val1);
+					val2 = Number(val2);
+				}
+				if (val1 < val2) {
+					return -1;
+				} else if (val1 > val2) {
+					return 1;
+				} else {
+					return 0;
+				}
+			}
+		}
+	}
 </script>
 <script>
 	var vm = new Vue({
@@ -516,7 +601,7 @@
 				steelPipeUsage: [{}, {}, {}],
 				pipeCutting: {},
 				weldOnce: {}, //count   passCount
-				personCount: [{}, {}],
+				personCount: {},
 				dataAudit: [],
 				personFill: [],
 				statsScope: [ //
@@ -598,12 +683,15 @@
 			}
 		},
 		created: function () {
-			this.login();
+			// this.login();
+			this.getProject();
+			this.initJasMap();
 
 		},
 		watch: {
 			projectId: function (val) {
 				if (!val) return;
+
 				this.getStatsScope();
 				this.getStatsQuantityOfMaterial();
 				this.getSteelPipeUsage();
@@ -615,13 +703,57 @@
 				this.getProcessCompletion();
 				this.getDataAudit();
 				this.getPersonFill();
+				if (this.mapLoaded) {
+					this.jasMap.zoomHome();
+					this.refreshMap();
+				}
 			}
 		},
 		methods: {
+			refreshMap: function () {
+				this.jasMap.updateLayer('daq_median_stake', {
+					where: "project_oid='" + this.projectId + "'"
+				});
+			},
+			initJasMap: function (fn) {
+				var that = this;
+				this.jasMap = new JasMap({
+					// layersVisible: {
+					// 	daq_median_stake: true,
+					// },
+					appConfig: './pages/map/config.onepage.json',
+					onMapLoaded: function (e) {
+						that.refreshMap();
+						that.mapLoaded = true;
+						fn && fn();
+						that.addMapListener();
+					},
+					onError: function (e) {},
+					onLayerAdded: function (e) {}
+				});
+			},
+			addMapListener: function () {
+				var jasMap = this.jasMap;
+				jasMap.removeEventListener(this.layerListener);
+				this.layerListener = jasMap.subscribe(jasMap.Events.LayerFeaturesLoadedEvent, function (e) {
+					if (e.data.layerId === "daq_median_stake") {
+						var source = e.data.source;
+						gisMap.drawLineByStakes(source, jasMap);
+					}
+				});
+			},
+			listclr: function (index) {
+				var color = '#c19f1d';
+				if (index == 0) color = '#ffe418';
+				if (index == 1) color = '#e2e2e0';
+				return {
+					color: color
+				};
+			},
 			pgClr: function (per) {
-				if (per < 30) return '#67c23a';
-				if (per < 80) return '#409eff';
-				return '#f56c6c';
+				if (per < 30) return '#f56c6c';
+				if (per < 70) return '#409eff';
+				return '#67c23a';
 			},
 			per: function (num, total) {
 				if (!num || !total) return 0;
@@ -713,20 +845,7 @@
 						label: {
 							normal: {
 								show: false,
-								position: 'center'
 							},
-							emphasis: {
-								show: true,
-								textStyle: {
-									fontSize: '16',
-									fontWeight: 'bold'
-								}
-							}
-						},
-						labelLine: {
-							normal: {
-								show: false
-							}
 						},
 						data: [{
 							value: this.pipeCutting.usedLength || 0,
@@ -771,10 +890,7 @@
 						radius: ['50%', '70%'],
 						avoidLabelOverlap: false,
 						label: {
-							normal: {
-								show: false,
-								// position: 'center'
-							},
+							show: false,
 						},
 						data: [{
 							value: this.weldOnce.passCount || 0,
@@ -814,14 +930,28 @@
 						left: '3%',
 						right: '10%',
 						bottom: '3%',
-						top: '14%',
+						top: '20%',
 						containLabel: true
 					},
 					xAxis: {
 						type: 'time',
 					},
 					yAxis: {
+						name: '单位：个',
 						type: 'value',
+						axisLine: {
+							show: false,
+						},
+						splitNumber: 5,
+						splitLine: {
+							show: true,
+							lineStyle: {
+								color: ['#666'],
+								width: 1,
+								type: 'dashed',
+								opacity: 0.4,
+							}
+						}
 					},
 					series: [{
 						data: this.weldRework.map(function (item) {
@@ -830,7 +960,22 @@
 						showSymbol: false,
 						hoverAnimation: false,
 						type: 'line',
-						smooth: true
+						smooth: true,
+						label: {
+							show: true,
+							position: 'top',
+						},
+						markPoint: {
+							symbol: 'pin',
+							symbolSize: [30, 30],
+							symbolKeepAspect: false,
+							symbolOffset: [0, 0],
+							silent: false,
+							data: [{
+								name: '最大值',
+								type: 'max'
+							}, ]
+						}
 					}]
 				};
 				// 使用刚指定的配置项和数据显示图表。
@@ -843,7 +988,12 @@
 				jasTools.ajax.post(url, {
 					projectIds: [this.projectId]
 				}, function (data) {
-					that.personCount = data.data;
+					var obj = {};
+					data.data.forEach(function (item) {
+						if (item.statsType == 'constructor') item.statsType = '_constructor';
+						obj[item.statsType] = item.statsResult;
+					});
+					that.personCount = obj;
 				});
 			},
 			getProcessCompletion: function () {
@@ -880,7 +1030,7 @@
 						left: '3%',
 						right: '4%',
 						bottom: '3%',
-						top: '14%',
+						top: '20%',
 						containLabel: true
 					},
 					xAxis: {
@@ -894,12 +1044,31 @@
 						},
 					},
 					yAxis: {
+						name: '单位：km',
 						type: 'value',
+						axisLine: {
+							show: false,
+						},
+						splitNumber: 5,
+						splitLine: {
+							show: true,
+							lineStyle: {
+								color: ['#666'],
+								width: 1,
+								type: 'dashed',
+								opacity: 0.4,
+							}
+						},
+
 					},
 					series: [{
 						data: values,
 						type: 'bar',
 						barWidth: 20,
+						label: {
+							show: true,
+							position: 'top',
+						}
 					}]
 				};
 
@@ -913,7 +1082,7 @@
 				jasTools.ajax.post(url, {
 					projectIds: [this.projectId],
 				}, function (data) {
-					data.data.length = 4;
+					// data.data.length = 4;
 
 					that.dataAudit = data.data.map(function (item) {
 						item.auditPassedCount = item.auditPassedCount || 0;
