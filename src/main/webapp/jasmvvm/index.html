@@ -184,9 +184,9 @@
 				<el-main>
 					<el-container style="height:100%">
 						<el-main style="height:100%">
-							
+
 							<jas-two-panel-resizer :showed="panelShowed" ref="resizer" layout="horizontal" length="40%" @paneresize="paneresize" @statuschanged="statuschanged">
-								<div slot="closePanel" id="jasMap" class="jasmap" style="height:100%;"> </div>
+								<div slot="closePanel" id="jasMap" class="jasmap" style="height:100%;background-color: #ececec;"> </div>
 								<el-tabs id="tabs"style="position:relative"slot="mainPanel" class="tabswrapper jas-flex-box" v-model="currentTap" type="card" @tab-remove="removeTab">
 									<el-tab-pane v-for="(item, index) in tabs" :key="item.link" :name="item.name" :closable="item.closable">
 										<span slot="label">
