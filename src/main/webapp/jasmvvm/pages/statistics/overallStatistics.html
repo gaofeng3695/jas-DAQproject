@@ -85,7 +85,7 @@
           projectOids: [],
         },
         projectArray: [{
-          key: "0",
+          key: "项目群",
           value: "项目群"
         }],
         // fields: [{
@@ -137,7 +137,7 @@
         yield: "", //合格率
         inputAndCheck: "", //数据录入/审核统计
         month: "", //分月
-        ids: ['0', ], //表示所有下拉选的id
+        ids: ['项目群', ], //表示所有下拉选的id
         oldOptions: [] //表示上次选中的值
       }
     },
@@ -183,7 +183,10 @@
         var serise = [];
         var months = [];
         var url = jasTools.base.rootPath + "/overallStatistics/processMonthlyCompletion.do";
-        jasTools.ajax.post(url, that.topSearch, function (data) {
+        var ids= that.topSearch.projectOids.filter(function(item){
+        	return item!='项目群'
+        });
+        jasTools.ajax.post(url, {projectOids:ids}, function (data) {
 
           for (var key in data.data) {
             var x = [];
@@ -218,7 +221,10 @@
       requestYield: function () {
         var that = this;
         var url = jasTools.base.rootPath + "/overallStatistics/statsDetectionRayPassCount.do";
-        jasTools.ajax.post(url, that.topSearch, function (data) {
+        var ids= that.topSearch.projectOids.filter(function(item){
+        	return item!='项目群'
+        });
+        jasTools.ajax.post(url, {projectOids:ids}, function (data) {
           var pass;
           var noPass;
           if (data.data.count == 0) {
@@ -236,7 +242,10 @@
         var x = [];
         var y = [];
         var url = jasTools.base.rootPath + "/overallStatistics/dataEntryAudit.do";
-        jasTools.ajax.post(url, that.topSearch, function (data) {
+        var ids= that.topSearch.projectOids.filter(function(item){
+        	return item!='项目群'
+        });
+        jasTools.ajax.post(url, {projectOids:ids}, function (data) {
           for (var key in data.data) {
             x.push(that.fieldsMap[key].name);
             y.push(data.data[key]);
@@ -250,7 +259,10 @@
         var x = [];
         var y = [];
         var url = jasTools.base.rootPath + "/overallStatistics/processCumulativeCompletion.do";
-        jasTools.ajax.post(url, that.topSearch, function (data) {
+        var ids= that.topSearch.projectOids.filter(function(item){
+        	return item!='项目群'
+        });
+        jasTools.ajax.post(url, {projectOids:ids}, function (data) {
           data.data.forEach(function (item, index) {
             var type = item.statsType;
             x.push(that.fieldsMap[type].name);
@@ -455,12 +467,12 @@
       },
       select: function (val) {
         var that = this;
-        if (val.length == that.projectArray.length || (val.length == 1 && val[0] == "0")||(val.length==0)) { //表示肯定是全选
+        if (val.length == that.projectArray.length || (val.length == 1 && val[0] == "项目群")||(val.length==0)) { //表示肯定是全选
           that.topSearch.projectOids = that.ids;
           that.oldOptions = that.topSearch.projectOids;
-          return;
+         // return;
         }
-        if (val.indexOf("0") < 0) {
+        if (val.indexOf("项目群") < 0) {
           if (that.oldOptions.length - 1 == val.length) {
             // that.$toast("默认为全部选择");
             // that.topSearch.projectOids = [];
@@ -474,7 +486,7 @@
           if (val.length != that.oldOptions.length) { //此时选中的值与上一次选中值不一样。取消0；
             var isExist = 0;
             that.oldOptions.forEach(function (item) {
-              if (item == '0') {
+              if (item == '项目群') {
                 isExist++;
               }
             });
@@ -482,7 +494,7 @@
             that.oldOptions = [];
             if (isExist > 0) {
               val.forEach(function (item) {
-                if (item != "0") {
+                if (item != "项目群") {
                   that.topSearch.projectOids.push(item);
                   that.oldOptions.push(item);
                 }
