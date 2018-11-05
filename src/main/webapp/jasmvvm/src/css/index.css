@@ -31,9 +31,10 @@ body,
 }
 
 .logo {
-	width: 50px;
-	background: url(./../images/logo.png) no-repeat center right;
-	margin: 0 10px 0 0px;
+	width: 60px;
+	background: url(./../images/logo.png) no-repeat center center;
+	background-size: 50px;
+	margin: 0 10px 0 10px;
 }
 
 .name .china {
@@ -93,10 +94,7 @@ body,
 	border-radius: 50%;
 }
 
-
-
-.user-info
-li {
+.user-info li {
 	list-style: none;
 	display: inline-block;
 	float: right;
@@ -125,8 +123,8 @@ a:hover {
 	margin: 15px 0px;
 	line-height: 30px;
 	color: #5fb8ff;
-	border-left:2px solid #5fb8ff;
-	width:2px;
+	border-left: 2px solid #5fb8ff;
+	width: 2px;
 }
 
 .user-info .fullscreen {
@@ -148,7 +146,6 @@ a:hover {
 .userunit {
 	height: 20px;
 	line-height: 20px;
-
 }
 
 .el-dropdown-menu__item {
