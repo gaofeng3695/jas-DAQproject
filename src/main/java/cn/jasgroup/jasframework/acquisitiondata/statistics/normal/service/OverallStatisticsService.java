@@ -1,7 +1,8 @@
 package cn.jasgroup.jasframework.acquisitiondata.statistics.normal.service;
 
 import cn.jasgroup.framework.data.exception.BusinessException;
-import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.StatsPipeEnum;
+import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.StatsBackPipeTypeEnum;
+import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.StatsPipeTypeEnum;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.StatsProcessEnum;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.StatsUtils;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.dao.OverallStatisticsDao;
@@ -19,7 +20,6 @@ import org.springframework.util.CollectionUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.StatsPipeEnum.*;
 
 /**
  * description: 总体统计业务逻辑
@@ -33,6 +33,10 @@ public class OverallStatisticsService {
     private static final Logger logger = LoggerFactory.getLogger(OverallStatisticsService.class);
 
     private static final String YYYY_MM = "yyyy-MM";
+
+    private static final String STRAIGHT_STEEL_PIPE = "straight_steel_pipe";
+    private static final String HOT_BEND = "hot_bend";
+    private static final String COLD_BEND = "cold_bend";
 
     @Autowired
     private OverallStatisticsDao overallStatisticsDao;
@@ -56,15 +60,14 @@ public class OverallStatisticsService {
         StatsResultBo weldStatsResult = this.statsPipeLengthByType(weldList, projectIds, StatsProcessEnum.WELD.getType());
         StatsResultBo patchStatsResult = this.statsPipeLengthByType(patchRelationWeldList, projectIds, StatsProcessEnum.PATCH.getType());
 
-
         // 统计测量放线, 管沟回填, 地貌恢复
         List<StatsResultBo> otherStatsResultBos = this.overallStatisticsDao.statsOtherLength(projectIds);
-        otherStatsResultBos.stream().filter(bo -> bo.getStatsResult() == null).forEach(bo -> bo.setStatsResult(0));
 
         List<StatsResultBo> resultList = Lists.newArrayList(pipeStatsResult, weldStatsResult, patchStatsResult);
         resultList.addAll(otherStatsResultBos);
 
-        // 矫正顺序
+        // null转0 && 矫正顺序
+        resultList.stream().filter(bo -> bo.getStatsResult() == null).forEach(bo -> bo.setStatsResult(0));
         Map<String, Object> typeToBo = resultList.stream().collect(Collectors.toMap(StatsResultBo::getStatsType, StatsResultBo::getStatsResult, (a, b) -> b));
         return Arrays.stream(StatsProcessEnum.values()).map(anEnum -> new StatsResultBo(anEnum.getType(), typeToBo.get(anEnum.getType()))).collect(Collectors.toList());
     }
@@ -78,10 +81,10 @@ public class OverallStatisticsService {
      */
     public Table<String, String, Object> processMonthlyCompletion(List<String> projectIds) {
 
-        // 按年月统计: 管材
+        // 按年月分组统计: 管材
         List<DateStatsResultBo> pipeStatsResult = this.overallStatisticsDao.statsPipeLengthMonthly(projectIds);
 
-        // 按年月统计: 测量放线, 管够回填, 地貌回复
+        // 按年月分组统计: 测量放线, 管够回填, 地貌回复
         List<DateStatsResultBo> otherStatsResult = this.overallStatisticsDao.statsOtherLengthMonthly(projectIds);
 
 
@@ -89,7 +92,7 @@ public class OverallStatisticsService {
         List<WeldInfoBo> weldInfoBos = this.overallStatisticsDao.listWeldInfoMonthly(projectIds);
 
         // 查询管件信息集合: 补口关联的焊口信息的
-        List<WeldInfoBo> patchRelationWelds = this.overallStatisticsDao.listPatchRelationWeldInfoByYear(projectIds);
+        List<WeldInfoBo> patchRelationWelds = this.overallStatisticsDao.listPatchRelationWeldInfoMonthly(projectIds);
 
         List<WeldInfoBo> totalWeldList = Lists.newArrayList(weldInfoBos);
         totalWeldList.addAll(patchRelationWelds);
@@ -112,7 +115,7 @@ public class OverallStatisticsService {
         // 生成连续的年月集合: 根据统计开始日期和结束日期
         List<String> monthlyList = StatsUtils.genContinuityYearMonthStr(new Date(minTimestamp.getAsLong()), new Date(), YYYY_MM);
 
-        // 初始化table生成连续的月份(为了保证顺序, 这里用ArrayTable先初始化一下)
+        // 初始化table生成连续的月份(为了保证table row key的顺序, 这里用ArrayTable先初始化一下)
         List<String> typeList = Arrays.stream(StatsProcessEnum.values()).map(StatsProcessEnum::getType).collect(Collectors.toList());
         Table<String, String, Object> table = ArrayTable.create(typeList, monthlyList);
         initTable(monthlyList, table);
@@ -132,6 +135,9 @@ public class OverallStatisticsService {
     }
 
 
+    /**
+     * 寻找最长不重复子串
+     */
     private static int lengthOfLongestSubStr(String s) {
         Map<Integer, Integer> lastOccurredMap = Maps.newHashMap();
         int start = 0;
@@ -148,15 +154,9 @@ public class OverallStatisticsService {
             }
             lastOccurredMap.put((int) c, i);
         }
-
-        System.out.println(lastOccurredMap);
         return maxLength;
     }
 
-    public static void main(String[] args) {
-        System.out.println(lengthOfLongestSubStr("票我我看额我"));
-
-    }
 
     /**
      * 初始化统计Table
@@ -165,10 +165,7 @@ public class OverallStatisticsService {
      */
     public void initTable(List<String> dateList, Table<String, String, Object> table) {
         for (StatsProcessEnum processEnum : StatsProcessEnum.values()) {
-            for (String date : dateList) {
-                logger.info("process:{}, date:{}", processEnum.getType(), date);
-                table.put(processEnum.getType(), date, 0);
-            }
+            dateList.forEach(date -> table.put(processEnum.getType(), date, 0));
         }
     }
 
@@ -221,9 +218,9 @@ public class OverallStatisticsService {
      * @return Map<String, Map<String, Double>> (key:管件类型, value:[Map：id-length])
      */
     public Map<String, Map<String, Double>> getPipeLengthMap( List<WeldInfoBo> weldInfoBos) {
-        Set<String> straightPipeIds = getWeldPipeIdsByType(weldInfoBos, STRAIGHT_STEEL_PIPE);
-        Set<String> hotBendIds = getWeldPipeIdsByType(weldInfoBos, HOT_BEND);
-        Set<String> coldBendIds = getWeldPipeIdsByType(weldInfoBos, COLD_BEND);
+        Set<String> straightPipeIds = getWeldPipeIdsByType(weldInfoBos, StatsPipeTypeEnum.STRAIGHT_STEEL_PIPE, StatsBackPipeTypeEnum.STRAIGHT_STEEL_PIPE);
+        Set<String> hotBendIds = getWeldPipeIdsByType(weldInfoBos, StatsPipeTypeEnum.HOT_BEND, StatsBackPipeTypeEnum.HOT_BEND);
+        Set<String> coldBendIds = getWeldPipeIdsByType(weldInfoBos, StatsPipeTypeEnum.COLD_BEND, StatsBackPipeTypeEnum.COLD_BEND);
 
         List<StatsResultBo> straightPipeLengthList = Lists.newArrayList();
         List<StatsResultBo> hotBendLengthList = Lists.newArrayList();
@@ -245,9 +242,9 @@ public class OverallStatisticsService {
         Map<String, Double> coldBendLengthMap = coldBendLengthList.stream().collect(Collectors.toMap(StatsResultBo::getStatsType, statsResultBo -> Double.parseDouble(statsResultBo.getStatsResult().toString()), (a, b) -> b));
 
         Map<String, Map<String, Double>> returnMap = Maps.newHashMap();
-        returnMap.put(STRAIGHT_STEEL_PIPE.getCode(), straightLengthMap);
-        returnMap.put(HOT_BEND.getCode(), hotBendLengthMap);
-        returnMap.put(COLD_BEND.getCode(), coldBendLengthMap);
+        returnMap.put(STRAIGHT_STEEL_PIPE, straightLengthMap);
+        returnMap.put(HOT_BEND, hotBendLengthMap);
+        returnMap.put(COLD_BEND, coldBendLengthMap);
         return returnMap;
     }
 
@@ -259,13 +256,13 @@ public class OverallStatisticsService {
      * @return Double
      */
     public Double statsPipeLength(Map<String, Map<String, Double>> pipeLengthMap, List<WeldInfoBo> weldInfoBos) {
-        Set<String> straightPipeIds = getWeldPipeIdsByType(weldInfoBos, STRAIGHT_STEEL_PIPE);
-        Set<String> hotBends = getWeldPipeIdsByType(weldInfoBos, HOT_BEND);
-        Set<String> coldBends = getWeldPipeIdsByType(weldInfoBos, COLD_BEND);
+        Set<String> straightPipeIds = getWeldPipeIdsByType(weldInfoBos, StatsPipeTypeEnum.STRAIGHT_STEEL_PIPE, StatsBackPipeTypeEnum.STRAIGHT_STEEL_PIPE);
+        Set<String> hotBends = getWeldPipeIdsByType(weldInfoBos, StatsPipeTypeEnum.HOT_BEND, StatsBackPipeTypeEnum.HOT_BEND);
+        Set<String> coldBends = getWeldPipeIdsByType(weldInfoBos, StatsPipeTypeEnum.COLD_BEND, StatsBackPipeTypeEnum.COLD_BEND);
 
-        Double straightPipeLength = sumPipeLength(pipeLengthMap.get(STRAIGHT_STEEL_PIPE.getCode()), straightPipeIds);
-        Double hotBendLength = sumPipeLength(pipeLengthMap.get(HOT_BEND.getCode()), hotBends);
-        Double coldBendLength = sumPipeLength(pipeLengthMap.get(COLD_BEND.getCode()), coldBends);
+        Double straightPipeLength = sumPipeLength(pipeLengthMap.get(STRAIGHT_STEEL_PIPE), straightPipeIds);
+        Double hotBendLength = sumPipeLength(pipeLengthMap.get(HOT_BEND), hotBends);
+        Double coldBendLength = sumPipeLength(pipeLengthMap.get(COLD_BEND), coldBends);
         return StatsUtils.sumExact(straightPipeLength, hotBendLength, coldBendLength);
     }
 
@@ -282,14 +279,14 @@ public class OverallStatisticsService {
         return StatsUtils.sumExact(sumList);
     }
 
-    private Set<String> getWeldPipeIdsByType(List<WeldInfoBo> weldInfoBos, StatsPipeEnum statsPipeEnum) {
+    private Set<String> getWeldPipeIdsByType(List<WeldInfoBo> weldInfoBos, StatsPipeTypeEnum pipeTypeEnum, StatsBackPipeTypeEnum backPipeTypeEnum) {
         Set<String> pipeIds = new HashSet<>();
         for (WeldInfoBo weldInfoBo : weldInfoBos) {
-            if (statsPipeEnum.getCode().equals(weldInfoBo.getFrontPipeType())) {
+            if (pipeTypeEnum.getCode().equals(weldInfoBo.getFrontPipeType())) {
                 pipeIds.add(weldInfoBo.getFrontPipeOid());
             }
 
-            if (statsPipeEnum.getCode().equals(weldInfoBo.getBackPipeType())) {
+            if (backPipeTypeEnum.getCode().equals(weldInfoBo.getBackPipeType())) {
                 pipeIds.add(weldInfoBo.getBackPipeOid());
             }
         }
@@ -299,7 +296,7 @@ public class OverallStatisticsService {
 
     /**
      * 统计焊口信息中的前后管件长度
-     * 只计算{@link StatsPipeEnum} 这几种管子的长度
+     * 只计算{@link StatsPipeTypeEnum} 这几种管子的长度
      * @param weldList 焊口信息集合
      * @param projectIds 项目ID
      * @param statsType 统计类型的标识(焊接和补口可以共用)
@@ -311,29 +308,26 @@ public class OverallStatisticsService {
         }
         List<String> straightSteelPipes = Lists.newArrayList(), hotBends = Lists.newArrayList(), coldBends = Lists.newArrayList();
         weldList.forEach(bo -> {
-            // 前管件
-            if (StatsPipeEnum.STRAIGHT_STEEL_PIPE.getCode().equals(bo.getFrontPipeType())) {
+            // 前管件: StatsPipeTypeEnum
+            if (StatsPipeTypeEnum.STRAIGHT_STEEL_PIPE.getCode().equals(bo.getFrontPipeType())) {
                 straightSteelPipes.add(bo.getFrontPipeOid());
-            } else if (StatsPipeEnum.HOT_BEND.getCode().equals(bo.getFrontPipeType())) {
+            } else if (StatsPipeTypeEnum.HOT_BEND.getCode().equals(bo.getFrontPipeType())) {
                 hotBends.add(bo.getFrontPipeOid());
-            } else if (StatsPipeEnum.COLD_BEND.getCode().equals(bo.getFrontPipeType())) {
+            } else if (StatsPipeTypeEnum.COLD_BEND.getCode().equals(bo.getFrontPipeType())) {
                 coldBends.add(bo.getFrontPipeOid());
             }
 
-            // 后管件
-            if (StatsPipeEnum.STRAIGHT_STEEL_PIPE.getCode().equals(bo.getBackPipeType())) {
+            // 后管件: StatsBackPipeTypeEnum
+            if (StatsBackPipeTypeEnum.STRAIGHT_STEEL_PIPE.getCode().equals(bo.getBackPipeType())) {
                 straightSteelPipes.add(bo.getBackPipeOid());
-            } else if (StatsPipeEnum.HOT_BEND.getCode().equals(bo.getBackPipeType())) {
+            } else if (StatsBackPipeTypeEnum.HOT_BEND.getCode().equals(bo.getBackPipeType())) {
                 hotBends.add(bo.getBackPipeOid());
-            } else if (StatsPipeEnum.COLD_BEND.getCode().equals(bo.getBackPipeType())) {
+            } else if (StatsBackPipeTypeEnum.COLD_BEND.getCode().equals(bo.getBackPipeType())) {
                 coldBends.add(bo.getBackPipeOid());
             }
         });
 
-        return this.overallStatisticsDao.statsPipeLengthByType(statsType,
-                ImmutableMap.of("projectOids", projectIds,
-                        StatsPipeEnum.STRAIGHT_STEEL_PIPE.getCode(), straightSteelPipes,
-                        StatsPipeEnum.HOT_BEND.getCode(), hotBends, StatsPipeEnum.COLD_BEND.getCode(), coldBends));
+        return this.overallStatisticsDao.statsPipeLengthByType(statsType, projectIds, straightSteelPipes, hotBends, coldBends);
 
     }
 
