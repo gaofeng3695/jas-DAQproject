@@ -2,7 +2,7 @@ package cn.jasgroup.jasframework.acquisitiondata.statistics.normal.dao;
 
 import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.ApproveStatisticsBlock;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.EntryStatisticsBlock;
-import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.StatsPipeEnum;
+import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.StatsPipeTypeEnum;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.service.bo.*;
 import cn.jasgroup.jasframework.acquisitiondata.variate.UnitHierarchyEnum;
 import cn.jasgroup.jasframework.engine.jdbc.dao.CommonDataJdbcDao;
@@ -70,10 +70,6 @@ public class AppStatisticsDao {
         return commonDataJdbcDao.queryForList(sql.toString(), variables, StatsResultBo.class);
     }
 
-public static void main(String[] args) {
-    List<String> codeList = new ArrayList<>(ApproveStatisticsBlock.ALL.keySet());
-    System.out.println(codeList);
-}
 
     /**
      * 数据审核统计 
@@ -294,7 +290,7 @@ public static void main(String[] args) {
                 " where active = 1 and approve_status = 2 and project_oid = :projectId " +
                 " and (front_pipe_type in (:statsTypes) or back_pipe_type in (:statsTypes) ) " +
                 " and to_char(create_datetime, 'yyyy-MM-dd') between :startDate and :endDate ";
-        ImmutableList<String> statsTypes = ImmutableList.of(StatsPipeEnum.STRAIGHT_STEEL_PIPE.getCode(), StatsPipeEnum.HOT_BEND.getCode(), StatsPipeEnum.COLD_BEND.getCode());
+        ImmutableList<String> statsTypes = ImmutableList.of(StatsPipeTypeEnum.STRAIGHT_STEEL_PIPE.getCode(), StatsPipeTypeEnum.HOT_BEND.getCode(), StatsPipeTypeEnum.COLD_BEND.getCode());
         return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectId", projectId, "statsTypes", statsTypes, "startDate", startDate, "endDate", endDate), WeldInfoBo.class);
     }
 
@@ -324,7 +320,7 @@ public static void main(String[] args) {
                 " where t.active = 1 and t.approve_status = 2 and t.project_oid = :projectId and c.project_oid = :projectId " +
                 " and c.active=1 and c.approve_status = 2 and (t.front_pipe_type in (:statsTypes) or t.back_pipe_type in (:statsTypes)) " +
                 " and to_char(c.create_datetime, 'yyyy-MM-dd') between :startDate and :endDate  ";
-        ImmutableList<String> statsTypes = ImmutableList.of(StatsPipeEnum.STRAIGHT_STEEL_PIPE.getCode(), StatsPipeEnum.HOT_BEND.getCode(), StatsPipeEnum.COLD_BEND.getCode());
+        ImmutableList<String> statsTypes = ImmutableList.of(StatsPipeTypeEnum.STRAIGHT_STEEL_PIPE.getCode(), StatsPipeTypeEnum.HOT_BEND.getCode(), StatsPipeTypeEnum.COLD_BEND.getCode());
         return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectId", projectId, "statsTypes", statsTypes, "startDate", startDate, "endDate", endDate),
                 WeldInfoBo.class);
     }

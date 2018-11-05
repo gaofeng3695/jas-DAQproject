@@ -1,7 +1,8 @@
 package cn.jasgroup.jasframework.acquisitiondata.statistics.normal.dao;
 
 import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.ApproveStatisticsBlock;
-import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.StatsPipeEnum;
+import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.StatsBackPipeTypeEnum;
+import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.StatsPipeTypeEnum;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.service.bo.DataEntryAuditBo;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.service.bo.DateStatsResultBo;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.service.bo.StatsResultBo;
@@ -9,14 +10,16 @@ import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.service.bo.Wel
 import cn.jasgroup.jasframework.engine.jdbc.dao.CommonDataJdbcDao;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
-import static cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.StatsPipeEnum.*;
+import static cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.StatsPipeTypeEnum.*;
 
 /**
  * description: none
@@ -38,7 +41,7 @@ public class OverallStatisticsDao {
      */
     public StatsResultBo statsPipeLengthByType(List<String> projectIds, String queryDate) {
 
-        Map<String, Object> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>(4);
         params.put("projectIds", projectIds);
 
         String conditionSql = "";
@@ -47,14 +50,14 @@ public class OverallStatisticsDao {
             params.put("queryDate", queryDate);
         }
         String sql =
-                "select 'pipe' as stats_type, sum(result) as stats_result from ( " +
+                "select 'pipe' as stats_type, COALESCE(sum(result), 0) as stats_result from ( " +
                         // 防腐管检查-钢管长度统计
-                "  select sum(p.pipe_length) as result from daq_check_coating_pipe t " +
+                "  select COALESCE(sum(p.pipe_length), 0) as result from daq_check_coating_pipe t " +
                 "  left join daq_material_pipe p on t.pipe_oid = p.oid " +
                 "  where t.active = 1 and p.active = 1 and t.project_oid in (:projectIds) " + conditionSql +
                 "  union all " +
                         // 热煨弯管检查-热煨弯管长度统计
-                "  select sum(p.pipe_length) as result from daq_check_hot_bends t " +
+                "  select COALESCE(sum(p.pipe_length), 0) as result from daq_check_hot_bends t " +
                 "  left join daq_material_hot_bends p on t.hot_bends_oid = p.oid " +
                 "  where t.active = 1 and p.active = 1 and t.project_oid in (:projectIds) " + conditionSql +
                 ") as ss";
@@ -75,12 +78,12 @@ public class OverallStatisticsDao {
     public List<DateStatsResultBo> statsPipeLengthMonthly(List<String> projectIds) {
         String sql = "" +
                 "select 'pipe' as stats_type, stats_date as stats_date, sum(stats_result) as stats_result from ( " +
-                "  select 'check_coating_pipe' as stats_type, to_char(t.create_datetime, 'yyyy-MM') as stats_date, sum(p.pipe_length) as stats_result " +
+                "  select 'check_coating_pipe' as stats_type, to_char(t.create_datetime, 'yyyy-MM') as stats_date, COALESCE(sum(p.pipe_length), 0) as stats_result " +
                 "  from daq_check_coating_pipe t left join daq_material_pipe p on t.pipe_oid = p.oid " +
                 "  where t.active = 1 and p.active = 1 and t.project_oid in (:projectIds) " +
                 "  group by to_char(t.create_datetime, 'yyyy-MM') " +
                 "  union all " +
-                "  select 'check_hot_bends' as stats_type, to_char(t.create_datetime, 'yyyy-MM') as stats_date, sum(p.pipe_length) as stats_result " +
+                "  select 'check_hot_bends' as stats_type, to_char(t.create_datetime, 'yyyy-MM') as stats_date, COALESCE(sum(p.pipe_length), 0) as stats_result " +
                 "  from daq_check_hot_bends t left join daq_material_hot_bends p on t.hot_bends_oid = p.oid " +
                 "  where t.active = 1 and p.active = 1 and t.project_oid in (:projectIds) " +
                 "  group by to_char(t.create_datetime, 'yyyy-MM') " +
@@ -89,7 +92,51 @@ public class OverallStatisticsDao {
     }
 
 
+    public StatsResultBo statsPipeLengthByType(String statsType, List<String> projectIds, List<String> straightSteelPipes, List<String> hotBends, List<String> coldBends) {
+
+        Map<String, Object> variables = Maps.newHashMap();
+        variables.put("projectIds", projectIds);
+        StringBuilder sql = new StringBuilder();
+        boolean steelPipeEmpty = CollectionUtils.isEmpty(straightSteelPipes);
+        boolean hotBendEmpty = CollectionUtils.isEmpty(hotBends);
+        boolean coldBendEmpty = CollectionUtils.isEmpty(coldBends);
+
+
+        if (!steelPipeEmpty) {
+            sql.append(" select sum(pipe_length) as length from daq_material_pipe where active = 1 and project_oid in (:projectIds) and oid in (:straightSteelPipes) ");
+            variables.put("straightSteelPipes", straightSteelPipes);
+        }
+
+        if (!hotBendEmpty) {
+            sql.append(steelPipeEmpty ? "" : " union all ");
+            sql.append(" select sum(pipe_length) as length from daq_material_hot_bends where active = 1 and project_oid in (:projectIds) and oid in (:hotBends) ");
+            variables.put("hotBends", hotBends);
+        }
+
+        if (!coldBendEmpty) {
+            sql.append((!steelPipeEmpty||!hotBendEmpty) ? " union all " : "");
+            sql.append("  select sum(pipe_length) as length from daq_material_pipe_cold_bending where active = 1 and project_oid in (:projectIds) and oid in (:coldBends) ");
+            variables.put("coldBends", coldBends);
+        }
+
+        if (StringUtils.isEmpty(sql.toString())) {
+            return new StatsResultBo(statsType, 0);
+        }
+
+        sql.insert(0, " select '" +statsType+ "' as stats_type, sum(length) as stats_result from ( ").append(" ) as t ");
+
+        List resultList = this.commonDataJdbcDao.queryForList(sql.toString(), variables, StatsResultBo.class);
+
+        if (CollectionUtils.isEmpty(resultList)) {
+            return new StatsResultBo(statsType, 0);
+        }
+
+        return (StatsResultBo) resultList.get(0);
+    }
+
+    @Deprecated
     public StatsResultBo statsPipeLengthByType(String statsType, Map<String, Object> variables) {
+
 
         StringBuilder sql = new StringBuilder();
         boolean steelPipeEmpty = CollectionUtils.isEmpty((Collection<?>) variables.get(STRAIGHT_STEEL_PIPE.getCode()));
@@ -97,17 +144,17 @@ public class OverallStatisticsDao {
         boolean coldBendEmpty = CollectionUtils.isEmpty((Collection<?>) variables.get(COLD_BEND.getCode()));
 
         if (!steelPipeEmpty) {
-            sql.append(" select sum(pipe_length) as length from daq_material_pipe where active = 1 and project_oid in (:projectOids) and oid in (:").append(STRAIGHT_STEEL_PIPE.getCode()).append(")   ");
+            sql.append(" select sum(pipe_length) as length from daq_material_pipe where active = 1 and project_oid in (:projectIds) and oid in (:").append(STRAIGHT_STEEL_PIPE.getCode()).append(")   ");
         }
 
         if (!hotBendEmpty) {
             sql.append(steelPipeEmpty ? "" : " union all ");
-            sql.append(" select sum(pipe_length) as length from daq_material_hot_bends where active = 1 and project_oid in (:projectOids) and oid in (:").append(HOT_BEND.getCode()).append(")   ");
+            sql.append(" select sum(pipe_length) as length from daq_material_hot_bends where active = 1 and project_oid in (:projectIds) and oid in (:").append(HOT_BEND.getCode()).append(")   ");
         }
 
         if (!coldBendEmpty) {
             sql.append((!steelPipeEmpty||!hotBendEmpty) ? " union all " : "");
-            sql.append("  select sum(pipe_length) as length from daq_material_pipe_cold_bending where active = 1 and project_oid in (:projectOids) and oid in (:").append(COLD_BEND.getCode()).append(")   ");
+            sql.append("  select sum(pipe_length) as length from daq_material_pipe_cold_bending where active = 1 and project_oid in (:projectIds) and oid in (:").append(COLD_BEND.getCode()).append(")   ");
         }
 
         if (StringUtils.isEmpty(sql.toString())) {
@@ -145,11 +192,14 @@ public class OverallStatisticsDao {
      * 查询要统计长度焊口信息
      */
     public List<WeldInfoBo> listWeldInfo(List<String> projectIds) {
-        String sql = "select oid, front_pipe_type, front_pipe_oid, back_pipe_type, back_pipe_oid from daq_construction_weld " +
+        String sql = "" +
+                " select oid, front_pipe_type, front_pipe_oid, back_pipe_type, back_pipe_oid from daq_construction_weld " +
                 " where active = 1 and approve_status = 2 and project_oid in (:projectIds) " +
-                " and (front_pipe_type in (:statsTypes) or back_pipe_type in (:statsTypes) ) ";
-        ImmutableList<String> statsTypes = ImmutableList.of(StatsPipeEnum.STRAIGHT_STEEL_PIPE.getCode(), StatsPipeEnum.HOT_BEND.getCode(), StatsPipeEnum.COLD_BEND.getCode());
-        return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectIds", projectIds, "statsTypes", statsTypes), WeldInfoBo.class);
+                " and (front_pipe_type in (:pipe_types) or back_pipe_type in (:back_pipe_types) ) ";
+
+        return this.commonDataJdbcDao.queryForList(sql,
+                ImmutableMap.of("projectIds", projectIds,"pipe_types", StatsPipeTypeEnum.TYPE_LIST, "back_pipe_types", StatsBackPipeTypeEnum.TYPE_LIST),
+                WeldInfoBo.class);
     }
 
 
@@ -158,12 +208,12 @@ public class OverallStatisticsDao {
      */
     public List<WeldInfoBo> listWeldInfoMonthly(List<String> projectIds) {
         String sql = "" +
-                "select oid, to_char(create_datetime, 'yyyy-MM') as stats_date, front_pipe_type, front_pipe_oid, back_pipe_type, back_pipe_oid  " +
-                "from daq_construction_weld " +
-                "where active = 1 and project_oid in (:projectIds) and approve_status = 2  " +
-                "and (front_pipe_type in (:statsTypes) or back_pipe_type in (:statsTypes) ) ";
-        ImmutableList<String> statsTypes = ImmutableList.of(StatsPipeEnum.STRAIGHT_STEEL_PIPE.getCode(), StatsPipeEnum.HOT_BEND.getCode(), StatsPipeEnum.COLD_BEND.getCode());
-        return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectIds", projectIds, "statsTypes", statsTypes), WeldInfoBo.class);
+                " select oid, to_char(create_datetime, 'yyyy-MM') as stats_date, front_pipe_type, front_pipe_oid, back_pipe_type, back_pipe_oid  " +
+                " from daq_construction_weld where active = 1 and project_oid in (:projectIds) and approve_status = 2  " +
+                " and (front_pipe_type in (:pipe_types) or back_pipe_type in (:back_pipe_types) ) ";
+        return this.commonDataJdbcDao.queryForList(sql,
+                ImmutableMap.of("projectIds", projectIds,"pipe_types", StatsPipeTypeEnum.TYPE_LIST, "back_pipe_types", StatsBackPipeTypeEnum.TYPE_LIST),
+                WeldInfoBo.class);
     }
 
 
@@ -171,23 +221,26 @@ public class OverallStatisticsDao {
      * 查询补口关联焊口信息中的管件
      */
     public List<WeldInfoBo> listPatchRelationWeldInfo(List<String> projectIds) {
-        String sql = "select t.oid, t.front_pipe_type, t.front_pipe_oid, t.back_pipe_type, t.back_pipe_oid from daq_construction_weld t " +
+        String sql = "" +
+                " select t.oid, t.front_pipe_type, t.front_pipe_oid, t.back_pipe_type, t.back_pipe_oid from daq_construction_weld t " +
                 " inner join daq_weld_anticorrosion_check c on t.oid = c.weld_oid " +
                 " where t.active = 1 and t.approve_status = 2 and t.project_oid in (:projectIds) and c.project_oid in (:projectIds) " +
-                " and c.active=1 and c.approve_status = 2 and (t.front_pipe_type in (:statsTypes) or t.back_pipe_type in (:statsTypes)) ";
-        ImmutableList<String> statsTypes = ImmutableList.of(StatsPipeEnum.STRAIGHT_STEEL_PIPE.getCode(), StatsPipeEnum.HOT_BEND.getCode(), StatsPipeEnum.COLD_BEND.getCode());
-        return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectIds", projectIds, "statsTypes", statsTypes), WeldInfoBo.class);
+                " and c.active=1 and c.approve_status = 2 and (t.front_pipe_type in (:pipe_types) or t.back_pipe_type in (:back_pipe_types)) ";
+        return this.commonDataJdbcDao.queryForList(sql,
+                ImmutableMap.of("projectIds", projectIds,"pipe_types", StatsPipeTypeEnum.TYPE_LIST, "back_pipe_types", StatsBackPipeTypeEnum.TYPE_LIST),
+                WeldInfoBo.class);
     }
 
-    public List<WeldInfoBo> listPatchRelationWeldInfoByYear(List<String> projectIds) {
+    public List<WeldInfoBo> listPatchRelationWeldInfoMonthly(List<String> projectIds) {
         String sql = "" +
                 " select t.oid, to_char(t.create_datetime, 'yyyy-MM') as stats_date, w.front_pipe_type, w.front_pipe_oid, w.back_pipe_type, w.back_pipe_oid " +
                 " from daq_weld_anticorrosion_check t " +
                 " left join daq_construction_weld w on t.weld_oid = w.oid " +
                 " where t.active = 1 and t.approve_status = 2 and t.project_oid in (:projectIds) and w.project_oid in (:projectIds) " +
-                " and w.active=1 and w.approve_status = 2 and (w.front_pipe_type in (:statsTypes) or w.back_pipe_type in (:statsTypes)) ";
-        ImmutableList<String> statsTypes = ImmutableList.of(StatsPipeEnum.STRAIGHT_STEEL_PIPE.getCode(), StatsPipeEnum.HOT_BEND.getCode(), StatsPipeEnum.COLD_BEND.getCode());
-        return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectIds", projectIds, "statsTypes", statsTypes), WeldInfoBo.class);
+                " and w.active=1 and w.approve_status = 2 and (w.front_pipe_type in (:pipe_types) or w.back_pipe_type in (:back_pipe_types)) ";
+        return this.commonDataJdbcDao.queryForList(sql,
+                ImmutableMap.of("projectIds", projectIds,"pipe_types", StatsPipeTypeEnum.TYPE_LIST, "back_pipe_types", StatsBackPipeTypeEnum.TYPE_LIST),
+                WeldInfoBo.class);
     }
 
 
@@ -198,13 +251,13 @@ public class OverallStatisticsDao {
      */
     public List<StatsResultBo> statsOtherLength(List<String> projectIds) {
         String sql = "" +
-                " select 'lay_surveying' as stats_type, sum(relative_mileage) as stats_result from daq_lay_surveying " +
+                " select 'lay_surveying' as stats_type, COALESCE(sum(relative_mileage), 0) as stats_result from daq_lay_surveying " +
                 " where active = 1 and approve_status = 2 and project_oid in (:projectIds) " +
                 " union all " +
-                " select 'lay_land_restoration' as stats_type, sum(length) as stats_result from daq_lay_land_restoration " +
+                " select 'lay_land_restoration' as stats_type, COALESCE(sum(length), 0) as stats_result from daq_lay_land_restoration " +
                 " where active = 1 and approve_status = 2 and project_oid in (:projectIds) " +
                 " union all " +
-                " select 'lay_pipe_trench_backfill' as stats_type, sum(backfill_length) as stats_result from daq_lay_pipe_trench_backfill " +
+                " select 'lay_pipe_trench_backfill' as stats_type, COALESCE(sum(backfill_length), 0) as stats_result from daq_lay_pipe_trench_backfill " +
                 "where active = 1 and approve_status = 2 and project_oid in (:projectIds) ";
         return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectIds", projectIds), StatsResultBo.class);
     }
@@ -217,15 +270,15 @@ public class OverallStatisticsDao {
      */
     public List<DateStatsResultBo> statsOtherLengthMonthly(List<String> projectIds) {
         String sql = "" +
-                " select 'lay_surveying' as stats_type, to_char(create_datetime, 'yyyy-MM') as stats_date, sum(relative_mileage) as stats_result " +
+                " select 'lay_surveying' as stats_type, to_char(create_datetime, 'yyyy-MM') as stats_date, COALESCE(sum(relative_mileage), 0) as stats_result " +
                 " from daq_lay_surveying where active = 1 and approve_status = 2 and project_oid in (:projectIds) " +
                 " group by to_char(create_datetime, 'yyyy-MM') " +
                 " union all " +
-                " select 'lay_land_restoration' as stats_type, to_char(create_datetime, 'yyyy-MM') as stats_date, sum(length) as stats_result " +
+                " select 'lay_land_restoration' as stats_type, to_char(create_datetime, 'yyyy-MM') as stats_date, COALESCE(sum(length), 0) as stats_result " +
                 " from daq_lay_land_restoration where active = 1 and approve_status = 2 and project_oid in (:projectIds) " +
                 " group by to_char(create_datetime, 'yyyy-MM') " +
                 " union all " +
-                " select 'lay_pipe_trench_backfill' as stats_type, to_char(create_datetime, 'yyyy-MM') as stats_date, sum(backfill_length) as stats_result " +
+                " select 'lay_pipe_trench_backfill' as stats_type, to_char(create_datetime, 'yyyy-MM') as stats_date, COALESCE(sum(backfill_length), 0) as stats_result " +
                 " from daq_lay_pipe_trench_backfill where active = 1 and approve_status = 2 and project_oid in (:projectIds) " +
                 " group by to_char(create_datetime, 'yyyy-MM') ";
         return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectIds", projectIds), DateStatsResultBo.class);
@@ -256,7 +309,7 @@ public class OverallStatisticsDao {
 
 
     public List<Map<String, Integer>> statsDetectionRayPassCount(List<String> projectIds) {
-        String sql = "select count(*) as count, sum(case when (detection_type='detection_type_code_001') then 1 else 0 end) as pass_count " +
+        String sql = "select count(*) as count, coalesce(sum(case when (detection_type='detection_type_code_001' and evaluation_result=1) then 1 else 0 end), 0) as pass_count " +
                 " from daq_detection_ray where active = 1 and approve_status = 2 and project_oid in (:projectIds) ";
         return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectIds", projectIds));
     }
