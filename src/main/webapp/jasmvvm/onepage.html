@@ -259,6 +259,10 @@
 		.el-progress__text {
 			color: #999;
 		}
+
+		.hovertxt:hover {
+			color: #5ed5ec;
+		}
 	</style>
 
 
@@ -271,8 +275,10 @@
 			<div class="headertop"></div>
 			<div>
 				<span class="headerdate">{{dateStr}}</span>
-				<span class="headerright" @click="returnIndex">管理端</span>
-				<div class="headertitle">施工数据可视化一览</div>
+				<span class="headerright hovertxt" @click="returnIndex">
+					<i class="fa fa-laptop" aria-hidden="true"></i>
+					管理端</span>
+				<div class="headertitle">施工数据监控可视化</div>
 			</div>
 			<div class="headerbottom"></div>
 		</div>

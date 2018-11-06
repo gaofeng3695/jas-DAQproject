@@ -13,8 +13,8 @@ window.app = new Vue({
 			panelShowed: false,
 			isExpend: true,
 			menuWith: 200,
-			menusOpened: ['P-hq-weld-0001'],
-			currentTap: 'P-hq-weld-0001',
+			menusOpened: ['statistics-01'],
+			currentTap: 'statistics-01',
 			tabs: [], // 打开的标签页
 			items: [], //菜单数组
 			isMapInited:false//地图未初始化
