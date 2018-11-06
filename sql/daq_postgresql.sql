@@ -6226,3 +6226,35 @@ COMMENT ON COLUMN log_operate.app_id IS '应用Id';
 
 COMMENT ON COLUMN log_operate.app_name IS '应用名称';
 /*******框架相关数据库end********/
+
+
+
+/**
+ * 名称：		空间对象表模块postgresql数据库初始化脚本
+ * 创建人：	张锡梓
+ * 创建时间：	2018-05-03 09:06	
+ * 更新时间:	2018-05-03 19:01 修改记录表中的flag字段值
+ * */
+
+/**域值表**/
+create table sys_spatial_object( 
+	oid varchar(36) not null primary key,
+	wkt  TEXT ,
+	create_user_id varchar(36)  ,
+	create_user_name varchar(50)  ,
+	create_datetime timestamp(6)  ,
+	modify_user_id varchar(36)  ,
+	modify_user_name varchar(50)  ,
+	modify_datetime timestamp(6)  ,
+	active smallint not null 
+);
+comment on table  sys_spatial_object is '空间对象表';	
+comment on column sys_spatial_object.oid is '主键';	
+comment on column sys_spatial_object.wkt is 'wkt';	
+comment on column sys_spatial_object.create_user_id is '创建人id';	
+comment on column sys_spatial_object.create_user_name is '创建人姓名';	
+comment on column sys_spatial_object.create_datetime is '创建时间';	
+comment on column sys_spatial_object.modify_user_id is '修改人id';	
+comment on column sys_spatial_object.modify_user_name is '修改人姓名';	
+comment on column sys_spatial_object.modify_datetime is '修改时间';	
+comment on column sys_spatial_object.active is '是否有效';
