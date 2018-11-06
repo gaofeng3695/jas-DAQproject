@@ -312,23 +312,7 @@ comment on column daq_median_stake.remarks is '备注';
 comment on column daq_median_stake.geo_state is '空间数据状态';
 create index INDEX_DAQ_MEDIAN_STAKE_MEDIAN_STAKE_CODE_5 ON daq_median_stake ( median_stake_code );
 
-/***标段范围管理视图***/
-create or replace view v_daq_scope as 
-	select tt.oid,tt.project_oid,tt.parent_oid,tt.name,tt.ordernum,tt.type,tt.type_name,tt.province,a.name as province_name from (
-	select t.oid,t.oid as project_oid,null as parent_oid,t.project_name as name,1 as ordernum,-1 as type,'项目' as type_name,null as province,t.create_datetime from daq_project t where t.active=1
-	union all
-	select t.oid,t.project_oid,t.project_oid as parent_oid,t.pipeline_name as name,2 as ordernum,0 as type,'管线' as type_name, null province,t.create_datetime from daq_pipeline t where t.active=1
-	union all
-	select t.oid,t.project_oid,t.pipeline_oid as parent_oid,t.pipe_segment_name as name,3 as ordernum,1 as type,'线路段' as type_name,t.province,t.create_datetime from daq_pipe_segment t where t.active=1
-	union all
-	select t.oid,t.project_oid,t.pipeline_oid as parent_oid,t.cross_name as name,4 as ordernum,2 as type,'穿跨越' as type_name,t.province,t.create_datetime from daq_cross t where t.active=1
-	union all
-	select t.oid,t.project_oid,t.pipeline_oid as parent_oid,t.pipe_station_name as name,5 as ordernum,3 as type,'站场/阀室' as type_name,t.province,t.create_datetime from daq_pipe_station  t where t.active=1
-	union all
-	select t.oid,t.project_oid,t.pipeline_oid as parent_oid,t.road_name as name,6 as ordernum,4 as type,'伴行道路' as type_name,t.province,t.create_datetime from daq_maintenance_road t where t.active=1
-	union all
-	select t.oid,t.project_oid,t.pipeline_oid as parent_oid,t.power_line_name as name,7 as ordernum,5 as type,'外供电线路' as type_name,t.province,t.create_datetime from daq_power_line t where t.active=1
-	) tt left join area a on tt.province=a.oid order by tt.ordernum,tt.create_datetime
+
 
 CREATE TABLE daq_tenders_scope_ref (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -362,31 +346,14 @@ create index INDEX_DAQ_TENDERS_SCOPE_REF_SCOPE_OID_6 ON daq_tenders_scope_ref ( 
 
 /**********范围管理数据表end***************/
 /**********权限管理数据表begin***************/
-/**实施范围视图**/
-create or replace view v_daq_implement_scope as
-	select tt.oid,tt.parent_oid,tt.name,tt.type,tt.type_name,tt.project_oid,tt.tenders_oid,tt.province,a.name as province_name from (
-	select t.oid,null as parent_oid,t.project_name as name,-2 as type,'项目' as type_name,t.oid as project_oid,null as province,null as tenders_oid,t.create_datetime from daq_project t where t.active=1 and t.pipe_network_type_code='pipe_network_code_001'
-	union all
-	select distinct t.oid,t.project_oid as parent_oid,t.tenders_name as name,-1 as type,'标段' as type_name,t.project_oid,null as province,t.oid as tenders_oid,t.create_datetime from daq_tenders_scope_ref r join daq_tenders t on r.tenders_oid=t.oid where t.active=1
-	union all
-	select distinct t.oid,r.tenders_oid as parent_oid,t.pipeline_name as name,0 as type,'管线' as type_name,t.project_oid,null as province,r.tenders_oid,t.create_datetime from daq_pipeline t join daq_tenders_scope_ref r on t.oid=r.pipeline_oid and t.active=1
-	union all
-	select t.oid,t.pipeline_oid as parent_oid,t.pipe_segment_name as name,1 as type,'线路段' as type_name,t.project_oid,t.province,r.tenders_oid,t.create_datetime from daq_pipe_segment t join daq_tenders_scope_ref r on t.oid=r.scope_oid where t.active=1
-	union all
-	select t.oid,t.pipeline_oid as parent_oid,t.cross_name as name,2 as type,'穿跨越' as type_name,t.project_oid,t.province,r.tenders_oid,t.create_datetime from daq_cross t join daq_tenders_scope_ref r on t.oid=r.scope_oid where t.active=1
-	union all
-	select t.oid,t.pipeline_oid as parent_oid,t.pipe_station_name as name,3 as type,'站场/阀室' as type_name,t.project_oid,t.province,r.tenders_oid,t.create_datetime from daq_pipe_station t join daq_tenders_scope_ref r on t.oid=r.scope_oid where t.active=1
-	union all
-	select t.oid,t.pipeline_oid as parent_oid,t.road_name as name,4 as type,'伴行道路' as type_name,t.project_oid,t.province,r.tenders_oid,t.create_datetime from daq_maintenance_road t join daq_tenders_scope_ref r on t.oid=r.scope_oid where t.active=1
-	union all
-	select t.oid,t.pipeline_oid as parent_oid,t.power_line_name as name,5 as type,'外供电线路' as type_name,t.project_oid,t.province,r.tenders_oid,t.create_datetime from daq_power_line t join daq_tenders_scope_ref r on t.oid=r.scope_oid where t.active=1
-	) tt left join area a on tt.province=a.oid order by tt.type,tt.create_datetime
+
 	
 CREATE TABLE daq_implement_scope_ref (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
 	unit_oid VARCHAR (36),
 	project_oid VARCHAR (36),
 	pipeline_oid VARCHAR (36),
+	tenders_oid varchar(36) ,
 	scope_oid VARCHAR (36),
 	scope_type VARCHAR (10),
 	create_user_id VARCHAR (36),
@@ -403,6 +370,7 @@ comment on column daq_implement_scope_ref.oid is '主键';
 comment on column daq_implement_scope_ref.unit_oid is '部门oid';
 comment on column daq_implement_scope_ref.project_oid is '项目oid';
 comment on column daq_implement_scope_ref.pipeline_oid is '管线oid';
+COMMENT ON COLUMN daq_implement_scope_ref.tenders_oid IS '标段oid';
 comment on column daq_implement_scope_ref.scope_oid is '实体oid（即线路段oid或者站场oid等）';
 comment on column daq_implement_scope_ref.scope_type is '实体类型（1：线路段，2：创跨越，3：站场/阀室，4：伴行道路，5：外供电线路）';
 comment on column daq_implement_scope_ref.create_user_id is '创建人id';
@@ -532,7 +500,6 @@ ALTER TABLE daq_work_unit ADD PRIMARY KEY (oid);
 /**********基础数据维护end***************/
 /**********线路物资基本信息begin***************/
 
-DROP TABLE IF EXISTS daq_material_closure;
 CREATE TABLE daq_material_closure (
 	oid varchar(36) NOT NULL,
 	closure_code varchar(36),
@@ -637,7 +604,6 @@ comment on column daq_material_flange.modify_user_name IS '修改人名称';
 comment on column daq_material_flange.modify_datetime IS '修改时间';
 comment on column daq_material_flange.active IS '有效标志';
 
-DROP TABLE IF EXISTS daq_material_hot_bends;
 CREATE TABLE daq_material_hot_bends (
 	oid varchar(36) NOT NULL,
 	project_oid varchar(36),
@@ -803,6 +769,7 @@ CREATE TABLE daq_material_pipe (
 	is_cut SMALLINT DEFAULT 0,
 	is_use SMALLINT DEFAULT 0,
 	is_cold_bend SMALLINT DEFAULT 0,
+	is_child SMALLINT DEFAULT 0,
 	construct_unit varchar(36),
 	remarks varchar(200),
 	create_user_id varchar(36),
@@ -844,6 +811,7 @@ comment on column daq_material_pipe.coating_factory IS '防腐加工厂家';
 comment on column daq_material_pipe.is_cut IS '是否切管';
 comment on column daq_material_pipe.is_use IS '是否使用';
 comment on column daq_material_pipe.is_cold_bend IS '是否冷弯';
+COMMENT ON COLUMN daq_material_pipe.is_child IS '是否是子管，1为是，0为否';
 comment on column daq_material_pipe.construct_unit IS '施工单位';
 comment on column daq_material_pipe.remarks IS '备注';
 comment on column daq_material_pipe.create_user_id IS '创建人id';
@@ -1054,17 +1022,14 @@ CREATE INDEX index_daq_material_insulated_joint_manufacturer_code_5 ON daq_mater
 ALTER TABLE daq_material_insulated_joint ADD PRIMARY KEY (oid);
 CREATE INDEX index_daq_material_pipe_pipe_code_8 ON daq_material_pipe USING btree (pipe_code);
 ALTER TABLE daq_material_pipe ADD PRIMARY KEY (oid);
-CREATE INDEX index_daq_material_pipe_cold_bending_pipe_code_9 ON daq_material_pipe_cold_bending USING btree (pipe_code);
+CREATE INDEX index_daq_material_pipe_cold_bending_pipe_code_9 ON daq_material_pipe_cold_bending USING btree (pipe_oid);
 ALTER TABLE daq_material_pipe_cold_bending ADD PRIMARY KEY (oid);
 CREATE INDEX index_daq_material_reducer_reducer_code_5 ON daq_material_reducer USING btree (reducer_code);
 ALTER TABLE daq_material_reducer ADD PRIMARY KEY (oid);
 CREATE INDEX index_daq_material_tee_tee_code_5 ON daq_material_tee USING btree (tee_code);
 ALTER TABLE daq_material_tee ADD PRIMARY KEY (oid);
 
-create or replace view v_daq_pipe_segment_cross as 
-select s.oid,s.pipe_segment_name as name,s.start_stake_oid,s.end_stake_oid,1 as type,s.pipe_segment_code AS code,s.create_datetime,s.pipeline_oid from daq_pipe_segment s where s.active=1
-union all
-select s.oid,s.cross_name as name,s.start_stake_oid,s.end_stake_oid, 2 as type,s.cross_code AS code,s.create_datetime,s.pipeline_oid from daq_cross s where s.active=1
+
 /**********线路物资基本信息end***************/
 /**********线路物资检查信息begin***************/
 create table daq_check_coating_pipe( 
@@ -1365,6 +1330,77 @@ ALTER TABLE daq_check_reducer ADD PRIMARY KEY (oid);
 CREATE INDEX index_daq_check_tee_tee_code_5 ON daq_check_tee USING btree (tee_code_oid);
 ALTER TABLE daq_check_tee ADD PRIMARY KEY (oid);
 /**********线路物资检查信息end***************/
+/**********站/阀/井物资基本信息begin***************/
+create table daq_material_valve( 
+	oid varchar(36) not null primary key,
+	project_oid varchar(36)  ,
+	pipeline_oid varchar(36)  ,
+	tenders_oid varchar(36)  ,
+	valve_name varchar(50)  ,
+	valve_type varchar(50)  ,
+	material_code varchar(50)  ,
+	valve_model varchar(50)  ,
+	valve_axial_size numeric(3,1)  ,
+	valve_weight numeric(6,1)  ,
+	torque numeric(6,1)  ,
+	valve_body_seal_type varchar(50)  ,
+	valve_body_hard_seal_material varchar(50)  ,
+	valve_body_soft_seal_material varchar(50)  ,
+	valve_handle_diameter numeric(6,1)  ,
+	valve_handle_seal_type varchar(50)  ,
+	valve_handle_seal_material varchar(50)  ,
+	flange_standard varchar(50)  ,
+	flange_sealing_surface_type varchar(50)  ,
+	manufacture_number varchar(50)  ,
+	manufacturer varchar(60)  ,
+	manufacture_date timestamp(6)  ,
+	guarantee_period smallint  ,
+	contract_number varchar(60)  ,
+	is_use smallint  default 0 ,
+	remarks varchar(200)  ,
+	create_user_id varchar(36)  ,
+	create_user_name varchar(50)  ,
+	create_datetime timestamp(6)  ,
+	modify_user_id varchar(36)  ,
+	modify_user_name varchar(50)  ,
+	modify_datetime timestamp(6)  ,
+	active smallint  default 1  
+); 
+comment on table daq_material_valve is '阀门表';
+comment on column daq_material_valve.oid is '主键';
+comment on column daq_material_valve.project_oid is '项目oid';
+comment on column daq_material_valve.pipeline_oid is '管线oid';
+comment on column daq_material_valve.tenders_oid is '标段oid';
+comment on column daq_material_valve.valve_name is '阀门名称';
+comment on column daq_material_valve.valve_type is '阀门类型';
+comment on column daq_material_valve.material_code is '物料码';
+comment on column daq_material_valve.valve_model is '规格型号';
+comment on column daq_material_valve.valve_axial_size is '阀门轴向尺寸(M)';
+comment on column daq_material_valve.valve_weight is '阀门重量(Kg)';
+comment on column daq_material_valve.torque is '扭矩(Nm)';
+comment on column daq_material_valve.valve_body_seal_type is '阀体密封形式';
+comment on column daq_material_valve.valve_body_hard_seal_material is '阀体硬密封材质';
+comment on column daq_material_valve.valve_body_soft_seal_material is '阀体软密封材质';
+comment on column daq_material_valve.valve_handle_diameter is '阀杆直径(mm)';
+comment on column daq_material_valve.valve_handle_seal_type is '阀杆密封形式';
+comment on column daq_material_valve.valve_handle_seal_material is '阀杆密封材质';
+comment on column daq_material_valve.flange_standard is '法兰标准';
+comment on column daq_material_valve.flange_sealing_surface_type is '法兰密封面型式';
+comment on column daq_material_valve.manufacture_number is '出厂编号';
+comment on column daq_material_valve.manufacturer is '生产厂家';
+comment on column daq_material_valve.manufacture_date is '出厂时间';
+comment on column daq_material_valve.guarantee_period is '质保期(月)';
+comment on column daq_material_valve.contract_number is '合同号';
+comment on column daq_material_valve.is_use is '是否使用';
+comment on column daq_material_valve.remarks is '备注';
+comment on column daq_material_valve.create_user_id is '创建人id';
+comment on column daq_material_valve.create_user_name is '创建人名称';
+comment on column daq_material_valve.create_datetime is '创建时间';
+comment on column daq_material_valve.modify_user_id is '修改人id';
+comment on column daq_material_valve.modify_user_name is '修改人名称';
+comment on column daq_material_valve.modify_datetime is '修改时间';
+comment on column daq_material_valve.active is '有效标志';
+/**********站/阀/井物资基本信息end***************/
 /**********管道焊接信息begin***************/
 CREATE TABLE daq_construction_weld (
 	oid varchar(36) NOT NULL,
@@ -1467,10 +1503,6 @@ alter table daq_construction_weld add is_pa_ultrasonic smallint default 0;
 comment on column daq_construction_weld.is_pa_ultrasonic IS '相控阵超声波检测';
 
 
-create or replace view v_daq_weld_info as
-select oid,weld_code,pipe_segment_or_cross_oid from daq_construction_weld where active=1 and approve_status=2 
-union all 
-select oid,rework_weld_code,pipe_segment_or_cross_oid as weld_code from daq_weld_rework_weld where active=1 and approve_status=2
 
 CREATE TABLE daq_weld_anticorrosion_check (
 	oid varchar(36) NOT NULL,
@@ -1806,7 +1838,7 @@ CREATE INDEX index_daq_weld_anticorrosion_repair_weld_oid_9 ON daq_weld_anticorr
 ALTER TABLE daq_weld_anticorrosion_repair ADD PRIMARY KEY (oid);
 CREATE INDEX index_daq_weld_anticorrosion_test_weld_oid_9 ON daq_weld_anticorrosion_test USING btree (weld_oid);
 ALTER TABLE daq_weld_anticorrosion_test ADD PRIMARY KEY (oid);
-CREATE INDEX index_daq_weld_cut_cut_weld_code_9 ON daq_weld_cut USING btree (cut_weld_code);
+CREATE INDEX index_daq_weld_cut_weld_oid_9 ON daq_weld_cut USING btree (weld_oid);
 CREATE INDEX index_daq_weld_cut_front_weld_oid_10 ON daq_weld_cut USING btree (front_weld_oid);
 CREATE INDEX index_daq_weld_cut_back_weld_oid_11 ON daq_weld_cut USING btree (back_weld_oid);
 ALTER TABLE daq_weld_cut ADD PRIMARY KEY (oid);
@@ -4106,6 +4138,65 @@ comment on column daq_cathodic_impressed_current_test.modify_datetime is '修改
 comment on column daq_cathodic_impressed_current_test.active is '有效标志';
 create index INDEX_DAQ_CATHODIC_IMPRESSED_CURRENT_TEST_TEST_STAKE_OID_5 ON daq_cathodic_impressed_current_test ( test_stake_oid );
 /**********管道阴保end***************/
+/**********站/阀/井设备安装begin***************/
+create table daq_test_valve( 
+	oid varchar(36) not null primary key,
+	project_oid varchar(36)  ,
+	tenders_oid varchar(36)  ,
+	pipeline_oid varchar(36)  ,
+	pipe_station_oid varchar(36)  ,
+	valve_oid varchar(36)  ,
+	test_date timestamp(6)  ,
+	filler varchar(50)  ,
+	test_medium varchar(50)  ,
+	strength_test_pressure numeric(6,3)  ,
+	strength_test_time smallint  ,
+	tightness_test_pressure numeric(6,3)  ,
+	tightness_test_time smallint  ,
+	test_condition_and_apparent_check varchar(50)  ,
+	construct_date timestamp(6)  ,
+	construct_unit varchar(36)  ,
+	collection_person varchar(50)  ,
+	collection_date timestamp(6)  ,
+	supervision_unit varchar(36)  ,
+	supervision_engineer varchar(50)  ,
+	create_user_id varchar(36)  ,
+	create_user_name varchar(50)  ,
+	create_datetime timestamp(6)  ,
+	modify_user_id varchar(36)  ,
+	modify_user_name varchar(50)  ,
+	modify_datetime timestamp(6)  ,
+	active smallint not null default 1  
+); 
+comment on table daq_test_valve is '阀门试验表';
+comment on column daq_test_valve.oid is '主键';
+comment on column daq_test_valve.project_oid is '项目oid';
+comment on column daq_test_valve.tenders_oid is '标段oid';
+comment on column daq_test_valve.pipeline_oid is '管线oid';
+comment on column daq_test_valve.pipe_station_oid is '站场/阀室oid';
+comment on column daq_test_valve.valve_oid is '设备编号';
+comment on column daq_test_valve.test_date is '试验日期';
+comment on column daq_test_valve.filler is '填料';
+comment on column daq_test_valve.test_medium is '试验介质';
+comment on column daq_test_valve.strength_test_pressure is '强度试验压力(Mpa)';
+comment on column daq_test_valve.strength_test_time is '强度试验时间(min)';
+comment on column daq_test_valve.tightness_test_pressure is '严密性试验压力(Mpa)';
+comment on column daq_test_valve.tightness_test_time is '严密性试验时间(min)';
+comment on column daq_test_valve.test_condition_and_apparent_check is '试验情况及外观检查';
+comment on column daq_test_valve.construct_date is '施工日期';
+comment on column daq_test_valve.construct_unit is '施工单位';
+comment on column daq_test_valve.collection_person is '数据采集人';
+comment on column daq_test_valve.collection_date is '采集日期';
+comment on column daq_test_valve.supervision_unit is '监理单位';
+comment on column daq_test_valve.supervision_engineer is '监理工程师';
+comment on column daq_test_valve.create_user_id is '创建人id';
+comment on column daq_test_valve.create_user_name is '创建人名称';
+comment on column daq_test_valve.create_datetime is '创建时间';
+comment on column daq_test_valve.modify_user_id is '修改人id';
+comment on column daq_test_valve.modify_user_name is '修改人名称';
+comment on column daq_test_valve.modify_datetime is '修改时间';
+comment on column daq_test_valve.active is '有效标志';
+/**********站/阀/井设备安装end***************/
 /**********管道附属物begin***************/
 CREATE TABLE daq_appendages_mark_stake (
 	oid VARCHAR (36) NOT NULL PRIMARY KEY,
@@ -4456,7 +4547,7 @@ comment on column daq_appendages_hydraulic_protection.modify_user_id is '修改�
 comment on column daq_appendages_hydraulic_protection.modify_user_name is '修改人名称';
 comment on column daq_appendages_hydraulic_protection.modify_datetime is '修改时间';
 comment on column daq_appendages_hydraulic_protection.active is '有效标志';
-create index INDEX_DAQ_APPENDAGES_HYDRAULIC_PROTECTION_HYDRAULIC_PROTECTION_CODE_9 ON daq_appendages_hydraulic_protection ( hydraulic_protection_code );
+create index INDEX_DAQ_APPENDAGES_HYDRAULIC_PROTECTION_CODE ON daq_appendages_hydraulic_protection ( hydraulic_protection_code );
 
 
 CREATE TABLE daq_appendages_concomitant_road (
@@ -4657,7 +4748,7 @@ CREATE TABLE daq_mv_pipe_section (
 	end_pointz NUMERIC (7, 2),
 	pipe_section_length NUMERIC (12, 3),
 	pipe_diameter NUMERIC (9, 3),
-	wall thickness NUMERIC (9, 3),
+	wall_thickness NUMERIC (9, 3),
 	pipe_section_material VARCHAR (50),
 	pipe_section_spec VARCHAR (50),
 	design_life SMALLINT,
@@ -4694,7 +4785,7 @@ comment on column daq_mv_pipe_section.end_pointy is '终止点Y坐标';
 comment on column daq_mv_pipe_section.end_pointz is '终止点管顶高程(m)';
 comment on column daq_mv_pipe_section.pipe_section_length is '管段长度(m)';
 comment on column daq_mv_pipe_section.pipe_diameter is '管径(mm)';
-comment on column daq_mv_pipe_section.wall thickness is '壁厚(mm)';
+comment on column daq_mv_pipe_section.wall_thickness is '壁厚(mm)';
 comment on column daq_mv_pipe_section.pipe_section_material is '材质';
 comment on column daq_mv_pipe_section.pipe_section_spec is '规格';
 comment on column daq_mv_pipe_section.design_life is '管道设计年限(年)';
@@ -4737,7 +4828,7 @@ CREATE TABLE daq_mv_across_info (
 	pipe_section_material VARCHAR (50),
 	pipe_section_spec VARCHAR (50),
 	outer_diameter NUMERIC (9, 3),
-	wall thickness NUMERIC (9, 3),
+	wall_thickness NUMERIC (9, 3),
 	design_life SMALLINT,
 	measure_unit VARCHAR (50),
 	collection_person VARCHAR (30),
@@ -4773,7 +4864,7 @@ comment on column daq_mv_across_info.pipe_section_category is '管段类别';
 comment on column daq_mv_across_info.pipe_section_material is '材质';
 comment on column daq_mv_across_info.pipe_section_spec is '规格';
 comment on column daq_mv_across_info.outer_diameter is '外径';
-comment on column daq_mv_across_info.wall thickness is '壁厚';
+comment on column daq_mv_across_info.wall_thickness is '壁厚';
 comment on column daq_mv_across_info.design_life is '管道设计年限';
 comment on column daq_mv_across_info.measure_unit is '陀螺仪测量单位 ';
 comment on column daq_mv_across_info.collection_person is '采集人员';
@@ -4809,7 +4900,7 @@ CREATE TABLE daq_mv_stride_across_info (
 	pipe_section_material VARCHAR (50),
 	pipe_section_spec VARCHAR (50),
 	outer_diameter NUMERIC (9, 3),
-	wall thickness NUMERIC (9, 3),
+	wall_thickness NUMERIC (9, 3),
 	design_life SMALLINT,
 	collection_person VARCHAR (30),
 	collection_date TIMESTAMP (6),
@@ -4844,7 +4935,7 @@ comment on column daq_mv_stride_across_info.pipe_section_category is '管段类�
 comment on column daq_mv_stride_across_info.pipe_section_material is '材质';
 comment on column daq_mv_stride_across_info.pipe_section_spec is '规格';
 comment on column daq_mv_stride_across_info.outer_diameter is '外径';
-comment on column daq_mv_stride_across_info.wall thickness is '壁厚';
+comment on column daq_mv_stride_across_info.wall_thickness is '壁厚';
 comment on column daq_mv_stride_across_info.design_life is '管道设计年限';
 comment on column daq_mv_stride_across_info.collection_person is '采集人员';
 comment on column daq_mv_stride_across_info.collection_date is '采集日期';
@@ -4939,7 +5030,6 @@ comment on column daq_data_approve.active is '有效标志';
 create index INDEX_DAQ_DATA_APPROVE_BUSINESS_OID_5 ON daq_data_approve ( business_oid );
 /**********数据审核记录表end***************/
 /*********空间数据相关start*********/
-select dropgeometrycolumn('public', 'daq_median_stake', 'geom');
 select AddGeometryColumn('public', 'daq_median_stake', 'geom', 4490, 'POINT', 4);
 CREATE INDEX daq_median_stake_geom_idx ON public.daq_median_stake USING gist (geom);
 
@@ -5030,20 +5120,7 @@ CREATE INDEX daq_appendages_casing_pipe_geom_idx ON public.daq_appendages_casing
 select AddGeometryColumn('public', 'daq_weld_rework_weld', 'geom', 4490, 'POINT', 4);
 CREATE INDEX daq_weld_rework_weld_idx ON public.daq_weld_rework_weld USING gist (geom);
 /*********空间数据相关end*********/
-create or replace view v_daq_material as
-select oid,pipe_code as code,pipe_length as length from daq_material_pipe where active=1
-union all
-select oid,hot_bends_code as code,pipe_length as length from daq_material_hot_bends where active=1
-union all 
-select oid,tee_code as code,null as length from daq_material_tee  t where active=1
-union all 
-select oid,manufacturer_code as code,null as length from daq_material_insulated_joint where active=1
-union all
-select oid,reducer_code as code,null as length from daq_material_reducer where active=1
-union all
-select oid,closure_code as code,null as length from daq_material_closure where active=1
-union all
-select oid,pipe_cold_bending_code as code,pipe_length as length from daq_material_pipe_cold_bending where active=1
+
 
 /***************添加字段*****************/
 alter table daq_material_pipe_cold_bending add column front_is_use smallint DEFAULT 0;
@@ -5078,3 +5155,1106 @@ alter table daq_construction_weld add column is_anticorrosion_check smallint DEF
 alter table daq_construction_weld add column is_rework smallint DEFAULT 0;
 comment on column daq_construction_weld.is_anticorrosion_check IS '是否补扣';
 comment on column daq_construction_weld.is_rework IS '是否返修';
+
+-- ----------------------------
+-- T: app版本表
+-- ----------------------------
+DROP TABLE IF EXISTS app_version;
+CREATE TABLE app_version (
+	oid varchar(36) NOT NULL PRIMARY KEY,
+	version_number varchar(100) NOT NULL,
+	version_desc varchar(2000) ,
+	version_time timestamp(6),
+	appcan_version varchar(200) ,
+	product_id varchar(200) ,
+	product_name varchar(200) ,
+	update_model SMALLINT,
+	url varchar(500) ,
+	client_type varchar(100) ,
+	active SMALLINT
+);
+
+-- ----------------------------
+-- Records of app_version
+-- ----------------------------
+INSERT INTO app_version VALUES ('1', 'V1.1.0', '施工数据采集测试版本&优化部分功能&修改部分Bug', '2018-09-30 10:24:05', '0.0.23', 'daq', '施工数据采集', 1, 'http://pipeline.zyax.cn:10080/巡线卫士.apk', 'Android', 1);
+
+/**
+ * 人脸信息保存表
+ */
+CREATE TABLE daq_user_face_info (
+oid varchar(38) ,
+login_name varchar(50)  NOT NULL,
+base64_image text ,
+CONSTRAINT daq_user_face_info_pkey PRIMARY KEY (login_name)
+)
+WITH (OIDS=FALSE);
+
+ALTER TABLE daq_user_face_info OWNER TO postgres;
+
+COMMENT ON COLUMN daq_user_face_info.oid IS '主键';
+
+COMMENT ON COLUMN daq_user_face_info.login_name IS '登录名';
+
+COMMENT ON COLUMN daq_user_face_info.base64_image IS 'base64图片';
+
+/*******框架相关数据库begin********/
+CREATE TABLE SYS_ATTACHMENT (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	file_name VARCHAR (200),
+	file_type VARCHAR (20),
+	file_size INT,
+	CONTENT bytea,
+	file_description VARCHAR (200),
+	file_url VARCHAR (500),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_time TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_time TIMESTAMP (6),
+	active SMALLINT NOT NULL
+);
+
+CREATE TABLE SYS_ATTACHMENTBUSINESSRELATION (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	attachment_id VARCHAR (36) NOT NULL,
+	business_data_id VARCHAR (36) NOT NULL,
+	business_data_table VARCHAR (50),
+	business_type VARCHAR (20),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_time TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_time TIMESTAMP (6),
+	active SMALLINT NOT NULL
+);
+
+COMMENT ON TABLE SYS_ATTACHMENT IS '附件表，用来存储附件相关信息';
+
+COMMENT ON COLUMN SYS_ATTACHMENT.oid IS '主键';
+
+COMMENT ON COLUMN SYS_ATTACHMENT.file_name IS '文件名称';
+
+COMMENT ON COLUMN SYS_ATTACHMENT.file_type IS '文件类型';
+
+COMMENT ON COLUMN SYS_ATTACHMENT.file_size IS '文件大小';
+
+COMMENT ON COLUMN SYS_ATTACHMENT. CONTENT IS '文件二进制流';
+
+COMMENT ON COLUMN SYS_ATTACHMENT.file_description IS '文件描述';
+
+COMMENT ON COLUMN SYS_ATTACHMENT.file_url IS '文件路径';
+
+COMMENT ON COLUMN SYS_ATTACHMENT.create_user_id IS '创建人ID';
+
+COMMENT ON COLUMN SYS_ATTACHMENT.create_user_name IS '创建人名称';
+
+COMMENT ON COLUMN SYS_ATTACHMENT.create_time IS '创建时间';
+
+COMMENT ON COLUMN SYS_ATTACHMENT.modify_user_id IS '修改人ID';
+
+COMMENT ON COLUMN SYS_ATTACHMENT.modify_user_name IS '修改人名称';
+
+COMMENT ON COLUMN SYS_ATTACHMENT.modify_time IS '修改时间';
+
+COMMENT ON COLUMN SYS_ATTACHMENT.active IS '标识符';
+
+COMMENT ON TABLE SYS_ATTACHMENTBUSINESSRELATION IS '附件与业务含义的关系表';
+
+COMMENT ON COLUMN SYS_ATTACHMENTBUSINESSRELATION.oid IS '主键';
+
+COMMENT ON COLUMN SYS_ATTACHMENTBUSINESSRELATION.attachment_id IS '附件ID';
+
+COMMENT ON COLUMN SYS_ATTACHMENTBUSINESSRELATION.business_data_id IS '业务数据ID';
+
+COMMENT ON COLUMN SYS_ATTACHMENTBUSINESSRELATION.business_data_table IS '业务数据表名称';
+
+COMMENT ON COLUMN SYS_ATTACHMENTBUSINESSRELATION.business_type IS '业务含义';
+
+COMMENT ON COLUMN SYS_ATTACHMENTBUSINESSRELATION.create_user_id IS '创建人ID';
+
+COMMENT ON COLUMN SYS_ATTACHMENTBUSINESSRELATION.create_user_name IS '创建人名称';
+
+COMMENT ON COLUMN SYS_ATTACHMENTBUSINESSRELATION.create_time IS '创建时间';
+
+COMMENT ON COLUMN SYS_ATTACHMENTBUSINESSRELATION.modify_user_id IS '修改人ID';
+
+COMMENT ON COLUMN SYS_ATTACHMENTBUSINESSRELATION.modify_user_name IS '修改人名称';
+
+COMMENT ON COLUMN SYS_ATTACHMENTBUSINESSRELATION.modify_time IS '修改时间';
+
+COMMENT ON COLUMN SYS_ATTACHMENTBUSINESSRELATION.active IS '标识符';
+
+--为表SYS_ATTACHMENTBUSINESSRELATION添加列FILE_TYPE
+ALTER TABLE SYS_ATTACHMENTBUSINESSRELATION ADD FILE_TYPE character varying(10);
+
+/** 自定义表单-数据库-表单信息 */
+create table custom_db_table(
+	oid varchar(36) not null primary key,
+	db_type varchar(30) not null ,
+	db_source_name varchar(50) not null ,
+	table_name varchar(50) not null ,
+	table_name_cn varchar(100) not null ,
+	table_type varchar(30) not null ,
+	table_desc varchar(200)  ,
+	row_index smallint not null ,
+	create_user_id varchar(36) not null ,
+	create_user_name varchar(50) not null ,
+	create_datetime timestamp not null ,
+	modify_user_id varchar(36) not null ,
+	modify_user_name varchar(50) not null ,
+	modify_datetime timestamp not null ,
+	active smallint not null
+);
+
+create index INDEX_CUSTOM_DB_TABLE_TABLE_NAME_7 ON custom_db_table ( table_name );
+comment on table custom_db_table is '自定义表单-数据库-表单信息';
+comment on column custom_db_table.oid is '主键';
+comment on column custom_db_table.db_type is '数据库类型';
+comment on column custom_db_table.db_source_name is '数据源名称';
+comment on column custom_db_table.table_name is '数据库表名称';
+comment on column custom_db_table.table_type is '值范围（-32768 到 +32767）TT_10：业务属性表, TT_11：业务关系表, TT_20：点空间表, TT_21：线空间表, TT_22：面空间表（具体见预值表）';
+comment on column custom_db_table.table_name_cn is '数据库表中文名称';
+comment on column custom_db_table.table_desc is '数据库表描述';
+comment on column custom_db_table.row_index is '排序字段';
+
+
+
+
+/** 自定义表单-数据库-表字段信息 */
+create table custom_db_table_fields(
+	oid varchar(36) not null primary key,
+	table_id varchar(36) not null ,
+	field_name varchar(50) not null ,
+	field_name_alias  varchar(50)  ,
+	field_name_cn varchar(50)  ,
+	field_type varchar(50) not null ,
+	field_length varchar(50),
+	if_pk varchar(20)  ,
+	if_fk varchar(20)  ,
+	fk_table varchar(50)  ,
+	fk_table_field varchar(50)  ,
+	fk_table_id varchar(36)  ,
+	if_empty varchar(20)  ,
+	if_index varchar(20)  ,
+	field_default_value  varchar(50)  ,
+	field_desc varchar(200)  ,
+	row_index smallint not null ,
+	create_user_id varchar(36) not null ,
+	create_user_name varchar(50) not null ,
+	create_datetime timestamp not null ,
+	modify_user_id varchar(36) not null ,
+	modify_user_name varchar(50) not null ,
+	modify_datetime timestamp not null ,
+	active smallint not null
+);
+
+comment on table custom_db_table_fields is '自定义表单-数据库-表字段信息';
+comment on column custom_db_table_fields.oid is '主键';
+comment on column custom_db_table_fields.table_id is '数据库表ID';
+comment on column custom_db_table_fields.field_name is '数据库字段名称';
+comment on column custom_db_table_fields.field_name_alias  is '数据库字段别名';
+comment on column custom_db_table_fields.field_name_cn is '数据库字段中文名称';
+comment on column custom_db_table_fields.field_type is '字段类型';
+comment on column custom_db_table_fields.field_length is '字段长度/精度';
+comment on column custom_db_table_fields.if_pk is '是否主键';
+comment on column custom_db_table_fields.if_fk is '是否外键';
+comment on column custom_db_table_fields.fk_table is '外键表名';
+comment on column custom_db_table_fields.fk_table_field is '外键表字段';
+comment on column custom_db_table_fields.fk_table_id is '外见表ID';
+comment on column custom_db_table_fields.if_empty is '是否为空';
+comment on column custom_db_table_fields.if_index is '是否索引';
+comment on column custom_db_table_fields.field_default_value  is '默认值';
+comment on column custom_db_table_fields.field_desc is '表字段描述';
+comment on column custom_db_table_fields.row_index is '排序';
+
+
+/** 自定义表单-功能配置-功能 */
+create table custom_fun_function(
+	oid varchar(36) not null primary key,
+	function_name varchar(50) not null ,
+	function_code varchar(50) not null ,
+	table_name varchar(50) not null ,
+	save_sql varchar(4000) not null ,
+	update_sql varchar(4000) not null ,
+	delete_sql varchar(4000) not null ,
+	query_sql varchar(4000) not null ,
+	details_sql varchar(4000) not null ,
+	if_attachment varchar(20),
+	create_user_id varchar(36) not null ,
+	create_user_name varchar(50) not null ,
+	create_datetime timestamp not null ,
+	modify_user_id varchar(36) not null ,
+	modify_user_name varchar(50) not null ,
+	modify_datetime timestamp not null ,
+	active smallint not null
+);
+
+comment on table custom_fun_function is '自定义表单-功能配置-功能';
+comment on column custom_fun_function.oid is '主键';
+comment on column custom_fun_function.function_name is '功能名称';
+comment on column custom_fun_function.function_code is '功能编码(后台自动生成)';
+comment on column custom_fun_function.table_name is '数据库表名称(数据来源)';
+comment on column custom_fun_function.save_sql is '保存sql';
+comment on column custom_fun_function.update_sql is '更新sql';
+comment on column custom_fun_function.delete_sql is '删除sql';
+comment on column custom_fun_function.query_sql is '列表查询sql';
+comment on column custom_fun_function.details_sql is '详情查询sql';
+comment on column custom_fun_function.if_attachment is '是否支持附件';
+
+
+/** 自定义表单-功能配置-字段 */
+create table custom_fun_fields(
+	oid varchar(36) not null primary key,
+	function_id varchar(36) not null ,
+	field_name varchar(50) not null ,
+	field_name_cn varchar(50)  ,
+	field_source varchar(50) not null ,
+	if_save varchar(20) not null ,
+	if_update varchar(20) not null ,
+	if_query varchar(20) not null ,
+	if_list varchar(20) not null ,
+	if_details varchar(20) not null ,
+	if_required varchar(10) not null ,
+	field_length smallint  ,
+	field_type varchar(50)  ,
+	ui_type varchar(50)  ,
+	domain varchar(1000)  ,
+	regular_expression varchar(200)  ,
+	group_name varchar(100)  ,
+	group_index smallint  ,
+	row_index smallint  ,
+	updateable varchar(10)  ,
+	min smallint  ,
+	max smallint  ,
+	placeholder varchar(50)  ,
+	child_field varchar(50)  ,
+	request_path varchar(500)  ,
+	query_index smallint ,
+	list_index smallint ,
+	create_user_id varchar(36) not null ,
+	create_user_name varchar(50) not null ,
+	create_datetime timestamp not null ,
+	modify_user_id varchar(36) not null ,
+	modify_user_name varchar(50) not null ,
+	modify_datetime timestamp not null ,
+	active smallint not null
+);
+
+comment on table custom_fun_fields is '自定义表单-功能配置-字段';
+comment on column custom_fun_fields.oid is '主键';
+comment on column custom_fun_fields.function_id is '所属功能id(引用custom_fun_function的主键)';
+comment on column custom_fun_fields.field_name is '数据库字段名称';
+comment on column custom_fun_fields.field_name_cn is '数据库字段中文名称';
+comment on column custom_fun_fields.field_source is '字段来源';
+comment on column custom_fun_fields.if_save is '是否新增字段';
+comment on column custom_fun_fields.if_update is '是否修改字段';
+comment on column custom_fun_fields.if_query is '是否搜索字段';
+comment on column custom_fun_fields.if_list is '是否列表字段';
+comment on column custom_fun_fields.if_details is '是否详情字段';
+comment on column custom_fun_fields.if_required is '是否是必填';
+comment on column custom_fun_fields.field_length is '字段长度';
+comment on column custom_fun_fields.field_type is '字段类型';
+comment on column custom_fun_fields.ui_type is '控件类别（域值';
+comment on column custom_fun_fields.domain is '域值';
+comment on column custom_fun_fields.regular_expression is '正则表达式';
+comment on column custom_fun_fields.group_name is '页面控件分组';
+comment on column custom_fun_fields.group_index is '分组排序序号';
+comment on column custom_fun_fields.row_index is '字段排序序号';
+comment on column custom_fun_fields.updateable is '可编辑性';
+comment on column custom_fun_fields.min is '最小值';
+comment on column custom_fun_fields.max is '最大值';
+comment on column custom_fun_fields.placeholder is '文本框默认提示';
+comment on column custom_fun_fields.child_field is '子级字段';
+comment on column custom_fun_fields.request_path is '请求路径';
+comment on column custom_fun_fields.query_index is '查询条件排序序号';
+comment on column custom_fun_fields.list_index is '列表排序序号';
+comment on column custom_db_table_fields.row_index is '排序';
+
+
+/** 自定义表单-数据字典 */
+create table custom_dict(
+	oid varchar(36) not null primary key,
+	dict_type varchar(50) not null ,
+	dict_type_cn varchar(50) not null ,
+	dict_code varchar(50) not null ,
+	dict_value varchar(50) not null ,
+	dict_value_desc varchar(50)  ,
+	row_index smallint not null ,
+	active smallint not null
+);
+
+create index INDEX_CUSTOM_DICT_DICT_TYPE_5 ON custom_dict ( dict_type );
+comment on table custom_dict is '自定义表单-数据字典';
+comment on column custom_dict.oid is '主键';
+comment on column custom_dict.dict_type is '类型编码';
+comment on column custom_dict.dict_type_cn is '类型中文';
+comment on column custom_dict.dict_code is '值编码';
+comment on column custom_dict.dict_value is '值';
+comment on column custom_dict.dict_value_desc is '值描述';
+comment on column custom_dict.row_index is '排序';
+
+
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('36af025c-3b7c-457f-abb4-ec0dd99acd14', 'if_type', '是否', '0', '否', NULL, '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('320bdcf5-89d2-4b9f-a66d-09310218f059', 'if_type', '是否', '1', '是', NULL, '1', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('ff8e4dc9-9e3b-4a15-b943-befb7ae2d069', 'db_type', '数据库类型', 'DT_01', 'oracle', NULL, '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('c709575b-53a6-40f4-b7b2-998bcd8894e5', 'db_type', '数据库类型', 'DT_02', 'mysql', NULL, '1', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('c1cd99b0-c8ec-4e83-80f0-4bb7cbd4bc21', 'db_type', '数据库类型', 'DT_03', 'postgresql', NULL, '2', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('2ec56b85-e8da-4939-8036-794574db85d5', 'table_type', '数据库表类型', 'TT_10', '业务属性表', NULL, '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('02b2b8b2-1411-4797-8e11-156301290367', 'table_type', '数据库表类型', 'TT_11', '业务关系表', NULL, '1', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('7bd742a8-c649-470b-8b7c-1b0430fa4c01', 'table_type', '数据库表类型', 'TT_20', '点空间表', NULL, '2', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('bf8dd52f-e8d3-431e-8eb6-db63b4bacce1', 'table_type', '数据库表类型', 'TT_21', '线空间表', NULL, '3', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('d4afecd3-5262-4f7c-bc85-a46511569680', 'table_type', '数据库表类型', 'TT_22', '面空间表', NULL, '4', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('04005f8f-2042-4913-b477-5a925755acf6', 'oracle_fields_type', 'oracle数据库字段类型', 'varchar2', 'varchar2', '字符串（不含中文，最大4KB）', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('c1e503a7-e3cc-4c0c-8792-8b5b7f6aca61', 'oracle_fields_type', 'oracle数据库字段类型', 'nvarchar2', 'nvarchar2', '字符串（包含中文，最大4KB，约1333个汉字）', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('b9e83ef4-89e1-4ee4-8cfa-36a8ef096955', 'oracle_fields_type', 'oracle数据库字段类型', 'integer', 'integer', '整数（不推荐使用）', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('a625813e-c529-4cfe-b8bf-a9cff678dc26', 'oracle_fields_type', 'oracle数据库字段类型', 'number', 'number(P,S)', 'P为整数位，S位小数位', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('4b710f1c-bfbe-473e-bb29-9372f1f5b5b2', 'oracle_fields_type', 'oracle数据库字段类型', 'decimal', 'decimal(P,S)', 'P为整数位，S位小数位', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('efd72a02-ec0f-4767-8f0b-ac82de2bc93e', 'oracle_fields_type', 'oracle数据库字段类型', 'blob', 'blob', '二进制类型（适用于文件存储，最大4G）', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('13bab619-3c73-47df-90cf-e1b5c73e1833', 'oracle_fields_type', 'oracle数据库字段类型', 'clob', 'clob', '大文本类型（最大4G）', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('7a3c8216-9a02-463f-aec9-0d601c05386a', 'oracle_fields_type', 'oracle数据库字段类型', 'date', 'date', '日期时间类型', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('c38e7436-1be5-445e-9d44-65c7ad295333', 'oracle_fields_type', 'oracle数据库字段类型', 'timestamp', 'timestamp(p)', '高精度日期时间类型（p精度，范围0~9）', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('a3173502-49e1-4bd5-815a-d98ec4d45cf9', 'mysql_fields_type', 'mysql数据库字段类型', 'varchar', 'varchar(n)', '字符串（包含中文，最大长度21845）', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('4dc35249-d582-42c5-9808-86e0f22beab1', 'mysql_fields_type', 'mysql数据库字段类型', 'tinyint', 'tinyint', '有符号（-128~127）无符号（0~255）', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('e7de0f02-6aba-4fd0-8903-8eafa580d81e', 'mysql_fields_type', 'mysql数据库字段类型', 'smallint', 'smallint', '有符号（-32768~32767)无符号（0~65535） ', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('2e60cb38-3b77-479b-84ad-ac1067b69a5a', 'mysql_fields_type', 'mysql数据库字段类型', 'mediumint', 'mediumint', '有符号（-8338608~8388607）无符号（0~16777215）', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('bfe2b023-f98c-41eb-8bb8-44caf8711104', 'mysql_fields_type', 'mysql数据库字段类型', 'int', 'int', '有符号（-2147483648~2147483647）无符号（0~4294967295）', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('93aa6b87-9f33-4d3f-ba0b-c6a64d080d11', 'mysql_fields_type', 'mysql数据库字段类型', 'float', 'float', '4字节', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('6f1070d1-91cb-4f2e-8275-4d42dea92bd1', 'mysql_fields_type', 'mysql数据库字段类型', 'double', 'double', '8字节', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('26a8dc32-cdb6-45e5-b573-6d6e62cf216d', 'mysql_fields_type', 'mysql数据库字段类型', 'decimal', 'decimal(m,d)', 'm为整数位，d位小数位', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('b9bb4964-a69a-4a9d-90aa-ed25aad10894', 'mysql_fields_type', 'mysql数据库字段类型', 'text', 'text', '64KB', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('73707391-1511-4375-8153-55e8dfd22f17', 'mysql_fields_type', 'mysql数据库字段类型', 'mediumtext', 'mediumtext', '16M', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('3c75fc0e-027a-4ec3-aad5-45de4c6a21b2', 'mysql_fields_type', 'mysql数据库字段类型', 'longtext', 'longtext', '4G', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('e0223d28-e52c-44bb-8aa6-709d27695b98', 'mysql_fields_type', 'mysql数据库字段类型', 'blob', 'blob', '64KB', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('045f20ff-69dc-4442-80c9-48850027bae3', 'mysql_fields_type', 'mysql数据库字段类型', 'mediumblob', 'mediumblob', '16M', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('15b0e3a5-09e0-4184-921b-23160811897d', 'mysql_fields_type', 'mysql数据库字段类型', 'longblob', 'longblob', '4G', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('0e8f192c-8b76-4436-92c1-96ff9bbc64be', 'mysql_fields_type', 'mysql数据库字段类型', 'date', 'date', 'YYYY-MM-DD', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('d527764d-607a-4a81-ae54-e40783f62412', 'mysql_fields_type', 'mysql数据库字段类型', 'time', 'time', 'HH:MM:SS', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('0c03819d-115d-46a3-a4e7-88ede0a5ec8d', 'mysql_fields_type', 'mysql数据库字段类型', 'datetime', 'datetime', 'YYYY-MM-DD HH:MM:SS', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('85a3e694-af6a-47b6-af99-9870520c4204', 'mysql_fields_type', 'mysql数据库字段类型', 'timestamp', 'timestamp', 'timestamp', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('7fd5d65f-b90a-4c0d-9b03-5c1ee5e935bf', 'pg_fields_type', 'postgreSQL数据库字段类型', 'varchar', 'varchar(size)', '字符串', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('aa311066-2dbe-4547-9631-9fe14423a733', 'pg_fields_type', 'postgreSQL数据库字段类型', 'smallint', 'smallint', '有符号（-32768~32767）', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('c252c02f-87eb-42d9-8e12-d6ff93ac92fc', 'pg_fields_type', 'postgreSQL数据库字段类型', 'integer', 'integer', '有符号（-2147483648~2147483647）', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('1c87448d-ef02-40bc-980a-5a2596310dcf', 'pg_fields_type', 'postgreSQL数据库字段类型', 'real', 'real', '4字节（6位数字精度）', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('96a0433a-f9d1-4d41-b6ad-5681d73c408c', 'pg_fields_type', 'postgreSQL数据库字段类型', 'double', 'double', '8字节（15位数字精度）', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('f068eb6c-31cd-417d-bf35-8ad3910b0d31', 'pg_fields_type', 'postgreSQL数据库字段类型', 'numeric', 'numeric(p,s)', 'p为整数位，s位小数位', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('04429b2f-6e74-409d-a4ef-ea23ccfc97c1', 'pg_fields_type', 'postgreSQL数据库字段类型', 'decimal', 'decimal(p,s)', 'p为整数位，s位小数位', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('4538e49a-eb78-42b4-94a4-ab8fd660a4bf', 'pg_fields_type', 'postgreSQL数据库字段类型', 'text', 'text', '文本', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('f3d8b299-7b70-4085-95b5-f81a9eac824f', 'pg_fields_type', 'postgreSQL数据库字段类型', 'date', 'date', 'YYYY-MM-DD', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('b54ff40d-a456-4764-8853-6644e6e4d9e8', 'pg_fields_type', 'postgreSQL数据库字段类型', 'time', 'time', 'HH:MM:SS', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('7672c0e7-c575-4333-8d8e-314320059b41', 'pg_fields_type', 'postgreSQL数据库字段类型', 'timestamp', 'timestamp', 'timestamp', '0', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('afab443e-f0f4-4810-86b9-0649c8b1f005', 'ui_type', 'UI控件类型', 'UT_01', '文本输入框', '', '10', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('1379e709-818a-4675-8f52-dd46697d539f', 'ui_type', 'UI控件类型', 'UT_14', '数字输入框', '', '20', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('2f5b94e9-3817-4649-b7e9-b6f529a804ce', 'ui_type', 'UI控件类型', 'UT_02', '时间输入框', '', '30', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('6eecd829-c26a-4d20-af15-6d5fe162e6e3', 'ui_type', 'UI控件类型', 'UT_03', '日期输入框', '', '40', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('c7b0287d-9b3f-4ef2-9f16-4f5be790a775', 'ui_type', 'UI控件类型', 'UT_04', '时间日期输入框', '', '50', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('4b12d1e2-65cf-4bbf-87eb-50bc32d2ccaa', 'ui_type', 'UI控件类型', 'UT_05', '单选框(sql)', '', '60', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('253005b4-bc7d-4326-8a7e-3ed18eb054ec', 'ui_type', 'UI控件类型', 'UT_06', '单选框(json)', '', '70', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('1612535a-b418-4902-8ece-8132185a864e', 'ui_type', 'UI控件类型', 'UT_07', '复选框(sql)', '', '80', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('6299de0a-2821-496f-b197-f4765a55dbfd', 'ui_type', 'UI控件类型', 'UT_08', '复选框(json)', '', '90', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('52eb5091-64eb-4316-be8c-e7347ecff36e', 'ui_type', 'UI控件类型', 'UT_09', '下拉多选框(sql)', '', '100', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('68221361-24ad-49a3-862a-a0e37b2a919d', 'ui_type', 'UI控件类型', 'UT_10', '下拉多选框(json)', '', '110', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('f1e032d0-53af-4b6f-b1c4-3a4492c01524', 'ui_type', 'UI控件类型', 'UT_11', '下拉选择框(sql)', '', '120', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('9b9a97f8-e60d-4134-a86e-e28022aa0d7f', 'ui_type', 'UI控件类型', 'UT_12', '下拉选择框(json)', '', '130', '1');
+INSERT INTO custom_dict(oid, dict_type, dict_type_cn, dict_code, dict_value, dict_value_desc, row_index, active) VALUES ('fb07f70c-5354-43ec-887e-a5da99460e6f', 'ui_type', 'UI控件类型', 'UT_13', '文本域', '', '130', '1');
+
+
+/** 自定义功能配置, 唯一性验证 */
+create table custom_fun_unique_validate(
+	oid varchar(36) not null primary key,
+	function_code varchar(24) not null ,
+	unique_condition varchar(128)  ,
+	unique_field varchar(48) not null ,
+	unique_field_message varchar(64)  ,
+	condition_expression varchar(64)  ,
+	logical_del_field varchar(24)  ,
+	create_user_id varchar(36) not null ,
+	create_user_name varchar(50) not null ,
+	create_datetime timestamp not null ,
+	modify_user_id varchar(36) not null ,
+	modify_user_name varchar(50) not null ,
+	modify_datetime timestamp not null ,
+	active smallint not null
+);
+
+comment on table custom_fun_unique_validate is '自定义功能配置, 唯一性验证';
+comment on column custom_fun_unique_validate.oid is '主键';
+comment on column custom_fun_unique_validate.function_code is '功能编号';
+comment on column custom_fun_unique_validate.unique_condition is '唯一性条件(逗号分隔)';
+comment on column custom_fun_unique_validate.unique_field is '唯一性字段';
+comment on column custom_fun_unique_validate.unique_field_message is '提示信息';
+comment on column custom_fun_unique_validate.condition_expression is '表达式';
+comment on column custom_fun_unique_validate.logical_del_field is '逻辑有效字段(默认为active)';
+
+CREATE TABLE pri_application (
+oid varchar(36)  NOT NULL,
+app_name varchar(50)  NOT NULL,
+description varchar(200) ,
+role_id varchar(36) ,
+app_url varchar(200) ,
+create_user_id varchar(36) ,
+create_user_name varchar(50) ,
+create_datetime timestamp(6),
+modify_user_id varchar(36) ,
+modify_user_name varchar(50) ,
+modify_datetime timestamp(6),
+active int2 DEFAULT 1 NOT NULL,
+CONSTRAINT pri_application_pkey PRIMARY KEY (oid)
+)
+WITH (OIDS=FALSE)
+;
+
+ALTER TABLE pri_application OWNER TO postgres;
+
+COMMENT ON TABLE pri_application IS '应用系统表';
+
+COMMENT ON COLUMN pri_application.oid IS '主键';
+
+COMMENT ON COLUMN pri_application.app_name IS '应用系统名称';
+
+COMMENT ON COLUMN pri_application.description IS '应用系统描述';
+
+COMMENT ON COLUMN pri_application.role_id IS '应用系统管理角色ID';
+
+COMMENT ON COLUMN pri_application.app_url IS '应用系统前缀';
+
+COMMENT ON COLUMN pri_application.create_user_id IS '记录创建人ID';
+
+COMMENT ON COLUMN pri_application.create_user_name IS '记录创建人姓名';
+
+COMMENT ON COLUMN pri_application.create_datetime IS '记录创建时间';
+
+COMMENT ON COLUMN pri_application.modify_user_id IS '最近修改人ID';
+
+COMMENT ON COLUMN pri_application.modify_user_name IS '最近修改人姓名';
+
+COMMENT ON COLUMN pri_application.modify_datetime IS '最近修改时间';
+
+COMMENT ON COLUMN pri_application.active IS '数据有效标识：1有效 0无效';
+
+CREATE TABLE pri_func_privilege (
+oid varchar(36)  NOT NULL,
+parent_id varchar(36) ,
+privilege_name varchar(50)  NOT NULL,
+privilege_code varchar(50)  NOT NULL,
+privilege_type varchar(20)  NOT NULL,
+open_type varchar(20) ,
+url varchar(2000) ,
+description varchar(200) ,
+app_id varchar(36)  NOT NULL,
+hierarchy varchar(200)  NOT NULL,
+hlevel varchar(20)  NOT NULL,
+order_num int2 NOT NULL,
+create_user_id varchar(36) ,
+create_user_name varchar(50) ,
+create_datetime timestamp(6),
+modify_user_id varchar(36) ,
+modify_user_name varchar(50) ,
+modify_datetime timestamp(6),
+active int2 DEFAULT 1 NOT NULL,
+icon varchar(50) ,
+function_type varchar(50) ,
+query_name varchar(200) ,
+CONSTRAINT pri_func_privilege_pkey PRIMARY KEY (oid)
+)
+WITH (OIDS=FALSE)
+;
+
+ALTER TABLE pri_func_privilege OWNER TO postgres;
+
+COMMENT ON TABLE pri_func_privilege IS '功能权限表（包含菜单权限、功能权限、表单权限）';
+
+COMMENT ON COLUMN pri_func_privilege.oid IS '主键';
+
+COMMENT ON COLUMN pri_func_privilege.parent_id IS '父权限id';
+
+COMMENT ON COLUMN pri_func_privilege.privilege_name IS '权限名称';
+
+COMMENT ON COLUMN pri_func_privilege.privilege_code IS '权限编码';
+
+COMMENT ON COLUMN pri_func_privilege.privilege_type IS '权限类型：1菜单 2功能点 3表单 4 表单字段';
+
+COMMENT ON COLUMN pri_func_privilege.open_type IS '菜单的打开方式：1表示tab方式，2表示新页面方式，3表示弹窗';
+
+COMMENT ON COLUMN pri_func_privilege.url IS '权限url';
+
+COMMENT ON COLUMN pri_func_privilege.description IS '权限说明';
+
+COMMENT ON COLUMN pri_func_privilege.app_id IS '应用系统ID';
+
+COMMENT ON COLUMN pri_func_privilege.hierarchy IS '层级编号';
+
+COMMENT ON COLUMN pri_func_privilege.hlevel IS '层级等级';
+
+COMMENT ON COLUMN pri_func_privilege.order_num IS '排序编号';
+
+COMMENT ON COLUMN pri_func_privilege.create_user_id IS '记录创建人ID';
+
+COMMENT ON COLUMN pri_func_privilege.create_user_name IS '记录创建人姓名';
+
+COMMENT ON COLUMN pri_func_privilege.create_datetime IS '记录创建时间';
+
+COMMENT ON COLUMN pri_func_privilege.modify_user_id IS '最近修改人ID';
+
+COMMENT ON COLUMN pri_func_privilege.modify_user_name IS '最近修改人姓名';
+
+COMMENT ON COLUMN pri_func_privilege.modify_datetime IS '最近修改时间';
+
+COMMENT ON COLUMN pri_func_privilege.active IS '数据有效标识：1有效 0无效';
+
+COMMENT ON COLUMN pri_func_privilege.function_type IS '功能点类型';
+
+CREATE TABLE pri_role (
+oid varchar(36)  NOT NULL,
+role_name varchar(50)  NOT NULL,
+role_type varchar(20)  NOT NULL,
+unit_id varchar(36)  NOT NULL,
+description varchar(200) ,
+create_user_id varchar(36) ,
+create_user_name varchar(50) ,
+create_datetime timestamp(6),
+modify_user_id varchar(36) ,
+modify_user_name varchar(50) ,
+modify_datetime timestamp(6),
+active int2 DEFAULT 1 NOT NULL,
+CONSTRAINT pri_role_pkey PRIMARY KEY (oid)
+)
+WITH (OIDS=FALSE)
+;
+
+ALTER TABLE pri_role OWNER TO postgres;
+
+COMMENT ON TABLE pri_role IS '[权限]角色表';
+
+COMMENT ON COLUMN pri_role.oid IS '主键';
+
+COMMENT ON COLUMN pri_role.role_name IS '角色名';
+
+COMMENT ON COLUMN pri_role.role_type IS '角色类型包括私有和保护两种。具体业务规则为：私有角色为角色所属部门私有的角色，其他部门的人员对其不可见，保护类型的角色的可见范围所属部门及其下属部门人员可见。该规则主要用于系统管理的分级管理，上级管理员可以设定保护角色，则下级管理员可以直接应用，但不能对其修改。';
+
+COMMENT ON COLUMN pri_role.unit_id IS '角色所属部门ID';
+
+COMMENT ON COLUMN pri_role.description IS '角色说明';
+
+COMMENT ON COLUMN pri_role.create_user_id IS '记录创建人ID';
+
+COMMENT ON COLUMN pri_role.create_user_name IS '记录创建人姓名';
+
+COMMENT ON COLUMN pri_role.create_datetime IS '记录创建时间';
+
+COMMENT ON COLUMN pri_role.modify_user_id IS '最近修改人ID';
+
+COMMENT ON COLUMN pri_role.modify_user_name IS '最近修改人姓名';
+
+COMMENT ON COLUMN pri_role.modify_datetime IS '最近修改时间';
+
+COMMENT ON COLUMN pri_role.active IS '数据有效标识：1有效 0无效';
+
+CREATE TABLE pri_role_func_privilege_ref (
+oid varchar(36)  NOT NULL,
+role_id varchar(36)  NOT NULL,
+func_privilege_id varchar(36)  NOT NULL,
+create_user_id varchar(36) ,
+create_user_name varchar(50) ,
+create_datetime timestamp(6),
+modify_user_id varchar(36) ,
+modify_user_name varchar(50) ,
+modify_datetime timestamp(6),
+active int2 DEFAULT 1 NOT NULL,
+app_id varchar(36)  NOT NULL,
+CONSTRAINT pri_role_func_privilege_ref_pkey PRIMARY KEY (oid)
+)
+WITH (OIDS=FALSE)
+;
+
+ALTER TABLE pri_role_func_privilege_ref OWNER TO postgres;
+
+COMMENT ON TABLE pri_role_func_privilege_ref IS '角色与权限关联表';
+
+COMMENT ON COLUMN pri_role_func_privilege_ref.oid IS '主键';
+
+COMMENT ON COLUMN pri_role_func_privilege_ref.role_id IS '角色id';
+
+COMMENT ON COLUMN pri_role_func_privilege_ref.func_privilege_id IS '权限id';
+
+COMMENT ON COLUMN pri_role_func_privilege_ref.create_user_id IS '记录创建人ID';
+
+COMMENT ON COLUMN pri_role_func_privilege_ref.create_user_name IS '记录创建人姓名';
+
+COMMENT ON COLUMN pri_role_func_privilege_ref.create_datetime IS '记录创建时间';
+
+COMMENT ON COLUMN pri_role_func_privilege_ref.modify_user_id IS '最近修改人ID';
+
+COMMENT ON COLUMN pri_role_func_privilege_ref.modify_user_name IS '最近修改人姓名';
+
+COMMENT ON COLUMN pri_role_func_privilege_ref.modify_datetime IS '最近修改时间';
+
+COMMENT ON COLUMN pri_role_func_privilege_ref.active IS '数据有效标识：1有效 0无效';
+
+CREATE TABLE pri_unit (
+oid varchar(36)  NOT NULL,
+parent_id varchar(36) ,
+unit_name varchar(50)  NOT NULL,
+unit_code varchar(50)  NOT NULL,
+description varchar(200) ,
+unit_type varchar(20)  NOT NULL,
+address varchar(200) ,
+phone varchar(50) ,
+addata int2,
+ext_field1 varchar(500) ,
+ext_field2 varchar(500) ,
+ext_field3 varchar(500) ,
+ext_field4 varchar(500) ,
+ext_field5 varchar(500) ,
+hierarchy varchar(200)  NOT NULL,
+hlevel varchar(20)  NOT NULL,
+order_num int2 NOT NULL,
+create_user_id varchar(36) ,
+create_user_name varchar(50) ,
+create_datetime timestamp(6),
+modify_user_id varchar(36) ,
+modify_user_name varchar(50) ,
+modify_datetime timestamp(6),
+active int2 DEFAULT 1 NOT NULL,
+CONSTRAINT pri_unit_pkey PRIMARY KEY (oid)
+)
+WITH (OIDS=FALSE)
+;
+
+ALTER TABLE pri_unit OWNER TO postgres;
+
+COMMENT ON TABLE pri_unit IS '组织机构表';
+
+COMMENT ON COLUMN pri_unit.oid IS '主键';
+
+COMMENT ON COLUMN pri_unit.parent_id IS '父组织机构id';
+
+COMMENT ON COLUMN pri_unit.unit_name IS '组织机构名称';
+
+COMMENT ON COLUMN pri_unit.unit_code IS '组织机构编码';
+
+COMMENT ON COLUMN pri_unit.description IS '组织机构说明';
+
+COMMENT ON COLUMN pri_unit.unit_type IS '组织机构类型分两种，部门和机关，划分的依据是组织机构所管理的业务数据范围的不同。部门可以管理本部门及下属部门和机关的业务数据，机关可以管理的业务数据范围与机关所属的部门相同。1代表机关，2代表部门';
+
+COMMENT ON COLUMN pri_unit.address IS '组织机构地址';
+
+COMMENT ON COLUMN pri_unit.phone IS '组织机构联系电话';
+
+COMMENT ON COLUMN pri_unit.addata IS '0表示平台数据，1表示ldap上的数据';
+
+COMMENT ON COLUMN pri_unit.ext_field1 IS '备用字段';
+
+COMMENT ON COLUMN pri_unit.ext_field2 IS '备用字段';
+
+COMMENT ON COLUMN pri_unit.ext_field3 IS '备用字段';
+
+COMMENT ON COLUMN pri_unit.ext_field4 IS '备用字段';
+
+COMMENT ON COLUMN pri_unit.ext_field5 IS '备用字段';
+
+COMMENT ON COLUMN pri_unit.hierarchy IS '层级编号';
+
+COMMENT ON COLUMN pri_unit.hlevel IS '层级等级';
+
+COMMENT ON COLUMN pri_unit.order_num IS '同级排序编号';
+
+COMMENT ON COLUMN pri_unit.create_user_id IS '记录创建人ID';
+
+COMMENT ON COLUMN pri_unit.create_user_name IS '记录创建人姓名';
+
+COMMENT ON COLUMN pri_unit.create_datetime IS '记录创建时间';
+
+COMMENT ON COLUMN pri_unit.modify_user_id IS '最近修改人ID';
+
+COMMENT ON COLUMN pri_unit.modify_user_name IS '最近修改人姓名';
+
+COMMENT ON COLUMN pri_unit.modify_datetime IS '最近修改时间';
+
+COMMENT ON COLUMN pri_unit.active IS '数据有效标识：1有效 0无效';
+
+CREATE TABLE pri_user (
+oid varchar(36)  NOT NULL,
+user_name varchar(50)  NOT NULL,
+login_name varchar(50)  NOT NULL,
+password varchar(100)  NOT NULL,
+password_expired_date timestamp(6),
+validdate timestamp(6),
+address varchar(200) ,
+phone varchar(50) ,
+email varchar(100) ,
+unit_id varchar(36)  NOT NULL,
+user_type varchar(20) ,
+addata int2,
+description varchar(200) ,
+ext_field1 varchar(500) ,
+ext_field2 varchar(500) ,
+ext_field3 varchar(500) ,
+ext_field4 varchar(500) ,
+ext_field5 varchar(500) ,
+find_pass_validcode varchar(50) ,
+find_pass_validtime timestamp(6),
+create_user_id varchar(36) ,
+create_user_name varchar(50) ,
+create_datetime timestamp(6),
+modify_user_id varchar(36) ,
+modify_user_name varchar(50) ,
+modify_datetime timestamp(6),
+active int2 DEFAULT 1 NOT NULL,
+CONSTRAINT pri_user_pkey PRIMARY KEY (oid)
+)
+WITH (OIDS=FALSE)
+;
+
+ALTER TABLE pri_user OWNER TO postgres;
+
+COMMENT ON TABLE pri_user IS '用户表';
+
+COMMENT ON COLUMN pri_user.oid IS '主键';
+
+COMMENT ON COLUMN pri_user.user_name IS '用户姓名';
+
+COMMENT ON COLUMN pri_user.login_name IS '登陆名';
+
+COMMENT ON COLUMN pri_user.password IS '登陆密码  MD5码';
+
+COMMENT ON COLUMN pri_user.password_expired_date IS '密码到期时间';
+
+COMMENT ON COLUMN pri_user.validdate IS '有效日期';
+
+COMMENT ON COLUMN pri_user.address IS '地址';
+
+COMMENT ON COLUMN pri_user.phone IS '电话';
+
+COMMENT ON COLUMN pri_user.email IS '电子邮件地址';
+
+COMMENT ON COLUMN pri_user.unit_id IS '所属部门ID';
+
+COMMENT ON COLUMN pri_user.user_type IS '用户类型';
+
+COMMENT ON COLUMN pri_user.addata IS '0表示平台数据，1表示ldap上的数据';
+
+COMMENT ON COLUMN pri_user.description IS '说明';
+
+COMMENT ON COLUMN pri_user.ext_field1 IS '备用字段';
+
+COMMENT ON COLUMN pri_user.ext_field2 IS '备用字段';
+
+COMMENT ON COLUMN pri_user.ext_field3 IS '备用字段';
+
+COMMENT ON COLUMN pri_user.ext_field4 IS '备用字段';
+
+COMMENT ON COLUMN pri_user.ext_field5 IS '备用字段';
+
+COMMENT ON COLUMN pri_user.find_pass_validcode IS '找回密码验证码，暂时无用';
+
+COMMENT ON COLUMN pri_user.find_pass_validtime IS '找回密码有效时间，暂时无用';
+
+COMMENT ON COLUMN pri_user.create_user_id IS '记录创建人ID';
+
+COMMENT ON COLUMN pri_user.create_user_name IS '记录创建人姓名';
+
+COMMENT ON COLUMN pri_user.create_datetime IS '记录创建时间';
+
+COMMENT ON COLUMN pri_user.modify_user_id IS '最近修改人ID';
+
+COMMENT ON COLUMN pri_user.modify_user_name IS '最近修改人姓名';
+
+COMMENT ON COLUMN pri_user.modify_datetime IS '最近修改时间';
+
+COMMENT ON COLUMN pri_user.active IS '数据有效标识：1有效 0无效';
+
+CREATE TABLE pri_user_role_ref (
+oid varchar(36)  NOT NULL,
+user_id varchar(36)  NOT NULL,
+role_id varchar(36)  NOT NULL,
+create_user_id varchar(36) ,
+create_user_name varchar(50) ,
+create_datetime timestamp(6),
+modify_user_id varchar(36) ,
+modify_user_name varchar(50) ,
+modify_datetime timestamp(6),
+active int2 DEFAULT 1 NOT NULL,
+CONSTRAINT pri_user_role_ref_pkey PRIMARY KEY (oid)
+)
+WITH (OIDS=FALSE)
+;
+
+ALTER TABLE pri_user_role_ref OWNER TO postgres;
+
+COMMENT ON TABLE pri_user_role_ref IS '用户与角色对应关系表';
+
+COMMENT ON COLUMN pri_user_role_ref.oid IS '主键';
+
+COMMENT ON COLUMN pri_user_role_ref.user_id IS '用户id';
+
+COMMENT ON COLUMN pri_user_role_ref.role_id IS '角色id';
+
+COMMENT ON COLUMN pri_user_role_ref.create_user_id IS '记录创建人ID';
+
+COMMENT ON COLUMN pri_user_role_ref.create_user_name IS '记录创建人姓名';
+
+COMMENT ON COLUMN pri_user_role_ref.create_datetime IS '记录创建时间';
+
+COMMENT ON COLUMN pri_user_role_ref.modify_user_id IS '最近修改人ID';
+
+COMMENT ON COLUMN pri_user_role_ref.modify_user_name IS '最近修改人姓名';
+
+COMMENT ON COLUMN pri_user_role_ref.modify_datetime IS '最近修改时间';
+
+COMMENT ON COLUMN pri_user_role_ref.active IS '数据有效标识：1有效 0无效';
+
+CREATE TABLE sys_domain (
+oid varchar(36)  NOT NULL,
+domain_name varchar(50)  NOT NULL,
+code_id varchar(50) ,
+parent_code_id varchar(36) ,
+code_name varchar(50) ,
+ordinal int2,
+description varchar ,
+create_user_id varchar(36) ,
+create_user_name varchar(50) ,
+create_datetime timestamp(6),
+modify_user_id varchar(36) ,
+modify_user_name varchar(50) ,
+modify_datetime timestamp(6),
+active int2 NOT NULL,
+CONSTRAINT sys_domain_pkey PRIMARY KEY (oid)
+)
+WITH (OIDS=FALSE)
+;
+
+ALTER TABLE sys_domain OWNER TO postgres;
+
+COMMENT ON TABLE sys_domain IS '域值表';
+
+COMMENT ON COLUMN sys_domain.oid IS '主键';
+
+COMMENT ON COLUMN sys_domain.domain_name IS '域名称';
+
+COMMENT ON COLUMN sys_domain.code_id IS '域值Id';
+
+COMMENT ON COLUMN sys_domain.parent_code_id IS '父节点Id';
+
+COMMENT ON COLUMN sys_domain.code_name IS '域值名称';
+
+COMMENT ON COLUMN sys_domain.ordinal IS '序号';
+
+COMMENT ON COLUMN sys_domain.description IS '描述';
+
+CREATE INDEX index_sys_domain_domain_name_5 ON sys_domain USING btree (domain_name);
+
+CREATE TABLE sys_excel_template (
+oid varchar(36)  NOT NULL,
+excel_template_name varchar(50) ,
+excel_template_code varchar(50)  NOT NULL,
+excel_template_type varchar(36) ,
+remark varchar(200) ,
+create_user_id varchar(36) ,
+create_user_name varchar(50) ,
+create_datetime timestamp(6),
+modify_user_id varchar(36) ,
+modify_user_name varchar(50) ,
+modify_datetime timestamp(6),
+active int2 NOT NULL,
+excel_template_path varchar(255) ,
+CONSTRAINT sys_excel_template_pkey PRIMARY KEY (oid)
+)
+WITH (OIDS=FALSE)
+;
+
+ALTER TABLE sys_excel_template OWNER TO postgres;
+
+COMMENT ON TABLE sys_excel_template IS 'excel导入导出模板管理表';
+
+COMMENT ON COLUMN sys_excel_template.oid IS '主键';
+
+COMMENT ON COLUMN sys_excel_template.excel_template_name IS '管线名称';
+
+COMMENT ON COLUMN sys_excel_template.excel_template_code IS '管线编号';
+
+COMMENT ON COLUMN sys_excel_template.excel_template_type IS '项目id';
+
+COMMENT ON COLUMN sys_excel_template.remark IS '备注';
+
+COMMENT ON COLUMN sys_excel_template.excel_template_path IS '模板存储路径';
+
+CREATE INDEX index_sys_excel_template_excel_template_code_6 ON sys_excel_template USING btree (excel_template_code);
+
+CREATE INDEX index_sys_excel_template_excel_template_name_5 ON sys_excel_template USING btree (excel_template_name);
+
+CREATE TABLE sys_login_log (
+oid varchar(36)  NOT NULL,
+user_id varchar(36)  NOT NULL,
+user_name varchar(50)  NOT NULL,
+login_name varchar(50)  NOT NULL,
+unit_id varchar(36)  NOT NULL,
+unit_name varchar(50)  NOT NULL,
+unit_name_fullpath varchar(200) ,
+token varchar(100)  NOT NULL,
+app_id varchar(36) ,
+app_name varchar(50) ,
+login_datetime timestamp(6) NOT NULL,
+exit_datetime timestamp(6),
+server_ip varchar(25) ,
+client_ip varchar(25) ,
+os_type varchar(20) ,
+browser_type varchar(20) ,
+browser_ver varchar(20) ,
+screen_dpi varchar(20) ,
+CONSTRAINT sys_login_log_pkey PRIMARY KEY (oid)
+)
+WITH (OIDS=FALSE)
+;
+
+ALTER TABLE sys_login_log OWNER TO postgres;
+
+COMMENT ON TABLE sys_login_log IS '用户登录日志信息表';
+
+COMMENT ON COLUMN sys_login_log.oid IS '主键';
+
+COMMENT ON COLUMN sys_login_log.user_id IS '用户ID';
+
+COMMENT ON COLUMN sys_login_log.user_name IS '用户姓名';
+
+COMMENT ON COLUMN sys_login_log.login_name IS '用户登录名';
+
+COMMENT ON COLUMN sys_login_log.unit_id IS '用户部门ID';
+
+COMMENT ON COLUMN sys_login_log.unit_name IS '用户部门名称';
+
+COMMENT ON COLUMN sys_login_log.unit_name_fullpath IS '用户部门全路径';
+
+COMMENT ON COLUMN sys_login_log.token IS 'token值';
+
+COMMENT ON COLUMN sys_login_log.app_id IS '登录的应用ID';
+
+COMMENT ON COLUMN sys_login_log.app_name IS '登录的应用名称';
+
+COMMENT ON COLUMN sys_login_log.login_datetime IS '登录时间';
+
+COMMENT ON COLUMN sys_login_log.exit_datetime IS '退出时间';
+
+COMMENT ON COLUMN sys_login_log.server_ip IS '服务IP';
+
+COMMENT ON COLUMN sys_login_log.client_ip IS '客户端IP';
+
+COMMENT ON COLUMN sys_login_log.os_type IS '操作系统类型';
+
+COMMENT ON COLUMN sys_login_log.browser_type IS '浏览器类型';
+
+COMMENT ON COLUMN sys_login_log.browser_ver IS '浏览器版本';
+
+COMMENT ON COLUMN sys_login_log.screen_dpi IS '屏幕分辨率';
+
+
+CREATE INDEX index_sys_login_log_oid_140 ON sys_login_log USING btree (oid);
+
+CREATE TABLE log_business (
+oid varchar(36)  NOT NULL,
+business_id varchar(36)  NOT NULL,
+opt_type varchar(50)  NOT NULL,
+detail text ,
+remark varchar(2000) ,
+create_user_id varchar(36)  NOT NULL,
+create_user_name varchar(50)  NOT NULL,
+create_time timestamp(6),
+CONSTRAINT log_business_pkey PRIMARY KEY (oid)
+)
+WITH (OIDS=FALSE)
+;
+
+ALTER TABLE log_business OWNER TO postgres;
+
+COMMENT ON TABLE log_business IS '业务日志记录表';
+
+COMMENT ON COLUMN log_business.oid IS '主键';
+
+COMMENT ON COLUMN log_business.business_id IS '业务数据ID';
+
+COMMENT ON COLUMN log_business.opt_type IS '操作类型';
+
+COMMENT ON COLUMN log_business.detail IS '详情。详情。若是更新，必须是json数组：[{dataItem:自主外包费,newValue:1000.0,oldValue:50000.0}]），其他类型则无限制';
+
+COMMENT ON COLUMN log_business.remark IS '备注';
+
+CREATE TABLE log_operate (
+oid varchar(36)  NOT NULL,
+business_id varchar(36) ,
+business_name varchar(50) ,
+table_name varchar(200) ,
+opt_type varchar(50)  NOT NULL,
+detail varchar(2000) ,
+remark varchar(2000) ,
+create_user_id varchar(36)  NOT NULL,
+create_user_name varchar(50)  NOT NULL,
+create_time timestamp(6),
+app_id varchar(36) ,
+app_name varchar(50) ,
+CONSTRAINT log_operate_pkey PRIMARY KEY (oid)
+)
+WITH (OIDS=FALSE)
+;
+
+ALTER TABLE log_operate OWNER TO postgres;
+
+COMMENT ON TABLE log_operate IS '操作日志记录表';
+
+COMMENT ON COLUMN log_operate.oid IS '主键';
+
+COMMENT ON COLUMN log_operate.business_id IS '业务数据ID';
+
+COMMENT ON COLUMN log_operate.business_name IS '业务名称';
+
+COMMENT ON COLUMN log_operate.table_name IS '业务表名';
+
+COMMENT ON COLUMN log_operate.opt_type IS '操作类型';
+
+COMMENT ON COLUMN log_operate.detail IS '详情';
+
+COMMENT ON COLUMN log_operate.remark IS '备注';
+
+COMMENT ON COLUMN log_operate.create_user_id IS '操作人ID';
+
+COMMENT ON COLUMN log_operate.create_user_name IS '操作人姓名';
+
+COMMENT ON COLUMN log_operate.create_time IS '操作时间';
+
+COMMENT ON COLUMN log_operate.app_id IS '应用Id';
+
+COMMENT ON COLUMN log_operate.app_name IS '应用名称';
+/*******框架相关数据库end********/
+
+
+
+/**
+ * 名称：		空间对象表模块postgresql数据库初始化脚本
+ * 创建人：	张锡梓
+ * 创建时间：	2018-05-03 09:06	
+ * 更新时间:	2018-05-03 19:01 修改记录表中的flag字段值
+ * */
+
+/**域值表**/
+create table sys_spatial_object( 
+	oid varchar(36) not null primary key,
+	wkt  TEXT ,
+	create_user_id varchar(36)  ,
+	create_user_name varchar(50)  ,
+	create_datetime timestamp(6)  ,
+	modify_user_id varchar(36)  ,
+	modify_user_name varchar(50)  ,
+	modify_datetime timestamp(6)  ,
+	active smallint not null 
+);
+comment on table  sys_spatial_object is '空间对象表';	
+comment on column sys_spatial_object.oid is '主键';	
+comment on column sys_spatial_object.wkt is 'wkt';	
+comment on column sys_spatial_object.create_user_id is '创建人id';	
+comment on column sys_spatial_object.create_user_name is '创建人姓名';	
+comment on column sys_spatial_object.create_datetime is '创建时间';	
+comment on column sys_spatial_object.modify_user_id is '修改人id';	
+comment on column sys_spatial_object.modify_user_name is '修改人姓名';	
+comment on column sys_spatial_object.modify_datetime is '修改时间';	
+comment on column sys_spatial_object.active is '是否有效';

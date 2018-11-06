@@ -21,6 +21,7 @@ import java.util.*;
  *
  * @author xiefayang
  * 2018/10/22 10:42
+ * @
  */
 @Repository
 public class DataVisualizationDao {
@@ -145,19 +146,8 @@ public class DataVisualizationDao {
         return commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectIds", projectIds), SteelPipeUsageBo.class);
     }
 
-    /**
 
-p1(10)[cut=1, child=0]
 
-p1-1(3)[cut=0, child=1]    p1-2(7)[cut=1, child=1]
-
-p1-1(3)[cut=0, child=1]    p1-2-1(2)[cut=0, child=1],   p1-2-2(5)[cut=0, child=1]
-
-----------------------------------------------------------------------------------------
-
-p1-1(3)[cut=0, child=1]    p1-2-1(2)[cut=0, child=1],   p1-2-2-1(1)[cut=0, child=1],  p1-2-2-1(4)[cut=0, child=1]
-
-     */
     public StatsPipeCuttingBo statsPipeCutting(List<String> projectIds) {
         String sql = "" +
                 " select sum(case when (is_cut=1) then 1 else 0 end ) as cut_count,\n" +
@@ -197,6 +187,19 @@ p1-1(3)[cut=0, child=1]    p1-2-1(2)[cut=0, child=1],   p1-2-2-1(1)[cut=0, child
         return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectIds", projectIds,
                 "weldUnitTypeCode", weldUnitTypeCode, "welderTypeCode", welderTypeCode),
                 StatsResultBo.class);
+    }
+
+
+    public List<Map<String, Integer>> countConstructorAndSupervisor(Collection<String> projectIds) {
+        String sql = "" +
+                " select coalesce(sum(case when hierarchy like 'Unit.0001.0005%' then 1 else 0 end), 0) as constructor,\n" +
+                "   coalesce(sum(case when hierarchy like 'Unit.0001.0004%' then 1 else 0 end), 0) as supervisor from pri_unit unit\n" +
+                " left join pri_user u on unit.oid = u.unit_id\n" +
+                " where unit.active = 1 and u.active=1 and unit.oid in (\n" +
+                "     select distinct unit_oid from daq_implement_scope_ref where active = 1 and project_oid in(:projectIds)\n" +
+                " ) and (hierarchy like 'Unit.0001.0005%' or hierarchy like 'Unit.0001.0004%')";
+
+        return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectIds", projectIds), Map.class);
     }
 
 

@@ -198,7 +198,7 @@ window.app = new Vue({
 			});
 		},
 		_goPage:function(){
-			location.href = './onepage.html';	
+			location.href = './onepage.html';
 		},
 		_createTabsArr: function (aIndex, aMenu) {
 			var that = this;
@@ -318,7 +318,7 @@ window.app = new Vue({
 				layersVisible: {
 					daq_median_stake: true,
 				},
-				appConfigPath: './pages/map/config.json',
+				appConfig: './pages/map/config.json',
 				onMapLoaded: function (e) {
 					fn && fn();
 				},
@@ -367,9 +367,9 @@ window.app = new Vue({
 			businessId: sBizId,}, function (data) {
 			 var arr = data.rows;
 			 if(data.rows.length > 0){
-				 that.userImg=jasTools.base.rootPath+'/attachment/app/getImageBySize.do?oid='+data.rows[0].oid+"&token="+localStorage.getItem("token"); 
-			 }  
-			
+				 that.userImg=jasTools.base.rootPath+'/attachment/app/getImageBySize.do?oid='+data.rows[0].oid+"&token="+localStorage.getItem("token");
+			 }
+
 		});
 	},
 },
