@@ -95,7 +95,7 @@
         "visible": false,
         "type": "Tile",
         "source": "TileArcGISRest",
-        "url": "http://192.168.100.51:6080/arcgis/rest/services/%E8%A1%8C%E6%94%BF%E5%8C%BA%E5%88%92/MapServer"
+        "url": "http://106.37.179.154:10028/arcgis/rest/services/%E8%A1%8C%E6%94%BF%E5%8C%BA%E5%88%92/MapServer"
       }, {
         "id": "china_img",
         "index": 2,
@@ -104,7 +104,7 @@
         "icon": "stylepath:images/basemap_img.png",
         "type": "Tile",
         "source": "WMTS",
-        "url": "http://192.168.40.228:8080/geoserver/gwc/service/wmts",
+        "url": "http://106.37.179.154:10037/geoserver/gwc/service/wmts",
         "style": "",
         "format": "image/png",
         "layer": "jasgroup:china_img_bing_l12",
@@ -122,7 +122,7 @@
         "icon": "stylepath:images/basemap_img.png",
         "type": "VectorTile",
         "source": "VectorTile",
-        "url": "http://192.168.40.228:8080/geoserver/gwc/service/wmts",
+        "url": "http://106.37.179.154:10037/geoserver/gwc/service/wmts",
         "layer": "jasgroup:china_canton",
         "tileMatrixSet": "CHINA_CGCS_SM"
       }]
@@ -561,7 +561,7 @@
   },{
     "id":"overViewMap","label":"鹰眼图","class":"OverViewMap","icon":"stylepath:images/queryByPolygon.png","enable":true,
     "options":{
-      "url":"http://192.168.100.51:6080/arcgis/rest/services/%E8%A1%8C%E6%94%BF%E5%8C%BA%E5%88%92/MapServer"
+      "url":"http://106.37.179.154:10028/arcgis/rest/services/%E8%A1%8C%E6%94%BF%E5%8C%BA%E5%88%92/MapServer"
     }
   },{
     "id":"mapPrint","label":"地图打印","class":"MapPrint","icon":"stylepath:images/queryByPolygon.png","enable":false
