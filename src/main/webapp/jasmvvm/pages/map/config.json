@@ -83,7 +83,7 @@
         "visible": false,
         "type": "Tile",
         "source": "TileWMS",
-        "url": "http://192.168.40.228:8080/geoserver/jasgroup/wms",
+        "url": "http://geoserver.zyax.cn/geoserver/jasgroup/wms",
         "params": {
           "LAYERS": "china_canton"
         }
