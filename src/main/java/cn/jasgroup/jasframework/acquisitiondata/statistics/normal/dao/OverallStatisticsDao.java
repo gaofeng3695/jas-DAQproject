@@ -92,31 +92,30 @@ public class OverallStatisticsDao {
     }
 
 
-    public StatsResultBo statsPipeLengthByType(String statsType, List<String> projectIds, List<String> straightSteelPipes, List<String> hotBends, List<String> coldBends) {
+    public StatsResultBo statsPipeLengthByType(String statsType, List<String> projectIds, List<String> straightSteelPipeIds, List<String> hotBendIds, List<String> coldBendIds) {
 
         Map<String, Object> variables = Maps.newHashMap();
         variables.put("projectIds", projectIds);
         StringBuilder sql = new StringBuilder();
-        boolean steelPipeEmpty = CollectionUtils.isEmpty(straightSteelPipes);
-        boolean hotBendEmpty = CollectionUtils.isEmpty(hotBends);
-        boolean coldBendEmpty = CollectionUtils.isEmpty(coldBends);
-
+        boolean steelPipeEmpty = CollectionUtils.isEmpty(straightSteelPipeIds);
+        boolean hotBendEmpty = CollectionUtils.isEmpty(hotBendIds);
+        boolean coldBendEmpty = CollectionUtils.isEmpty(coldBendIds);
 
         if (!steelPipeEmpty) {
-            sql.append(" select sum(pipe_length) as length from daq_material_pipe where active = 1 and project_oid in (:projectIds) and oid in (:straightSteelPipes) ");
-            variables.put("straightSteelPipes", straightSteelPipes);
+            sql.append(" select COALESCE(sum(pipe_length), 0) as length from daq_material_pipe where active = 1 and project_oid in (:projectIds) and oid in (:straightSteelPipeIds) ");
+            variables.put("straightSteelPipeIds", straightSteelPipeIds);
         }
 
         if (!hotBendEmpty) {
             sql.append(steelPipeEmpty ? "" : " union all ");
-            sql.append(" select sum(pipe_length) as length from daq_material_hot_bends where active = 1 and project_oid in (:projectIds) and oid in (:hotBends) ");
-            variables.put("hotBends", hotBends);
+            sql.append(" select COALESCE(sum(pipe_length), 0) as length from daq_material_hot_bends where active = 1 and project_oid in (:projectIds) and oid in (:hotBendIds) ");
+            variables.put("hotBendIds", hotBendIds);
         }
 
         if (!coldBendEmpty) {
             sql.append((!steelPipeEmpty||!hotBendEmpty) ? " union all " : "");
-            sql.append("  select sum(pipe_length) as length from daq_material_pipe_cold_bending where active = 1 and project_oid in (:projectIds) and oid in (:coldBends) ");
-            variables.put("coldBends", coldBends);
+            sql.append(" select COALESCE(sum(pipe_length), 0) as length from daq_material_pipe_cold_bending where active = 1 and project_oid in (:projectIds) and oid in (:coldBendIds) ");
+            variables.put("coldBendIds", coldBendIds);
         }
 
         if (StringUtils.isEmpty(sql.toString())) {
@@ -185,7 +184,6 @@ public class OverallStatisticsDao {
         String sql = " select oid as stats_type, coalesce(pipe_length, 0) as stats_result from daq_material_pipe_cold_bending where active = 1 and oid in (:idList) ";
         return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("idList", idList), StatsResultBo.class);
     }
-
 
 
     /**
@@ -287,7 +285,8 @@ public class OverallStatisticsDao {
 
     public List<DataEntryAuditBo> dataEntryAudit(List<String> projectIds) {
 
-        String sqlFormat = "select count(*) as total, " +
+        String sqlFormat = "" +
+                " select count(*) as total, " +
                 " sum(case when (approve_status=1 or approve_status=-1) then 1 else 0 end) as need_audit, " +
                 " sum(case when (approve_status=2) then 1 else 0 end) as audited" +
                 " from %s where active = 1 ";
@@ -309,7 +308,8 @@ public class OverallStatisticsDao {
 
 
     public List<Map<String, Integer>> statsDetectionRayPassCount(List<String> projectIds) {
-        String sql = "select count(*) as count, coalesce(sum(case when (detection_type='detection_type_code_001' and evaluation_result=1) then 1 else 0 end), 0) as pass_count " +
+        String sql = "" +
+                " select count(*) as count, coalesce(sum(case when (detection_type='detection_type_code_001' and evaluation_result=1) then 1 else 0 end), 0) as pass_count " +
                 " from daq_detection_ray where active = 1 and approve_status = 2 and project_oid in (:projectIds) ";
         return this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectIds", projectIds));
     }
