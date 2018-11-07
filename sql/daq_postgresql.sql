@@ -1357,6 +1357,7 @@ create table daq_material_valve(
 	guarantee_period smallint  ,
 	contract_number varchar(60)  ,
 	is_use smallint  default 0 ,
+	construct_unit varchar(36)  ,
 	remarks varchar(200)  ,
 	create_user_id varchar(36)  ,
 	create_user_name varchar(50)  ,
@@ -1391,6 +1392,7 @@ comment on column daq_material_valve.manufacturer is '生产厂家';
 comment on column daq_material_valve.manufacture_date is '出厂时间';
 comment on column daq_material_valve.guarantee_period is '质保期(月)';
 comment on column daq_material_valve.contract_number is '合同号';
+comment on column daq_material_valve.construct_unit is '施工单位';
 comment on column daq_material_valve.is_use is '是否使用';
 comment on column daq_material_valve.remarks is '备注';
 comment on column daq_material_valve.create_user_id is '创建人id';
