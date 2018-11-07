@@ -39,7 +39,7 @@ public class DaqAppendagesHandHoleQuery extends BaseJavaQuery {
 	private String constructUnit;
 	
 	@Override
-	public String getSql() {
+	public String getQuerySql() {
 		String sql =  "select t.*,"
 				+ " d1.code_name as handHoleNameCodeName,"
 				+ " d2.code_name as handHoleTypeName,"
