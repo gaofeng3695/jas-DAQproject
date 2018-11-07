@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import cn.jasgroup.jasframework.dataaccess.base.BaseJdbcDao;
 import cn.jasgroup.jasframework.dataaccess3.core.BaseJdbcTemplate;
+import cn.jasgroup.jasframework.utils.StringUtil;
 
 @Repository
 public class DaqPrivilegeDao extends BaseJdbcDao{
@@ -201,26 +202,25 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getMedianStakeList(String pipeSegmentOrCrossOid){
-//		String sql ="select t.oid as key,t.median_stake_code as value,vv.oid as pipe_segment_or_cross_oid,vv.start_median_stake_code,vv.end_median_stake_code from ("
-//				+ "select v.*,n.median_stake_code as start_median_stake_code,m.median_stake_code as end_median_stake_code "
-//				+ "from v_daq_pipe_segment_cross v "
-//				+ "left join (select oid,median_stake_code from daq_median_stake where active=1) n on n.oid=v.start_stake_oid "
-//				+ "left join (select oid,median_stake_code from daq_median_stake where active=1) m on m.oid=v.end_stake_oid) vv "
-//				+ "left join daq_median_stake t on t.median_stake_code>=vv.start_median_stake_code and t.median_stake_code<=vv.end_median_stake_code "
-//				+ "where vv.active=1";
-//				if(StringUtil.isNotBlank(pipeSegmentOrCrossOid)){
-//					sql +=" and vv.oid ='"+pipeSegmentOrCrossOid+"'";
-//				}
-//				sql += " order by t.create_datetime asc";
-		String sql = "select st.oid as key,st.median_stake_code as value,vt.start_stake_code,vt.end_stake_code "
-				+ "from daq_median_stake st "
-				+ "inner join ( "
-					+ "select t.median_stake_code as start_stake_code,tt.median_stake_code as end_stake_code,t.pipeline_oid "
-					+ "from v_daq_pipe_segment_cross v "
-					+ "left join (select oid,pipeline_oid,median_stake_code,mileage from daq_median_stake where active=1) t on t.oid=v.start_stake_oid "
-					+ "left join(select oid,median_stake_code,mileage from daq_median_stake where active=1) tt on tt.oid=v.end_stake_oid "
-					+ "where v.oid='"+pipeSegmentOrCrossOid+"') vt "
-					+ "on st.pipeline_oid=vt.pipeline_oid where st.active=1 order by st.mileage";
+		String sql ="select t.oid as key,t.median_stake_code as value,vv.oid as pipe_segment_or_cross_oid ,vv.start_median_stake_code,vv.end_median_stake_code from ("
+				+ "select v.*,n.mileage as start_median_stake_mileage,m.mileage as end_median_stake_mileage,n.median_stake_code as start_median_stake_code,m.median_stake_code as end_median_stake_code "
+				+ "from v_daq_pipe_segment_cross v "
+				+ "left join (select oid,mileage,median_stake_code from daq_median_stake where active=1) n on n.oid=v.start_stake_oid "
+				+ "	left join (select oid,mileage,median_stake_code from daq_median_stake where active=1) m on m.oid=v.end_stake_oid)vv "
+				+ "left join daq_median_stake t on t.mileage>=vv.start_median_stake_mileage and t.mileage<=vv.end_median_stake_mileage ";
+				if(StringUtil.hasText(pipeSegmentOrCrossOid)){
+					sql +=" where vv.oid ='"+pipeSegmentOrCrossOid+"'";
+				}
+				sql += " order by t.project_oid,t.pipeline_oid,t.mileage asc";
+//		sql = "select st.oid as key,st.median_stake_code as value,vt.start_stake_code,vt.end_stake_code "
+//				+ "from daq_median_stake st "
+//				+ "inner join ( "
+//					+ "select t.median_stake_code as start_stake_code,tt.median_stake_code as end_stake_code,t.pipeline_oid "
+//					+ "from v_daq_pipe_segment_cross v "
+//					+ "left join (select oid,pipeline_oid,median_stake_code,mileage from daq_median_stake where active=1) t on t.oid=v.start_stake_oid "
+//					+ "left join(select oid,median_stake_code,mileage from daq_median_stake where active=1) tt on tt.oid=v.end_stake_oid "
+//					+ "where v.oid='"+pipeSegmentOrCrossOid+"') vt "
+//					+ "on st.pipeline_oid=vt.pipeline_oid where st.active=1 order by st.mileage";
 		return this.queryForList(sql, new Object[]{});
 	}
 	
