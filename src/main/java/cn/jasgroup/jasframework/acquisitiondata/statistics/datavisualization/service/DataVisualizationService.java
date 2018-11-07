@@ -173,13 +173,18 @@ public class DataVisualizationService {
 
 
     public List<PersonFillBo> statsPersonFill(List<String> projectIds, Integer topNum) {
+
+        List<PersonFillBo> resultList = Lists.newArrayList();
         List<StatsResultBo> statsResultBos = this.dataVisualizationDao.countPersonFillTopNum(projectIds, topNum);
         List<String> userIdCollect = statsResultBos.stream().map(StatsResultBo::getStatsType).collect(Collectors.toList());
 
+        if (CollectionUtils.isEmpty(userIdCollect)) {
+            return resultList;
+        }
         List<PersonFillBo> userAndUnitMapList = this.dataVisualizationDao.queryUserAndUnit(userIdCollect);
         Map<String, PersonFillBo> userIdToName = userAndUnitMapList.stream().collect(Collectors.toMap(PersonFillBo::getUserId, bo -> bo, (a, b) -> b));
 
-        List<PersonFillBo> resultList = Lists.newArrayList();
+
         for (int i = 0; i < statsResultBos.size(); i++) {
             StatsResultBo bo = statsResultBos.get(i);
             PersonFillBo personFillBo = new PersonFillBo();
