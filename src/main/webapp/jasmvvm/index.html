@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="renderer" content="webkit">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>中盈安信研发平台</title>
+	<title>施工数据采集</title>
 
 	<!-- 老框架的样式依赖 -->
 	<link rel="stylesheet" href="../jasframework/common/css/jasframework-layout.css" />
@@ -30,7 +30,7 @@
 	<div id="app" v-cloak>
 		<el-container class="outerwrapper">
 
-			<el-header height="80px" class="headerwrapper">
+			<el-header class="headerwrapper">
 				<!-- header 开始 -->
 				<div class="header">
 					<div class="logo item">
@@ -39,29 +39,45 @@
 						<div class="china">施工数据采集</div>
 						<div class="english">CONSTRUCTION DATA COLLECTION</div>
 					</div>
-
-					<div class="user-info">
-						<!-- <div style="height:40px;">
-							<i class="fa fa-arrows-alt" aria-hidden="true"></i>
-							<i class="fa fa-unlock-alt" aria-hidden="true"></i>
-							<i style="font-size: 18px;" class="fa fa-sign-out" aria-hidden="true"></i>
-
-						</div>
-						<div style="height:40px;">
-							<i style="font-size: 18px;" class="fa fa-user-circle-o" aria-hidden="true"></i>
-							<span>{{username}}</span>
-						</div> -->
-						<el-dropdown class="dropdown-wrapper" trigger="click" @command="handleCommand">
-							<span class="el-dropdown-link">
-								<img class="user-logo" src="./src/images/enterlogo.png"> {{username}}
+					<ul class="user-info">
+						<li class="items quit">
+							<a href="#" @click="_loginOut" style="display:block;padding:0px 10px">
+								<i class="fa fa-sign-out"></i> 退出
+							</a>
+						</li>
+						<li class="border"></li>
+						<li class="items fullscreen">
+							<a href="#" @click="_goFullscreen" style="display:block;padding:0px 10px">
+								<i class="fa fa-arrows-alt"></i> 全屏
+							</a>
+						</li>
+						<li class="border"></li>
+							<li class="items fullscreen">
+							<a href="#" @click="_goPage" style="display:block;padding:0px 10px">
+								<i class="fa fa-bar-chart"></i> 可视化
+							</a>
+						</li>
+						<li class="border"></li>
+						<li class="items">
+							<a href="#" style="display:block">
+								<el-dropdown class="dropdown-wrapper" trigger="click" @command="handleCommand">
+									<span class="el-dropdown-link">
+								<img class="user-logo" :src="userImg">
+								<div class="userInfo">
+	                                <div class="username">{{username}}</div>
+									<div class="userunit">{{userunit}}</div>
+								</div>
 							</span>
-							<el-dropdown-menu slot="dropdown">
-								<el-dropdown-item command="fullscreen">切换全屏</el-dropdown-item>
-								<el-dropdown-item command="resetPassword">修改密码</el-dropdown-item>
-								<el-dropdown-item command="loginout">退出登录</el-dropdown-item>
-							</el-dropdown-menu>
-						</el-dropdown>
-					</div>
+									<el-dropdown-menu slot="dropdown">
+										<!--<el-dropdown-item command="fullscreen">切换全屏</el-dropdown-item>-->
+										<el-dropdown-item command="resetPassword">修改密码</el-dropdown-item>
+										<!--<el-dropdown-item command="loginout">退出登录</el-dropdown-item>-->
+									</el-dropdown-menu>
+								</el-dropdown>
+							</a>
+						</li>
+
+					</ul>
 				</div>
 				<!-- header 结束 -->
 
@@ -70,7 +86,7 @@
 			<el-container style="height: 0%;">
 				<loading-bar :on-error-done="errorDone" :on-progress-done="progressDone" :progress="progress" :direction="direction" :error="error">
 				</loading-bar>
-				<el-aside style="background-color: #fff;width:auto;" class="jas-flex-box is-vertical menuwrapper">
+				<el-aside id="aside" style="background-color: #fff;width:auto;" class="jas-flex-box is-vertical menuwrapper">
 					<!-- sider 结束 -->
 					<div class="is-grown menusubwrap" :style="menuStyle" ref="menubar" v-bar>
 						<div>
@@ -80,14 +96,14 @@
 								<template v-for="item in items">
 									<el-submenu v-if="item.subs" :index="item.index">
 										<template slot="title">
-											<i :class=" 'fa fa-folder' || item.icon"></i>
+											<i :class="item.icon||'fa fa-folder' "></i>
 											<span slot="title">{{ item.title }}</span>
 										</template>
 										<!-- 第二层菜单开始 -->
 										<template v-for="subitem in item.subs">
 											<el-submenu v-if="subitem.subs" :index="subitem.index">
 												<template slot="title">
-													<i :class="  'fa fa-bars' || subitem.icon"></i>
+													<i :class=" subitem.icon || 'fa fa-bars' "></i>
 													<span slot="title">{{ subitem.title }}</span>
 												</template>
 
@@ -140,7 +156,7 @@
 
 											</el-submenu>
 											<el-menu-item :index="subitem.index" v-else>
-												<i :class=" 'fa fa-bars' || subitem.icon"></i>
+												<i :class="subitem.icon||'fa fa-bars' "></i>
 												<span slot="title">{{ subitem.title }}</span>
 											</el-menu-item>
 										</template>
@@ -148,7 +164,7 @@
 
 									</el-submenu>
 									<el-menu-item :index="item.index" v-else>
-										<i :class=" 'fa fa-folder' || item.icon"></i>
+										<i :class=" item.icon||'fa fa-folder' "></i>
 										<span slot="title">{{ item.title }}</span>
 									</el-menu-item>
 								</template>
@@ -166,33 +182,35 @@
 					<!-- sider 结束 -->
 				</el-aside>
 				<el-main>
-					<div v-tabclose></div>
+					<el-container style="height:100%">
+						<el-main style="height:100%">
 
-					<jas-two-panel-resizer :showed="panelShowed" ref="resizer" layout="horizontal" length="40%" @paneresize="paneresize" @statuschanged="statuschanged">
-						<div slot="closePanel" id="jasMap" class="jasmap" style="height:100%;"> </div>
+							<jas-two-panel-resizer :showed="panelShowed" ref="resizer" layout="horizontal" length="40%" @paneresize="paneresize" @statuschanged="statuschanged">
+								<div slot="closePanel" id="jasMap" class="jasmap" style="height:100%;background-color: #ececec;"> </div>
+								<el-tabs id="tabs"style="position:relative"slot="mainPanel" class="tabswrapper jas-flex-box" v-model="currentTap" type="card" @tab-remove="removeTab">
+									<el-tab-pane v-for="(item, index) in tabs" :key="item.link" :name="item.name" :closable="item.closable">
+										<span slot="label">
+											<i :class="item.icon||'el-icon-date'"></i> {{item.title}}
+								       </span>
+										<div class="iframewrapper">
+											<div class="iframesubwrapper">
+												<iframe class="iframe" :src="item.link" frameborder="0" height="100%"></iframe>
+											</div>
+										</div>
+									</el-tab-pane>
+									<div v-tabclose></div>
+								</el-tabs>
 
-						<el-tabs slot="mainPanel" class="tabswrapper jas-flex-box" v-model="currentTap" type="card" @tab-remove="removeTab">
-							<el-tab-pane v-for="(item, index) in tabs" :key="item.link" :name="item.name" :closable="item.closable">
-								<span slot="label">
-									<i :class="item.icon||'el-icon-date'"></i> {{item.title}}
-								</span>
-								<div class="iframewrapper">
-									<div class="iframesubwrapper">
-										<iframe class="iframe" :src="item.link" frameborder="0" height="100%"></iframe>
-									</div>
-								</div>
-							</el-tab-pane>
-						</el-tabs>
-
-					</jas-two-panel-resizer>
-
-
+							</jas-two-panel-resizer>
+						</el-main>
+						<el-footer style="height:25px;">
+							<div style="text-align: center;height:25px;">@Copyright北京中盈安信技术服务股份有限公司</div>
+						</el-footer>
+					</el-container>
 				</el-main>
 			</el-container>
 
-			 <el-footer height="30px"  class="headerwrapper">
-				 <div style="text-align: center;height:30px;line-height: 30px;color:#fff">@Copyright北京中盈安信技术服务股份有限公司</div>
-			 </el-footer>
+
 			<!-- <nav-menu :nav-menus="item.subs" /> -->
 		</el-container>
 
@@ -221,7 +239,7 @@
 <!-- 先引入index的配置文件，再引入index文件 -->
 <script src="./common/components/jas-components.js"></script>
 <script src="./common/js/jas-tools.js"></script>
-<script id="mapApi" src="./pages/map/mapjs/mapjs4ol.js"></script>
+<script id="mapApi" src="./pages/map/mapjs/jasopengis.js"></script>
 
 <script src="./src/js/index.js"></script>
 

@@ -28,10 +28,10 @@ public class PipeFittingDao{
 		String sql= null;
 		switch (pipeTypeCode) {
 		case "pipe_type_code_001"://前直钢管
-			sql = "select oid as key,pipe_code as value from daq_material_pipe t where active=1 and front_is_use=0 and is_cold_bend=0 and project_oid='"+projectOid+"'";
+			sql = "select oid as key,pipe_code as value from daq_material_pipe t where active=1 and front_is_use=0 and is_cold_bend=0 and is_cut=0 and project_oid='"+projectOid+"'";
 			break;
 		case "pipe_type_code_0011"://后直钢管
-			sql = "select oid as key,pipe_code as value from daq_material_pipe t where active=1 and back_is_use=0 and is_cold_bend=0 and project_oid='"+projectOid+"'";
+			sql = "select oid as key,pipe_code as value from daq_material_pipe t where active=1 and back_is_use=0 and is_cold_bend=0 and is_cut=0 and project_oid='"+projectOid+"'";
 			break;
 		case "pipe_type_code_002"://前热煨弯管
 			sql = "select oid as key,hot_bends_code as value from daq_material_hot_bends  t where active=1 and front_is_use=0 and project_oid='"+projectOid+"'";

@@ -34,7 +34,7 @@ public class WeldMeasuredResultListQuery extends BaseJavaQuery {
 				+ "left join(select oid,pipeline_name from daq_pipeline where active=1) dp on dp.oid=t.pipeline_oid "
 				+ "left join(select oid,name from v_daq_pipe_segment_cross) vc on vc.oid=t.pipe_segment_or_cross_oid "
 				+ "left join(select oid,weld_code from v_daq_weld_info) vw on vw.oid=t.weld_oid "
-				+ "where t.active=1 and t.geo_state='正常' and t.approve_status=2";
+				+ "where t.active=1  and t.approve_status=2";
 		sql += this.dataAuthoritySql;
 		return sql;
 	}

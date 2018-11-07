@@ -5,16 +5,19 @@ window.app = new Vue({
 	data: function () {
 		return {
 			username: localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')).userName,
+			userunit: localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')).unitName,
+			userImg:'./src/images/enterlogo.png',
 			progress: 0,
 			error: false,
 			direction: 'right',
 			panelShowed: false,
 			isExpend: true,
 			menuWith: 200,
-			menusOpened: ['P-hq-weld-0001'],
-			currentTap: 'P-hq-weld-0001',
+			menusOpened: ['statistics-01'],
+			currentTap: 'statistics-01',
 			tabs: [], // 打开的标签页
-			items: [] //菜单数组
+			items: [], //菜单数组
+			isMapInited:false//地图未初始化
 		}
 	},
 	computed: {
@@ -44,6 +47,7 @@ window.app = new Vue({
 		this._listenWindowClose();
 		this._setWindowResizeEventToCloseMenu();
 		this._requestLoginInfo();
+		this.requestFile();
 	},
 	methods: {
 		_queryMenuData: function () {
@@ -193,6 +197,9 @@ window.app = new Vue({
 				location.href = './login.html';
 			});
 		},
+		_goPage:function(){
+			location.href = './onepage.html';
+		},
 		_createTabsArr: function (aIndex, aMenu) {
 			var that = this;
 
@@ -311,7 +318,7 @@ window.app = new Vue({
 				layersVisible: {
 					daq_median_stake: true,
 				},
-				appConfigPath: './pages/map/config.json',
+				appConfig: './pages/map/config.json',
 				onMapLoaded: function (e) {
 					fn && fn();
 				},
@@ -334,7 +341,7 @@ window.app = new Vue({
 			var that = this;
 			if (!this.$refs.resizer.panelShowed) {
 				this.$refs.resizer.panelShowed = true;
-				setTimeout(function () {
+				//setTimeout(function () {
 					if (!that.isMapInited) {
 						that.isMapInited = true;
 						that.initJasMap();
@@ -345,10 +352,25 @@ window.app = new Vue({
 					} else {
 						that.jasMap.flashGraphic(id, tableCode);
 					}
-				}, 300);
+				//}, 300);
 			} else {
 				this.jasMap.flashGraphic(id, tableCode);
 			}
-		}
+		},
+		//获取附件文件
+	requestFile:function(){
+		var that=this;
+		var url = jasTools.base.rootPath + '/attachment/getInfo.do';
+		var sBizId = JSON.parse(localStorage.getItem('user')).oid;
+		jasTools.ajax.get(url, {
+			businessType: 'photo',
+			businessId: sBizId,}, function (data) {
+			 var arr = data.rows;
+			 if(data.rows.length > 0){
+				 that.userImg=jasTools.base.rootPath+'/attachment/app/getImageBySize.do?oid='+data.rows[0].oid+"&token="+localStorage.getItem("token");
+			 }
+
+		});
 	},
+},
 })

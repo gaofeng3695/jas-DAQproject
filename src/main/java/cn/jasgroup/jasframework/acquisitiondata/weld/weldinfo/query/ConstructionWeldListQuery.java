@@ -31,7 +31,7 @@ public class ConstructionWeldListQuery extends BaseJavaQuery {
 				+ "left join (select oid, unit_name, active from pri_unit where active=1) pu on pu.oid = t.supervision_unit "
 				+ "left join (select oid, unit_name, active from pri_unit where active=1) u on u.oid = t.construct_unit "
 				+ "left join (select oid, work_unit_code, active from daq_work_unit where active=1) wu ON wu.oid = t.work_unit_oid "
-				+ "where t.active=1 and t.geo_state='正常' and t.approve_status=2";
+				+ "where t.active=1 and t.approve_status=2";
 		sql += this.dataAuthoritySql;
 		sql += "order by t.create_datetime desc";
 		if(lastDataTime!=null){

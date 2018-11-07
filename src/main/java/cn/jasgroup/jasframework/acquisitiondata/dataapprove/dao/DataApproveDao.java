@@ -39,7 +39,7 @@ public class DataApproveDao {
 		baseJdbcTemplate.update(updateSql, new Object[]{approveStatus,businessOid});
 	}
 	public void chanageOriginalPipeUseState(String tableName,String businessOid){
-		String sql = "update daq_material_pipe set is_cold_bend=1 where oid=(select pipe_oid from "+tableName+" where oid=?)";
-		baseJdbcTemplate.update(sql, new Object[]{businessOid});
+		String sql = "update daq_material_pipe set is_cold_bend=1,is_use=1 where oid=(select pipe_oid from "+tableName+" where oid=?)";
+		baseJdbcTemplate.update(sql, new Object[]{businessOid});   
 	}
 }

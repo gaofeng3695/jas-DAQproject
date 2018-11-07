@@ -27,7 +27,7 @@ public class MedianStakeQueryList extends BaseJavaQuery{
 						+ "(select hierarchy from pri_unit where oid='"+unitOid+"') pp "
 						+ "on p.hierarchy like pp.hierarchy||'%' where p.active=1) "
 					+ "pu on pu.oid = i.unit_oid) up "
-				+ "on up.project_oid=t.project_oid where t.geo_state='正常' and t.active=1 order by t.mileage";
+				+ "on up.project_oid=t.project_oid where t.active=1 order by t.mileage";
 		
 		return sql;
 	}

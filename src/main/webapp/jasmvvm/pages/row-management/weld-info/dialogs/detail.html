@@ -10,6 +10,71 @@
 	<link rel="stylesheet" href="./../../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
 	<link rel="stylesheet" href="./../../../../src/css/main.css">
 	<style>
+		.pipe_wrap {
+			overflow: hidden;
+			text-align: center;
+			padding-top: 10px;
+		}
+
+		.pipeTip {
+			padding: 10px 6px;
+			line-height: 18px;
+			font-size: 12px;
+			color: #999;
+			word-break: break-all;
+
+		}
+
+		.pipeTip.link {
+			color: blue;
+			cursor: pointer;
+		}
+
+		.pipeTip.link.notlink {
+			color: #333;
+			cursor: auto;
+		}
+
+		.pipe {
+			float: left;
+			width: 14.1%;
+		}
+
+		.weld {
+			float: left;
+			width: 14.1%;
+		}
+
+		.codeTip {}
+
+		.pipecode {
+			height: 32px;
+			line-height: 32px;
+			cursor: pointer;
+			/* background-color: rgb(219, 219, 219); */
+			background: linear-gradient(#d2d2d2, #adadad, #e8e8e8, #bbbbbd);
+			/* 标准的语法 */
+			text-align: center;
+		}
+
+		.weldcode {
+			height: 32px;
+			line-height: 32px;
+			cursor: pointer;
+			/* background-color: rgba(156, 223, 236, 0.39); */
+			background: linear-gradient(#d2d2d2, #adadad, #e8e8e8, #bbbbbd);
+
+			text-align: center;
+		}
+
+		.weldcode::after {
+			content: '';
+			width: 6px;
+			height: 100%;
+			background-color: #5f351987;
+			display: block;
+			margin: 0 auto;
+		}
 	</style>
 </head>
 
@@ -21,6 +86,46 @@
 				<jas-detail-table :titles="baseArr" :detail="detail"></jas-detail-table>
 				<jas-base-group-title name="位置数据"></jas-base-group-title>
 				<jas-detail-table :titles="addressArr" :detail="detail"></jas-detail-table>
+				<jas-base-group-title name="焊口链接图"></jas-base-group-title>
+				<div class="pipe_wrap">
+					<div v-if="detail.fweldCode" class="pipe" @click="openPipeDialog(detail.ffrontPipeOid, detail.ffrontPipeType, '前前管件',detail.ffrontPipeCode)">
+						<div class="pipeTip">前前管件</div>
+						<div class="pipecode">{{(detail.ffrontPipeLength || 0) + ' m' }}</div>
+						<div class="pipeTip link">{{detail.ffrontPipeCode}}</div>
+					</div>
+					<div v-if="detail.fweldCode" class="weld" @click="openWeldDialog(detail.foid)">
+						<div class="pipeTip">前焊口</div>
+						<div class="weldcode"></div>
+						<div class="pipeTip link">{{detail.fweldCode}}</div>
+					</div>
+					<div class="pipe" @click="openPipeDialog(detail.frontPipeOid, detail.frontPipeType, '前管件',detail.frontPipeCode)">
+						<div class="pipeTip">前管件</div>
+
+						<div class="pipecode">{{(detail.frontPipeLength || 0) + ' m'}}</div>
+						<div class="pipeTip link">{{detail.frontPipeCode}}</div>
+					</div>
+					<div class="weld">
+						<div class="pipeTip" style="color:#333;font-size: 14px;">当前焊口</div>
+						<div class="weldcode" style="cursor: auto;"></div>
+						<div class="pipeTip link notlink">{{detail.weldCode}}</div>
+					</div>
+					<div class="pipe" @click="openPipeDialog(detail.backPipeOid, detail.backPipeType, '后管件',detail.backPipeCode)">
+						<div class="pipeTip">后管件</div>
+						<div class="pipecode">{{(detail.backPipeLength || 0) + ' m'}}</div>
+						<div class="pipeTip link">{{detail.backPipeCode}}</div>
+					</div>
+					<div v-if="detail.bweldCode" class="weld" @click="openWeldDialog(detail.boid)">
+						<div class="pipeTip">后焊口</div>
+						<div class="weldcode"></div>
+						<div class="pipeTip  link">{{detail.bweldCode}}</div>
+					</div>
+					<div v-if="detail.bweldCode" @click="openPipeDialog(detail.bbackPipeOid, detail.bbackPipeType, '后后管件',detail.bbackPipeCode)"
+					  class="pipe">
+						<div class="pipeTip">后后管件</div>
+						<div class="pipecode">{{(detail.bbackPipeLength || 0) + ' m'}}</div>
+						<div class="pipeTip  link">{{detail.bbackPipeCode}}</div>
+					</div>
+				</div>
 				<jas-base-group-title name="焊口数据"></jas-base-group-title>
 				<jas-detail-table ref="weldDetail" :titles="busArr" :detail="detail"></jas-detail-table>
 				<jas-base-group-title name="其他信息"></jas-base-group-title>
@@ -36,7 +141,6 @@
 <script src="./../../../../lib/element-ui/v2.4.1/index.min.js"></script>
 <script src="./../../../../common/components/jas-components.js "></script>
 <script src="./../../../../common/js/jas-tools.js"></script>
-<!--<script src="js/ajaxFileUpload.js"></script>-->
 <script>
 	var app = new Vue({
 		el: "#app",
@@ -153,7 +257,6 @@
 				oid: '',
 			}
 		},
-
 		created: function () {
 			var that = this;
 			var param = window.jasTools.base.getParamsInUrl(location.href);
@@ -205,45 +308,59 @@
 					that.addPipeEvent();
 				});
 			},
+			openWeldDialog: function (oid) {
+				if (!oid) return;
+				var url = jasTools.base.setParamsToUrl('pages/row-management/weld-info/dialogs/detail.html', {
+					oid: oid
+				});
+				top.jasTools.dialog.show({
+					width: '55%',
+					height: '80%',
+					title: '焊口详情',
+					src: url,
+				});
+			},
+			openPipeDialog: function (oid, type, name, code) {
+				if (!code) return;
+				var urlMap = {
+					pipe_type_code_001: 'pages/template/dialogs/viewTemplate.html?menuCode=F000024', //直钢管",
+					pipe_type_code_0011: 'pages/template/dialogs/viewTemplate.html?menuCode=F000024', //后直钢管",
+					pipe_type_code_002: 'pages/template/dialogs/viewTemplate.html?menuCode=F000025', //"热煨弯管",
+					pipe_type_code_0021: 'pages/template/dialogs/viewTemplate.html?menuCode=F000025', //"后热煨弯管",
+					pipe_type_code_003: 'pages/template/dialogs/viewTemplate.html?menuCode=F000026', //三通",
+					pipe_type_code_004: 'pages/template/dialogs/viewTemplate.html?menuCode=F000044', //"阀门",
+					pipe_type_code_005: 'pages/template/dialogs/viewTemplate.html?menuCode=F000027', //"绝缘接头",
+					pipe_type_code_006: 'pages/template/dialogs/viewTemplate.html?menuCode=F000028', //"大小头",
+					pipe_type_code_007: 'pages/row-management/sealing/dialogs/detail.html', //"封堵物",
+					pipe_type_code_008: 'pages/row-management/cold-bends/dialogs/detail.html', //"冷弯管",
+					pipe_type_code_0081: 'pages/row-management/cold-bends/dialogs/detail.html', //"后冷弯管",
+				};
+				var url = jasTools.base.setParamsToUrl(urlMap[type], {
+					oid: oid
+				});
+				top.jasTools.dialog.show({
+					width: '50%',
+					height: '80%',
+					title: name + '详情',
+					src: url,
+				});
+			},
 			addPipeEvent: function () {
 				var that = this;
 				var arr = that.$refs.weldDetail;
-				var urlMap = {
-					'冷弯管': 'pages/row-management/cold-bends/dialogs/detail.html',
-					'封堵物': 'pages/row-management/sealing/dialogs/detail.html',
-					'直钢管': 'pages/template/dialogs/viewTemplate.html?menuCode=F000024',
-					'热煨弯管': 'pages/template/dialogs/viewTemplate.html?menuCode=F000025',
-					'三通': 'pages/template/dialogs/viewTemplate.html?menuCode=F000026',
-					'绝缘接头': 'pages/template/dialogs/viewTemplate.html?menuCode=F000027',
-					'大小头': 'pages/template/dialogs/viewTemplate.html?menuCode=F000028',
-					'阀门': 'pages/template/dialogs/viewTemplate.html?menuCode=F000044',
-				};
 				var frontDom = arr.$refs['frontPipeCode'];
 				var backDom = arr.$refs['backPipeCode'];
 
 				$(frontDom).css('color', 'blue').css('cursor', 'pointer').click(function () {
 					// console.log(that.detail.frontPipeTypeName + ' ' + that.detail.frontPipeOid);
-					var url = jasTools.base.setParamsToUrl(urlMap[that.detail.frontPipeTypeName], {
-						oid: that.detail.frontPipeOid
-					});
-					top.jasTools.dialog.show({
-						width: '50%',
-						height: '80%',
-						title: that.detail.frontPipeTypeName + '详情',
-						src: url,
-					});
+					that.openPipeDialog(that.detail.frontPipeOid, that.detail.frontPipeType, that.detail.frontPipeTypeName, that.detail
+						.frontPipeCode)
 				});
 				$(backDom).css('color', 'blue').css('cursor', 'pointer').click(function () {
 					// console.log(that.detail.backPipeTypeName + ' ' + that.detail.backPipeOid);
-					var url = jasTools.base.setParamsToUrl(urlMap[that.detail.backPipeTypeName], {
-						oid: that.detail.backPipeOid
-					});
-					top.jasTools.dialog.show({
-						width: '50%',
-						height: '80%',
-						title: that.detail.backPipeTypeName + '详情',
-						src: url,
-					});
+					that.openPipeDialog(that.detail.backPipeOid, that.detail.backPipeType, that.detail.backPipeTypeName, that.detail
+						.backPipeCode)
+
 				});
 			}
 		},
