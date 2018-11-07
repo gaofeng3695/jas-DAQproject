@@ -4206,7 +4206,7 @@ CREATE TABLE daq_appendages_mark_stake (
 	tenders_oid VARCHAR (36),
 	pipeline_oid VARCHAR (36),
 	pipe_segment_or_cross_oid VARCHAR (36),
-	mark_stake_oid VARCHAR (36),
+	mark_stake_code VARCHAR (50),
 	median_stake_oid VARCHAR (36),
 	relative_mileage NUMERIC (9, 3),
 	pointx NUMERIC (10, 3),
@@ -4238,7 +4238,7 @@ comment on column daq_appendages_mark_stake.project_oid is '项目oid';
 comment on column daq_appendages_mark_stake.tenders_oid is '标段oid';
 comment on column daq_appendages_mark_stake.pipeline_oid is '管线oid';
 comment on column daq_appendages_mark_stake.pipe_segment_or_cross_oid is '线路段/穿跨越oid';
-comment on column daq_appendages_mark_stake.mark_stake_oid is '标志桩编号';
+comment on column daq_appendages_mark_stake.mark_stake_code is '标志桩编号';
 comment on column daq_appendages_mark_stake.median_stake_oid is '桩号';
 comment on column daq_appendages_mark_stake.relative_mileage is '相对桩位置(m)';
 comment on column daq_appendages_mark_stake.pointx is '东坐标';
