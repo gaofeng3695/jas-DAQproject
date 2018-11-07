@@ -38,7 +38,7 @@ public class DaqAppendagesHydraulicProtectionQuery extends BaseJavaQuery{
 	private String approveStatus;
 	private String constructUnit;
 	@Override
-	public String getSql() {
+	public String getQuerySql() {
 		String sql =  "select t.*,"
 				+ " d1.code_name as hydraulicProtectionTypeName,"
 				+ " d2.code_name as hydraulicProtectionMaterialName,"

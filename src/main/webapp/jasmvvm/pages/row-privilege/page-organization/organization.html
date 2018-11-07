@@ -195,7 +195,7 @@
 			},
 			_requestTable: function () {
 				var that = this;
-				var url = jasTools.base.rootPath + "/jasframework/privilege/unit/getLeftTree.do";
+				var url = jasTools.base.rootPath + "/jasframework/privilege/unit/getLeftTree.do?isroot=true";
 				jasTools.ajax.get(url, {}, function (data) {
 					that.orgnData = data[0].children;
 					that.$nextTick(function () {
