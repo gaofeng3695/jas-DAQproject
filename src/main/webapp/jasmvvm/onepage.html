@@ -259,20 +259,26 @@
 		.el-progress__text {
 			color: #999;
 		}
+
+		.hovertxt:hover {
+			color: #5ed5ec;
+		}
 	</style>
 
 
 
 </head>
 
-<body>
-	<div id="app" v-cloak>
+<body style="overflow:auto;">
+	<div id="app" v-cloak style="min-height: 860px;">
 		<div class="header">
 			<div class="headertop"></div>
 			<div>
 				<span class="headerdate">{{dateStr}}</span>
-				<span class="headerright" @click="returnIndex">管理端</span>
-				<div class="headertitle">施工数据可视化一览</div>
+				<span class="headerright hovertxt" @click="returnIndex">
+					<i class="fa fa-laptop" aria-hidden="true"></i>
+					管理端</span>
+				<div class="headertitle">施工数据监控可视化</div>
 			</div>
 			<div class="headerbottom"></div>
 		</div>
@@ -325,27 +331,33 @@
 						<div class="contentBox" style="height:calc(100% - 20px);">
 							<div id="pipeCutting" style="width:50%;height:100%;float: left;">
 							</div>
-							<div class="bsb" style="width:50%;height:100%;float: left;padding:20px 0 0 20px;">
+							<div class="bsb" style="width:50%;height:100%;float: left;padding:10px 0 0 0x;">
 								<div class="lh24">
-									<span>总长度：</span>
+									<span>钢管总长度：</span>
 									<span>{{pipeCutting.totalLength}}</span>
+									<span class="fs12">km</span>
 								</div>
 								<div class="lh24">
-									<span>使用长度：</span>
-									<span>{{pipeCutting.usedLength}}</span>
-								</div>
-								<div class="lh24">
-									<span>未使用长度：</span>
-									<span>{{pipeCutting.unUsedLength}}</span>
+									<span>切管长度：</span>
+									<span>{{pipeCutting.cutLength}}</span>
+									<span class="fs12">km</span>
 								</div>
 								<div class="lh24">
 									<span>切管次数：</span>
 									<span>{{pipeCutting.cutCount}}</span>
 								</div>
 								<div class="lh24">
-									<span>切管长度：</span>
-									<span>{{pipeCutting.cutLength}}</span>
+									<span>切管使用长度：</span>
+									<span>{{pipeCutting.usedLength}}</span>
+									<span class="fs12">km</span>
 								</div>
+								<div class="lh24">
+									<span>切管未使用长度：</span>
+									<span>{{pipeCutting.unUsedLength}}</span>
+									<span class="fs12">km</span>
+								</div>
+
+
 
 							</div>
 						</div>
@@ -355,17 +367,17 @@
 						<div class="contentBox" style="height:calc(100% - 20px);">
 							<div id="weldOnce" style="width:50%;height:100%;float: left;">
 							</div>
-							<div class="bsb" style="width:50%;height:100%;float: left;padding:20px 0 0 20px;">
+							<div class="bsb" style="width:50%;height:100%;float: left;padding:20px 0 0 0;">
 								<div class="lh24">
 									<span>总数量：</span>
 									<span>{{weldOnce.count}}</span>
 								</div>
 								<div class="lh24">
-									<span>合格数量</span>
+									<span>合格数量：</span>
 									<span>{{weldOnce.passCount}}</span>
 								</div>
 								<div class="lh24">
-									<span>不合格数量</span>
+									<span>不合格数量：</span>
 									<span>{{weldOnce.unPassCount}}</span>
 								</div>
 							</div>
@@ -416,7 +428,7 @@
 						<div class="contentBox" style="overflow: hidden;">
 							<div v-for="item in quantityOfMaterial" style="float:left;width:14.285%;text-align: center;padding-top:10px;box-sizing: border-box;">
 								<div class="mb5" v-text="item.cnName || 0"></div>
-								<div class="mb10" v-text="item.entryCountOrLength || 0" style="font-size: 22px;"></div>
+								<div class="mb10" v-text="tofix3(item) || 0" style="font-size: 22px;overflow: hidden;"></div>
 								<div class="mb5 fs10 clr01">已检查</div>
 								<el-progress type="circle" :color="pgClr(per(item.checkedCountOrLength,item.entryCountOrLength))" :width="60" :percentage="per(item.checkedCountOrLength,item.entryCountOrLength)"></el-progress>
 								<div class="mb5  mt10 fs10 clr01">已使用</div>
@@ -759,6 +771,14 @@
 				if (!num || !total) return 0;
 				return +(num / total * 100).toFixed(1);
 			},
+			tofix3: function (item) {
+				var num = item.entryCountOrLength;
+				if (['material_pipe', 'material_hot_bends'].indexOf(item.statsType) > -1) {
+					num = (+(num / 1000).toFixed(3)) || 0;
+				}
+				console.log(num)
+				return num;
+			},
 			login: function () {
 				var that = this;
 				var url = jasTools.base.rootPath + "/jasframework/login/login.do";
@@ -810,7 +830,10 @@
 				jasTools.ajax.post(url, {
 					projectIds: [this.projectId]
 				}, function (data) {
-					that.steelPipeUsage = data.data;
+					that.steelPipeUsage = data.data.map(function (item) {
+						item.usedLength = +(item.usedLength / 1000).toFixed(3) || 0;
+						return item;
+					});
 				});
 			},
 			getPipeCutting: function () {
@@ -819,6 +842,10 @@
 				jasTools.ajax.post(url, {
 					projectIds: [this.projectId]
 				}, function (data) {
+					data.data.cutLength = +(data.data.cutLength / 1000).toFixed(3) || 0;
+					data.data.totalLength = +(data.data.totalLength / 1000).toFixed(3) || 0;
+					data.data.unUsedLength = +(data.data.unUsedLength / 1000).toFixed(3) || 0;
+					data.data.usedLength = +(data.data.usedLength / 1000).toFixed(3) || 0;
 					that.pipeCutting = data.data;
 					that.renderPipeCutting();
 				});

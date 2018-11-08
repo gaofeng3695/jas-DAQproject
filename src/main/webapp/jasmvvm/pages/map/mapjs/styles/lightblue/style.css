@@ -14,7 +14,7 @@ body {
   position: relative;
 }
 
-.required {
+.jasmap i {
   color: red;
 }
 
@@ -221,7 +221,7 @@ body {
    border:none ;
 }
 .map-module-drawbox .style input.color:hover{
- border:none !important;
+ border:none !important;	
 }
 
 .map-module-drawbox .style input.progressbar {
@@ -624,6 +624,7 @@ input[type="color"]::-webkit-color-swatch{
   line-height: 12px;
   border: 1px solid black;
   border-top: none;
+  margin: 3px;
 }
 
 /*坐标定位*/

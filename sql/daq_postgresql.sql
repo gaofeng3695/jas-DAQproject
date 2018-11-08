@@ -1357,6 +1357,7 @@ create table daq_material_valve(
 	guarantee_period smallint  ,
 	contract_number varchar(60)  ,
 	is_use smallint  default 0 ,
+	construct_unit varchar(36)  ,
 	remarks varchar(200)  ,
 	create_user_id varchar(36)  ,
 	create_user_name varchar(50)  ,
@@ -1391,6 +1392,7 @@ comment on column daq_material_valve.manufacturer is '生产厂家';
 comment on column daq_material_valve.manufacture_date is '出厂时间';
 comment on column daq_material_valve.guarantee_period is '质保期(月)';
 comment on column daq_material_valve.contract_number is '合同号';
+comment on column daq_material_valve.construct_unit is '施工单位';
 comment on column daq_material_valve.is_use is '是否使用';
 comment on column daq_material_valve.remarks is '备注';
 comment on column daq_material_valve.create_user_id is '创建人id';
@@ -4204,7 +4206,7 @@ CREATE TABLE daq_appendages_mark_stake (
 	tenders_oid VARCHAR (36),
 	pipeline_oid VARCHAR (36),
 	pipe_segment_or_cross_oid VARCHAR (36),
-	mark_stake_oid VARCHAR (36),
+	mark_stake_code VARCHAR (50),
 	median_stake_oid VARCHAR (36),
 	relative_mileage NUMERIC (9, 3),
 	pointx NUMERIC (10, 3),
@@ -4236,7 +4238,7 @@ comment on column daq_appendages_mark_stake.project_oid is '项目oid';
 comment on column daq_appendages_mark_stake.tenders_oid is '标段oid';
 comment on column daq_appendages_mark_stake.pipeline_oid is '管线oid';
 comment on column daq_appendages_mark_stake.pipe_segment_or_cross_oid is '线路段/穿跨越oid';
-comment on column daq_appendages_mark_stake.mark_stake_oid is '标志桩编号';
+comment on column daq_appendages_mark_stake.mark_stake_code is '标志桩编号';
 comment on column daq_appendages_mark_stake.median_stake_oid is '桩号';
 comment on column daq_appendages_mark_stake.relative_mileage is '相对桩位置(m)';
 comment on column daq_appendages_mark_stake.pointx is '东坐标';

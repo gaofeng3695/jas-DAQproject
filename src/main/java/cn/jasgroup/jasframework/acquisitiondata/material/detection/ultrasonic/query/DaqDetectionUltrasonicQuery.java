@@ -41,7 +41,7 @@ public class DaqDetectionUltrasonicQuery extends BaseJavaQuery{
 	private String constructUnit;
 	
 	@Override
-	public String getSql() {
+	public String getQuerySql() {
 		String sql = "select t.*,d1.code_name as detectionTypeName,"
 				+ " d2.code_name as evaluationGradeName,"
 				+ "	p.project_name,"

@@ -38,7 +38,7 @@ public class DaqAppendagesElectronicLabelQuery extends BaseJavaQuery {
 	private String constructUnit;
 	
 	@Override
-	public String getSql() {
+	public String getQuerySql() {
 		String sql =  "select t.*,"
 				+ " d1.code_name as featurePointTypeName,"
 				+ "	p.project_name,"

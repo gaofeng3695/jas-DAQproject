@@ -25,7 +25,7 @@ public class DataApproveQuery extends BaseJavaQuery{
 	private String businessOid;
 
 	@Override
-	public String getSql() {
+	public String getQuerySql() {
 		String sql ="select t.oid,t.business_oid,t.approve_opinion,t.approve_status,"
 				+ "case when t.approve_status = -1 then '驳回' "
 					+ "when t.approve_status = 1 then '待审核' "

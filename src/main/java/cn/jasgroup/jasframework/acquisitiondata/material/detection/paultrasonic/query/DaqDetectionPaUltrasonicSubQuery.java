@@ -31,7 +31,7 @@ public class DaqDetectionPaUltrasonicSubQuery extends BaseJavaQuery {
 	private String parentOid;
 
 	@Override
-	public String getSql() {
+	public String getQuerySql() {
 		String sql = "select t.*,"
 				+ " vdwi.weld_code "
 				+ " from daq_detection_pa_ultrasonic_sub t "

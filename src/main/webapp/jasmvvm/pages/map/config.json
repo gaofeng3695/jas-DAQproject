@@ -76,55 +76,59 @@
     "basemaps": {
       "label": "基础底图",
       "baseMapLayers": [{
-        "id": "china_shp",
-        "index": 0,
-        "label": "行政区划图",
-        "icon": "stylepath:images/basemap_shp.png",
-        "visible": false,
-        "type": "Tile",
-        "source": "TileWMS",
-        "url": "http://192.168.40.228:8080/geoserver/jasgroup/wms",
-        "params": {
-          "LAYERS": "china_canton"
-        }
-      }, {
-        "id": "china_shp2",
-        "index": 1,
-        "label": "中国行政区划图",
-        "icon": "stylepath:images/basemap_shp.png",
-        "visible": false,
-        "type": "Tile",
-        "source": "TileArcGISRest",
-        "url": "http://192.168.100.51:6080/arcgis/rest/services/%E8%A1%8C%E6%94%BF%E5%8C%BA%E5%88%92/MapServer"
-      }, {
-        "id": "china_img",
-        "index": 2,
-        "visible": true,
-        "label": "中国影像图",
-        "icon": "stylepath:images/basemap_img.png",
-        "type": "Tile",
-        "source": "WMTS",
-        "url": "http://192.168.40.228:8080/geoserver/gwc/service/wmts",
-        "style": "",
-        "format": "image/png",
-        "layer": "jasgroup:china_img_bing_l12",
-        "version": "1.0.0",
-        "tileMatrixSet": "CHINA_CGCS_SM",
-        "tileGrid": {
-          "tileSize": [256, 256],
-          "origin": [-180.0, 90.0]
-        }
-      }, {
-        "id": "china_canton",
-        "index": 3,
-        "visible": false,
-        "label": "中国政区图",
-        "icon": "stylepath:images/basemap_img.png",
-        "type": "VectorTile",
-        "source": "VectorTile",
-        "url": "http://192.168.40.228:8080/geoserver/gwc/service/wmts",
-        "layer": "jasgroup:china_canton",
-        "tileMatrixSet": "CHINA_CGCS_SM"
+        "id":"china_shp_tdt" ,"visible":false,
+        "label":"天地图矢量","icon":"stylepath:images/basemap_shp.png",
+        "layerSet":[{
+            "id":"china_shp_tdt_0" ,
+            "index":5,
+            "label":"全球地形图标注",
+            "type":"Tile",
+            "source":"tdt",
+            "layer":"cva"
+        },{
+          "id":"china_shp_tdt_1" ,
+          "index":2,
+          "label":"全球矢量图",
+          "type":"Tile",
+          "source":"tdt",
+          "layer":"vec"
+        }]
+      },{
+        "id":"china_img_tdt" ,"visible":true,
+        "label":"天地图影像","icon":"stylepath:images/basemap_img.png",
+        "layerSet":[{
+          "id":"china_img_tdt_0" ,
+          "index":5,
+          "label":"全球影像图标注",
+          "type":"Tile",
+          "source":"tdt",
+          "layer":"cia"
+        },{
+          "id":"china_img_tdt_1" ,
+          "index":2,
+          "label":"全球影像图",
+          "type":"Tile",
+          "source":"tdt",
+          "layer":"img"
+        }]
+      },{
+        "id":"china_ter_tdt" ,"visible":false,
+        "label":"天地图地形","icon":"stylepath:images/basemap_terr.png",
+        "layerSet":[{
+          "id":"china_ter_tdt_0" ,
+          "index":5,
+          "label":"全球地形图标注",
+          "type":"Tile",
+          "source":"tdt",
+          "layer":"cta"
+        },{
+          "id":"china_ter_tdt_1" ,
+          "index":2,
+          "label":"全球地形图",
+          "type":"Tile",
+          "source":"tdt",
+          "layer":"ter"
+        }]
       }]
     },
     "optionallayers": [{
@@ -561,7 +565,7 @@
   },{
     "id":"overViewMap","label":"鹰眼图","class":"OverViewMap","icon":"stylepath:images/queryByPolygon.png","enable":true,
     "options":{
-      "url":"http://192.168.100.51:6080/arcgis/rest/services/%E8%A1%8C%E6%94%BF%E5%8C%BA%E5%88%92/MapServer"
+      "url":"http://106.37.179.154:10028/arcgis/rest/services/%E8%A1%8C%E6%94%BF%E5%8C%BA%E5%88%92/MapServer"
     }
   },{
     "id":"mapPrint","label":"地图打印","class":"MapPrint","icon":"stylepath:images/queryByPolygon.png","enable":false
