@@ -174,6 +174,26 @@ public class SteelPipe extends CommonJdbcEntity{
 	 * 是否是子管
 	 */
 	private Integer isChild; 
+	
+	/** 
+	 * 是否是子管
+	 */
+	private Integer frontIsUse; 
+	
+	/** 
+	 * 是否是子管
+	 */
+	private Integer backIsUse; 
+
+	/** 
+	 * 物料编码
+	 */
+	private String materielCode; 
+	
+	/** 
+	 * 出厂日期
+	 */
+	private Date productionDate; 
 
 	/** 
 	 * 备注
@@ -452,6 +472,43 @@ public class SteelPipe extends CommonJdbcEntity{
 	public void setIsChild(Integer isChild) {
 		this.isChild = isChild;
 		super.setField("isChild");
+	}
+
+	public Integer getFrontIsUse() {
+		return frontIsUse;
+	}
+
+	public void setFrontIsUse(Integer frontIsUse) {
+		this.frontIsUse = frontIsUse;
+		super.setField("frontIsUse");
+	}
+
+	public Integer getBackIsUse() {
+		return backIsUse;
+	}
+
+	public void setBackIsUse(Integer backIsUse) {
+		this.backIsUse = backIsUse;
+		super.setField("backIsUse");
+	}
+
+	public String getMaterielCode() {
+		return materielCode;
+	}
+
+	public void setMaterielCode(String materielCode) {
+		this.materielCode = materielCode;
+	}
+
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getProductionDate() {
+		return productionDate;
+	}
+
+	public void setProductionDate(Date productionDate) {
+		this.productionDate = productionDate;
+		super.setField("productionDate");
 	}
 
 	public String getRemarks() {
