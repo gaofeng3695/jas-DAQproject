@@ -14,7 +14,7 @@ body {
   position: relative;
 }
 
-i {
+.jasmap i {
   color: red;
 }
 
@@ -641,6 +641,7 @@ input[type="number"] {
   line-height: 12px;
   border: 1px solid black;
   border-top: none;
+  margin: 3px;
 }
 
 /*坐标定位*/

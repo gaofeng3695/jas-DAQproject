@@ -131,9 +131,9 @@
 					<el-button :size="item.size" v-if="privilege.join('').indexOf(item.id)>-1" :type="item.type" :plain="item.plain" :icon="item.icon"
 					  @click="item.functionName">{{item.title}}</el-button>
 				</template>
-				<el-button size="small" plain type="primary" icon="fa fa-plus" v-if="isApprove&&privilege.join('').indexOf('bt_report')>-1"
+				<el-button size="small" plain type="primary" icon="fa fa-level-up" v-if="isApprove&&privilege.join('').indexOf('bt_report')>-1"
 				  :disabled="reportRows.length==0" @click="upcall">上报</el-button>
-				<el-button size="small" plain type="primary" icon="fa fa-plus" v-if="isApprove&&privilege.join('').indexOf('bt_approve')>-1"
+				<el-button size="small" plain type="primary" icon="fa fa-check" v-if="isApprove&&privilege.join('').indexOf('bt_approve')>-1"
 				  :disabled="approveRows.length==0" @click="approve">审核</el-button>
 
 
@@ -234,7 +234,7 @@
 				menuCode: "",
 				searchUi: [],
 				isShowSearch: false,
-			
+
 			}
 		},
 		computed: {
@@ -412,7 +412,7 @@
 						that.loading = false;
 						return;
 					}
-					
+
 					that.getSearchFieldAndList(data.data);
 				});
 			},
@@ -448,7 +448,7 @@
 							options.push(obj);
 						});
 					}else{
-						optionsOrgin="select";	
+						optionsOrgin="select";
 					}
 					if (item.ifQuery == "1") {
 						var obj = {
@@ -528,11 +528,11 @@
 							}
 							for(var key in that.searchData){
 								if(that.searchData[key].type!='opertion'&&that.searchData[key].optionsOrgin!="domain"){
-									that.searchData[key].options=[];	
+									that.searchData[key].options=[];
 								}
-								
+
 							}
-						
+
 							that.requestTableList();
 						}
 					}]
