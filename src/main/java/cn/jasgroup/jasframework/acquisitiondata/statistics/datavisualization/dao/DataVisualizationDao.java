@@ -153,8 +153,8 @@ public class DataVisualizationDao {
                 " select sum(case when (is_cut=1) then 1 else 0 end ) as cut_count,\n" +
                 "   sum(case when (is_cut=0) then pipe_length else 0 end) as total_length,\n" +
                 "   sum(case when (is_cut=0 and is_child=1) then pipe_length else 0 end) as cut_length,\n" +
-                "   sum(case when (is_cut=0 and is_use=1) then pipe_length else 0 end ) used_length,\n" +
-                "   sum(case when (is_cut=0 and is_use=0) then pipe_length else 0 end ) un_used_length\n" +
+                "   sum(case when (is_cut=0 and is_child=1 and is_use=1) then pipe_length else 0 end ) used_length,\n" +
+                "   sum(case when (is_cut=0 and is_child=1 and is_use=0) then pipe_length else 0 end ) un_used_length\n" +
                 " from daq_material_pipe where active = 1 and project_oid in (:projectIds) ";
         return (StatsPipeCuttingBo) commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectIds", projectIds), StatsPipeCuttingBo.class).get(0);
     }
