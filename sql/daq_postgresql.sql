@@ -6260,3 +6260,234 @@ comment on column sys_spatial_object.modify_user_id is '修改人id';
 comment on column sys_spatial_object.modify_user_name is '修改人姓名';	
 comment on column sys_spatial_object.modify_datetime is '修改时间';	
 comment on column sys_spatial_object.active is '是否有效';
+
+
+
+
+
+/**站场数据采集start**/
+create table daq_dynamic_compressor( 
+oid varchar(36) not null primary key,
+project_oid varchar(36)  ,
+tenders_oid varchar(36)  ,
+pipeline_oid varchar(36)  ,
+pipe_station_oid varchar(36)  ,
+device_code varchar(50)  ,
+compressor_name varchar(50)  ,
+manufacture_number varchar(50)  ,
+concentricity numeric(9,3)  ,
+picture_code varchar(50)  ,
+lubricant_brand varchar(50)  ,
+lubricating_total_add numeric(6,3)  ,
+single_debug_record varchar(200)  ,
+empty_debug_record varchar(200)  ,
+operate_24_hour_record varchar(200)  ,
+operate_72_hour_record varchar(200)  ,
+bussiness_start_date timestamp(6)  ,
+construct_unit varchar(36)  ,
+supervision_unit varchar(36)  ,
+supervision_engineer varchar(50)  ,
+collection_person varchar(30)  ,
+collection_date timestamp(6)  ,
+approve_status smallint  default 0 ,
+remarks varchar(200)  ,
+create_user_id varchar(36)  ,
+create_user_name varchar(50)  ,
+create_datetime timestamp(6)  ,
+modify_user_id varchar(36)  ,
+modify_user_name varchar(50)  ,
+modify_datetime timestamp(6)  ,
+active smallint  default 1  ); 
+comment on table daq_dynamic_compressor is '压缩机表';
+comment on column daq_dynamic_compressor.oid is '主键';
+comment on column daq_dynamic_compressor.project_oid is '项目oid';
+comment on column daq_dynamic_compressor.tenders_oid is '标段oid';
+comment on column daq_dynamic_compressor.pipeline_oid is '管线oid';
+comment on column daq_dynamic_compressor.pipe_station_oid is '站场/阀室oid';
+comment on column daq_dynamic_compressor.device_code is '设备编号';
+comment on column daq_dynamic_compressor.compressor_name is '压缩机名称';
+comment on column daq_dynamic_compressor.manufacture_number is '出厂编号';
+comment on column daq_dynamic_compressor.concentricity is '同心度';
+comment on column daq_dynamic_compressor.picture_code is '照片编号';
+comment on column daq_dynamic_compressor.lubricant_brand is '润滑油牌号';
+comment on column daq_dynamic_compressor.lubricating_total_add is '润滑油/脂加装总量（kg)';
+comment on column daq_dynamic_compressor.single_debug_record is '单体调试记录';
+comment on column daq_dynamic_compressor.empty_debug_record is '空载试验记录';
+comment on column daq_dynamic_compressor.operate_24_hour_record is '24小时运行记录';
+comment on column daq_dynamic_compressor.operate_72_hour_record is '72小时运行记录';
+comment on column daq_dynamic_compressor.bussiness_start_date is '商业运营开始日期';
+comment on column daq_dynamic_compressor.construct_unit is '施工单位';
+comment on column daq_dynamic_compressor.supervision_unit is '监理单位';
+comment on column daq_dynamic_compressor.supervision_engineer is '监理工程师';
+comment on column daq_dynamic_compressor.collection_person is '数据采集人';
+comment on column daq_dynamic_compressor.collection_date is '采集日期';
+comment on column daq_dynamic_compressor.approve_status is '审核状态';
+comment on column daq_dynamic_compressor.remarks is '备注';
+comment on column daq_dynamic_compressor.create_user_id is '创建人id';
+comment on column daq_dynamic_compressor.create_user_name is '创建人名称';
+comment on column daq_dynamic_compressor.create_datetime is '创建时间';
+comment on column daq_dynamic_compressor.modify_user_id is '修改人id';
+comment on column daq_dynamic_compressor.modify_user_name is '修改人名称';
+comment on column daq_dynamic_compressor.modify_datetime is '修改时间';
+comment on column daq_dynamic_compressor.active is '有效标志';
+
+
+create table daq_dynamic_compressor_motor( 
+oid varchar(36) not null primary key,
+project_oid varchar(36)  ,
+tenders_oid varchar(36)  ,
+pipeline_oid varchar(36)  ,
+pipe_station_oid varchar(36)  ,
+device_code varchar(50)  ,
+compressor_motor_name varchar(50)  ,
+manufacture_number varchar(50)  ,
+picture_code varchar(50)  ,
+empty_debug_record varchar(200)  ,
+construct_unit varchar(36)  ,
+supervision_unit varchar(36)  ,
+supervision_engineer varchar(50)  ,
+collection_person varchar(30)  ,
+collection_date timestamp(6)  ,
+construct_date timestamp(6)  ,
+approve_status smallint  default 0 ,
+remarks varchar(200)  ,
+create_user_id varchar(36)  ,
+create_user_name varchar(50)  ,
+create_datetime timestamp(6)  ,
+modify_user_id varchar(36)  ,
+modify_user_name varchar(50)  ,
+modify_datetime timestamp(6)  ,
+active smallint not null default 1  ); 
+comment on table daq_dynamic_compressor_motor is '压缩机电机表';
+comment on column daq_dynamic_compressor_motor.oid is '主键';
+comment on column daq_dynamic_compressor_motor.project_oid is '项目oid';
+comment on column daq_dynamic_compressor_motor.tenders_oid is '标段oid';
+comment on column daq_dynamic_compressor_motor.pipeline_oid is '管线oid';
+comment on column daq_dynamic_compressor_motor.pipe_station_oid is '站场/阀室oid';
+comment on column daq_dynamic_compressor_motor.device_code is '设备编号';
+comment on column daq_dynamic_compressor_motor.compressor_motor_name is '压缩机电机名称';
+comment on column daq_dynamic_compressor_motor.manufacture_number is '出厂编号';
+comment on column daq_dynamic_compressor_motor.picture_code is '照片编号';
+comment on column daq_dynamic_compressor_motor.empty_debug_record is '空载试验记录';
+comment on column daq_dynamic_compressor_motor.construct_unit is '施工单位';
+comment on column daq_dynamic_compressor_motor.supervision_unit is '监理单位';
+comment on column daq_dynamic_compressor_motor.supervision_engineer is '监理工程师';
+comment on column daq_dynamic_compressor_motor.collection_person is '数据采集人';
+comment on column daq_dynamic_compressor_motor.collection_date is '采集日期';
+comment on column daq_dynamic_compressor_motor.construct_date is '施工日期';
+comment on column daq_dynamic_compressor_motor.approve_status is '审核状态';
+comment on column daq_dynamic_compressor_motor.remarks is '备注';
+comment on column daq_dynamic_compressor_motor.create_user_id is '创建人id';
+comment on column daq_dynamic_compressor_motor.create_user_name is '创建人名称';
+comment on column daq_dynamic_compressor_motor.create_datetime is '创建时间';
+comment on column daq_dynamic_compressor_motor.modify_user_id is '修改人id';
+comment on column daq_dynamic_compressor_motor.modify_user_name is '修改人名称';
+comment on column daq_dynamic_compressor_motor.modify_datetime is '修改时间';
+comment on column daq_dynamic_compressor_motor.active is '有效标志';
+
+
+create table daq_static_receiver_launcher_device( 
+oid varchar(36) not null primary key,
+project_oid varchar(36)  ,
+tenders_oid varchar(36)  ,
+pipeline_oid varchar(36)  ,
+pipe_station_oid varchar(36)  ,
+device_code varchar(50)  ,
+device_name varchar(50)  ,
+manufacture_number varchar(50)  ,
+main_tube_length numeric(9,3)  ,
+device_type varchar(50)  ,
+length_from_equip_to_board numeric(9,3)  ,
+construct_date timestamp(6)  ,
+construct_unit varchar(36)  ,
+supervision_unit varchar(36)  ,
+supervision_engineer varchar(50)  ,
+collection_person varchar(30)  ,
+collection_date timestamp(6)  ,
+approve_status smallint  default 0 ,
+remarks varchar(200)  ,
+create_user_id varchar(36)  ,
+create_user_name varchar(50)  ,
+create_datetime timestamp(6)  ,
+modify_user_id varchar(36)  ,
+modify_user_name varchar(50)  ,
+modify_datetime timestamp(6)  ,
+active smallint not null default 1  ); 
+comment on table daq_static_receiver_launcher_device is '清管器收发球装置装置表';
+comment on column daq_static_receiver_launcher_device.oid is '主键';
+comment on column daq_static_receiver_launcher_device.project_oid is '项目oid';
+comment on column daq_static_receiver_launcher_device.tenders_oid is '标段oid';
+comment on column daq_static_receiver_launcher_device.pipeline_oid is '管线oid';
+comment on column daq_static_receiver_launcher_device.pipe_station_oid is '站场/阀室oid';
+comment on column daq_static_receiver_launcher_device.device_code is '设备编号';
+comment on column daq_static_receiver_launcher_device.device_name is '名称';
+comment on column daq_static_receiver_launcher_device.manufacture_number is '出厂编号';
+comment on column daq_static_receiver_launcher_device.main_tube_length is '主筒长度(m)';
+comment on column daq_static_receiver_launcher_device.device_type is '类型';
+comment on column daq_static_receiver_launcher_device.length_from_equip_to_board is '喷射器/制动器至盲板的距离(m)';
+comment on column daq_static_receiver_launcher_device.construct_date is '施工日期';
+comment on column daq_static_receiver_launcher_device.construct_unit is '施工单位';
+comment on column daq_static_receiver_launcher_device.supervision_unit is '监理单位';
+comment on column daq_static_receiver_launcher_device.supervision_engineer is '监理工程师';
+comment on column daq_static_receiver_launcher_device.collection_person is '数据采集人';
+comment on column daq_static_receiver_launcher_device.collection_date is '采集日期';
+comment on column daq_static_receiver_launcher_device.approve_status is '审核状态';
+comment on column daq_static_receiver_launcher_device.remarks is '备注';
+comment on column daq_static_receiver_launcher_device.create_user_id is '创建人id';
+comment on column daq_static_receiver_launcher_device.create_user_name is '创建人名称';
+comment on column daq_static_receiver_launcher_device.create_datetime is '创建时间';
+comment on column daq_static_receiver_launcher_device.modify_user_id is '修改人id';
+comment on column daq_static_receiver_launcher_device.modify_user_name is '修改人名称';
+comment on column daq_static_receiver_launcher_device.modify_datetime is '修改时间';
+comment on column daq_static_receiver_launcher_device.active is '有效标志';
+
+
+create table daq_static_flare( 
+oid varchar(36) not null primary key,
+project_oid varchar(36)  ,
+tenders_oid varchar(36)  ,
+pipeline_oid varchar(36)  ,
+pipe_station_oid varchar(36)  ,
+device_code varchar(50)  ,
+device_name varchar(50)  ,
+manufacture_number varchar(50)  ,
+construct_date timestamp(6)  ,
+construct_unit varchar(36)  ,
+supervision_unit varchar(36)  ,
+supervision_engineer varchar(50)  ,
+collection_person varchar(30)  ,
+collection_date timestamp(6)  ,
+approve_status smallint  default 0 ,
+remarks varchar(200)  ,
+create_user_id varchar(36)  ,
+create_user_name varchar(50)  ,
+create_datetime timestamp(6)  ,
+modify_user_id varchar(36)  ,
+modify_user_name varchar(50)  ,
+modify_datetime timestamp(6)  ,
+active smallint not null default 1  ); 
+comment on table daq_static_flare is '放空火炬表';
+comment on column daq_static_flare.oid is '主键';
+comment on column daq_static_flare.project_oid is '项目oid';
+comment on column daq_static_flare.tenders_oid is '标段oid';
+comment on column daq_static_flare.pipeline_oid is '管线oid';
+comment on column daq_static_flare.pipe_station_oid is '站场/阀室oid';
+comment on column daq_static_flare.device_code is '设备编号';
+comment on column daq_static_flare.device_name is '名称';
+comment on column daq_static_flare.manufacture_number is '出厂编号';
+comment on column daq_static_flare.construct_date is '施工日期';
+comment on column daq_static_flare.construct_unit is '施工单位';
+comment on column daq_static_flare.supervision_unit is '监理单位';
+comment on column daq_static_flare.supervision_engineer is '监理工程师';
+comment on column daq_static_flare.collection_person is '数据采集人';
+comment on column daq_static_flare.collection_date is '采集日期';
+comment on column daq_static_flare.approve_status is '审核状态';
+comment on column daq_static_flare.remarks is '备注';
+comment on column daq_static_flare.create_user_id is '创建人id';
+comment on column daq_static_flare.create_user_name is '创建人名称';
+comment on column daq_static_flare.create_datetime is '创建时间';
+comment on column daq_static_flare.modify_user_id is '修改人id';
+comment on column daq_static_flare.modify_user_name is '修改人名称';
+comment on column daq_static_flare.modify_datetime is '修改时间';
+comment on column daq_static_flare.active is '有效标志';
+/**站场数据采集end**/
