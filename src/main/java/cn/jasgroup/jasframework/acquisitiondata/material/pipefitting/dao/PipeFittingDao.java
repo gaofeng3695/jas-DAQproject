@@ -121,10 +121,10 @@ public class PipeFittingDao{
 		}
 		switch (pipeTypeCode) {
 		case "pipe_type_code_0011"://直钢管
-			sql = "update daq_material_pipe set tenders_oid='"+tendersOid+"',pipeline_oid='"+pipelineOid+"',back_is_use="+isUse+" where oid='"+pipeOid+"'";
+			sql = "update daq_material_pipe set tenders_oid='"+tendersOid+"',pipeline_oid='"+pipelineOid+"',back_is_use="+isUse+",is_use="+isUse+" where oid='"+pipeOid+"'";
 			break;
 		case "pipe_type_code_0021"://热煨弯管
-			sql = "update daq_material_hot_bends set tenders_oid='"+tendersOid+"',pipeline_oid='"+pipelineOid+"',back_is_use="+isUse+" where oid='"+pipeOid+"'";
+			sql = "update daq_material_hot_bends set tenders_oid='"+tendersOid+"',pipeline_oid='"+pipelineOid+"',back_is_use="+isUse+",is_use="+isUse+" where oid='"+pipeOid+"'";
 			break;
 		case "pipe_type_code_003"://三通
 			sql = "update daq_material_tee set tenders_oid='"+tendersOid+"',pipeline_oid='"+pipelineOid+"',is_use="+isUse+" where oid='"+pipeOid+"'";
