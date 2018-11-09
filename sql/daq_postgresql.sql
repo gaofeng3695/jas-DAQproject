@@ -6307,7 +6307,7 @@ comment on column daq_dynamic_compressor.pipe_station_oid is '站场/阀室oid';
 comment on column daq_dynamic_compressor.device_code is '设备编号';
 comment on column daq_dynamic_compressor.compressor_name is '压缩机名称';
 comment on column daq_dynamic_compressor.manufacture_number is '出厂编号';
-comment on column daq_dynamic_compressor.concentricity is '同心度';
+comment on column daq_dynamic_compressor.concentricity is '同心度(mm)';
 comment on column daq_dynamic_compressor.picture_code is '照片编号';
 comment on column daq_dynamic_compressor.lubricant_brand is '润滑油牌号';
 comment on column daq_dynamic_compressor.lubricating_total_add is '润滑油/脂加装总量（kg)';
