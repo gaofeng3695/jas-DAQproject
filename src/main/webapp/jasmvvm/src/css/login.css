@@ -195,9 +195,11 @@ button {
 .form .login-btn {
     padding-top: 20px;
 }
-.login-btn button{
-    background:#25a1fb;
+
+.login-btn button {
+    background: #25a1fb;
 }
+
 .password {
     font-size: 16px;
     color: #178de4;
@@ -227,6 +229,7 @@ button {
     width: 100%;
     text-align: center;
     position: absolute;
-    bottom: 16px;
+    bottom: 8px;
     margin: 0 auto;
+    color: #333;
 }
