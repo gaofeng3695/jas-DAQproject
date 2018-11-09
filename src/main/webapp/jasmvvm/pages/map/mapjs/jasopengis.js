@@ -368,7 +368,7 @@ var JasMap = null ,M = null;
                 var params = commonUtil.extend(defaults ,args[0]);
                 featureId = params.featureId;
                 layerId = params.layerId;
-                where = params.where;
+                where = params.where ? params.where : "";
                 url = params.url;
             }
             if(layerId){
@@ -1277,7 +1277,7 @@ var JasMap = null ,M = null;
                 if(_this.mapConfig.attribution !== true){
                     _this.map.getControls().pop();//移除attribution
                 }
-                if(_this.mapConfig.scale === true){//有点问题！
+                if(_this.mapConfig.scale !== false){//有点问题！
                     var scaleLineControl = new ol.control.ScaleLine({
                         "units":"metric",
                         "topOutUnits":"千米",
@@ -1936,7 +1936,7 @@ var JasMap = null ,M = null;
                 _this.map.interactions.forEach(function(ele,index,arr){
                     if(ele instanceof ol.interaction.DragZoom){
                         dragZoomInteracting = ele;
-
+                        
                     }
                 });
                 if(dragZoomInteracting !== null){
