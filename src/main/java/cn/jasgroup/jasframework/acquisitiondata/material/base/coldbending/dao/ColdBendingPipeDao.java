@@ -12,10 +12,10 @@ import cn.jasgroup.jasframework.dataaccess.base.BaseJdbcDao;
 @Repository
 public class ColdBendingPipeDao extends BaseJdbcDao{
 	
-	public void chanageOriginalPipeUseState(String projectOid,String pipelineOid, String tendersOid, String pipeOid){
+	public void chanageOriginalPipeUseState(int isColdeBend,String projectOid,String pipelineOid, String tendersOid, String pipeOid){
 //		String sql = "update daq_material_pipe set is_cold_bend=1 where oid=?";
-		String sql = "update daq_material_pipe set project_oid=?,pipeline_oid=?,tenders_oid=? where oid=?";
-		this.update(sql, new Object[]{projectOid,pipelineOid,tendersOid,pipeOid});
+		String sql = "update daq_material_pipe set is_cold_bend=?, project_oid=?,pipeline_oid=?,tenders_oid=? where oid=?";
+		this.update(sql, new Object[]{isColdeBend,projectOid,pipelineOid,tendersOid,pipeOid});
 	}
 	
 	/***
