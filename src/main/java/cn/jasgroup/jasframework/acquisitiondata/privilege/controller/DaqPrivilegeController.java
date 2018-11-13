@@ -487,6 +487,9 @@ public class DaqPrivilegeController extends BaseController{
 			}else{
 				result.put("unitType", 0);
 			}
+			String loginName = paramMap.get("loginNum").toString();
+			String base64Image = this.daqPrivilegeService.getFaceInfo(loginName);
+			result.put("base64Image", base64Image);
 			return result;
 		} catch (Exception e) {
 			return resultData;
