@@ -1,6 +1,7 @@
 package cn.jasgroup.jasframework.acquisitiondata.statistics.normal.dao;
 
 import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.ApproveStatisticsBlock;
+import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.MaterialStatisticsBlock;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.StatsBackPipeTypeEnum;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.StatsPipeTypeEnum;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.service.bo.DataEntryAuditBo;
@@ -285,7 +286,7 @@ public class OverallStatisticsDao {
 
     public List<DataEntryAuditBo> dataEntryAudit(List<String> projectIds) {
 
-        String sqlFormat = "" +
+        /*String sqlFormat = "" +
                 " select count(*) as total, " +
                 " sum(case when (approve_status=1 or approve_status=-1) then 1 else 0 end) as need_audit, " +
                 " sum(case when (approve_status=2) then 1 else 0 end) as audited" +
@@ -301,8 +302,38 @@ public class OverallStatisticsDao {
         for (int i = 0; i < codeList.size(); i++) {
             sql.append(String.format(sqlFormat, ApproveStatisticsBlock.ALL.get(codeList.get(i)).getTableName()));
             sql.append(i<(codeList.size()-1) ? " UNION ALL ":"");
+        }*/
+        String sqlFormat = "" +
+        		" select count(*) as total, " +
+        		" count(*) as need_audit, " +
+        		" sum(case when (approve_status=2) then 1 else 0 end) as audited" +
+        		" from %s where active = 1 ";
+        String sqlFormatMaterial = "" +
+        		" select count(*) as total, " +
+        		" 0 as need_audit, " +
+        		" 0 as audited" +
+        		" from %s where active = 1 ";
+        if (!CollectionUtils.isEmpty(projectIds)) {
+        	sqlFormat = sqlFormat.concat(" and project_oid in (:projectIds) ");
+        	sqlFormatMaterial = sqlFormatMaterial.concat(" and project_oid in (:projectIds) ");
         }
-
+        
+        List<String> codeList = new ArrayList<>(ApproveStatisticsBlock.ALL.keySet());
+        
+        StringBuilder sql = new StringBuilder();
+        for (int i = 0; i < codeList.size(); i++) {
+        	sql.append(String.format(sqlFormat, ApproveStatisticsBlock.ALL.get(codeList.get(i)).getTableName()));
+        	sql.append(i<(codeList.size()-1) ? " UNION ALL ":"");
+        }
+        
+        System.err.println(sql.toString());
+        List<String> materialCodeList = new ArrayList<>(MaterialStatisticsBlock.ALL.keySet());
+        sql.append(" UNION ALL ");
+        for (int j = 0; j < materialCodeList.size(); j++) {
+        	sql.append(String.format(sqlFormatMaterial, MaterialStatisticsBlock.ALL.get(materialCodeList.get(j)).getTableName()));
+        	sql.append(j<(materialCodeList.size()-1) ? " UNION ALL ":"");
+        }
+        System.err.println(sql.toString());
         return commonDataJdbcDao.queryForList(sql.toString(), ImmutableMap.of("projectIds", projectIds), DataEntryAuditBo.class);
     }
 
