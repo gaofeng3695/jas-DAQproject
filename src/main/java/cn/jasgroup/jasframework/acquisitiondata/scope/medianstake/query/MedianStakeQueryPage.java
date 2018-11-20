@@ -25,7 +25,7 @@ public class MedianStakeQueryPage extends BaseJavaQuery{
 	private String medianStakeCode;
 	
 	@Override
-	public String getSql() {
+	public String getQuerySql() {
 		String sql = "select t.*,p.project_name,l.pipeline_name "
 				+ "from daq_median_stake t "
 				+ "left join daq_project p on p.oid=t.project_oid "

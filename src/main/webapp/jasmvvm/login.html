@@ -12,10 +12,40 @@
 	<link rel="stylesheet" href="./lib/font-awesome-4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="./src/css/main.css">
 	<link rel="stylesheet" href="./src/css/login.css">
+	<style>
+		.applink {
+			overflow: hidden;
+			height: 24px;
+			font-size: 16px;
+			line-height: 24px;
+			background: #f90;
+			text-align: center;
+			width: 140px;
+			position: absolute;
+			left: 0;
+			top: 0;
+			transform: translateX(-30px) translateY(28px) rotateZ(-45deg);
+			-webkit-transform: translateX(-30px) translateY(28px) rotateZ(-45deg);
+			-webkit-box-shadow: 0px 1px 9px #666;
+			box-shadow: 0px 1px 9px #666;
+			color: #666;
+			cursor: pointer;
+		}
+	</style>
 </head>
 
 <body>
-	<div class="login-wrap">
+	<div class="login-wrap" >
+		<div class="applink" @click="centerDialogVisible = true">APP下载</div>
+		<el-dialog v-cloak title="APP下载" :visible.sync="centerDialogVisible" width="350px" center>
+			<div style="width:300px;height:300px;background: #00b7ff url(src/images/wecode.png) no-repeat center center">
+
+			</div>
+			<span slot="footer" class="dialog-footer">
+				<el-button size="small" @click="centerDialogVisible = false">取 消</el-button>
+				<el-button size="small" type="primary" @click="downloadApp">直接下载</el-button>
+			</span>
+		</el-dialog>
 		<div class="content">
 			<div class="content-bg">
 				<div class="start">
@@ -55,9 +85,9 @@
 			<div class="bg5">
 			</div>
 		</div>
-		<!--<p class="copyright">
+		<p class="copyright">
 			版权所有：北京中盈安信技术服务股份有限公司 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;京ICP备12006059号-1
-		</p>-->
+		</p>
 	</div>
 
 
@@ -75,6 +105,7 @@
 		el: ".login-wrap",
 		data: function () {
 			return {
+				centerDialogVisible: false,
 				logined: 0,
 				isPersonal: false,
 				ruleForm: {
@@ -146,6 +177,10 @@
 				// 		}
 				// 	}
 				// });
+			},
+			downloadApp: function () {
+				this.centerDialogVisible = false;
+				jasTools.ajax.downloadByIframe('get', 'http://download.zyax.cn/jasdaq.apk');
 			}
 		}
 	});

@@ -37,7 +37,7 @@ public class DaqCrossAcrossQuery extends BaseJavaQuery {
 	private String constructUnit;
 	
 	@Override
-	public String getSql() {
+	public String getQuerySql() {
 		String sql = "select t.*, "
 				+ " p.project_name,"
 				+ " l.pipeline_name,"

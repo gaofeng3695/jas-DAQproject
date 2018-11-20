@@ -37,7 +37,7 @@ public class DaqAppendagesCasingPipeQuery extends BaseJavaQuery {
 	private String constructUnit;
 	
 	@Override
-	public String getSql() {
+	public String getQuerySql() {
 		String sql =  "select t.*,"
 				+ " d1.code_name as casingPipeTypeName,"
 				+ "	p.project_name,"

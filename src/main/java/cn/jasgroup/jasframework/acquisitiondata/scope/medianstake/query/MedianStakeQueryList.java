@@ -14,7 +14,7 @@ import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 public class MedianStakeQueryList extends BaseJavaQuery{
 	
 	@Override
-	public String getSql() {
+	public String getQuerySql() {
 		String unitOid = ThreadLocalHolder.getCurrentUser().getUnitId();
 		String sql = "select t.oid,t.project_oid,t.pipeline_oid,t.median_stake_code,t.mileage,st_x(t.geom) as pointx,st_y(t.geom) as pointy,st_z(t.geom) as pointz "
 				+ "from daq_median_stake t "

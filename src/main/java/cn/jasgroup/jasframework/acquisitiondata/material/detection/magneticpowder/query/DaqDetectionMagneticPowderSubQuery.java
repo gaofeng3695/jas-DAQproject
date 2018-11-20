@@ -31,7 +31,7 @@ public class DaqDetectionMagneticPowderSubQuery extends BaseJavaQuery{
 	private String parentOid;
 
 	@Override
-	public String getSql() {
+	public String getQuerySql() {
 		String sql = "select t.*,d.code_name as defectPropertiesName,"
 				+ " vdwi.weld_code "
 				+ " from daq_detection_magnetic_powder_sub t "
