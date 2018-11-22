@@ -225,14 +225,15 @@
         	return item!='项目群'
         });
         jasTools.ajax.post(url, {projectOids:ids}, function (data) {
+        	console.log(data);
           var pass;
           var noPass;
           if (data.data.count == 0) {
             pass = 1;
             noPass = 0;
           } else {
-            pass = data.data.passCount / data.data.count;
-            noPass = (data.data.count - data.data.passCount) / data.data.count;
+            pass = data.data.passCount;
+            noPass = data.data.count - data.data.passCount;
           }
           that.renderYield(pass, noPass);
         });
@@ -383,6 +384,8 @@
         that.inputAndCheck.setOption(option);
       },
       renderYield: function (pass, noPass) {
+    	  console.log(pass);
+    	  console.log(noPass);
         var that = this;
         that.yield = echarts.init(document.getElementById('yield'));
         var option = {

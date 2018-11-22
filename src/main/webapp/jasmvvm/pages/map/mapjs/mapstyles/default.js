@@ -62,6 +62,7 @@ JasMap.require(function(){
             color: 'rgba(225, 0, 255, 1)'
         })
     });
+
     /**
      *
      * @type {ol.style.Style}
