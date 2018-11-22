@@ -827,14 +827,14 @@
 			 changeStart (){
 			    this.pickerOptionsStart = Object.assign({},this.pickerOptionsStart,{
 			     disabledDate: (time) => {
-			      return time.getTime() >new Date(this.formData.collectionDate).getTime() ;
+			      return time.getTime() >new Date(this.formData.collectionDate).getTime()||time.getTime()>new Date().getTime();
 			     }
 			    })
 			   },
 			   changeEnd (){
 			    this.pickerOptionsEnd = Object.assign({},this.pickerOptionsEnd,{
 			     disabledDate: (time) => {
-			      return time.getTime() <new Date(this.formData.constructDate).getTime()
+			      return time.getTime() <new Date(this.formData.constructDate).getTime()||time.getTime()>new Date().getTime();
 			      }
 			    })
 			   },

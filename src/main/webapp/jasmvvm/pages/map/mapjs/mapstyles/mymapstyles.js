@@ -13,26 +13,126 @@ JasMap.require(function () {
   //  * @param feature 样式如果是函数类型，该参数是要渲染的要素对象，包含pipesegmentname属性值
   //  * @returns {*}  函数返回值为样式对象
   //  */
-  mapStyleTemplates.pipesegment_renderer_by_pipename = function(feature ) {
-      if(!styleManager.pipesegment_renderer_by_pipename_style){
-          styleManager.pipesegment_renderer_by_pipename_style = {};
-      }
-      var name = feature.get('pipesegmentname');
-      if(!styleManager.pipesegment_renderer_by_pipename_style[name]){
-          var color = styleManager.randomColor();//随机颜色
-          //创建openlayers样式
-          var style = new ol.style.Style({
-              stroke: new ol.style.Stroke({
-                  color: color ,
-                  width: 6
-              })
-          });
-          //保存已经有的属性字段样式
-          styleManager.pipesegment_renderer_by_pipename_style[name] = style;
-      }
-      return styleManager.pipesegment_renderer_by_pipename_style[name]
-  };​
-
+//  mapStyleTemplates.pipesegment_renderer_by_pipename = function() {
+//      if(!styleManager.pipesegment_renderer_by_pipename_style){
+//          styleManager.pipesegment_renderer_by_pipename_style = {};
+//      }
+//      var name = feature.get('pipesegmentname');
+//      if(!styleManager.pipesegment_renderer_by_pipename_style[name]){
+//          var color = styleManager.randomColor();//随机颜色
+//          //创建openlayers样式
+//          var style = new ol.style.Style({
+//              stroke: new ol.style.Stroke({
+//                  color: color ,
+//                  width: 6
+//              })
+//          });
+//          //保存已经有的属性字段样式
+//          styleManager.pipesegment_renderer_by_pipename_style[name] = style;
+//      }
+//      return styleManager.pipesegment_renderer_by_pipename_style[name]
+//  };​
+//穿跨越
+  mapStyleTemplates.crossAcross=function(feature){
+	  if(!styleManager.crossAcrossStyle){
+		  styleManager.crossAcrossStyle={};  
+	  }
+	  var name = feature.get('pipesegmentname');
+	  if(!styleManager.crossAcrossStyle[name]){
+		  var style = new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: '#fec880' ,
+                width: 4
+            })
+        });
+		  styleManager.crossAcrossStyle[name]=style;
+	  }
+	  return  styleManager.crossAcrossStyle[name];
+  }
+//钻爆隧道穿越
+  mapStyleTemplates.crossDrillingBlasting=function(feature){
+	  if(!styleManager.crossAcrossStyle){
+		  styleManager.crossAcrossStyle={};  
+	  }
+	  var name = feature.get('pipesegmentname');
+	  if(!styleManager.crossAcrossStyle[name]){
+		  var style = new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: '#f9ff00' ,
+                width: 4
+            })
+        });
+		  styleManager.crossAcrossStyle[name]=style;
+	  }
+	  return  styleManager.crossAcrossStyle[name];
+  }
+//盾构隧道穿越
+  mapStyleTemplates.crossShield=function(feature){
+	  if(!styleManager.crossAcrossStyle){
+		  styleManager.crossAcrossStyle={};  
+	  }
+	  var name = feature.get('pipesegmentname');
+	  if(!styleManager.crossAcrossStyle[name]){
+		  var style = new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: '#ccf068' ,
+                width: 4
+            })
+        });
+		  styleManager.crossAcrossStyle[name]=style;
+	  }
+	  return  styleManager.crossAcrossStyle[name];
+  }//定向钻穿越
+  mapStyleTemplates.crossDrilling=function(feature){
+	  if(!styleManager.crossAcrossStyle){
+		  styleManager.crossAcrossStyle={};  
+	  }
+	  var name = feature.get('pipesegmentname');
+	  if(!styleManager.crossAcrossStyle[name]){
+		  var style = new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: '#00e0fc' ,
+                width: 4
+            })
+        });
+		  styleManager.crossAcrossStyle[name]=style;
+	  }
+	  return  styleManager.crossAcrossStyle[name];
+  }
+  //箱涵穿越
+  mapStyleTemplates.crossBoxCulvert=function(feature){
+	  if(!styleManager.crossAcrossStyle){
+		  styleManager.crossAcrossStyle={};  
+	  }
+	  var name = feature.get('pipesegmentname');
+	  if(!styleManager.crossAcrossStyle[name]){
+		  var style = new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: '#ae20ff' ,
+                width: 4
+            })
+        });
+		  styleManager.crossAcrossStyle[name]=style;
+	  }
+	  return  styleManager.crossAcrossStyle[name];
+  }
+  //顶管穿越
+  mapStyleTemplates.crossPipeJacking=function(feature){
+	  if(!styleManager.crossAcrossStyle){
+		  styleManager.crossAcrossStyle={};  
+	  }
+	  var name = feature.get('pipesegmentname');
+	  if(!styleManager.crossAcrossStyle[name]){
+		  var style = new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: '#fd22d8' ,
+                width: 4
+            })
+        });
+		  styleManager.crossAcrossStyle[name]=style;
+	  }
+	  return  styleManager.crossAcrossStyle[name];
+  }
    /**
      *管道焊口信息
      * @type {ol.style.Style}
@@ -81,7 +181,7 @@ JasMap.require(function () {
 	        angle: Math.PI / 4
 	      })
   });
-//管道阴保  
+//管道阴保
   //绝缘件
   mapStyleTemplates.cathodicIsolatingPiece = new ol.style.Style({
 	  image: new ol.style.RegularShape({
@@ -191,7 +291,7 @@ JasMap.require(function () {
 	        radius: 5,
 	      })
 });
- //手孔 
+ //手孔
  mapStyleTemplates.appendagesHandHole = new ol.style.Style({
 	  image: new ol.style.Circle({
 	        fill: new ol.style.Fill({
@@ -228,7 +328,7 @@ JasMap.require(function () {
 	      })
 });
  /**管道敷设  三角形**/
- //测量放线  
+ //测量放线
  mapStyleTemplates.laySurveying = new ol.style.Style({
 	  image: new ol.style.RegularShape({
 	        fill: new ol.style.Fill({
@@ -239,7 +339,7 @@ JasMap.require(function () {
             points: 3,
 	      })
 });
- //管沟开挖  
+ //管沟开挖
  mapStyleTemplates.layPipeTrenchExcavation = new ol.style.Style({
 	  image: new ol.style.RegularShape({
 	        fill: new ol.style.Fill({
@@ -250,7 +350,7 @@ JasMap.require(function () {
            points: 3,
 	      })
 });
- //管沟开回填 
+ //管沟开回填
  mapStyleTemplates.layPipeTrenchBackfill = new ol.style.Style({
 	  image: new ol.style.RegularShape({
 	        fill: new ol.style.Fill({

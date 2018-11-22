@@ -189,7 +189,6 @@
           "callback":""
           }
         },
-        "maxScale":100000,
         "type": "Vector",
         "source": "Vector",
         "flash": true,
@@ -362,6 +361,11 @@
           "label": "顶管穿越",
           "index": 20,
           "style": "pipesegment",
+           "renderer": {
+            "style": "crossPipeJacking",
+            "labelStyle": "",
+            "labelField": ""
+          },
           "type": "Vector",
           "source": "Vector",
           "flash": true,
@@ -374,6 +378,11 @@
           "label": "箱涵穿越",
           "index": 20,
           "style": "pipesegment",
+                  "renderer": {
+            "style": "crossBoxCulvert",
+            "labelStyle": "",
+            "labelField": ""
+          },
           "type": "Vector",
           "source": "Vector",
           "flash": true,
@@ -386,6 +395,11 @@
           "label": "定向钻穿越",
           "index": 20,
           "style": "pipesegment",
+               "renderer": {
+            "style": "crossDrilling",
+            "labelStyle": "",
+            "labelField": ""
+          },
           "type": "Vector",
           "source": "Vector",
           "flash": true,
@@ -398,6 +412,11 @@
           "label": "盾构隧道穿越",
           "index": 20,
           "style": "pipesegment",
+              "renderer": {
+            "style": "crossShield",
+            "labelStyle": "",
+            "labelField": ""
+          },
           "type": "Vector",
           "source": "Vector",
           "flash": true,
@@ -410,6 +429,11 @@
           "label": "钻爆隧道穿越",
           "index": 20,
           "style": "pipesegment",
+              "renderer": {
+            "style": "crossDrillingBlasting",
+            "labelStyle": "",
+            "labelField": ""
+          },
           "type": "Vector",
           "source": "Vector",
           "flash": true,
@@ -422,6 +446,11 @@
           "label": "跨越",
           "index": 20,
           "style": "pipesegment",
+            "renderer": {
+            "style": "crossAcross",
+            "labelStyle": "",
+            "labelField": ""
+          },
           "type": "Vector",
           "source": "Vector",
           "flash": true,
@@ -662,7 +691,7 @@
           "id": "daq_appendages_casing_pipe",
           "label": "套管",
           "index": 20,
-              "renderer": {
+           "renderer": {
             "style": "appendagesCasingPipe",
             "labelStyle": "",
             "labelField": ""
