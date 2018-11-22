@@ -1,6 +1,6 @@
 {
-  "description":"基于产品 JasOpenGIS 1.0",
-  "style":"lightblue",
+  "description": "基于产品 JasOpenGIS 1.0",
+  "style": "lightblue",
   "basePath": "",
   "resources": [{
       "type": "css",
@@ -11,22 +11,54 @@
       "url": "basepath:../lib/openlayer_v5.0.2/ol.js",
       "id": "ol.js"
     },
-        { "type":"css","url":"basepath:../lib/jquery-easyui/1.5.2/themes/icon.css"},
-    { "type":"css","url":"basepath:../lib/jquery-easyui/1.5.2/themes/default/easyui.css"},
-    { "type":"js","url":"basepath:../lib/jquery/jquery-1.12.4.min.js","id":"jquery.js"  },
-    { "type":"js","url":"basepath:../lib/jquery-easyui/1.5.2/jquery.easyui.min.js","relyOn":"jquery.js" ,"id":"easyui.js"  },
-    { "type":"js","url":"basepath:../lib/jquery-easyui/1.5.2/locale/easyui-lang-zh_CN.js","relyOn":"easyui.js" ,"id":"easyui-lang.js"  },
+    {
+      "type": "css",
+      "url": "basepath:../lib/jquery-easyui/1.5.2/themes/icon.css"
+    },
+    {
+      "type": "css",
+      "url": "basepath:../lib/jquery-easyui/1.5.2/themes/default/easyui.css"
+    },
+    {
+      "type": "js",
+      "url": "basepath:../lib/jquery/jquery-1.12.4.min.js",
+      "id": "jquery.js"
+    },
+    {
+      "type": "js",
+      "url": "basepath:../lib/jquery-easyui/1.5.2/jquery.easyui.min.js",
+      "relyOn": "jquery.js",
+      "id": "easyui.js"
+    },
+    {
+      "type": "js",
+      "url": "basepath:../lib/jquery-easyui/1.5.2/locale/easyui-lang-zh_CN.js",
+      "relyOn": "easyui.js",
+      "id": "easyui-lang.js"
+    },
     {
       "type": "js",
       "url": "basepath:../lib/proj4js/proj4_2.4.4.js"
     },
-       { "type":"js","url":"basepath:../lib/FileSaver.min.js"},
+    {
+      "type": "js",
+      "url": "basepath:../lib/FileSaver.min.js"
+    },
 
     {
       "type": "js",
       "url": "basepath:mapmodules.js"
     },
-        { "type":"js","url":"basepath:mapstyles/default.js" ,"relyOn":"ol.js"  }
+    {
+      "type": "js",
+      "url": "basepath:mapstyles/default.js",
+      "relyOn": "ol.js"
+    },
+    {
+      "type": "js",
+      "url": "basepath:mapstyles/mymapstyles.js",
+      "relyOn": "ol.js"
+    }
 
   ],
   "services": {},
@@ -76,58 +108,64 @@
     "basemaps": {
       "label": "基础底图",
       "baseMapLayers": [{
-        "id":"china_shp_tdt" ,"visible":false,
-        "label":"天地图矢量","icon":"stylepath:images/basemap_shp.png",
-        "layerSet":[{
-            "id":"china_shp_tdt_0" ,
-            "index":5,
-            "label":"全球地形图标注",
-            "type":"Tile",
-            "source":"tdt",
-            "layer":"cva"
-        },{
-          "id":"china_shp_tdt_1" ,
-          "index":2,
-          "label":"全球矢量图",
-          "type":"Tile",
-          "source":"tdt",
-          "layer":"vec"
+        "id": "china_shp_tdt",
+        "visible": false,
+        "label": "天地图矢量",
+        "icon": "stylepath:images/basemap_shp.png",
+        "layerSet": [{
+          "id": "china_shp_tdt_0",
+          "index": 5,
+          "label": "全球地形图标注",
+          "type": "Tile",
+          "source": "tdt",
+          "layer": "cva"
+        }, {
+          "id": "china_shp_tdt_1",
+          "index": 2,
+          "label": "全球矢量图",
+          "type": "Tile",
+          "source": "tdt",
+          "layer": "vec"
         }]
-      },{
-        "id":"china_img_tdt" ,"visible":true,
-        "label":"天地图影像","icon":"stylepath:images/basemap_img.png",
-        "layerSet":[{
-          "id":"china_img_tdt_0" ,
-          "index":5,
-          "label":"全球影像图标注",
-          "type":"Tile",
-          "source":"tdt",
-          "layer":"cia"
-        },{
-          "id":"china_img_tdt_1" ,
-          "index":2,
-          "label":"全球影像图",
-          "type":"Tile",
-          "source":"tdt",
-          "layer":"img"
+      }, {
+        "id": "china_img_tdt",
+        "visible": true,
+        "label": "天地图影像",
+        "icon": "stylepath:images/basemap_img.png",
+        "layerSet": [{
+          "id": "china_img_tdt_0",
+          "index": 5,
+          "label": "全球影像图标注",
+          "type": "Tile",
+          "source": "tdt",
+          "layer": "cia"
+        }, {
+          "id": "china_img_tdt_1",
+          "index": 2,
+          "label": "全球影像图",
+          "type": "Tile",
+          "source": "tdt",
+          "layer": "img"
         }]
-      },{
-        "id":"china_ter_tdt" ,"visible":false,
-        "label":"天地图地形","icon":"stylepath:images/basemap_terr.png",
-        "layerSet":[{
-          "id":"china_ter_tdt_0" ,
-          "index":5,
-          "label":"全球地形图标注",
-          "type":"Tile",
-          "source":"tdt",
-          "layer":"cta"
-        },{
-          "id":"china_ter_tdt_1" ,
-          "index":2,
-          "label":"全球地形图",
-          "type":"Tile",
-          "source":"tdt",
-          "layer":"ter"
+      }, {
+        "id": "china_ter_tdt",
+        "visible": false,
+        "label": "天地图地形",
+        "icon": "stylepath:images/basemap_terr.png",
+        "layerSet": [{
+          "id": "china_ter_tdt_0",
+          "index": 5,
+          "label": "全球地形图标注",
+          "type": "Tile",
+          "source": "tdt",
+          "layer": "cta"
+        }, {
+          "id": "china_ter_tdt_1",
+          "index": 2,
+          "label": "全球地形图",
+          "type": "Tile",
+          "source": "tdt",
+          "layer": "ter"
         }]
       }]
     },
@@ -138,18 +176,28 @@
         "id": "daq_median_stake",
         "label": "中线桩",
         "index": 30,
-        "renderer":{
-          "style":"centerlinestake" ,
-          "labelStyle":"",
-          "labelField":""
+        "renderer": {
+          "style": "centerlinestake",
+          "labelStyle": "",
+          "labelField": ""
         },
+        "listener":{
+        "onHover":{
+          "responseType":"tip",
+          "fieldNames":"median_stake_code",
+          "template":"桩号：${median_stake_code}",
+          "callback":""
+          }
+        },
+        "maxScale":100000,
         "type": "Vector",
         "source": "Vector",
         "flash": true,
         "visible": false,
         "loader": "jas",
         "format": "GeoJSON",
-        "strategy": "all"
+        "strategy": "all",
+        "outFields":"median_stake_code,mileage,pipeline_oid,project_oid"
       }, {
         "id": "layerSet002",
         "label": "管道焊接补口",
@@ -157,6 +205,11 @@
           "id": "daq_construction_weld",
           "label": "焊口信息",
           "index": 20,
+          "renderer": {
+            "style": "constructionWeld",
+            "labelStyle": "",
+            "labelField": ""
+          },
           "style": "pipesegment",
           "type": "Vector",
           "source": "Vector",
@@ -169,6 +222,11 @@
           "id": "daq_weld_rework_weld",
           "label": "焊口返修信息",
           "index": 20,
+          "renderer": {
+            "style": "weldrework",
+            "labelStyle": "",
+            "labelField": ""
+          },
           "style": "pipesegment",
           "type": "Vector",
           "source": "Vector",
@@ -181,6 +239,11 @@
           "id": "daq_weld_measured_result",
           "label": "焊口测量成果信息",
           "index": 20,
+          "renderer": {
+            "style": "weldmeasured",
+            "labelStyle": "",
+            "labelField": ""
+          },
           "style": "pipesegment",
           "type": "Vector",
           "source": "Vector",
@@ -197,6 +260,11 @@
           "id": "daq_lay_surveying",
           "label": "测量放线",
           "index": 20,
+           "renderer": {
+            "style": "laySurveying",
+            "labelStyle": "",
+            "labelField": ""
+          },
           "style": "pipesegment",
           "type": "Vector",
           "source": "Vector",
@@ -209,6 +277,11 @@
           "id": "daq_lay_pipe_trench_excavation",
           "label": "管沟开挖",
           "index": 20,
+             "renderer": {
+            "style": "layPipeTrenchExcavation",
+            "labelStyle": "",
+            "labelField": ""
+          },
           "style": "pipesegment",
           "type": "Vector",
           "source": "Vector",
@@ -221,6 +294,11 @@
           "id": "daq_lay_pipe_trench_backfill",
           "label": "管沟回填",
           "index": 20,
+           "renderer": {
+            "style": "layPipeTrenchBackfill",
+            "labelStyle": "",
+            "labelField": ""
+          },
           "style": "pipesegment",
           "type": "Vector",
           "source": "Vector",
@@ -233,6 +311,11 @@
           "id": "daq_lay_land_restoration",
           "label": "地貌恢复",
           "index": 20,
+           "renderer": {
+            "style": "layLandRestoration",
+            "labelStyle": "",
+            "labelField": ""
+          },
           "style": "pipesegment",
           "type": "Vector",
           "source": "Vector",
@@ -246,6 +329,11 @@
           "label": "保温",
           "index": 20,
           "style": "pipesegment",
+                "renderer": {
+            "style": "layThermalInsulation",
+            "labelStyle": "",
+            "labelField": ""
+          },
           "type": "Vector",
           "source": "Vector",
           "flash": true,
@@ -349,6 +437,11 @@
           "id": "daq_cathodic_isolating_piece",
           "label": "绝缘件",
           "index": 20,
+           "renderer": {
+            "style": "cathodicIsolatingPiece",
+            "labelStyle": "",
+            "labelField": ""
+          },
           "style": "pipesegment",
           "type": "Vector",
           "source": "Vector",
@@ -361,6 +454,11 @@
           "id": "daq_cathodic_cable_protection",
           "label": "阴保电缆",
           "index": 20,
+            "renderer": {
+            "style": "cathodicCableProtection",
+            "labelStyle": "",
+            "labelField": ""
+          },
           "style": "pipesegment",
           "type": "Vector",
           "source": "Vector",
@@ -373,6 +471,11 @@
           "id": "daq_cathodic_sacrifice_anode",
           "label": "牺牲阳极",
           "index": 20,
+              "renderer": {
+            "style": "cathodicSacrificeAnode",
+            "labelStyle": "",
+            "labelField": ""
+          },
           "style": "pipesegment",
           "type": "Vector",
           "source": "Vector",
@@ -385,6 +488,11 @@
           "id": "daq_cathodic_insulated_joint",
           "label": "绝缘接头保护器",
           "index": 20,
+              "renderer": {
+            "style": "cathodicInsulatedJoint",
+            "labelStyle": "",
+            "labelField": ""
+          },
           "style": "pipesegment",
           "type": "Vector",
           "source": "Vector",
@@ -397,6 +505,11 @@
           "id": "daq_cathodic_solid_decoupler",
           "label": "固态去耦合器",
           "index": 20,
+                "renderer": {
+            "style": "cathodicSolidDecoupler",
+            "labelStyle": "",
+            "labelField": ""
+          },
           "style": "pipesegment",
           "type": "Vector",
           "source": "Vector",
@@ -409,6 +522,11 @@
           "id": "daq_cathodic_test_stake",
           "label": "测试桩",
           "index": 20,
+                "renderer": {
+            "style": "cathodicTestStake",
+            "labelStyle": "",
+            "labelField": ""
+          },
           "style": "pipesegment",
           "type": "Vector",
           "source": "Vector",
@@ -421,6 +539,11 @@
           "id": "daq_cathodic_polarity_drainage",
           "label": "极性排流器",
           "index": 20,
+                "renderer": {
+            "style": "cathodicPolarityDrainage",
+            "labelStyle": "",
+            "labelField": ""
+          },
           "style": "pipesegment",
           "type": "Vector",
           "source": "Vector",
@@ -433,6 +556,11 @@
           "id": "daq_cathodic_anode_bed",
           "label": "辅助阳极地床",
           "index": 20,
+                "renderer": {
+            "style": "cathodicAnodeBed",
+            "labelStyle": "",
+            "labelField": ""
+          },
           "style": "pipesegment",
           "type": "Vector",
           "source": "Vector",
@@ -449,6 +577,11 @@
           "id": "daq_appendages_mark_stake",
           "label": "标志桩",
           "index": 20,
+                "renderer": {
+            "style": "appendagesMarkStake",
+            "labelStyle": "",
+            "labelField": ""
+          },
           "style": "pipesegment",
           "type": "Vector",
           "source": "Vector",
@@ -461,6 +594,11 @@
           "id": "daq_appendages_electronic_label",
           "label": "电子标签",
           "index": 20,
+              "renderer": {
+            "style": "appendagesElectronicLabel",
+            "labelStyle": "",
+            "labelField": ""
+          },
           "style": "pipesegment",
           "type": "Vector",
           "source": "Vector",
@@ -473,6 +611,11 @@
           "id": "daq_appendages_hand_hole",
           "label": "手孔",
           "index": 20,
+               "renderer": {
+            "style": "appendagesHandHole",
+            "labelStyle": "",
+            "labelField": ""
+          },
           "style": "pipesegment",
           "type": "Vector",
           "source": "Vector",
@@ -485,6 +628,11 @@
           "id": "daq_appendages_obstacle",
           "label": "地下障碍物",
           "index": 20,
+               "renderer": {
+            "style": "appendagesObstacle",
+            "labelStyle": "",
+            "labelField": ""
+          },
           "style": "pipesegment",
           "type": "Vector",
           "source": "Vector",
@@ -497,6 +645,11 @@
           "id": "daq_appendages_hydraulic_protection",
           "label": "水工保护",
           "index": 20,
+                "renderer": {
+            "style": "appendagesHydraulicProtection",
+            "labelStyle": "",
+            "labelField": ""
+          },
           "style": "pipesegment",
           "type": "Vector",
           "source": "Vector",
@@ -509,6 +662,11 @@
           "id": "daq_appendages_casing_pipe",
           "label": "套管",
           "index": 20,
+              "renderer": {
+            "style": "appendagesCasingPipe",
+            "labelStyle": "",
+            "labelField": ""
+          },
           "style": "pipesegment",
           "type": "Vector",
           "source": "Vector",
@@ -523,108 +681,197 @@
   },
   "proxy": [],
   "modules": [{
-    "id":"baseMapToolsBar","label":"地图工具条","class":"BaseMapToolsBar","icon":"","controller":true,"container":"map",
-    "moduleSet":[{
-      "type":"api","target":"zoomHome","label":"地图复位","index":"","icon":"stylepath:images/reset.png"
-    },{
-      "type":"api","target":"startPanMode","label":"地图导航","index":"","icon":"stylepath:images/mapPan.png"
-    },{
-      "type":"api","target":"zoomIn","label":"拖拽放大地图","index":"","icon":"stylepath:images/zoomIn.png"
-    },{
-      "type":"api","target":"zoomOut","label":"拖拽缩小地图","index":"","icon":"stylepath:images/zoomOut.png"
-    },{
-      "type":"api","target":"drawLineAndGetLength","label":"距离测量","index":"","icon":"stylepath:images/measureDistance.png","toggle":true
-    },{
-      "type":"api","target":"drawPolygonAndGetArea","label":"面积测量","index":"","icon":"stylepath:images/measureArea.png","toggle":true
-    },{
-      "type":"api","target":"clearAllGraphics","label":"清除标记","index":"","icon":"stylepath:images/clear.png"
-    },{
-      "type":"module","target":"coorsPosition","index":"","toggle":true
-    },{
-      "type":"module","target":"drawBox","index":"","toggle":true
-    },{
-      "type":"module","target":"layerListTree","index":"","toggle":true
-    },{
-      "type":"module","target":"circleQuery","index":"","toggle":true
-    },{
-      "type":"module","target":"polygonQuery","index":"","toggle":true
-    },{
-      "type":"api","target":"export","label":"导出图片","index":"","toggle":true,"icon":"stylepath:images/export.png"
+    "id": "baseMapToolsBar",
+    "label": "地图工具条",
+    "class": "BaseMapToolsBar",
+    "icon": "",
+    "controller": true,
+    "container": "map",
+    "moduleSet": [{
+      "type": "api",
+      "target": "zoomHome",
+      "label": "地图复位",
+      "index": "",
+      "icon": "stylepath:images/reset.png"
+    }, {
+      "type": "api",
+      "target": "startPanMode",
+      "label": "地图导航",
+      "index": "",
+      "icon": "stylepath:images/mapPan.png"
+    }, {
+      "type": "api",
+      "target": "zoomIn",
+      "label": "拖拽放大地图",
+      "index": "",
+      "icon": "stylepath:images/zoomIn.png"
+    }, {
+      "type": "api",
+      "target": "zoomOut",
+      "label": "拖拽缩小地图",
+      "index": "",
+      "icon": "stylepath:images/zoomOut.png"
+    }, {
+      "type": "api",
+      "target": "drawLineAndGetLength",
+      "label": "距离测量",
+      "index": "",
+      "icon": "stylepath:images/measureDistance.png",
+      "toggle": true
+    }, {
+      "type": "api",
+      "target": "drawPolygonAndGetArea",
+      "label": "面积测量",
+      "index": "",
+      "icon": "stylepath:images/measureArea.png",
+      "toggle": true
+    }, {
+      "type": "api",
+      "target": "clearAllGraphics",
+      "label": "清除标记",
+      "index": "",
+      "icon": "stylepath:images/clear.png"
+    }, {
+      "type": "module",
+      "target": "coorsPosition",
+      "index": "",
+      "toggle": true
+    }, {
+      "type": "module",
+      "target": "drawBox",
+      "index": "",
+      "toggle": true
+    }, {
+      "type": "module",
+      "target": "layerListTree",
+      "index": "",
+      "toggle": true
+    }, {
+      "type": "api",
+      "target": "export",
+      "label": "导出图片",
+      "index": "",
+      "toggle": true,
+      "icon": "stylepath:images/export.png"
     }]
-  },{
-    "id":"layerListTree","label":"图层控制","class":"LayerListTree","icon":"stylepath:images/layers.png","enable":true,"container":"map"
-  },{
-    "id":"drawBox","label":"标绘","class":"DrawBox","icon":"stylepath:images/draw.png","enable":true
-  },{
-    "id":"coorsPosition","label":"坐标定位","class":"CoorsPosition","icon":"stylepath:images/quicklocate.png","enable":true
-  },{
-    "id":"baseMapsGallary","label":"底图切换","class":"BaseMapsGallary","icon":"stylepath:images/queryByPolygon.png","enable":true,
-    "options":{
-      "folded":true
+  }, {
+    "id": "layerListTree",
+    "label": "图层控制",
+    "class": "LayerListTree",
+    "icon": "stylepath:images/layers.png",
+    "enable": true,
+    "container": "map"
+  }, {
+    "id": "drawBox",
+    "label": "标绘",
+    "class": "DrawBox",
+    "icon": "stylepath:images/draw.png",
+    "enable": true
+  }, {
+    "id": "coorsPosition",
+    "label": "坐标定位",
+    "class": "CoorsPosition",
+    "icon": "stylepath:images/quicklocate.png",
+    "enable": true
+  }, {
+    "id": "baseMapsGallary",
+    "label": "底图切换",
+    "class": "BaseMapsGallary",
+    "icon": "stylepath:images/queryByPolygon.png",
+    "enable": true,
+    "options": {
+      "folded": true
     }
-  },{
-    "id":"overViewMap","label":"鹰眼图","class":"OverViewMap","icon":"stylepath:images/queryByPolygon.png","enable":true,
-    "options":{
-      "url":"http://106.37.179.154:10028/arcgis/rest/services/%E8%A1%8C%E6%94%BF%E5%8C%BA%E5%88%92/MapServer"
+  }, {
+    "id": "overViewMap",
+    "label": "鹰眼图",
+    "class": "OverViewMap",
+    "icon": "stylepath:images/queryByPolygon.png",
+    "enable": true,
+    "options": {
+      "url": "http://106.37.179.154:10028/arcgis/rest/services/%E8%A1%8C%E6%94%BF%E5%8C%BA%E5%88%92/MapServer"
     }
-  },{
-    "id":"mapPrint","label":"地图打印","class":"MapPrint","icon":"stylepath:images/queryByPolygon.png","enable":false
-  },{
-    "id":"mapExport","label":"地图导出","class":"MapExport","icon":"stylepath:images/export.png","enable":true
-  },{
-    "id":"circleQuery","label":"圆查询","class":"CircleQuery",
-    "options":{
-      "showResultPanel":true,
-      "indexEnable":true,
-      "positionEnable":true,
-      "columns":[{
-        "field":"name","title":"名称","width":100,"align":"center"
-      },{
-        "field":"pipeline_oid","title":"线路段","width":100,"align":"center"
+  }, {
+    "id": "mapPrint",
+    "label": "地图打印",
+    "class": "MapPrint",
+    "icon": "stylepath:images/queryByPolygon.png",
+    "enable": false
+  }, {
+    "id": "mapExport",
+    "label": "地图导出",
+    "class": "MapExport",
+    "icon": "stylepath:images/export.png",
+    "enable": true
+  }, {
+    "id": "circleQuery",
+    "label": "圆查询",
+    "class": "CircleQuery",
+    "options": {
+      "showResultPanel": true,
+      "indexEnable": true,
+      "positionEnable": true,
+      "columns": [{
+        "field": "name",
+        "title": "名称",
+        "width": 100,
+        "align": "center"
+      }, {
+        "field": "pipeline_oid",
+        "title": "线路段",
+        "width": 100,
+        "align": "center"
       }],
-      "query":[{
-        "source":"pd_centerlinestake",
-        "sourceLabel":"中线桩",
-        "columnFields":"name,pipeline_oid",
-        "outFields":"stakenumber,lineid"
-      },{
-        "source":"pd_station",
-        "sourceLabel":"站场",
-        "columnFields":"name,pipeline_oid",
-        "outFields":"name,lineid"
-      },{
-        "source":"pd_valveroom",
-        "sourceLabel":"阀室",
-        "columnFields":"name,pipeline_oid",
-        "outFields":"name,lineid"
+      "query": [{
+        "source": "pd_centerlinestake",
+        "sourceLabel": "中线桩",
+        "columnFields": "name,pipeline_oid",
+        "outFields": "stakenumber,lineid,pipeline_oid,project_oid"
+      }, {
+        "source": "pd_station",
+        "sourceLabel": "站场",
+        "columnFields": "name,pipeline_oid",
+        "outFields": "name,lineid"
+      }, {
+        "source": "pd_valveroom",
+        "sourceLabel": "阀室",
+        "columnFields": "name,pipeline_oid",
+        "outFields": "name,lineid"
       }]
     }
-  },{
-    "id":"polygonQuery","class":"PolygonQuery",
-    "options":{
-      "showResultPanel":true,
-      "indexEnable":true,
-      "positionEnable":true,
-      "columns":[{
-        "field":"name","title":"名称","width":100,"align":"center"
-      },{
-        "field":"pipeline_oid","title":"线路段","width":100,"align":"center"
+  }, {
+    "id": "polygonQuery",
+    "class": "PolygonQuery",
+    "options": {
+      "showResultPanel": true,
+      "indexEnable": true,
+      "positionEnable": true,
+      "columns": [{
+        "field": "name",
+        "title": "名称",
+        "width": 100,
+        "align": "center"
+      }, {
+        "field": "pipeline_oid",
+        "title": "线路段",
+        "width": 100,
+        "align": "center"
       }],
-      "query":[{
-        "source":"pd_centerlinestake",
-        "sourceLabel":"中线桩",
-        "columnFields":"name,pipeline_oid",
-        "outFields":"stakenumber,lineid"
-      },{
-        "source":"pd_station",
-        "sourceLabel":"站场",
-        "columnFields":"name,pipeline_oid",
-        "outFields":"name,lineid"
-      },{
-        "source":"pd_valveroom",
-        "sourceLabel":"阀室",
-        "columnFields":"name,pipeline_oid",
-        "outFields":"name,lineid"
+      "query": [{
+        "source": "pd_centerlinestake",
+        "sourceLabel": "中线桩",
+        "columnFields": "name,pipeline_oid",
+        "outFields": "stakenumber,lineid,pipeline_oid,project_oid"
+      }, {
+        "source": "pd_station",
+        "sourceLabel": "站场",
+        "columnFields": "name,pipeline_oid",
+        "outFields": "name,lineid"
+      }, {
+        "source": "pd_valveroom",
+        "sourceLabel": "阀室",
+        "columnFields": "name,pipeline_oid",
+        "outFields": "name,lineid"
       }]
     }
   }]
