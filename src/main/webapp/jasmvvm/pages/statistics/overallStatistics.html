@@ -193,7 +193,7 @@
             var month = [];
             for (var key1 in data.data[key]) {
               var d=data.data[key][key1]?data.data[key][key1]/1000:0;
-              var d1=d?d.toFixed(5):0;
+              var d1=d?d.toFixed(3):0;
               x.push(d1);
               if (months.length == 0) {
                 month.push(key1);
@@ -267,7 +267,7 @@
             var type = item.statsType;
             x.push(that.fieldsMap[type].name);
             var result=item.statsResult?item.statsResult/1000:0;
-            var d1=result?result.toFixed(5):0;
+            var d1=result?result.toFixed(3):0;
             y.push(d1);
           });
           that.renderChart(x, y);
