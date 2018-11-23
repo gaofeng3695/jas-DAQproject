@@ -367,9 +367,11 @@ public class PipeDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public String getTableNameByFunctionCode(String functionCode){
+		Map<String,Object> param = new HashMap<String,Object>();
+		param.put("functionCode",functionCode);
 		String tableName=null;
-		String selectSql = "select t.table_name from custom_fun_function t where t.function_code=?";
-		List<Map<String, Object>> dataList = baseNamedParameterJdbcTemplate.queryForListHump(selectSql, new Object[]{functionCode});
+		String selectSql = "select t.table_name from custom_fun_function t where t.function_code=:functionCode";
+		List<Map<String, Object>> dataList = baseNamedParameterJdbcTemplate.queryForListHump(selectSql, param);
 		if(dataList.size()>0){
 			Object tableNameObj = dataList.get(0).get("tableName");
 			tableName = tableNameObj !=null ? tableNameObj.toString() : "";
