@@ -138,6 +138,7 @@
             "callback": ""
           }
         },
+         "maxScale":200000,
         "outFields": "median_stake_code,mileage,pipeline_oid,project_oid",
         "source": "Vector",
         "flash": true,
