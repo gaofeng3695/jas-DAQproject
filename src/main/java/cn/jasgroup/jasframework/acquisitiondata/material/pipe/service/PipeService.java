@@ -1,13 +1,30 @@
 package cn.jasgroup.jasframework.acquisitiondata.material.pipe.service;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.deepoove.poi.XWPFTemplate;
+import com.deepoove.poi.data.DocxRenderData;
+import com.deepoove.poi.data.PictureRenderData;
+
 import cn.jasgroup.jasframework.acquisitiondata.material.pipe.dao.PipeDao;
+import cn.jasgroup.jasframework.acquisitiondata.story.StoryData;
+import cn.jasgroup.jasframework.acquisitiondata.utils.ScannerUtils;
+import cn.jasgroup.jasframework.support.ThreadLocalHolder;
+import cn.jasgroup.jasframework.utils.ReadConfigUtil;
+
 
 @Service
 @Transactional
@@ -15,6 +32,7 @@ public class PipeService {
 
 	@Autowired
 	private PipeDao pipeDao;
+	
 
 	/**
 	 * <p>功能描述：。</p>
@@ -210,4 +228,54 @@ public class PipeService {
 		return pipeDao.getPipeColdBendingList(projectOids);
 	}
 	
+	/***
+	  * <p>功能描述：直管二维生成。</p>
+	  * <p> 雷凯。</p>	
+	  * @param request
+	  * @param oids
+	  * @return
+	  * @throws Exception
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年11月23日 上午11:27:54。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public String produceScanner(HttpServletRequest request,List<String> oids) throws Exception{
+		String root = request.getServletContext().getRealPath(File.separator);
+		String scannerFileOid = UUID.randomUUID().toString();
+		String tempPath = ReadConfigUtil.getPlatformConfig("scanner.tempPath");
+		tempPath += File.separator+System.currentTimeMillis();
+		List<PipeScannerBo> scannerList = this.pipeDao.produceScanner(oids);
+		if(scannerList!=null && scannerList.size()>0){
+			StoryData data = new StoryData();
+			data.setTitleName("直管");
+			List<PipeScannerBo> segments = new ArrayList<PipeScannerBo>();
+			List<PipeScannerBo> segments2 = new ArrayList<PipeScannerBo>();
+			for(int k=0;k<3;k++){
+				for(int i=0; i<scannerList.size(); i++){
+					PipeScannerBo bo = scannerList.get(i);
+					String picturePath = ScannerUtils.createScanner(tempPath, bo.getScannerContext());
+					bo.setPicture(new PictureRenderData(130, 130, picturePath));
+					if(i%2==0){
+						segments.add(bo);
+					}else{
+						segments2.add(bo);
+					}
+				}
+			}
+			DocxRenderData segment = new DocxRenderData(new File(root+"pipeSegment.docx"), segments );
+			DocxRenderData segment2 = new DocxRenderData(new File(root+"pipeSegment.docx"), segments2 );
+			data.setSegment(segment);
+			data.setSegment2(segment2);
+
+			XWPFTemplate template = XWPFTemplate.compile(new File(root+"/story.docx")).render(data);
+			String scannerFilePath = tempPath+File.separator+"直管二维码.docx";
+			FileOutputStream out = new FileOutputStream(scannerFilePath);
+			template.write(out);
+			out.flush();
+			out.close();
+			template.close();
+			ThreadLocalHolder.setParam(scannerFileOid, scannerFilePath);
+		}
+		return scannerFileOid;
+	}
 }
