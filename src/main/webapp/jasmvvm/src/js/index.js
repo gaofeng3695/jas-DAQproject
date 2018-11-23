@@ -65,28 +65,22 @@ var gisMap = {
 			}
 
 		},
-        randomColor:function(i){
-        	var that=this;
-        	//var colorArr=['#ff716f','#ff9724','#fefc73','#a4e700','#4ae3fb','#b31dff','#fd22d8','#7a1ddd']
-        	var colorArr=['#3afb3d','#d56034','#685a99','#e1abd9','#f39413','#670057','#cb1beb'];
-			if(i<colorArr.length){
-				return colorArr[i];
-			}else{
-				return colorArr[colorArr.length-i];
-			}
-			
-        },
-        random:function(min,max){
-        	if(isNaN(min) || isNaN(max)){
-				return null;
-			}
-			if(min > max){
-				min ^= max;
-				max ^= min;
-				min ^= max;
-			}
-			return (Math.random() * (max - min) | 0) + min;
-        },
+	     randomColor:function(i){
+	        	var that=this;
+	        	var colorArr=['#3afb3d','#d56034','#685a99','#e1abd9','#f39413','#670057','#cb1beb'];
+				if(i<colorArr.length){
+					return colorArr[i];
+				}else{
+				   return colorArr[that.random(0,6)];
+				}
+	        },
+	        random:function(min,max){
+	        	 var Range = max - min;
+	        	 var Rand = Math.random();
+	        	 var num = min + Math.round(Rand * Range); //四舍五入
+	        	 console.log(num);
+	        	 return num;
+	        },
 		compare: function (prop) {
 			return function (obj1, obj2) {
 				var val1 = obj1[prop];

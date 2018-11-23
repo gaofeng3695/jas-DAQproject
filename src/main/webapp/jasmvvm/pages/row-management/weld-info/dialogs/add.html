@@ -475,8 +475,16 @@
 					//  "geoState": "正常",
 					remarks: ""
 				},
-				pickerOptionsStart: {},
-				pickerOptionsEnd: {},
+				pickerOptionsStart: {
+					disabledDate:function(time){
+						return time.getTime()>new Date().getTime()
+					}
+				},
+				pickerOptionsEnd: {
+					disabledDate:function(time){
+						return time.getTime()>new Date().getTime()
+					}
+				},
 			}
 		},
 
@@ -827,6 +835,9 @@
 			 changeStart (){
 			    this.pickerOptionsStart = Object.assign({},this.pickerOptionsStart,{
 			     disabledDate: (time) => {
+			    	 if(!this.formData.collectionDate){
+			    		 return time.getTime()>new Date().getTime()
+			    	 }
 			      return time.getTime() >new Date(this.formData.collectionDate).getTime()||time.getTime()>new Date().getTime();
 			     }
 			    })
@@ -834,6 +845,9 @@
 			   changeEnd (){
 			    this.pickerOptionsEnd = Object.assign({},this.pickerOptionsEnd,{
 			     disabledDate: (time) => {
+			    	 if(!this.formData.constructDate){
+			    		 return time.getTime()>new Date().getTime()
+			    	 }
 			      return time.getTime() <new Date(this.formData.constructDate).getTime()||time.getTime()>new Date().getTime();
 			      }
 			    })
