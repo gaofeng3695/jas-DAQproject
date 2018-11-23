@@ -18,17 +18,6 @@ var gisMap = {
 				obj.projectId=projectId;//项目
 				obj.coor = geom.getCoordinates(); //
 				pipelineArray.push(obj);
-				//根据管线id进行数据的分组。
-//				if (lineId !== currentPipelineOid) {
-//					pipelineArray.length && dataArray.push(pipelineArray);
-//					currentPipelineOid = lineId;
-//					pipelineArray = [];
-//				}
-//				pipelineArray.push(obj);
-//				//
-//				if (i === features.length - 1) {
-//					dataArray.push(pipelineArray);
-//				}
 			}
 			
 			var map = {},
@@ -38,8 +27,6 @@ var gisMap = {
 		    if(!map[ai.lineId]){
 		    	dataArray.push({
 		        	lineId: ai.lineId,
-		        	//mileage: ai.mileage,
-		        	//coor:ai.coor,
 		            data: [ai]
 		        });
 		        map[ai.lineId] = ai;
@@ -62,7 +49,6 @@ var gisMap = {
 			console.log(dataArray.length);
 			jasMap.clearMapGraphics();
 			//生成线
-		//	var red=['red','green','yellow'];
 			for (i = 0; i < dataArray.length; i++) {
 				var stakes = dataArray[i].data;
 				var coors = [];
@@ -70,15 +56,37 @@ var gisMap = {
 					var stake = stakes[j];
 					coors.push(stake.coor);
 				}
+				var color= that.randomColor(i);
+//				console.log(color);
 				jasMap.addPolylineGraphic(coors, {
-					color: '#fe0000',
-					//color:red[i],
+					color:color,
 					width: 4
 				});
 			}
 
 		},
-
+        randomColor:function(i){
+        	var that=this;
+        	//var colorArr=['#ff716f','#ff9724','#fefc73','#a4e700','#4ae3fb','#b31dff','#fd22d8','#7a1ddd']
+        	var colorArr=['#3afb3d','#d56034','#685a99','#e1abd9','#f39413','#670057','#cb1beb'];
+			if(i<colorArr.length){
+				return colorArr[i];
+			}else{
+				return colorArr[colorArr.length-i];
+			}
+			
+        },
+        random:function(min,max){
+        	if(isNaN(min) || isNaN(max)){
+				return null;
+			}
+			if(min > max){
+				min ^= max;
+				max ^= min;
+				min ^= max;
+			}
+			return (Math.random() * (max - min) | 0) + min;
+        },
 		compare: function (prop) {
 			return function (obj1, obj2) {
 				var val1 = obj1[prop];
