@@ -1,27 +1,26 @@
 Vue.component('loading-bar', LoadingBar);
 var gisMap = {
-	drawLineByStakes: function (source, jasMap) {
+	drawLineByStakes: function (features, jasMap) {
 		var that = this;
 		//var features = source.getFeatures();
 		var dataArray = []; //最终绘制数据
 		var pipelineArray = []; //按照每一个管线的数组
 		var lineidArray = []; //用于存储管线id
-		for (var i = 0; i < source.length; i++) {
+		for (var i = 0; i < features.length; i++) {
 			var obj = {};
-			//				var feature = features[i];
+			var feature = features[i].values_;
 			//var properties = feature.getProperties(); //属性信息
-			//				var geom = feature.getGeometry(); // Point
-			//				var projectId=properties.project_oid;//先根据项目进行分组
-			//				var lineId = properties.pipeline_oid;//再根据管线id进行分组
-			//				obj.mileage = properties.mileage; //里程值
-			//				obj.lineId = lineId; //线路段
-			//				obj.projectId=projectId;//项目
-			//				obj.coor = geom.getCoordinates(); //
-
-			obj.mileage = source[i].mileage;
-			obj.projectId = source[i].project_oid;
-			obj.lineId = source[i].pipeline_oid;
-			obj.coor = source[i].coor;
+			//var geom = feature.getGeometry(); // Point
+			var projectId=feature.project_oid;//先根据项目进行分组
+			var lineId = feature.pipeline_oid;//再根据管线id进行分组
+			obj.mileage = feature.mileage; //里程值
+			obj.lineId = lineId; //线路段
+			obj.projectId=projectId;//项目
+			obj.coor = feature.geometry.flatCoordinates; //
+//			obj.mileage = source[i].mileage;
+//			obj.projectId = source[i].project_oid;
+//			obj.lineId = source[i].pipeline_oid;
+//			obj.coor = source[i].coor;
 			pipelineArray.push(obj);
 		}
 
@@ -425,7 +424,7 @@ window.app = new Vue({
 				appConfig: './pages/map/config.json',
 				onMapLoaded: function (e) {
 					fn && fn();
-					that.addMapListener();
+					//that.addMapListener();
 
 				},
 				onError: function (e) {
@@ -434,6 +433,9 @@ window.app = new Vue({
 						type: 'error'
 					});
 				},
+			    onOptionalLayersLoaded:function(){
+	               that.addMapListener();
+	            },
 				onLayerAdded: function (e) {
 					var layerId = e.data.layerId;
 					if (layerId === "daq_median_stake") {
@@ -445,35 +447,38 @@ window.app = new Vue({
 		},
 		addMapListener: function () {
 			var jasMap = this.jasMap;
+		      var paramsArray = [] ;
+              paramsArray.push({
+                  layerId : 'daq_median_stake'
+              });
+              jasMap.queryFeatures(paramsArray,function(features){
+                  console.info(features);
+                  gisMap.drawLineByStakes(features, jasMap);
+              });
+              
 			//jasMap.removeEventListener(this.layerListener);
 			//进行中线桩数据的读取
-			var url = jasTools.base.rootPath + "/jdbc/commonData/medianStake/getPage.do";
-			jasTools.ajax.post(url, {
-					pageNo: 1,
-					pageSize: 100000,
-				},
-				function (data) {
-					var source = [];
-					data.rows.forEach(function (item) {
-						//						var projectId=properties.project_oid;//先根据项目进行分组
-						//						var lineId = properties.pipeline_oid;//再根据管线id进行分组
-						//						obj.mileage = properties.mileage; //里程值
-						source.push({
-							project_oid: item.projectOid,
-							pipeline_oid: item.pipelineOid,
-							mileage: item.mileage,
-							coor: [item.pointx, item.pointy]
-						});
-					});
-
-					gisMap.drawLineByStakes(source, jasMap);
-				});
-			//				this.layerListener = jasMap.subscribe(jasMap.Events.LayerFeaturesLoadedEvent, function (e) {
-			//					if (e.data.layerId === "daq_median_stake") {
-			//						var source = e.data.source;
-			//						gisMap.drawLineByStakes(source, jasMap);
-			//					}
-			//				});
+//			var url = jasTools.base.rootPath + "/jdbc/commonData/medianStake/getPage.do";
+//			jasTools.ajax.post(url, {
+//					pageNo: 1,
+//					pageSize: 100000,
+//				},
+//				function (data) {
+//					var source = [];
+//					data.rows.forEach(function (item) {
+//						//						var projectId=properties.project_oid;//先根据项目进行分组
+//						//						var lineId = properties.pipeline_oid;//再根据管线id进行分组
+//						//						obj.mileage = properties.mileage; //里程值
+//						source.push({
+//							project_oid: item.projectOid,
+//							pipeline_oid: item.pipelineOid,
+//							mileage: item.mileage,
+//							coor: [item.pointx, item.pointy]
+//						});
+//					});
+//
+//					gisMap.drawLineByStakes(source, jasMap);
+//				});
 		},
 		locate: function (id, tableCode) {
 			var that = this;

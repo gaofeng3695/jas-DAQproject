@@ -62,7 +62,6 @@ JasMap.require(function(){
             color: 'rgba(225, 0, 255, 1)'
         })
     });
-
     /**
      *
      * @type {ol.style.Style}
@@ -369,7 +368,26 @@ JasMap.require(function(){
             })
         })
     };
-
+    //
+    mapStyleTemplates[jasMap.Keys.defaultHighlightStyleName] = new  ol.style.Style({
+        image: new  ol.style.Circle({
+            fill: new  ol.style.Fill({
+                color: 'rgba(255,0,255,0.5)'
+            }),
+            radius: 5,
+            stroke: new  ol.style.Stroke({
+                color: '#f0f',
+                width: 1
+            })
+        }),
+        stroke: new  ol.style.Stroke({
+            color: '#f0f',
+            width: 3
+        }),
+        fill: new  ol.style.Fill({
+            color: 'rgba(255,0,255,0.5)'
+        })
+    });
     return mapStyleTemplates;
 });
 
