@@ -489,7 +489,11 @@ public class DaqPrivilegeController extends BaseController{
 			}
 			String loginName = paramMap.get("loginNum").toString();
 			String base64Image = this.daqPrivilegeService.getFaceInfo(loginName);
-			result.put("base64Image", base64Image);
+			if(StringUtils.isNotBlank(base64Image)){
+				result.put("isFaceInfo", 1);
+			}else{
+				result.put("isFaceInfo", 0);
+			}
 			return result;
 		} catch (Exception e) {
 			return resultData;

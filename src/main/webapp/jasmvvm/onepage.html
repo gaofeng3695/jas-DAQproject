@@ -525,60 +525,90 @@
 
 <script>
 	var gisMap = {
-		drawLineByStakes: function (source, jasMap) {
+		drawLineByStakes: function (features, jasMap) {
 			var that = this;
-			var features = source.getFeatures();
-
-			var dataArray = [];
-			var currentPipelineOid = null;
-			var pipelineArray = [];
-
+			//var features = source.getFeatures();
+			var dataArray = []; //最终绘制数据
+			var pipelineArray = []; //按照每一个管线的数组
+			var lineidArray = []; //用于存储管线id
 			for (var i = 0; i < features.length; i++) {
 				var obj = {};
-				var feature = features[i];
-				var properties = feature.getProperties(); //属性信息
-				// console.log(properties);
-				var geom = feature.getGeometry(); // Point
-				//
-				var lineId = properties.pipeline_oid;
-				obj.mileage = properties.mileage; //里程值
+				var feature = features[i].values_;
+				//var properties = feature.getProperties(); //属性信息
+				//var geom = feature.getGeometry(); // Point
+				var projectId=feature.project_oid;//先根据项目进行分组
+				var lineId = feature.pipeline_oid;//再根据管线id进行分组
+				obj.mileage = feature.mileage; //里程值
 				obj.lineId = lineId; //线路段
-				obj.coor = geom.getCoordinates(); //
-
-				if (lineId !== currentPipelineOid) {
-					pipelineArray.length && dataArray.push(pipelineArray);
-					currentPipelineOid = lineId;
-					pipelineArray = [];
-				}
+				obj.projectId=projectId;//项目
+				obj.coor = feature.geometry.flatCoordinates; //
+//				obj.mileage = source[i].mileage;
+//				obj.projectId = source[i].project_oid;
+//				obj.lineId = source[i].pipeline_oid;
+//				obj.coor = source[i].coor;
 				pipelineArray.push(obj);
-				//
-				if (i === features.length - 1) {
-					dataArray.push(pipelineArray);
+				//根据管线id进行数据的分组。
+			}
+
+			var map = {},
+				dataArray = [];
+			for (var i = 0; i < pipelineArray.length; i++) {
+				var ai = pipelineArray[i];
+				if (!map[ai.lineId]) {
+					dataArray.push({
+						lineId: ai.lineId,
+						data: [ai]
+					});
+					map[ai.lineId] = ai;
+				} else {
+					for (var j = 0; j < dataArray.length; j++) {
+						var dj = dataArray[j];
+						if (dj.lineId == ai.lineId) {
+							dj.data.push(ai);
+							break;
+						}
+					}
 				}
 			}
 			//各个线路段按照里程排序
 			for (i = 0; i < dataArray.length; i++) {
-				var pipeArr = dataArray[i];
-				dataArray[i] = pipeArr.sort(that.compare("mileage"));
+				var pipeArr = dataArray[i].data;
+				dataArray[i].data = pipeArr.sort(that.compare("mileage"));
 			}
+			//此时的dataArray 已经按照管线分组，并且按照里程进行排序
 			jasMap.clearMapGraphics();
-
-			//生成线
 			for (i = 0; i < dataArray.length; i++) {
-				var stakes = dataArray[i];
+				var stakes = dataArray[i].data;
 				var coors = [];
 				for (var j = 0; j < stakes.length; j++) {
 					var stake = stakes[j];
 					coors.push(stake.coor);
 				}
+				var color = that.randomColor(i);
+				console.log(color);
 				jasMap.addPolylineGraphic(coors, {
-					color: [233, 123, 255, 1],
+					color: color,
 					width: 4
 				});
 			}
 
 		},
-
+		randomColor: function (i) {
+			var that = this;
+			var colorArr = ['#3afb3d', '#d56034', '#685a99', '#e1abd9', '#f39413', '#670057', '#cb1beb'];
+			if (i < colorArr.length) {
+				return colorArr[i];
+			} else {
+				return colorArr[that.random(0, 6)];
+			}
+		},
+		random: function (min, max) {
+			var Range = max - min;
+			var Rand = Math.random();
+			var num = min + Math.round(Rand * Range); //四舍五入
+			console.log(num);
+			return num;
+		},
 		compare: function (prop) {
 			return function (obj1, obj2) {
 				var val1 = obj1[prop];
@@ -730,29 +760,32 @@
 			initJasMap: function (fn) {
 				var that = this;
 				this.jasMap = new JasMap({
-					// layersVisible: {
-					// 	daq_median_stake: true,
-					// },
+
 					appConfig: './pages/map/config.onepage.json',
 					onMapLoaded: function (e) {
 						that.refreshMap();
 						that.mapLoaded = true;
 						fn && fn();
-						that.addMapListener();
+						//that.addMapListener();
 					},
 					onError: function (e) {},
-					onLayerAdded: function (e) {}
+					onOptionalLayersLoaded:function(){
+			             that.addMapListener();
+			         },
+					onLayerAdded: function (e) {
+
+					}
 				});
 			},
 			addMapListener: function () {
 				var jasMap = this.jasMap;
-				jasMap.removeEventListener(this.layerListener);
-				this.layerListener = jasMap.subscribe(jasMap.Events.LayerFeaturesLoadedEvent, function (e) {
-					if (e.data.layerId === "daq_median_stake") {
-						var source = e.data.source;
-						gisMap.drawLineByStakes(source, jasMap);
-					}
-				});
+			      var paramsArray = [] ;
+	              paramsArray.push({
+	                  layerId : 'daq_median_stake'
+	              });
+	              jasMap.queryFeatures(paramsArray,function(features){
+	                  gisMap.drawLineByStakes(features, jasMap);
+	              });
 			},
 			listclr: function (index) {
 				var color = '#c19f1d';

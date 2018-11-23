@@ -1,12 +1,114 @@
 Vue.component('loading-bar', LoadingBar);
+var gisMap = {
+	drawLineByStakes: function (features, jasMap) {
+		var that = this;
+		//var features = source.getFeatures();
+		var dataArray = []; //最终绘制数据
+		var pipelineArray = []; //按照每一个管线的数组
+		var lineidArray = []; //用于存储管线id
+		for (var i = 0; i < features.length; i++) {
+			var obj = {};
+			var feature = features[i].values_;
+			//var properties = feature.getProperties(); //属性信息
+			//var geom = feature.getGeometry(); // Point
+			var projectId=feature.project_oid;//先根据项目进行分组
+			var lineId = feature.pipeline_oid;//再根据管线id进行分组
+			obj.mileage = feature.mileage; //里程值
+			obj.lineId = lineId; //线路段
+			obj.projectId=projectId;//项目
+			obj.coor = feature.geometry.flatCoordinates; //
+//			obj.mileage = source[i].mileage;
+//			obj.projectId = source[i].project_oid;
+//			obj.lineId = source[i].pipeline_oid;
+//			obj.coor = source[i].coor;
+			pipelineArray.push(obj);
+		}
 
+		var map = {},
+			dataArray = [];
+		for (var i = 0; i < pipelineArray.length; i++) {
+			var ai = pipelineArray[i];
+			if (!map[ai.lineId]) {
+				dataArray.push({
+					lineId: ai.lineId,
+					data: [ai]
+				});
+				map[ai.lineId] = ai;
+			} else {
+				for (var j = 0; j < dataArray.length; j++) {
+					var dj = dataArray[j];
+					if (dj.lineId == ai.lineId) {
+						dj.data.push(ai);
+						break;
+					}
+				}
+			}
+		}
+		//各个线路段按照里程排序
+		for (i = 0; i < dataArray.length; i++) {
+			var pipeArr = dataArray[i].data;
+			dataArray[i].data = pipeArr.sort(that.compare("mileage"));
+		}
+		//此时的dataArray 已经按照管线分组，并且按照里程进行排序
+		jasMap.clearMapGraphics();
+		//生成线
+		for (i = 0; i < dataArray.length; i++) {
+			var stakes = dataArray[i].data;
+			var coors = [];
+			for (var j = 0; j < stakes.length; j++) {
+				var stake = stakes[j];
+				coors.push(stake.coor);
+			}
+			var color = that.randomColor(i);
+			//				console.log(color);
+			jasMap.addPolylineGraphic(coors, {
+				color: color,
+				width: 4
+			});
+		}
+
+	},
+	randomColor: function (i) {
+		var that = this;
+		var colorArr = ['#3afb3d', '#d56034', '#685a99', '#e1abd9', '#f39413', '#670057', '#cb1beb'];
+		if (i < colorArr.length) {
+			return colorArr[i];
+		} else {
+			return colorArr[that.random(0, 6)];
+		}
+	},
+	random: function (min, max) {
+		var Range = max - min;
+		var Rand = Math.random();
+		var num = min + Math.round(Rand * Range); //四舍五入
+		// console.log(num);
+		return num;
+	},
+	compare: function (prop) {
+		return function (obj1, obj2) {
+			var val1 = obj1[prop];
+			var val2 = obj2[prop];
+			if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
+				val1 = Number(val1);
+				val2 = Number(val2);
+			}
+			if (val1 < val2) {
+				return -1;
+			} else if (val1 > val2) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
+	}
+}
 window.app = new Vue({
 	el: '#app',
 	data: function () {
 		return {
 			username: localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')).userName,
 			userunit: localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')).unitName,
-			userImg:'./src/images/enterlogo.png',
+			userImg: './src/images/enterlogo.png',
 			progress: 0,
 			error: false,
 			direction: 'right',
@@ -17,7 +119,7 @@ window.app = new Vue({
 			currentTap: 'statistics-01',
 			tabs: [], // 打开的标签页
 			items: [], //菜单数组
-			isMapInited:false//地图未初始化
+			isMapInited: false //地图未初始化
 		}
 	},
 	computed: {
@@ -197,7 +299,7 @@ window.app = new Vue({
 				location.href = './login.html';
 			});
 		},
-		_goPage:function(){
+		_goPage: function () {
 			location.href = './onepage.html';
 		},
 		_createTabsArr: function (aIndex, aMenu) {
@@ -311,6 +413,7 @@ window.app = new Vue({
 			}
 		},
 		initJasMap: function (fn) {
+			var that = this;
 			var onCenterStakeLayerClicked = function (e) {
 				//业务逻辑
 			};
@@ -321,6 +424,8 @@ window.app = new Vue({
 				appConfig: './pages/map/config.json',
 				onMapLoaded: function (e) {
 					fn && fn();
+					//that.addMapListener();
+
 				},
 				onError: function (e) {
 					top.Vue.prototype.$message({
@@ -328,49 +433,88 @@ window.app = new Vue({
 						type: 'error'
 					});
 				},
+			    onOptionalLayersLoaded:function(){
+	               that.addMapListener();
+	            },
 				onLayerAdded: function (e) {
 					var layerId = e.data.layerId;
-					if (layerId === "centerlinestake") {
+					if (layerId === "daq_median_stake") {
 						//添加单个图层的点击事件
 						this.addLayerClickEventListener(layerId, onCenterStakeLayerClicked);
 					}
 				}
 			});
 		},
+		addMapListener: function () {
+			var jasMap = this.jasMap;
+		      var paramsArray = [] ;
+              paramsArray.push({
+                  layerId : 'daq_median_stake'
+              });
+              jasMap.queryFeatures(paramsArray,function(features){
+                  console.info(features);
+                  gisMap.drawLineByStakes(features, jasMap);
+              });
+              
+			//jasMap.removeEventListener(this.layerListener);
+			//进行中线桩数据的读取
+//			var url = jasTools.base.rootPath + "/jdbc/commonData/medianStake/getPage.do";
+//			jasTools.ajax.post(url, {
+//					pageNo: 1,
+//					pageSize: 100000,
+//				},
+//				function (data) {
+//					var source = [];
+//					data.rows.forEach(function (item) {
+//						//						var projectId=properties.project_oid;//先根据项目进行分组
+//						//						var lineId = properties.pipeline_oid;//再根据管线id进行分组
+//						//						obj.mileage = properties.mileage; //里程值
+//						source.push({
+//							project_oid: item.projectOid,
+//							pipeline_oid: item.pipelineOid,
+//							mileage: item.mileage,
+//							coor: [item.pointx, item.pointy]
+//						});
+//					});
+//
+//					gisMap.drawLineByStakes(source, jasMap);
+//				});
+		},
 		locate: function (id, tableCode) {
 			var that = this;
 			if (!this.$refs.resizer.panelShowed) {
 				this.$refs.resizer.panelShowed = true;
 				//setTimeout(function () {
-					if (!that.isMapInited) {
-						that.isMapInited = true;
-						that.initJasMap();
-						top.Vue.prototype.$message({
-							message: '正在初始化地图，请稍后定位',
-							type: 'warning'
-						});
-					} else {
-						that.jasMap.flashGraphic(id, tableCode);
-					}
+				if (!that.isMapInited) {
+					that.isMapInited = true;
+					that.initJasMap();
+					top.Vue.prototype.$message({
+						message: '正在初始化地图，请稍后定位',
+						type: 'warning'
+					});
+				} else {
+					that.jasMap.flashGraphic(id, tableCode);
+				}
 				//}, 300);
 			} else {
 				this.jasMap.flashGraphic(id, tableCode);
 			}
 		},
 		//获取附件文件
-	requestFile:function(){
-		var that=this;
-		var url = jasTools.base.rootPath + '/attachment/getInfo.do';
-		var sBizId = JSON.parse(localStorage.getItem('user')).oid;
-		jasTools.ajax.get(url, {
-			businessType: 'photo',
-			businessId: sBizId,}, function (data) {
-			 var arr = data.rows;
-			 if(data.rows.length > 0){
-				 that.userImg=jasTools.base.rootPath+'/attachment/app/getImageBySize.do?oid='+data.rows[0].oid+"&token="+localStorage.getItem("token");
-			 }
+		requestFile: function () {
+			var that = this;
+			var url = jasTools.base.rootPath + '/attachment/getInfo.do';
+			var sBizId = JSON.parse(localStorage.getItem('user')).oid;
+			jasTools.ajax.get(url, {
+				businessType: 'photo',
+				businessId: sBizId,
+			}, function (data) {
+				var arr = data.rows;
+				if (data.rows.length > 0) {
+					that.userImg = jasTools.base.rootPath + '/attachment/app/getImageBySize.do?oid=' + data.rows[0].oid + "&token=" + localStorage.getItem("token");
+				}
 
-		});
+			});
+		},
 	},
-},
 })
