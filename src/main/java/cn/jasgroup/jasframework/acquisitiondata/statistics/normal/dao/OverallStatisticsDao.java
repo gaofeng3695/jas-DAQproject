@@ -326,14 +326,13 @@ public class OverallStatisticsDao {
         	sql.append(i<(codeList.size()-1) ? " UNION ALL ":"");
         }
         
-        System.err.println(sql.toString());
         List<String> materialCodeList = new ArrayList<>(MaterialStatisticsBlock.ALL.keySet());
         sql.append(" UNION ALL ");
         for (int j = 0; j < materialCodeList.size(); j++) {
         	sql.append(String.format(sqlFormatMaterial, MaterialStatisticsBlock.ALL.get(materialCodeList.get(j)).getTableName()));
         	sql.append(j<(materialCodeList.size()-1) ? " UNION ALL ":"");
         }
-        System.err.println(sql.toString());
+        
         return commonDataJdbcDao.queryForList(sql.toString(), ImmutableMap.of("projectIds", projectIds), DataEntryAuditBo.class);
     }
 

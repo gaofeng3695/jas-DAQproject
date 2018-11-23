@@ -41,7 +41,7 @@ public class WeldController extends BaseController{
 	  * <p>创建日期:2018年8月21日 下午2:14:05。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	@RequestMapping(value="getWeldList",method = RequestMethod.POST)
+	@RequestMapping(value="/getWeldList",method = RequestMethod.POST)
 	@ResponseBody
 	public Object getWeldList(HttpServletRequest request,@RequestBody Map<String,String> param){
 		ListResult<Map<String,Object>> result=null;
@@ -70,7 +70,7 @@ public class WeldController extends BaseController{
 	 * <p>创建日期:2018年8月21日 下午2:14:05。</p>
 	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	@RequestMapping(value="getOnlyWeldList",method = RequestMethod.POST)
+	@RequestMapping(value="/getOnlyWeldList",method = RequestMethod.POST)
 	@ResponseBody
 	public Object getOnlyWeldList(HttpServletRequest request,@RequestBody Map<String,String> param){
 		ListResult<Map<String,Object>> result=null;
@@ -95,7 +95,7 @@ public class WeldController extends BaseController{
 	 * <p>创建日期:2018年8月21日 下午2:14:05。</p>
 	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	@RequestMapping(value="getAllWeldList",method = RequestMethod.POST)
+	@RequestMapping(value="/getAllWeldList",method = RequestMethod.POST)
 	@ResponseBody
 	public Object getAllWeldList(HttpServletRequest request,@RequestBody Map<String,String> param){
 		ListResult<Map<String,Object>> result=null;
@@ -120,7 +120,7 @@ public class WeldController extends BaseController{
 	  * <p>创建日期:2018年8月21日 下午2:16:22。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	@RequestMapping(value="getWeldListByWeldOid",method = RequestMethod.POST)
+	@RequestMapping(value="/getWeldListByWeldOid",method = RequestMethod.POST)
 	@ResponseBody
 	public Object getWeldListByWeldOid(HttpServletRequest request,@RequestBody Map<String,String> param){
 		ListResult<Map<String,Object>> result=null;
@@ -161,4 +161,18 @@ public class WeldController extends BaseController{
 		return result;
 	}
 	
+	@RequestMapping(value="/getDetectionInfoByWeldOid",method = RequestMethod.POST)
+	@ResponseBody
+	public Object getDetectionInfoByWeldOid(HttpServletRequest request,@RequestBody Map<String,String> param){
+		ListResult<Map<String,Object>> result;
+		try {
+			String weldOid = param.get("weldOid");
+			List<Map<String,Object>> list = this.weldService.getDetectionInfoByWeldOid(weldOid);
+			result = new ListResult<>(1, "200", "ok", list);
+		} catch (Exception e) {
+			result = new ListResult<>(-1, "400", "ok");
+			e.printStackTrace();
+		}
+		return result;
+	}
 }
