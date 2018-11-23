@@ -252,7 +252,7 @@
           "strategy": "all",
             "outFields":"rework_weld_code,project_oid"
         }, {
-          "id": "daq_weld_measured_result",
+          "id": "v_daq_weld_measured_result",
           "label": "焊口测量成果信息",
           "index": 20,
           "renderer": {
@@ -263,8 +263,8 @@
            "listener":{
           "onHover":{
 	          "responseType":"tip",
-	          "fieldNames":"weld_oid",
-	          "template":"焊口编号：${weld_oid}",
+	          "fieldNames":"weld_code",
+	          "template":"焊口编号：${weld_code}",
 	          "callback":""
 	          }
           },
@@ -276,7 +276,7 @@
           "loader": "jas",
           "format": "GeoJSON",
           "strategy": "all",
-           "outFields":"weld_oid,project_oid"
+           "outFields":"weld_code,project_oid"
         }]
       }, {
         "id": "layerSet003",
