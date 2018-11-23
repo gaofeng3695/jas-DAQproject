@@ -303,7 +303,7 @@ public class PipeDao {
 	}
 	
 	/***
-	  * <p>功能描述：二维码生成信息查询。</p>
+	  * <p>功能描述：直管二维码生成信息查询。</p>
 	  * <p> 雷凯。</p>	
 	  * @param oids
 	  * @return
@@ -311,7 +311,7 @@ public class PipeDao {
 	  * <p>创建日期:2018年11月22日 下午5:21:21。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public List<PipeScannerBo> produceScanner(List<String> oids){
+	public List<PipeScannerBo> queryPipeScannerInfo(List<String> oids){
 		Map<String,Object> param = new HashMap<String,Object>();
 		String sql = "select concat_ws(';','Z',p.project_code,pipe_code,pipe_diameter||'*'||wall_thickness,tt.code_name,ttt.code_name,pipe_length,pipe_weight,stove_serial_num,tttt.code_name,manufacture_factory,coating_factory,to_char(production_date,'yyyy-MM-dd')) as scanner_context,"
 				+ "p.project_code,pipe_code,pipe_length,pipe_weight,stove_serial_num,tttt.code_name as external_coating_type,manufacture_factory,coating_factory,to_char(production_date,'yyyy-MM-dd') as production_date,"
@@ -323,10 +323,57 @@ public class PipeDao {
 				+ "left join (select oid,project_code from daq_project) p on p.oid=t.project_oid "
 				+ "where t.active=1 and t.is_cut=0 ";
 		if(oids!=null && oids.size()>0){
-			sql += "t.oid in (:oids)";
+			sql += "and t.oid in (:oids) ";
 			param.put("oids", oids);
 		}
 		sql += " order by t.pipe_code";
 		return this.baseNamedParameterJdbcTemplate.queryForList(sql, param,PipeScannerBo.class);
+	}
+	/***
+	  * <p>功能描述：。</p>
+	  * <p> 雷凯。</p>	
+	  * @param oids
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年11月23日 下午4:47:54。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<PipeScannerBo> queryHotPipeScannerInfo(List<String> oids){
+		Map<String,Object> param = new HashMap<String,Object>();
+		String sql = "select concat_ws(';','Z',p.project_code,pipe_code,pipe_diameter||'*'||wall_thickness,tt.code_name,ttt.code_name,pipe_length,pipe_weight,stove_serial_num,tttt.code_name,manufacture_factory,coating_factory,to_char(production_date,'yyyy-MM-dd')) as scanner_context,"
+				+ "p.project_code,pipe_code,pipe_length,pipe_weight,stove_serial_num,tttt.code_name as external_coating_type,manufacture_factory,coating_factory,to_char(production_date,'yyyy-MM-dd') as production_date,"
+				+ "concat_ws(',',pipe_diameter||'*'||wall_thickness,tt.code_name,ttt.code_name) as pipe_info "
+				+ "from daq_material_pipe t "
+				+ "left join (select code_id,code_name from sys_domain t where t.domain_name='pipe_forming_method_domain' and t.active=1) tt on tt.code_id=t.pipe_forming_method "
+				+ "left join (select code_id,code_name from sys_domain t where t.domain_name='grade_domain' and t.active=1) ttt on ttt.code_id=t.grade "
+				+ "left join (select code_id,code_name from sys_domain t where t.domain_name='coating_type_domain' and t.active=1) tttt on tttt.code_id=t.external_coating_type "
+				+ "left join (select oid,project_code from daq_project) p on p.oid=t.project_oid "
+				+ "where t.active=1 and t.is_cut=0 ";
+		if(oids!=null && oids.size()>0){
+			sql += "and t.oid in (:oids) ";
+			param.put("oids", oids);
+		}
+		sql += " order by t.pipe_code";
+		return this.baseNamedParameterJdbcTemplate.queryForList(sql, param,PipeScannerBo.class);
+	}
+	
+	/**
+	 * <p>功能描述：。</p>
+	  * <p> 雷凯。</p>	
+	  * @param functionCode
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年11月23日 下午4:39:07。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public String getTableNameByFunctionCode(String functionCode){
+		String tableName=null;
+		String selectSql = "select t.table_name from custom_fun_function t where t.function_code=?";
+		List<Map<String, Object>> dataList = baseNamedParameterJdbcTemplate.queryForListHump(selectSql, new Object[]{functionCode});
+		if(dataList.size()>0){
+			Object tableNameObj = dataList.get(0).get("tableName");
+			tableName = tableNameObj !=null ? tableNameObj.toString() : "";
+		}
+		return tableName;
 	}
 }
