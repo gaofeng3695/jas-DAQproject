@@ -62,7 +62,6 @@ var gisMap = {
 			console.log(dataArray.length);
 			jasMap.clearMapGraphics();
 			//生成线
-		//	var red=['red','green','yellow'];
 			for (i = 0; i < dataArray.length; i++) {
 				var stakes = dataArray[i].data;
 				var coors = [];
@@ -70,15 +69,35 @@ var gisMap = {
 					var stake = stakes[j];
 					coors.push(stake.coor);
 				}
+				var color= that.randomColor();
+				console.log(color);
 				jasMap.addPolylineGraphic(coors, {
-					color: '#fe0000',
-					//color:red[i],
+					color:color,
 					width: 4
 				});
 			}
 
 		},
-
+        randomColor:function(){
+        	var that=this;
+        	var color="#";
+        	var colorArr=['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
+			for(var i=0;i<6;i++){
+				color += colorArr[that.random(0,16)];
+			}
+			return color
+        },
+        random:function(min,max){
+        	if(isNaN(min) || isNaN(max)){
+				return null;
+			}
+			if(min > max){
+				min ^= max;
+				max ^= min;
+				min ^= max;
+			}
+			return (Math.random() * (max - min) | 0) + min;
+        },
 		compare: function (prop) {
 			return function (obj1, obj2) {
 				var val1 = obj1[prop];
