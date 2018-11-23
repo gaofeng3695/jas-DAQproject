@@ -181,6 +181,7 @@
           "labelStyle": "",
           "labelField": ""
         },
+        "maxScale":100000,
         "listener":{
         "onHover":{
           "responseType":"tip",
