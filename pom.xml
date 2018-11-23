@@ -129,6 +129,25 @@
 		    <artifactId>hibernate-validator</artifactId>  
 		    <version>5.1.0.Final</version>  
 		</dependency>
+		<!-- ZXing -->
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>core</artifactId>
+			<version>3.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>javase</artifactId>
+			<version>3.2.0</version>
+		</dependency>
+		<!-- ZXing -->
+		
+		<dependency>
+		    <groupId>com.deepoove</groupId>
+		    <artifactId>poi-tl</artifactId>
+		    <version>1.4.1</version>
+		</dependency>
+		
 	</dependencies>
 	<build>
 		<plugins>

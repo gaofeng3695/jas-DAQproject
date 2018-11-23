@@ -1,5 +1,110 @@
 Vue.component('loading-bar', LoadingBar);
+var gisMap = {
+		drawLineByStakes: function (source, jasMap) {
+			var that = this;
+			var features = source.getFeatures();
+			var dataArray = [];//最终绘制数据
+			var pipelineArray = [];//按照每一个管线的数组
+            var lineidArray=[];//用于存储管线id
+			for (var i = 0; i < features.length; i++) {
+				var obj = {};
+				var feature = features[i];
+				var properties = feature.getProperties(); //属性信息
+				var geom = feature.getGeometry(); // Point
+				var projectId=properties.project_oid;//先根据项目进行分组
+				var lineId = properties.pipeline_oid;//再根据管线id进行分组
+				obj.mileage = properties.mileage; //里程值
+				obj.lineId = lineId; //线路段
+				obj.projectId=projectId;//项目
+				obj.coor = geom.getCoordinates(); //
+				pipelineArray.push(obj);
+			}
+			
+			var map = {},
+			dataArray = [];
+		for(var i = 0; i < pipelineArray.length; i++){
+		    var ai = pipelineArray[i];
+		    if(!map[ai.lineId]){
+		    	dataArray.push({
+		        	lineId: ai.lineId,
+		            data: [ai]
+		        });
+		        map[ai.lineId] = ai;
+		    }else{
+		        for(var j = 0; j < dataArray.length; j++){
+		            var dj = dataArray[j];
+		            if(dj.lineId == ai.lineId){
+		                dj.data.push(ai);
+		                break;
+		            }
+		        }
+		    }
+		}
+			//各个线路段按照里程排序
+			for (i = 0; i < dataArray.length; i++) {
+				var pipeArr = dataArray[i].data;
+				dataArray[i].data = pipeArr.sort(that.compare("mileage"));
+			}
+			//此时的dataArray 已经按照管线分组，并且按照里程进行排序   
+			console.log(dataArray.length);
+			jasMap.clearMapGraphics();
+			//生成线
+			for (i = 0; i < dataArray.length; i++) {
+				var stakes = dataArray[i].data;
+				var coors = [];
+				for (var j = 0; j < stakes.length; j++) {
+					var stake = stakes[j];
+					coors.push(stake.coor);
+				}
+				var color= that.randomColor(i);
+//				console.log(color);
+				jasMap.addPolylineGraphic(coors, {
+					color:color,
+					width: 4
+				});
+			}
 
+		},
+        randomColor:function(i){
+        	var that=this;
+        	//var colorArr=['#ff716f','#ff9724','#fefc73','#a4e700','#4ae3fb','#b31dff','#fd22d8','#7a1ddd']
+        	var colorArr=['#3afb3d','#d56034','#685a99','#e1abd9','#f39413','#670057','#cb1beb'];
+			if(i<colorArr.length){
+				return colorArr[i];
+			}else{
+				return colorArr[colorArr.length-i];
+			}
+			
+        },
+        random:function(min,max){
+        	if(isNaN(min) || isNaN(max)){
+				return null;
+			}
+			if(min > max){
+				min ^= max;
+				max ^= min;
+				min ^= max;
+			}
+			return (Math.random() * (max - min) | 0) + min;
+        },
+		compare: function (prop) {
+			return function (obj1, obj2) {
+				var val1 = obj1[prop];
+				var val2 = obj2[prop];
+				if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
+					val1 = Number(val1);
+					val2 = Number(val2);
+				}
+				if (val1 < val2) {
+					return -1;
+				} else if (val1 > val2) {
+					return 1;
+				} else {
+					return 0;
+				}
+			}
+		}
+	}
 window.app = new Vue({
 	el: '#app',
 	data: function () {
@@ -311,6 +416,7 @@ window.app = new Vue({
 			}
 		},
 		initJasMap: function (fn) {
+			var that=this;
 			var onCenterStakeLayerClicked = function (e) {
 				//业务逻辑
 			};
@@ -321,6 +427,8 @@ window.app = new Vue({
 				appConfig: './pages/map/config.json',
 				onMapLoaded: function (e) {
 					fn && fn();
+					that.addMapListener();
+					
 				},
 				onError: function (e) {
 					top.Vue.prototype.$message({
@@ -330,13 +438,23 @@ window.app = new Vue({
 				},
 				onLayerAdded: function (e) {
 					var layerId = e.data.layerId;
-					if (layerId === "centerlinestake") {
+					if (layerId === "daq_median_stake") {
 						//添加单个图层的点击事件
 						this.addLayerClickEventListener(layerId, onCenterStakeLayerClicked);
 					}
 				}
 			});
 		},
+			addMapListener: function () {
+				var jasMap = this.jasMap;
+				jasMap.removeEventListener(this.layerListener);
+				this.layerListener = jasMap.subscribe(jasMap.Events.LayerFeaturesLoadedEvent, function (e) {
+					if (e.data.layerId === "daq_median_stake") {
+						var source = e.data.source;
+						gisMap.drawLineByStakes(source, jasMap);
+					}
+				});
+			},
 		locate: function (id, tableCode) {
 			var that = this;
 			if (!this.$refs.resizer.panelShowed) {

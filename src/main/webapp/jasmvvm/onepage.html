@@ -525,60 +525,90 @@
 
 <script>
 	var gisMap = {
-		drawLineByStakes: function (source, jasMap) {
-			var that = this;
-			var features = source.getFeatures();
-
-			var dataArray = [];
-			var currentPipelineOid = null;
-			var pipelineArray = [];
-
-			for (var i = 0; i < features.length; i++) {
-				var obj = {};
-				var feature = features[i];
-				var properties = feature.getProperties(); //属性信息
-				// console.log(properties);
-				var geom = feature.getGeometry(); // Point
-				//
-				var lineId = properties.pipeline_oid;
-				obj.mileage = properties.mileage; //里程值
-				obj.lineId = lineId; //线路段
-				obj.coor = geom.getCoordinates(); //
-
-				if (lineId !== currentPipelineOid) {
-					pipelineArray.length && dataArray.push(pipelineArray);
-					currentPipelineOid = lineId;
-					pipelineArray = [];
+			drawLineByStakes: function (source, jasMap) {
+				var that = this;
+				var features = source.getFeatures();
+				var dataArray = [];//最终绘制数据
+				var pipelineArray = [];//按照每一个管线的数组
+	            var lineidArray=[];//用于存储管线id
+				for (var i = 0; i < features.length; i++) {
+					var obj = {};
+					var feature = features[i];
+					var properties = feature.getProperties(); //属性信息
+					var geom = feature.getGeometry(); // Point
+					var projectId=properties.project_oid;//先根据项目进行分组
+					var lineId = properties.pipeline_oid;//再根据管线id进行分组
+					obj.mileage = properties.mileage; //里程值
+					obj.lineId = lineId; //线路段
+					obj.projectId=projectId;//项目
+					obj.coor = geom.getCoordinates(); //
+					pipelineArray.push(obj);
+					//根据管线id进行数据的分组。
 				}
-				pipelineArray.push(obj);
-				//
-				if (i === features.length - 1) {
-					dataArray.push(pipelineArray);
+				
+				var map = {},
+				dataArray = [];
+			for(var i = 0; i < pipelineArray.length; i++){
+			    var ai = pipelineArray[i];
+			    if(!map[ai.lineId]){
+			    	dataArray.push({
+			        	lineId: ai.lineId,
+			            data: [ai]
+			        });
+			        map[ai.lineId] = ai;
+			    }else{
+			        for(var j = 0; j < dataArray.length; j++){
+			            var dj = dataArray[j];
+			            if(dj.lineId == ai.lineId){
+			                dj.data.push(ai);
+			                break;
+			            }
+			        }
+			    }
+			}
+				//各个线路段按照里程排序
+				for (i = 0; i < dataArray.length; i++) {
+					var pipeArr = dataArray[i].data;
+					dataArray[i].data = pipeArr.sort(that.compare("mileage"));
 				}
-			}
-			//各个线路段按照里程排序
-			for (i = 0; i < dataArray.length; i++) {
-				var pipeArr = dataArray[i];
-				dataArray[i] = pipeArr.sort(that.compare("mileage"));
-			}
-			jasMap.clearMapGraphics();
-
-			//生成线
-			for (i = 0; i < dataArray.length; i++) {
-				var stakes = dataArray[i];
-				var coors = [];
-				for (var j = 0; j < stakes.length; j++) {
-					var stake = stakes[j];
-					coors.push(stake.coor);
+				//此时的dataArray 已经按照管线分组，并且按照里程进行排序   
+				jasMap.clearMapGraphics();
+				for (i = 0; i < dataArray.length; i++) {
+					var stakes = dataArray[i].data;
+					var coors = [];
+					for (var j = 0; j < stakes.length; j++) {
+						var stake = stakes[j];
+						coors.push(stake.coor);
+					}
+					 var color= that.randomColor();
+						console.log(color);
+					jasMap.addPolylineGraphic(coors, {
+						color:color,
+						width: 4
+					});
 				}
-				jasMap.addPolylineGraphic(coors, {
-					color: [233, 123, 255, 1],
-					width: 4
-				});
-			}
 
-		},
-
+			},
+			 randomColor:function(){
+		        	var that=this;
+		        	var color="#";
+		        	var colorArr=['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
+					for(var i=0;i<6;i++){
+						color += colorArr[that.random(0,16)];
+					}
+					return color
+		        },
+		        random:function(min,max){
+		        	if(isNaN(min) || isNaN(max)){
+						return null;
+					}
+					if(min > max){
+						min ^= max;
+						max ^= min;
+						min ^= max;
+					}
+					return (Math.random() * (max - min) | 0) + min;
+		        },
 		compare: function (prop) {
 			return function (obj1, obj2) {
 				var val1 = obj1[prop];
@@ -730,9 +760,7 @@
 			initJasMap: function (fn) {
 				var that = this;
 				this.jasMap = new JasMap({
-					// layersVisible: {
-					// 	daq_median_stake: true,
-					// },
+
 					appConfig: './pages/map/config.onepage.json',
 					onMapLoaded: function (e) {
 						that.refreshMap();
@@ -741,7 +769,9 @@
 						that.addMapListener();
 					},
 					onError: function (e) {},
-					onLayerAdded: function (e) {}
+					onLayerAdded: function (e) {
+						
+					}
 				});
 			},
 			addMapListener: function () {

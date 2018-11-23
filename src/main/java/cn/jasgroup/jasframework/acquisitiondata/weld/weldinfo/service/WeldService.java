@@ -86,4 +86,8 @@ public class WeldService extends CommonDataHibernateService{
 		}	
 		return msg;
 	}
+	
+	public List<Map<String,Object>> getDetectionInfoByWeldOid(String weldOid){
+		return this.weldDao.getDetectionInfoByWeldOid(weldOid);
+	}
 }

@@ -206,8 +206,8 @@ var BaseMapToolsBar = function (options) {
 var LayerListTree = function (options) {
     var defaults = {
         title: "图层控制",
-        right: 30,
-        top: 60,
+        right: 20,
+        top: 80,
         left: null,
         bottom: null,
         width: 250,
@@ -927,8 +927,8 @@ var DrawBox = function (options) {
     _self.dom = null;
     _self.$attrTable = null;
     _self.state = "closed";
-    _self.template = "<div class='" + _self.moduleClass + "'>" +
-        "<div class='title'><strong>类型</strong></div>" +
+    _self.template = "<div class='" + _self.moduleClass + "' style='overflow:hidden'>" +
+        "<div style='overflow-y:scorll;overflow-x:hidden;height:100%'><div class='title'><strong>类型</strong></div>" +
         "<div class='tools'></div>" +
         "<div class='title'><strong>样式</strong></div>" +
         "<div class='styles'></div>" +
@@ -952,8 +952,8 @@ var DrawBox = function (options) {
         "</tr>" +
         "</tbody>" +
         "</table>" +
-        "</div>" +
-        "<div class='buttons'>" +
+        "</div></div>" +
+        "<div class='buttons' style='background:#f1f1f1;bottom:5px'>" +
 
         //"<input dataaccess-class='save' value='保存' type='button' >" +
         "<input class='style_canel' dataaccess-class='cancel' value='取消' type='button' >" +

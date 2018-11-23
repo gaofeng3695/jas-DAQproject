@@ -1079,7 +1079,7 @@ var JasMap = null ,M = null;
         };
         _this.export = function(){
             _this.map.once('postcompose', function (event) {
-                var canvas = event.context.canvas;
+                var canvas = event.context.canvas;      
                 var pngName = "map" + new Date().getTime() + ".png";
                 if(!navigator.msSaveBlob && !saveAs){
                     eventManager.publishError(_this.Strings.exportResourceNeeded);
@@ -1087,6 +1087,7 @@ var JasMap = null ,M = null;
                 if (navigator.msSaveBlob) {
                     navigator.msSaveBlob(canvas.msToBlob(), pngName);
                 } else {
+                	console.log(canvas);
                     canvas.toBlob(function (blob) {
                         saveAs(blob,pngName);
                     });
