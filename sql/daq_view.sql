@@ -82,4 +82,10 @@ create or replace view v_daq_weld_detection as
  * 焊口返修视图
  */
 create or replace view v_daq_weld_rework as 
-	select r.*,t.geom from daq_weld_rework_weld r left join (select oid,geom from daq_construction_weld) t on t.oid=r.weld_oid	
+	select r.*,t.geom from daq_weld_rework_weld r left join (select oid,geom from daq_construction_weld) t on t.oid=r.weld_oid
+
+/**
+ * 焊口测量成果视图
+ */
+create or replace view v_daq_weld_measured_result as 
+	select m.*,t.weld_code from daq_weld_measured_result m left join (select oid,weld_code from daq_construction_weld) t on t.oid=m.weld_oid	

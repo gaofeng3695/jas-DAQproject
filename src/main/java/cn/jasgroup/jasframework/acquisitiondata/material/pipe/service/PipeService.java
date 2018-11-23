@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +23,7 @@ import com.deepoove.poi.data.PictureRenderData;
 import cn.jasgroup.jasframework.acquisitiondata.material.pipe.dao.PipeDao;
 import cn.jasgroup.jasframework.acquisitiondata.story.StoryData;
 import cn.jasgroup.jasframework.acquisitiondata.utils.ScannerUtils;
+import cn.jasgroup.jasframework.base.service.RedisService;
 import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 import cn.jasgroup.jasframework.utils.ReadConfigUtil;
 
@@ -32,6 +34,9 @@ public class PipeService {
 
 	@Autowired
 	private PipeDao pipeDao;
+	
+	@Autowired
+	private RedisService redisService;
 	
 
 	/**
@@ -239,33 +244,47 @@ public class PipeService {
 	  * <p>创建日期:2018年11月23日 上午11:27:54。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public String produceScanner(HttpServletRequest request,List<String> oids) throws Exception{
+	public String produceScanner(HttpServletRequest request,String functionCode,List<String> oids) throws Exception{
 		String root = request.getServletContext().getRealPath(File.separator);
 		String scannerFileOid = UUID.randomUUID().toString();
 		String tempPath = ReadConfigUtil.getPlatformConfig("scanner.tempPath");
 		tempPath += File.separator+System.currentTimeMillis();
-		List<PipeScannerBo> scannerList = this.pipeDao.produceScanner(oids);
+		String tableName = this.pipeDao.getTableNameByFunctionCode(functionCode);
+		String titleName=null;
+		String segmentFileName=null;
+		List<PipeScannerBo> scannerList = null;
+		if(tableName.equals("daq_material_pipe")){
+			titleName = "直管";
+			segmentFileName = "pipeSegment.docx";
+			scannerList = this.pipeDao.queryPipeScannerInfo(oids);
+		}else if(tableName.equals("daq_material_hot_bends")){
+			titleName = "热煨弯管";
+			segmentFileName = "hotPipeSegment.docx";
+			scannerList = this.pipeDao.queryHotPipeScannerInfo(oids);
+		}
 		if(scannerList!=null && scannerList.size()>0){
 			StoryData data = new StoryData();
-			data.setTitleName("直管");
+			data.setTitleName(titleName);
 			List<PipeScannerBo> segments = new ArrayList<PipeScannerBo>();
 			List<PipeScannerBo> segments2 = new ArrayList<PipeScannerBo>();
-			for(int k=0;k<3;k++){
-				for(int i=0; i<scannerList.size(); i++){
-					PipeScannerBo bo = scannerList.get(i);
-					String picturePath = ScannerUtils.createScanner(tempPath, bo.getScannerContext());
-					bo.setPicture(new PictureRenderData(130, 130, picturePath));
-					if(i%2==0){
-						segments.add(bo);
-					}else{
-						segments2.add(bo);
-					}
+			for(int i=0; i<scannerList.size(); i++){
+				PipeScannerBo bo = scannerList.get(i);
+				String picturePath = ScannerUtils.createScanner(tempPath, bo.getScannerContext());
+				bo.setPicture(new PictureRenderData(130, 130, picturePath));
+				if(i%2==0){
+					segments.add(bo);
+				}else{
+					segments2.add(bo);
 				}
 			}
-			DocxRenderData segment = new DocxRenderData(new File(root+"pipeSegment.docx"), segments );
-			DocxRenderData segment2 = new DocxRenderData(new File(root+"pipeSegment.docx"), segments2 );
-			data.setSegment(segment);
-			data.setSegment2(segment2);
+			if(segments.size()>0){
+				DocxRenderData segment = new DocxRenderData(new File(root+segmentFileName), segments );
+				data.setSegment(segment);
+			}
+			if(segments2.size()>0){
+				DocxRenderData segment2 = new DocxRenderData(new File(root+segmentFileName), segments2 );
+				data.setSegment2(segment2);
+			}
 
 			XWPFTemplate template = XWPFTemplate.compile(new File(root+"/story.docx")).render(data);
 			String scannerFilePath = tempPath+File.separator+"直管二维码.docx";
@@ -274,8 +293,10 @@ public class PipeService {
 			out.flush();
 			out.close();
 			template.close();
-			ThreadLocalHolder.setParam(scannerFileOid, scannerFilePath);
+			redisService.putValue(scannerFileOid, scannerFilePath);
+			redisService.expirse(scannerFileOid, 30l, TimeUnit.MINUTES);
+			return scannerFileOid;
 		}
-		return scannerFileOid;
+		return null;
 	}
 }

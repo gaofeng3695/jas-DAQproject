@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,6 +27,7 @@ import cn.jasgroup.framework.data.result.ListResult;
 import cn.jasgroup.framework.data.result.SimpleResult;
 import cn.jasgroup.jasframework.acquisitiondata.material.pipe.service.PipeService;
 import cn.jasgroup.jasframework.acquisitiondata.privilege.service.DaqPrivilegeService;
+import cn.jasgroup.jasframework.base.service.RedisService;
 import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 
 @RestController
@@ -37,6 +39,9 @@ public class PipeController {
 	
 	@Resource(name="daqPrivilegeService")
 	private DaqPrivilegeService daqPrivilegeService;
+	
+	@Autowired
+	private RedisService redisService;
 	
 	/**
 	 * <p>功能描述：查询未使用的钢管。</p>
@@ -274,25 +279,32 @@ public class PipeController {
 	  * <p>创建日期:2018年11月22日 下午3:35:13。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value="/produceScanner",method=RequestMethod.POST)
 	@ResponseBody
-	public Object produceScanner(HttpServletRequest request,@RequestBody List<String> oids){
+	public Object produceScanner(HttpServletRequest request,@RequestBody Map<String,Object> params){
 		SimpleResult<String> result;
 		try {
-			String filePath = this.pipeService.produceScanner(request,oids);
-			result = new SimpleResult<String>(1, "200", "ok", filePath);
+			List<String> oids = (List<String>) params.get("oids");
+			String functionCode = params.get("functionCode").toString();
+			String fileOid = this.pipeService.produceScanner(request,functionCode,oids);
+			if(fileOid!=null){
+				result = new SimpleResult<String>(1, "200", "ok", fileOid);
+			}else{
+				result = new SimpleResult<String>(-1, "400", "error");
+			}
 		} catch (Exception e) {
 			result = new SimpleResult<String>(-1, "400", e.getMessage());
 			e.printStackTrace();
 		}
 		return result;
 	}
-	@RequestMapping(value="/downloadScanner",method=RequestMethod.POST)
+	@RequestMapping(value="/downloadScanner")
 	@ResponseBody
-	public void downloadScanner(HttpServletResponse response, @RequestBody String fileOid) {
+	public void downloadScanner(HttpServletResponse response,@RequestParam("fileOid") String fileOid) {
 		String filePath=null;
 		try {
-			Object obj = ThreadLocalHolder.getParam(fileOid);
+			Object obj = redisService.getValue(fileOid);
 			filePath = obj != null ? obj.toString() : "";
 			if(StringUtils.isNotBlank(filePath)){
 				InputStream inputstream = new FileInputStream(new File(filePath));
