@@ -78,12 +78,6 @@ create or replace view v_daq_weld_detection as
 	select t.oid,t.detection_report_num as code,case when t.evaluation_result=1 then '合格' else '不合格' end as evaluation_result,t.weld_oid, 6 as type from daq_detection_pa_ultrasonic t where t.active=1
 	union all 
 	select t.oid,to_char(t.buckle_date,'yyyy-MM-dd') as code,s.code_name,t.weld_oid,7 as type from daq_weld_anticorrosion_check t left join (select code_id,code_name from sys_domain where domain_name='buckle_anticorrosive_type_domain') s on s.code_id=t.buckle_anticorrosive_type;
-/***
- * 焊口返修视图
- */
-create or replace view v_daq_weld_rework as 
-	select r.*,t.geom from daq_weld_rework_weld r left join (select oid,geom from daq_construction_weld) t on t.oid=r.weld_oid;
-
 /**
  * 焊口测量成果视图
  */

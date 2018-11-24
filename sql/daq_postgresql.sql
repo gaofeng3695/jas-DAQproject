@@ -5036,7 +5036,10 @@ select AddGeometryColumn('public', 'daq_median_stake', 'geom', 4490, 'POINT', 4)
 CREATE INDEX daq_median_stake_geom_idx ON public.daq_median_stake USING gist (geom);
 
 select AddGeometryColumn('public', 'daq_construction_weld', 'geom', 4490, 'POINT', 4);
-CREATE INDEX point_test_geom_idx ON public.daq_construction_weld USING gist (geom);
+CREATE INDEX daq_construction_weld_geom_idx ON public.daq_construction_weld USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_weld_rework_weld', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_weld_rework_weld_geom_idx ON public.daq_weld_rework_weld USING gist (geom);
 
 select AddGeometryColumn('public', 'daq_weld_measured_result', 'geom', 4490, 'POINT', 4);
 CREATE INDEX daq_weld_measured_result_geom_idx ON public.daq_weld_measured_result USING gist (geom);
