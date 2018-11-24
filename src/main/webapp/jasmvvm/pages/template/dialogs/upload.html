@@ -82,8 +82,8 @@
           </div>
           <div class="dialog-footer" style="text-align: center">
             <el-button size="small" @click="closeDialog">取 消</el-button>
-            <el-button size="small" @click="uploadExcel('initial')" type="primary">初始导入</el-button>
-            <el-button size="small" @click="uploadExcel('update')" type="primary">更新导入</el-button>
+            <el-button size="small" @click="uploadExcel()" type="primary">导入</el-button>
+           <!--   <el-button size="small" @click="uploadExcel('update')" type="primary">更新导入</el-button>-->
           </div>
         </div>
         <div class="jas-flex-box is-vertical" v-show="step===1">
@@ -181,9 +181,10 @@
           }
         }, 300);
       },
-      uploadExcel: function (type) {
+      uploadExcel: function () {
         var that = this;
-        this.uploadUrl = this.baseUploadUrl + ('&importType=' + type);
+        this.uploadUrl = this.baseUploadUrl;
+        console.log( this.uploadUrl);
         this.$nextTick(function () {
           that.$refs.upload.submit();
         });

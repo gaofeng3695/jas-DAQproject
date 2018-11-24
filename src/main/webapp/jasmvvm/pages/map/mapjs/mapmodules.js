@@ -67,24 +67,80 @@ var BaseMapToolsBar = function (options) {
     var onMapResized = function (e) {
         _self.resetLayout(); //
     };
+    _self.label = "地图工具条";
+    _self.apiDefaults = {
+        "zoomHome":{
+            "label": "地图复位",
+            "index": "",
+            "icon": "stylepath:images/reset.png"
+        },
+        "startPanMode":{
+            "label": "地图导航",
+            "index": "",
+            "icon": "stylepath:images/mapPan.png"
+        },
+        "zoomIn":{
+            "label": "拖拽放大地图",
+            "index": "",
+            "icon": "stylepath:images/zoomIn.png"
+        },
+        "zoomOut":{
+            "label": "拖拽缩小地图",
+            "index": "",
+            "icon": "stylepath:images/zoomOut.png"
+        },
+        "drawLineAndGetLength":{
+            "label": "距离测量",
+            "index": "",
+            "icon": "stylepath:images/measureDistance.png",
+            "toggle": true
+        },
+        "drawPolygonAndGetArea":{
+            "label": "面积测量",
+            "index": "",
+            "icon": "stylepath:images/measureArea.png",
+            "toggle": true
+        },
+        "clearAllGraphics":{
+            "label": "清除标记",
+            "index": "",
+            "icon": "stylepath:images/clear.png"
+        },
+        "export":{
+            "label":"导出图片",
+            "index":"",
+            "toggle":true,
+            "icon":"stylepath:images/export.png"
+        }
+    };
+    _self.BaseToolItem = function(){
+        return {
+            target: null, //moduleId,apiName
+            type: "module", //api,module
+            icon: "basepath:images/missing.png", //设置默认的图标
+            label: null,
+            index: 0,
+            toggle: false // 默认false
+        }
+    };
+
+    //
     _self.moduleClass = "map-module-basemaptoolsbar";
     _self.template =
         "<div class='" + _self.moduleClass + "' style='display:none;'>" +
         "<ul class='ToolsList'></ul>" +
         "</div>";
     _self.addToolItems = function () {
-        var item = {
-            target: null, //moduleId,apiName
-            type: "module", //api,module
-            icon: "", //设置默认的图标
-            label: "",
-            index: 0,
-            toggle: false // 默认false
-        };
         var $list = $("ul", _self.dom);
         for (var i = 0; i < _self.moduleSet.length; i++) {
+            var item = new _self.BaseToolItem();
             var m = _self.moduleSet[i];
-            var it = $.extend(item, m);
+            var it = null;
+            if( m.type === "api" && _self.apiDefaults[m.target]){
+                it = $.extend({},_self.apiDefaults[m.target],m);
+            }else{
+                it = $.extend({},item, m);
+            }
             var $li = $("<li></li>");
             if (it.toggle) {
                 $li.addClass("toggle");
@@ -98,8 +154,11 @@ var BaseMapToolsBar = function (options) {
                     });
                     continue;
                 }
-                it.icon = _self.mapApi.commonUtil.getApiRootPath(module.icon);
                 it.label = module.label;
+                it.icon = it.icon === "basepath:images/missing.png" && module.icon ?  module.icon:it.icon ;
+            }
+            if(it.icon){
+                it.icon = _self.mapApi.commonUtil.getApiRootPath(it.icon);
             }
             var $icon = $("<img dataaccess-target='" + it.target + "' dataaccess-type='" + it.type + "' src='" + it.icon + "' title='" + it.label + "' />");
             $icon.css("height", params.iconHeight + "px");
@@ -206,8 +265,8 @@ var BaseMapToolsBar = function (options) {
 var LayerListTree = function (options) {
     var defaults = {
         title: "图层控制",
-        right: 20,
-        top: 80,
+        right: 30,
+        top: 60,
         left: null,
         bottom: null,
         width: 250,
@@ -603,7 +662,7 @@ var DrawBox = function (options) {
         "</tr>" +
         "<tr>" +
         "<td  class='tr_title'><label class='style_title'>线透明度：</label></td>" +
-        "<td colspan='2'><input name='border_opacity' class='progressbar1' type='range' min='0' value='1' max='1' step='0.1'></td>" +
+        "<td colspan='2'><input name='border_opacity' class='progressbar1 style_input' type='range' min='0' value='1' max='1' step='0.1'></td>" +
         "</tr>" +
         "<tr>" +
         "<td  class='tr_title '><label class='style_title'>填充颜色：</label></td>" +
@@ -612,7 +671,7 @@ var DrawBox = function (options) {
         "</tr>" +
         "<tr>" +
         "<td  class='tr_title'><label class='style_title'>填充透明度：</label></td>" +
-        "<td colspan='2'><input name='fill_opacity' class='progressbar1' type='range' min='0' value='1' max='1' step='0.1'></td>" +
+        "<td colspan='2'><input name='fill_opacity' class='progressbar1 style_input' type='range' min='0' value='1' max='1' step='0.1'></td>" +
         "</tr>" +
         "</table>" +
         "</div>";
@@ -665,7 +724,7 @@ var DrawBox = function (options) {
         "</tr>" +
         "<tr>" +
         "<td class='tr_title'><label class='style_title'>线透明度：</label></td>" +
-        "<td  colspan='2'> <input name='border_opacity' class='progressbar1 ' type='range' min='0' value='1' max='1' step='0.1'></td>" +
+        "<td  colspan='2'> <input name='border_opacity' class='progressbar1 style_input' type='range' min='0' value='1' max='1' step='0.1'></td>" +
         "</tr>" +
         "<tr>" +
         "<td class='tr_title'><label class='style_title'>填充颜色：</label></td>" +
@@ -674,7 +733,7 @@ var DrawBox = function (options) {
         "</tr>" +
         "<tr>" +
         "<td class='tr_title'><label class='style_title'>填充透明度：</label></td>" +
-        "<td  colspan='2'><input name='fill_opacity' class='progressbar1 ' type='range' min='0' value='0.8' max='1' step='0.1'></td>" +
+        "<td  colspan='2'><input name='fill_opacity' class='progressbar1 style_input' type='range' min='0' value='0.8' max='1' step='0.1'></td>" +
         "</tr>" +
         "</table>" +
         "</div>";
@@ -692,7 +751,7 @@ var DrawBox = function (options) {
         "</tr>" +
         "<tr>" +
         "<td  class='tr_title'><label class='style_title'>线透明度：</label></td>" +
-        "<td colspan='2'><input name='border_opacity' class='progressbar1 ' type='range' min='0' value='1' max='1' step='0.1'></td>" +
+        "<td colspan='2'><input name='border_opacity' class='progressbar1 style_input' type='range' min='0' value='1' max='1' step='0.1'></td>" +
         "</tr>" +
         "</table>" +
         "</div>";
@@ -710,7 +769,7 @@ var DrawBox = function (options) {
         "</tr>" +
         "<tr>" +
         "<td  class='tr_title'><label class='style_title'>线透明度：</label></td>" +
-        "<td colspan='2'><input name='border_opacity' class='progressbar1 ' type='range' min='0' value='1' max='1' step='0.1'></td>" +
+        "<td colspan='2'><input name='border_opacity' class='progressbar1 style_input' type='range' min='0' value='1' max='1' step='0.1'></td>" +
         "</tr>" +
         "<tr>" +
         "<td  class='tr_title'><label class='style_title'>填充颜色：</label></td>" +
@@ -719,7 +778,7 @@ var DrawBox = function (options) {
         "</tr>" +
         "<tr>" +
         "<td  class='tr_title'><label class='style_title'>填充透明度：</label></td>" +
-        "<td colspan='2'><input name='fill_opacity' class='progressbar1 ' type='range' min='0' value='0.8' max='1' step='0.1'></td>" +
+        "<td colspan='2'><input name='fill_opacity' class='progressbar1 style_input' type='range' min='0' value='0.8' max='1' step='0.1'></td>" +
         "</tr>" +
         "</table>" +
         "</div>";
@@ -737,7 +796,7 @@ var DrawBox = function (options) {
         "</tr>" +
         "<tr>" +
         "<td class='tr_title'><label class='style_title'>线透明度：</label></td>" +
-        "<td colspan='2'><input name='border_opacity' class='progressbar1 ' id='line_num' type='range' min='0' value='1' max='1' step='0.1'></td>" +
+        "<td colspan='2'><input name='border_opacity' class='progressbar1 style_input' id='line_num' type='range' min='0' value='1' max='1' step='0.1'></td>" +
         "</tr>" +
         "<tr>" +
         "<td class='tr_title'><label class='style_title'>填充颜色：</label></td>" +
@@ -746,7 +805,7 @@ var DrawBox = function (options) {
         "</tr>" +
         "<tr>" +
         "<td class='tr_title'><label class='style_title'>填充透明度：</label></td>" +
-        "<td colspan='2'><input name='fill_opacity' class='progressbar1 ' type='range' min='0' value='0.8' max='1' step='0.1'></td>" +
+        "<td colspan='2'><input name='fill_opacity' class='progressbar1 style_input ' type='range' min='0' value='0.8' max='1' step='0.1'></td>" +
         "</tr>" +
         "</table>" +
         "</div>";
@@ -927,8 +986,8 @@ var DrawBox = function (options) {
     _self.dom = null;
     _self.$attrTable = null;
     _self.state = "closed";
-    _self.template = "<div class='" + _self.moduleClass + "' style='overflow:hidden'>" +
-        "<div style='overflow-y:scorll;overflow-x:hidden;height:100%'><div class='title'><strong>类型</strong></div>" +
+    _self.template = "<div class='" + _self.moduleClass + "'>" +
+        "<div style='height:100%;overflow-x:hidden;overflow-y:scroll'><div class='title'><strong>类型</strong></div>" +
         "<div class='tools'></div>" +
         "<div class='title'><strong>样式</strong></div>" +
         "<div class='styles'></div>" +
@@ -953,7 +1012,7 @@ var DrawBox = function (options) {
         "</tbody>" +
         "</table>" +
         "</div></div>" +
-        "<div class='buttons' style='background:#f1f1f1;bottom:5px'>" +
+        "<div class='buttons'>" +
 
         //"<input dataaccess-class='save' value='保存' type='button' >" +
         "<input class='style_canel' dataaccess-class='cancel' value='取消' type='button' >" +
@@ -1029,7 +1088,7 @@ var BaseMapsGallary = function (options) {
     var _self = this;
 
     _self.moduleClass = "map-module-basemapsgallary";
-    _self.template = "<div class='" + _self.moduleClass + "'><ul></ul></div>";
+    _self.template = "<div class='" + _self.moduleClass + "' style='height:70px !important'><ul></ul></div>";
 
     _self.showIndex = 0;
     _self.state = params.folded === true ? "open":"folded";
@@ -1037,8 +1096,9 @@ var BaseMapsGallary = function (options) {
     var imgWidth = params.imgWidth ? params.imgWidth : 100;
     var imgHeight = params.imgHeight ? params.imgHeight : 60;
     var containerWidth = imgWidth + 10;
-    var containerHeight = imgHeight + 25;
-
+   // var containerHeight = imgHeight + 25;
+    var containerHeight=70;
+    console.log(containerHeight);
     var getBaseInfo = function (config) {
         return {
             "id": config.id,

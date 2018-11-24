@@ -53,7 +53,12 @@
       "type": "js",
       "url": "basepath:mapstyles/default.onepage.js",
       "relyOn": "ol.js"
+    },  {
+      "type": "js",
+      "url": "basepath:mapstyles/mymapstyles.js",
+      "relyOn": "ol.js"
     }
+    
 
   ],
   "services": {},
@@ -138,6 +143,7 @@
             "callback": ""
           }
         },
+         "maxScale":200000,
         "outFields": "median_stake_code,mileage,pipeline_oid,project_oid",
         "source": "Vector",
         "flash": true,
@@ -146,7 +152,24 @@
         "format": "GeoJSON",
         "strategy": "all"
       }]
-    }]
+    },{
+        "id": "v_daq_median_stake_polyline",
+        "label": "中线桩连线",
+        "index": 90,
+        "renderer": {
+          "style": "medianStakePolyline",
+          "labelStyle": "",
+          "labelField": ""
+        },
+        "type": "Vector",
+        "source": "Vector",
+        "flash": true,
+        "visible": true,
+        "loader": "jas",
+        "format": "GeoJSON",
+        "strategy": "all",
+        "outFields":"pipeline_oid,project_oid"
+      }]
   },
   "proxy": [],
   "modules": []

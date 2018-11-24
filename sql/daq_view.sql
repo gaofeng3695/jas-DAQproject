@@ -61,25 +61,36 @@ create or replace view v_daq_material as
 	union all
 	select oid,pipe_cold_bending_code as code,pipe_length as length from daq_material_pipe_cold_bending where active=1;
 	
-	/***
-	 *焊口检测视图
-	 */
+/***
+ *焊口检测视图
+ */
 create or replace view v_daq_weld_detection as
-	select t.oid,case when t.evaluation_result=1 then '合格' else '不合格' end as evaluation_result,t.weld_oid, 1 as type from daq_detection_ray t where t.active=1 
+	select t.oid,t.detection_report_num as code,case when t.evaluation_result=1 then '合格' else '不合格' end as evaluation_result,t.weld_oid, 1 as type from daq_detection_ray t where t.active=1 
 	union all 
-	select t.oid,case when t.evaluation_result=1 then '合格' else '不合格' end as evaluation_result,t.weld_oid, 2 as type from daq_detection_ultrasonic t where t.active=1
+	select t.oid,t.detection_report_num as code,case when t.evaluation_result=1 then '合格' else '不合格' end as evaluation_result,t.weld_oid, 2 as type from daq_detection_ultrasonic t where t.active=1
 	union all 
-	select t.oid,case when t.evaluation_result=1 then '合格' else '不合格' end as evaluation_result,t.weld_oid, 3 as type from daq_detection_infiltration t where t.active=1
+	select t.oid,t.detection_report_num as code,case when t.evaluation_result=1 then '合格' else '不合格' end as evaluation_result,t.weld_oid, 3 as type from daq_detection_infiltration t where t.active=1
 	union all 
-	select t.oid,case when t.evaluation_result=1 then '合格' else '不合格' end as evaluation_result,t.weld_oid, 4 as type from daq_detection_magnetic_powder t where t.active=1
+	select t.oid,t.detection_report_num as code,case when t.evaluation_result=1 then '合格' else '不合格' end as evaluation_result,t.weld_oid, 4 as type from daq_detection_magnetic_powder t where t.active=1
 	union all 
-	select t.oid,case when t.evaluation_result=1 then '合格' else '不合格' end as evaluation_result,t.weld_oid, 5 as type from daq_detection_fa_ultrasonic t where t.active=1
+	select t.oid,t.detection_report_num as code,case when t.evaluation_result=1 then '合格' else '不合格' end as evaluation_result,t.weld_oid, 5 as type from daq_detection_fa_ultrasonic t where t.active=1
 	union all 
-	select t.oid,case when t.evaluation_result=1 then '合格' else '不合格' end as evaluation_result,t.weld_oid, 6 as type from daq_detection_pa_ultrasonic t where t.active=1
+	select t.oid,t.detection_report_num as code,case when t.evaluation_result=1 then '合格' else '不合格' end as evaluation_result,t.weld_oid, 6 as type from daq_detection_pa_ultrasonic t where t.active=1
 	union all 
-	select t.oid,s.code_name,t.weld_oid,7 as type from daq_weld_anticorrosion_check t left join (select code_id,code_name from sys_domain where domain_name='buckle_anticorrosive_type_domain') s on s.code_id=t.buckle_anticorrosive_type
+	select t.oid,to_char(t.buckle_date,'yyyy-MM-dd') as code,s.code_name,t.weld_oid,7 as type from daq_weld_anticorrosion_check t left join (select code_id,code_name from sys_domain where domain_name='buckle_anticorrosive_type_domain') s on s.code_id=t.buckle_anticorrosive_type;
 /***
  * 焊口返修视图
  */
 create or replace view v_daq_weld_rework as 
-	select r.*,t.geom from daq_weld_rework_weld r left join (select oid,geom from daq_construction_weld) t on t.oid=r.weld_oid	
+	select r.*,t.geom from daq_weld_rework_weld r left join (select oid,geom from daq_construction_weld) t on t.oid=r.weld_oid;
+
+/**
+ * 焊口测量成果视图
+ */
+create or replace view v_daq_weld_measured_result as 
+	select m.*,t.weld_code from daq_weld_measured_result m left join (select oid,weld_code from daq_construction_weld) t on t.oid=m.weld_oid;
+/***
+ * 中线桩连线视图
+ */	
+create or replace view v_daq_median_stake_polyline as
+	select t.project_oid,t.pipeline_oid,ST_GeomFromText(concat('LINESTRING(',string_agg(concat_ws(' ',t.pointx,t.pointy),','),')'),4490) as geom from (select project_oid,pipeline_oid,pointx,pointy from daq_median_stake where active=1 order by mileage) t  group by t.project_oid,t.pipeline_oid;	

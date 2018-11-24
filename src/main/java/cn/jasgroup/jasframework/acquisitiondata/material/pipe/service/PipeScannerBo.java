@@ -17,23 +17,6 @@ public class PipeScannerBo {
 	
 	@Name("pipe_info")
 	private String pipeInfo;
-	
-	/***
-	 * 直径
-	 *//*
-	private String pipeDiameter;
-	*//**
-	 * 壁厚
-	 *//*
-	private String wallThickness;
-	*//**
-	 * 钢管成型方式
-	 *//*
-	private String pipeFormingMethod;
-	*//**
-	 * 管材等级
-	 *//*
-	private String grade;*/
 	/**
 	 * 钢管长度
 	 */
