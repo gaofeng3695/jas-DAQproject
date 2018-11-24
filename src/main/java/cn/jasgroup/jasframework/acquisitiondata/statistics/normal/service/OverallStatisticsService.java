@@ -108,30 +108,32 @@ public class OverallStatisticsService {
         resultBos.addAll(weldStatsResult);
         resultBos.addAll(patchStatsResult);
         resultBos.addAll(otherStatsResult);
-
-        // 统计从开工年月开始: 找出最早的年月做统计开始日期
-        OptionalLong minTimestamp = resultBos.stream().mapToLong(value -> StatsUtils.strToDateLong(value.getStatsDate(), YYYY_MM)).min();
-
-        // 生成连续的年月集合: 根据统计开始日期和结束日期
-        List<String> monthlyList = StatsUtils.genContinuityYearMonthStr(new Date(minTimestamp.getAsLong()), new Date(), YYYY_MM);
-
-        // 初始化table生成连续的月份(为了保证table row key的顺序, 这里用ArrayTable先初始化一下)
-        List<String> typeList = Arrays.stream(StatsProcessEnum.values()).map(StatsProcessEnum::getType).collect(Collectors.toList());
-        Table<String, String, Object> table = ArrayTable.create(typeList, monthlyList);
-        initTable(monthlyList, table);
-
-        // Table赋值
-        resultBos.forEach(bo -> table.put(bo.getStatsType(), bo.getStatsDate(), bo.getStatsResult()==null?0:bo.getStatsResult()));
-
-        // 计算累积结果: 每个统计类型下的年月统计值=之前月份累计只和
-        Table<String, String, Object> resultTable = ArrayTable.create(typeList, monthlyList);
-        for (String statsType : table.rowKeySet()) {
-            for (String yearMonth : monthlyList) {
-                resultTable.put(statsType, yearMonth, getCumulativeCount(table, monthlyList, statsType, yearMonth));
-            }
+        if(resultBos!=null && resultBos.size()>0){
+        	
+        	// 统计从开工年月开始: 找出最早的年月做统计开始日期
+        	OptionalLong minTimestamp = resultBos.stream().mapToLong(value -> StatsUtils.strToDateLong(value.getStatsDate(), YYYY_MM)).min();
+        	
+        	// 生成连续的年月集合: 根据统计开始日期和结束日期
+        	List<String> monthlyList = StatsUtils.genContinuityYearMonthStr(new Date(minTimestamp.getAsLong()), new Date(), YYYY_MM);
+        	
+        	// 初始化table生成连续的月份(为了保证table row key的顺序, 这里用ArrayTable先初始化一下)
+        	List<String> typeList = Arrays.stream(StatsProcessEnum.values()).map(StatsProcessEnum::getType).collect(Collectors.toList());
+        	Table<String, String, Object> table = ArrayTable.create(typeList, monthlyList);
+        	initTable(monthlyList, table);
+        	
+        	// Table赋值
+        	resultBos.forEach(bo -> table.put(bo.getStatsType(), bo.getStatsDate(), bo.getStatsResult()==null?0:bo.getStatsResult()));
+        	// 计算累积结果: 每个统计类型下的年月统计值=之前月份累计只和
+        	Table<String, String, Object> resultTable = ArrayTable.create(typeList, monthlyList);
+        	for (String statsType : table.rowKeySet()) {
+        		for (String yearMonth : monthlyList) {
+        			resultTable.put(statsType, yearMonth, getCumulativeCount(table, monthlyList, statsType, yearMonth));
+        		}
+        	}
+        	return resultTable;
         }
 
-        return resultTable;
+        return null;
     }
 
 
