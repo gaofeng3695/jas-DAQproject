@@ -792,6 +792,13 @@
 			save: function () {
 				var that = this;
 				var msg = "";
+				if((that.formData.frontPipeType==that.formData.backPipeType || (that.formData.frontPipeType+'1')==that.formData.backPipeType) && that.formData.frontPipeOid==that.formData.backPipeOid){
+					top.Vue.prototype.$message({
+						type: 'warning',
+						message: '前管件和后管件重复'
+					});
+					return;
+				}
 				if (!this.isEdit) {
 					msg = "增加成功";
 					url = jasTools.base.rootPath +

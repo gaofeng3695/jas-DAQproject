@@ -243,7 +243,7 @@
           "strategy": "all",
           "outFields":"weld_code,project_oid"
         }, {
-          "id": "v_daq_weld_rework",
+          "id": "daq_weld_rework_weld",
           "label": "焊口返修信息",
           "index": 20,
           "renderer": {
