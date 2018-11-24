@@ -436,6 +436,9 @@ public class CutWeldService {
 						effectiveBuffer.append("第" + (1 + i) + "行，第" + ((char)(j + 65)) + "列数据有误，请填写对应项目下未被使用的的钢管;<br>");
 					}
 					// //钢管长度有效性
+					if (StringUtils.isBlank(cellValue)) {
+						break;
+					}
 					Object pipeLengthObj = cutWeldDao.getPipeInfo(cellValue).get(0).get("pipe_length");
 					if (pipeLengthObj != null) {
 						// 钢管实际长度
