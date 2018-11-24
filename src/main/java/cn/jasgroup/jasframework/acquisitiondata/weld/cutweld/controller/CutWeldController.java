@@ -42,12 +42,12 @@ public class CutWeldController {
 		upload.setHeaderEncoding("UTF-8");
 		try{
 			// 导入方式：初始导入initial || 更新导入update
-			String importType = request.getParameter("importType");
-			if(StringUtils.isNotBlank(importType)){
-				importType = URLDecoder.decode(importType, "UTF-8");
-			}else{
-				return new SimpleResult<>(-1, "400", "导入方式为空！");
-			}
+//			String importType = request.getParameter("importType");
+//			if(StringUtils.isNotBlank(importType)){
+//				importType = URLDecoder.decode(importType, "UTF-8");
+//			}else{
+//				return new SimpleResult<>(-1, "400", "导入方式为空！");
+//			}
 			List<?> items = upload.parseRequest(request);
 			FileItem item = null;
 			int itemsSize = items.size();
