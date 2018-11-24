@@ -266,7 +266,7 @@ var LayerListTree = function (options) {
     var defaults = {
         title: "图层控制",
         right: 30,
-        top: 60,
+        top: 80,
         left: null,
         bottom: null,
         width: 250,

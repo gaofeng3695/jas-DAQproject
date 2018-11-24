@@ -12,6 +12,7 @@ var Constants = {
         "MapResizedEvent": "MapResizedEvent",
         "BaseMapLayersLoaded": "BaseMapLayersLoaded",
         "OptionalLayersLoaded": "OptionalLayersLoaded",
+        "LayerRemovedEvent": "LayerRemovedEvent",
         "ModulesLoadedEvent": "ModulesLoaded",
         "ModuleStartupEvent": "ModuleStartupEvent",
         "ModuleInitEvent": "ModuleInitEvent",
@@ -149,6 +150,9 @@ var JasMap = null ,M = null;
             onLayerAdded:function(e){
 
             },
+            onLayerRemoved:function(e){
+
+            },
             onMapClicked:function(e){
 
             },
@@ -197,6 +201,8 @@ var JasMap = null ,M = null;
             _this.subscribe( _this.Events .ModuleStartupEvent ,apiDefaults.onModuleStartup);
             _this.subscribe( _this.Events .OptionalLayerAddedEvent ,apiDefaults.onLayerAdded);
             _this.subscribe( _this.Events .MapResizedEvent ,apiDefaults.onMapResized);
+            _this.subscribe( _this.Events .LayerRemovedEvent ,apiDefaults.onLayerRemoved);
+
         };//
         _this.map = null;
         _this.apiConfig = null;
@@ -364,7 +370,7 @@ var JasMap = null ,M = null;
         // arguments type 1： [{ featureId:null ,layerId:null, attributes:null }]
         // arguments type 2： featureId:null ,layerId:null, attributes:null
         _this.queryFeatures = function(args ,callback){
-            console.log("D");
+            //
             var defaults = {
                 layerId:null,
                 featureId:null,
@@ -618,6 +624,7 @@ var JasMap = null ,M = null;
                 var layerId = layerIds[i];
                 var layer = _this.getLayerById(layerId);
                 layer && _this.map.removeLayer(layer);
+                eventManager.publishEvent(_this.Events.LayerRemovedEvent,{ layerId:layer.get("id") });
             }
         };
         _this.refreshLayerById = function(layerId){
@@ -2645,15 +2652,20 @@ var JasMap = null ,M = null;
                 switch(type){
                     case "Tile":
                         sourceConfig.crossOrigin = 'anonymous';
+                        //crossOrigin : 'anonymous';
                         if("TileArcGISRest" === source){
                             layerSource = new ol.source.TileArcGISRest({
+                                crossOrigin : 'anonymous',
                                 url: url
                             });
                         }else if("OSM" === source){
-                            layerSource = new ol.source.OSM();
+                            layerSource = new ol.source.OSM({
+                                crossOrigin : 'anonymous'
+                            });
                         }else if("TileWMS" === source){
                             layerSource = new ol.source.TileWMS({
                                 url: url,
+                                crossOrigin : 'anonymous',
                                 serverType: serverType ? serverType : 'geoserver',
                                 params: sourceConfig.params
                             });
@@ -2724,6 +2736,7 @@ var JasMap = null ,M = null;
                 var proj = _this.map.getView().getProjection();
                 //
                 var source =  new ol.source.XYZ({
+                    crossOrigin:'anonymous',
                     url: 'http://t{0-7}.tianditu.com/DataServer?T='+type+'&x={x}&y={y}&l={z}',
                     projection: proj
                 }) ;
@@ -3519,7 +3532,7 @@ var JasMap = null ,M = null;
             }
 
         }
-
+        //
         apiInit();
     };
 
