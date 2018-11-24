@@ -2148,7 +2148,7 @@ Vue.component('jas-detail-table-link', {
 		'        <tr>',
 		'            <template v-for="subitem in item">',
 		'                <th>{{subitem.name}}</th>',
-		'                <td v-if="subitem.isLink":ref="subitem.field" style="color: blue; cursor: pointer;"  @click="linkForDetail(subitem.link,detail[subitem.detailOid])" v-text="formatValue(detail[subitem.field],subitem.formatter)"></td>',
+		'                <td v-if="subitem.isLink":ref="subitem.field" style="color: blue; cursor: pointer;"  @click="linkForDetail(subitem.link,detail[subitem.detailOid],subitem.detailTitle)" v-text="formatValue(detail[subitem.field],subitem.formatter)"></td>',
 		'                <td v-else :ref="subitem.field" v-text="formatValue(detail[subitem.field],subitem.formatter)"></td>',
 		'            </template>',
 		'        </tr>',
@@ -2175,8 +2175,8 @@ Vue.component('jas-detail-table-link', {
 				that.columnNum = 3;
 			}
 		},
-		linkForDetail:function(src,oid){
-			console.log(oid);
+		linkForDetail:function(src,oid,title){
+			console.log(title);
 			if (!oid) return;
 			var url = jasTools.base.setParamsToUrl(src, {
 				oid: oid
@@ -2184,7 +2184,7 @@ Vue.component('jas-detail-table-link', {
 			top.jasTools.dialog.show({
 				width: '55%',
 				height: '80%',
-				title: '查看',
+				title: title,
 				src: url,
 			});
 		}

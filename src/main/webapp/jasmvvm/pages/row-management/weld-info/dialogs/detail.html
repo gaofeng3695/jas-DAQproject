@@ -256,54 +256,60 @@
 				testbusArr: [{
 					name: "射线检测报告编号",
 					field: "rayCode",
-					isLink:true,
-					link:"pages/row-detection/detection-ray/dialogs/detail.html",
-					detailOid:"rayOid"
+					isLink: true,
+					link: "pages/row-detection/detection-ray/dialogs/detail.html",
+					detailOid: "rayOid",
+					detailTitle:"射线检测详情"
 				}, {
 					name: "检测结果",
 					field: "rayResult"
 				}, {
 					name: "超声波检测报告编号",
 					field: "ultrasonicCode",
-					isLink:true,
-					link:"pages/row-detection/detection-ultrasonic/dialogs/detail.html",
-					detailOid:"ultrasonicOid"
+					isLink: true,
+					link: "pages/row-detection/detection-ultrasonic/dialogs/detail.html",
+					detailOid: "ultrasonicOid",
+					detailTitle:"超声波检测详情"
 				}, {
 					name: "检测结果",
 					field: "ultrasonicResult"
 				}, {
 					name: "渗透检测报告编号",
 					field: "osmosisCode",
-					isLink:true,
-					link:"pages/row-detection/detection-infiltration/dialogs/detail.html",
-					detailOid:"osmosisOid"
+					isLink: true,
+					link: "pages/row-detection/detection-infiltration/dialogs/detail.html",
+					detailOid: "osmosisOid",
+					detailTitle:"渗透检测详情"
 				}, {
 					name: "检测结果",
 					field: "osmosisResult"
 				}, {
 					name: "磁粉检测报告编号",
 					field: "magneticCode",
-					isLink:true,
-					link:"pages/row-detection/detection-magnetic-powder/dialogs/detail.html",
-					detailOid:"magneticOid"
+					isLink: true,
+					link: "pages/row-detection/detection-magnetic-powder/dialogs/detail.html",
+					detailOid: "magneticOid",
+					detailTitle:"磁粉检测详情"
 				}, {
 					name: "检测结果",
 					field: "magneticResult"
 				}, {
 					name: "全自动超声波检测报告编号",
 					field: "selfMotionCode",
-					isLink:true,
-					link:"pages/row-detection/detection-fa-ultrasonic/dialogs/detail.html",
-					detailOid:"selfMotionOid"
+					isLink: true,
+					link: "pages/row-detection/detection-fa-ultrasonic/dialogs/detail.html",
+					detailOid: "selfMotionOid",
+					detailTitle:"全自动超声波检测详情"
 				}, {
 					name: "检测结果",
 					field: "selfMotionResult"
 				}, {
 					name: "相控超声波检测报告编号",
 					field: "faciesCode",
-					isLink:true,
-					link:"pages/row-detection/detection-pa-ultrasonic/dialogs/detail.html",
-					detailOid:"faciesOid"
+					isLink: true,
+					link: "pages/row-detection/detection-pa-ultrasonic/dialogs/detail.html",
+					detailOid: "faciesOid",
+					detailTitle:"相控超声波检测详情"
 				}, {
 					name: "检测结果",
 					field: "faciesResult"
@@ -321,7 +327,9 @@
 				}],
 				detail: {},
 				antisepticDetail: {},
-				testDetail: {rayCode:''},
+				testDetail: {
+					rayCode: ''
+				},
 				columnNum: 2,
 				oid: '',
 			}
@@ -386,39 +394,41 @@
 				}, function (data) {
 					if (data.rows.length > 0) {
 						data.rows.forEach(function (item) {
-							if (item.type == 1) {
-								that.testDetail.rayCode = item.code;
-								that.testDetail.rayResult = item.evaluation_result;
-								that.testDetail.rayOid=item.oid;
-							}
-							if (item.type == 2) {
-								that.testDetail.ultrasonicCode = item.code;
-								that.testDetail.ultrasonicResult = item.evaluation_result;
-								that.testDetail.ultrasonicOid=item.oid;
-							}
-							if (item.type == 3) {
-								that.testDetail.osmosisCode = item.code;
-								that.testDetail.osmosisResult = item.evaluation_result;
-								that.testDetail.osmosisOid=item.oid;
-							}
-							if (item.type == 4) {
-								that.testDetail.magneticCode = item.code;
-								that.testDetail.magneticResult = item.evaluation_result;
-								that.testDetail.magneticOid=item.oid;
-							}
-							if (item.type == 5) {
-								that.testDetail.selfMotionCode = item.code;
-								that.testDetail.selfMotionResult = item.evaluation_result;
-								that.testDetail.selfMotionOid=item.oid;
-							}
-							if (item.type == 6) {
-								that.testDetail.faciesCode = item.code;
-								that.testDetail.faciesResult = item.evaluation_result;
-								that.testDetail.faciesOid=item.oid;
-							}
-							if (item.type == 7) {
-								that.antisepticDetail.antisepticbusType = item.evaluation_result;
-								that.antisepticDetail.antisepticbusDate = item.code;
+							switch (item.type) {
+								case 1:
+									that.testDetail.rayCode = item.code;
+									that.testDetail.rayResult = item.evaluation_result;
+									that.testDetail.rayOid = item.oid;
+									break;
+								case 2:
+									that.testDetail.ultrasonicCode = item.code;
+									that.testDetail.ultrasonicResult = item.evaluation_result;
+									that.testDetail.ultrasonicOid = item.oid;
+									break;
+								case 3:
+									that.testDetail.osmosisCode = item.code;
+									that.testDetail.osmosisResult = item.evaluation_result;
+									that.testDetail.osmosisOid = item.oid;
+									break;
+								case 4:
+									that.testDetail.magneticCode = item.code;
+									that.testDetail.magneticResult = item.evaluation_result;
+									that.testDetail.magneticOid = item.oid;
+									break;
+								case 5:
+									that.testDetail.selfMotionCode = item.code;
+									that.testDetail.selfMotionResult = item.evaluation_result;
+									that.testDetail.selfMotionOid = item.oid;
+									break;
+								case 6:
+									that.testDetail.faciesCode = item.code;
+									that.testDetail.faciesResult = item.evaluation_result;
+									that.testDetail.faciesOid = item.oid;
+									break;
+								case 7:
+									that.antisepticDetail.antisepticbusType = item.evaluation_result;
+									that.antisepticDetail.antisepticbusDate = item.code;
+									break;
 							}
 						});
 					}
