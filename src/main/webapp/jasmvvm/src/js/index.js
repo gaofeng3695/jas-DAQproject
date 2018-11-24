@@ -454,7 +454,7 @@ window.app = new Vue({
               });
               jasMap.queryFeatures(paramsArray,function(features){
                  // console.info(features);
-                  gisMap.drawLineByStakes(features, jasMap);
+               //   gisMap.drawLineByStakes(features, jasMap);
               });
               
 			//jasMap.removeEventListener(this.layerListener);

@@ -31,7 +31,7 @@ JasMap.require(function () {
 //          styleManager.pipesegment_renderer_by_pipename_style[name] = style;
 //      }
 //      return styleManager.pipesegment_renderer_by_pipename_style[name]
-//  };​
+//  };
 //穿跨越
   mapStyleTemplates.crossAcross=function(feature){
 	  if(!styleManager.crossAcrossStyle){
@@ -405,6 +405,37 @@ JasMap.require(function () {
            points: 3,
 	      })
 });
+ //中线桩连线   
+ mapStyleTemplates.medianStakePolyline=function(feature){
+	 console.log(feature);
+	 var colorArr = ['#CC0000','#00FF00','#CC33FF','#CCFF00','#FF66FF','#FFFF00','#00FFFF','#00FFCC'];
+	  if(!styleManager.medianStakePolylineStyle){
+		  styleManager.medianStakePolylineStyle={};  
+	  }
+	  var name = feature.get('pipeline_oid');
+	  console.log(name);
+	  if(!styleManager.medianStakePolylineStyle[name]){
+		  var style = new ol.style.Style({
+           stroke: new ol.style.Stroke({
+               color: colorArr[random(0,8)] ,
+               width:5
+           })
+       });
+		  styleManager.medianStakePolylineStyle[name]=style;
+	  }
+	  return  styleManager.medianStakePolylineStyle[name];
+ }
+ 
+
   //<<<-------------------自定义样式结束----------------ss
   return mapStyleTemplates; //返回样式模版对象
 });
+
+
+ function random (min, max) {
+	var Range = max - min;
+	var Rand = Math.random();
+	var num = min + Math.round(Rand * Range); //四舍五入
+	// console.log(num);
+	return num;
+}

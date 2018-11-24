@@ -189,8 +189,7 @@
           "template":"桩号:${median_stake_code}",
           "callback":""
           }
-        },
-        "type": "Vector",
+        },        "type": "Vector",
         "source": "Vector",
         "flash": true,
         "visible": false,
@@ -198,6 +197,23 @@
         "format": "GeoJSON",
         "strategy": "all",
         "outFields":"median_stake_code,mileage,pipeline_oid,project_oid"
+      },{
+        "id": "v_daq_median_stake_polyline",
+        "label": "中线桩连线",
+        "index": 12,
+        "renderer": {
+          "style": "medianStakePolyline",
+          "labelStyle": "",
+          "labelField": ""
+        },
+        "type": "Vector",
+        "source": "Vector",
+        "flash": true,
+        "visible": true,
+        "loader": "jas",
+        "format": "GeoJSON",
+        "strategy": "all",
+        "outFields":"pipeline_oid,project_oid"
       }, {
         "id": "layerSet002",
         "label": "管道焊接补口",

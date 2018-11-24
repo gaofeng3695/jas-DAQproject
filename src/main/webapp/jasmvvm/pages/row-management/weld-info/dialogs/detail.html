@@ -128,6 +128,10 @@
 				</div>
 				<jas-base-group-title name="焊口数据"></jas-base-group-title>
 				<jas-detail-table ref="weldDetail" :titles="busArr" :detail="detail"></jas-detail-table>
+				<jas-base-group-title name="检测数据"></jas-base-group-title>
+				<jas-detail-table-link :titles="testbusArr" :detail="testDetail"></jas-detail-table-link>
+				<jas-base-group-title name="防腐补口"></jas-base-group-title>
+				<jas-detail-table :titles="antisepticbusArr" :detail="antisepticDetail"></jas-detail-table>
 				<jas-base-group-title name="其他信息"></jas-base-group-title>
 				<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
 				<jas-base-group-title name="附件信息"></jas-base-group-title>
@@ -245,14 +249,79 @@
 					}, {
 						name: '是否连头口',
 						field: 'isPipeHead',
+					}, {
 
 					}
 				],
+				testbusArr: [{
+					name: "射线检测报告编号",
+					field: "rayCode",
+					isLink:true,
+					link:"pages/row-detection/detection-ray/dialogs/detail.html",
+					detailOid:"rayOid"
+				}, {
+					name: "检测结果",
+					field: "rayResult"
+				}, {
+					name: "超声波检测报告编号",
+					field: "ultrasonicCode",
+					isLink:true,
+					link:"pages/row-detection/detection-ultrasonic/dialogs/detail.html",
+					detailOid:"ultrasonicOid"
+				}, {
+					name: "检测结果",
+					field: "ultrasonicResult"
+				}, {
+					name: "渗透检测报告编号",
+					field: "osmosisCode",
+					isLink:true,
+					link:"pages/row-detection/detection-infiltration/dialogs/detail.html",
+					detailOid:"osmosisOid"
+				}, {
+					name: "检测结果",
+					field: "osmosisResult"
+				}, {
+					name: "磁粉检测报告编号",
+					field: "magneticCode",
+					isLink:true,
+					link:"pages/row-detection/detection-magnetic-powder/dialogs/detail.html",
+					detailOid:"magneticOid"
+				}, {
+					name: "检测结果",
+					field: "magneticResult"
+				}, {
+					name: "全自动超声波检测报告编号",
+					field: "selfMotionCode",
+					isLink:true,
+					link:"pages/row-detection/detection-fa-ultrasonic/dialogs/detail.html",
+					detailOid:"selfMotionOid"
+				}, {
+					name: "检测结果",
+					field: "selfMotionResult"
+				}, {
+					name: "相控超声波检测报告编号",
+					field: "faciesCode",
+					isLink:true,
+					link:"pages/row-detection/detection-pa-ultrasonic/dialogs/detail.html",
+					detailOid:"faciesOid"
+				}, {
+					name: "检测结果",
+					field: "faciesResult"
+				}],
+				antisepticbusArr: [{
+					name: "补口防腐类型",
+					field: "antisepticbusType"
+				}, {
+					name: "补口日期",
+					field: "antisepticbusDate"
+				}],
 				otherArr: [{
 					name: '备注',
 					field: 'remarks',
 				}],
 				detail: {},
+				antisepticDetail: {},
+				testDetail: {rayCode:''},
 				columnNum: 2,
 				oid: '',
 			}
@@ -263,6 +332,7 @@
 			if (param.oid) {
 				this.oid = param.oid;
 				this.params = param;
+				this.getDetailByWeldOid();
 				this.getDetailByObjectId();
 			};
 
@@ -275,7 +345,6 @@
 				jasTools.ajax.post(url, {
 					oid: that.oid
 				}, function (data) {
-
 					that.detail = data.rows[0];
 					if (data.rows[0].isGoldeJoint == 1) {
 						that.detail.isGoldeJoint = '是';
@@ -306,6 +375,53 @@
 						that.detail.approveStatus = '通过';
 					}
 					that.addPipeEvent();
+				});
+			},
+			getDetailByWeldOid: function () {
+				var that = this;
+				var url = jasTools.base.rootPath +
+					"/daq/weld/getDetectionInfoByWeldOid.do";
+				jasTools.ajax.post(url, {
+					weldOid: that.oid
+				}, function (data) {
+					if (data.rows.length > 0) {
+						data.rows.forEach(function (item) {
+							if (item.type == 1) {
+								that.testDetail.rayCode = item.code;
+								that.testDetail.rayResult = item.evaluation_result;
+								that.testDetail.rayOid=item.oid;
+							}
+							if (item.type == 2) {
+								that.testDetail.ultrasonicCode = item.code;
+								that.testDetail.ultrasonicResult = item.evaluation_result;
+								that.testDetail.ultrasonicOid=item.oid;
+							}
+							if (item.type == 3) {
+								that.testDetail.osmosisCode = item.code;
+								that.testDetail.osmosisResult = item.evaluation_result;
+								that.testDetail.osmosisOid=item.oid;
+							}
+							if (item.type == 4) {
+								that.testDetail.magneticCode = item.code;
+								that.testDetail.magneticResult = item.evaluation_result;
+								that.testDetail.magneticOid=item.oid;
+							}
+							if (item.type == 5) {
+								that.testDetail.selfMotionCode = item.code;
+								that.testDetail.selfMotionResult = item.evaluation_result;
+								that.testDetail.selfMotionOid=item.oid;
+							}
+							if (item.type == 6) {
+								that.testDetail.faciesCode = item.code;
+								that.testDetail.faciesResult = item.evaluation_result;
+								that.testDetail.faciesOid=item.oid;
+							}
+							if (item.type == 7) {
+								that.antisepticDetail.antisepticbusType = item.evaluation_result;
+								that.antisepticDetail.antisepticbusDate = item.code;
+							}
+						});
+					}
 				});
 			},
 			openWeldDialog: function (oid) {

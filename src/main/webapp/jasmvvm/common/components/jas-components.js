@@ -2100,3 +2100,101 @@ Vue.component('jas-remarks', {
 		}
 	}
 })
+
+
+
+
+Vue.component('jas-detail-table-link', {
+	props: {
+		titles: {
+			type: Array,
+			required: true
+		},
+		detail: {
+
+		}
+	},
+	data: function () {
+		return {
+			columnNum: 2,
+		}
+	},
+	computed: {
+		formatTitle: function () {
+			var that = this;
+			var newTitle = [];
+			if (!this.detail) return [];
+			this.titles.forEach(function (item, index, arr) {
+				if (index % that.columnNum === 0) {
+					var _arr = [];
+					for (var i = 0; i < that.columnNum; i++) {
+						if (arr[index + i] !== undefined) {
+							_arr.push(arr[index + i]);
+						}
+					}
+					newTitle.push(_arr)
+				}
+			});
+			if (this.titles.length === 1) {
+				this.columnNum = 1;
+			}
+			return newTitle;
+		}
+	},
+	template: [
+		'<div v-show="detail" class="jas-detail-table">',
+		'<table class="table_wrap">',
+		'    <template v-for="item in formatTitle">',
+		'        <tr>',
+		'            <template v-for="subitem in item">',
+		'                <th>{{subitem.name}}</th>',
+		'                <td v-if="subitem.isLink":ref="subitem.field" style="color: blue; cursor: pointer;"  @click="linkForDetail(subitem.link,detail[subitem.detailOid])" v-text="formatValue(detail[subitem.field],subitem.formatter)"></td>',
+		'                <td v-else :ref="subitem.field" v-text="formatValue(detail[subitem.field],subitem.formatter)"></td>',
+		'            </template>',
+		'        </tr>',
+		'    </template>',
+		'</table>',
+		'</div>'
+	].join(''),
+	methods: {
+		formatValue: function (value, formatter) {
+			if (formatter) {
+				return formatter('', '', value, '');
+			}
+			return value;
+		},
+		resizeColumn: function () {
+			var that = this;
+
+			var width = that.$el.clientWidth;
+			if (width < 660) {
+				that.columnNum = 1;
+			} else if (width < 1400) {
+				that.columnNum = 2;
+			} else {
+				that.columnNum = 3;
+			}
+		},
+		linkForDetail:function(src,oid){
+			console.log(oid);
+			if (!oid) return;
+			var url = jasTools.base.setParamsToUrl(src, {
+				oid: oid
+			});
+			top.jasTools.dialog.show({
+				width: '55%',
+				height: '80%',
+				title: '查看',
+				src: url,
+			});
+		}
+	},
+	mounted: function () {
+		var that = this;
+		this.resizeColumn();
+		$(window).on('resize', function () {
+			that.resizeColumn();
+
+		});
+	},
+});
