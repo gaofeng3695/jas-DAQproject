@@ -987,7 +987,7 @@ var DrawBox = function (options) {
     _self.$attrTable = null;
     _self.state = "closed";
     _self.template = "<div class='" + _self.moduleClass + "'>" +
-        "<div class='title'><strong>类型</strong></div>" +
+        "<div style='height:100%;overflow-x:hidden;overflow-y:scroll'><div class='title'><strong>类型</strong></div>" +
         "<div class='tools'></div>" +
         "<div class='title'><strong>样式</strong></div>" +
         "<div class='styles'></div>" +
@@ -1011,7 +1011,7 @@ var DrawBox = function (options) {
         "</tr>" +
         "</tbody>" +
         "</table>" +
-        "</div>" +
+        "</div></div>" +
         "<div class='buttons'>" +
 
         //"<input dataaccess-class='save' value='保存' type='button' >" +
@@ -1088,7 +1088,7 @@ var BaseMapsGallary = function (options) {
     var _self = this;
 
     _self.moduleClass = "map-module-basemapsgallary";
-    _self.template = "<div class='" + _self.moduleClass + "'><ul></ul></div>";
+    _self.template = "<div class='" + _self.moduleClass + "' style='height:70px !important'><ul></ul></div>";
 
     _self.showIndex = 0;
     _self.state = params.folded === true ? "open":"folded";
@@ -1096,8 +1096,9 @@ var BaseMapsGallary = function (options) {
     var imgWidth = params.imgWidth ? params.imgWidth : 100;
     var imgHeight = params.imgHeight ? params.imgHeight : 60;
     var containerWidth = imgWidth + 10;
-    var containerHeight = imgHeight + 25;
-
+   // var containerHeight = imgHeight + 25;
+    var containerHeight=70;
+    console.log(containerHeight);
     var getBaseInfo = function (config) {
         return {
             "id": config.id,

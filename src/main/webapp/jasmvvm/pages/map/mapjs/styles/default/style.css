@@ -21,6 +21,14 @@ html,body { height:100%;width:100%;padding:0;margin:0 auto;overflow: hidden;}
 .map-module-basemaptoolsbar ul li:hover{cursor: pointer;background-color: #3171e5; }
 
 .map-module-layerlisttree{}
+.map-module-layerlisttree div.tree{
+    overflow: auto;
+}
+.map-module-layerlisttree .tree{
+    height:100%;
+    width :100%;
+}
+
 .map-module-coorspicker{}
 .map-module-basemapsgallary{}
 
@@ -42,11 +50,18 @@ html,body { height:100%;width:100%;padding:0;margin:0 auto;overflow: hidden;}
 .map-module-basemapsgallary:hover{ opacity: 1;}
 .map-module-basemapsgallary .container{ display: block; width: 110px; height: 85px; overflow: hidden; padding: 0 3px 0 3px;background-color: white;  transition: width 0.2s ease-out 0s;  -webkit-transition:width 0.2s ease-out 0s;  }
 .map-module-basemapsgallary ul{ list-style: none;display: inline; font-size: 10px;overflow: auto; padding: 0; margin: 0 auto;}
-.map-module-basemapsgallary ul li{ float: left; padding: 2px;}
+.map-module-basemapsgallary ul li{ float: left; padding: 2px;  margin-right: 5px;  width: 70px;}
 .map-module-basemapsgallary ul li div.listItem{ text-align: center;padding:1px;}
 .map-module-basemapsgallary ul li div.listItem:hover{ border: solid 2px blue;}
 .map-module-basemapsgallary ul li div.selected{ border: solid 2px blue;}
 .map-module-basemapsgallary ul div.listItem img{ width:100px;height:60px;cursor: pointer;}
+.map-module-basemapsgallary ul li div.listItem span{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 100%;
+    display: inline-block;
+    white-space: nowrap;
+}
 
 .map-popup {  position: absolute;  background-color: white;  -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));  filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));  padding: 5px;  border-radius: 10px;  border: 1px solid #cccccc;  bottom: 12px;  left: -50px;  min-width: 280px; width: 250px;height:150px;z-index:2000; }
 .map-popup:after, .map-popup:before {  top: 100%;  border: solid transparent;  content: " ";  height: 0;  width: 0;  position: absolute;  pointer-events: none;  }
@@ -61,3 +76,13 @@ html,body { height:100%;width:100%;padding:0;margin:0 auto;overflow: hidden;}
 .map-popup-closer:after {  content: "✖";  }
 .map-module-positiondemo{}
 .map-module-positiondemo input[type=text]{width:230px;}
+.map-module-coorsposition-overlay {
+    position: absolute;
+    bottom: 10px;
+    left: 170px;
+    color: #00bbee;
+    font-size: small;
+}
+.map-module-coorsposition-overlay .ol-mouse-position {
+    position: relative;
+}

@@ -633,12 +633,12 @@
           "id": "daq_appendages_mark_stake",
           "label": "标志桩",
           "index": 20,
-                "renderer": {
+          "style": "pipesegment",
+           "renderer": {
             "style": "appendagesMarkStake",
             "labelStyle": "",
             "labelField": ""
           },
-          "style": "pipesegment",
           "type": "Vector",
           "source": "Vector",
           "flash": true,
@@ -701,12 +701,12 @@
           "id": "daq_appendages_hydraulic_protection",
           "label": "水工保护",
           "index": 20,
-                "renderer": {
+          "style": "pipesegment",
+           "renderer": {
             "style": "appendagesHydraulicProtection",
             "labelStyle": "",
             "labelField": ""
           },
-          "style": "pipesegment",
           "type": "Vector",
           "source": "Vector",
           "flash": true,
@@ -718,12 +718,12 @@
           "id": "daq_appendages_casing_pipe",
           "label": "套管",
           "index": 20,
+          "style": "pipesegment",
            "renderer": {
             "style": "appendagesCasingPipe",
             "labelStyle": "",
             "labelField": ""
           },
-          "style": "pipesegment",
           "type": "Vector",
           "source": "Vector",
           "flash": true,

@@ -60,21 +60,22 @@ var gisMap = {
 				coors.push(stake.coor);
 			}
 			var color = that.randomColor(i);
-			//				console.log(color);
+							console.log(color);
 			jasMap.addPolylineGraphic(coors, {
 				color: color,
-				width: 4
+				width: 3
 			});
 		}
 
 	},
 	randomColor: function (i) {
 		var that = this;
-		var colorArr = ['#3afb3d', '#d56034', '#685a99', '#e1abd9', '#f39413', '#670057', '#cb1beb'];
+		//, '', 
+		var colorArr = ['#CC0000','#00FF00','#0066FF','#CC33FF','#CCFF00','#FF66FF','#FFFF00','#00FFFF','#00FFCC'];
 		if (i < colorArr.length) {
 			return colorArr[i];
 		} else {
-			return colorArr[that.random(0, 6)];
+			return colorArr[that.random(0, 8)];
 		}
 	},
 	random: function (min, max) {
@@ -452,7 +453,7 @@ window.app = new Vue({
                   layerId : 'daq_median_stake'
               });
               jasMap.queryFeatures(paramsArray,function(features){
-                  console.info(features);
+                 // console.info(features);
                   gisMap.drawLineByStakes(features, jasMap);
               });
               
