@@ -64,7 +64,20 @@
 			var that = this;
 			var param = window.jasTools.base.getParamsInUrl(location.href);
 			this.pageCode = param.pageCode;
-
+			
+			if(this.pageCode=='appendagesHydraulicProtection'){//水工保护
+				 crossConfig.fieldsConfig.medianStakeOid.isRequired=false;
+				 crossConfig.fieldsConfig.relativeMileage.isRequired=false;
+				 crossConfig.fieldsConfig.startPointx.isRequired=true;
+				 crossConfig.fieldsConfig.startPointy.isRequired=true;
+				 crossConfig.fieldsConfig.endPointx.isRequired=true;
+				 crossConfig.fieldsConfig.endPointy.isRequired=true;
+				
+			}
+			if(this.pageCode=='appendagesElectronicLabel'){//电子标签
+				 crossConfig.fieldsConfig.pointx.isRequired=true;
+				 crossConfig.fieldsConfig.pointy.isRequired=true;
+			}
 			var fields = crossConfig[this.pageCode].addFields1;
 			var fields2 = crossConfig[this.pageCode].addFields2;
 			this.groupNames = crossConfig[this.pageCode].groupNames;

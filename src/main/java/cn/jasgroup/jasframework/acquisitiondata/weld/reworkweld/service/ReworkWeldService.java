@@ -31,6 +31,7 @@ public class ReworkWeldService extends CommonDataJdbcService {
 	 */
 	public void saveChangeWeldStatus(ReworkWeld reworkWeld) {
 		reworkWeldDao.changeWeldStatus(reworkWeld.getWeldOid(), 1);
+		reworkWeldDao.changeGeomColumn(reworkWeld.getOid(), reworkWeld.getWeldOid());
 	}
 	/**
 	  * <p>功能描述：。</p>
@@ -44,6 +45,7 @@ public class ReworkWeldService extends CommonDataJdbcService {
 		ReworkWeld oldReworkWeld = (ReworkWeld)BaseEntityThreadLocalHolder.getEntitySnap();
 		reworkWeldDao.changeWeldStatus(oldReworkWeld.getWeldOid(), 0);
 		reworkWeldDao.changeWeldStatus(reworkWeld.getWeldOid(), 1);
+		reworkWeldDao.changeGeomColumn(reworkWeld.getOid(), reworkWeld.getWeldOid());
 	}
 	/**
 	  * <p>功能描述：。</p>

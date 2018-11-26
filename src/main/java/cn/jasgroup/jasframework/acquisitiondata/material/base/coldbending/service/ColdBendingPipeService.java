@@ -72,12 +72,12 @@ public class ColdBendingPipeService extends CommonDataHibernateService{
 	}
 	public void updateChanageOriginalPipeUseState(ColdBendingPipe coldBendingPipe){
 		ColdBendingPipe oldColdBendingPipe = (ColdBendingPipe)BaseEntityThreadLocalHolder.getEntitySnap();
-		this.coldBendingPipeDao.chanageOriginalPipeUseState(0,"","","",oldColdBendingPipe.getPipeOid());
+		this.coldBendingPipeDao.chanageOriginalPipeUseState(0,oldColdBendingPipe.getProjectOid(),"","",oldColdBendingPipe.getPipeOid());
 		this.coldBendingPipeDao.chanageOriginalPipeUseState(1,coldBendingPipe.getProjectOid(),coldBendingPipe.getPipelineOid(),coldBendingPipe.getTendersOid(),coldBendingPipe.getPipeOid());
 	}
 	public void deleteChanageOriginalPipeUseState(ColdBendingPipe coldBendingPipe){
 		ColdBendingPipe oldColdBendingPipe = this.coldBendingPipeDao.find(coldBendingPipe.getOid());
-		this.coldBendingPipeDao.chanageOriginalPipeUseState(0,"","","",oldColdBendingPipe.getPipeOid());
+		this.coldBendingPipeDao.chanageOriginalPipeUseState(0,oldColdBendingPipe.getProjectOid(),"","",oldColdBendingPipe.getPipeOid());
 	}
 	public void updateChanageBeforeAdvice(ColdBendingPipe coldBendingPipe){
 		ColdBendingPipe oldColdBendingPipe = this.coldBendingPipeDao.find(coldBendingPipe.getOid());

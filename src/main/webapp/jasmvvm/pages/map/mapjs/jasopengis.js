@@ -2,7 +2,7 @@
  * Created by kc on 2018/1/19.
  * @description jasopengis webgis 开发框架
  * @version jasopengis-v-1.0.0
- * @lastUpdate 2018/06/27
+ * @lastUpdate 2018/11/12
  */
 var Constants = {
     "events": {
@@ -12,6 +12,7 @@ var Constants = {
         "MapResizedEvent": "MapResizedEvent",
         "BaseMapLayersLoaded": "BaseMapLayersLoaded",
         "OptionalLayersLoaded": "OptionalLayersLoaded",
+        "LayerRemovedEvent": "LayerRemovedEvent",
         "ModulesLoadedEvent": "ModulesLoaded",
         "ModuleStartupEvent": "ModuleStartupEvent",
         "ModuleInitEvent": "ModuleInitEvent",
@@ -35,7 +36,7 @@ var Constants = {
         "configUrlError": "js脚本标签没有配置data-config属性",
         "moduleClassNotFoundError": "该地图控件类没有定义",
         "moduleConfigError": "地图控件配置出错",
-        "moduleReferError": "地图控件依赖文件modules.js没有加载",
+        "moduleReferError": "地图控件依赖文件mapmodules.js没有加载",
         "moduleCreateError": "地图控件创建出错",
         "moduleNotFound": "地图控件没有找到",
         "moduleLoaded": "地图控件加载成功",
@@ -74,7 +75,8 @@ var Constants = {
         "defaultCircleQueryStyleName":"defaultPolygonQueryStyle",
         "defaultPolygonQueryStyleName":"defaultPolygonQueryStyle",
         "defaultDrawStyleName":"defaultDrawStyle",
-        "defaultMeasureStyleName":"defaultMeasureStyle"
+        "defaultMeasureStyleName":"defaultMeasureStyle",
+        "defaultHighlightStyleName":"defaultHighlightStyle"
     }
 };
 /**
@@ -139,7 +141,16 @@ var JasMap = null ,M = null;
             onMapLoaded:function(e){
 
             },
+            onBaseLayersLoaded:function(e){
+
+            },
+            onOptionalLayersLoaded:function(e){
+
+            },
             onLayerAdded:function(e){
+
+            },
+            onLayerRemoved:function(e){
 
             },
             onMapClicked:function(e){
@@ -182,12 +193,16 @@ var JasMap = null ,M = null;
             configManager.startup();//这里配置加载最后启动
 
             _this.subscribe( _this.Events .ConfigLoadedEvent ,apiDefaults.onConfigLoaded);
+            _this.subscribe( _this.Events .BaseMapLayersLoaded ,apiDefaults.onBaseLayersLoaded);
+            _this.subscribe( _this.Events .OptionalLayersLoaded ,apiDefaults.onOptionalLayersLoaded);
             _this.subscribe( _this.Events .MapLoadedEvent ,apiDefaults.onMapLoaded);
             _this.subscribe( _this.Events .ErrorEvent ,apiDefaults.onError);
             _this.subscribe( _this.Events .ModulesLoadedEvent ,apiDefaults.onModulesLoaded);
             _this.subscribe( _this.Events .ModuleStartupEvent ,apiDefaults.onModuleStartup);
             _this.subscribe( _this.Events .OptionalLayerAddedEvent ,apiDefaults.onLayerAdded);
             _this.subscribe( _this.Events .MapResizedEvent ,apiDefaults.onMapResized);
+            _this.subscribe( _this.Events .LayerRemovedEvent ,apiDefaults.onLayerRemoved);
+
         };//
         _this.map = null;
         _this.apiConfig = null;
@@ -376,8 +391,11 @@ var JasMap = null ,M = null;
                 var source = layer && layer.getSource();
                 url = source.getUrl();
             }
-            url = commonUtil.appendUrl(url,"featureId",featureId);
-            url = commonUtil.appendUrl(url,"where",where);
+            if(featureId !== null)
+                url = commonUtil.appendUrl(url,"featureId",featureId);
+            if(where !== null)
+                url = commonUtil.appendUrl(url,"where",where);
+
             commonUtil.simpleAjaxLoader({
                 async: true,
                 url:url ,
@@ -387,7 +405,7 @@ var JasMap = null ,M = null;
                     if(data){
                         result = new ol.format.GeoJSON().readFeatures(data);//先只处理GeoJSON格式数据
                     }
-                    if(typeof  callback === "function"){
+                    if(typeof callback === "function"){
                         callback(result);
                     }
                 }
@@ -404,78 +422,7 @@ var JasMap = null ,M = null;
             var params = commonUtil.extend(defaults , obj);
             return new ol.style.Style(params);
         };
-        //-----------弹出窗口----------//
-        _this.showInfoWindow = function(x, y ,content ,title ,options){
-            var defaults = {
-                width : 250,
-                height:150
-            };
-            var params = commonUtil.extend(defaults,options);
-            mapManager.showInfoWindow.call(this,x, y ,content ,title ,params);
-        };
-        _this.dialog = function(options){
-            if(!$ ){
-                eventManager.publishError(_this.Strings.hasNoJqueryEasyUILib);
-            }
-            var defaults = {
-                title : "信息窗口" ,
-                width :  550 ,
-                height : 500 ,
-                left: null,
-                top: null,
-                modal :true ,
-                draggable :true ,
-                inline: false ,
-                resizable :true ,
-                collapsible :true ,//可折叠的
-                constrain :true,
-                href : "",
-                $dom :null,
-                container :"body", //inline :true 条件下可配置"map"|"body"|"#id"
-                onClose: function () {//弹出层关闭事件
-                    $(this).dialog('destroy');
-                },
-                onLoad: function () {//弹出层加载事件
 
-                }
-            };
-            var container = options.container ;
-            var $dom = options.$dom;
-            container && delete options.container;
-            $dom && delete options.$dom;
-
-            var params = commonUtil.extend(defaults , options);
-
-            if($dom){
-                return $dom.dialog(params);
-            }
-            var inline = options.inline;
-            var $dialog = null;
-            if(container instanceof Node){
-                $dialog =  $('<div id="map-dialog"/>',container);
-            }else if(inline && container === "map"){
-                $dialog =  $('<div id="map-dialog"/>',_this.map.getTargetElement());
-            }else{
-                $dialog = $('<div id="map-dialog"/>');
-            }
-            return $dialog.dialog(params);
-        };
-        _this.moduleDialog = function(options, $dom ,parent){
-            options.resizable = true;
-            options.modal = false;
-            options.collapsible = true;
-            options.constrain = true;
-            options.inline = true;
-            if(options.right){
-                options.left = parent.offsetWidth - options.width - options.right;
-            }
-            if(options.bottom){
-                options.top = parent.offsetHeight - options.height  - options.bottom;
-            }
-            options.container = parent;
-            options.$dom = $dom;
-            return _this.dialog(options );
-        };
         //-------------图层操作类----------//
         _this.addLayer = function(layer ){
             _this.map.addLayer(layer);
@@ -677,6 +624,7 @@ var JasMap = null ,M = null;
                 var layerId = layerIds[i];
                 var layer = _this.getLayerById(layerId);
                 layer && _this.map.removeLayer(layer);
+                eventManager.publishEvent(_this.Events.LayerRemovedEvent,{ layerId:layer.get("id") });
             }
         };
         _this.refreshLayerById = function(layerId){
@@ -839,7 +787,6 @@ var JasMap = null ,M = null;
         _this.addMapLoadedEventListener = function(func){
             return _this.addMapEvent("postrender",func);
         };
-
         _this.addZoomEventListener = function(func){// ?
             return _this.addMapEvent("moveend",func);
         };
@@ -1073,26 +1020,9 @@ var JasMap = null ,M = null;
                 }
             }
         };
-        _this.layerSetVisibleSwitch = function(layerSetId){
+        _this.layerSetVisibleSwitch = function(layerSetId,visible){
             //开发中...
 
-        };
-        _this.export = function(){
-            _this.map.once('postcompose', function (event) {
-                var canvas = event.context.canvas;
-                var pngName = "map" + new Date().getTime() + ".png";
-                if(!navigator.msSaveBlob && !saveAs){
-                    eventManager.publishError(_this.Strings.exportResourceNeeded);
-                }
-                if (navigator.msSaveBlob) {
-                    navigator.msSaveBlob(canvas.msToBlob(), pngName);
-                } else {
-                    canvas.toBlob(function (blob) {
-                        saveAs(blob,pngName);
-                    });
-                }
-            });
-            _this.map.renderSync();
         };
         _this.updateLayer = function(layerId , options){
             var defaults =  {
@@ -1225,7 +1155,7 @@ var JasMap = null ,M = null;
                 }
             });
         };
-        //---------------事件方法------------//
+        //---------------公共方法------------//
         _this.publish = function(eventType , data){
             eventManager.publishEvent.apply(this,arguments);
         };
@@ -1244,6 +1174,94 @@ var JasMap = null ,M = null;
         };
         _this.resizeMap = function(){
             _this.map.updateSize();
+        };
+        _this.export = function(){
+            _this.map.once('postcompose', function (event) {
+                var canvas = event.context.canvas;
+                var pngName = "map" + new Date().getTime() + ".png";
+                if(!navigator.msSaveBlob && !saveAs){
+                    eventManager.publishError(_this.Strings.exportResourceNeeded);
+                }
+                if (navigator.msSaveBlob) {
+                    navigator.msSaveBlob(canvas.msToBlob(), pngName);
+                } else {
+                    canvas.toBlob(function (blob) {
+                        saveAs(blob,pngName);
+                    });
+                }
+            });
+            _this.map.renderSync();
+        };
+        _this.showInfoWindow = function(x, y ,content ,title ,options){
+            var defaults = {
+                width : 250,
+                height:150
+            };
+            var params = commonUtil.extend(defaults,options);
+            mapManager.showInfoWindow.call(this,x, y ,content ,title ,params);
+        };
+        _this.dialog = function(options){
+            if(!$ ){
+                eventManager.publishError(_this.Strings.hasNoJqueryEasyUILib);
+            }
+            var defaults = {
+                title : "信息窗口" ,
+                width :  550 ,
+                height : 500 ,
+                left: null,
+                top: null,
+                modal :true ,
+                draggable :true ,
+                inline: false ,
+                resizable :true ,
+                collapsible :true ,//可折叠的
+                constrain :true,
+                href : "",
+                $dom :null,
+                container :"body", //inline :true 条件下可配置"map"|"body"|"#id"
+                onClose: function () {//弹出层关闭事件
+                    $(this).dialog('destroy');
+                },
+                onLoad: function () {//弹出层加载事件
+
+                }
+            };
+            var container = options.container ;
+            var $dom = options.$dom;
+            container && delete options.container;
+            $dom && delete options.$dom;
+
+            var params = commonUtil.extend(defaults , options);
+
+            if($dom){
+                return $dom.dialog(params);
+            }
+            var inline = options.inline;
+            var $dialog = null;
+            if(container instanceof Node){
+                $dialog =  $('<div id="map-dialog"/>',container);
+            }else if(inline && container === "map"){
+                $dialog =  $('<div id="map-dialog"/>',_this.map.getTargetElement());
+            }else{
+                $dialog = $('<div id="map-dialog"/>');
+            }
+            return $dialog.dialog(params);
+        };
+        _this.moduleDialog = function(options, $dom ,parent){
+            options.resizable = true;
+            options.modal = false;
+            options.collapsible = true;
+            options.constrain = true;
+            options.inline = true;
+            if(options.right){
+                options.left = parent.offsetWidth - options.width - options.right;
+            }
+            if(options.bottom){
+                options.top = parent.offsetHeight - options.height  - options.bottom;
+            }
+            options.container = parent;
+            options.$dom = $dom;
+            return _this.dialog(options );
         };
 
         //-----------几个管理器------------//
@@ -1657,7 +1675,8 @@ var JasMap = null ,M = null;
                 }
                 var projection = null;
                 switch (epsgString){
-                    case "EPSG:4490":
+                    case "EPSG:4490":;
+                    default:
                         proj4.defs("EPSG:4490","+proj=longlat +ellps=GRS80 +no_defs");
                         projection = new ol.proj.Projection({
                             code: 'EPSG:4490',
@@ -1665,7 +1684,6 @@ var JasMap = null ,M = null;
                             axisOrientation: 'neu'
                         });
                         projection.setExtent([-180,-90,180,90]);break;
-                    default:
                 }
                 return projection;
             };
@@ -1989,6 +2007,9 @@ var JasMap = null ,M = null;
                     default:
                 }
             };
+            _class.getDefaultResolution = function(){
+
+            }
         }
         function StyleManager(){
             var _class = this;
@@ -2050,7 +2071,7 @@ var JasMap = null ,M = null;
                         }),
                         stroke: new ol.style.Stroke({
                             color: borderColor,
-                            lineDash: [2, 3],
+                            //lineDash: [2, 3],
                             width: parseFloat(styleParam.border_width)
                         })
                     } ;
@@ -2144,22 +2165,23 @@ var JasMap = null ,M = null;
                             style = lStyle.clone();
                     }
                 }
-                if(style){
-                    if(style.getFill()){
-                        var fill = style.getFill();
-                        fill.setColor(apiDefaults.defaultHighlightColor);
-                    }
-                    if(style.getStroke()){
-                        var stroke = style.getStroke();
-                        var width = stroke.getWidth() + 2;
-                        stroke.setWidth(width);
-                        stroke.setColor(apiDefaults.defaultHighlightColor);
-                    }
-                    if(style.getImage()){
-                        var image = style.getImage();
-                        var scale = image.getScale() * 1.5;
-                        image.setScale(scale);
-                    }
+                if(!style){
+                    style = _class.parse(_this.Keys.defaultHighlightStyleName).clone();
+                }
+                if(style.getFill()){
+                    var fill = style.getFill();
+                    fill.setColor(apiDefaults.defaultHighlightColor);
+                }
+                if(style.getStroke()){
+                    var stroke = style.getStroke();
+                    var width = stroke.getWidth() + 2;
+                    stroke.setWidth(width);
+                    stroke.setColor(apiDefaults.defaultHighlightColor);
+                }
+                if(style.getImage()){
+                    var image = style.getImage();
+                    var scale = image.getScale() * 1.5;
+                    image.setScale(scale);
                 }
                 return style;
             };
@@ -2231,8 +2253,8 @@ var JasMap = null ,M = null;
             var defaultGridSet = {
                 "tileSize":[256,256],
                 "origin":[-180.0,90.0],
-                "resolutions":[],
-                "matrixIds":[]
+                "resolutions":[0.703125,0.3515625,0.17578125,0.087890625,0.0439453125,0.02197265625,0.010986328125,0.0054931640625,0.00274658203125,0.001373291015625,0.0006866455078125],
+                "matrixIds":["1","2","3","4","5","6","7","8","9","10","11"]
             };
             var defaultWmtsConfig = {
                 "style":"",
@@ -2427,18 +2449,12 @@ var JasMap = null ,M = null;
                         layerConfig.style = styleManager.parseLayerLabelStyle(labelConfig,fieldConfig,outFieldsConfig,layerConfig.style,layerId);
                     }
                     if(layerConfig.source.toUpperCase() ==="WMTS"){
-                        var tileGrid = commonUtil.extend({},defaultGridSet,config.tileGrid);
+                        var tileGrid = config.tileGrid ? config.tileGrid :{};
                         delete config.tileGrid;
                         config = commonUtil.extend({},defaultWmtsConfig,config);
-                        var resolutions = tileGrid.resolutions;
-                        if(!resolutions || resolutions.length === 0){
-                            resolutions = _this.mapConfig.mapOptions.resolutions;
-                        }
-                        for(var i = 0; i < resolutions.length;i++){
-                            var reso = resolutions[i];
-                            tileGrid.resolutions.push(reso.resolution);
-                            tileGrid.matrixIds.push(reso.matrixId);
-                        }
+
+                        tileGrid = getTileGrid(tileGrid);
+
                         sourceConfig.layer = config.layer;
                         sourceConfig.format = config.format;
                         sourceConfig.style = config.style ? config.style :"";
@@ -2461,16 +2477,14 @@ var JasMap = null ,M = null;
                         }
                         url = url.slice(0, -1);
 
-                        var tileGrid = commonUtil.extend({},defaultGridSet,config.tileGrid);
-                        var resolutions = tileGrid.resolutions;
-                        if(!resolutions || resolutions.length === 0){
-                            resolutions = _this.mapConfig.mapOptions.resolutions;
-                        }
-                        for(var i = 0; i < resolutions.length;i++){
-                            var reso = resolutions[i];
-                            tileGrid.resolutions.push(reso.resolution);
-                            tileGrid.matrixIds.push(reso.matrixId);
-                        }
+                        //var tileGrid = commonUtil.extend({},defaultGridSet,config.tileGrid);
+                        var tileGrid = config.tileGrid ? config.tileGrid :{};
+                        tileGrid = commonUtil.extend({},defaultGridSet,tileGrid);
+                        //delete config.tileGrid;
+                        //config = commonUtil.extend({},defaultWmtsConfig,config);
+
+                        tileGrid = getTileGrid(tileGrid);
+
                         sourceConfig = {
                             url:url,
                             format:  new ol.format.MVT(),
@@ -2497,6 +2511,25 @@ var JasMap = null ,M = null;
                 } catch (e) {
                     eventManager.publishError(_this.Strings.parseLayerConfigError + "layerId=" + config.id ,e);
                 }
+            };
+            var getTileGrid = function(tileGrid){
+                var resolutions = tileGrid.resolutions;
+                if(!resolutions || resolutions.length === 0 ){
+                    if(_this.mapConfig.mapOptions.resolutions){
+                        resolutions = _this.mapConfig.mapOptions.resolutions;
+                        tileGrid.resolutions || (tileGrid.resolutions = []);
+                        tileGrid.matrixIds || (tileGrid.matrixIds = []);
+                        for(var i = 0; i < resolutions.length;i++){
+                            var reso = resolutions[i];
+                            tileGrid.resolutions.push(reso.resolution);
+                            tileGrid.matrixIds.push(reso.matrixId);
+                        }
+                    }else{
+                        tileGrid = commonUtil.extend({},defaultGridSet,tileGrid)
+                    }
+                }
+
+                return tileGrid;
             };
             var createBaseMapLayers = function(){
                 if(_baseMapLayerConfig) {
@@ -2618,16 +2651,21 @@ var JasMap = null ,M = null;
                 var layer = null;
                 switch(type){
                     case "Tile":
-                        sourceConfig.crossOrigin = 'Anonymous';
+                        sourceConfig.crossOrigin = 'anonymous';
+                        //crossOrigin : 'anonymous';
                         if("TileArcGISRest" === source){
                             layerSource = new ol.source.TileArcGISRest({
+                                crossOrigin : 'anonymous',
                                 url: url
                             });
                         }else if("OSM" === source){
-                            layerSource = new ol.source.OSM();
+                            layerSource = new ol.source.OSM({
+                                crossOrigin : 'anonymous'
+                            });
                         }else if("TileWMS" === source){
                             layerSource = new ol.source.TileWMS({
                                 url: url,
+                                crossOrigin : 'anonymous',
                                 serverType: serverType ? serverType : 'geoserver',
                                 params: sourceConfig.params
                             });
@@ -2664,7 +2702,7 @@ var JasMap = null ,M = null;
                         layer = new ol.layer.Vector(layerConfig);
                         break;
                     case "VectorTile":
-                        sourceConfig.crossOrigin = 'Anonymous';
+                        sourceConfig.crossOrigin = 'anonymous';
                         if("VectorTile" === source){
                             layerSource = new ol.source.VectorTile(sourceConfig);
                         }
@@ -2698,11 +2736,14 @@ var JasMap = null ,M = null;
                 var proj = _this.map.getView().getProjection();
                 //
                 var source =  new ol.source.XYZ({
+                    crossOrigin:'anonymous',
                     url: 'http://t{0-7}.tianditu.com/DataServer?T='+type+'&x={x}&y={y}&l={z}',
                     projection: proj
                 }) ;
                 return source;
             };
+            //
+
         }
         function EventManager(){
             var _class = this;
@@ -3491,7 +3532,7 @@ var JasMap = null ,M = null;
             }
 
         }
-
+        //
         apiInit();
     };
 

@@ -105,4 +105,9 @@ public class WeldDao extends BaseJdbcDao{
 			return reworkWeld.getReworkWeldCode();
 		}
 	}
+	
+	public List<Map<String,Object>> getDetectionInfoByWeldOid(String weldOid){
+		String sql = "select t.oid,t.evaluation_result,t.type,t.code from v_daq_weld_detection t where t.weld_oid=?";
+		return this.queryForList(sql, new Object[]{weldOid});
+	}
 }

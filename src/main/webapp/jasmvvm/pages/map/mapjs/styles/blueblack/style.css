@@ -169,6 +169,13 @@ body {
 }
 
 .map-module-layerlisttree {}
+.map-module-layerlisttree div.tree{
+  overflow: auto;
+}
+.map-module-layerlisttree .tree{
+  height:100%;
+  width :100%;
+}
 
 .map-module-coorspicker {}
 
@@ -340,6 +347,13 @@ input[type="number"] {
   border: 2px solid rgb(51, 67, 102, .8);
   background: rgb(51, 67, 102, .8);
   box-shadow: 0px 0px 10px rgb(16, 24, 41, .2);
+}
+.map-module-basemapsgallary ul li div.listItem span{
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
+  display: inline-block;
+  white-space: nowrap;
 }
 
 .map-module-basemapsgallary ul li div {
@@ -736,6 +750,7 @@ range滑块样式优化
 .map-module-drawbox .style input.progressbar1 {
   color: #333;
   border: none;
+  height:4px;
 }
 
 input[type=range] {

@@ -454,13 +454,13 @@
 								projectOid:val
 							},
 							function (arr) {
-								//if(edit){
-									//arr.forEach(function(item){
-										//that.domain.pipeOids.push(item);
-									//});
-								//}else{
+								if(edit){
+									arr.forEach(function(item){
+									that.domain.pipeOids.push(item);
+									});
+								}else{
 									that.domain.pipeOids = arr;
-								//}
+								}
 						});
 				}else{
 					that.domain.pipeOids=[];
@@ -576,10 +576,10 @@
 					oid: that.oid
 				}, function (data) {
 					that.formData= data.rows[0];
-					//that.domain.pipeOids.push({
-						//key: that.formData.pipeOid,
-						//value: that.formData.pipeCode
-					//});
+					that.domain.pipeOids.push({
+						key: that.formData.pipeOid,
+					    value: that.formData.pipeCode
+					});
 					//console.log(that.domain.pipeOids);
 					that.projectChanged(data.rows[0].projectOid,true);
 					that.tendersChanged(data.rows[0].tendersOid,true);

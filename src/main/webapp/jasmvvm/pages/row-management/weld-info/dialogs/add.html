@@ -50,21 +50,22 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="标段名称" prop="tendersOid" required>
-								<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged"  @visible-change="childChange($event,'projectOid','项目名称')">
+								<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged" @visible-change="childChange($event,'projectOid','项目名称')">
 									<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="管线名称" prop="pipelineOid" required>
-								<el-select v-model="formData.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged"  @visible-change="childChange($event,'tendersOid','标段名称')">
+								<el-select v-model="formData.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged" @visible-change="childChange($event,'tendersOid','标段名称')">
 									<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="线路段/穿跨越" prop="pipeSegmentOrCrossOid" required>
-								<el-select v-model="formData.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small" @change="pipeSegmentChanged"  @visible-change="childChange($event,'pipelineOid','管线名称')">
+								<el-select v-model="formData.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small" @change="pipeSegmentChanged"
+								  @visible-change="childChange($event,'pipelineOid','管线名称')">
 									<el-option v-for="item in domain.pipeSegment" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
@@ -87,7 +88,7 @@
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="施工日期" prop="constructDate" required>
 								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入施工日期" v-model="formData.constructDate" size="small"
-								  style="width: 100%;">
+								  style="width: 100%;" :picker-options="pickerOptionsStart" @change="changeEnd">
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
@@ -136,7 +137,7 @@
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="采集日期" prop="collectionDate" required>
 								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入采集日期" v-model="formData.collectionDate" size="small"
-								  style="width: 100%;">
+								  style="width: 100%;" :picker-options="pickerOptionsEnd" @change="changeStart">
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
@@ -244,7 +245,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="是否连头口"  prop="isPipeHead" required>
+							<el-form-item label="是否连头口" prop="isPipeHead" required>
 								<el-select v-model="formData.isPipeHead" clearable placeholder="请选择是否连头口" size="small">
 									<el-option v-for="item in domain.isPass" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
@@ -293,6 +294,7 @@
 		data: function () {
 			var that = this;
 			return {
+				pipeTypeStr:'pipe_type_code_0011,pipe_type_code_0021,pipe_type_code_0031,pipe_type_code_0081',
 				domain: {
 					project: [],
 					pipeline: [],
@@ -465,15 +467,25 @@
 					renderOid: [],
 					isGoldeJoint: null,
 					isPipeHead: null,
-					constructDate: null,
+					constructDate: '',
 					supervisionUnit: null,
 					supervisionEngineer: null,
 					collectionPerson: null,
-					collectionDate: null,
+					collectionDate: '',
 					//    "approveStatus": null,
 					//  "geoState": "正常",
 					remarks: ""
-				}
+				},
+				pickerOptionsStart: {
+					disabledDate:function(time){
+						return time.getTime()>new Date().getTime()
+					}
+				},
+				pickerOptionsEnd: {
+					disabledDate:function(time){
+						return time.getTime()>new Date().getTime()
+					}
+				},
 			}
 		},
 
@@ -558,10 +570,10 @@
 						},
 						function (arr) {
 							that.domain.tenders = arr;
-							
+
 						});
-				}else{
-					that.domain.tenders=[];	
+				} else {
+					that.domain.tenders = [];
 				}
 				if (!edit) {
 					that.formData.tendersOid = '';
@@ -586,14 +598,14 @@
 
 						},
 						function (arr) {
-							
+
 							that.domain.weldProduces = arr;
 						});
-				}else{
-					that.domain.weldProduces=[];	
+				} else {
+					that.domain.weldProduces = [];
 				}
 				if (!edit) {
-			
+
 					that.formData.weldProduce = '';
 				}
 			},
@@ -607,10 +619,10 @@
 						},
 						function (arr) {
 							that.domain.workUnits = arr;
-						
+
 						});
-				}else{
-					that.domain.workUnits=[];	
+				} else {
+					that.domain.workUnits = [];
 				}
 				if (!edit) {
 					that.formData.workUnitOid = '';
@@ -624,11 +636,11 @@
 							tendersOid: val
 						},
 						function (arr) {
-							
+
 							that.domain.pipeline = arr;
 						});
-				}else{
-					that.domain.pipeline=[];	
+				} else {
+					that.domain.pipeline = [];
 				}
 				if (!edit) {
 					that.formData.pipelineOid = '';
@@ -647,11 +659,11 @@
 							tendersOid: val
 						},
 						function (arr) {
-							
+
 							that.domain.supervisionUnits = arr;
 						});
-				}else{
-					that.domain.supervisionUnits=[];	
+				} else {
+					that.domain.supervisionUnits = [];
 				}
 				if (!edit) {
 					that.formData.supervisionUnit = '';
@@ -665,11 +677,11 @@
 							pipelineOid: val
 						},
 						function (arr) {
-							
+
 							that.domain.pipeSegment = arr;
 						});
-				}else{
-					that.domain.pipeSegment=[];	
+				} else {
+					that.domain.pipeSegment = [];
 				}
 				if (!edit) {
 					that.formData.pipeSegmentOrCrossOid = '';
@@ -685,11 +697,11 @@
 							pipeSegmentOrCrossOid: val
 						},
 						function (arr) {
-						
+
 							that.domain.medianStakes = arr;
 						});
-				}else{
-					that.domain.medianStakes=[];	
+				} else {
+					that.domain.medianStakes = [];
 				}
 				if (!edit) {
 					that.formData.medianStakeOid = '';
@@ -707,16 +719,16 @@
 							function (arr) {
 								that.domain.persons = arr;
 							});
-				}else{
-					that.domain.persons=[];	
+				} else {
+					that.domain.persons = [];
 				}
 				if (!edit) {
 					that.formData.coverOid = [];
 					that.formData.padderOid = [];
-					that.formData.renderOid =[];
+					that.formData.renderOid = [];
 				}
 			},
-			frontpipeChange: function (val,edit) { //触发前管件编号
+			frontpipeChange: function (val, edit) { //触发前管件编号
 				var that = this;
 				if (val) {
 					this
@@ -727,23 +739,23 @@
 								pipeTypeCode: val
 							},
 							function (arr) {
-								if(edit){
-									arr.forEach(function(item){
-										that.domain.frontPipeOids.push(item);	
+								if (edit) {
+									arr.forEach(function (item) {
+										that.domain.frontPipeOids.push(item);
 									});
-								}else{
-								 that.domain.frontPipeOids = arr;
+								} else {
+									that.domain.frontPipeOids = arr;
 								}
-								
+
 							});
-				}else{
-					that.domain.frontPipeOids=[];
+				} else {
+					that.domain.frontPipeOids = [];
 				}
-				if(!edit){
-					that.formData.frontPipeOid = "";	
+				if (!edit) {
+					that.formData.frontPipeOid = "";
 				}
 			},
-			backpipeChange: function (val,edit) { //触发后管件编号
+			backpipeChange: function (val, edit) { //触发后管件编号
 				var that = this;
 				if (val) {
 					this
@@ -754,19 +766,19 @@
 								pipeTypeCode: val
 							},
 							function (arr) {
-								if(edit){
-									arr.forEach(function(item){
-										that.domain.backPipeOids.push(item);	
+								if (edit) {
+									arr.forEach(function (item) {
+										that.domain.backPipeOids.push(item);
 									});
-								}else{
+								} else {
 									that.domain.backPipeOids = arr;
-								}	
+								}
 							});
-				}else{
-					that.domain.backPipeOids = [];	
+				} else {
+					that.domain.backPipeOids = [];
 				}
-				if(!edit){
-					that.formData.backPipeOid = "";	
+				if (!edit) {
+					that.formData.backPipeOid = "";
 				}
 			},
 			submit: function (formName) {
@@ -781,6 +793,17 @@
 			save: function () {
 				var that = this;
 				var msg = "";
+				var tempFrontPipeType=that.formData.frontPipeType;
+				var tempBackPipeType=that.formData.backPipeType;
+				var tempFrontPipeOid=that.formData.frontPipeOid;
+				var tempBackPipeOid=that.formData.backPipeOid;
+				if(that.pipeTypeStr.indexOf(tempFrontPipeType)>-1 && that.pipeTypeStr.indexOf(tempBackPipeType)>-1 && tempFrontPipeOid==tempBackPipeOid){
+					top.Vue.prototype.$message({
+						type: 'warning',
+						message: '前管件和后管件重复'
+					});
+					return;
+				}
 				if (!this.isEdit) {
 					msg = "增加成功";
 					url = jasTools.base.rootPath +
@@ -821,6 +844,26 @@
 				});
 				this.cancel(1);
 			},
+			 changeStart (){
+			    this.pickerOptionsStart = Object.assign({},this.pickerOptionsStart,{
+			     disabledDate: (time) => {
+			    	 if(!this.formData.collectionDate){
+			    		 return time.getTime()>new Date().getTime()
+			    	 }
+			      return time.getTime() >new Date(this.formData.collectionDate).getTime()||time.getTime()>new Date().getTime();
+			     }
+			    })
+			   },
+			   changeEnd (){
+			    this.pickerOptionsEnd = Object.assign({},this.pickerOptionsEnd,{
+			     disabledDate: (time) => {
+			    	 if(!this.formData.constructDate){
+			    		 return time.getTime()>new Date().getTime()
+			    	 }
+			      return time.getTime() <new Date(this.formData.constructDate).getTime()||time.getTime()>new Date().getTime();
+			      }
+			    })
+			   },
 			getDetailByObjectId: function () {
 				var that = this;
 				var url = jasTools.base.rootPath + "/jdbc/commonData/constructionWeld/getPage.do";
@@ -832,12 +875,12 @@
 					} */
 					that.formData = data.rows[0];
 					that.domain.frontPipeOids.push({
-						value:that.formData.frontPipeCode,
-						key:that.formData.frontPipeOid
+						value: that.formData.frontPipeCode,
+						key: that.formData.frontPipeOid
 					});
 					that.domain.backPipeOids.push({
-						value:that.formData.backPipeCode,
-						key:that.formData.backPipeOid
+						value: that.formData.backPipeCode,
+						key: that.formData.backPipeOid
 					});
 					if (that.formData.coverOid.length == 0) {
 						that.formData.coverOid = [];

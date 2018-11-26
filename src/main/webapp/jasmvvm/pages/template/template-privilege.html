@@ -140,6 +140,7 @@
 				<jas-import-export-btns  @refreshtable="refresh" :is-import="privilege.join('').indexOf('bt_import')>-1" :is-export="privilege.join('').indexOf('bt_export')>-1"
 				  :form="searchform" :oids="oids" :template-code="templateCode" :function-code="menuCode" :export-template-code="exportTemplateCode"
 				  :class-name="className"></jas-import-export-btns>
+			  	<el-button size="small" plain type="primary" icon="fa fa-qrcode" v-if="isScanner" @click="scanner">二维码下载</el-button>
 
 				<div style="display:inline-block;float:right">
 
@@ -206,6 +207,7 @@
 				exportTemplateCode: "",
 				className: '',
 				isApprove: '',
+				isScanner: '',
 				privilege: [], //权限数组 bt_add,bt_update,bt_delete,bt_select,bt_export,bt_import,bt_position
 				btnxs: 12,
 				btnlg: 6,
@@ -249,12 +251,18 @@
 				return this.rows.filter(function (row) {
 					return row.approve_status == 1;
 				});
-			},
+			},scannerRows: function(){
+				var that = this;
+				return this.rows.filter(function (row) {
+					return true;
+				});
+			}
 		},
 		created: function () {
 			var param = window.jasTools.base.getParamsInUrl(location.href);
 			this.menuCode = param.menuCode;
 			this.isApprove = param.isApprove;
+			this.isScanner = param.isScanner;
 			this.templateCode = param.templateCode;
 			this.exportTemplateCode = param.exportTemplateCode;
 			this.className = param.className;
@@ -349,6 +357,27 @@
 					});
 				}
 
+			},
+			scanner:function(){
+				var that = this;
+				var oids = this.scannerRows.map(function (item) {
+					return item.oid;
+				});
+				console.log(oids);
+				var url = jasTools.base.rootPath + "/daq/materialPipe/produceScanner.do";
+				jasTools.ajax.post(url, {oids:oids,functionCode:this.menuCode}, function (data) {
+					console.log(data);
+					if(data.status){
+						jasTools.ajax.downloadByIframe('post', jasTools.base.rootPath + "/daq/materialPipe/downloadScanner.do", {
+							fileOid: data.data
+						});
+					}else{
+						top.Vue.prototype.$message({
+							message: data.msg,
+							type: 'warning'
+						});
+					}
+				});
 			},
 			handleSelectionChange: function (val) {
 				this.rows = val;
