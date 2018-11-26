@@ -7,6 +7,8 @@ import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.service.bo.*;
 import cn.jasgroup.jasframework.acquisitiondata.variate.UnitHierarchyEnum;
 import cn.jasgroup.jasframework.engine.jdbc.dao.CommonDataJdbcDao;
 import cn.jasgroup.jasframework.support.ThreadLocalHolder;
+
+import com.alibaba.druid.support.logging.Log;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -361,9 +363,9 @@ public class AppStatisticsDao {
 
     public List<DateApproveStatsForApp> statsDataEntryApproveGroupByDay(String projectId, String startDate, String endDate) {
         String sqlFormat = "" +
-                " select to_char(create_datetime, 'yyyy-DD-mm') as stats_date, count(*) as total_count, sum(case when (approve_status=2) then 1 else 0 end) as audited_count " +
+                " select to_char(create_datetime, 'yyyy-MM-dd') as stats_date, count(*) as total_count, sum(case when (approve_status=2) then 1 else 0 end) as audited_count " +
                 " from %s where active = 1 and project_oid = :projectId" +
-                " group by to_char(create_datetime, 'yyyy-DD-mm') ";
+                " group by to_char(create_datetime, 'yyyy-MM-dd') ";
         List<String> codeList = new ArrayList<>(ApproveStatisticsBlock.ALL.keySet());
 
         StringBuilder sql = new StringBuilder();
@@ -374,6 +376,7 @@ public class AppStatisticsDao {
 
         sql.insert(0, " select stats_date, sum(total_count) as total_count, sum(audited_count) as audited_count from ( ").append(" ) as ss ");
         sql.append(" where stats_date BETWEEN :startDate and :endDate group by stats_date");
+        
         return commonDataJdbcDao.queryForList(sql.toString(), ImmutableMap.of("projectId", projectId, "startDate", startDate, "endDate", endDate), DateApproveStatsForApp.class);
     }
 
