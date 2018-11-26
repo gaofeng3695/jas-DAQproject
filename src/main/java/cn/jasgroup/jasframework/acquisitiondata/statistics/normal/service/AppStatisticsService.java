@@ -236,7 +236,10 @@ public class AppStatisticsService {
             List<WeldInfoBo> weldInfoBos = this.appStatisticsDao.listWeldInfoByDate(projectId, yesterday, yesterday);
             Map<String, Map<String, Double>> pipeLengthMap = this.overallStatisticsService.getPipeLengthMap(weldInfoBos);
             //  根据施工单位分组计算
-            Map<String, List<WeldInfoBo>> dateToWeldInfoList = weldInfoBos.stream().collect(Collectors.groupingBy(WeldInfoBo::getConstructUnit, Collectors.toList()));
+            Map<String, List<WeldInfoBo>> dateToWeldInfoList = new HashMap<>();
+            for (WeldInfoBo weldInfoBo : weldInfoBos) {
+                dateToWeldInfoList.computeIfAbsent(weldInfoBo.getConstructUnit(), k -> new ArrayList<>()).add(weldInfoBo);
+            }
             for (String constructId : dateToWeldInfoList.keySet()) {
                 List<WeldInfoBo> weldInfoList = dateToWeldInfoList.get(constructId);
                 Double length = this.overallStatisticsService.statsPipeLength(pipeLengthMap, weldInfoList);
@@ -249,7 +252,10 @@ public class AppStatisticsService {
             List<WeldInfoBo> weldInfoBos = this.appStatisticsDao.listPatchRelationWeldInfoByDate(projectId, yesterday, yesterday);
             Map<String, Map<String, Double>> pipeLengthMap = this.overallStatisticsService.getPipeLengthMap(weldInfoBos);
             //  根据施工单位分组计算
-            Map<String, List<WeldInfoBo>> dateToWeldInfoList = weldInfoBos.stream().collect(Collectors.groupingBy(WeldInfoBo::getConstructUnit, Collectors.toList()));
+            Map<String, List<WeldInfoBo>> dateToWeldInfoList = new HashMap<>();
+            for (WeldInfoBo weldInfoBo : weldInfoBos) {
+                dateToWeldInfoList.computeIfAbsent(weldInfoBo.getConstructUnit(), k -> new ArrayList<>()).add(weldInfoBo);
+            }
             for (String constructId : dateToWeldInfoList.keySet()) {
                 List<WeldInfoBo> weldList = dateToWeldInfoList.get(constructId);
                 Double length = this.overallStatisticsService.statsPipeLength(pipeLengthMap, weldList);
@@ -394,7 +400,11 @@ public class AppStatisticsService {
      * 根据施工单位和日期分组计算焊口信息中的管件长度
      */
     private void countGroupUnitAndDate(List<DateStatsResultBo> weldStatsResult, List<WeldInfoBo> weldInfoBos, Map<String, Map<String, Double>> pipeLengthMap) {
-        Map<String, List<WeldInfoBo>> dateToWeldInfoList = weldInfoBos.stream().collect(Collectors.groupingBy(WeldInfoBo::getConstructUnit, Collectors.toList()));
+        Map<String, List<WeldInfoBo>> dateToWeldInfoList = new HashMap<>();
+//        Map<String, List<WeldInfoBo>> dateToWeldInfoList = weldInfoBos.stream().collect(Collectors.groupingBy(WeldInfoBo::getConstructUnit));
+        for (WeldInfoBo weldInfoBo : weldInfoBos) {
+            dateToWeldInfoList.computeIfAbsent(weldInfoBo.getConstructUnit(), k -> new ArrayList<>()).add(weldInfoBo);
+        }
         for (String constructId : dateToWeldInfoList.keySet()) {
             List<WeldInfoBo> weldInfoList = dateToWeldInfoList.get(constructId);
             Map<String, List<WeldInfoBo>> dateToWelds = weldInfoList.stream().collect(Collectors.groupingBy(WeldInfoBo::getStatsDate, Collectors.toList()));

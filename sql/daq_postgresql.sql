@@ -5036,7 +5036,10 @@ select AddGeometryColumn('public', 'daq_median_stake', 'geom', 4490, 'POINT', 4)
 CREATE INDEX daq_median_stake_geom_idx ON public.daq_median_stake USING gist (geom);
 
 select AddGeometryColumn('public', 'daq_construction_weld', 'geom', 4490, 'POINT', 4);
-CREATE INDEX point_test_geom_idx ON public.daq_construction_weld USING gist (geom);
+CREATE INDEX daq_construction_weld_geom_idx ON public.daq_construction_weld USING gist (geom);
+
+select AddGeometryColumn('public', 'daq_weld_rework_weld', 'geom', 4490, 'POINT', 4);
+CREATE INDEX daq_weld_rework_weld_geom_idx ON public.daq_weld_rework_weld USING gist (geom);
 
 select AddGeometryColumn('public', 'daq_weld_measured_result', 'geom', 4490, 'POINT', 4);
 CREATE INDEX daq_weld_measured_result_geom_idx ON public.daq_weld_measured_result USING gist (geom);
@@ -5113,7 +5116,7 @@ CREATE INDEX daq_appendages_hand_hole_geom_idx ON public.daq_appendages_hand_hol
 select AddGeometryColumn('public', 'daq_appendages_obstacle', 'geom', 4490, 'POINT', 4);
 CREATE INDEX daq_appendages_obstacle_geom_idx ON public.daq_appendages_obstacle USING gist (geom);
 
-select AddGeometryColumn('public', 'daq_appendages_hydraulic_protection', 'geom', 4490, 'POINT', 4);
+select AddGeometryColumn('public', 'daq_appendages_hydraulic_protection', 'geom', 4490, 'LINESTRING', 4);
 CREATE INDEX daq_appendages_hydraulic_protection_geom_idx ON public.daq_appendages_hydraulic_protection USING gist (geom);
 
 select AddGeometryColumn('public', 'daq_appendages_casing_pipe', 'geom', 4490, 'LINESTRING', 4);
@@ -5121,7 +5124,6 @@ CREATE INDEX daq_appendages_casing_pipe_geom_idx ON public.daq_appendages_casing
 
 select AddGeometryColumn('public', 'daq_weld_rework_weld', 'geom', 4490, 'POINT', 4);
 CREATE INDEX daq_weld_rework_weld_idx ON public.daq_weld_rework_weld USING gist (geom);
-Select dropgeometrycolumn('public', 'daq_weld_rework_weld', 'geom');
 /*********空间数据相关end*********/
 
 
@@ -5430,8 +5432,8 @@ create table custom_fun_fields(
 	group_index smallint  ,
 	row_index smallint  ,
 	updateable varchar(10)  ,
-	min smallint  ,
-	max smallint  ,
+	min int4  ,
+	max int4  ,
 	placeholder varchar(50)  ,
 	child_field varchar(50)  ,
 	request_path varchar(500)  ,

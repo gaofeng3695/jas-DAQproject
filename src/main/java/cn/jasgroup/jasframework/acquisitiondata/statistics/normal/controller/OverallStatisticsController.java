@@ -1,6 +1,7 @@
 package cn.jasgroup.jasframework.acquisitiondata.statistics.normal.controller;
 
 import cn.jasgroup.framework.data.result.BaseResult;
+import cn.jasgroup.framework.data.result.SimpleResult;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.service.OverallStatisticsService;
 import cn.jasgroup.jasframework.acquisitiondata.utils.ResultVOUtil;
 import com.google.common.collect.Table;
@@ -58,6 +59,9 @@ public class OverallStatisticsController {
         }
 
         Table<String, String, Object> resultTable = this.overallStatisticsService.processMonthlyCompletion(projectIds);
+        if(resultTable==null){
+        	return new SimpleResult<>();
+        }
         return ResultVOUtil.ofSuccess(resultTable.rowMap());
     }
 

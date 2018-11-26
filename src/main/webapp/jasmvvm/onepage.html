@@ -152,7 +152,6 @@
 			width: 170px;
 			height: 80px;
 			margin: 5px;
-			background: #f90;
 			border-radius: 4px;
 		}
 
@@ -238,13 +237,13 @@
 		}
 
 		.bggrad {
-			/* background-image: linear-gradient( 135deg, #123597 10%, #607ae8 100%); */
-			background-image: linear-gradient( 135deg, #72a8fb 10%, #87f7cf 100%);
+			 background-image: linear-gradient( 135deg, #409eff 10%, #409effa3 100%);
+			 /* background-image: linear-gradient( 135deg, #409effa3 10%, #409eff 100%); */
 		}
 
 		.bggrad02 {
-			/* background-image: linear-gradient( 135deg, #9708CC 10%, #b77fe2 100%); */
-			background-image: linear-gradient( 135deg, #f235fe 10%, #52b2fe 100%);
+			/* background-image: linear-gradient( 135deg, #f56c6c 10%, #f56c6cbf 100%); */
+			background-image: linear-gradient( 135deg, #67c23a 10%, #67c23ac2 100%);
 			color: #fff;
 		}
 
@@ -595,7 +594,7 @@
 		},
 		randomColor: function (i) {
 			var that = this;
-			var colorArr = ['#3afb3d', '#d56034', '#685a99', '#e1abd9', '#f39413', '#670057', '#cb1beb'];
+			var colorArr = ['#CC0000','#00FF00','#0066FF','#CC33FF','#CCFF00','#FF66FF','#FFFF00','#00FFFF','#00FFCC'];
 			if (i < colorArr.length) {
 				return colorArr[i];
 			} else {
@@ -770,7 +769,7 @@
 					},
 					onError: function (e) {},
 					onOptionalLayersLoaded:function(){
-			             that.addMapListener();
+			            // that.addMapListener();
 			         },
 					onLayerAdded: function (e) {
 

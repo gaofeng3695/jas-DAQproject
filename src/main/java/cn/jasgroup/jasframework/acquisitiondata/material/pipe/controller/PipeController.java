@@ -325,6 +325,7 @@ public class PipeController {
 			e.printStackTrace();
 		}finally{
 			if(StringUtils.isNotBlank(filePath)){
+				redisService.removeKey(fileOid);
 				deleteDir(new File(filePath).getParentFile());
 			}
 		}

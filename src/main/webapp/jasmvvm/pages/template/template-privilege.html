@@ -140,7 +140,7 @@
 				<jas-import-export-btns  @refreshtable="refresh" :is-import="privilege.join('').indexOf('bt_import')>-1" :is-export="privilege.join('').indexOf('bt_export')>-1"
 				  :form="searchform" :oids="oids" :template-code="templateCode" :function-code="menuCode" :export-template-code="exportTemplateCode"
 				  :class-name="className"></jas-import-export-btns>
-			  	<el-button size="small" plain type="primary" icon="el-icon-download" v-if="isScanner" @click="scanner">二维码下载</el-button>
+			  	<el-button size="small" plain type="primary" icon="fa fa-qrcode" v-if="isScanner" @click="scanner">二维码下载</el-button>
 
 				<div style="display:inline-block;float:right">
 
