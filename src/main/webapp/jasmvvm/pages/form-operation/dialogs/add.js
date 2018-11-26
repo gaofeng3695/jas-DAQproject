@@ -330,7 +330,12 @@ var vm = new Vue({
           }
 
           jasTools.ajax.post(url, oData, function (data) {
-            that.functionId = data.data;
+            if (typeof data.data == 'string') {
+              that.functionId = data.data;
+            } else {
+              that.functionId = data.data.functionId;
+              that.functionCode = data.data.functionCode;
+            }
             that.ruleForm.isSqlError = 0;
             that.isLoadingFieldInfo = true;
             if (isClose == 1) {
@@ -640,7 +645,7 @@ var vm = new Vue({
 
     saveFieldConfig: function (isClose) { // 保存字段配置信息
       var that = this;
-      that.isLoadingFieldInfo=true;
+      that.isLoadingFieldInfo = true;
       var isSort = this._formatSortInfo();
       if (isSort) {
         var funFunctionFieldsForms = this.privateTable.map(function (item) {
@@ -650,7 +655,7 @@ var vm = new Vue({
         jasTools.ajax.post(jasTools.base.rootPath + '/functionFields/save.do', {
           funFunctionFieldsForms: funFunctionFieldsForms,
         }, function (data) {
-          that.isLoadingFieldInfo=false;
+          that.isLoadingFieldInfo = false;
           if (isClose == 1) {
             parent.window.jasTools.dialog.close(1);
             window.top.Vue.prototype.$message({
@@ -708,7 +713,7 @@ var vm = new Vue({
       });
       var url = jasTools.base.rootPath + '/functionConfiguration/updateUniqueStrategy.do';
       jasTools.ajax.post(url, {
-        functionCode:that.functionCode,
+        functionCode: that.functionCode,
         uniqueValidateFormList: arr
       }, function (data) {
         parent.window.jasTools.dialog.close(1);
