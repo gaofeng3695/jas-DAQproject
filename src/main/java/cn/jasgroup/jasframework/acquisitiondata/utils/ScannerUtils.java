@@ -22,7 +22,6 @@ public class ScannerUtils {
 
 	public static String createScanner(String folderPath,String scannerContext){
 		String fileName = System.currentTimeMillis() + ".png";
-		String contents = "RW;ZEGD_PROJECT;ZEHOTBENDS08;17209621;106.000*21.000;X42M;14.120;2.000;SAWH;30.000;沙市钢管分公司;3LPE+;2018-11-06";
 		try {
 			File file = new File(folderPath);
 			if (!file.exists()) {
@@ -34,7 +33,7 @@ public class ScannerUtils {
 			Hashtable<EncodeHintType, Object> hints = new Hashtable<>();
 			hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
 			hints.put(EncodeHintType.MARGIN, new Integer(0));
-			BitMatrix bitMatrix = qrCodeWriter.encode(contents, BarcodeFormat.QR_CODE, width, height, hints);
+			BitMatrix bitMatrix = qrCodeWriter.encode(scannerContext, BarcodeFormat.QR_CODE, width, height, hints);
 			MatrixToImageWriter.writeToPath(bitMatrix, "png", path);
 			return path.toString();
 		} catch (Exception e) {
