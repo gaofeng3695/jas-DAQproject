@@ -294,6 +294,7 @@
 		data: function () {
 			var that = this;
 			return {
+				pipeTypeStr:'pipe_type_code_0011,pipe_type_code_0021,pipe_type_code_0031,pipe_type_code_0081',
 				domain: {
 					project: [],
 					pipeline: [],
@@ -792,7 +793,11 @@
 			save: function () {
 				var that = this;
 				var msg = "";
-				if((that.formData.frontPipeType==that.formData.backPipeType || (that.formData.frontPipeType+'1')==that.formData.backPipeType) && that.formData.frontPipeOid==that.formData.backPipeOid){
+				var tempFrontPipeType=that.formData.frontPipeType;
+				var tempBackPipeType=that.formData.backPipeType;
+				var tempFrontPipeOid=that.formData.frontPipeOid;
+				var tempBackPipeOid=that.formData.backPipeOid;
+				if(that.pipeTypeStr.indexOf(tempFrontPipeType)>-1 && that.pipeTypeStr.indexOf(tempBackPipeType)>-1 && tempFrontPipeOid==tempBackPipeOid){
 					top.Vue.prototype.$message({
 						type: 'warning',
 						message: '前管件和后管件重复'

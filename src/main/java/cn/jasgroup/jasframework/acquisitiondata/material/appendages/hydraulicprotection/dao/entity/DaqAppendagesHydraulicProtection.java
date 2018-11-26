@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import cn.jasgroup.framework.spatial.annotation.Line;
 import cn.jasgroup.framework.spatial.support.enumeration.CalculateType;
+import cn.jasgroup.framework.spatial.support.enumeration.ScopeType;
+import cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.dao.entity.MedianStake;
 import cn.jasgroup.jasframework.base.annotation.CommonDeleteBatchConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
@@ -48,6 +50,9 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 	endX = "endPointx",
 	endY = "endPointy",
 	geometryColumnName = "geom",
+	anchorClass=MedianStake.class,
+	scopeType=ScopeType.CURRENT,
+	geometryState="geoState",
 	calculateType = CalculateType.DoubleAnchor
 )
 @JdbcEntity(name="daq_appendages_hydraulic_protection")

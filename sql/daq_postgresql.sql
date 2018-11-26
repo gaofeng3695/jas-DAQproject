@@ -5116,7 +5116,7 @@ CREATE INDEX daq_appendages_hand_hole_geom_idx ON public.daq_appendages_hand_hol
 select AddGeometryColumn('public', 'daq_appendages_obstacle', 'geom', 4490, 'POINT', 4);
 CREATE INDEX daq_appendages_obstacle_geom_idx ON public.daq_appendages_obstacle USING gist (geom);
 
-select AddGeometryColumn('public', 'daq_appendages_hydraulic_protection', 'geom', 4490, 'POINT', 4);
+select AddGeometryColumn('public', 'daq_appendages_hydraulic_protection', 'geom', 4490, 'LINESTRING', 4);
 CREATE INDEX daq_appendages_hydraulic_protection_geom_idx ON public.daq_appendages_hydraulic_protection USING gist (geom);
 
 select AddGeometryColumn('public', 'daq_appendages_casing_pipe', 'geom', 4490, 'LINESTRING', 4);
@@ -5124,7 +5124,6 @@ CREATE INDEX daq_appendages_casing_pipe_geom_idx ON public.daq_appendages_casing
 
 select AddGeometryColumn('public', 'daq_weld_rework_weld', 'geom', 4490, 'POINT', 4);
 CREATE INDEX daq_weld_rework_weld_idx ON public.daq_weld_rework_weld USING gist (geom);
-Select dropgeometrycolumn('public', 'daq_weld_rework_weld', 'geom');
 /*********空间数据相关end*********/
 
 
