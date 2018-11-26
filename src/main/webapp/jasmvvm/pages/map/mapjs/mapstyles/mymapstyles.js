@@ -362,49 +362,48 @@ JasMap.require(function () {
 	      })
 });
  //管沟开挖
- mapStyleTemplates.layPipeTrenchExcavation = new ol.style.Style({
-	  image: new ol.style.RegularShape({
-	        fill: new ol.style.Fill({
-	          color: '#fcc982'
-	        }),
-	        radius1: 8,
-           radius2: 4,
-           points: 3,
-	      })
-});
+ mapStyleTemplates.layPipeTrenchExcavation =function(feature){
+	  var style = new ol.style.Style({
+          stroke: new ol.style.Stroke({
+              color: '#fcc982' ,
+              width: 5
+          })
+      });
+	  return  style;
+  }
  //管沟开回填
- mapStyleTemplates.layPipeTrenchBackfill = new ol.style.Style({
-	  image: new ol.style.RegularShape({
-	        fill: new ol.style.Fill({
-	          color: '#80bbff'
-	        }),
-	        radius1: 8,
-           radius2: 4,
-           points: 3,
-	      })
-});
+ mapStyleTemplates.layPipeTrenchBackfill = function(feature){
+	  var style = new ol.style.Style({
+          stroke: new ol.style.Stroke({
+              color: '#80bbff' ,
+              width: 5
+          })
+      });
+	  return  style;
+  }
+
  //地貌恢复
- mapStyleTemplates.layLandRestoration = new ol.style.Style({
-	  image: new ol.style.RegularShape({
-	        fill: new ol.style.Fill({
-	          color: '#feff7f'
-	        }),
-	        radius1: 8,
-           radius2: 4,
-           points: 3,
-	      })
-});
+ mapStyleTemplates.layLandRestoration = function(feature){
+	  var style = new ol.style.Style({
+          stroke: new ol.style.Stroke({
+              color: '#feff7f' ,
+              width: 5
+          })
+      });
+	  return  style;
+  }
+
  //保温
- mapStyleTemplates.layThermalInsulation = new ol.style.Style({
-	  image: new ol.style.RegularShape({
-	        fill: new ol.style.Fill({
-	          color: '#82ff46'
-	        }),
-	        radius1: 8,
-           radius2: 4,
-           points: 3,
-	      })
-});
+ mapStyleTemplates.layThermalInsulation =function(feature){
+	  var style = new ol.style.Style({
+          stroke: new ol.style.Stroke({
+              color: '#82ff46' ,
+              width: 5
+          })
+      });
+	  return  style;
+  }
+
  //中线桩连线   
  mapStyleTemplates.medianStakePolyline=function(feature){
 	 console.log(feature);
