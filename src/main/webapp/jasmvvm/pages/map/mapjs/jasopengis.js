@@ -1954,7 +1954,7 @@ var JasMap = null ,M = null;
                 _this.map.interactions.forEach(function(ele,index,arr){
                     if(ele instanceof ol.interaction.DragZoom){
                         dragZoomInteracting = ele;
-                        
+
                     }
                 });
                 if(dragZoomInteracting !== null){
@@ -2665,7 +2665,7 @@ var JasMap = null ,M = null;
                         }else if("TileWMS" === source){
                             layerSource = new ol.source.TileWMS({
                                 url: url,
-                                crossOrigin : 'anonymous',
+                                // crossOrigin : 'anonymous',
                                 serverType: serverType ? serverType : 'geoserver',
                                 params: sourceConfig.params
                             });
