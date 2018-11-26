@@ -319,7 +319,7 @@
           "id": "daq_lay_pipe_trench_excavation",
           "label": "管沟开挖",
           "index": 20,
-             "renderer": {
+           "renderer": {
             "style": "layPipeTrenchExcavation",
             "labelStyle": "",
             "labelField": ""
