@@ -64,7 +64,7 @@
 
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="施工日期" prop="constructDate" required>
-							<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入施工日期" v-model="form.constructDate" size="small" style="width: 100%;">
+							<el-date-picker value-format="yyyy-MM-dd" type="date" :picker-options="pickerOptionsStart"  @change="changeEnd"  placeholder="请输入施工日期" v-model="form.constructDate" size="small" style="width: 100%;">
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
@@ -89,7 +89,7 @@
 
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="采集日期" prop="collectionDate" required>
-							<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入采集日期" v-model="form.collectionDate" size="small" style="width: 100%;">
+							<el-date-picker value-format="yyyy-MM-dd" :picker-options="pickerOptionsEnd" @change="changeStart" type="date" placeholder="请输入采集日期" v-model="form.collectionDate" size="small" style="width: 100%;">
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
@@ -292,6 +292,16 @@
 					collectionPerson:"",
 					remarks:""
 				},
+				pickerOptionsStart: {
+					disabledDate:function(time){
+						return time.getTime()>new Date().getTime()
+					}
+				},
+				pickerOptionsEnd: {
+					disabledDate:function(time){
+						return time.getTime()>new Date().getTime()
+					}
+				},
 			}
 		},
 
@@ -490,6 +500,28 @@
 
 				});
 			},
+			 changeStart:function (){
+				 var that=this;
+				 that.pickerOptionsStart = Object.assign({},that.pickerOptionsStart,{
+			     disabledDate:function(time){
+			    	 if(!that.form.collectionDate){
+			    		 return time.getTime()>new Date().getTime()
+			    	 }
+			      return time.getTime() >new Date(that.form.collectionDate).getTime()||time.getTime()>new Date().getTime();
+			     }
+			    })
+			   },
+			   changeEnd:function (){
+				   var that=this;
+				   that.pickerOptionsEnd = Object.assign({},that.pickerOptionsEnd,{
+			     disabledDate:function(time) {
+			    	 if(!that.form.constructDate){
+			    		 return time.getTime()>new Date().getTime()
+			    	 }
+			      return time.getTime() <new Date(that.form.constructDate).getTime()||time.getTime()>new Date().getTime();
+			      }
+			    })
+			   },
 		},
 	});
 </script>

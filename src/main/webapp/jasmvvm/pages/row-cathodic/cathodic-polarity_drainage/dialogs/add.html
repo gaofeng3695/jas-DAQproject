@@ -79,8 +79,8 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="施工日期">
-								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入施工日期" v-model="formData.constructDate" size="small"
-								  style="width: 100%;">
+								<el-date-picker value-format="yyyy-MM-dd" :picker-options="pickerOptionsStart" @change="changeEnd" type="date" placeholder="请输入施工日期"
+								  v-model="formData.constructDate" size="small" style="width: 100%;">
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
@@ -105,8 +105,8 @@
 
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="采集日期" prop="collectionDate" required>
-								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入采集日期" v-model="formData.collectionDate" size="small"
-								  style="width: 100%;">
+								<el-date-picker value-format="yyyy-MM-dd" :picker-options="pickerOptionsEnd" @change="changeStart" type="date" placeholder="请输入采集日期"
+								  v-model="formData.collectionDate" size="small" style="width: 100%;">
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
@@ -213,28 +213,28 @@
 					constructUnit: [{
 						required: true,
 						message: '施工单位为必填项',
-					//	trigger: 'change'
+						//	trigger: 'change'
 					}],
 
 					supervisionUnit: [{
 						required: true,
 						message: '监理单位为必填项',
-					//	trigger: 'change'
+						//	trigger: 'change'
 					}],
 					medianStakeOid: [{
 						required: true,
 						message: '桩号为必填项',
-					//	trigger: 'change'
+						//	trigger: 'change'
 					}],
 					relativeMileage: [{
 						required: true,
 						message: '相对桩距离为必填项',
-					//	trigger: 'change'
+						//	trigger: 'change'
 					}],
 					collectionDate: [{
 						required: true,
 						message: '采集日期为必填项',
-					//	trigger: 'change'
+						//	trigger: 'change'
 					}],
 					supervisionEngineer: [{
 						min: "0",
@@ -465,6 +465,16 @@
 						max: 999999,
 						precision: 0
 					}
+				},
+				pickerOptionsStart: {
+					disabledDate: function (time) {
+						return time.getTime() > new Date().getTime()
+					}
+				},
+				pickerOptionsEnd: {
+					disabledDate: function (time) {
+						return time.getTime() > new Date().getTime()
+					}
 				}
 			}
 		},
@@ -540,8 +550,8 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
-				}else{
-					that.domain.tenders=[];
+				} else {
+					that.domain.tenders = [];
 				}
 				if (!edit) {
 					that.formData.tendersOid = '';
@@ -567,8 +577,8 @@
 						function (arr) {
 							that.domain.pipeline = arr;
 						});
-				}else{
-					that.domain.pipeline=[];
+				} else {
+					that.domain.pipeline = [];
 				}
 				if (!edit) {
 					that.formData.pipelineOid = '';
@@ -589,8 +599,8 @@
 						function (arr) {
 							that.domain.supervisionUnits = arr;
 						});
-				}else{
-					that.domain.supervisionUnits=[];
+				} else {
+					that.domain.supervisionUnits = [];
 				}
 				if (!edit) {
 					that.formData.supervisionUnit = '';
@@ -606,8 +616,8 @@
 						function (arr) {
 							that.domain.pipeSegment = arr;
 						});
-				}else{
-					that.domain.pipeSegment=[];
+				} else {
+					that.domain.pipeSegment = [];
 				}
 				if (!edit) {
 					that.formData.pipeSegmentOid = '';
@@ -625,8 +635,8 @@
 						function (arr) {
 							that.domain.medianStakes = arr;
 						});
-				}else{
-					that.domain.medianStakes=[];
+				} else {
+					that.domain.medianStakes = [];
 				}
 				if (!edit) {
 					that.formData.medianStakeOid = '';
@@ -682,6 +692,28 @@
 					that.pipeSegmentChanged(data.rows[0].pipeSegmentOid, true);
 
 				});
+			},
+			changeStart: function () {
+				var that = this;
+				that.pickerOptionsStart = Object.assign({}, that.pickerOptionsStart, {
+					disabledDate: function (time) {
+						if (!that.formData.collectionDate) {
+							return time.getTime() > new Date().getTime()
+						}
+						return time.getTime() > new Date(that.formData.collectionDate).getTime() || time.getTime() > new Date().getTime();
+					}
+				})
+			},
+			changeEnd: function () {
+				var that = this;
+				that.pickerOptionsEnd = Object.assign({}, that.pickerOptionsEnd, {
+					disabledDate: function (time) {
+						if (!that.formData.constructDate) {
+							return time.getTime() > new Date().getTime()
+						}
+						return time.getTime() < new Date(that.formData.constructDate).getTime() || time.getTime() > new Date().getTime();
+					}
+				})
 			},
 		},
 	});

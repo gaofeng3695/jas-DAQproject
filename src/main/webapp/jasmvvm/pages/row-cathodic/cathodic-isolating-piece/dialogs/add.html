@@ -79,14 +79,14 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="施工日期" prop="constructDate" required>
-								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入施工日期" v-model="formData.constructDate" size="small"
-								  style="width: 100%;">
+								<el-date-picker value-format="yyyy-MM-dd" type="date" :picker-options="pickerOptionsStart" @change="changeEnd" placeholder="请输入施工日期"
+								  v-model="formData.constructDate" size="small" style="width: 100%;">
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="监理单位" prop="supervisionUnit" required>
-								<el-select v-model="formData.supervisionUnit" clearable placeholder="请选择监理单位" size="small" @visible-change="childChange($event,'tendersOid','标段名称')" >
+								<el-select v-model="formData.supervisionUnit" clearable placeholder="请选择监理单位" size="small" @visible-change="childChange($event,'tendersOid','标段名称')">
 									<el-option v-for="item in domain.supervisionUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
@@ -105,8 +105,8 @@
 
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="采集日期" prop="collectionDate" required>
-								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入采集日期" v-model="formData.collectionDate" size="small"
-								  style="width: 100%;">
+								<el-date-picker value-format="yyyy-MM-dd" :picker-options="pickerOptionsEnd" @change="changeStart" type="date" placeholder="请输入采集日期"
+								  v-model="formData.collectionDate" size="small" style="width: 100%;">
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
@@ -121,7 +121,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="相对桩位置(m)"  prop="relativeMileage" required>
+							<el-form-item label="相对桩位置(m)" prop="relativeMileage" required>
 								<el-input-number :precision="0" :step="1" :max="99999999" controls-position="right" v-model="formData.relativeMileage" clearable
 								  placeholder="请输入相对桩位置" size="small"></el-input-number>
 							</el-form-item>
@@ -269,7 +269,7 @@
 						message: '施工单位为必填项',
 						//trigger: 'change'
 					}],
-					constructDate:[{
+					constructDate: [{
 						required: true,
 						message: '施工日期为必填项',
 						//trigger: 'change'
@@ -277,24 +277,24 @@
 					supervisionUnit: [{
 						required: true,
 						message: '监理单位为必填项',
-					//	trigger: 'change'
+						//	trigger: 'change'
 					}],
-					medianStakeOid:[{
+					medianStakeOid: [{
 						required: true,
 						message: '桩号为必填项',
-					//	trigger: 'change'
+						//	trigger: 'change'
 					}],
-					relativeMileage:[{
+					relativeMileage: [{
 						required: true,
 						message: '相对桩位置为必填项',
 						//trigger: 'change'
 					}],
-					startPipeFittingType:[{
+					startPipeFittingType: [{
 						required: true,
 						message: '前管件类型为必填项',
 						//trigger: 'change'
 					}],
-					endPipeFittingType:[{
+					endPipeFittingType: [{
 						required: true,
 						message: '后管件类型为必填项',
 						//trigger: 'change'
@@ -308,7 +308,7 @@
 						min: "0",
 						max: 50,
 						message: "不能超过50个字"
-					},{
+					}, {
 						required: true,
 						message: '前管件编号为必填项',
 						//trigger: 'change'
@@ -317,7 +317,7 @@
 						min: "0",
 						max: 50,
 						message: "不能超过50个字"
-					},{
+					}, {
 						required: true,
 						message: '后管件编号为必填项',
 						//trigger: 'change'
@@ -325,7 +325,7 @@
 					isolatingPieceCode: [{
 						required: true,
 						message: '绝缘件编号为必填项',
-					//	trigger: 'change'
+						//	trigger: 'change'
 					}, {
 						min: "0",
 						max: 50,
@@ -336,10 +336,10 @@
 						max: 50,
 						message: "不能超过50个字"
 					}],
-					collectionDate:[{
+					collectionDate: [{
 						required: true,
 						message: '采集日期为必填项',
-					//	trigger: 'change'
+						//	trigger: 'change'
 					}],
 					collectionPerson: [{
 						min: "0",
@@ -349,9 +349,19 @@
 				},
 				formData: {
 					pointx: '',
-					supervisionUnit:"",
-					medianStakeOid:""
-					
+					supervisionUnit: "",
+					medianStakeOid: ""
+
+				},
+				pickerOptionsStart: {
+					disabledDate: function (time) {
+						return time.getTime() > new Date().getTime()
+					}
+				},
+				pickerOptionsEnd: {
+					disabledDate: function (time) {
+						return time.getTime() > new Date().getTime()
+					}
 				}
 			}
 		},
@@ -420,7 +430,7 @@
 					cb && cb([]);
 				});
 			},
-			projectChanged: function (val,edit) {
+			projectChanged: function (val, edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -430,10 +440,10 @@
 						function (arr) {
 							that.domain.tenders = arr;
 						});
-				}else{
-					that.domain.tenders=[];
+				} else {
+					that.domain.tenders = [];
 				}
-				if(!edit){
+				if (!edit) {
 					that.formData.tendersOid = '';
 					that.domain.pipeline = [];
 					that.formData.pipelineOid = '';
@@ -442,11 +452,11 @@
 					that.domain.supervisionUnits = [];
 					that.formData.supervisionUnit = '';
 					that.domain.medianStakes = [];
-					that.formData.medianStakeOid = '';	
+					that.formData.medianStakeOid = '';
 				}
-					
+
 			},
-			tendersChanged: function (val,edit) { //根据标段触发管线列表
+			tendersChanged: function (val, edit) { //根据标段触发管线列表
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -456,21 +466,21 @@
 						function (arr) {
 							that.domain.pipeline = arr;
 						});
-				}else{
-					that.domain.pipeline=[];
+				} else {
+					that.domain.pipeline = [];
 				}
-				if(!edit){
+				if (!edit) {
 					that.formData.pipelineOid = '';
 					that.domain.pipeSegment = [];
 					that.formData.pipeSegmentOid = '';
 					that.domain.medianStakes = [];
-					that.formData.medianStakeOid = '';	
+					that.formData.medianStakeOid = '';
 				}
-					
-			
-				that.getSupervisionUnit(val,edit); //根据标段获取监理单位
+
+
+				that.getSupervisionUnit(val, edit); //根据标段获取监理单位
 			},
-			getSupervisionUnit: function (val,edit) {
+			getSupervisionUnit: function (val, edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -480,14 +490,14 @@
 						function (arr) {
 							that.domain.supervisionUnits = arr;
 						});
-				}else{
-					that.domain.supervisionUnits=[];
+				} else {
+					that.domain.supervisionUnits = [];
 				}
-				if(!edit){
-					that.formData.supervisionUnit = '';	
+				if (!edit) {
+					that.formData.supervisionUnit = '';
 				}
 			},
-			pipelineChanged: function (val,edit) { //根据管线触发线路段/穿跨越
+			pipelineChanged: function (val, edit) { //根据管线触发线路段/穿跨越
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -497,16 +507,16 @@
 						function (arr) {
 							that.domain.pipeSegment = arr;
 						});
-				}else{
-					that.domain.pipeSegment=[];
+				} else {
+					that.domain.pipeSegment = [];
 				}
-				if(!edit){
+				if (!edit) {
 					that.formData.pipeSegmentOid = '';
 					that.domain.medianStakes = [];
 					that.formData.medianStakeOid = '';
-				 }
+				}
 			},
-			pipeSegmentChanged: function (val,edit) {
+			pipeSegmentChanged: function (val, edit) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -516,11 +526,11 @@
 						function (arr) {
 							that.domain.medianStakes = arr;
 						});
-				}else{
-					that.domain.medianStakes=[];
+				} else {
+					that.domain.medianStakes = [];
 				}
-				if(!edit){
-					that.formData.medianStakeOid = '';	
+				if (!edit) {
+					that.formData.medianStakeOid = '';
 				}
 			}, //获取桩号
 
@@ -564,13 +574,35 @@
 					oid: that.oid
 				}, function (data) {
 					that.formData = data.rows[0];
-					that.projectChanged(data.rows[0].projectOid,true);
-					that.tendersChanged(data.rows[0].tendersOid,true);
-					that.getSupervisionUnit(data.rows[0].tendersOid,true);
-					that.pipelineChanged(data.rows[0].pipelineOid,true);
-					that.pipeSegmentChanged(data.rows[0].pipeSegmentOid,true);
+					that.projectChanged(data.rows[0].projectOid, true);
+					that.tendersChanged(data.rows[0].tendersOid, true);
+					that.getSupervisionUnit(data.rows[0].tendersOid, true);
+					that.pipelineChanged(data.rows[0].pipelineOid, true);
+					that.pipeSegmentChanged(data.rows[0].pipeSegmentOid, true);
 
 				});
+			},
+			changeStart: function () {
+				var that = this;
+				that.pickerOptionsStart = Object.assign({}, that.pickerOptionsStart, {
+					disabledDate: function (time) {
+						if (!that.formData.collectionDate) {
+							return time.getTime() > new Date().getTime()
+						}
+						return time.getTime() > new Date(that.formData.collectionDate).getTime() || time.getTime() > new Date().getTime();
+					}
+				})
+			},
+			changeEnd: function () {
+				var that = this;
+				that.pickerOptionsEnd = Object.assign({}, that.pickerOptionsEnd, {
+					disabledDate: function (time) {
+						if (!that.formData.constructDate) {
+							return time.getTime() > new Date().getTime()
+						}
+						return time.getTime() < new Date(that.formData.constructDate).getTime() || time.getTime() > new Date().getTime();
+					}
+				})
 			},
 		},
 	});

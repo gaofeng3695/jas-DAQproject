@@ -197,7 +197,7 @@
 									</template>
 								</el-table-column>
 
-								<el-table-column label="新增" align="center" prop="ifSave">
+								<el-table-column label="新增" align="center" :render-header="renderHeader" prop="ifSave">
 									<template slot-scope="scope">
 										<el-checkbox true-label="1" false-label="0" v-model="scope.row.ifSave" @change="changeFieldIfAdd(scope.row)" v-show="isTableSource(scope.row)"></el-checkbox>
 									</template>
@@ -304,7 +304,27 @@
 										<el-input v-model="scope.row.requestPath" placeholder="输入请求路径" size="small" v-show="isUrl(scope.row)"></el-input>
 									</template>
 								</el-table-column>
-
+								<el-table-column label="是否小于今天" align="center" min-width="120px">
+									<template slot-scope="scope">
+										<el-switch v-model="scope.row.ifLessToday" v-show="isSwitch(scope.row)"></el-switch>
+									</template>
+								</el-table-column>
+								<el-table-column label="小于日期" align="center" min-width="120px">
+									<template slot-scope="scope">
+										<el-select size="small" v-model="scope.row.lessDateScopeArr" multiple placeholder="" v-show="isSwitch(scope.row)">
+											<!-- <el-option label="无" value=""></el-option> -->
+											<el-option v-for="option in filterTable" :label="option.fieldNameCn" v-show=isDate(option.uiType) :value="option.fieldName"></el-option>
+										</el-select>
+									</template>
+								</el-table-column>
+								<el-table-column label="大于日期" align="center" min-width="120px">
+									<template slot-scope="scope">
+										<el-select size="small" v-model="scope.row.maxDateScopeArr" multiple placeholder="" v-show="isSwitch(scope.row)">
+											<!-- <el-option label="无" value=""></el-option> -->
+											<el-option v-for="option in filterTable" :label="option.fieldNameCn" v-show=isDate(option.uiType) :value="option.fieldName"></el-option>
+										</el-select>
+									</template>
+								</el-table-column>
 							</el-table>
 
 

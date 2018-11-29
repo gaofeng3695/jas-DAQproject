@@ -724,7 +724,7 @@ Vue.component('jas-table-for-list', {
 			oids: [],
 			rows: [],
 			isClosed: false,
-			_privilegeCode:''
+			_privilegeCode: ''
 		}
 	},
 	computed: {
@@ -800,7 +800,7 @@ Vue.component('jas-table-for-list', {
 		this._templateCode = this.templateCode || param.templateCode;
 		this._exportTemplateCode = this.exportTemplateCode || param.exportTemplateCode;
 		this.functionCode = param.menuCode || param.functionCode;
-		this._privilegeCode=this.privilegeCode||param.privilegeCode;
+		this._privilegeCode = this.privilegeCode || param.privilegeCode;
 	},
 	mounted: function () {
 
@@ -1247,8 +1247,8 @@ Vue.component('jas-import-export-btns', {
 		bt_import: function () { // 导入
 			var that = this;
 			var src = './pages/template/dialogs/upload.html?templateCode=' + this.templateCode;
-			if(that.importConfig&&that.importConfig.importUrl){
-				src+="&importUrl="+that.importConfig.importUrl;
+			if (that.importConfig && that.importConfig.importUrl) {
+				src += "&importUrl=" + that.importConfig.importUrl;
 			}
 			top.jasTools.dialog.show({
 				title: '导入',
@@ -1263,8 +1263,8 @@ Vue.component('jas-import-export-btns', {
 		bt_export: function (obj) {
 			var that = this;
 			var url = jasTools.base.rootPath + '/importExcelController/exportExcel.do';
-			if(that.importConfig&&that.importConfig.exportUrl){
-				url=jasTools.base.rootPath + that.importConfig.exportUrl;
+			if (that.importConfig && that.importConfig.exportUrl) {
+				url = jasTools.base.rootPath + that.importConfig.exportUrl;
 			}
 			jasTools.ajax.post(url, {
 				templateCode: this.exportTemplateCode,
@@ -1284,8 +1284,8 @@ Vue.component('jas-import-export-btns', {
 			//					this.form[key]=[Number(this.form[key].min),Number(this.form[key].max)];
 			//				}
 			//			}
-			if(that.importConfig&&that.importConfig.exportUrl){
-				url=jasTools.base.rootPath + that.importConfig.exportUrl;
+			if (that.importConfig && that.importConfig.exportUrl) {
+				url = jasTools.base.rootPath + that.importConfig.exportUrl;
 			}
 			jasTools.ajax.post(url, {
 				templateCode: this.exportTemplateCode,
@@ -1357,7 +1357,7 @@ Vue.component('jas-form-items', {
 		'					<el-input-number @change="fieldChanged(item.field)" v-model="form[item.field]" :precision="precision(fieldsConfig[item.field].precision)" :step="1" :max="fieldsConfig[item.field].max || 999999" controls-position="right" clearable :placeholder="\'请输入\'+item.name" size="small"></el-input-number>',
 		'	    	</template>',
 		'				<template v-if="fieldsConfig[item.field].type == \'date\'">',
-		'					<el-date-picker clearable value-format="yyyy-MM-dd" type="date" :placeholder="\'请选择\'+item.name" @change="fieldChanged(item.field)" v-model="form[item.field]" size="small" style="width: 100%;"></el-date-picker>',
+		'					<el-date-picker clearable value-format="yyyy-MM-dd" type="date" :picker-options="fieldsConfig[item.field].pickerOptions" :placeholder="\'请选择\'+item.name" @change="fieldChanged(item.field)" v-model="form[item.field]" size="small" style="width: 100%;"></el-date-picker>',
 		'				</template>',
 		'			</el-form-item>',
 		'		</el-col>',
@@ -1519,8 +1519,40 @@ Vue.component('jas-form-items', {
 		},
 
 		fieldChanged: function (field) {
-			// console.log(this.$refs[field + 123][0].form)
+			var that = this;
 			this.$refs[field + 123][0].form.validateField(field);
+			if (that.fieldsConfig[field].type == 'date') {
+				if (that.fieldsConfig[field].lessDateScope && that.fieldsConfig[field].lessDateScope.length > 0) {
+					that.fieldsConfig[field].lessDateScope.forEach(function (item) {
+						that.fieldsConfig[item].pickerOptions = Object.assign({}, that.fieldsConfig[item].pickerOptions, {
+							disabledDate: function (time) {
+								if (that.fieldsConfig[item].isLessToday) {
+									if (!that.form[field]) {
+										return time.getTime() > new Date().getTime()
+									}
+									return time.getTime() < new Date(that.form[field]).getTime() || time.getTime() > new Date().getTime();
+								}
+								return time.getTime() < new Date(that.form[field]).getTime();
+							}
+						})
+					});
+				}
+				if (that.fieldsConfig[field].maxDateScope && that.fieldsConfig[field].maxDateScope.length > 0) {
+					that.fieldsConfig[field].maxDateScope.forEach(function (item) {
+						that.fieldsConfig[item].pickerOptions = Object.assign({}, that.fieldsConfig[item].pickerOptions, {
+							disabledDate: function (time) {
+								if (that.fieldsConfig[item].isLessToday) {
+									if (!that.form[field]) {
+										return time.getTime() > new Date().getTime()
+									}
+									return time.getTime() > new Date(that.form[field]).getTime() || time.getTime() > new Date().getTime();
+								}
+								return time.getTime() > new Date(that.form[field]).getTime();
+							}
+						})
+					});
+				}
+			}
 		},
 
 		requestDomainFromDomainTable: function (domainName, cb) {
@@ -1605,7 +1637,7 @@ Vue.component('jas-form-items-group', {
 		'					<el-input-number @change="fieldChanged(item.field)" v-model="form[item.field]" :precision="fieldsConfig[item.field].precision || 3" :step="1" :max="fieldsConfig[item.field].max || 999999" controls-position="right" clearable :placeholder="\'请输入\'+item.name" size="small"></el-input-number>',
 		'	    	</template>',
 		'				<template v-if="fieldsConfig[item.field].type == \'date\'">',
-		'					<el-date-picker clearable value-format="yyyy-MM-dd" type="date" :placeholder="\'请选择\'+item.name" @change="fieldChanged(item.field)" v-model="form[item.field]" size="small" style="width: 100%;"></el-date-picker>',
+		'					<el-date-picker clearable value-format="yyyy-MM-dd" type="date" :picker-options="fieldsConfig[item.field].pickerOptions" :placeholder="\'请选择\'+item.name" @change="fieldChanged(item.field)" v-model="form[item.field]" size="small" style="width: 100%;"></el-date-picker>',
 		'				</template>',
 		'			</el-form-item>',
 		'		</el-col>',
@@ -1761,8 +1793,40 @@ Vue.component('jas-form-items-group', {
 			this.fieldChanged(fatherField)
 		},
 		fieldChanged: function (field) {
-			// console.log(this.$refs[field + 123][0].form)
+			var that = this;
 			this.$refs[field + 123][0].form.validateField(field);
+			if (that.fieldsConfig[field].type == 'date') {
+				if (that.fieldsConfig[field].lessDateScope && that.fieldsConfig[field].lessDateScope.length > 0) {
+					that.fieldsConfig[field].lessDateScope.forEach(function (item) {
+						that.fieldsConfig[item].pickerOptions = Object.assign({}, that.fieldsConfig[item].pickerOptions, {
+							disabledDate: function (time) {
+								if (that.fieldsConfig[item].isLessToday) {
+									if (!that.form[field]) {
+										return time.getTime() > new Date().getTime()
+									}
+									return time.getTime() < new Date(that.form[field]).getTime() || time.getTime() > new Date().getTime();
+								}
+								return time.getTime() < new Date(that.form[field]).getTime();
+							}
+						})
+					});
+				}
+				if (that.fieldsConfig[field].maxDateScope && that.fieldsConfig[field].maxDateScope.length > 0) {
+					that.fieldsConfig[field].maxDateScope.forEach(function (item) {
+						that.fieldsConfig[item].pickerOptions = Object.assign({}, that.fieldsConfig[item].pickerOptions, {
+							disabledDate: function (time) {
+								if (that.fieldsConfig[item].isLessToday) {
+									if (!that.form[field]) {
+										return time.getTime() > new Date().getTime()
+									}
+									return time.getTime() > new Date(that.form[field]).getTime() || time.getTime() > new Date().getTime();
+								}
+								return time.getTime() > new Date(that.form[field]).getTime();
+							}
+						})
+					});
+				}
+			}
 		},
 		requestDomainFromDomainTable: function (domainName, cb) {
 			var that = this;
@@ -2175,7 +2239,7 @@ Vue.component('jas-detail-table-link', {
 				that.columnNum = 3;
 			}
 		},
-		linkForDetail:function(src,oid,title){
+		linkForDetail: function (src, oid, title) {
 			console.log(title);
 			if (!oid) return;
 			var url = jasTools.base.setParamsToUrl(src, {
