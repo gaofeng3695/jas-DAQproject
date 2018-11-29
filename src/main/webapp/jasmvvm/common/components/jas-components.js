@@ -2138,8 +2138,10 @@ Vue.component('jas-remarks', {
 	},
 	watch: {
 		remarks: function () {
-			this.remark = this.remarks;
-			this.remarksDesc = 200 - this.remarks.length;
+			if(this.remarks){
+				this.remark = this.remarks;
+				this.remarksDesc = 200 - this.remarks.length;	
+			}
 		}
 	},
 	template: [
