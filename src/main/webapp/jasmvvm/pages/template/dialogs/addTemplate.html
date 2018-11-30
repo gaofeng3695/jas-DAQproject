@@ -316,7 +316,7 @@
 								verify: [],
 								requestUrl: item.requestPath,
 								childField: item.childField,
-								min: item.min || 0,
+								min: item.min ,
 								max: item.max || Infinity,
 								index: item.rowIndex,
 								ifLessToday: item.ifLessToday, //读取配置接口，暂时写死
@@ -327,7 +327,6 @@
 								obj.verify.push({
 									required: true,
 									message: item.placeholder || '该字段为必填项',
-									// trigger: 'blur'
 								});
 
 							}
@@ -375,7 +374,12 @@
 							}
 							if (item.uiType == 'UT_14') {
 								// 如果是数字，增加默认值
-								that.$set(that.formData, item.fieldName, obj.min || 0);
+								if(!obj.min){
+									obj.min=-10000;
+									that.$set(that.formData, item.fieldName, 0);
+								}else{
+									that.$set(that.formData, item.fieldName,obj.min);
+								}
 							}
 							groupAttr.push(obj);
 						}
@@ -423,7 +427,7 @@
 								requestUrl: item.requestPath,
 								childField: item.childField,
 								index: item.rowIndex,
-								min: item.min || 0,
+								min: item.min,
 								max: item.max || Infinity,
 								disabled: false,
 								ifLessToday: item.ifLessToday, //读取配置接口，暂时写死
@@ -481,6 +485,19 @@
 							}
 							if (item.uiType == "UT_09" || item.uiType == "UT_10") {
 								that.$set(that.formData, item.fieldName, that.formData[item.fieldName].split(","));
+							}
+							if (item.uiType == 'UT_14') {
+								// 如果是数字，增加默认值
+								if(!that.formData[obj.id]){
+									if(obj.min){
+										that.$set(that.formData, item.fieldName, obj.min);	
+									}else{
+										obj.min=-10000;
+										that.$set(that.formData, item.fieldName, 0);
+									}
+								}else{
+									that.$set(that.formData, item.fieldName,that.formData[obj.id]);
+								}
 							}
 							groupAttr.push(obj);
 
