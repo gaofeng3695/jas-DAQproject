@@ -43,7 +43,7 @@ public class PipeFittingDao{
 			sql = "select oid as key,tee_code as value from daq_material_tee  t where active=1 and project_oid='"+projectOid+"'";
 			break;
 		case "pipe_type_code_004"://阀门
-			sql = "select t.oid as key,t.valve_name as value from daq_material_valve t where t.project_oid='"+projectOid+"'";
+			sql = "select t.oid as key,t.valve_name as value from daq_material_valve t where active=1 and t.project_oid='"+projectOid+"'";
 			break;
 		case "pipe_type_code_005"://绝缘接头
 			sql = "select oid as key,manufacturer_code as value from daq_material_insulated_joint  t where active=1 and project_oid='"+projectOid+"'";

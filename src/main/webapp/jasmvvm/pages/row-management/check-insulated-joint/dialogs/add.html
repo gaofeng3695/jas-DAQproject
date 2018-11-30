@@ -57,7 +57,7 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="施工单位" prop="constructUnit" required>
-								<el-select v-model="formData.constructUnit" clearable placeholder="请选择施工单位" size="small">
+								<el-select v-model="formData.constructUnit" disabled clearable placeholder="请选择施工单位" size="small">
 									<el-option v-for="item in domain.constructUnitArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
@@ -272,13 +272,13 @@
 			},
 			getconstructUnit: function () { //根据标段触发管线列表
 				var that = this;
-			
-					this
-						.requestDomainFromBizTable(
-							'/daq/privilege/getCurrentUnitId.do', {},
-							function (arr) {
-								that.domain.constructUnitArr = arr;
-							});
+				var userBo = JSON.parse(localStorage.getItem("user"));
+				that.formData.constructUnit = userBo.unitId;
+				this.requestDomainFromBizTable(
+						'/daq/privilege/getCurrentUnitId.do', {},
+						function (arr) {
+							that.domain.constructUnitArr = arr;
+						});
 			
 			},
 			getCode:function(val,edit){
