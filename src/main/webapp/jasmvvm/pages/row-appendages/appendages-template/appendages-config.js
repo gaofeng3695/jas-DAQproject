@@ -729,7 +729,8 @@ var crossConfig = {
     constructUnit: {
       type: 'select',
       name: '施工单位',
-      isRequired: true
+      isRequired: true,
+      disabled:true
     },
     constructUnitName: {
       type: 'input',

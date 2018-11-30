@@ -204,6 +204,7 @@
 					detectionUnit: {
 						type: 'select',
 						options: [],
+						disabled:true,
 						isRequired: true
 					},
 					detectionPerson: {
@@ -281,10 +282,13 @@
 			var param = window.jasTools.base.getParamsInUrl(location.href);
 			var userBo = JSON.parse(localStorage.getItem("user"));
 			that.form.detectionUnit = userBo.unitId;
-			that.fieldsConfig.detectionUnit.options = [{
+			/* that.fieldsConfig.detectionUnit.options = [{
 				key: userBo.unitId,
 				value: userBo.unitName
-			}];
+			}]; */
+			this.requestDomainFromBizTable('/daq/privilege/getCurrentUnitId.do', {}, function (arr) {
+				that.fieldsConfig.detectionUnit.options = arr;
+			});
 			if (param.oid) {
 				this.oid = param.oid;
 				this.form.oid = this.oid;
@@ -351,7 +355,16 @@
 						item.operationFlag = 2;
 					});
 				});
+			},requestDomainFromBizTable: function (url, obj, cb) {
+				var that = this;
+				var url = jasTools.base.rootPath + url;
+				jasTools.ajax.post(url, obj, function (data) {
+					cb && cb(data.rows);
+				}, function () {
+					cb && cb([]);
+				});
 			},
+
 		},
 	});
 </script>

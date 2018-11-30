@@ -47,7 +47,7 @@ create or replace view v_daq_weld_info as
 	select oid,rework_weld_code,pipe_segment_or_cross_oid as weld_code from daq_weld_rework_weld where active=1 and approve_status=2;
 
 create or replace view v_daq_material as
-	select oid,pipe_code as code,pipe_length as length from daq_material_pipe where active=1
+select oid,pipe_code as code,pipe_length as length from daq_material_pipe where active=1
 	union all
 	select oid,hot_bends_code as code,pipe_length as length from daq_material_hot_bends where active=1
 	union all 
@@ -59,7 +59,9 @@ create or replace view v_daq_material as
 	union all
 	select oid,closure_code as code,null as length from daq_material_closure where active=1
 	union all
-	select oid,pipe_cold_bending_code as code,pipe_length as length from daq_material_pipe_cold_bending where active=1;
+	select oid,pipe_cold_bending_code as code,pipe_length as length from daq_material_pipe_cold_bending where active=1
+	union all
+	select t.oid,t.valve_name,null as length from daq_material_valve t where t.active=1;
 	
 /***
  *焊口检测视图
