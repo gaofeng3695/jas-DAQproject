@@ -473,7 +473,7 @@
         if (val.length == that.projectArray.length || (val.length == 1 && val[0] == "项目群")||(val.length==0)) { //表示肯定是全选
           that.topSearch.projectOids = that.ids;
           that.oldOptions = that.topSearch.projectOids;
-         // return;
+          return;
         }
         if (val.indexOf("项目群") < 0) {
           if (that.oldOptions.length - 1 == val.length) {

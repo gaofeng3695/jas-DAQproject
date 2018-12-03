@@ -309,13 +309,18 @@ public class DaqPrivilegeController extends BaseController{
 	public Object getCurrentUnitId(HttpServletRequest request){
 		ListResult<Map<String,Object>> result = null;
 		try{
-			List<Map<String,Object>> rows = new ArrayList<Map<String,Object>>();
+			/*List<Map<String,Object>> rows = new ArrayList<Map<String,Object>>();
 			AuthUser currentUser = ThreadLocalHolder.getCurrentUser();
 			Map<String,Object> data = new HashMap<String,Object>();
 			data.put("key", currentUser.getUnitId());
 			data.put("value", currentUser.getUnitName());
-			rows.add(data);
-			result = new ListResult<>(1, "200", "ok", rows);
+			rows.add(data);*/
+			List<Map<String,Object>> rows = this.daqPrivilegeService.getCurrentUnitId();
+			if(rows!=null){
+				result = new ListResult<>(1, "200", "ok", rows);
+			}else{
+				result = new ListResult<>(-1, "400", "error");
+			}
 		}catch(Exception e){
 			result = new ListResult<>(-1, "400", "error");
 			e.printStackTrace();
