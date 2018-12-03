@@ -64,7 +64,7 @@ JasMap.require(function () {
         });
 		  styleManager.crossDrillingBlastingStyle[name]=style;
 	  }
-	  return  styleManager.crossAcrossStyle[name];
+	  return  styleManager.crossDrillingBlastingStyle[name];
   }
 //盾构隧道穿越
   mapStyleTemplates.crossShield=function(feature){
