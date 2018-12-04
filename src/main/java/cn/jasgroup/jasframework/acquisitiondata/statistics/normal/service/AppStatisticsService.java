@@ -10,6 +10,7 @@ import cn.jasgroup.jasframework.security.dao.entity.PriUnit;
 import cn.jasgroup.jasframework.security.service.UnitService;
 import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 import com.google.common.collect.*;
+import com.google.common.primitives.Doubles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.StatsProcessForAppEnum.*;
 
 /**
  * description: none
@@ -48,6 +51,8 @@ public class AppStatisticsService {
 
     /** 射线检测类型: 一次性检测 */
     private static final String ONCE_DETECTION_QUALIFIED = "detection_type_code_001";
+
+
 
     /**
      * 数据录入统计
@@ -190,23 +195,21 @@ public class AppStatisticsService {
      */
     public List<StatsProcessResultBo> statsYesterdayProcess(String projectId) {
         String yesterday = LocalDate.now().minusDays(1).toString();
-        StatsResultBo pipeResultBo = appStatisticsDao.statsPipeLengthByDate(projectId, yesterday, yesterday);
-        StatsResultBo backFillResultBo = this.appStatisticsDao.sumBackFillLengthByDate(projectId, yesterday, yesterday);
 
-        // 焊接(km/口)
-        List<WeldInfoBo> weldInfoBos = this.appStatisticsDao.listWeldInfoByDate(projectId, yesterday, yesterday);
-        Integer weldCount = this.appStatisticsDao.countWeldInfoByDate(projectId, yesterday, null);
-        StatsResultBo weldResultBo = overallStatisticsService.statsPipeLengthByType(weldInfoBos, Lists.newArrayList(projectId), StatsProcessEnum.WELD.getType());
+        // 统计长度: 管材, 管沟回填, 焊口, 补口
+        StatsResultBo pipeResultBo = appStatisticsDao.statsPipeLengthByDate(projectId, yesterday);
+        StatsResultBo backFillResultBo = this.appStatisticsDao.statsBackFillLengthByDate(projectId, yesterday);
+        StatsResultBo weldResultBo = this.appStatisticsDao.statsWeldLengthByDate(projectId, yesterday);
+        StatsResultBo patchResultBo = this.appStatisticsDao.statsPatchLengthByDate(projectId, yesterday);
 
-        // 补口(km/口)
-        List<WeldInfoBo> patchWeldInBos = this.appStatisticsDao.listPatchRelationWeldInfoByDate(projectId, yesterday, yesterday);
-        Integer patchRelationWeldCount = this.appStatisticsDao.countPatchRelationWeldInfoByDate(projectId, yesterday, null);
-        StatsResultBo patchRelationWeldResultBo = overallStatisticsService.statsPipeLengthByType(patchWeldInBos, Lists.newArrayList(projectId), StatsProcessEnum.PATCH.getType());
+        // 统计数量: 焊口, 补口
+        Integer weldCount = this.appStatisticsDao.countWeldByDate(projectId, yesterday);
+        Integer patchRelationWeldCount = this.appStatisticsDao.countPatchByDate(projectId, yesterday);
 
         return Lists.newArrayList(
                 new StatsProcessResultBo(pipeResultBo.getStatsType(), null, pipeResultBo.getStatsResult()),
                 new StatsProcessResultBo(weldResultBo.getStatsType(), weldCount, weldResultBo.getStatsResult()),
-                new StatsProcessResultBo(patchRelationWeldResultBo.getStatsType(), patchRelationWeldCount, patchRelationWeldResultBo.getStatsResult()),
+                new StatsProcessResultBo(patchResultBo.getStatsType(), patchRelationWeldCount, patchResultBo.getStatsResult()),
                 new StatsProcessResultBo(backFillResultBo.getStatsType(), null, backFillResultBo.getStatsResult())
         );
     }
@@ -222,63 +225,43 @@ public class AppStatisticsService {
         String yesterday = LocalDate.now().minusDays(1).toString();
         Map<String, String> unitMap = this.getUnitMap(projectId);
 
-        List<StatsProcessResultBo> returnList = Lists.newArrayList();
+        List<StatsProcessResultBo> resultList = Lists.newArrayList();
 
-        if (StatsProcessForAppEnum.PIPE.getType().equals(statsType)) {
-            returnList = appStatisticsDao.statsPipeLengthGroupByConstruct(projectId, yesterday, yesterday);
+        if (PIPE.getType().equals(statsType)) {
+            resultList = appStatisticsDao.statsPipeLengthGroupByConstruct(projectId, yesterday);
         }
 
-        if (StatsProcessForAppEnum.LAY_PIPE_TRENCH_BACKFILL.getType().equals(statsType)) {
-            returnList = appStatisticsDao.sumBackFillLengthGroupByConstruct(projectId, yesterday, yesterday);
+        if (LAY_PIPE_TRENCH_BACKFILL.getType().equals(statsType)) {
+            resultList = appStatisticsDao.sumBackFillLengthGroupByConstruct(projectId, yesterday);
         }
 
-        if (StatsProcessForAppEnum.WELD.getType().equals(statsType)) {
-            List<WeldInfoBo> weldInfoBos = this.appStatisticsDao.listWeldInfoByDate(projectId, yesterday, yesterday);
-            Map<String, Map<String, Double>> pipeLengthMap = this.overallStatisticsService.getPipeLengthMap(weldInfoBos);
-            //  根据施工单位分组计算
-            Map<String, List<WeldInfoBo>> dateToWeldInfoList = new HashMap<>();
-            for (WeldInfoBo weldInfoBo : weldInfoBos) {
-                dateToWeldInfoList.computeIfAbsent(weldInfoBo.getConstructUnit(), k -> new ArrayList<>()).add(weldInfoBo);
-            }
-            for (String constructId : dateToWeldInfoList.keySet()) {
-                List<WeldInfoBo> weldInfoList = dateToWeldInfoList.get(constructId);
-                Double length = this.overallStatisticsService.statsPipeLength(pipeLengthMap, weldInfoList);
-                Integer count = this.appStatisticsDao.countWeldInfoByDate(projectId, yesterday, constructId);
-                returnList.add(new StatsProcessResultBo(constructId, count, length));
-            }
+        if (WELD.getType().equals(statsType)) {
+            resultList = this.appStatisticsDao.statsWeldLengthGroupByConstruct(projectId, yesterday);
+            List<StatsProcessResultBo> countList = appStatisticsDao.countWeldGroupByUnitId(projectId, yesterday);
+            Map<String, Integer> unitIdToCount = countList.stream().collect(Collectors.toMap(StatsProcessResultBo::getConstructId, StatsProcessResultBo::getStatsCount, (a, b) -> b));
+            resultList.forEach(bo -> bo.setStatsCount(unitIdToCount.get(bo.getStatsType())));
         }
 
-        if (StatsProcessForAppEnum.PATCH.getType().equals(statsType)) {
-            List<WeldInfoBo> weldInfoBos = this.appStatisticsDao.listPatchRelationWeldInfoByDate(projectId, yesterday, yesterday);
-            Map<String, Map<String, Double>> pipeLengthMap = this.overallStatisticsService.getPipeLengthMap(weldInfoBos);
-            //  根据施工单位分组计算
-            Map<String, List<WeldInfoBo>> dateToWeldInfoList = new HashMap<>();
-            for (WeldInfoBo weldInfoBo : weldInfoBos) {
-                dateToWeldInfoList.computeIfAbsent(weldInfoBo.getConstructUnit(), k -> new ArrayList<>()).add(weldInfoBo);
-            }
-            for (String constructId : dateToWeldInfoList.keySet()) {
-                List<WeldInfoBo> weldList = dateToWeldInfoList.get(constructId);
-                Double length = this.overallStatisticsService.statsPipeLength(pipeLengthMap, weldList);
-                Integer count = this.appStatisticsDao.countPatchRelationWeldInfoByDate(projectId, yesterday, constructId);
-                returnList.add(new StatsProcessResultBo(constructId, count, length));
-            }
+        if (PATCH.getType().equals(statsType)) {
+            resultList = this.appStatisticsDao.statsPatchLengthGroupByConstruct(projectId, yesterday);
+            List<StatsProcessResultBo> countList = appStatisticsDao.countPatchGroupByUnitId(projectId, yesterday);
+            Map<String, Integer> unitIdToCount = countList.stream().collect(Collectors.toMap(StatsProcessResultBo::getConstructId, StatsProcessResultBo::getStatsCount, (a, b) -> b));
+            resultList.forEach(bo -> bo.setStatsCount(unitIdToCount.get(bo.getStatsType())));
         }
 
         // 包装该项目下所有施工单位的统计(统计数据中没有的)
-        Set<String> statsUnitIds = returnList.stream().map(StatsProcessResultBo::getStatsType).collect(Collectors.toSet());
+        Set<String> statsUnitIds = resultList.stream().map(StatsProcessResultBo::getStatsType).collect(Collectors.toSet());
         for (String unitId : unitMap.keySet()) {
             if (!statsUnitIds.contains(unitId)) {
-                returnList.add(new StatsProcessResultBo(unitId, 0, 0));
+                resultList.add(new StatsProcessResultBo(unitId, 0, 0));
             }
         }
 
-        // 包装单位中文名称
-        returnList.forEach(bo -> bo.setConstructName(unitMap.get(bo.getStatsType())));
-
-        returnList.sort((o1, o2) -> Double.compare(Double.parseDouble(o2.getStatsResult().toString()), Double.parseDouble(o1.getStatsResult().toString())));
-        return returnList;
+        // 包装单位中文名称 & 根据统计结果排序
+        resultList.forEach(bo -> bo.setConstructName(unitMap.get(bo.getStatsType())));
+        resultList.sort((o1, o2) -> Double.compare(Double.parseDouble(o2.getStatsResult().toString()), Double.parseDouble(o1.getStatsResult().toString())));
+        return resultList;
     }
-
 
 
     public Table<String, String, Object> statsLatestWeekCumulativeProcess(String projectId) {
@@ -286,30 +269,21 @@ public class AppStatisticsService {
         String endDate = LocalDate.now().toString();
         List<String> dayList = StatsUtils.genContinuityDayStr(startDate, endDate, YYYY_MM_DD);
 
-        // 管材
-        List<DateStatsResultBo> pipeStatsResult = this.appStatisticsDao.statsPipeLengthGroupDate(projectId, startDate, endDate);
+        // 统计各工序之前的所有长度
+        List<StatsResultBo> beforeStatsResults = appStatisticsDao.statsProcessLengthByDate(projectId, startDate);
+        Map<String, Double> typeToLength = beforeStatsResults.stream().collect(Collectors.toMap(StatsResultBo::getStatsType, bo -> Doubles.tryParse(StatsUtils.coalesce(bo.getStatsResult().toString())), (a, b) -> b));
 
-        // 焊接
-        List<WeldInfoBo> weldInfoBos = this.appStatisticsDao.listWeldInfoByDate(projectId, startDate, endDate);
-
-        // 补口
-        List<WeldInfoBo> patchRelationWeldInfoBos = this.appStatisticsDao.listPatchRelationWeldInfoByDate(projectId, startDate, endDate);
-
-        List<WeldInfoBo> statsWeldList = Lists.newArrayList(weldInfoBos);
-        statsWeldList.addAll(patchRelationWeldInfoBos);
-        Map<String, Map<String, Double>> pipeLengthMap = this.overallStatisticsService.getPipeLengthMap(statsWeldList);
-
-        List<DateStatsResultBo> weldStatsResult = this.overallStatisticsService.getDateStatsResult(StatsProcessEnum.WELD.getType(), weldInfoBos, pipeLengthMap);
-        List<DateStatsResultBo> patchStatsResult = this.overallStatisticsService.getDateStatsResult(StatsProcessEnum.PATCH.getType(), patchRelationWeldInfoBos, pipeLengthMap);
-
-        // 回填
-        List<DateStatsResultBo> backFillStatsResult = this.appStatisticsDao.statsBackFillLengthGroupByDate(projectId, startDate, endDate);
+        // 管材, 焊口, 补口, 管沟回填 根据日期分桶统计长度
+        List<DateStatsResultBo> pipeStats = this.appStatisticsDao.statsPipeLengthGroupByDate(projectId, startDate, endDate);
+        List<DateStatsResultBo> weldStats = this.appStatisticsDao.statsWeldLengthGroupByDate(projectId, startDate, endDate);
+        List<DateStatsResultBo> patchStats = this.appStatisticsDao.statsPatchLengthGroupByDate(projectId, startDate, endDate);
+        List<DateStatsResultBo> backFillStats = this.appStatisticsDao.statsBackFillLengthGroupByDate(projectId, startDate, endDate);
 
         List<DateStatsResultBo> resultBos = Lists.newArrayList();
-        resultBos.addAll(pipeStatsResult);
-        resultBos.addAll(weldStatsResult);
-        resultBos.addAll(patchStatsResult);
-        resultBos.addAll(backFillStatsResult);
+        resultBos.addAll(pipeStats);
+        resultBos.addAll(weldStats);
+        resultBos.addAll(patchStats);
+        resultBos.addAll(backFillStats);
 
         // 初始化table生成连续的月份
         Table<String, String, Object> table = TreeBasedTable.create();
@@ -318,11 +292,13 @@ public class AppStatisticsService {
         // Table赋值
         resultBos.forEach(bo -> table.put(bo.getStatsType(), bo.getStatsDate(), bo.getStatsResult()==null?0:bo.getStatsResult()));
 
-        // 计算累积结果: 每个统计类型下的日期统计值=之前月份累计之和
+        // 计算累积结果
         Table<String, String, Object> resultTable = TreeBasedTable.create();
         for (String statsType : table.rowKeySet()) {
             for (String date : dayList) {
-                resultTable.put(statsType, date, overallStatisticsService.getCumulativeCount(table, dayList, statsType, date));
+                Object cumulativeLength = overallStatisticsService.getCumulativeCount(table, dayList, statsType, date);
+                double length = Double.sum(typeToLength.get(statsType), Double.parseDouble(cumulativeLength.toString()));
+                resultTable.put(statsType, date, length);
             }
         }
 
@@ -341,27 +317,23 @@ public class AppStatisticsService {
         String startDate = LocalDate.now().minusDays(6).toString();
         String endDate = LocalDate.now().toString();
         List<String> dayList = StatsUtils.genContinuityDayStr(startDate, endDate, YYYY_MM_DD);
-
         Map<String, String> unitMap = this.getUnitMap(projectId);
+        if (unitMap.isEmpty()) {
+            return null;
+        }
 
-        // 管材
-        List<DateStatsResultBo> pipeStatsResult = this.appStatisticsDao.statsPipeLengthGroupByConstructAndDate(projectId, startDate, endDate);
+        Set<String> unitIds = unitMap.keySet();
 
-        // 管沟回填
-        List<DateStatsResultBo> backFillStatsResult = this.appStatisticsDao.statsBackFillLengthGroupByConstructAndDate(projectId, startDate, endDate);
+        // 根据日期, 单位分桶统计长度: 管材, 管沟回填, 焊口, 补口
+        List<DateStatsResultBo> pipeStatsResult = this.appStatisticsDao.statsPipeLengthGroupByConstructAndDate(projectId, unitIds, startDate, endDate);
+        List<DateStatsResultBo> backFillStatsResult = this.appStatisticsDao.statsBackFillLengthGroupByConstructAndDate(projectId, unitIds, startDate, endDate);
+        List<DateStatsResultBo> weldStatsResult = this.appStatisticsDao.statsWeldLengthGroupByConstructAndDate(projectId, unitIds, startDate, endDate);
+        List<DateStatsResultBo> patchStatsResult = this.appStatisticsDao.statsPatchLengthGroupByConstructAndDate(projectId, unitIds, startDate, endDate);
 
-        // 焊接/补口
-        List<DateStatsResultBo> weldStatsResult = Lists.newArrayList(), patchStatsResult = Lists.newArrayList();
-        List<WeldInfoBo> weldInfoBos = this.appStatisticsDao.listWeldInfoByDate(projectId, startDate, endDate);
-        List<WeldInfoBo> patchRelationWeldInfoBos = this.appStatisticsDao.listPatchRelationWeldInfoByDate(projectId, startDate, endDate);
-        List<WeldInfoBo> totalWeldList = Lists.newArrayList();
-        totalWeldList.addAll(weldInfoBos);
-        totalWeldList.addAll(patchRelationWeldInfoBos);
-        Map<String, Map<String, Double>> pipeLengthMap = this.overallStatisticsService.getPipeLengthMap(totalWeldList);
-
-        // 根据施工单位和日期分组计算焊口信息中的管件长度
-        countGroupUnitAndDate(weldStatsResult, weldInfoBos, pipeLengthMap);
-        countGroupUnitAndDate(patchStatsResult, patchRelationWeldInfoBos, pipeLengthMap);
+        // 统计各工序之前的所有长度
+        List<StatsProcessResultBo> beforeList = appStatisticsDao.statsProcessLengthGroupByUnit(projectId, unitIds, startDate);
+        Table<String, String, Object> beforeTable = HashBasedTable.create();
+        beforeList.forEach(bo -> beforeTable.put(bo.getStatsType(), bo.getConstructId(), bo.getStatsResult()));
 
         // 包装施工单位中文名 & 填充统计结果(累积计算)
         List<Map<String, Object>> resultList = Lists.newArrayList();
@@ -369,20 +341,22 @@ public class AppStatisticsService {
             Table<String, String, Object> table = TreeBasedTable.create();
             this.initTable(dayList, table);
 
-            for (DateStatsResultBo dateStatsResultBo : pipeStatsResult) {
-                if (unitId.equals(dateStatsResultBo.getStatsType())) {
-                    table.put(StatsProcessForAppEnum.PIPE.getType(), dateStatsResultBo.getStatsDate(), dateStatsResultBo.getStatsResult());
-                }
-            }
-            backFillStatsResult.stream().filter(bo -> unitId.equals(bo.getStatsType())).forEach(bo -> table.put(StatsProcessForAppEnum.LAY_PIPE_TRENCH_BACKFILL.getType(), bo.getStatsDate(), bo.getStatsResult()));
-            weldStatsResult.stream().filter(bo -> unitId.equals(bo.getStatsType())).forEach(bo -> table.put(StatsProcessForAppEnum.WELD.getType(), bo.getStatsDate(), bo.getStatsResult()));
-            patchStatsResult.stream().filter(bo -> unitId.equals(bo.getStatsType())).forEach(bo -> table.put(StatsProcessForAppEnum.WELD.getType(), bo.getStatsDate(), bo.getStatsResult()));
+            pipeStatsResult.stream().filter(bo -> unitId.equals(bo.getStatsType())).forEach(dateStatsResultBo -> table.put(PIPE.getType(), dateStatsResultBo.getStatsDate(), dateStatsResultBo.getStatsResult()));
+            backFillStatsResult.stream().filter(bo -> unitId.equals(bo.getStatsType())).forEach(dateStatsResultBo -> table.put(LAY_PIPE_TRENCH_BACKFILL.getType(), dateStatsResultBo.getStatsDate(), dateStatsResultBo.getStatsResult()));
+            weldStatsResult.stream().filter(bo -> unitId.equals(bo.getStatsType())).forEach(bo -> table.put(WELD.getType(), bo.getStatsDate(), bo.getStatsResult()));
+            patchStatsResult.stream().filter(bo -> unitId.equals(bo.getStatsType())).forEach(bo -> table.put(PATCH.getType(), bo.getStatsDate(), bo.getStatsResult()));
 
             // 计算累积结果: 每个统计类型下的日期统计值=之前月份累计之和
             Table<String, String, Object> resultTable = TreeBasedTable.create();
             for (String statsType : table.rowKeySet()) {
                 for (String date : dayList) {
-                    resultTable.put(statsType, date, overallStatisticsService.getCumulativeCount(table, dayList, statsType, date));
+                    Double beforeResult = 0d;
+                    if (beforeTable.contains(statsType, unitId)) {
+                        beforeResult = Double.parseDouble(beforeTable.get(statsType, unitId).toString());
+                    }
+                    Object cumulativeLength = overallStatisticsService.getCumulativeCount(table, dayList, statsType, date);
+                    double length = Double.sum(beforeResult, Double.parseDouble(cumulativeLength.toString()));
+                    resultTable.put(statsType, date, length);
                 }
             }
 
@@ -394,28 +368,6 @@ public class AppStatisticsService {
         }
         return resultList;
     }
-
-
-    /**
-     * 根据施工单位和日期分组计算焊口信息中的管件长度
-     */
-    private void countGroupUnitAndDate(List<DateStatsResultBo> weldStatsResult, List<WeldInfoBo> weldInfoBos, Map<String, Map<String, Double>> pipeLengthMap) {
-        Map<String, List<WeldInfoBo>> dateToWeldInfoList = new HashMap<>();
-//        Map<String, List<WeldInfoBo>> dateToWeldInfoList = weldInfoBos.stream().collect(Collectors.groupingBy(WeldInfoBo::getConstructUnit));
-        for (WeldInfoBo weldInfoBo : weldInfoBos) {
-            dateToWeldInfoList.computeIfAbsent(weldInfoBo.getConstructUnit(), k -> new ArrayList<>()).add(weldInfoBo);
-        }
-        for (String constructId : dateToWeldInfoList.keySet()) {
-            List<WeldInfoBo> weldInfoList = dateToWeldInfoList.get(constructId);
-            Map<String, List<WeldInfoBo>> dateToWelds = weldInfoList.stream().collect(Collectors.groupingBy(WeldInfoBo::getStatsDate, Collectors.toList()));
-            for (String statsDate : dateToWelds.keySet()) {
-                Double length = this.overallStatisticsService.statsPipeLength(pipeLengthMap, dateToWelds.get(statsDate));
-                weldStatsResult.add(new DateStatsResultBo(constructId, statsDate, length));
-            }
-        }
-    }
-
-
 
 
     public Table<String, String, Integer> statsDateEntryAndAuditing(String projectId) {
