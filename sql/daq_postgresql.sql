@@ -4162,6 +4162,7 @@ create table daq_test_valve(
 	collection_date timestamp(6)  ,
 	supervision_unit varchar(36)  ,
 	supervision_engineer varchar(50)  ,
+	approve_status smallint DEFAULT 0,
 	create_user_id varchar(36)  ,
 	create_user_name varchar(50)  ,
 	create_datetime timestamp(6)  ,
@@ -4191,6 +4192,7 @@ comment on column daq_test_valve.collection_person is '数据采集人';
 comment on column daq_test_valve.collection_date is '采集日期';
 comment on column daq_test_valve.supervision_unit is '监理单位';
 comment on column daq_test_valve.supervision_engineer is '监理工程师';
+comment on column daq_test_valve.approve_status is '审核状态';
 comment on column daq_test_valve.create_user_id is '创建人id';
 comment on column daq_test_valve.create_user_name is '创建人名称';
 comment on column daq_test_valve.create_datetime is '创建时间';
