@@ -353,9 +353,12 @@
 			var param = window.jasTools.base.getParamsInUrl(location.href);
 			var userBo = JSON.parse(localStorage.getItem("user"));
 			that.formData.constructUnit = userBo.unitId;
-			that.domain.constructUnits.push({
+			/* that.domain.constructUnits.push({
 				key: userBo.unitId,
 				value: userBo.unitName
+			}); */
+			this.requestDomainFromBizTable('/daq/privilege/getCurrentUnitId.do', {}, function (arr) {
+				that.domain.constructUnits = arr;
 			});
 			if (param.oid) {
 				this.oid = param.oid;
@@ -678,19 +681,19 @@
 					} */
 					that.formData = data.rows[0];
 
-					if (that.formData.coverOid.length == 0) {
+					if (!that.formData.coverOid||that.formData.coverOid.length == 0) {
 						that.formData.coverOid = [];
 					} else {
 						that.formData.coverOid = that.formData.coverOid.split(",");
 					}
 
-					if (that.formData.renderOid.length == 0) {
+					if (!that.formData.renderOid||that.formData.renderOid.length == 0) {
 						that.formData.renderOid = [];
 					} else {
 						that.formData.renderOid = that.formData.renderOid.split(",");
 					}
 
-					if (that.formData.padderOid.length == 0) {
+					if (!that.formData.padderOid||that.formData.padderOid.length == 0) {
 						that.formData.padderOid = [];
 					} else {
 						that.formData.padderOid = that.formData.padderOid.split(",");

@@ -383,4 +383,13 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 		}
 		return result;
 	}
+	
+	public List<Map<String, Object>> getCurrentUnitId(String sql) {
+		try {
+			return this.baseJdbcTemplate.queryForListHump(sql, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
