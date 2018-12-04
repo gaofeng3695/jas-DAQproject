@@ -5447,7 +5447,10 @@ create table custom_fun_fields(
 	modify_user_id varchar(36) not null ,
 	modify_user_name varchar(50) not null ,
 	modify_datetime timestamp not null ,
-	active smallint not null
+	active smallint not null,
+	if_less_today varchar(20),
+	less_date_scope varchar(64),
+	max_date_scope varchar(64),
 );
 
 comment on table custom_fun_fields is '自定义表单-功能配置-字段';
