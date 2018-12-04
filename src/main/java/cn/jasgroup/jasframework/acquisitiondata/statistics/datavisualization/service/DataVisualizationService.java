@@ -1,28 +1,23 @@
 package cn.jasgroup.jasframework.acquisitiondata.statistics.datavisualization.service;
 
 import cn.jasgroup.framework.data.exception.BusinessException;
+import cn.jasgroup.jasframework.acquisitiondata.privilege.service.DaqPrivilegeService;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.datavisualization.comm.MaterialBlock;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.datavisualization.comm.ScopeManagementBlock;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.datavisualization.dao.DataVisualizationDao;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.datavisualization.service.bo.*;
-import cn.jasgroup.jasframework.acquisitiondata.privilege.service.DaqPrivilegeService;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.StatsProcessEnum;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.StatsUtils;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.dao.OverallStatisticsDao;
-import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.service.OverallStatisticsService;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.service.bo.StatsResultBo;
-import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.service.bo.WeldInfoBo;
 import cn.jasgroup.jasframework.domain.utils.DomainUtil;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -42,8 +37,6 @@ public class DataVisualizationService {
     @Autowired
     private DataVisualizationDao dataVisualizationDao;
 
-    @Autowired
-    private OverallStatisticsService overallStatisticsService;
     @Autowired
     private OverallStatisticsDao overallStatisticsDao;
 
@@ -133,29 +126,24 @@ public class DataVisualizationService {
         return returnList;
     }
 
+
     public List<StatsResultWithNameBo> statsProcessCompletion(List<String> projectIds) {
-
-        // 查询管件信息集合: 焊接关联的
-        List<WeldInfoBo> weldList = this.overallStatisticsDao.listWeldInfo(projectIds);
-
-        // 查询管件信息集合: 补口关联的焊口关联的
-        List<WeldInfoBo> patchRelationWeldList = this.overallStatisticsDao.listPatchRelationWeldInfo(projectIds);
-
         // 统计管材, 焊口, 补口
-        StatsResultBo pipeStatsResult = this.overallStatisticsDao.statsPipeLengthByType(projectIds, null);
-        StatsResultBo weldStatsResult = overallStatisticsService.statsPipeLengthByType(weldList, projectIds, StatsProcessEnum.WELD.getType());
-        StatsResultBo patchStatsResult = overallStatisticsService.statsPipeLengthByType(patchRelationWeldList, projectIds, StatsProcessEnum.PATCH.getType());
+        StatsResultBo pipeStatsResult = this.overallStatisticsDao.statsPipeLength(projectIds);
+        List<StatsResultBo> weldAndPatchStatsResult = this.overallStatisticsDao.statsWeldAndPatchLengthByDate(projectIds);
 
         // 统计测量放线, 管沟回填, 地貌恢复
         List<StatsResultBo> otherStatsResultBos = this.overallStatisticsDao.statsOtherLength(projectIds);
-        otherStatsResultBos.stream().filter(bo -> bo.getStatsResult() == null).forEach(bo -> bo.setStatsResult(0));
 
-        List<StatsResultBo> resultList = Lists.newArrayList(pipeStatsResult, weldStatsResult, patchStatsResult);
-        resultList.addAll(otherStatsResultBos);
+        List<StatsResultBo> statsResultBoList = Lists.newArrayList(pipeStatsResult);
+        statsResultBoList.addAll(weldAndPatchStatsResult);
+        statsResultBoList.addAll(otherStatsResultBos);
 
+        // null转0
+        statsResultBoList.stream().filter(bo -> bo.getStatsResult() == null).forEach(bo -> bo.setStatsResult(0));
 
         List<StatsResultWithNameBo> returnList = Lists.newArrayList();
-        Map<String, StatsResultBo> typeToBo = resultList.stream().collect(Collectors.toMap(StatsResultBo::getStatsType, bo -> bo, (a, b) -> b));
+        Map<String, StatsResultBo> typeToBo = statsResultBoList.stream().collect(Collectors.toMap(StatsResultBo::getStatsType, bo -> bo, (a, b) -> b));
         for (StatsProcessEnum anEnum : StatsProcessEnum.values()) {
             StatsResultWithNameBo resultWithNameBo = new StatsResultWithNameBo();
             BeanUtils.copyProperties(typeToBo.get(anEnum.getType()), resultWithNameBo);
