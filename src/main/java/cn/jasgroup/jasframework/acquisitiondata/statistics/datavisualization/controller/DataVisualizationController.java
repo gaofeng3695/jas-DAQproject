@@ -148,6 +148,7 @@ public class DataVisualizationController {
      * 统计各工序完成情况
      * @param params projectIds
      * @return {@link BaseResult}
+     * 与Web端总体中各工序累计完成情况相同: {@link cn.jasgroup.jasframework.acquisitiondata.statistics.normal.controller.OverallStatisticsController#processCumulativeCompletion}
      */
     @PostMapping("statsProcessCompletion")
     public BaseResult statsProcessCompletion(@RequestBody Map<String, Object> params) {
