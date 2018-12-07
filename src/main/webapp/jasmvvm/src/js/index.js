@@ -23,7 +23,6 @@ var gisMap = {
 //			obj.coor = source[i].coor;
 			pipelineArray.push(obj);
 		}
-
 		var map = {},
 			dataArray = [];
 		for (var i = 0; i < pipelineArray.length; i++) {
@@ -101,7 +100,15 @@ var gisMap = {
 				return 0;
 			}
 		}
-	}
+	},
+
+}
+var showInfo=function(e){
+	 var coor = e.coordinate;
+     var name = "<div style='height:24px;line-height:24px'>焊口号:WERTYUIOP</div>";
+     name+="<div style='height:24px;line-height:24px'>桩号:WWWWW</div>";
+     name+="<div style='height:24px;line-height:24px'>相对桩位置：89.08</div>";
+	 app.jasMap.showInfoWindow(coor[0], coor[1], name, "焊口信息");
 }
 window.app = new Vue({
 	el: '#app',
@@ -439,13 +446,14 @@ window.app = new Vue({
 	            },
 				onLayerAdded: function (e) {
 					var layerId = e.data.layerId;
-					if (layerId === "daq_median_stake") {
+					if (layerId === "daq_construction_weld") {//焊口信息的时候
 						//添加单个图层的点击事件
-						this.addLayerClickEventListener(layerId, onCenterStakeLayerClicked);
+						this.addLayerClickEventListener(layerId, showInfo);
 					}
 				}
 			});
 		},
+
 		addMapListener: function () {
 			var jasMap = this.jasMap;
 		      var paramsArray = [] ;
