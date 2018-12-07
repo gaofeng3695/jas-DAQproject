@@ -768,6 +768,13 @@ Vue.component('jas-table-for-list', {
 		'		<el-table-column label="序号" type="index" align="center" width="50" fixed>',
 		'		</el-table-column>',
 		'		<el-table-column v-for="item,index in fields" :key="item.oid" :fixed="index=== 0?true:false" :label="item.name" :prop="item.field" :formatter="item.formatter" min-width="130px" show-overflow-tooltip align="center">',
+		
+		 '<template slot-scope="scope" >',
+	     '<div  v-if="isShowStatus(item)">',
+	      '<el-tag  :type="isShowType(scope)" size="medium">{{ scope.row.approveStatusName }}</el-tag>',
+	     '</div>',
+		   '<span v-else>{{scope.row[item.field]}}</span>',
+		  '</template>',
 		'		</el-table-column>',
 		'		<el-table-column label="操作" align="center" width="180" fixed="right">',
 		'			<template slot-scope="scope">',
@@ -1011,6 +1018,32 @@ Vue.component('jas-table-for-list', {
 				});
 				that.refresh();
 			});
+		},
+		isShowStatus:function(item){
+			
+			if(item.field=='approveStatus'){
+				return true;
+			}else{
+				return false;
+			}
+		},
+		isShowType:function(scope){
+			if(scope.row.approveStatus=='0'){
+				scope.row.approveStatusName="未上报"
+				return 'info';
+			}
+			if(scope.row.approveStatus=='1'){
+				scope.row.approveStatusName="待审核"
+				return 'warning';
+			}
+			if(scope.row.approveStatus=='2'){
+				scope.row.approveStatusName="审核通过"
+				return 'success';
+			}
+			if(scope.row.approveStatus=='-1'){
+				scope.row.approveStatusName="驳回"
+				return 'danger';
+			}
 		},
 		handleSizeChange: function (val) {
 			this.pageSize = val;
