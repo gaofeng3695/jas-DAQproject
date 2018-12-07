@@ -1559,13 +1559,14 @@ Vue.component('jas-form-items', {
 					that.fieldsConfig[field].lessDateScope.forEach(function (item) {
 						that.fieldsConfig[item].pickerOptions = Object.assign({}, that.fieldsConfig[item].pickerOptions, {
 							disabledDate: function (time) {
+								var day=new Date(that.form[field]).getTime()-1000*24*60*60;//获取天数
 								if (that.fieldsConfig[item].isLessToday) {
 									if (!that.form[field]) {
 										return time.getTime() > new Date().getTime()
 									}
-									return time.getTime() < new Date(that.form[field]).getTime() || time.getTime() > new Date().getTime();
+									return time.getTime() < new Date(day).getTime() || time.getTime() > new Date().getTime();
 								}
-								return time.getTime() < new Date(that.form[field]).getTime();
+								return time.getTime() < new Date(day).getTime();
 							}
 						})
 					});
@@ -1833,13 +1834,14 @@ Vue.component('jas-form-items-group', {
 					that.fieldsConfig[field].lessDateScope.forEach(function (item) {
 						that.fieldsConfig[item].pickerOptions = Object.assign({}, that.fieldsConfig[item].pickerOptions, {
 							disabledDate: function (time) {
+								var day=new Date(that.form[field]).getTime()-1000*24*60*60;//获取天数
 								if (that.fieldsConfig[item].isLessToday) {
 									if (!that.form[field]) {
 										return time.getTime() > new Date().getTime()
 									}
-									return time.getTime() < new Date(that.form[field]).getTime() || time.getTime() > new Date().getTime();
+									return time.getTime() < new Date(day).getTime() || time.getTime() > new Date().getTime();
 								}
-								return time.getTime() < new Date(that.form[field]).getTime();
+								return time.getTime() < new Date(day).getTime();
 							}
 						})
 					});
