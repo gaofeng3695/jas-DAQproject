@@ -198,22 +198,24 @@
         "strategy": "all",
         "outFields":"median_stake_code,mileage,pipeline_oid,project_oid"
       },{
-        "id": "v_daq_median_stake_polyline",
+        "id": "daq_median_stake_polyline",
         "label": "中线桩连线",
         "index": 12,
-        "renderer": {
-          "style": "medianStakePolyline",
-          "labelStyle": "",
-          "labelField": ""
-        },
+         "outFields":"pipeline_oid,project_oid,pipeline_name",
         "type": "Vector",
         "source": "Vector",
         "flash": true,
         "visible": true,
+        "declutter":false,
         "loader": "jas",
         "format": "GeoJSON",
         "strategy": "all",
-        "outFields":"pipeline_oid,project_oid"
+         "renderer": {
+          "style": "medianStakePolyline",
+          "labelStyle": "lineLabelStyle",
+          "labelField": "pipeline_name"
+        }
+       
       }, {
         "id": "layerSet002",
         "label": "管道焊接补口",
@@ -233,7 +235,6 @@
 	          "template":"焊口编号:${weld_code}",
 	          "callback":""
           }},
-          "style": "pipesegment",
           "type": "Vector",
           "source": "Vector",
           "flash": true,

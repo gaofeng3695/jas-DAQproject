@@ -406,13 +406,13 @@ JasMap.require(function () {
 
  //中线桩连线   
  mapStyleTemplates.medianStakePolyline=function(feature){
-	 console.log(feature);
+	// console.log(feature);
 	 var colorArr = ['#CC0000','#00FF00','#CC33FF','#CCFF00','#FF66FF','#FFFF00','#00FFFF','#00FFCC'];
 	  if(!styleManager.medianStakePolylineStyle){
 		  styleManager.medianStakePolylineStyle={};  
 	  }
 	  var name = feature.get('pipeline_oid');
-	  console.log(name);
+	  //console.log(name);
 	  if(!styleManager.medianStakePolylineStyle[name]){
 		  var style = new ol.style.Style({
            stroke: new ol.style.Stroke({
