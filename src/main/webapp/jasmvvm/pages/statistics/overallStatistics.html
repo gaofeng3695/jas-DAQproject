@@ -232,6 +232,9 @@
         }, function (data) {
           data.data.forEach(function (item, index) {
             var type = item.statsType;
+            if(type=="lay_surveying"){
+            	 return;
+            }
             x.push(that.fieldsMap[type].name);
             var result = item.statsResult ? item.statsResult / 1000 : 0;
             var d1 = result ? result.toFixed(3) : 0;
