@@ -108,9 +108,103 @@ public class ProgressStatsDao {
 		return queryForList;
 	}
 
+	/**
+	 * <p>功能描述：根据项目oids查询项目oid和对应的名称列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOids
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月11日 下午2:46:28。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
 	public List<Map<String, String>> getProjectList(List<String> projectOids) {
 		String sql = "select oid, project_name from daq_project where active=1 and oid in (:projectOids)";
 		List queryForList = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOids", projectOids));
+		return queryForList;
+	}
+	
+	/**
+	 * <p>功能描述：根据项目分组，查询查询指定项目或时间下焊口口数。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOids
+	  * @param date
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月11日 下午3:06:20。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<ProgressStatsQueryBo> getWeldCountStats(List<String> projectOids, String date) {
+		String sql = "SELECT tt.*,p.project_name FROM ("
+					+ "(SELECT 'weld' AS statsType,weld.project_oid,COALESCE (count(weld.weld_code), 0) AS stats_result "
+					+ "FROM daq_construction_weld weld "
+					+ "WHERE weld.active = 1 AND weld.approve_status = 2 AND weld.project_oid IN (:projectOids) AND to_char(weld.construct_date,'yyyy-MM-dd') <= :date "
+					+ "GROUP BY weld.project_oid)"
+					+ ") tt LEFT JOIN (select oid,project_name,active from daq_project where active=1) p ON p.oid=tt.project_oid";
+		List queryForList = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOids", projectOids,"date",date), ProgressStatsQueryBo.class);
+		return queryForList;
+	}
+
+	/**
+	 * <p>功能描述：根据项目分组，查询查询指定项目或时间下补口口数。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOids
+	  * @param date
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月11日 下午3:08:37。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<ProgressStatsQueryBo> getPetchCountStats(List<String> projectOids, String date) {
+		String sql = "select tt.*,p.project_name from "
+					+ "(select 'patch' as stats_type, patch.project_oid, COALESCE(count(patch.weld_oid), 0) as stats_result"
+					+ " from daq_weld_anticorrosion_check patch "
+					+ "where patch.active=1 and patch.approve_status=2 and patch.project_oid in (:projectOids) AND to_char(patch.buckle_date,'yyyy-MM-dd') <= :date "
+					+ "GROUP BY patch.project_oid"
+					+ ")tt LEFT JOIN (select oid,project_name,active from daq_project where active=1) p ON p.oid=tt.project_oid";
+		List queryForList = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOids", projectOids,"date",date), ProgressStatsQueryBo.class);
+		return queryForList;
+	}
+
+	
+	/**
+	 * <p>功能描述：根据项目分组，查询查询指定项目或时间下射线检测口数。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOids
+	  * @param date
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月11日 下午3:30:48。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<ProgressStatsQueryBo> getDetectionRayCountStats(List<String> projectOids, String date) {
+		String sql = "SELECT tt.*, P .project_name FROM "
+					+ "(SELECT 'detection_ray' AS stats_type, project_oid, COALESCE (count(weld_oid), 0) AS stats_result "
+					+ "FROM daq_detection_ray "
+					+ "WHERE active = 1 AND approve_status = 2 AND project_oid IN (:projectOids) AND to_char(detection_deta,'yyyy-MM-dd') <= :date "
+					+ "GROUP BY project_oid "
+					+ " ) tt LEFT JOIN (select oid,project_name,active from daq_project where active=1) p ON p.oid=tt.project_oid";
+		List queryForList = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOids", projectOids,"date",date), ProgressStatsQueryBo.class);
+		return queryForList;
+	}
+
+	/**
+	 * <p>功能描述：根据项目分组，查询查询指定项目或时间下焊口测量口数。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOids
+	  * @param date
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月11日 下午3:31:07。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<ProgressStatsQueryBo> getMeasuredResultCountStats(List<String> projectOids, String date) {
+		String sql = "SELECT tt.*, P .project_name FROM "
+					+ "(SELECT 'measured_result' AS stats_type, project_oid, COALESCE (count(weld_oid), 0) AS stats_result "
+					+ "FROM daq_weld_measured_result "
+					+ "WHERE active = 1 AND approve_status = 2 AND project_oid IN (:projectOids) AND to_char(survey_date,'yyyy-MM-dd') <= :date "
+					+ "GROUP BY project_oid"
+					+ ") tt LEFT JOIN (select oid,project_name,active from daq_project where active=1) p ON p.oid=tt.project_oid";
+		List queryForList = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOids", projectOids,"date",date), ProgressStatsQueryBo.class);
 		return queryForList;
 	}
 	
