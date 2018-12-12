@@ -35,9 +35,9 @@ public class ProgressStatsController {
 	  * <p>创建日期:2018年12月10日 下午4:49:05。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	@PostMapping("getEachItemLengthStats")
+	@PostMapping("getEachItemLengthStatsByProject")
 	@ResponseBody
-	public Object getEachItemLengthStatsByProjectsAndDate(@RequestBody Map<String, Object> params){
+	public Object getEachItemLengthStatsByProject(@RequestBody Map<String, Object> params){
 		ListResult<Map<String, Object>> result= null;
 		try{
 			List<String> projectOids = (List<String>)params.get("projectOids");
@@ -45,7 +45,7 @@ public class ProgressStatsController {
 			if (projectOids.size() == 0 || StringUtils.isBlank(date)) {
 				return new ListResult<>(-1,"400","请选择对应的项目或日期");
 			}
-			List<Map<String, Object>> rows = progressStatsService.getEachItemLengthStats(projectOids,date);
+			List<Map<String, Object>> rows = progressStatsService.getEachItemLengthStatsByProject(projectOids,date);
 			result = new ListResult<>(1,"200","ok",rows);
 		}catch(Exception e){
 			result = new ListResult<>(-1,"400","error");
@@ -63,7 +63,7 @@ public class ProgressStatsController {
 	  * <p>创建日期:2018年12月11日 下午3:52:32。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	@PostMapping("getEachItemCountStats")
+	@PostMapping("getEachItemCountStatsByProject")
 	@ResponseBody
 	public Object getEachItemCountStatsByProjectsAndDate(@RequestBody Map<String, Object> params){
 		ListResult<Map<String, Object>> result= null;
@@ -73,7 +73,7 @@ public class ProgressStatsController {
 			if (projectOids.size() == 0 || StringUtils.isBlank(date)) {
 				return new ListResult<>(-1,"400","请选择对应的项目或日期");
 			}
-			List<Map<String, Object>> rows = progressStatsService.getEachItemCountStats(projectOids,date);
+			List<Map<String, Object>> rows = progressStatsService.getEachItemCountStatsByProject(projectOids,date);
 			result = new ListResult<>(1,"200","ok",rows);
 		}catch(Exception e){
 			result = new ListResult<>(-1,"400","error");
@@ -117,8 +117,34 @@ public class ProgressStatsController {
 		return result;
 	}
 	
-	
-	
+	/**
+	 * <p>功能描述：标段-各工序分标段累计情况统计（km）。</p>
+	  * <p> 葛建。</p>	
+	  * @param params
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月12日 下午4:37:56。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@PostMapping("getEachItemLengthStatsByTenders")
+	@ResponseBody
+	public Object getEachItemLengthStatsByTendersAndDate(@RequestBody Map<String, Object> params){
+		ListResult<Map<String, Object>> result= null;
+		try{
+			String projectOid = (String)params.get("projectOid");
+			String date = (String)params.get("date");
+			if (StringUtils.isBlank(projectOid) || StringUtils.isBlank(date)) {
+				return new ListResult<>(-1,"400","请选择对应的项目或日期");
+			}
+			List<Map<String, Object>> rows = progressStatsService.getEachItemLengthStatsByTenders(projectOid,date);
+//			result = new ListResult<>(1,"200","ok",rows);
+		}catch(Exception e){
+			result = new ListResult<>(-1,"400","error");
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 	
 	
 	
