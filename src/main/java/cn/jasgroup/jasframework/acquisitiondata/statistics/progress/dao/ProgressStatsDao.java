@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.google.common.collect.ImmutableMap;
 
 import cn.jasgroup.jasframework.acquisitiondata.statistics.progress.common.ProgressStatsQueryBo;
+import cn.jasgroup.jasframework.acquisitiondata.statistics.progress.common.ProgressStatsResultBo;
 import cn.jasgroup.jasframework.engine.jdbc.dao.CommonDataJdbcDao;
 
 @Repository
@@ -205,6 +206,90 @@ public class ProgressStatsDao {
 					+ "GROUP BY project_oid"
 					+ ") tt LEFT JOIN (select oid,project_name,active from daq_project where active=1) p ON p.oid=tt.project_oid";
 		List queryForList = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOids", projectOids,"date",date), ProgressStatsQueryBo.class);
+		return queryForList;
+	}
+
+	/**
+	 * <p>功能描述：根据项目oid查询项目下的标段oid及对应的名称列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月11日 下午6:08:48。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, String>> getTendersList(String projectOid) {
+		String sql = "select oid, tenders_name from daq_tenders where active=1 and project_oid in (:projectOid)";
+		List queryForList = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid));
+		return queryForList;
+	}
+
+	/**
+	 * <p>功能描述：标段-工序分标段分月累计完成统计（km）。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @param procedure
+	  * @param beginMonth
+	  * @param endMonth
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月11日 下午6:25:50。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<ProgressStatsResultBo> getCumulateStatsByProjectAndSingleItem(String projectOid, String procedure,
+			String beginMonth, String endMonth) {
+		String segmentSql = "";
+		switch (procedure) {
+		case "weld":
+			segmentSql = "SELECT 'weld' AS statsType, weld.tenders_oid,to_char(weld.construct_date,'yyyy-MM') as month_of_year,"
+						+ "COALESCE (SUM(pipe.pipe_length), 0) + COALESCE (SUM(hot.pipe_length), 0) + COALESCE (SUM(cold.pipe_length), 0) AS sum_per_month "
+						+ "FROM daq_construction_weld weld "
+						+ "left join daq_material_pipe pipe on pipe.oid = weld.front_pipe_oid and weld.front_pipe_type = 'pipe_type_code_001' and pipe.active=1 "
+						+ "left join daq_material_hot_bends hot on hot.oid = weld.front_pipe_oid and weld.front_pipe_type = 'pipe_type_code_002' and hot.active=1 "
+						+ "left join daq_material_pipe_cold_bending cold on cold.oid = weld.front_pipe_oid and weld.front_pipe_type = 'pipe_type_code_008' and cold.active=1 "
+						+ "WHERE weld.active = 1 AND weld.approve_status = 2 AND weld.project_oid IN (:projectOid) "
+						+ "AND to_char(weld.construct_date,'yyyy-MM') BETWEEN :beginMonth and :endMonth "
+						+ "GROUP by to_char(weld.construct_date,'yyyy-MM'),weld.tenders_oid ORDER BY MONTH_of_year";
+			break;
+		case "patch":
+			segmentSql = "SELECT 'patch' AS statsType, patch.tenders_oid,to_char(patch.buckle_date,'yyyy-MM') as month_of_year,"
+						+ "COALESCE (SUM(pipe.pipe_length), 0) + COALESCE (SUM(hot.pipe_length), 0) + COALESCE (SUM(cold.pipe_length), 0) AS sum_per_month "
+						+ "FROM daq_weld_anticorrosion_check patch "
+						+ "LEFT JOIN daq_construction_weld weld on weld.oid=patch.weld_oid and weld.active=1 and weld.approve_status=2 "
+						+ "left join daq_material_pipe pipe on pipe.oid = weld.front_pipe_oid and weld.front_pipe_type = 'pipe_type_code_001' and pipe.active=1 "
+						+ "left join daq_material_hot_bends hot on hot.oid = weld.front_pipe_oid and weld.front_pipe_type = 'pipe_type_code_002' and hot.active=1 "
+						+ "left join daq_material_pipe_cold_bending cold on cold.oid = weld.front_pipe_oid and weld.front_pipe_type = 'pipe_type_code_008' and cold.active=1 "
+						+ "WHERE patch.active = 1 AND patch.approve_status = 2 AND patch.project_oid IN (:projectOid) "
+						+ "AND to_char(patch.buckle_date,'yyyy-MM') BETWEEN :beginMonth and :endMonth "
+						+ "GROUP by to_char(patch.buckle_date,'yyyy-MM'),patch.tenders_oid ORDER BY MONTH_of_year";
+			break;
+		case "lay_pipe_trench_backfill":
+			segmentSql = "SELECT 'lay_pipe_trench_backfill' AS statsType, backfill.tenders_oid,to_char(backfill.construct_date,'yyyy-MM') as month_of_year,"
+						+ "COALESCE (SUM(backfill_length), 0) AS sum_per_month "
+						+ "FROM daq_lay_pipe_trench_backfill backfill "
+						+ "WHERE backfill.active = 1 AND backfill.approve_status = 2 AND backfill.project_oid IN (:projectOid) "
+						+ "AND to_char(backfill.construct_date,'yyyy-MM') BETWEEN :beginMonth and :endMonth "
+						+ "GROUP by to_char(backfill.construct_date,'yyyy-MM'),backfill.tenders_oid ORDER BY MONTH_of_year";
+			break;
+		case "lay_land_restoration":
+			segmentSql = "SELECT 'lay_land_restoration' AS statsType, land.tenders_oid,to_char(land.construct_date,'yyyy-MM') as month_of_year,"
+						+ "COALESCE (SUM(length), 0) AS sum_per_month "
+						+ "FROM daq_lay_land_restoration land "
+						+ "WHERE land.active = 1 AND land.approve_status = 2 AND land.project_oid IN (:projectOid) "
+						+ "AND to_char(land.construct_date,'yyyy-MM') BETWEEN :beginMonth and :endMonth "
+						+ "GROUP by to_char(land.construct_date,'yyyy-MM'),land.tenders_oid ORDER BY MONTH_of_year";
+			break;
+		default:
+			return null;
+		}
+		String sql = "SELECT tenders_oid,te.tenders_name,month_of_year,sum_per_month,"
+					+ "(SELECT SUM (sum_per_month) FROM (" +segmentSql+ ") AS test_table_1 "
+							+ "WHERE test_table_1.month_of_year <= test_table_2.month_of_year and test_table_1.tenders_oid=test_table_2.tenders_oid "
+					+ ") AS total_by_month "
+					+ "FROM (" +segmentSql+ ") AS test_table_2 "
+					+ "LEFT JOIN (select oid,tenders_name from daq_tenders where active=1) te on te.oid=test_table_2.tenders_oid "
+					+ "ORDER BY month_of_year;";
+		List queryForList = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid,"beginMonth",beginMonth,"endMonth",endMonth),ProgressStatsResultBo.class);
 		return queryForList;
 	}
 	
