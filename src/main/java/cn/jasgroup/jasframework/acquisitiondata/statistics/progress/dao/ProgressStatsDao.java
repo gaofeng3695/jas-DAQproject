@@ -28,7 +28,7 @@ public class ProgressStatsDao {
 	   * <p>创建日期:2018年12月11日 上午11:06:11。</p>
 	   * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	  */
-	public List<ProgressStatsQueryBo> getWeldLengthStats(List<String> projectOids, String date) {
+	public List<ProgressStatsQueryBo> getWeldLengthStatsByProject(List<String> projectOids, String date) {
 		String sql = "SELECT tt.*,p.project_name FROM ("
 					+ "(SELECT 'weld' AS statsType,weld.project_oid,COALESCE (SUM(pipe.pipe_length), 0) + COALESCE (SUM(hot.pipe_length), 0) + COALESCE (SUM(cold.pipe_length), 0) AS stats_result "
 					+ "FROM daq_construction_weld weld "
@@ -52,7 +52,7 @@ public class ProgressStatsDao {
 	  * <p>创建日期:2018年12月11日 上午11:07:17。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public List<ProgressStatsQueryBo> getPetchLengthStats(List<String> projectOids, String date) {
+	public List<ProgressStatsQueryBo> getPetchLengthStatsByProject(List<String> projectOids, String date) {
 		String sql = "select tt.*,p.project_name from "
 					+ "(select 'patch' as stats_type, patch.project_oid, COALESCE(sum(pipe.pipe_length), 0) + COALESCE(sum(hot.pipe_length), 0) + COALESCE(sum(cold.pipe_length), 0) as stats_result"
 					+ " from daq_weld_anticorrosion_check patch "
@@ -77,7 +77,7 @@ public class ProgressStatsDao {
 	  * <p>创建日期:2018年12月11日 上午11:07:49。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public List<ProgressStatsQueryBo> getBackFillLengthStats(List<String> projectOids, String date) {
+	public List<ProgressStatsQueryBo> getBackFillLengthStatsByProject(List<String> projectOids, String date) {
 		String sql = "select tt.*,p.project_name from "
 					+ "(SELECT 'lay_pipe_trench_backfill' AS stats_type, project_oid, COALESCE (SUM(backfill_length), 0) AS stats_result "
 					+ "FROM daq_lay_pipe_trench_backfill "
@@ -98,7 +98,7 @@ public class ProgressStatsDao {
 	  * <p>创建日期:2018年12月11日 上午11:21:27。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public List<ProgressStatsQueryBo> getLandRestorationLengthStats(List<String> projectOids, String date) {
+	public List<ProgressStatsQueryBo> getLandRestorationLengthStatsByProject(List<String> projectOids, String date) {
 		String sql = "select tt.*,p.project_name from "
 				+ "(select 'lay_land_restoration' as stats_type,llr.project_oid, COALESCE(sum(llr.length), 0) as stats_result "
 				+ "from daq_lay_land_restoration  llr "
@@ -134,7 +134,7 @@ public class ProgressStatsDao {
 	  * <p>创建日期:2018年12月11日 下午3:06:20。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public List<ProgressStatsQueryBo> getWeldCountStats(List<String> projectOids, String date) {
+	public List<ProgressStatsQueryBo> getWeldCountStatsByProject(List<String> projectOids, String date) {
 		String sql = "SELECT tt.*,p.project_name FROM ("
 					+ "(SELECT 'weld' AS statsType,weld.project_oid,COALESCE (count(weld.weld_code), 0) AS stats_result "
 					+ "FROM daq_construction_weld weld "
@@ -155,7 +155,7 @@ public class ProgressStatsDao {
 	  * <p>创建日期:2018年12月11日 下午3:08:37。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public List<ProgressStatsQueryBo> getPetchCountStats(List<String> projectOids, String date) {
+	public List<ProgressStatsQueryBo> getPetchCountStatsByProject(List<String> projectOids, String date) {
 		String sql = "select tt.*,p.project_name from "
 					+ "(select 'patch' as stats_type, patch.project_oid, COALESCE(count(patch.weld_oid), 0) as stats_result"
 					+ " from daq_weld_anticorrosion_check patch "
@@ -177,7 +177,7 @@ public class ProgressStatsDao {
 	  * <p>创建日期:2018年12月11日 下午3:30:48。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public List<ProgressStatsQueryBo> getDetectionRayCountStats(List<String> projectOids, String date) {
+	public List<ProgressStatsQueryBo> getDetectionRayCountStatsByProject(List<String> projectOids, String date) {
 		String sql = "SELECT tt.*, P .project_name FROM "
 					+ "(SELECT 'detection_ray' AS stats_type, project_oid, COALESCE (count(weld_oid), 0) AS stats_result "
 					+ "FROM daq_detection_ray "
@@ -198,7 +198,7 @@ public class ProgressStatsDao {
 	  * <p>创建日期:2018年12月11日 下午3:31:07。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public List<ProgressStatsQueryBo> getMeasuredResultCountStats(List<String> projectOids, String date) {
+	public List<ProgressStatsQueryBo> getMeasuredResultCountStatsByProject(List<String> projectOids, String date) {
 		String sql = "SELECT tt.*, P .project_name FROM "
 					+ "(SELECT 'measured_result' AS stats_type, project_oid, COALESCE (count(weld_oid), 0) AS stats_result "
 					+ "FROM daq_weld_measured_result "
