@@ -169,19 +169,19 @@
 
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="长度(m)">
-								<el-input-number :precision="3" :step="1" :max="9999" controls-position="right" v-model="formData.pipeLength" clearable
+								<el-input-number :precision="3" :step="1" :max="9999" :disabled="true" controls-position="right" v-model="formData.pipeLength" clearable
 								  placeholder="请输入长度" size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="管径(mm)">
-								<el-input-number :precision="2" :step="1" :max="9999" controls-position="right" v-model="formData.pipeDiameter" clearable
+								<el-input-number :precision="2" :step="1" :max="9999" :disabled="true" controls-position="right" v-model="formData.pipeDiameter" clearable
 								  placeholder="请输入管径" size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="壁厚(mm)">
-								<el-input-number :precision="2" :step="1" :max="9999" controls-position="right" v-model="formData.wallThickness" clearable
+								<el-input-number :precision="2" :step="1" :max="9999" :disabled="true" controls-position="right" v-model="formData.wallThickness" clearable
 								  placeholder="请输入壁厚" size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
@@ -534,7 +534,11 @@
 				obj = that.domain.pipeOids.find((item) => { //这里的userList就是上面遍历的数据源
 					return item.key === val; //筛选出匹配数据
 				});
-				this.formData.pipeColdBendingCode = obj.value + "-LW";
+				that.formData.pipeColdBendingCode = obj.value + "-LW";
+				that.formData.pipeLength = obj.length;
+				that.formData.pipeDiameter = obj.pipe_diameter;
+				that.formData.wallThickness = obj.wall_thickness;
+				
 			},
 			submit: function (formName) {
 				var that = this;

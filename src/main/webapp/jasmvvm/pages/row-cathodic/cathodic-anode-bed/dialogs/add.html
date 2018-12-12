@@ -334,6 +334,16 @@
 					name: '地床连接阴保电源',
 					field: 'connectionPower',
 				}],
+				pickerOptionsStart: {
+					disabledDate: function (time) {
+						return time.getTime() > new Date().getTime()
+					}
+				},
+				pickerOptionsEnd: {
+					disabledDate: function (time) {
+						return time.getTime() > new Date().getTime()
+					}
+				},
 				fieldsConfig: {
 					groundBed: {
 						type: 'input',
@@ -691,7 +701,9 @@
 						if (!that.formData.constructDate) {
 							return time.getTime() > new Date().getTime()
 						}
-						return time.getTime() < new Date(that.formData.constructDate).getTime() || time.getTime() > new Date().getTime();
+						var day=new Date(that.formData.constructDate).getTime()-1000*24*60*60;//获取天数
+			    	return time.getTime() <new Date(day).getTime()||time.getTime()>new Date().getTime();
+					//	return time.getTime() < new Date(that.formData.constructDate).getTime() || time.getTime() > new Date().getTime();
 					}
 				})
 			},

@@ -47,6 +47,14 @@
 		.height {
 			height: 41px;
 		}
+		.el-tag--medium{
+		    display:inline-block;
+		    text-align:center;
+		    width:60px;
+		}
+		.el-tag{
+		    padding:0 !important
+		}
 	</style>
 </head>
 
@@ -166,6 +174,15 @@
 				<el-table-column type="index" label="序号" width="50" align="center" fixed></el-table-column>
 				<el-table-column v-for="item,index in tableColumn" :fixed="index===0?true:false" :prop="item.id" :label="item.name" :key="item.id"
 				  align="center" min-width="130px" show-overflow-tooltip>
+				     <template slot-scope="scope" >
+				     <div  v-if="item.id=='approve_status_name'">
+				      <el-tag  v-if="scope.row.approve_status=='0'"  type="info" size="medium">{{ scope.row.approve_status_name }}</el-tag>
+					   <el-tag  v-if="scope.row.approve_status=='1'"  type="warning" size="medium">{{ scope.row.approve_status_name }}</el-tag>
+					   <el-tag  v-if="scope.row.approve_status=='2'"  type="success" size="medium">{{ scope.row.approve_status_name }}</el-tag>
+					   <el-tag  v-if="scope.row.approve_status=='-1'" type="danger" size="medium">{{ scope.row.approve_status_name }}</el-tag>
+				     </div>
+					   <span v-else>{{scope.row[item.id]}}</span>
+					  </template>
 				</el-table-column>
 				<el-table-column fixed="right" label="操作" :width="config.table.tableWidth" align="center">
 					<template slot-scope="scope">
@@ -363,10 +380,10 @@
 				var oids = this.scannerRows.map(function (item) {
 					return item.oid;
 				});
-				console.log(oids);
+			//	console.log(oids);
 				var url = jasTools.base.rootPath + "/daq/materialPipe/produceScanner.do";
 				jasTools.ajax.post(url, {oids:oids,functionCode:this.menuCode}, function (data) {
-					console.log(data);
+				//	console.log(data);
 					if(data.status){
 						jasTools.ajax.downloadByIframe('post', jasTools.base.rootPath + "/daq/materialPipe/downloadScanner.do", {
 							fileOid: data.data
@@ -607,6 +624,7 @@
 			repeatComplate: function (data) {
 				var that = this;
 				that.tableColumn = that.tableColumns.sort(that.sortByIndex('listIndex'));
+				//console.log(that.tableColumn);
 				that.requestTableList();
 			},
 			sortByIndex: function (name) {
