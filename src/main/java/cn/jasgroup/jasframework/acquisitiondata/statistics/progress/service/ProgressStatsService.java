@@ -42,19 +42,19 @@ public class ProgressStatsService {
 		//焊接
 		List<ProgressStatsQueryBo> weldList = progressStatsDao.getWeldLengthStatsByProject(projectOids,date);
 		//封装焊接工序的返回值
-		setListItems(list,weldList,"weld",projectList);
+		setListItemsForProject(list,weldList,"weld",projectList);
 		//补口
 		List<ProgressStatsQueryBo> petchList = progressStatsDao.getPetchLengthStatsByProject(projectOids,date);
 		//封装补口工序的返回值
-		setListItems(list,petchList,"patch",projectList);
+		setListItemsForProject(list,petchList,"patch",projectList);
 		//管沟回填
 		List<ProgressStatsQueryBo> backFillList = progressStatsDao.getBackFillLengthStatsByProject(projectOids,date);
 		//封装管沟回填的返回值
-		setListItems(list,backFillList,"lay_pipe_trench_backfill",projectList);
+		setListItemsForProject(list,backFillList,"lay_pipe_trench_backfill",projectList);
 		//地貌恢复
 		List<ProgressStatsQueryBo> landRestorationList = progressStatsDao.getLandRestorationLengthStatsByProject(projectOids,date);
 		//封装地貌恢复的返回值
-		setListItems(list,landRestorationList,"lay_land_restoration",projectList);
+		setListItemsForProject(list,landRestorationList,"lay_land_restoration",projectList);
 		return list;
 	}
 	
@@ -67,7 +67,7 @@ public class ProgressStatsService {
 	  * <p>创建日期:2018年12月11日 下午1:59:28。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public void setListItems(List<Map<String, Object>> resultList, List<ProgressStatsQueryBo> dataList,String type, List<Map<String, String>> projectList){
+	public void setListItemsForProject(List<Map<String, Object>> resultList, List<ProgressStatsQueryBo> dataList,String type, List<Map<String, String>> projectList){
 		Map<String, Object> map = new HashMap<>();
 		//封装类型和名称
 		switch (type) {
@@ -161,19 +161,19 @@ public class ProgressStatsService {
 		//焊接
 		List<ProgressStatsQueryBo> weldList = progressStatsDao.getWeldCountStatsByProject(projectOids,date);
 		//封装焊接工序的返回值
-		setListItems(list,weldList,"weld",projectList);
+		setListItemsForProject(list,weldList,"weld",projectList);
 		//补口
 		List<ProgressStatsQueryBo> petchList = progressStatsDao.getPetchCountStatsByProject(projectOids,date);
 		//封装补口工序的返回值
-		setListItems(list,petchList,"petch",projectList);
+		setListItemsForProject(list,petchList,"petch",projectList);
 		//射线检测
 		List<ProgressStatsQueryBo> detectionRayList = progressStatsDao.getDetectionRayCountStatsByProject(projectOids,date);
 		//封装射线检测工序的返回值
-		setListItems(list,detectionRayList,"detection_ray",projectList);
+		setListItemsForProject(list,detectionRayList,"detection_ray",projectList);
 		//射线检测
 		List<ProgressStatsQueryBo> measuredResultList = progressStatsDao.getMeasuredResultCountStatsByProject(projectOids,date);
 		//封装射线检测工序的返回值
-		setListItems(list,measuredResultList,"measured_result",projectList);
+		setListItemsForProject(list,measuredResultList,"measured_result",projectList);
 		return list;
 	}
 
@@ -266,19 +266,100 @@ public class ProgressStatsService {
 		//封装返回值
 		List<Map<String, Object>> list = new ArrayList<>();
 		//根据项目oids查询项目名称
-		List<Map<String, String>> projectList = progressStatsDao.getTendersList(projectOid);
+		List<Map<String, String>> tendersList = progressStatsDao.getTendersList(projectOid);
 		//焊接
-//		List<ProgressStatsQueryBo> weldList = progressStatsDao.getWeldLengthStatsByTenders(projectOid,date);
-//		//封装焊接工序的返回值
+		List<ProgressStatsQueryBo> weldList = progressStatsDao.getWeldLengthStatsByTenders(projectOid,date);
+//		// 封装焊接工序的返回值
+		setListItemsForTenders(list,weldList,"weld",tendersList);
 //		//补口
-//		List<ProgressStatsQueryBo> petchList = progressStatsDao.getPetchLengthStatsByTenders(projectOid,date);
+		List<ProgressStatsQueryBo> petchList = progressStatsDao.getPetchLengthStatsByTenders(projectOid,date);
 //		//封装补口工序的返回值
+		setListItemsForTenders(list,petchList,"patch",tendersList);
 //		//管沟回填
-//		List<ProgressStatsQueryBo> backFillList = progressStatsDao.getBackFillLengthStatsByTenders(projectOid,date);
+		List<ProgressStatsQueryBo> backFillList = progressStatsDao.getBackFillLengthStatsByTenders(projectOid,date);
 //		//封装管沟回填的返回值
+		setListItemsForTenders(list,backFillList,"lay_pipe_trench_backfill",tendersList);
 //		//地貌恢复
-//		List<ProgressStatsQueryBo> landRestorationList = progressStatsDao.getLandRestorationLengthStatsByTenders(projectOid,date);
+		List<ProgressStatsQueryBo> landRestorationList = progressStatsDao.getLandRestorationLengthStatsByTenders(projectOid,date);
 		//封装地貌恢复的返回值
+		setListItemsForTenders(list,landRestorationList,"lay_land_restoration",tendersList);
 		return list;
 	}
+	
+	public void setListItemsForTenders(List<Map<String, Object>> resultList, List<ProgressStatsQueryBo> dataList,String type, List<Map<String, String>> tendersList){
+		Map<String, Object> map = new HashMap<>();
+		//封装类型和名称
+		switch (type) {
+		case "weld":
+			map.put("type", "weld");
+			map.put("typeName", "焊接");
+			break;
+		case "patch":
+			map.put("type", "patch");
+			map.put("typeName", "补口");
+			break;
+		case "lay_pipe_trench_backfill":
+			map.put("type", "lay_pipe_trench_backfill");
+			map.put("typeName", "管沟回填");
+			break;
+		case "lay_land_restoration":
+			map.put("type", "lay_land_restoration");
+			map.put("typeName", "地貌恢复");
+			break;
+		case "detectionRayList":
+			map.put("type", "detectionRayList");
+			map.put("typeName", "射线检测");
+			break;
+		case "measured_result":
+			map.put("type", "measured_result");
+			map.put("typeName", "焊口测量");
+			break;
+		default:
+			break;
+		}
+		//若dataList不为空，取对应数据封装
+		if (dataList.size() > 0) {
+			Double[] statsResult = new Double[tendersList.size()];
+			//将statsResult数组数值默认填充为0.0
+			Arrays.fill(statsResult, 0.0);
+			String[] tendersNames = new String[tendersList.size()];
+			String[] tendersOids = new String[tendersList.size()];
+			for (int i = 0; i < dataList.size(); i++) {
+				statsResult[i] = Double.parseDouble(dataList.get(i).getStatsResult().toString());
+				tendersNames[i] = dataList.get(i).getProjectName();
+				tendersOids[i] = dataList.get(i).getProjectOid();
+			}
+			//若dataList中数据不包含传的项目，将遗失的项目及对应的数据补0
+			//用于判断向数组中哪个索引位置插值
+			int lastIndex = tendersOids.length;
+			for (int i = 0; i < tendersList.size(); i++) {
+				int index = getIndex(tendersOids, tendersList.get(i).get("oid"));
+				if (index == -1) {
+					lastIndex -= 1;
+					tendersOids[lastIndex] = tendersList.get(i).get("oid");
+					tendersNames[lastIndex] = tendersList.get(i).get("tendersName");
+				}
+			}
+			map.put("statsResult", statsResult);
+			map.put("tendersNames", tendersNames);
+			map.put("tendersOids", tendersOids);
+			resultList.add(map);
+		} else {
+			//若dataList为空，封装项目oid和名称，将对应的长度封装为0
+			Double[] statsResult = new Double[tendersList.size()];
+			String[] projectName = new String[tendersList.size()];
+			String[] projectOid = new String[tendersList.size()];
+			for (int i = 0; i < tendersList.size(); i++) {
+				statsResult[i] = 0.0;
+				projectName[i] = tendersList.get(i).get("tendersName");
+				projectOid[i] = tendersList.get(i).get("oid");
+			}
+			map.put("statsResult", statsResult);
+			map.put("tendersNames", projectName);
+			map.put("tendersOids", projectOid);
+			resultList.add(map);
+		}
+	}
+	
+	
 }
