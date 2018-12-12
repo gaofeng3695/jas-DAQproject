@@ -137,7 +137,7 @@ public class ProgressStatsController {
 				return new ListResult<>(-1,"400","请选择对应的项目或日期");
 			}
 			List<Map<String, Object>> rows = progressStatsService.getEachItemLengthStatsByTenders(projectOid,date);
-//			result = new ListResult<>(1,"200","ok",rows);
+			result = new ListResult<>(1,"200","ok",rows);
 		}catch(Exception e){
 			result = new ListResult<>(-1,"400","error");
 			e.printStackTrace();

@@ -31,6 +31,16 @@ public class ProgressStatsQueryBo extends StatsResultBo {
 	 */
 	private String projectName;
 
+	/*
+	 * 项目oid
+	 */
+	private String tendersOid;
+	
+	/*
+	 * 项目名称
+	 */
+	private String tendersName;
+
 	public String getStatsDate() {
 		return statsDate;
 	}
@@ -53,6 +63,22 @@ public class ProgressStatsQueryBo extends StatsResultBo {
 
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
+	}
+
+	public String getTendersOid() {
+		return tendersOid;
+	}
+
+	public void setTendersOid(String tendersOid) {
+		this.tendersOid = tendersOid;
+	}
+
+	public String getTendersName() {
+		return tendersName;
+	}
+
+	public void setTendersName(String tendersName) {
+		this.tendersName = tendersName;
 	}
 
 }

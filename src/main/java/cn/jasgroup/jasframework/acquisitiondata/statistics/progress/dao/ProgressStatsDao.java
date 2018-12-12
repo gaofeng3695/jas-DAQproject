@@ -247,7 +247,7 @@ public class ProgressStatsDao {
 						+ "left join daq_material_pipe pipe on pipe.oid = weld.front_pipe_oid and weld.front_pipe_type = 'pipe_type_code_001' and pipe.active=1 "
 						+ "left join daq_material_hot_bends hot on hot.oid = weld.front_pipe_oid and weld.front_pipe_type = 'pipe_type_code_002' and hot.active=1 "
 						+ "left join daq_material_pipe_cold_bending cold on cold.oid = weld.front_pipe_oid and weld.front_pipe_type = 'pipe_type_code_008' and cold.active=1 "
-						+ "WHERE weld.active = 1 AND weld.approve_status = 2 AND weld.project_oid IN (:projectOid) "
+						+ "WHERE weld.active = 1 AND weld.approve_status = 2 AND weld.project_oid = :projectOid "
 						+ "AND to_char(weld.construct_date,'yyyy-MM') BETWEEN :beginMonth and :endMonth "
 						+ "GROUP by to_char(weld.construct_date,'yyyy-MM'),weld.tenders_oid ORDER BY MONTH_of_year";
 			break;
@@ -259,7 +259,7 @@ public class ProgressStatsDao {
 						+ "left join daq_material_pipe pipe on pipe.oid = weld.front_pipe_oid and weld.front_pipe_type = 'pipe_type_code_001' and pipe.active=1 "
 						+ "left join daq_material_hot_bends hot on hot.oid = weld.front_pipe_oid and weld.front_pipe_type = 'pipe_type_code_002' and hot.active=1 "
 						+ "left join daq_material_pipe_cold_bending cold on cold.oid = weld.front_pipe_oid and weld.front_pipe_type = 'pipe_type_code_008' and cold.active=1 "
-						+ "WHERE patch.active = 1 AND patch.approve_status = 2 AND patch.project_oid IN (:projectOid) "
+						+ "WHERE patch.active = 1 AND patch.approve_status = 2 AND patch.project_oid = :projectOid "
 						+ "AND to_char(patch.buckle_date,'yyyy-MM') BETWEEN :beginMonth and :endMonth "
 						+ "GROUP by to_char(patch.buckle_date,'yyyy-MM'),patch.tenders_oid ORDER BY MONTH_of_year";
 			break;
@@ -267,7 +267,7 @@ public class ProgressStatsDao {
 			segmentSql = "SELECT 'lay_pipe_trench_backfill' AS statsType, backfill.tenders_oid,to_char(backfill.construct_date,'yyyy-MM') as month_of_year,"
 						+ "COALESCE (SUM(backfill_length), 0) AS sum_per_month "
 						+ "FROM daq_lay_pipe_trench_backfill backfill "
-						+ "WHERE backfill.active = 1 AND backfill.approve_status = 2 AND backfill.project_oid IN (:projectOid) "
+						+ "WHERE backfill.active = 1 AND backfill.approve_status = 2 AND backfill.project_oid = :projectOid "
 						+ "AND to_char(backfill.construct_date,'yyyy-MM') BETWEEN :beginMonth and :endMonth "
 						+ "GROUP by to_char(backfill.construct_date,'yyyy-MM'),backfill.tenders_oid ORDER BY MONTH_of_year";
 			break;
@@ -275,7 +275,7 @@ public class ProgressStatsDao {
 			segmentSql = "SELECT 'lay_land_restoration' AS statsType, land.tenders_oid,to_char(land.construct_date,'yyyy-MM') as month_of_year,"
 						+ "COALESCE (SUM(length), 0) AS sum_per_month "
 						+ "FROM daq_lay_land_restoration land "
-						+ "WHERE land.active = 1 AND land.approve_status = 2 AND land.project_oid IN (:projectOid) "
+						+ "WHERE land.active = 1 AND land.approve_status = 2 AND land.project_oid = :projectOid "
 						+ "AND to_char(land.construct_date,'yyyy-MM') BETWEEN :beginMonth and :endMonth "
 						+ "GROUP by to_char(land.construct_date,'yyyy-MM'),land.tenders_oid ORDER BY MONTH_of_year";
 			break;
@@ -290,6 +290,98 @@ public class ProgressStatsDao {
 					+ "LEFT JOIN (select oid,tenders_name from daq_tenders where active=1) te on te.oid=test_table_2.tenders_oid "
 					+ "ORDER BY month_of_year;";
 		List queryForList = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid,"beginMonth",beginMonth,"endMonth",endMonth),ProgressStatsResultBo.class);
+		return queryForList;
+	}
+
+	/**
+	 * <p>功能描述：根据标段分组，查询指定项目或日期下焊接长度。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @param date
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月12日 下午4:45:00。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<ProgressStatsQueryBo> getWeldLengthStatsByTenders(String projectOid, String date) {
+		String sql = "SELECT tt.*,p.tenders_name FROM ("
+					+ "(SELECT 'weld' AS statsType,weld.tenders_oid,"
+					+ "COALESCE(SUM(pipe.pipe_length), 0)+COALESCE(SUM(hot.pipe_length), 0)+COALESCE(SUM(cold.pipe_length), 0) AS stats_result "
+					+ "FROM daq_construction_weld weld "
+					+ "left join daq_material_pipe pipe on pipe.oid = weld.front_pipe_oid and weld.front_pipe_type = 'pipe_type_code_001' and pipe.active=1 "
+					+ "left join daq_material_hot_bends hot on hot.oid = weld.front_pipe_oid and weld.front_pipe_type = 'pipe_type_code_002' and hot.active=1  "
+					+ "left join daq_material_pipe_cold_bending cold on cold.oid = weld.front_pipe_oid and weld.front_pipe_type = 'pipe_type_code_008' and cold.active=1  "
+					+ "WHERE weld.active = 1 AND weld.approve_status = 2 AND weld.project_oid = :projectOid "
+					+ "AND to_char(weld.construct_date,'yyyy-MM-dd') <= :date GROUP BY weld.tenders_oid)"
+					+ ") tt LEFT JOIN (select oid,tenders_name,active from daq_tenders where active=1) p ON p.oid=tt.tenders_oid";
+		List queryForList = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid,"date",date), ProgressStatsQueryBo.class);
+		return queryForList;
+	}
+
+	/**
+	 * <p>功能描述：根据标段分组，查询指定项目或日期下补口长度。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @param date
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月12日 下午5:27:47。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<ProgressStatsQueryBo> getPetchLengthStatsByTenders(String projectOid, String date) {
+		String sql = "select tt.*,p.tenders_name from "
+					+ "(select 'patch' as stats_type, patch.tenders_oid, COALESCE(sum(pipe.pipe_length), 0) + COALESCE(sum(hot.pipe_length), 0) + COALESCE(sum(cold.pipe_length), 0) as stats_result"
+					+ " from daq_weld_anticorrosion_check patch "
+					+ "left join daq_construction_weld w on patch.weld_oid = w.oid and w.active = 1 and w.approve_status=2 "
+					+ "left join daq_material_pipe pipe on pipe.oid = w.front_pipe_oid and w.front_pipe_type = 'pipe_type_code_001' and pipe.active=1 "
+					+ "left join daq_material_hot_bends hot on hot.oid = w.front_pipe_oid and w.front_pipe_type = 'pipe_type_code_002' and hot.active=1 "
+					+ "left join daq_material_pipe_cold_bending cold on cold.oid = w.front_pipe_oid and w.front_pipe_type = 'pipe_type_code_008' and cold.active=1 "
+					+ "where patch.active=1 and patch.approve_status=2 and patch.project_oid = :projectOid AND to_char(patch.buckle_date,'yyyy-MM-dd') <= :date "
+					+ "GROUP BY patch.tenders_oid"
+					+ ") tt LEFT JOIN (select oid,tenders_name,active from daq_tenders where active=1) p ON p.oid=tt.tenders_oid";
+		List queryForList = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid,"date",date), ProgressStatsQueryBo.class);
+		return queryForList;
+	}
+
+	/**
+	 * <p>功能描述：根据标段分组，查询指定项目或日期下管沟回填长度。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @param date
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月12日 下午5:36:01。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<ProgressStatsQueryBo> getBackFillLengthStatsByTenders(String projectOid, String date) {
+		String sql = "select tt.*,p.tenders_name from "
+					+ "(SELECT 'lay_pipe_trench_backfill' AS stats_type, tenders_oid, COALESCE (SUM(backfill_length), 0) AS stats_result "
+					+ "FROM daq_lay_pipe_trench_backfill "
+					+ "WHERE active = 1 AND approve_status = 2 AND project_oid = :projectOid AND to_char(construct_date, 'yyyy-MM-dd') <= :date "
+					+ "GROUP BY tenders_oid  "
+					+ ") tt LEFT JOIN (select oid,tenders_name,active from daq_tenders where active=1) p ON p.oid=tt.tenders_oid";
+		List queryForList = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid,"date",date), ProgressStatsQueryBo.class);
+		return queryForList;
+	}
+
+	/**
+	 * <p>功能描述：根据标段分组，查询指定项目或日期下地貌恢复长度。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @param date
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月12日 下午5:38:34。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<ProgressStatsQueryBo> getLandRestorationLengthStatsByTenders(String projectOid, String date) {
+		String sql = "select tt.*,p.tenders_name from "
+				+ "(select 'lay_land_restoration' as stats_type,llr.tenders_oid, COALESCE(sum(llr.length), 0) as stats_result "
+				+ "from daq_lay_land_restoration  llr "
+				+ "where llr.active = 1 and llr.approve_status = 2 and llr.project_oid = :projectOid "
+				+ "and to_char(llr.construct_date, 'yyyy-MM-dd') <= :date GROUP BY llr.tenders_oid) tt "
+				+ "LEFT JOIN (select oid,tenders_name,active from daq_tenders where active=1) p ON p.oid=tt.tenders_oid";
+		List queryForList = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid,"date",date), ProgressStatsQueryBo.class);
 		return queryForList;
 	}
 	
