@@ -5033,100 +5033,6 @@ comment on column daq_data_approve.modify_datetime is '修改时间';
 comment on column daq_data_approve.active is '有效标志';
 create index INDEX_DAQ_DATA_APPROVE_BUSINESS_OID_5 ON daq_data_approve ( business_oid );
 /**********数据审核记录表end***************/
-/*********空间数据相关start*********/
-select AddGeometryColumn('public', 'daq_median_stake', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_median_stake_geom_idx ON public.daq_median_stake USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_construction_weld', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_construction_weld_geom_idx ON public.daq_construction_weld USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_weld_rework_weld', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_weld_rework_weld_geom_idx ON public.daq_weld_rework_weld USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_weld_measured_result', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_weld_measured_result_geom_idx ON public.daq_weld_measured_result USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_lay_surveying', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_lay_surveying_geom_idx ON public.daq_lay_surveying USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_lay_pipe_trench_excavation', 'geom', 4490, 'LINESTRING', 4);
-CREATE INDEX daq_lay_pipe_trench_excavation_geom_idx ON public.daq_lay_pipe_trench_excavation USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_lay_pipe_trench_backfill', 'geom', 4490, 'LINESTRING', 4);
-CREATE INDEX daq_lay_pipe_trench_backfill_geom_idx ON public.daq_lay_pipe_trench_backfill USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_lay_land_restoration', 'geom', 4490, 'LINESTRING', 4);
-CREATE INDEX daq_lay_land_restoration_geom_idx ON public.daq_lay_land_restoration USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_lay_thermal_insulation', 'geom', 4490, 'LINESTRING', 4);
-CREATE INDEX daq_lay_thermal_insulation_geom_idx ON public.daq_lay_thermal_insulation USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_cross_excavation', 'geom', 4490, 'LINESTRING', 4);
-CREATE INDEX daq_cross_excavation_geom_idx ON public.daq_cross_excavation USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_cross_pipe_jacking', 'geom', 4490, 'LINESTRING', 4);
-CREATE INDEX daq_cross_pipe_jacking_geom_idx ON public.daq_cross_pipe_jacking USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_cross_box_culvert', 'geom', 4490, 'LINESTRING', 4);
-CREATE INDEX daq_cross_box_culvert_geom_idx ON public.daq_cross_box_culvert USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_cross_drilling', 'geom', 4490, 'LINESTRING', 4);
-CREATE INDEX daq_cross_drilling_geom_idx ON public.daq_cross_drilling USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_cross_shield', 'geom', 4490, 'LINESTRING', 4);
-CREATE INDEX daq_cross_shield_geom_idx ON public.daq_cross_shield USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_cross_drilling_blasting', 'geom', 4490, 'LINESTRING', 4);
-CREATE INDEX daq_cross_drilling_blasting_geom_idx ON public.daq_cross_drilling_blasting USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_cross_across', 'geom', 4490, 'LINESTRING', 4);
-CREATE INDEX daq_cross_across_geom_idx ON public.daq_cross_across USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_cathodic_isolating_piece', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_cathodic_isolating_piece_geom_idx ON public.daq_cathodic_isolating_piece USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_cathodic_cable_protection', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_cathodic_cable_protection_geom_idx ON public.daq_cathodic_cable_protection USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_cathodic_sacrifice_anode', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_cathodic_sacrifice_anode_geom_idx ON public.daq_cathodic_sacrifice_anode USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_cathodic_insulated_joint', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_cathodic_insulated_joint_geom_idx ON public.daq_cathodic_insulated_joint USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_cathodic_solid_decoupler', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_cathodic_solid_decoupler_geom_idx ON public.daq_cathodic_solid_decoupler USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_cathodic_test_stake', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_cathodic_test_stake_geom_idx ON public.daq_cathodic_test_stake USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_cathodic_polarity_drainage', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_cathodic_polarity_drainage_geom_idx ON public.daq_cathodic_polarity_drainage USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_cathodic_anode_bed', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_cathodic_anode_bed_geom_idx ON public.daq_cathodic_anode_bed USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_appendages_mark_stake', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_appendages_mark_stake_geom_idx ON public.daq_appendages_mark_stake USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_appendages_electronic_label', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_appendages_electronic_label_geom_idx ON public.daq_appendages_electronic_label USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_appendages_hand_hole', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_appendages_hand_hole_geom_idx ON public.daq_appendages_hand_hole USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_appendages_obstacle', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_appendages_obstacle_geom_idx ON public.daq_appendages_obstacle USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_appendages_hydraulic_protection', 'geom', 4490, 'LINESTRING', 4);
-CREATE INDEX daq_appendages_hydraulic_protection_geom_idx ON public.daq_appendages_hydraulic_protection USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_appendages_casing_pipe', 'geom', 4490, 'LINESTRING', 4);
-CREATE INDEX daq_appendages_casing_pipe_geom_idx ON public.daq_appendages_casing_pipe USING gist (geom);
-
-select AddGeometryColumn('public', 'daq_weld_rework_weld', 'geom', 4490, 'POINT', 4);
-CREATE INDEX daq_weld_rework_weld_idx ON public.daq_weld_rework_weld USING gist (geom);
-/*********空间数据相关end*********/
 
 
 /***************添加字段*****************/
@@ -5447,10 +5353,10 @@ create table custom_fun_fields(
 	modify_user_id varchar(36) not null ,
 	modify_user_name varchar(50) not null ,
 	modify_datetime timestamp not null ,
-	active smallint not null,
 	if_less_today varchar(20),
 	less_date_scope varchar(64),
 	max_date_scope varchar(64),
+	active smallint not null
 );
 
 comment on table custom_fun_fields is '自定义表单-功能配置-字段';
@@ -6499,3 +6405,27 @@ comment on column daq_static_flare.modify_user_name is '修改人名称';
 comment on column daq_static_flare.modify_datetime is '修改时间';
 comment on column daq_static_flare.active is '有效标志';
 /**站场数据采集end**/
+
+create table daq_median_stake_polyline(
+	project_oid varchar(36),
+	pipeline_oid varchar(36) not null primary key,
+	project_name varchar(100),
+	pipeline_name varchar(100),
+	geo_state VARCHAR (10),
+	active smallint not null default 1
+);
+comment on table daq_median_stake_polyline is '中线桩(管线)表';
+comment on column daq_median_stake_polyline.project_oid is '项目oid';
+comment on column daq_median_stake_polyline.project_name is '项目名称';
+comment on column daq_median_stake_polyline.pipeline_oid is '管线oid';
+comment on column daq_median_stake_polyline.pipeline_name is '管线名称';
+
+create table daq_tenders_polyline(
+	oid varchar(36) not null primary key,
+	tenders_name varchar(100),
+	geo_state VARCHAR (10),
+	active smallint not null default 1
+);
+comment on table daq_tenders_polyline is '标段线段表';
+comment on column daq_tenders_polyline.oid is 'oid';
+comment on column daq_tenders_polyline.tenders_name is '标段名称';

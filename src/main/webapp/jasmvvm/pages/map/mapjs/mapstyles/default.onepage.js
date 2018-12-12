@@ -122,12 +122,12 @@ JasMap.require(function(){
      */
     mapStyleTemplates.lineLabelStyle = new ol.style.Style({
         text: new ol.style.Text({
-            font: '13px Calibri,sans-serif',
+            font: '16px Calibri,sans-serif',
             placement:'line',
             overflow: true,
             textBaseline:"bottom",
-            //offsetY:10,
-            //offsetX:10,
+//            offsetY:10,
+//            offsetX:10,
             fill: new ol.style.Fill({
                 color: '#fff'
             }),

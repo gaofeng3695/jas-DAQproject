@@ -210,12 +210,29 @@
         "loader": "jas",
         "format": "GeoJSON",
         "strategy": "all",
-         "renderer": {
-          "style": "medianStakePolyline",
-          "labelStyle": "lineLabelStyle",
-          "labelField": "pipeline_name"
-        }
-       
+        "renderer": {
+         	"style": "medianStakePolyline",
+         	"labelStyle": "lineLabelStyle",
+         	"labelField": "pipeline_name"
+		  }
+      },{
+        "id": "daq_tenders_polyline",
+        "label": "标段",
+        "index": 10,
+         "outFields":"oid,tenders_name",
+        "type": "Vector",
+        "source": "Vector",
+        "flash": true,
+        "visible": true,
+        "declutter":false,
+        "loader": "jas",
+        "format": "GeoJSON",
+        "strategy": "all",
+        "renderer": {
+         	"style": "tendersPolyline",
+         	"labelStyle": "myLineLabelStyle",
+         	"labelField": "tenders_name"
+		  }
       }, {
         "id": "layerSet002",
         "label": "管道焊接补口",
