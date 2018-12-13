@@ -219,7 +219,7 @@ public class ProgressStatsDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String, String>> getTendersList(String projectOid) {
-		String sql = "select oid, tenders_name from daq_tenders where active=1 and project_oid in (:projectOid)";
+		String sql = "select oid, tenders_name from daq_tenders where active=1 and project_oid = :projectOid";
 		List queryForList = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid));
 		return queryForList;
 	}

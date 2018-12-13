@@ -87,8 +87,8 @@ public class ProgressStatsService {
 			map.put("type", "lay_land_restoration");
 			map.put("typeName", "地貌恢复");
 			break;
-		case "detectionRayList":
-			map.put("type", "detectionRayList");
+		case "detection_ray":
+			map.put("type", "detection_ray");
 			map.put("typeName", "射线检测");
 			break;
 		case "measured_result":
@@ -165,7 +165,7 @@ public class ProgressStatsService {
 		//补口
 		List<ProgressStatsQueryBo> petchList = progressStatsDao.getPetchCountStatsByProject(projectOids,date);
 		//封装补口工序的返回值
-		setListItemsForProject(list,petchList,"petch",projectList);
+		setListItemsForProject(list,petchList,"patch",projectList);
 		//射线检测
 		List<ProgressStatsQueryBo> detectionRayList = progressStatsDao.getDetectionRayCountStatsByProject(projectOids,date);
 		//封装射线检测工序的返回值
@@ -306,8 +306,8 @@ public class ProgressStatsService {
 			map.put("type", "lay_land_restoration");
 			map.put("typeName", "地貌恢复");
 			break;
-		case "detectionRayList":
-			map.put("type", "detectionRayList");
+		case "detection_ray":
+			map.put("type", "detection_ray");
 			map.put("typeName", "射线检测");
 			break;
 		case "measured_result":
@@ -383,7 +383,7 @@ public class ProgressStatsService {
 		//补口
 		List<ProgressStatsQueryBo> petchList = progressStatsDao.getPetchCountStatsByTenders(projectOid,date);
 		//封装补口工序的返回值
-		setListItemsForTenders(list,petchList,"petch",tendersList);
+		setListItemsForTenders(list,petchList,"patch",tendersList);
 		//射线检测
 		List<ProgressStatsQueryBo> detectionRayList = progressStatsDao.getDetectionRayCountStatsByTenders(projectOid,date);
 		//封装射线检测工序的返回值
