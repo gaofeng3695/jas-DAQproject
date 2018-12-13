@@ -265,21 +265,21 @@ public class ProgressStatsService {
 	public List<Map<String, Object>> getEachItemLengthStatsByTenders(String projectOid, String date) {
 		//封装返回值
 		List<Map<String, Object>> list = new ArrayList<>();
-		//根据项目oids查询项目名称
+		//根据项目oid查询标段oid和名称
 		List<Map<String, String>> tendersList = progressStatsDao.getTendersList(projectOid);
 		//焊接
 		List<ProgressStatsQueryBo> weldList = progressStatsDao.getWeldLengthStatsByTenders(projectOid,date);
-//		// 封装焊接工序的返回值
+		// 封装焊接工序的返回值
 		setListItemsForTenders(list,weldList,"weld",tendersList);
-//		//补口
+		//补口
 		List<ProgressStatsQueryBo> petchList = progressStatsDao.getPetchLengthStatsByTenders(projectOid,date);
-//		//封装补口工序的返回值
+		//封装补口工序的返回值
 		setListItemsForTenders(list,petchList,"patch",tendersList);
-//		//管沟回填
+		//管沟回填
 		List<ProgressStatsQueryBo> backFillList = progressStatsDao.getBackFillLengthStatsByTenders(projectOid,date);
-//		//封装管沟回填的返回值
+		//封装管沟回填的返回值
 		setListItemsForTenders(list,backFillList,"lay_pipe_trench_backfill",tendersList);
-//		//地貌恢复
+		//地貌恢复
 		List<ProgressStatsQueryBo> landRestorationList = progressStatsDao.getLandRestorationLengthStatsByTenders(projectOid,date);
 		//封装地貌恢复的返回值
 		setListItemsForTenders(list,landRestorationList,"lay_land_restoration",tendersList);
@@ -335,7 +335,7 @@ public class ProgressStatsService {
 			for (int i = 0; i < tendersList.size(); i++) {
 				int index = getIndex(tendersOids, tendersList.get(i).get("oid"));
 				if (index == -1) {
-					lastIndex -= 1;
+					lastIndex --;
 					tendersOids[lastIndex] = tendersList.get(i).get("oid");
 					tendersNames[lastIndex] = tendersList.get(i).get("tendersName");
 				}
@@ -359,6 +359,40 @@ public class ProgressStatsService {
 			map.put("tendersOids", projectOid);
 			resultList.add(map);
 		}
+	}
+
+	/**
+	 * <p>功能描述：标段-各工序分标段累计情况统计（口）。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @param date
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月12日 下午5:57:56。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getEachItemCountStatsByTendersAndDate(String projectOid, String date) {
+		//封装返回值
+		List<Map<String, Object>> list = new ArrayList<>();
+		//根据项目oid查询标段oid和名称
+		List<Map<String, String>> tendersList = progressStatsDao.getTendersList(projectOid);
+		//焊接
+		List<ProgressStatsQueryBo> weldList = progressStatsDao.getWeldCountStatsByTenders(projectOid,date);
+		//封装焊接工序的返回值
+		setListItemsForTenders(list,weldList,"weld",tendersList);
+		//补口
+		List<ProgressStatsQueryBo> petchList = progressStatsDao.getPetchCountStatsByTenders(projectOid,date);
+		//封装补口工序的返回值
+		setListItemsForTenders(list,petchList,"petch",tendersList);
+		//射线检测
+		List<ProgressStatsQueryBo> detectionRayList = progressStatsDao.getDetectionRayCountStatsByTenders(projectOid,date);
+		//封装射线检测工序的返回值
+		setListItemsForTenders(list,detectionRayList,"detection_ray",tendersList);
+		//射线检测
+		List<ProgressStatsQueryBo> measuredResultList = progressStatsDao.getMeasuredResultCountStatsByTenders(projectOid,date);
+		//封装射线检测工序的返回值
+		setListItemsForTenders(list,measuredResultList,"measured_result",tendersList);
+		return list;
 	}
 	
 	
