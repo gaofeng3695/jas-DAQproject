@@ -62,9 +62,9 @@ public class MaterialStatisticsDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getMonthlyStatistics(List<Object> projectOids,String year){
-		String sql = "select to_char(t.checked_date,'yyyy-MM') as date_time,sum(tt.pipe_length)/1000 as pipe_length,'pipe' as type from daq_check_coating_pipe t left join (select oid,pipe_length from daq_material_pipe where active=1) tt on t.pipe_oid=tt.oid where to_char(t.checked_date,'yyyy')=:year and t.project_oid in (:projectOid) group by date_time "
+		String sql = "select to_char(t.checked_date,'yyyy-MM') as date_time,coalesce(sum(tt.pipe_length),0)/1000 as pipe_length,'pipe' as type from daq_check_coating_pipe t left join (select oid,pipe_length from daq_material_pipe where active=1) tt on t.pipe_oid=tt.oid where to_char(t.checked_date,'yyyy')=:year and t.project_oid in (:projectOid) group by date_time "
 				+ " union all "
-				+ "select to_char(t.checked_date,'yyyy-MM') as date_time,sum(tt.pipe_length)/1000 as pipe_length,'hot_pipe' as type from daq_check_hot_bends t left join (select oid,pipe_length from daq_material_hot_bends where active=1) tt on t.hot_bends_oid=tt.oid where to_char(t.checked_date,'yyyy')=:year and t.project_oid in (:projectOid) group by date_time";
+				+ "select to_char(t.checked_date,'yyyy-MM') as date_time,coalesce(sum(tt.pipe_length),0)/1000 as pipe_length,'hot_pipe' as type from daq_check_hot_bends t left join (select oid,pipe_length from daq_material_hot_bends where active=1) tt on t.hot_bends_oid=tt.oid where to_char(t.checked_date,'yyyy')=:year and t.project_oid in (:projectOid) group by date_time";
 		
 		Map<String,Object> param = new HashMap<String,Object>();
 		param.put("year", year);
@@ -108,9 +108,9 @@ public class MaterialStatisticsDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getDailyStatistics(List<Object> projectOids,String month){
-		String sql = "select to_char(t.checked_date,'yyyy-MM-dd') as date_time,sum(tt.pipe_length)/1000 as pipe_length,'pipe' as type from daq_check_coating_pipe t left join (select oid,pipe_length from daq_material_pipe where active=1) tt on t.pipe_oid=tt.oid where to_char(t.checked_date,'yyyy-MM')=:month and t.project_oid in (:projectOid) group by date_time "
+		String sql = "select to_char(t.checked_date,'yyyy-MM-dd') as date_time,coalesce(sum(tt.pipe_length),0)/1000 as pipe_length,'pipe' as type from daq_check_coating_pipe t left join (select oid,pipe_length from daq_material_pipe where active=1) tt on t.pipe_oid=tt.oid where to_char(t.checked_date,'yyyy-MM')=:month and t.project_oid in (:projectOid) group by date_time "
 				+ " union all "
-				+ "select to_char(t.checked_date,'yyyy-MM-dd') as date_time,sum(tt.pipe_length)/1000 as pipe_length,'hot_pipe' as type from daq_check_hot_bends t left join (select oid,pipe_length from daq_material_hot_bends where active=1) tt on t.hot_bends_oid=tt.oid where to_char(t.checked_date,'yyyy-MM')=:month and t.project_oid in (:projectOid) group by date_time";
+				+ "select to_char(t.checked_date,'yyyy-MM-dd') as date_time,coalesce(sum(tt.pipe_length),0)/1000 as pipe_length,'hot_pipe' as type from daq_check_hot_bends t left join (select oid,pipe_length from daq_material_hot_bends where active=1) tt on t.hot_bends_oid=tt.oid where to_char(t.checked_date,'yyyy-MM')=:month and t.project_oid in (:projectOid) group by date_time";
 		
 		Map<String,Object> param = new HashMap<String,Object>();
 		param.put("month", month);
