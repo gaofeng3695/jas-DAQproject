@@ -89,7 +89,7 @@ public class MaterialStatisticsService {
 		double total = this.materialStatisticsDao.getMonthGrandTotal(projectOid, month);
 		List<Map<String, Object>> dailyData = this.materialStatisticsDao.getDailyStatistics(projectOid, month);
 
-		Date date = DateTimeUtil.getDateFromDateString("2018-06", "yyyy-MM");
+		Date date = DateTimeUtil.getDateFromDateString(month, "yyyy-MM");
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		int maxDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
