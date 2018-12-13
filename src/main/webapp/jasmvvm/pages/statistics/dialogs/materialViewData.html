@@ -25,34 +25,26 @@
   <div id="app" v-cloak>
 
     <jas-approve-dialog>
-      <div class="progressViewData" v-show="materialByMonthViewData">
+      <div class="progressViewData">
         <div class="jas-detail-table">
           <table class="table_wrap">
             <tr>
-              <th>年月</th>
-              <th>钢管（KM）</th>
-              <th>热煨弯管（KM）</th>
-              <th>合计（KM）</th>
-              <th>总累计（KM）</th>
+              <template v-for="title in currentObj.titleArr">
+                <th v-text="title"></th>
+              </template>
             </tr>
             <template v-for="item in progressData">
               <tr>
-                <td :rowspan="item.rows.length" v-text="item.type"></td>
-                <td v-text="item.rows[0].projectName"></td>
-                <td v-text="item.rows[0].data"></td>
+                <td v-text="item.year"></td>
+                <td v-text="item.pipe"></td>
+                <td v-text="item.hot"></td>
+                <td v-text="item.total"></td>
+                <td v-text="item.grandTotal"></td>
               </tr>
-              <template v-if="item.rows.length>0" v-for="dataItem,index in item.rows">
-                <tr v-if="index>0">
-                  <td v-text="dataItem.projectName"></td>
-                  <td v-text="dataItem.data"></td>
-                </tr>
-              </template>
             </template>
           </table>
         </div>
       </div>
-
-
     </jas-approve-dialog>
   </div>
 </body>
@@ -69,53 +61,109 @@
     data: function () {
       var that = this;
       return {
-        materialByMonthViewData: false,
+        map: {
+          materialByMonthViewData: {
+            type: "materialByMonthViewData",
+            titleArr: ["年月", "钢管（KM）", "热煨弯管（KM）", "合计(KM)", "总累计（KM）"],
+            url: jasTools.base.rootPath + "/daq/materialStatistics/getMonthlyStatistics.do",
+            isChangeUnit: false,
+          },
+          materialByDayViewData: {
+            type: "materialByDayViewData",
+            titleArr: ["日期", "当日钢管（KM）", "当日热煨弯管（KM）", "当日累计（KM）", "总累计（KM）"],
+            url: jasTools.base.rootPath + "/daq/materialStatistics/getDailyStatistics.do",
+            isChangeUnit: false,
+          },
+          materialByTenders: {
+            type: "materialByTenders",
+            titleArr: ["标段", "钢管（KM）", "热煨弯管（KM）", "合计（KM）", "总累计（KM）"],
+            url: jasTools.base.rootPath + "/daq/materialStatistics/getTendersStatistics.do",
+            isChangeUnit: false,
+          },
+          progressByTenderCViewData: {
+            titleArr: ["工序", "标段", "累计（口数）"],
+            url: jasTools.base.rootPath + "/daq/progressStats/getEachItemCountStatsByTenders.do",
+            isChangeUnit: false,
+          }
+        },
+        currentObj: {},
         searchObj: {},
-
+        progressData: []
       }
     },
     created: function () {
       var that = this;
       var param = window.jasTools.base.getParamsInUrl(location.href);
-      if (param.isShow == "materialByMonthViewData") {
-        that.materialByMonthViewData = true;
-        that.searchObj.projectOids = param.projectOids.split(",");
-        that.searchObj.date = param.date;
-        that.requestMaterialByMonth();
+      that.currentObj = that.map[param.isShow];
+      if (param.projectOids) {
+        that.searchObj.projectOid = param.projectOids.split(",");
+      } else {
+        that.searchObj.projectOid = param.projectOid;
       }
-
+      if (param.year) {
+        that.searchObj.year = param.year;
+      }
+      if (param.month) {
+        that.searchObj.month = param.month;
+      }
+      if (param.dateTime) {
+        that.searchObj.dateTime = param.dateTime;
+      }
+      console.log(that.searchObj);
+      that.requestNet();
     },
     methods: {
-      requestMaterialByMonth: function () { //各工序分项目对比统计
+      requestNet: function () { //各工序分项目对比统计
         var that = this;
-        var url = jasTools.base.rootPath + "/daq/materialStatistics/getMonthlyStatistics.do";
-        jasTools.ajax.post(url, {
-          year: new Date(that.searchObj.date).getFullYear()
-        }, function (data) {
-          console.log(data);
-        });
-      },
-      requestProByCount: function () { //各工序分项目对比统计(口数)
-          var that = this;
-          var url = jasTools.base.rootPath + "/daq/progressStats/getEachItemLengthStats.do";
-          jasTools.ajax.post(url, that.searchObj, function (data) {
-           that.progressData = [];
-            data.rows.forEach(function (item) {
-              var obj = {
-                type: item.typeName,
-                rows: []
-              };
-              item.projectName.forEach(function (proItem, index) {
-                var obj1 = {
-                  projectName: proItem,
-                  data: item.statsResult[index]
+        jasTools.ajax.post(that.currentObj.url, that.searchObj, function (data) {
+          that.progressData = [];
+          switch (that.currentObj.type) {
+            case "materialByMonthViewData":
+              {
+                data.data.pipe.forEach(function (item, index) {
+                  var obj = {
+                    year: that.searchObj.year + "年" + (index + 1) + "月",
+                    pipe: item,
+                    hot: data.data.hot_pipe[index],
+                    total: item + data.data.hot_pipe[index],
+                    grandTotal: data.data.grand_total[index]
+                  }
+                  that.progressData.push(obj);
+                });
+                break;
+              }
+            case "materialByDayViewData":
+              {
+                for (var key in data.data.pipe) {
+                  var obj = {
+                    year: key,
+                    pipe: data.data.pipe[key],
+                    hot: data.data.hot_pipe[key],
+                    total: data.data.pipe[key] + data.data.hot_pipe[key],
+                    grandTotal: data.data.grand_total[key]
+                  }
+                  that.progressData.push(obj);
                 }
-                obj.rows.push(obj1);
-              });
-              that.progressData.push(obj);
-            });
-          });
-        },
+                break;
+              }
+            case "materialByTenders":
+              {
+                for (var key in data.data.pipe) {
+                  var obj = {
+                    year: key,
+                    pipe: data.data.pipe[key],
+                    hot: data.data.hot_pipe[key],
+                    total: data.data.pipe[key] + data.data.hot_pipe[key],
+                  }
+                  that.progressData.push(obj);
+                }
+                break;
+              }
+          }
+
+
+        });
+      }
     },
   });
 </script>
