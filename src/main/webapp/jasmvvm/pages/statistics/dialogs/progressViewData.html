@@ -49,31 +49,6 @@
           </table>
         </div>
       </div>
-      <!--
-      <div class="progressViewData" v-show="progressCountViewData">
-        <div class="jas-detail-table">
-          <table class="table_wrap">
-            <tr>
-              <th>工序</th>
-              <th>项目</th>
-              <th>累计（口数）</th>
-            </tr>
-            <template v-for="item in progressData">
-              <tr>
-                <td :rowspan="item.rows.length" v-text="item.type"></td>
-                <td v-text="item.rows[0].projectName"></td>
-                <td v-text="item.rows[0].data"></td>
-              </tr>
-              <template v-if="item.rows.length>0" v-for="dataItem,index in item.rows">
-                <tr v-if="index>0">
-                  <td v-text="dataItem.projectName"></td>
-                  <td v-text="dataItem.data"></td>
-                </tr>
-              </template>
-            </template>
-          </table>
-        </div>
-      </div>-->
     </jas-approve-dialog>
   </div>
 </body>
