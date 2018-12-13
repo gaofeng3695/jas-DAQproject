@@ -145,8 +145,33 @@ public class ProgressStatsController {
 		return result;
 	}
 
-	
-	
+	/**
+	 * <p>功能描述：标段-各工序分标段累计情况统计（口）。</p>
+	  * <p> 葛建。</p>	
+	  * @param params
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月12日 下午5:58:01。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@PostMapping("getEachItemCountStatsByTenders")
+	@ResponseBody
+	public Object getEachItemCountStatsByTendersAndDate(@RequestBody Map<String, Object> params){
+		ListResult<Map<String, Object>> result= null;
+		try{
+			String projectOid = (String)params.get("projectOid");
+			String date = (String)params.get("date");
+			if (StringUtils.isBlank(projectOid) || StringUtils.isBlank(date)) {
+				return new ListResult<>(-1,"400","请选择对应的项目或日期");
+			}
+			List<Map<String, Object>> rows = progressStatsService.getEachItemCountStatsByTendersAndDate(projectOid,date);
+			result = new ListResult<>(1,"200","ok",rows);
+		}catch(Exception e){
+			result = new ListResult<>(-1,"400","error");
+			e.printStackTrace();
+		}
+		return result;
+	}
 	
 	
 	
