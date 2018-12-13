@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="./../../../lib/font-awesome-4.7.0/css/font-awesome.css">
+  <link rel="stylesheet" href="./../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+  <link rel="stylesheet" href="./../../../src/css/main.css">
+  <style>
+    .progressViewData {
+      padding-top: 20px;
+    }
+
+    td,
+    th {
+      text-align: center !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app" v-cloak>
+
+    <jas-approve-dialog>
+      <div class="progressViewData" v-show="materialByMonthViewData">
+        <div class="jas-detail-table">
+          <table class="table_wrap">
+            <tr>
+              <th>年月</th>
+              <th>钢管（KM）</th>
+              <th>热煨弯管（KM）</th>
+              <th>合计（KM）</th>
+              <th>总累计（KM）</th>
+            </tr>
+            <template v-for="item in progressData">
+              <tr>
+                <td :rowspan="item.rows.length" v-text="item.type"></td>
+                <td v-text="item.rows[0].projectName"></td>
+                <td v-text="item.rows[0].data"></td>
+              </tr>
+              <template v-if="item.rows.length>0" v-for="dataItem,index in item.rows">
+                <tr v-if="index>0">
+                  <td v-text="dataItem.projectName"></td>
+                  <td v-text="dataItem.data"></td>
+                </tr>
+              </template>
+            </template>
+          </table>
+        </div>
+      </div>
+
+
+    </jas-approve-dialog>
+  </div>
+</body>
+<script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../lib/vue/vue.js"></script>
+<script src="./../../../lib/element-ui/v2.4.1/index.min.js"></script>
+
+<script src="./../../../common/components/jas-components.js "></script>
+<script src="./../../../common/js/jas-tools.js"></script>
+
+<script>
+  var app = new Vue({
+    el: "#app",
+    data: function () {
+      var that = this;
+      return {
+        materialByMonthViewData: false,
+        searchObj: {},
+
+      }
+    },
+    created: function () {
+      var that = this;
+      var param = window.jasTools.base.getParamsInUrl(location.href);
+      if (param.isShow == "materialByMonthViewData") {
+        that.materialByMonthViewData = true;
+        that.searchObj.projectOids = param.projectOids.split(",");
+        that.searchObj.date = param.date;
+        that.requestMaterialByMonth();
+      }
+
+    },
+    methods: {
+      requestMaterialByMonth: function () { //各工序分项目对比统计
+        var that = this;
+        var url = jasTools.base.rootPath + "/daq/materialStatistics/getMonthlyStatistics.do";
+        jasTools.ajax.post(url, {
+          year: new Date(that.searchObj.date).getFullYear()
+        }, function (data) {
+          console.log(data);
+        });
+      },
+      requestProByCount: function () { //各工序分项目对比统计(口数)
+          var that = this;
+          var url = jasTools.base.rootPath + "/daq/progressStats/getEachItemLengthStats.do";
+          jasTools.ajax.post(url, that.searchObj, function (data) {
+           that.progressData = [];
+            data.rows.forEach(function (item) {
+              var obj = {
+                type: item.typeName,
+                rows: []
+              };
+              item.projectName.forEach(function (proItem, index) {
+                var obj1 = {
+                  projectName: proItem,
+                  data: item.statsResult[index]
+                }
+                obj.rows.push(obj1);
+              });
+              that.progressData.push(obj);
+            });
+          });
+        },
+    },
+  });
+</script>
+
+</html>

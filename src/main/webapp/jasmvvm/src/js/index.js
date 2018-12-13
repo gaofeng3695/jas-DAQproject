@@ -105,9 +105,9 @@ var gisMap = {
 }
 var showInfo=function(e){
 	 var coor = e.coordinate;
-     var name = "<div style='height:24px;line-height:24px'>焊口号:WERTYUIOP</div>";
-     name+="<div style='height:24px;line-height:24px'>桩号:WWWWW</div>";
-     name+="<div style='height:24px;line-height:24px'>相对桩位置：89.08</div>";
+     var name = "<div style='height:30px;line-height:30px;color:#333'><span style='color:#666'>焊口编号：</span>78787</div>";
+     name+="<div style='height:30px;line-height:30px;color:#333'><span style='color:#666'>桩号：</span>17YU008</div>";
+     name+="<div style='height:30px;line-height:30px;color:#333'><span style='color:#666'>相对桩位置：</span>：89.08</div>";
 	 app.jasMap.showInfoWindow(coor[0], coor[1], name, "焊口信息");
 }
 window.app = new Vue({

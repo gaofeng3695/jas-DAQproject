@@ -2306,6 +2306,9 @@ Vue.component('jas-detail-table-link', {
 
 Vue.component('jas-project-select', {
 	props: {
+		projectarray: {
+			type: Array
+		},
 		selprojectoids: {
 			type: Array
 		},
@@ -2353,7 +2356,6 @@ Vue.component('jas-project-select', {
 			if (val.length == that.projectArray.length || (val.length == 1 && val[0] == "项目群") || (val.length == 0)) { //表示肯定是全选
 				that.projectOids = that.ids;
 				that.oldOptions = that.projectOids;
-				return;
 			}
 			if (val.indexOf("项目群") < 0) {
 				if (that.oldOptions.length - 1 == val.length) {} else
@@ -2383,4 +2385,118 @@ Vue.component('jas-project-select', {
 		}
 	}
 
+});
+
+
+// 统计标题
+Vue.component('statistic-group-project', { //项目群的分组
+	props: {
+		title: {
+			type: String
+		},
+		search: {
+			type: Object
+		},
+		datetype: {
+			type: Object
+		},
+		projectarray: {
+			type: Array
+		}
+	},
+	data: function () {
+		var that = this;
+		return {
+			projectOids: that.search.projectOids,
+			date: that.search.date
+		}
+	},
+	template: [
+		'<el-row style="background:#ececec;">',
+		'<div style="float:left;padding:10px 10px 5px 10px;">',
+		'{{title}}',
+		'</div>',
+		'<div style="float:right;padding:5px 10px;">',
+		'<jas-project-select @requestnet="requesttable" :selprojectoids="projectOids" :projectarray="projectarray"></jas-project-select>',
+		'<el-date-picker v-model="date" :type="datetype.type" :value-format="datetype.format" :placeholder="datetype.placeholder" style="padding-left:10px" size="mini" @change="select">',
+		'</el-date-picker>',
+		'</div>',
+		' </el-row>'
+	].join(''),
+	mounted: function () {
+
+	},
+	methods: {
+		requesttable: function (oids) {
+			var that = this;
+			that.projectOids = oids;
+			that.$emit("requestnet", that.projectOids, that.date);
+		},
+		select: function () {
+			var that = this;
+			console.log(that.date);
+			that.$emit("requestnet", that.projectOids, that.date);
+		}
+	}
+});
+
+Vue.component('statistic-group', { //项目分组
+	props: {
+		title: {
+			type: String
+		},
+		search: {
+			type: Object
+		},
+		projectarray: {
+			type: Array
+		},
+		datetype:{
+			type:Object
+		}
+	},
+	data: function () {
+		var that = this;
+		return {
+			projectOids: that.search.projectOid,
+			projectArray:[],
+			date: that.search.date
+		}
+	},
+	template: [
+		'<el-row style="background:#ececec;">',
+		'<div style="float:left;padding:10px 10px 5px 10px;">',
+		'{{title}}',
+		'</div>',
+		'<div style="float:right;padding:5px 10px;">',
+		'<el-select size="mini" v-model="projectOids"  placeholder="请选择" @change="select">',
+		'<el-option v-for="project in projectArray" :key="project.key" :label="project.value" :value="project.key">',
+		'</el-option>',
+		'</el-select>',
+		'<el-date-picker v-model="date" type="date" placeholder="选择日期" :type="datetype.type" :value-format="datetype.format"  style="padding-left:10px" size="mini"  @change="select">',
+		'</el-date-picker>',
+		'</div>',
+		' </el-row>'
+	].join(''),
+	mounted: function () {
+		var that = this;
+		that.requestProject();
+	},
+	methods: {
+		requestProject: function () {
+			var that = this;
+			var url = jasTools.base.rootPath + "/daq/privilege/getProjectList.do";
+			jasTools.ajax.post(url, {}, function (data) {
+				data.rows.forEach(function (item) {
+					that.projectArray.push(item);
+				});
+				that.projectOids = that.projectArray[0].key;
+				that.$emit("requestnet", that.projectOids, that.date);
+			});
+		},
+		select: function () {
+			var that = this;
+			that.$emit("requestnet", that.projectOids, that.date);
+		}
+	}
 });
