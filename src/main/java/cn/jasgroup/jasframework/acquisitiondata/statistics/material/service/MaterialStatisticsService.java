@@ -1,6 +1,7 @@
 package cn.jasgroup.jasframework.acquisitiondata.statistics.material.service;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -193,10 +194,12 @@ public class MaterialStatisticsService {
 					newObj.put("pipe_total_use", 0);
 					newObj.put("pipe_month_receive", 0);
 					newObj.put("pipe_total_receive", 0);
+					newObj.put("pipe_total_overplus", 0);
 					newObj.put("h_pipe_month_use", 0);
 					newObj.put("h_pipe_total_use", 0);
 					newObj.put("h_pipe_month_receive", 0);
 					newObj.put("h_pipe_total_receive", 0);
+					newObj.put("h_pipe_total_overplus", 0);
 					newObj.put(map.get("dataType").toString(), map.get("pipeLength"));
 					mapData.add(newObj);
 				}
@@ -210,10 +213,12 @@ public class MaterialStatisticsService {
 					obj.put("pipe_total_use", 0);
 					obj.put("pipe_month_receive", 0);
 					obj.put("pipe_total_receive", 0);
+					obj.put("pipe_total_overplus", 0);
 					obj.put("h_pipe_month_use", 0);
 					obj.put("h_pipe_total_use", 0);
 					obj.put("h_pipe_month_receive", 0);
 					obj.put("h_pipe_total_receive", 0);
+					obj.put("h_pipe_total_overplus", 0);
 					obj.put(map.get("dataType").toString(), map.get("pipeLength"));
 					mapData.add(obj);
 				}
@@ -225,25 +230,67 @@ public class MaterialStatisticsService {
 		for (Entry<String, List<Map<String,Object>>> entry : tempDataMap.entrySet()) {
 			String oid = entry.getKey();
 			List<Map<String,Object>> data = entry.getValue();
+			double pipe_month_use_sum=0d;
+			double pipe_total_use_sum=0d;
+			double pipe_month_receive_sum=0d;
+			double pipe_total_receive_sum=0d;
+			double pipe_total_overplus_sum=0d;
+			
+			int h_pipe_month_use_sum=0;
+			int h_pipe_total_use_sum=0;
+			int h_pipe_month_receive_sum=0;
+			int h_pipe_total_receive_sum=0;
+			int h_pipe_total_overplus_sum=0;
 			for(Map<String,Object> obj : data){
 				double pipeTotalUse = Double.parseDouble(obj.get("pipe_total_use").toString());
 				double pipeTotalReceive = Double.parseDouble(obj.get("pipe_total_receive").toString());
+				double pipeMonthUse = Double.parseDouble(obj.get("pipe_month_use").toString());
+				double pipeMonthReceive = Double.parseDouble(obj.get("pipe_month_receive").toString());
 				double overplus = pipeTotalReceive-pipeTotalUse;
 				BigDecimal bg = new BigDecimal(overplus);
 				overplus = bg.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
 				obj.put("pipe_total_overplus", overplus);
+				pipe_month_use_sum+=pipeMonthUse;
+				pipe_total_use_sum+=pipeTotalUse;
+				pipe_month_receive_sum+=pipeMonthReceive;
+				pipe_total_receive_sum+=pipeTotalReceive;
+				pipe_total_overplus_sum+=overplus;
 				
-				double hPipeTotalUse = Double.parseDouble(obj.get("pipe_total_use").toString());
-				double hPipeTotalReceive = Double.parseDouble(obj.get("pipe_total_receive").toString());
-				double hOverplus = hPipeTotalReceive-hPipeTotalUse;
-				BigDecimal hbg = new BigDecimal(hOverplus);
-				hOverplus = hbg.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+				
+				int hPipeTotalUse = Integer.parseInt(obj.get("h_pipe_total_use").toString());
+				int hPipeTotalReceive = Integer.parseInt(obj.get("h_pipe_total_receive").toString());
+				int hPipeMonthUse = Integer.parseInt(obj.get("h_pipe_month_use").toString());
+				int hPipeMonthReceive = Integer.parseInt(obj.get("h_pipe_month_receive").toString());
+				int hOverplus = hPipeTotalReceive-hPipeTotalUse;
 				obj.put("h_pipe_total_overplus", hOverplus);
+				
+				h_pipe_month_use_sum+=hPipeMonthUse;
+				h_pipe_total_use_sum+=hPipeTotalUse;
+				h_pipe_month_receive_sum+=hPipeMonthReceive;
+				h_pipe_total_receive_sum+=hPipeTotalReceive;
+				h_pipe_total_overplus_sum+=hOverplus;
+			}
+			if(data!=null && data.size()>0){
+				DecimalFormat df = new DecimalFormat("#.000");
+				Map<String,Object> sum = new LinkedHashMap<>();
+				sum.put("tendersOid", oid);
+				sum.put("specifications", "合计");
+				sum.put("pipe_month_use", df.format(pipe_month_use_sum));
+				sum.put("pipe_total_use_", df.format(pipe_total_use_sum));
+				sum.put("pipe_month_receive", df.format(pipe_month_receive_sum));
+				sum.put("pipe_total_receive", df.format(pipe_total_receive_sum));
+				sum.put("pipe_total_overplus", df.format(pipe_total_overplus_sum));
+				sum.put("h_pipe_month_use", h_pipe_month_use_sum);
+				sum.put("h_pipe_total_use", h_pipe_total_use_sum);
+				sum.put("h_pipe_month_receive", h_pipe_month_receive_sum);
+				sum.put("h_pipe_total_receive", h_pipe_total_receive_sum);
+				sum.put("h_pipe_total_overplus", h_pipe_total_overplus_sum);
+				data.add(sum);
 			}
 			Map<String,Object> obj = new HashMap<>();
 			obj.put("tendersOid", oid);
 			obj.put("tendersName", tendersMap.get(oid));
-			obj.put("dateList", data);
+			obj.put("dataList", data);
 			result.add(obj);
 		}
 		return result;
