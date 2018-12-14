@@ -93,4 +93,15 @@ public class QualityStatsDao {
 		return commonDataJdbcDao.queryForList(sql,null);
 	}
 
+	public List<Map<String, Object>> getKindsOfDefectRateByProjects(List<String> projectOids, List<String> unitOids,
+			String month) {
+		String sql = "select tt.defect_properties,tt.count::NUMERIC/(SELECT count(*) FROM daq_detection_ray_sub sub INNER JOIN "
+					+ "(SELECT oid,detection_deta,project_oid,detection_unit,active,approve_status FROM	daq_detection_ray WHERE	active = 1 AND approve_status = 2) ray ON ray.oid = sub.parent_oid "
+					+ "WHERE ray.project_oid IN (:projectOids) AND ray.detection_unit IN (:unitOids) AND to_char(ray.detection_deta,'yyyy-MM') <= :month)::NUMERIC*100 as rate "
+					+ "from (SELECT sub.defect_properties,count(sub.parent_oid) FROM	daq_detection_ray_sub sub INNER JOIN "
+					+ "(SELECT oid,detection_deta,project_oid,detection_unit,active,approve_status FROM	daq_detection_ray WHERE	active = 1 AND approve_status = 2) ray ON ray.oid = sub.parent_oid "
+					+ "WHERE ray.project_oid IN (:projectOids) AND ray.detection_unit IN (:unitOids) AND to_char(ray.detection_deta,'yyyy-MM') <= :month GROUP BY sub.defect_properties) tt";
+		return commonDataJdbcDao.queryForList(sql,ImmutableMap.of("projectOids", projectOids, "unitOids", unitOids, "month", month));
+	}
+
 }
