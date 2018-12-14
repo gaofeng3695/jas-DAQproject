@@ -114,4 +114,34 @@ public class MaterialStatisticsController extends BaseController{
 		}
 		return result;
 	}
+	
+	/***
+	  * <p>功能描述：物资使用情况统计。</p>
+	  * <p> 雷凯。</p>	
+	  * @param request
+	  * @param param
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月14日 下午4:34:39。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="/getMaterialUseStatustics",method = RequestMethod.POST)
+	@ResponseBody
+	public Object getMaterialUseStatustics(HttpServletRequest request,@RequestBody Map<String,String> param){
+		SimpleResult<List<Map<String,Object>>> result = null;
+		String month = param.get("month");
+		String projectOid=param.get("projectOid");
+		try {
+			if(StringUtils.isNotBlank(month) && StringUtils.isNotBlank(projectOid)){
+				List<Map<String,Object>> data = this.materialStatisticsService.getMaterialUseStatustics(projectOid,month);
+				result = new SimpleResult<List<Map<String,Object>>>(0, "200","ok", data);
+			}else{
+				result = new SimpleResult<>(0, "400", "param can not is null");
+			}
+		} catch (Exception e) {
+			result = new SimpleResult<>(0, "400", e.getMessage());
+			e.printStackTrace();
+		}
+		return result;
+	}
 }
