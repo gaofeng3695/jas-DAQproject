@@ -16,6 +16,17 @@ public class QualityStatsDao {
 	 @Autowired
 	 private CommonDataJdbcDao commonDataJdbcDao;
 
+	 /**
+	  * <p>功能描述：根据条件查询每月射线检测的焊口口数及对应的一次合格率。</p>
+	   * <p> 葛建。</p>	
+	   * @param projectOids
+	   * @param unitOids
+	   * @param year
+	   * @return
+	   * @since JDK1.8。
+	   * <p>创建日期:2018年12月14日 下午2:04:03。</p>
+	   * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	  */
 	public List<Map<String, Object>> getMonthlyQualiifiedRateByProjectAndUnit(List<String> projectOids, List<String> unitOids, String year) {
 		String sql = "select total_table.month,total_table.month_count,"
 					+ "COALESCE (case when total_table.month = qualified_table.month then (qualified_table.qualified_count::NUMERIC)/(total_table.month_count::NUMERIC)*100 end, 0) as qualified_rate "
@@ -30,6 +41,56 @@ public class QualityStatsDao {
 					+ "and ray.detection_type='detection_type_code_001' and ray.evaluation_result=1 GROUP BY to_char(ray.detection_deta,'MM')) as qualified_table on qualified_table.month=total_table.month ";
 		List list = commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOids", projectOids,"unitOids", unitOids,"year",year));
 		return list;
+	}
+
+	/**
+	 * <p>功能描述：根据unitOids查询部门oid和对应的名称列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param unitOids
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月14日 下午1:58:27。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, String>> getUnitList(List<String> unitOids) {
+		String sql = "select oid,unit_name from pri_unit where active=1 and oid in (:unitOids)";
+		List list = commonDataJdbcDao.queryForList(sql, ImmutableMap.of("unitOids", unitOids));
+		return list;
+	}
+
+	/**
+	 * <p>功能描述：根据项目、unit和月份查询对应的单位下不同缺陷性质的个数。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOids
+	  * @param unitOids
+	  * @param month
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月14日 下午2:03:55。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getKindsOfDefectCountByProjects(List<String> projectOids, List<String> unitOids, String month) {
+		String sql = "select tt.*,u.unit_name from "
+					+ "(select ray.detection_unit,sub.defect_properties,count(sub.parent_oid) as count from daq_detection_ray_sub sub "
+					+ "INNER JOIN (select oid, detection_deta, project_oid,detection_unit,active,approve_status from daq_detection_ray where active=1 and approve_status=2) ray on ray.oid=sub.parent_oid "
+					+ "where ray.project_oid in (:projectOids) and ray.detection_unit in (:unitOids) and to_char(ray.detection_deta, 'yyyy-MM') <= :month "
+					+ "GROUP BY ray.detection_unit,sub.defect_properties"
+					+ ") tt LEFT JOIN (select * from pri_unit where active=1) u on u.oid=tt.detection_unit";
+		List<Map<String, Object>> list = commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOids", projectOids, "unitOids", unitOids, "month", month));
+		return list;
+	}
+
+	/**
+	 * <p>功能描述：查询缺陷性质列表。</p>
+	  * <p> 葛建。</p>	
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月14日 下午4:08:05。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, String>> getDefectList() {
+		String sql = "select code_id as key,code_name as value from sys_domain where active=1 and domain_name = 'defect_properties_domain' ORDER BY code_id";
+		return commonDataJdbcDao.queryForList(sql,null);
 	}
 
 }
