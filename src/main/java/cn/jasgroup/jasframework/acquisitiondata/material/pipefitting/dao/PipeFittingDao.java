@@ -142,7 +142,7 @@ public class PipeFittingDao{
 			sql = "update daq_material_closure set tenders_oid='"+tendersOid+"',pipeline_oid='"+pipelineOid+"',is_use="+isUse+" where oid='"+pipeOid+"'";
 			break;
 		case "pipe_type_code_0081"://冷弯管
-			sql = "update daq_material_pipe_cold_bending set back_is_use="+isUse+" where oid='"+pipeOid+"'";
+			sql = "update daq_material_pipe_cold_bending set back_is_use="+isUse+",is_use="+isUse+" where oid='"+pipeOid+"'";
 			break;
 		}
 		if(StringUtils.isBlank(sql)){

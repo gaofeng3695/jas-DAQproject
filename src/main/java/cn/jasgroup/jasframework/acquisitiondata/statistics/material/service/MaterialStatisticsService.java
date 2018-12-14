@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -150,4 +151,101 @@ public class MaterialStatisticsService {
 		return result;
 	}
 	
+	/***
+	  * <p>功能描述：物资使用情况统计。</p>
+	  * <p> 雷凯。</p>	
+	  * @param projectOid
+	  * @param month
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月14日 下午4:34:29。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getMaterialUseStatustics(String projectOid, String month) {
+		Date date = DateTimeUtil.getDateFromDateString(month, "yyyy-MM");
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		int maxDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+		String minDateTime = month + "-01";
+		String maxDateTime = month + "-" + maxDay;
+		List<Map<String, Object>> pipeData = this.materialStatisticsDao.getMaterialUseStatustics(projectOid, minDateTime, maxDateTime);
+		Map<String, String> tendersMap = new HashMap<>();
+		Map<String, List<Map<String,Object>>> tempDataMap = new HashMap<>();
+		for (Map<String, Object> map : pipeData) {
+			String tendersOid = map.get("oid").toString();
+			if(tempDataMap.containsKey(tendersOid)){
+				List<Map<String,Object>> mapData = tempDataMap.get(tendersOid);
+				boolean isExist = false;
+				for(Map<String,Object> obj : mapData){
+					if(map.get("specifications")!=null && map.get("specifications").toString().equals(obj.get("specifications"))){
+						obj.put(map.get("dataType").toString(), map.get("pipeLength"));
+						isExist = true;
+						break;
+					}else if(map.get("specifications")!=null){
+						isExist = false;
+					}
+				}
+				if(!isExist && map.get("specifications")!=null){
+					Map<String,Object> newObj = new LinkedHashMap<>();
+					newObj.put("tendersOid", tendersOid);
+					newObj.put("specifications", map.get("specifications"));
+					newObj.put("pipe_month_use", 0);
+					newObj.put("pipe_total_use", 0);
+					newObj.put("pipe_month_receive", 0);
+					newObj.put("pipe_total_receive", 0);
+					newObj.put("h_pipe_month_use", 0);
+					newObj.put("h_pipe_total_use", 0);
+					newObj.put("h_pipe_month_receive", 0);
+					newObj.put("h_pipe_total_receive", 0);
+					newObj.put(map.get("dataType").toString(), map.get("pipeLength"));
+					mapData.add(newObj);
+				}
+			}else{
+				List<Map<String,Object>> mapData = new ArrayList<>();
+				Map<String,Object> obj = new LinkedHashMap<>();
+				if(map.get("specifications")!=null){
+					obj.put("tendersOid", tendersOid);
+					obj.put("specifications", map.get("specifications"));
+					obj.put("pipe_month_use", 0);
+					obj.put("pipe_total_use", 0);
+					obj.put("pipe_month_receive", 0);
+					obj.put("pipe_total_receive", 0);
+					obj.put("h_pipe_month_use", 0);
+					obj.put("h_pipe_total_use", 0);
+					obj.put("h_pipe_month_receive", 0);
+					obj.put("h_pipe_total_receive", 0);
+					obj.put(map.get("dataType").toString(), map.get("pipeLength"));
+					mapData.add(obj);
+				}
+				tempDataMap.put(tendersOid, mapData);
+				tendersMap.put(tendersOid, map.get("tendersName").toString());
+			}
+		}
+		List<Map<String,Object>> result = new ArrayList<>();
+		for (Entry<String, List<Map<String,Object>>> entry : tempDataMap.entrySet()) {
+			String oid = entry.getKey();
+			List<Map<String,Object>> data = entry.getValue();
+			for(Map<String,Object> obj : data){
+				double pipeTotalUse = Double.parseDouble(obj.get("pipe_total_use").toString());
+				double pipeTotalReceive = Double.parseDouble(obj.get("pipe_total_receive").toString());
+				double overplus = pipeTotalReceive-pipeTotalUse;
+				BigDecimal bg = new BigDecimal(overplus);
+				overplus = bg.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+				obj.put("pipe_total_overplus", overplus);
+				
+				double hPipeTotalUse = Double.parseDouble(obj.get("pipe_total_use").toString());
+				double hPipeTotalReceive = Double.parseDouble(obj.get("pipe_total_receive").toString());
+				double hOverplus = hPipeTotalReceive-hPipeTotalUse;
+				BigDecimal hbg = new BigDecimal(hOverplus);
+				hOverplus = hbg.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+				obj.put("h_pipe_total_overplus", hOverplus);
+			}
+			Map<String,Object> obj = new HashMap<>();
+			obj.put("tendersOid", oid);
+			obj.put("tendersName", tendersMap.get(oid));
+			obj.put("dateList", data);
+			result.add(obj);
+		}
+		return result;
+	}
 }
