@@ -10,7 +10,6 @@ import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.StatsUtils;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.progress.common.ProgressStatsQueryBo;
@@ -18,7 +17,6 @@ import cn.jasgroup.jasframework.acquisitiondata.statistics.progress.common.Progr
 import cn.jasgroup.jasframework.acquisitiondata.statistics.progress.dao.ProgressStatsDao;
 
 @Service
-@Transactional
 public class ProgressStatsService {
 	
 	@Resource(name="progressStatsDao")
@@ -195,7 +193,6 @@ public class ProgressStatsService {
 		List<Map<String, Object>> list = new ArrayList<>();
 		//获取自开始月起到终止月的连续的月份数组
 		Object[] monthArray = StatsUtils.getMonthArray(beginMonth, endMonth, "yyyy-MM");
-		Double[] date = new Double[monthArray.length];
 		//根据项目oid查询下属标段及对应名称
 		List<Map<String, String>> tendersList = progressStatsDao.getTendersList(projectOid);
 		//根据项目，工艺，起止时间查询对应工艺的按标段的每月累计里程数
@@ -240,12 +237,12 @@ public class ProgressStatsService {
 	  * <p>创建日期:2018年12月12日 下午1:55:53。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	private int getIndex(Object[] monthArray, String monthOfYear) {
-		if (StringUtils.isBlank(monthOfYear)) {
+	private int getIndex(Object[] monthArray, String str) {
+		if (StringUtils.isBlank(str)) {
 			return -1;
 		}
 		for (int i = 0; i < monthArray.length; i++) {
-			if (monthOfYear.equals(monthArray[i])) {
+			if (str.equals(monthArray[i])) {
 				return i;
 			}
 		}
