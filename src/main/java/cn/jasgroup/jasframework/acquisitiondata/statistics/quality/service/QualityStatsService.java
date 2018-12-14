@@ -1,6 +1,6 @@
 package cn.jasgroup.jasframework.acquisitiondata.statistics.quality.service;
 
-import java.text.DecimalFormat;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,7 +17,6 @@ import cn.jasgroup.jasframework.acquisitiondata.statistics.quality.dao.QualitySt
 @Service
 public class QualityStatsService {
 
-	private static final String String = null;
 	@Resource(name = "qualityStatsDao")
 	private QualityStatsDao qualityStatsDao;
 
@@ -52,8 +51,9 @@ public class QualityStatsService {
 				int index = getIndex(monthArray,month);
 				if (index != -1) {
 					weldCount[index] = Integer.parseInt(weldCountAndRate.get("monthCount").toString());
-					DecimalFormat df = new DecimalFormat("#.00");
-					double qualifiedRate = Double.parseDouble(df.format(weldCountAndRate.get("qualifiedRate")).toString());
+					double qualifiedRate = Double.parseDouble(weldCountAndRate.get("qualifiedRate").toString());
+					BigDecimal bg = new BigDecimal(qualifiedRate);
+					qualifiedRate = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 					rate[index] = qualifiedRate;
 				}
 			}
@@ -100,7 +100,7 @@ public class QualityStatsService {
 	public List<Map<String, Object>> getKindsOfDefectCountByProjects(List<String> projectOids, List<String> unitOids, String month) {
 		//封装返回值
 		List<Map<String, Object>> list = new ArrayList<>();
-		//根据项目oids查询项目名称
+		//根据项目oids查询部门oid和对应的名称
 		List<Map<String, String>> unitList = qualityStatsDao.getUnitList(unitOids);
 		//查询缺陷性质列表
 		List<Map<String, String>> defectList = qualityStatsDao.getDefectList();
@@ -117,8 +117,8 @@ public class QualityStatsService {
 			String[] unitNameArray = new String[unitList.size()];
 			String[] unitOidsArray = new String[unitList.size()];
 			for (int j = 0; j < unitList.size(); j++) {
-				unitNameArray[j] = (String) unitList.get(j).get("unitName");
-				unitOidsArray[j] = (String) unitList.get(j).get("oid");
+				unitNameArray[j] = unitList.get(j).get("unitName");
+				unitOidsArray[j] = unitList.get(j).get("oid");
 				// 判断统计数据是否为空
 				if (defectCountList.size() > 0) {
 					for (int h = 0; h < defectCountList.size(); h++) {
@@ -136,6 +136,50 @@ public class QualityStatsService {
 			list.add(map);
 		}
 		return list;
+	}
+
+	/**
+	 * <p>功能描述：项目缺陷性质分类统计-占比。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOids
+	  * @param unitOids
+	  * @param month
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月14日 下午4:22:39。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public Map<String, Object> getKindsOfDefectRateByProjects(List<String> projectOids,
+			List<String> unitOids, String month) {
+		//用于封装返回数据
+		Map<String, Object> map = new HashMap<>();
+		//查询缺陷性质列表
+		List<Map<String, String>> defectList = qualityStatsDao.getDefectList();
+		String[] typeArray = new String[defectList.size()];
+		String[] typeNameArray = new String[defectList.size()];
+		Double[] rateArray = new Double[defectList.size()];
+		Arrays.fill(rateArray, 0.00);
+		//根据项目，单位和月份查询对应缺陷性质的占比
+		List<Map<String, Object>> rateList = qualityStatsDao.getKindsOfDefectRateByProjects(projectOids, unitOids, month);
+		//填充typeArray，typeNameArray
+		for (int i=0; i < defectList.size(); i++) {
+			typeArray[i] = defectList.get(i).get("key");
+			typeNameArray[i] = defectList.get(i).get("value");
+		}
+		//给对应位置填充真实的比例值
+		for (Map<String, Object> defectRate : rateList) {
+			int index = getIndex(typeArray, (String)defectRate.get("defectProperties"));
+			if (index != -1) {
+				double rate = Double.parseDouble(defectRate.get("rate").toString());
+				BigDecimal bg = new BigDecimal(rate);
+				rate = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+				rateArray[index] = rate;
+			}
+		}
+		map.put("type", typeArray);
+		map.put("typeName", typeNameArray);
+		map.put("rate", rateArray);
+		return map;
 	}
 	
 }
