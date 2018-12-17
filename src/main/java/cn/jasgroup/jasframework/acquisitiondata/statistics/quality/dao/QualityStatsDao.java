@@ -159,4 +159,76 @@ public class QualityStatsDao {
 		return list;
 	}
 
+	/**
+	 * <p>功能描述：根据项目和日期查询标段下施工单位的检测口数和一次合格率。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @param date
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月17日 下午2:20:05。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getEachUnitQualifiedRateByProjects(String projectOid, String date) {
+		String sql = "select total_table.tenders_oid,total_table.construct_unit,u.unit_name,total_table.total_count,"
+					+ "COALESCE (case when total_table.tenders_oid = qualified_table.tenders_oid and total_table.tenders_oid = qualified_table.tenders_oid "
+					+ "then (qualified_table.qualified_count::NUMERIC)/(total_table.total_count::NUMERIC)*100 end, 0) as qualified_rate "
+					+ "from (select ray.tenders_oid,weld.construct_unit,count(weld.weld_code) as total_count from daq_detection_ray ray "
+					+ "INNER JOIN daq_construction_weld weld on weld.oid=ray.weld_oid where weld.active=1 and weld.approve_status=2 and ray.active=1 "
+					+ "and ray.approve_status=2 and weld.project_oid = :projectOid and to_char(ray.detection_deta,'yyyy-MM-dd') <= :date "
+					+ "GROUP BY ray.tenders_oid,weld.construct_unit) total_table "
+					+ "LEFT JOIN (select ray.tenders_oid,weld.construct_unit,count(weld.weld_code) as qualified_count  "
+					+ "from daq_detection_ray ray INNER JOIN daq_construction_weld weld on weld.oid=ray.weld_oid where weld.active=1 and weld.approve_status=2 "
+					+ "and ray.active=1 and ray.approve_status=2 and weld.project_oid = :projectOid and to_char(ray.detection_deta,'yyyy-MM-dd') <= :date "
+					+ "and ray.detection_type='detection_type_code_001' and ray.evaluation_result=1 GROUP BY ray.tenders_oid,weld.construct_unit) qualified_table "
+					+ "on qualified_table.tenders_oid=total_table.tenders_oid and qualified_table.construct_unit=total_table.construct_unit "
+					+ "LEFT JOIN (select oid,unit_name,active from pri_unit where active=1) u on u.oid=total_table.construct_unit";
+		List<Map<String, Object>> list = commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid, "date", date));
+		return list;
+	}
+
+	/**
+	 * <p>功能描述：根据项目和日期查询各单位不合格口数占比。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @param date
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月17日 下午2:56:39。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getEachUnitUnQualifiedRateByProjects(String projectOid, String date) {
+		String sql = "SELECT tt.*,u.unit_name from (select weld.construct_unit,count(ray.weld_oid),count(ray.weld_oid)::NUMERIC/(select count(ray.weld_oid) from daq_detection_ray ray "
+					+ "INNER JOIN daq_construction_weld weld on weld.oid=ray.weld_oid where weld.active=1 and weld.approve_status=2 and ray.active=1 and ray.approve_status=2 "
+					+ "and weld.project_oid = :projectOid and to_char(ray.detection_deta,'yyyy-MM-dd') <= :date and ray.evaluation_result=0)::NUMERIC*100 as un_qualified_rate "
+					+ "from daq_detection_ray ray INNER JOIN daq_construction_weld weld on weld.oid=ray.weld_oid where weld.active=1 and weld.approve_status=2 and ray.active=1 "
+					+ "and ray.approve_status=2 and weld.project_oid = :projectOid and to_char(ray.detection_deta,'yyyy-MM-dd') <= :date and ray.evaluation_result=0 "
+					+ "GROUP by weld.construct_unit) tt LEFT JOIN (select oid,unit_name,active from pri_unit where active=1) u on u.oid=tt.construct_unit";
+		List<Map<String, Object>> list = commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid, "date", date));
+		return list;
+	}
+
+	/**
+	 * <p>功能描述：根据项目查询项目下所有的施工单位。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月17日 下午4:39:04。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getConstructUnitByProjectOid(String projectOid) {
+		String sql = "select distinct t.oid as key,t.unit_name as value,t.create_datetime from pri_unit t left JOIN daq_implement_scope_ref i on t.oid=i.unit_oid "
+					+ "where t.hierarchy like 'Unit.0001.0005%' and i.project_oid=:projectOid ORDER BY t.create_datetime";
+		List<Map<String, Object>> list = commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid));
+		return list;
+	}
+
+	public List<Map<String, Object>> getAllProjectUnitByProjectOid(String projectOid) {
+		String sql = "select DISTINCT t.oid as key,t.unit_name as value,t.create_datetime from pri_unit t left JOIN daq_implement_scope_ref i on t.oid=i.unit_oid "
+					+ "where t.hierarchy like 'Unit.0001.0001%' and i.project_oid=:projectOid ORDER BY t.create_datetime";
+		List<Map<String, Object>> list = commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid));
+		return list;
+	}
+
 }
