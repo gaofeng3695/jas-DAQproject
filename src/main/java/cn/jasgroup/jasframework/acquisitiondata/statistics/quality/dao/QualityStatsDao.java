@@ -93,6 +93,17 @@ public class QualityStatsDao {
 		return commonDataJdbcDao.queryForList(sql,null);
 	}
 
+	/**
+	 * <p>功能描述：根据项目、unit和月份查询不同缺陷性质的占比。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOids
+	  * @param unitOids
+	  * @param month
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月17日 上午11:38:59。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
 	public List<Map<String, Object>> getKindsOfDefectRateByProjects(List<String> projectOids, List<String> unitOids,
 			String month) {
 		String sql = "select tt.defect_properties,tt.count::NUMERIC/(SELECT count(*) FROM daq_detection_ray_sub sub INNER JOIN "
@@ -102,6 +113,50 @@ public class QualityStatsDao {
 					+ "(SELECT oid,detection_deta,project_oid,detection_unit,active,approve_status FROM	daq_detection_ray WHERE	active = 1 AND approve_status = 2) ray ON ray.oid = sub.parent_oid "
 					+ "WHERE ray.project_oid IN (:projectOids) AND ray.detection_unit IN (:unitOids) AND to_char(ray.detection_deta,'yyyy-MM') <= :month GROUP BY sub.defect_properties) tt";
 		return commonDataJdbcDao.queryForList(sql,ImmutableMap.of("projectOids", projectOids, "unitOids", unitOids, "month", month));
+	}
+
+	/**
+	 * <p>功能描述：根据项目、日期查询每个标段的检测口数和一次合格率。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @param date
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月17日 上午11:39:51。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getEachTendersQualifiedRateByProjects(String projectOid, String date) {
+		String sql = "select total_table.tenders_oid,total_table.total_count,COALESCE (case when total_table.tenders_oid = qualified_table.tenders_oid then (qualified_table.qualified_count::NUMERIC)/(total_table.total_count::NUMERIC)*100 end, 0) as qualified_rate " 
+					+ "from (select ray.tenders_oid,count(ray.weld_oid) as total_count from daq_detection_ray ray "
+					+ "INNER JOIN daq_construction_weld weld on weld.oid=ray.weld_oid where weld.active=1 and weld.approve_status=2 and ray.active=1 and ray.approve_status=2 "
+					+ "and weld.project_oid = :projectOid and to_char(ray.detection_deta,'yyyy-MM-dd') <= :date GROUP BY ray.tenders_oid) total_table "
+					+ "LEFT JOIN (select ray.tenders_oid,count(weld.weld_code) as qualified_count from daq_detection_ray ray INNER JOIN daq_construction_weld weld on weld.oid=ray.weld_oid "
+					+ "where weld.active=1 and weld.approve_status=2 and ray.active=1 and ray.approve_status=2 and weld.project_oid = :projectOid "
+					+ "and to_char(ray.detection_deta,'yyyy-MM-dd') <= :date and ray.detection_type='detection_type_code_001' and ray.evaluation_result=1 "
+					+ "GROUP BY ray.tenders_oid) qualified_table on qualified_table.tenders_oid=total_table.tenders_oid ";
+		List<Map<String, Object>> list = commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid, "date", date));
+		return list;
+	}
+
+	/**
+	 * <p>功能描述：根据项目和日期查询各标段不合格口数占比。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @param date
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月17日 上午11:40:07。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getEachTendersUnQualifiedRateByProjects(String projectOid, String date) {
+		String sql = "select ray.tenders_oid,count(ray.weld_oid),count(ray.weld_oid)::NUMERIC/(select count(ray.weld_oid) from daq_detection_ray ray "
+					+ "INNER JOIN daq_construction_weld weld on weld.oid=ray.weld_oid where weld.active=1 and weld.approve_status=2 and ray.active=1 "
+					+ "and ray.approve_status=2 and weld.project_oid = :projectOid and to_char(ray.detection_deta,'yyyy-MM-dd') <= :date and ray.evaluation_result=0)::NUMERIC*100 as un_qualified_rate "
+					+ "from daq_detection_ray ray INNER JOIN daq_construction_weld weld on weld.oid=ray.weld_oid where weld.active=1 and weld.approve_status=2 "
+					+ "and ray.active=1 and ray.approve_status=2 and weld.project_oid = :projectOid and to_char(ray.detection_deta,'yyyy-MM-dd') <= :date "
+					+ "and ray.evaluation_result=0 GROUP by ray.tenders_oid";
+		List<Map<String, Object>> list = commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid, "date", date));
+		return list;
 	}
 
 }
