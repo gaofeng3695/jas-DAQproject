@@ -180,4 +180,66 @@ public class QualityStatsController {
 		}
 		return result;
 	}
+	
+	/**
+	 * <p>功能描述：项目各单位焊接一次合格率对比。</p>
+	  * <p> 葛建。</p>	
+	  * @param params
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月17日 下午1:40:23。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@PostMapping("getEachUnitQualifiedRateByProjects")
+	@ResponseBody
+	public Object getEachUnitQualifiedRateByProjects(@RequestBody Map<String, Object> params){
+		ListResult<Map<String, Object>> result= null;
+		try{
+			//项目
+			String projectOid = (String)params.get("projectOid");
+			//月份
+			String date = (String)params.get("date");
+			if (StringUtils.isBlank(projectOid) || StringUtils.isBlank(date)) {
+				return new ListResult<>(-1,"400","请选择对应的项目或日期");
+			}
+			//根据项目、日期查询每个单位的检测口数和一次合格率
+			List<Map<String, Object>> rows = qualityStatsService.getEachUnitQualifiedRateByProjects(projectOid, date);
+			result = new ListResult<>(1,"200","ok",rows);
+		}catch(Exception e){
+			result = new ListResult<>(-1,"400","error");
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	/**
+	 * <p>功能描述：项目各单位焊接不合格口数对比。</p>
+	 * <p> 葛建。</p>	
+	 * @param params
+	 * @return
+	 * @since JDK1.8。
+	 * <p>创建日期:2018年12月17日 上午11:28:13。</p>
+	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@PostMapping("getEachUnitUnQualifiedRateByProjects")
+	@ResponseBody
+	public Object getEachUnitUnQualifiedRateByProjects(@RequestBody Map<String, Object> params){
+		SimpleResult<Map<String, Object>> result= null;
+		try{
+			//项目
+			String projectOid = (String)params.get("projectOid");
+			//月份
+			String date = (String)params.get("date");
+			if (StringUtils.isBlank(projectOid) || StringUtils.isBlank(date)) {
+				return new ListResult<>(-1,"400","请选择对应的项目或日期");
+			}
+			//根据项目、日期查询每个单位的检测口数和一次合格率
+			Map<String, Object> rows = qualityStatsService.getEachUnitUnQualifiedRateByProjects(projectOid, date);
+			result = new SimpleResult<>(1,"200","ok",rows);
+		}catch(Exception e){
+			result = new SimpleResult<>(-1,"400","error");
+			e.printStackTrace();
+		}
+		return result;
+	}
 }
