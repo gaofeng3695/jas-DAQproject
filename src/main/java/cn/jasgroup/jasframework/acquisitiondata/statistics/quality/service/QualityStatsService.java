@@ -165,8 +165,8 @@ public class QualityStatsService {
 		List<Map<String, String>> defectList = qualityStatsDao.getDefectList();
 		String[] typeArray = new String[defectList.size()];
 		String[] typeNameArray = new String[defectList.size()];
-		Double[] rateArray = new Double[defectList.size()];
-		Arrays.fill(rateArray, 0.00);
+		Integer[] countArray = new Integer[defectList.size()];
+		Arrays.fill(countArray, 0);
 		//根据项目，单位和月份查询对应缺陷性质的占比
 		List<Map<String, Object>> rateList = qualityStatsDao.getKindsOfDefectRateByProjects(projectOids, unitOids, month);
 		//填充typeArray，typeNameArray
@@ -178,15 +178,12 @@ public class QualityStatsService {
 		for (Map<String, Object> defectRate : rateList) {
 			int index = getIndex(typeArray, (String)defectRate.get("defectProperties"));
 			if (index != -1) {
-				double rate = Double.parseDouble(defectRate.get("rate").toString());
-				BigDecimal bg = new BigDecimal(rate);
-				rate = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-				rateArray[index] = rate;
+				countArray[index] = Integer.parseInt(defectRate.get("count").toString());
 			}
 		}
 		map.put("type", typeArray);
 		map.put("typeName", typeNameArray);
-		map.put("rate", rateArray);
+		map.put("count", countArray);
 		return map;
 	}
 
@@ -261,6 +258,8 @@ public class QualityStatsService {
 		String[] tendersNameArray = new String[tendersList.size()];
 		Double[] rateArray = new Double[tendersList.size()];
 		Arrays.fill(rateArray, 0.0);
+		Integer[] countArray = new Integer[tendersList.size()];
+		Arrays.fill(countArray, 0);
 		//判断项目下是否有标段
 		if (tendersList.size() > 0) {
 			for (int i = 0; i < tendersList.size(); i++) {
@@ -272,17 +271,14 @@ public class QualityStatsService {
 					String tendersOid = (String)dataList.get(i).get("tendersOid");
 					int index = getIndex(tendersOidArray, tendersOid);
 					if (index != -1) {
-						double qualifiedRate = Double.parseDouble(dataList.get(i).get("unQualifiedRate").toString());
-						BigDecimal bg = new BigDecimal(qualifiedRate);
-						qualifiedRate = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-						rateArray[index] = qualifiedRate;
+						countArray[index] = Integer.parseInt(dataList.get(i).get("count").toString());
 					}
 				}
 			}
 		}
 		map.put("tendersOids", tendersOidArray);
 		map.put("tendersNames", tendersNameArray);
-		map.put("rate", rateArray);
+		map.put("count", countArray);
 		return map;
 	}
 
@@ -380,6 +376,8 @@ public class QualityStatsService {
 		String[] unitNameArray = new String[constructAndProjectUnitList.size()];
 		Double[] rateArray = new Double[constructAndProjectUnitList.size()];
 		Arrays.fill(rateArray, 0.0);
+		Integer[] countArray = new Integer[constructAndProjectUnitList.size()];
+		Arrays.fill(countArray, 0);
 		if (constructAndProjectUnitList.size() > 0) {
 			for (int i = 0; i < constructAndProjectUnitList.size(); i++) {
 				unitOidArray[i] = (String) constructAndProjectUnitList.get(i).get("key");
@@ -389,17 +387,14 @@ public class QualityStatsService {
 				for (int j = 0; j < dataList.size(); j++) {
 					int index = getIndex(unitOidArray, (String)dataList.get(j).get("constructUnit"));
 					if (index != -1) {
-						double unQualifiedRate = Double.parseDouble(dataList.get(j).get("unQualifiedRate").toString());
-						BigDecimal bg = new BigDecimal(unQualifiedRate);
-						unQualifiedRate = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-						rateArray[j] = unQualifiedRate;
+						countArray[index] = Integer.parseInt(dataList.get(j).get("count").toString());
 					}
 				}
 			}
 		}
 		map.put("tendersOids", unitOidArray);
 		map.put("tendersNames", unitNameArray);
-		map.put("rate", rateArray);
+		map.put("count", countArray);
 		return map;
 	}
 	
