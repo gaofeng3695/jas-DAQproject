@@ -280,7 +280,7 @@ public class MaterialStatisticsService {
 				sum.put("tendersOid", oid);
 				sum.put("specifications", "合计");
 				sum.put("pipe_month_use", nf.format(pipe_month_use_sum));
-				sum.put("pipe_total_use_", nf.format(pipe_total_use_sum));
+				sum.put("pipe_total_use", nf.format(pipe_total_use_sum));
 				sum.put("pipe_month_receive", nf.format(pipe_month_receive_sum));
 				sum.put("pipe_total_receive", nf.format(pipe_total_receive_sum));
 				sum.put("pipe_total_overplus", nf.format(pipe_total_overplus_sum));
@@ -385,7 +385,7 @@ public class MaterialStatisticsService {
 			sum.put("tendersOid", "");
 			sum.put("specifications", "合计");
 			sum.put("pipe_month_use", nf.format(pipe_month_use_sum));
-			sum.put("pipe_total_use_", nf.format(pipe_total_use_sum));
+			sum.put("pipe_total_use", nf.format(pipe_total_use_sum));
 			sum.put("pipe_month_receive", nf.format(pipe_month_receive_sum));
 			sum.put("pipe_total_receive", nf.format(pipe_total_receive_sum));
 			sum.put("pipe_total_overplus", nf.format(pipe_total_overplus_sum));

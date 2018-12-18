@@ -72,6 +72,7 @@ public class CutWeldService {
 		pipe.setPipelineOid(cutWeld.getPipelineOid());
 		pipe.setIsCut(1);
 		pipe.setIsUse(1);
+		pipe.setConstructUnit(cutWeld.getConstructUnit());
 		// 将原钢管对象设置成已切管已使用
 		commonDataJdbcService.update(pipe);
 		// 保存段钢管信息
@@ -101,6 +102,7 @@ public class CutWeldService {
 		SteelPipe pipe = (SteelPipe) commonDataJdbcService.get(SteelPipe.class, cutWeld.getPipeOid());
 		pipe.setTendersOid(cutWeld.getTendersOid());
 		pipe.setPipelineOid(cutWeld.getPipelineOid());
+		pipe.setConstructUnit(cutWeld.getConstructUnit());
 		// 删除原段钢管信息
 		pipeDao.deleteSegmentPipe(pipe.getPipeCode(), pipe.getOid());
 		// 保存新的段钢管信息
