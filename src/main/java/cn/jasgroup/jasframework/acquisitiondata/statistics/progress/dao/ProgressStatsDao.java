@@ -219,7 +219,7 @@ public class ProgressStatsDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String, String>> getTendersList(String projectOid) {
-		String sql = "select oid, tenders_name from daq_tenders where active=1 and project_oid = :projectOid";
+		String sql = "select oid, tenders_name from daq_tenders where active=1 and project_oid = :projectOid order BY create_datetime";
 		List queryForList = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid));
 		return queryForList;
 	}
@@ -313,7 +313,7 @@ public class ProgressStatsDao {
 					+ "left join daq_material_pipe_cold_bending cold on cold.oid = weld.front_pipe_oid and weld.front_pipe_type = 'pipe_type_code_008' and cold.active=1  "
 					+ "WHERE weld.active = 1 AND weld.approve_status = 2 AND weld.project_oid = :projectOid "
 					+ "AND to_char(weld.construct_date,'yyyy-MM-dd') <= :date GROUP BY weld.tenders_oid)"
-					+ ") tt LEFT JOIN (select oid,tenders_name,active from daq_tenders where active=1) p ON p.oid=tt.tenders_oid";
+					+ ") tt LEFT JOIN (select oid,tenders_name,active,create_datetime from daq_tenders where active=1) p ON p.oid=tt.tenders_oid order by p.create_datetime";
 		List queryForList = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid,"date",date), ProgressStatsQueryBo.class);
 		return queryForList;
 	}
@@ -338,7 +338,8 @@ public class ProgressStatsDao {
 					+ "left join daq_material_pipe_cold_bending cold on cold.oid = w.front_pipe_oid and w.front_pipe_type = 'pipe_type_code_008' and cold.active=1 "
 					+ "where patch.active=1 and patch.approve_status=2 and patch.project_oid = :projectOid AND to_char(patch.buckle_date,'yyyy-MM-dd') <= :date "
 					+ "GROUP BY patch.tenders_oid"
-					+ ") tt LEFT JOIN (select oid,tenders_name,active from daq_tenders where active=1) p ON p.oid=tt.tenders_oid";
+					+ ") tt LEFT JOIN (select oid,tenders_name,active,create_datetime from daq_tenders where active=1) p ON p.oid=tt.tenders_oid "
+					+ "order by p.create_datetime";
 		List queryForList = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid,"date",date), ProgressStatsQueryBo.class);
 		return queryForList;
 	}
@@ -359,7 +360,7 @@ public class ProgressStatsDao {
 					+ "FROM daq_lay_pipe_trench_backfill "
 					+ "WHERE active = 1 AND approve_status = 2 AND project_oid = :projectOid AND to_char(construct_date, 'yyyy-MM-dd') <= :date "
 					+ "GROUP BY tenders_oid  "
-					+ ") tt LEFT JOIN (select oid,tenders_name,active from daq_tenders where active=1) p ON p.oid=tt.tenders_oid";
+					+ ") tt LEFT JOIN (select oid,tenders_name,active,create_datetime from daq_tenders where active=1) p ON p.oid=tt.tenders_oid order by p.create_datetime";
 		List queryForList = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid,"date",date), ProgressStatsQueryBo.class);
 		return queryForList;
 	}
@@ -380,7 +381,7 @@ public class ProgressStatsDao {
 					+ "from daq_lay_land_restoration  llr "
 					+ "where llr.active = 1 and llr.approve_status = 2 and llr.project_oid = :projectOid "
 					+ "and to_char(llr.construct_date, 'yyyy-MM-dd') <= :date GROUP BY llr.tenders_oid) tt "
-					+ "LEFT JOIN (select oid,tenders_name,active from daq_tenders where active=1) p ON p.oid=tt.tenders_oid";
+					+ "LEFT JOIN (select oid,tenders_name,active,create_datetime from daq_tenders where active=1) p ON p.oid=tt.tenders_oid order by p.create_datetime";
 		List queryForList = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid,"date",date), ProgressStatsQueryBo.class);
 		return queryForList;
 	}
@@ -401,7 +402,7 @@ public class ProgressStatsDao {
 					+ "FROM daq_construction_weld weld "
 					+ "WHERE weld.active = 1 AND weld.approve_status = 2 AND weld.project_oid = :projectOid "
 					+ "AND to_char(weld.construct_date,'yyyy-MM-dd') <= :date GROUP BY weld.tenders_oid)"
-					+ ") tt LEFT JOIN (select oid,tenders_name,active from daq_tenders where active=1) p ON p.oid=tt.tenders_oid ";
+					+ ") tt LEFT JOIN (select oid,tenders_name,active,create_datetime from daq_tenders where active=1) p ON p.oid=tt.tenders_oid order by p.create_datetime";
 		List queryForList = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid,"date",date), ProgressStatsQueryBo.class);
 		return queryForList;
 	}
@@ -423,7 +424,7 @@ public class ProgressStatsDao {
 					+ "where patch.active=1 and patch.approve_status=2 and patch.project_oid = :projectOid "
 					+ "AND to_char(patch.buckle_date,'yyyy-MM-dd') <= :date "
 					+ "GROUP BY patch.tenders_oid"
-					+ ") tt LEFT JOIN (select oid,tenders_name,active from daq_tenders where active=1) p ON p.oid=tt.tenders_oid ";
+					+ ") tt LEFT JOIN (select oid,tenders_name,active,create_datetime from daq_tenders where active=1) p ON p.oid=tt.tenders_oid  order by p.create_datetime";
 		List queryForList = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid,"date",date), ProgressStatsQueryBo.class);
 		return queryForList;
 	}
@@ -444,7 +445,7 @@ public class ProgressStatsDao {
 					+ "FROM daq_detection_ray "
 					+ "WHERE active = 1 AND approve_status = 2 AND project_oid = :projectOid AND to_char(detection_deta,'yyyy-MM-dd') <= :date "
 					+ "GROUP BY tenders_oid "
-					+ ") tt LEFT JOIN (select oid,tenders_name,active from daq_tenders where active=1) p ON p.oid=tt.tenders_oid ";
+					+ ") tt LEFT JOIN (select oid,tenders_name,active,create_datetime from daq_tenders where active=1) p ON p.oid=tt.tenders_oid  order by p.create_datetime";
 		List queryForList = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid,"date",date), ProgressStatsQueryBo.class);
 		return queryForList;
 	}
@@ -465,7 +466,7 @@ public class ProgressStatsDao {
 					+ "FROM daq_weld_measured_result "
 					+ "WHERE active = 1 AND approve_status = 2 AND project_oid = :projectOid AND to_char(survey_date,'yyyy-MM-dd') <= :date "
 					+ "GROUP BY tenders_oid"
-					+ ") tt LEFT JOIN (select oid,tenders_name,active from daq_tenders where active=1) p ON p.oid=tt.tenders_oid ";
+					+ ") tt LEFT JOIN (select oid,tenders_name,active,create_datetime from daq_tenders where active=1) p ON p.oid=tt.tenders_oid  order by p.create_datetime";
 		List queryForList = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid,"date",date), ProgressStatsQueryBo.class);
 		return queryForList;
 	}

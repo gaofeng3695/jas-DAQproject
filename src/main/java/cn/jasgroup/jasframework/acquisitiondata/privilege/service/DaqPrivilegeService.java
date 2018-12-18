@@ -287,6 +287,15 @@ public class DaqPrivilegeService extends BaseService{
 	}
 
 
+	/**
+	 * <p>功能描述：根据项目查所有的施工单位和建设单位。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOids
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月18日 下午4:35:15。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
 	public List<Map<String, Object>> getConstructAndProjectUnitList(List<String> projectOids) {
 		return daqPrivilegeDao.getConstructAndProjectUnitList(projectOids);
 	}
