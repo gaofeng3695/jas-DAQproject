@@ -218,15 +218,15 @@ public class QualityStatsDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String, Object>> getConstructUnitByProjectOid(String projectOid) {
-		String sql = "select distinct t.oid as key,t.unit_name as value,t.create_datetime from pri_unit t left JOIN daq_implement_scope_ref i on t.oid=i.unit_oid "
-					+ "where t.hierarchy like 'Unit.0001.0005%' and i.project_oid=:projectOid ORDER BY t.create_datetime";
+		String sql = "select distinct t.oid as key,t.unit_name as value,t.hierarchy from pri_unit t left JOIN daq_implement_scope_ref i on t.oid=i.unit_oid "
+					+ "where t.active=1 and t.hierarchy like 'Unit.0001.0005%' and i.project_oid=:projectOid ORDER BY t.hierarchy";
 		List<Map<String, Object>> list = commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid));
 		return list;
 	}
 
 	public List<Map<String, Object>> getAllProjectUnitByProjectOid(String projectOid) {
-		String sql = "select DISTINCT t.oid as key,t.unit_name as value,t.create_datetime from pri_unit t left JOIN daq_implement_scope_ref i on t.oid=i.unit_oid "
-					+ "where t.hierarchy like 'Unit.0001.0001%' and i.project_oid=:projectOid ORDER BY t.create_datetime";
+		String sql = "select DISTINCT t.oid as key,t.unit_name as value,t.hierarchy from pri_unit t left JOIN daq_implement_scope_ref i on t.oid=i.unit_oid "
+					+ "where t.active=1 and t.hierarchy like 'Unit.0001.0001%' and i.project_oid=:projectOid ORDER BY t.hierarchy";
 		List<Map<String, Object>> list = commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid));
 		return list;
 	}

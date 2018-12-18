@@ -285,4 +285,9 @@ public class DaqPrivilegeService extends BaseService{
 		}
 		return this.daqPrivilegeDao.getCurrentUnitId(sql);
 	}
+
+
+	public List<Map<String, Object>> getConstructAndProjectUnitList(List<String> projectOids) {
+		return daqPrivilegeDao.getConstructAndProjectUnitList(projectOids);
+	}
 }
