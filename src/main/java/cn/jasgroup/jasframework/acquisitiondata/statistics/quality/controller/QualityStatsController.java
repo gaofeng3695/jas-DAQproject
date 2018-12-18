@@ -193,7 +193,7 @@ public class QualityStatsController {
 	@PostMapping("getEachUnitQualifiedRateByProjects")
 	@ResponseBody
 	public Object getEachUnitQualifiedRateByProjects(@RequestBody Map<String, Object> params){
-		ListResult<Map<String, Object>> result= null;
+		SimpleResult<Map<String, Object>> result= null;
 		try{
 			//项目
 			String projectOid = (String)params.get("projectOid");
@@ -203,10 +203,10 @@ public class QualityStatsController {
 				return new ListResult<>(-1,"400","请选择对应的项目或日期");
 			}
 			//根据项目、日期查询每个单位的检测口数和一次合格率
-			List<Map<String, Object>> rows = qualityStatsService.getEachUnitQualifiedRateByProjects(projectOid, date);
-			result = new ListResult<>(1,"200","ok",rows);
+			Map<String, Object> rows = qualityStatsService.getEachUnitQualifiedRateByProjects(projectOid, date);
+			result = new SimpleResult<>(1,"200","ok",rows);
 		}catch(Exception e){
-			result = new ListResult<>(-1,"400","error");
+			result = new SimpleResult<>(-1,"400","error");
 			e.printStackTrace();
 		}
 		return result;

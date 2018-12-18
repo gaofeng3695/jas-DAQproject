@@ -292,61 +292,42 @@ public class QualityStatsService {
 	  * <p>创建日期:2018年12月17日 下午1:41:52。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public List<Map<String, Object>> getEachUnitQualifiedRateByProjects(String projectOid, String date) {
+	public Map<String, Object> getEachUnitQualifiedRateByProjects(String projectOid, String date) {
 		//封装返回值
-		List<Map<String, Object>> list = new ArrayList<>();
-		//查询项目下所有的建设单位
-		List<Map<String, Object>> projectUnitList = qualityStatsDao.getAllProjectUnitByProjectOid(projectOid);
-		//根据项目查询标段oid和对应的名称
-		List<Map<String,String>> tendersList = progressStatsDao.getTendersList(projectOid);
+		Map<String, Object> map = new HashMap<>();
+		//查询项目下所有的建设单位和施工单位
+		List<Map<String, Object>> constructAndProjectUnitList = qualityStatsDao.getAllProjectAndConstructUnitByProjectOid(projectOid);
 		//根据项目和日期查询标段下施工单位的检测口数和一次合格率
 		List<Map<String, Object>> dataList = qualityStatsDao.getEachUnitQualifiedRateByProjects(projectOid, date);
-		//判断项目下是否有标段
-		if (tendersList.size() > 0) {
-			for (int i = 0; i < tendersList.size(); i++) {
-				//封装每个标段返回值
-				Map<String, Object> map = new HashMap<>();
-				map.put("tendersOid", tendersList.get(i).get("oid"));
-				map.put("tendersName", tendersList.get(i).get("tendersName"));
-				//查询标段下所有的施工单位
-				List<Map<String, Object>> constructUnitList = daqPrivilegeDao.getConstructionUnitByTendersOid(tendersList.get(i).get("oid"));
-				//所有施工单位和建设单位
-				List<Map<String, Object>> constructAndProjectUnitList = new ArrayList<>();
-				constructAndProjectUnitList.addAll(projectUnitList);
-				constructAndProjectUnitList.addAll(constructUnitList);
-				
-				String[] unitOidArray = new String[constructAndProjectUnitList.size()];
-				String[] unitNameArray = new String[constructAndProjectUnitList.size()];
-				Integer[] countArray = new Integer[constructAndProjectUnitList.size()];
-				Arrays.fill(countArray, 0);
-				Double[] rateArray = new Double[constructAndProjectUnitList.size()];
-				Arrays.fill(rateArray, 0.0);
-				if (constructAndProjectUnitList.size() > 0) {
-					for (int j = 0; j < constructAndProjectUnitList.size(); j++) {
-						unitOidArray[j] = (String) constructAndProjectUnitList.get(j).get("key");
-						unitNameArray[j] = (String) constructAndProjectUnitList.get(j).get("value");
-					}
-					if (dataList.size() > 0) {
-						for (int h = 0; h < dataList.size(); h++) {
-							int index = getIndex(unitOidArray, (String)dataList.get(h).get("constructUnit"));
-							if (tendersList.get(i).get("oid").equals(dataList.get(h).get("tendersOid")) && index != -1) {
-								countArray[index] = Integer.parseInt(dataList.get(h).get("totalCount").toString());
-								double qualifiedRate = Double.parseDouble(dataList.get(h).get("qualifiedRate").toString());
-								BigDecimal bg = new BigDecimal(qualifiedRate);
-								qualifiedRate = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-								rateArray[index] = qualifiedRate;
-							}
-						}
+		String[] unitOidArray = new String[constructAndProjectUnitList.size()];
+		String[] unitNameArray = new String[constructAndProjectUnitList.size()];
+		Integer[] countArray = new Integer[constructAndProjectUnitList.size()];
+		Arrays.fill(countArray, 0);
+		Double[] rateArray = new Double[constructAndProjectUnitList.size()];
+		Arrays.fill(rateArray, 0.0);
+		if (constructAndProjectUnitList.size() > 0) {
+			for (int i = 0; i < constructAndProjectUnitList.size(); i++) {
+				unitOidArray[i] = (String) constructAndProjectUnitList.get(i).get("key");
+				unitNameArray[i] = (String) constructAndProjectUnitList.get(i).get("value");
+			}
+			if (dataList.size() > 0) {
+				for (int h = 0; h < dataList.size(); h++) {
+					int index = getIndex(unitOidArray, (String)dataList.get(h).get("constructUnit"));
+					if (index != -1) {
+						countArray[index] = Integer.parseInt(dataList.get(h).get("totalCount").toString());
+						double qualifiedRate = Double.parseDouble(dataList.get(h).get("qualifiedRate").toString());
+						BigDecimal bg = new BigDecimal(qualifiedRate);
+						qualifiedRate = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+						rateArray[index] = qualifiedRate;
 					}
 				}
-				map.put("unitOids", unitOidArray);
-				map.put("unitNames", unitNameArray);
-				map.put("count", countArray);
-				map.put("rate", rateArray);
-				list.add(map);
 			}
 		}
-		return list;
+		map.put("unitOids", unitOidArray);
+		map.put("unitNames", unitNameArray);
+		map.put("count", countArray);
+		map.put("rate", rateArray);
+		return map;
 	}
 
 	/**
