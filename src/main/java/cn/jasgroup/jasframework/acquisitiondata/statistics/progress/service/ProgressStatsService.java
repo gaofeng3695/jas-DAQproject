@@ -330,8 +330,8 @@ public class ProgressStatsService {
 			String[] tendersOids = new String[tendersList.size()];
 			for (int i = 0; i < dataList.size(); i++) {
 				statsResult[i] = Double.parseDouble(dataList.get(i).getStatsResult().toString());
-				tendersNames[i] = dataList.get(i).getProjectName();
-				tendersOids[i] = dataList.get(i).getProjectOid();
+				tendersNames[i] = dataList.get(i).getTendersName();
+				tendersOids[i] = dataList.get(i).getTendersOid();
 			}
 			//若dataList中数据不包含传的项目，将遗失的项目及对应的数据补0
 			//用于判断向数组中哪个索引位置插值
@@ -351,16 +351,16 @@ public class ProgressStatsService {
 		} else {
 			//若dataList为空，封装项目oid和名称，将对应的长度封装为0
 			Double[] statsResult = new Double[tendersList.size()];
-			String[] projectName = new String[tendersList.size()];
-			String[] projectOid = new String[tendersList.size()];
+			String[] tendersNames = new String[tendersList.size()];
+			String[] tendersOids = new String[tendersList.size()];
 			for (int i = 0; i < tendersList.size(); i++) {
 				statsResult[i] = 0.0;
-				projectName[i] = tendersList.get(i).get("tendersName");
-				projectOid[i] = tendersList.get(i).get("oid");
+				tendersNames[i] = tendersList.get(i).get("tendersName");
+				tendersOids[i] = tendersList.get(i).get("oid");
 			}
 			map.put("statsResult", statsResult);
-			map.put("tendersNames", projectName);
-			map.put("tendersOids", projectOid);
+			map.put("tendersNames", tendersNames);
+			map.put("tendersOids", tendersOids);
 			resultList.add(map);
 		}
 	}

@@ -399,6 +399,15 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 	}
 
 
+	/**
+	 * <p>功能描述：根据项目查所有的施工单位和建设单位。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOids
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月18日 下午4:34:33。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
 	public List<Map<String, Object>> getConstructAndProjectUnitList(List<String> projectOids) {
 		String sql = "select DISTINCT t.oid as key,t.unit_name as value,t.hierarchy from pri_unit t "
 					+ "left JOIN daq_implement_scope_ref i on t.oid=i.unit_oid where t.active=1 "
