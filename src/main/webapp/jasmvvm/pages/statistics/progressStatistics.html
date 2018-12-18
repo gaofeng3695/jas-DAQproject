@@ -14,9 +14,10 @@
     .height {
       height: 100% !important;
     }
-     .el-input__prefix{
-   left:10px !important;
-   }
+
+    .el-input__prefix {
+      left: 10px !important;
+    }
   </style>
 </head>
 
@@ -118,9 +119,9 @@
 <script src="./../../common/components/jas-components.js"></script>
 <script src="./../../common/js/jas-tools.js"></script>
 <script>
-var color = ['#396fff', '#5eb6f9', '#c2e4fd', '#dde6ff', '#e5e5e5', '#e1e9ff', '#FF99CC', '#99CCFF', '##FF9900',
-             '#FF9900', '#CCFF66'
-           ];
+  var color = ['#396fff', '#5eb6f9', '#c2e4fd', '#dde6ff', '#e5e5e5', '#e1e9ff', '#FF99CC', '#99CCFF', '##FF9900',
+    '#FF9900', '#CCFF66'
+  ];
   var vm = new Vue({
     el: '#app',
     data: function () {
@@ -327,18 +328,30 @@ var color = ['#396fff', '#5eb6f9', '#c2e4fd', '#dde6ff', '#e5e5e5', '#e1e9ff', '
       renderProcessByProject: function (x, legend) {
         var legendArr = [];
         var series = [];
-        for (var key in legend) {
-          legendArr.push(key);
-          series.push({
-            name: key,
-            type: 'bar',
-            label: {
-              show: true,
-              position: 'top'
-            },
-            data: legend[key]
-          })
+        var projectX = [];
+        for (var i = 0; i < x.length; i++) {
+          if (i == 0) {
+            for (var key in legend) {
+              legendArr.push(key);
+              projectX.push(key);
+              series.push({
+                name: key,
+                type: 'bar',
+                label: {
+                  show: true,
+                  position: 'top'
+                },
+                data: legend[key]
+              })
+            }
+          } else {
+            for (var key in legend) {
+              projectX.push(key);
+            }
+          }
+
         }
+
         var that = this;
         if (!that.processByProject) {
           that.processByProject = echarts.init(document.getElementById('processByProject'));
@@ -393,12 +406,28 @@ var color = ['#396fff', '#5eb6f9', '#c2e4fd', '#dde6ff', '#e5e5e5', '#e1e9ff', '
             containLabel: true
           },
           xAxis: [{
-                type: 'category',
-                data: x,
-                axisLabel: {
-                  show: true
-                }
-              }],
+            type: 'category',
+            data: ['焊接(KM)', '补口(KM)', '管沟回填(KM)', '地貌恢复(KM)'],
+            axisPointer: {
+              type: 'shadow'
+            },
+            position: 'bottom',
+            offset: 20,
+            axisTick: {
+              show: true,
+              length: 40,
+              lineStyle: {
+                type: 'dotted'
+              }
+            }
+          }, {
+            type: 'category',
+            data: projectX,
+            position: 'bottom',
+            axisLabel: {
+              show: true
+            }
+          }],
           yAxis: [{
             type: 'value'
           }],
@@ -411,17 +440,29 @@ var color = ['#396fff', '#5eb6f9', '#c2e4fd', '#dde6ff', '#e5e5e5', '#e1e9ff', '
         var that = this;
         var legendArr = [];
         var series = [];
-        for (var key in legend) {
-          legendArr.push(key);
-          series.push({
-            name: key,
-            type: 'bar',
-            label: {
-              show: true,
-              position: 'top'
-            },
-            data: legend[key]
-          })
+        var projectX = [];
+        for (var i = 0; i < x.length; i++) {
+          if (i == 0) {
+            for (var key in legend) {
+              legendArr.push(key);
+              projectX.push(key);
+              series.push({
+                name: key,
+                type: 'bar',
+                label: {
+                  show: true,
+                  position: 'top'
+                },
+                data: legend[key]
+              })
+            }
+          } else {
+            for (var key in legend) {
+
+              projectX.push(key);
+            }
+          }
+
         }
         if (!that.processByCount) {
           that.processByCount = echarts.init(document.getElementById('processByCount'));
@@ -476,12 +517,28 @@ var color = ['#396fff', '#5eb6f9', '#c2e4fd', '#dde6ff', '#e5e5e5', '#e1e9ff', '
             containLabel: true
           },
           xAxis: [{
-            type: 'category',
-            data: x,
-            axisLabel: {
-              show: true
-            }
-          }],
+              type: 'category',
+              data: ['焊接(口)', '补口(口)', '管沟回填(口)', '地貌恢复(口)'],
+              axisPointer: {
+                type: 'shadow'
+              },
+              position: 'bottom',
+              offset: 20,
+              axisTick: {
+                show: true,
+                length: 40,
+                lineStyle: {
+                  type: 'dotted'
+                }
+              }
+            }, {
+              type: 'category',
+              data: projectX,
+              position: 'bottom',
+              axisLabel: {
+                show: true
+              }
+            }],
           yAxis: [{
             type: 'value'
           }],
@@ -529,17 +586,27 @@ var color = ['#396fff', '#5eb6f9', '#c2e4fd', '#dde6ff', '#e5e5e5', '#e1e9ff', '
       renderSectionByProcessK: function (x, legend) {
         var legendArr = [];
         var serise = [];
-        for (var key in legend) {
-          legendArr.push(key);
-          serise.push({
-            name: key,
-            type: 'bar',
-            label: {
-              show: true,
-              position: 'top'
-            },
-            data: legend[key]
-          });
+        var projectX = [];
+        for (var i = 0; i < x.length; i++) {
+          if (i == 0) {
+            for (var key in legend) {
+                legendArr.push(key);
+                projectX.push(key);
+                serise.push({
+                  name: key,
+                  type: 'bar',
+                  label: {
+                    show: true,
+                    position: 'top'
+                  },
+                  data: legend[key]
+                });
+            }
+          } else {
+            for (var key in legend) {
+              projectX.push(key);
+            }
+          }
         }
         var that = this;
         if (!that.sectionByProcessKChart) {
@@ -593,12 +660,28 @@ var color = ['#396fff', '#5eb6f9', '#c2e4fd', '#dde6ff', '#e5e5e5', '#e1e9ff', '
             containLabel: true
           },
           xAxis: [{
-            type: 'category',
-            data: x,
-            axisLabel: {
-              show: true
-            }
-          }],
+              type: 'category',
+              data: ['焊接(KM)', '补口(KM)', '管沟回填(KM)', '地貌恢复(KM)'],
+              axisPointer: {
+                type: 'shadow'
+              },
+              position: 'bottom',
+              offset: 20,
+              axisTick: {
+                show: true,
+                length: 40,
+                lineStyle: {
+                  type: 'dotted'
+                }
+              }
+            }, {
+              type: 'category',
+              data: projectX,
+              position: 'bottom',
+              axisLabel: {
+                show: true
+              }
+            }],
           yAxis: [{
             type: 'value'
           }],
@@ -610,23 +693,29 @@ var color = ['#396fff', '#5eb6f9', '#c2e4fd', '#dde6ff', '#e5e5e5', '#e1e9ff', '
       renderSectionByProcessC: function (x, legend) {
         var legendArr = [];
         var serise = [];
-        for (var key in legend) {
-          legendArr.push(key);
-          for (var i = 0; i < x.length; i++) {
-            if (!legend[key][i]) {
-              legend[key][i] = 0;
+        var projectX = [];
+        for (var i = 0; i < x.length; i++) {
+          if (i == 0) {
+            for (var key in legend) {
+                legendArr.push(key);
+                projectX.push(key);
+                serise.push({
+                  name: key,
+                  type: 'bar',
+                  label: {
+                    show: true,
+                    position: 'top'
+                  },
+                  data: legend[key]
+                });
+            }
+          } else {
+            for (var key in legend) {
+              projectX.push(key);
             }
           }
-          serise.push({
-            name: key,
-            type: 'bar',
-            label: {
-              show: true,
-              position: 'top'
-            },
-            data: legend[key]
-          });
         }
+        console.log(projectX);
         var that = this;
         if (!that.sectionByProcessCChart) {
           that.sectionByProcessCChart = echarts.init(document.getElementById('sectionByProcessCChart'));
@@ -679,12 +768,28 @@ var color = ['#396fff', '#5eb6f9', '#c2e4fd', '#dde6ff', '#e5e5e5', '#e1e9ff', '
             containLabel: true
           },
           xAxis: [{
-            type: 'category',
-            data: x,
-            axisLabel: {
-              show: true
-            }
-          }],
+              type: 'category',
+              data: ['焊接(口)', '补口(口)', '管沟回填(口)', '地貌恢复(口)'],
+              axisPointer: {
+                type: 'shadow'
+              },
+              position: 'bottom',
+              offset: 20,
+              axisTick: {
+                show: true,
+                length: 40,
+                lineStyle: {
+                  type: 'dotted'
+                }
+              }
+            }, {
+              type: 'category',
+              data: projectX,
+              position: 'bottom',
+              axisLabel: {
+                show: true
+              }
+            }],
           yAxis: [{
             type: 'value'
           }],

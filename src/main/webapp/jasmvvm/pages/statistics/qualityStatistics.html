@@ -423,29 +423,7 @@
             });
             return;
           }
-          var x = [];
-          var legend = {
-
-          };
-          data.rows.forEach(function (item, index) {
-            x.push(item.tendersName);
-            var name = item.unitNames;
-            name.forEach(function (name, index1) {
-              if (!legend[name]) {
-                legend[name] = {
-                  count: [],
-                  rate: []
-                };
-                legend[name].count[index] = item.count[index1];
-                legend[name].rate[index] = item.rate[index1];
-              } else {
-                legend[name].count[index] = item.count[index1];
-                legend[name].rate[index] = item.rate[index1];
-              }
-            });
-          });
-          //   console.log(legend);
-          that._renderWeldByUnitsL(x, legend);
+          that._renderWeldByUnitsL(data.data);
         });
       },
       requestWeldByUnitsR: function () {
@@ -782,66 +760,73 @@
         };
         that.weldByTendersChartR.setOption(option, true);
       },
-      _renderWeldByUnitsL: function (x, obj) {
+      _renderWeldByUnitsL: function (data) {
         var that = this;
-        var series = [];
-        var legends = [];
-        for (var key in obj) {
-          legends.push(key);
-          series.push({
-            name: key,
-            type: 'bar',
-            stack: '总量',
-            label: {
-              normal: {
-                show: true,
-                position: 'inside'
-              }
-            },
-            data: obj[key].count
-          });
-        }
-        //  console.log(series);
         if (!that.weldByUnitsChartL) {
           that.weldByUnitsChartL = echarts.init(document.getElementById('weldByUnitsChartL'));
         }
         var option = {
-          title: {
-            left: 'center',
-            top: '10px',
-            text: "项目各单位焊接一次合格率对比"
-          },
-          tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-              type: 'cross',
-              crossStyle: {
-                color: '#999'
-              }
-            }
-          },
-          legend: {
-            data: legends,
-            bottom: "-5px"
-          },
-          grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '10%',
-            containLabel: true
-          },
-          xAxis: [{
-            type: 'category',
-            data: x,
-          }],
-          yAxis: [{
-              type: 'value',
-            }
+                title: {
+                  left: 'center',
+                  top: '10px',
+                  text: "项目各单位焊接一次合格率对比"
+                },
+                tooltip: {
+                  trigger: 'axis',
+                  axisPointer: {
+                    type: 'cross',
+                    crossStyle: {
+                      color: '#999'
+                    }
+                  }
+                },
+                legend: {
+                  data: ['焊口数量', '一次合格率'],
+                  bottom: "-5px"
+                },
+                grid: {
+                  left: '3%',
+                  right: '4%',
+                  bottom: '7%',
+                  containLabel: true
+                },
+                xAxis: [{
+                  type: 'category',
+                  data: data.unitNames,
+                }],
+                yAxis: [{
+                    type: 'value',
+                  },
+                  {
+                    type: 'value',
+                    axisLabel: {
+                      formatter: '{value} %'
+                    }
+                  }
+                ],
+                series: [{
+                    name: '焊口数量',
+                    type: 'bar',
+                    data: data.count,
+                    label: {
+                      show: true,
+                      position: 'top'
+                    }
+                  },
+                  {
+                    name: '一次合格率',
+                    type: 'line',
+                    yAxisIndex: 1,
+                    data: data.rate,
+                    label: {
+                      show: true,
+                      formatter: '{c}%'
 
-          ],
-          series: series,
-          color: color
-        };
+                    }
+                  }
+                ],
+                color: color
+              };
         that.weldByUnitsChartL.setOption(option, true);
       },
       _renderWeldByUnitsR: function (legend, dataArr) {
