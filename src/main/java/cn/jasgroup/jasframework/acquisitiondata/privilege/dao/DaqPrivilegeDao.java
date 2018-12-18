@@ -400,7 +400,10 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 
 
 	public List<Map<String, Object>> getConstructAndProjectUnitList(List<String> projectOids) {
-		String sql = "select DISTINCT t.oid as key,t.unit_name as value,t.hierarchy from pri_unit t left JOIN daq_implement_scope_ref i on t.oid=i.unit_oid where t.active=1 and t.hierarchy like 'Unit.0001.0001%' or t.hierarchy like 'Unit.0001.0005%' and i.project_oid in (:projectOids) ORDER BY t.hierarchy;";
+		String sql = "select DISTINCT t.oid as key,t.unit_name as value,t.hierarchy from pri_unit t "
+					+ "left JOIN daq_implement_scope_ref i on t.oid=i.unit_oid where t.active=1 "
+					+ "and (t.hierarchy like 'Unit.0001.0001%' or t.hierarchy like 'Unit.0001.0005%') and i.project_oid in (:projectOids) "
+					+ "ORDER BY t.hierarchy;";
 		return commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOids", projectOids));
 	}
 }
