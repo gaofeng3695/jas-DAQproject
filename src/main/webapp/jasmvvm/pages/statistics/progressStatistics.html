@@ -14,13 +14,17 @@
     .height {
       height: 100% !important;
     }
+     .el-input__prefix{
+   left:10px !important;
+   }
   </style>
 </head>
 
 <body>
   <div id="app" v-cloak>
     <div style="padding:10px;box-sizing: border-box;height: 100%;">
-      <statistic-group-project title="项目-各工序分项目对比统计(KM)" :search="proByProject" :datetype="proDate" @requestnet="requestProcessByProject"></statistic-group-project>
+      <statistic-group-project title="项目-各工序分项目对比统计(KM)" :projectarray="projectArray" :search="proByProject" :datetype="proDate"
+        @requestnet="requestProcessByProject"></statistic-group-project>
       <el-row :gutter="10" style="padding-top:10px">
         <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="height">
           <el-card style="margin-bottom: 10px">
@@ -31,7 +35,7 @@
         </el-col>
       </el-row>
 
-      <statistic-group-project title="项目-各工序项目对比统计（口数）" :search="proByCount" :datetype="proDate" @requestnet="requestProcessByCount"></statistic-group-project>
+      <statistic-group-project title="项目-各工序项目对比统计（口数）" :projectarray="projectArray" :search="proByCount" :datetype="proDate" @requestnet="requestProcessByCount"></statistic-group-project>
       <el-row :gutter="10" style="padding-top:10px">
         <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="height">
           <el-card style="margin-bottom: 10px">
@@ -78,7 +82,8 @@
 
 
 
-      <statistic-group title="标段-各工序分标段累计情况统计(KM)" :datetype="proDate" :search="sectionByProcessK" @requestnet="requestSectionByProcessK"></statistic-group>
+      <statistic-group title="标段-各工序分标段累计情况统计(KM)" :projectarray="projectArray" :datetype="proDate" :search="sectionByProcessK"
+        @requestnet="requestSectionByProcessK"></statistic-group>
       <el-row :gutter="10" style="padding-top:10px">
         <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="height">
           <el-card style="margin-bottom: 10px">
@@ -89,7 +94,8 @@
         </el-col>
       </el-row>
 
-      <statistic-group title="标段-各工序分标段累计情况统计（口数）" :datetype="proDate" :search="sectionByProcessC" @requestnet="requestSectionByProcessC"></statistic-group>
+      <statistic-group title="标段-各工序分标段累计情况统计（口数）" :projectarray="projectArray" :datetype="proDate" :search="sectionByProcessC"
+        @requestnet="requestSectionByProcessC"></statistic-group>
       <el-row :gutter="10" style="padding-top:10px">
         <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="height">
           <el-card style="margin-bottom: 10px">
@@ -112,9 +118,9 @@
 <script src="./../../common/components/jas-components.js"></script>
 <script src="./../../common/js/jas-tools.js"></script>
 <script>
-  var color = ['#168efe', '#fedb65', '#2cd1c0', '#ffa06c', '#6699CC', '#66CCCC', '#FF99CC', '#99CCFF', '##FF9900',
-    '#FF9900', '#CCFF66'
-  ];
+var color = ['#396fff', '#5eb6f9', '#c2e4fd', '#dde6ff', '#e5e5e5', '#e1e9ff', '#FF99CC', '#99CCFF', '##FF9900',
+             '#FF9900', '#CCFF66'
+           ];
   var vm = new Vue({
     el: '#app',
     data: function () {
@@ -171,9 +177,12 @@
     watch: {
 
     },
-    mounted: function () {
+    created: function () {
       var that = this;
       that.requestProject();
+    },
+    mounted: function () {
+      var that = this;
       $(window).resize(function () {
         that.processByProject.resize();
         that.processByCount.resize();
@@ -264,7 +273,7 @@
           projectOid: that.sectionByProcessK.projectOid,
           date: that.sectionByProcessK.date
         }, function (data) {
-          that._splitData(data.rows,true, function (x, legend) {
+          that._splitData(data.rows, true, function (x, legend) {
             that.renderSectionByProcessK(x, legend);
           });
         });
@@ -280,7 +289,7 @@
           projectOid: that.sectionByProcessC.projectOid,
           date: that.sectionByProcessC.date
         }, function (data) {
-          that._splitData(data.rows, false,function (x, legend) {
+          that._splitData(data.rows, false, function (x, legend) {
             that.renderSectionByProcessC(x, legend);
           });
         });
@@ -292,7 +301,7 @@
         var series = [];
         data.forEach(function (item, index) {
           x.push(item.typeName);
-          var name=item.projectName||item.tendersNames;
+          var name = item.projectName || item.tendersNames;
           name.forEach(function (proItem, index1) {
             if (!legend[proItem]) {
               legend[proItem] = [];
@@ -347,7 +356,7 @@
             }
           },
           legend: {
-            data: legend,
+            data: legendArr,
             bottom: "-5px"
           },
           toolbox: {
@@ -384,12 +393,12 @@
             containLabel: true
           },
           xAxis: [{
-            type: 'category',
-            data: x,
-            axisLabel: {
-              show: true
-            }
-          }],
+                type: 'category',
+                data: x,
+                axisLabel: {
+                  show: true
+                }
+              }],
           yAxis: [{
             type: 'value'
           }],
@@ -430,7 +439,7 @@
             }
           },
           legend: {
-            data: legend,
+            data: legendArr,
             bottom: "-5px"
           },
           toolbox: {

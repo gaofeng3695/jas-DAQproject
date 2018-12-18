@@ -2313,16 +2313,23 @@ Vue.component('jas-project-select', {
 		selprojectoids: {
 			type: Array
 		},
+		label: {
+			type: String
+		},
+		url: {
+			type: String
+		}
 	},
 	data: function () {
+		var that = this;
 		return {
 			projectOids: [],
 			projectArray: [{
-				key: "项目群",
-				value: "项目群"
+				key: that.label,
+				value: that.label
 			}],
 			oldOptions: [], //表示上次选中的值
-			ids: ['项目群', ], //表示所有下拉选的id
+			ids: [that.label, ], //表示所有下拉选的id
 		}
 	},
 	template: [
@@ -2331,14 +2338,32 @@ Vue.component('jas-project-select', {
 		'</el-option>',
 		'</el-select>'
 	].join(''),
-	mounted: function () {
+	created: function () {
 		this.projectOids = this.selprojectoids;
 		this.requestProject();
 	},
 	methods: {
 		requestProject: function () {
 			var that = this;
-			var url = jasTools.base.rootPath + "/daq/privilege/getProjectList.do";
+			console.log(that.projectarray);
+			if (that.projectarray) {
+				setTimeout(function () {
+					if (that.projectarray.length > 0) {
+						that.projectarray.forEach(function (item) {
+							that.ids.push(item.key);
+							that.projectArray.push(item);
+						});
+						that.projectOids = that.ids;
+						that.oldOptions = that.projectOids;
+						var ids = that.projectOids.filter(function (item) {
+							return item != that.label
+						});
+						that.$emit("requestnet", ids);
+					}
+				}, 1);
+				return;
+			}
+			var url = jasTools.base.rootPath + that.url;
 			jasTools.ajax.post(url, {}, function (data) {
 				data.rows.forEach(function (item) {
 					that.ids.push(item.key);
@@ -2347,29 +2372,29 @@ Vue.component('jas-project-select', {
 				that.projectOids = that.ids;
 				that.oldOptions = that.projectOids;
 				var ids = that.projectOids.filter(function (item) {
-					return item != '项目群'
+					return item != that.label
 				});
 				that.$emit("requestnet", ids);
 			});
 		},
 		select: function (val) {
 			var that = this;
-			if (val.length == that.projectArray.length || (val.length == 1 && val[0] == "项目群") || (val.length == 0)) { //表示肯定是全选
+			if (val.length == that.projectArray.length || (val.length == 1 && val[0] == that.label) || (val.length == 0)) { //表示肯定是全选
 				that.projectOids = that.ids;
 				that.oldOptions = that.projectOids;
 			}
-			if (val.indexOf("项目群") < 0) {
+			if (val.indexOf(that.label) < 0) {
 				if (that.oldOptions.length - 1 == val.length) {} else
 				if (val.length == that.projectArray.length - 1) {
 					that.projectOids = that.ids;
 					that.oldOptions = that.projectOids;
 				}
 			} else { //表示此时包含0
-				if (that.oldOptions.indexOf('项目群') > -1) { //此时表示取消全选操作
+				if (that.oldOptions.indexOf(that.label) > -1) { //此时表示取消全选操作
 					that.projectOids = [];
 					that.oldOptions = [];
 					val.forEach(function (item) {
-						if (item != "项目群") {
+						if (item != that.label) {
 							that.projectOids.push(item);
 							that.oldOptions.push(item);
 						}
@@ -2380,7 +2405,7 @@ Vue.component('jas-project-select', {
 				}
 			}
 			var ids = that.projectOids.filter(function (item) {
-				return item != '项目群'
+				return item != that.label
 			});
 			that.$emit("requestnet", ids);
 		}
@@ -2418,7 +2443,8 @@ Vue.component('statistic-group-project', { //项目群的分组
 		'{{title}}',
 		'</div>',
 		'<div style="float:right;padding:5px 10px;">',
-		'<jas-project-select @requestnet="requesttable" :selprojectoids="projectOids" :projectarray="projectarray"></jas-project-select>',
+		'<jas-project-select @requestnet="requesttable" label="项目群" url="/daq/privilege/getProjectList.do" :projectarray="projectarray" :selprojectoids="projectOids" ></jas-project-select>',
+		'<slot name="unit"></slot>',
 		'<el-date-picker v-model="date" :type="datetype.type" :value-format="datetype.format" :placeholder="datetype.placeholder" style="padding-left:10px" size="mini" @change="select">',
 		'</el-date-picker>',
 		'</div>',
@@ -2435,7 +2461,6 @@ Vue.component('statistic-group-project', { //项目群的分组
 		},
 		select: function () {
 			var that = this;
-			console.log(that.date);
 			that.$emit("requestnet", that.projectOids, that.date);
 		}
 	}
@@ -2452,15 +2477,15 @@ Vue.component('statistic-group', { //项目分组
 		projectarray: {
 			type: Array
 		},
-		datetype:{
-			type:Object
+		datetype: {
+			type: Object
 		}
 	},
 	data: function () {
 		var that = this;
 		return {
 			projectOids: that.search.projectOid,
-			projectArray:[],
+			projectArray: [],
 			date: that.search.date
 		}
 	},
@@ -2485,7 +2510,16 @@ Vue.component('statistic-group', { //项目分组
 	},
 	methods: {
 		requestProject: function () {
+		
 			var that = this;
+			if(that.projectarray){
+				setTimeout(function () {
+					that.projectArray=that.projectarray;
+					that.projectOids = that.projectarray[0].key;
+					that.$emit("requestnet", that.projectOids, that.date);
+				},10);
+				return;
+			}
 			var url = jasTools.base.rootPath + "/daq/privilege/getProjectList.do";
 			jasTools.ajax.post(url, {}, function (data) {
 				data.rows.forEach(function (item) {
@@ -2494,6 +2528,7 @@ Vue.component('statistic-group', { //项目分组
 				that.projectOids = that.projectArray[0].key;
 				that.$emit("requestnet", that.projectOids, that.date);
 			});
+			
 		},
 		select: function () {
 			var that = this;
