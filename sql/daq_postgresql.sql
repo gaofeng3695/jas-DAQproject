@@ -6429,3 +6429,13 @@ create table daq_tenders_polyline(
 comment on table daq_tenders_polyline is '标段线段表';
 comment on column daq_tenders_polyline.oid is 'oid';
 comment on column daq_tenders_polyline.tenders_name is '标段名称';
+
+
+alter table daq_material_pipe add is_check smallint not null default 0;
+comment on column daq_material_pipe.is_check is '是否检查';
+
+alter table daq_material_hot_bends add is_check smallint not null default 0;
+comment on column daq_material_hot_bends.is_check is '是否检查';
+
+alter table daq_material_pipe_cold_bending add is_check smallint not null default 0;
+comment on column daq_material_pipe_cold_bending.is_check is '是否检查';

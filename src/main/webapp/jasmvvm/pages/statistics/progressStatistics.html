@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>进度统计</title>
+  <!-- <link rel="stylesheet" href="./libelement-ui/element-#0E2B4A/src/index.css"> -->
+  <link rel="stylesheet" href="./../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+  <link rel="stylesheet" href="./../../lib/font-awesome-4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="./../../src/css/main.css">
+  <style>
+    .height {
+      height: 100% !important;
+    }
+
+    .el-input__prefix {
+      left: 10px !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app" v-cloak>
+    <div style="padding:10px;box-sizing: border-box;height: 100%;">
+      <statistic-group-project title="项目-各工序分项目对比统计(KM)" :projectarray="projectArray" :search="proByProject" :datetype="proDate"
+        @requestnet="requestProcessByProject"></statistic-group-project>
+      <el-row :gutter="10" style="padding-top:10px">
+        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="height">
+          <el-card style="margin-bottom: 10px">
+            <div id="processByProject" style="width:100%;height:300px;">
+
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+
+      <statistic-group-project title="项目-各工序项目对比统计（口数）" :projectarray="projectArray" :search="proByCount" :datetype="proDate" @requestnet="requestProcessByCount"></statistic-group-project>
+      <el-row :gutter="10" style="padding-top:10px">
+        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="height">
+          <el-card style="margin-bottom: 10px">
+            <div id="processByCount" style="width:100%;height:300px;">
+
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+
+
+
+      <el-row style="background:#ececec;">
+        <div style="float:left;padding:10px 10px 5px 10px;">
+          标段-工序分标段分月累计完成统计
+        </div>
+        <div style="float:right;padding:5px 10px 5px 5px">
+          <el-select size="mini" v-model="sectionByMonthObj.projectOid" placeholder="请选择" @change="requestSectionByMonth">
+            <el-option v-for="project in projectArray" :key="project.key" :label="project.value" :value="project.key">
+            </el-option>
+          </el-select>
+          <el-select v-model="sectionByMonthObj.processType" placeholder="请选择" size="mini" @change="requestSectionByMonth">
+            <el-option v-for="item in processTypeArr" :key="item.value" :label="item.label" :value="item.value">
+            </el-option>
+          </el-select>
+          <el-date-picker size="mini" v-model="sectionByMonthObj.startDate" value-format="yyyy-MM" type="month" placeholder="开始日期"
+            @change="requestSectionByMonth">
+          </el-date-picker>
+          至
+          <el-date-picker size="mini" v-model="sectionByMonthObj.endDate" value-format="yyyy-MM" type="month" placeholder="结束日期" @change="requestSectionByMonth">
+          </el-date-picker>
+        </div>
+      </el-row>
+      <el-row :gutter="10" style="padding-top:10px">
+        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="height">
+          <el-card style="margin-bottom: 10px">
+            <div id="sectionByMonth" style="width:100%;height:300px;">
+
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+
+
+
+
+      <statistic-group title="标段-各工序分标段累计情况统计(KM)" :projectarray="projectArray" :datetype="proDate" :search="sectionByProcessK"
+        @requestnet="requestSectionByProcessK"></statistic-group>
+      <el-row :gutter="10" style="padding-top:10px">
+        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="height">
+          <el-card style="margin-bottom: 10px">
+            <div id="sectionByProcessKChart" style="width:100%;height:300px;">
+
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+
+      <statistic-group title="标段-各工序分标段累计情况统计（口数）" :projectarray="projectArray" :datetype="proDate" :search="sectionByProcessC"
+        @requestnet="requestSectionByProcessC"></statistic-group>
+      <el-row :gutter="10" style="padding-top:10px">
+        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="height">
+          <el-card style="margin-bottom: 10px">
+            <div id="sectionByProcessCChart" style="width:100%;height:300px;">
+
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+    </div>
+  </div>
+
+</body>
+
+<script src="./../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../lib/vue/vue.js"></script>
+<script src="./../../lib/echarts/echarts.js"></script>
+<script src="./../../lib/vue-multipane/vue-multipane.js"></script>
+<script src="./../../lib/element-ui/v2.4.1/index.min.js"></script>
+<script src="./../../common/components/jas-components.js"></script>
+<script src="./../../common/js/jas-tools.js"></script>
+<script>
+  var color = ['#396fff', '#5eb6f9', '#c2e4fd', '#dde6ff', '#e5e5e5', '#e1e9ff', '#FF99CC', '#99CCFF', '##FF9900',
+    '#FF9900', '#CCFF66'
+  ];
+  var vm = new Vue({
+    el: '#app',
+    data: function () {
+      return {
+        icon: 'path://M30.9,53.2C16.8,53.2,5.3,41.7,5.3,27.6S16.8,2,30.9,2C45,2,56.4,13.5,56.4,27.6S45,53.2,30.9,53.2z M30.9,3.5C17.6,3.5,6.8,14.4,6.8,27.6c0,13.3,10.8,24.1,24.101,24.1C44.2,51.7,55,40.9,55,27.6C54.9,14.4,44.1,3.5,30.9,3.5z M36.9,35.8c0,0.601-0.4,1-0.9,1h-1.3c-0.5,0-0.9-0.399-0.9-1V19.5c0-0.6,0.4-1,0.9-1H36c0.5,0,0.9,0.4,0.9,1V35.8z M27.8,35.8 c0,0.601-0.4,1-0.9,1h-1.3c-0.5,0-0.9-0.399-0.9-1V19.5c0-0.6,0.4-1,0.9-1H27c0.5,0,0.9,0.4,0.9,1L27.8,35.8L27.8,35.8z',
+        processByProject: "", //各工序分项目对比统计
+        proDate: {
+          type: "date",
+          placeholder: "请选择日期",
+          format: "yyyy-MM-dd"
+        },
+        proByProject: {
+          projectOids: [],
+          date: new Date()
+        },
+        processByCount: "", //各工序分项目统计（口数）
+        proByCount: {
+          projectOids: [],
+          date: new Date()
+        },
+        sectionByMonth: "", //标段分月
+        projectArray: [],
+        processTypeArr: [{
+          value: "weld",
+          label: "焊接"
+        }, {
+          value: "patch",
+          label: "补口"
+        }, {
+          value: "lay_pipe_trench_backfill",
+          label: "管沟回填"
+        }, {
+          value: "lay_land_restoration",
+          label: "地貌恢复"
+        }],
+        sectionByMonthObj: {
+          projectOid: '',
+          processType: "weld",
+          startDate: new Date(new Date().getFullYear() + "-01"),
+          endDate: new Date()
+        },
+        sectionByProcessKChart: "", //各工序分标段累计情况（KM）
+        sectionByProcessK: {
+          projectOid: "",
+          date: new Date()
+        },
+        sectionByProcessCChart: "",
+        sectionByProcessC: {
+          projectOid: "",
+          date: new Date()
+        },
+      }
+    },
+    watch: {
+
+    },
+    created: function () {
+      var that = this;
+      that.requestProject();
+    },
+    mounted: function () {
+      var that = this;
+      $(window).resize(function () {
+        that.processByProject.resize();
+        that.processByCount.resize();
+        that.sectionByMonth.resize();
+        that.sectionByProcessKChart.resize();
+        that.sectionByProcessCChart.resize();
+      });
+    },
+    methods: {
+      requestProject: function () {
+        var that = this;
+        var url = jasTools.base.rootPath + "/daq/privilege/getProjectList.do";
+        jasTools.ajax.post(url, {}, function (data) {
+          data.rows.forEach(function (item) {
+            that.projectArray.push(item);
+          });
+          that.sectionByMonthObj.projectOid = that.projectArray[0].key;
+          that.requestSectionByMonth();
+        });
+      },
+      requestProcessByProject: function (projectOids, date) { //各工序分项目对比统计
+        var that = this;
+        that.proByProject.projectOids = projectOids;
+        that.proByProject.date = date;
+        var url = jasTools.base.rootPath + "/daq/progressStats/getEachItemLengthStatsByProject.do";
+        jasTools.ajax.post(url, {
+          projectOids: that.proByProject.projectOids,
+          date: that.proByProject.date
+        }, function (data) {
+          that._splitData(data.rows, true, function (x, legend, series) {
+            that.renderProcessByProject(x, legend);
+          });
+
+        });
+      },
+      requestProcessByCount: function (projectOids, date) {
+        var that = this;
+        that.proByCount.projectOids = projectOids;
+        that.proByCount.date = date;
+        var url = jasTools.base.rootPath + "/daq/progressStats/getEachItemCountStatsByProject.do";
+        jasTools.ajax.post(url, {
+          projectOids: that.proByCount.projectOids,
+          date: that.proByCount.date
+        }, function (data) {
+          that._splitData(data.rows, false, function (x, legend, series) {
+            that.renderProcessByCount(x, legend);
+          });
+        });
+      },
+      requestSectionByMonth: function (type) {
+        var that = this;
+        var legend = [];
+        var x = [];
+        var series = [];
+        var searchObj = {
+          projectOid: that.sectionByMonthObj.projectOid,
+          procedure: that.sectionByMonthObj.processType,
+          beginMonth: that.sectionByMonthObj.startDate,
+          endMonth: that.sectionByMonthObj.endDate
+        };
+        var url = jasTools.base.rootPath + "/daq/progressStats/getSingleItemCumulateStats.do";
+        jasTools.ajax.post(url, searchObj, function (data) {
+          data.rows.forEach(function (item) {
+            legend.push(item.tendersName);
+            if (x.length == 0) {
+              x = item.month;
+            }
+            item.data = item.data.map(function (s) {
+              return s / 1000;
+            });
+            series.push({
+              name: item.tendersName,
+              type: "line",
+              data: item.data
+            })
+          });
+          that.renderSectionByMonth(legend, x, series);
+        });
+
+      },
+      requestSectionByProcessK: function (projectOid, date) {
+        var that = this;
+        var that = this;
+        that.sectionByProcessK.projectOid = projectOid;
+        that.sectionByProcessK.date = date;
+        var url = jasTools.base.rootPath + "/daq/progressStats/getEachItemLengthStatsByTenders.do";
+        jasTools.ajax.post(url, {
+          projectOid: that.sectionByProcessK.projectOid,
+          date: that.sectionByProcessK.date
+        }, function (data) {
+          that._splitData(data.rows, true, function (x, legend) {
+            that.renderSectionByProcessK(x, legend);
+          });
+        });
+
+      }, //各工序分标段累计完成情况统计(KM)
+      requestSectionByProcessC: function (projectOid, date) {
+        var that = this;
+        var that = this;
+        that.sectionByProcessC.projectOid = projectOid;
+        that.sectionByProcessC.date = date;
+        var url = jasTools.base.rootPath + "/daq/progressStats/getEachItemCountStatsByTenders.do";
+        jasTools.ajax.post(url, {
+          projectOid: that.sectionByProcessC.projectOid,
+          date: that.sectionByProcessC.date
+        }, function (data) {
+          that._splitData(data.rows, false, function (x, legend) {
+            that.renderSectionByProcessC(x, legend);
+          });
+        });
+
+      }, ////各工序分标段累计完成情况统计(口)
+      _splitData: function (data, isConver, callback) {
+        var x = [];
+        var legend = {};
+        var series = [];
+        data.forEach(function (item, index) {
+          x.push(item.typeName);
+          var name = item.projectName || item.tendersNames;
+          name.forEach(function (proItem, index1) {
+            if (!legend[proItem]) {
+              legend[proItem] = [];
+              if (isConver) {
+                legend[proItem][index] = item.statsResult[index1] > 0 ? item.statsResult[index1] / 1000 :
+                  0;
+              } else {
+                legend[proItem][index] = item.statsResult[index1]
+              }
+
+            } else {
+              if (isConver) {
+                legend[proItem][index] = item.statsResult[index1] > 0 ? item.statsResult[index1] / 1000 :
+                  0;
+              } else {
+                legend[proItem][index] = item.statsResult[index1]
+              }
+            }
+          });
+        });
+        callback & callback(x, legend);
+      }, //进行数据的出路
+      renderProcessByProject: function (x, legend) {
+        var legendArr = [];
+        var series = [];
+        var projectX = [];
+        for (var i = 0; i < x.length; i++) {
+          if (i == 0) {
+            for (var key in legend) {
+              legendArr.push(key);
+              projectX.push(key);
+              series.push({
+                name: key,
+                type: 'bar',
+                label: {
+                  show: true,
+                  position: 'top'
+                },
+                data: legend[key]
+              })
+            }
+          } else {
+            for (var key in legend) {
+              projectX.push(key);
+            }
+          }
+
+        }
+
+        var that = this;
+        if (!that.processByProject) {
+          that.processByProject = echarts.init(document.getElementById('processByProject'));
+        }
+        option = {
+          title: {
+            left: 'center',
+            top: '10px',
+            text: "各工序分项目对比统计"
+          },
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: { // 坐标轴指示器，坐标轴触发有效
+              type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+            }
+          },
+          legend: {
+            data: legendArr,
+            bottom: "-5px"
+          },
+          toolbox: {
+            show: true,
+            orient: "horizontal",
+            showTitle: true,
+            feature: {
+              myTool2: {
+                show: true,
+                title: '数据视图',
+                icon: that.icon,
+                onclick: function () {
+                  top.jasTools.dialog.show({
+                    width: '60%',
+                    height: '80%',
+                    title: '数据视图',
+                    src: './pages/statistics/dialogs/progressViewData.html?isShow=progressViewData&projectOids=' +
+                      that.proByProject.projectOids + "&date=" + jasTools.base.formatDate(that.proByProject
+                        .date,
+                        'yyyy-MM-dd'),
+                    cbForClose: function () {
+
+                    }
+                  });
+                }
+              }
+            },
+            right: 30
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '7%',
+            containLabel: true
+          },
+          xAxis: [{
+            type: 'category',
+            data: ['焊接(KM)', '补口(KM)', '管沟回填(KM)', '地貌恢复(KM)'],
+            axisPointer: {
+              type: 'shadow'
+            },
+            position: 'bottom',
+            offset: 20,
+            axisTick: {
+              show: true,
+              length: 40,
+              lineStyle: {
+                type: 'dotted'
+              }
+            }
+          }, {
+            type: 'category',
+            data: projectX,
+            position: 'bottom',
+            axisLabel: {
+              show: true
+            }
+          }],
+          yAxis: [{
+            type: 'value'
+          }],
+          series: series,
+          color: color
+        };
+        that.processByProject.setOption(option, true);
+      },
+      renderProcessByCount: function (x, legend) {
+        var that = this;
+        var legendArr = [];
+        var series = [];
+        var projectX = [];
+        for (var i = 0; i < x.length; i++) {
+          if (i == 0) {
+            for (var key in legend) {
+              legendArr.push(key);
+              projectX.push(key);
+              series.push({
+                name: key,
+                type: 'bar',
+                label: {
+                  show: true,
+                  position: 'top'
+                },
+                data: legend[key]
+              })
+            }
+          } else {
+            for (var key in legend) {
+
+              projectX.push(key);
+            }
+          }
+
+        }
+        if (!that.processByCount) {
+          that.processByCount = echarts.init(document.getElementById('processByCount'));
+        }
+        option = {
+          title: {
+            left: 'center',
+            top: '10px',
+            text: "各工序分项目对比统计（口数）"
+          },
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: { // 坐标轴指示器，坐标轴触发有效
+              type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+            }
+          },
+          legend: {
+            data: legendArr,
+            bottom: "-5px"
+          },
+          toolbox: {
+            show: true,
+            orient: "horizontal",
+            showTitle: true,
+            feature: {
+              myTool2: {
+                show: true,
+                title: '数据视图',
+                icon: that.icon,
+                onclick: function () {
+                  top.jasTools.dialog.show({
+                    width: '60%',
+                    height: '80%',
+                    title: '数据视图',
+                    src: './pages/statistics/dialogs/progressViewData.html?isShow=progressCountViewData&projectOids=' +
+                      that.proByProject.projectOids + "&date=" + jasTools.base.formatDate(that.proByProject
+                        .date,
+                        'yyyy-MM-dd'),
+                    cbForClose: function () {
+
+                    }
+                  });
+                }
+              }
+            },
+            right: 30
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '7%',
+            containLabel: true
+          },
+          xAxis: [{
+              type: 'category',
+              data: ['焊接(口)', '补口(口)', '管沟回填(口)', '地貌恢复(口)'],
+              axisPointer: {
+                type: 'shadow'
+              },
+              position: 'bottom',
+              offset: 20,
+              axisTick: {
+                show: true,
+                length: 40,
+                lineStyle: {
+                  type: 'dotted'
+                }
+              }
+            }, {
+              type: 'category',
+              data: projectX,
+              position: 'bottom',
+              axisLabel: {
+                show: true
+              }
+            }],
+          yAxis: [{
+            type: 'value'
+          }],
+          series: series,
+          color: color
+        };
+        that.processByCount.setOption(option, true);
+      },
+      renderSectionByMonth: function (legend, x, series) {
+        var that = this;
+        if (!that.sectionByMonth) {
+          that.sectionByMonth = echarts.init(document.getElementById('sectionByMonth'));
+        }
+        var option = {
+          title: {
+            text: '工序分标段分月累计完成统计（KM）',
+            left: "center"
+          },
+          tooltip: {
+            trigger: 'axis'
+          },
+          legend: {
+            data: legend,
+            bottom: "-5px"
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '7%',
+            containLabel: true
+          },
+          xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: x
+          },
+          yAxis: {
+            type: 'value'
+          },
+          series: series,
+          color: color
+        };
+        that.sectionByMonth.setOption(option, true);
+      },
+      renderSectionByProcessK: function (x, legend) {
+        var legendArr = [];
+        var serise = [];
+        var projectX = [];
+        for (var i = 0; i < x.length; i++) {
+          if (i == 0) {
+            for (var key in legend) {
+                legendArr.push(key);
+                projectX.push(key);
+                serise.push({
+                  name: key,
+                  type: 'bar',
+                  label: {
+                    show: true,
+                    position: 'top'
+                  },
+                  data: legend[key]
+                });
+            }
+          } else {
+            for (var key in legend) {
+              projectX.push(key);
+            }
+          }
+        }
+        var that = this;
+        if (!that.sectionByProcessKChart) {
+          that.sectionByProcessKChart = echarts.init(document.getElementById('sectionByProcessKChart'));
+        }
+        option = {
+          title: {
+            left: 'center',
+            top: '10px',
+            text: "各工序分标段累计完成情况统计（KM）"
+          },
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: { // 坐标轴指示器，坐标轴触发有效
+              type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+            }
+          },
+          legend: {
+            data: legendArr,
+            bottom: "-5px"
+          },
+          toolbox: {
+            show: true,
+            orient: "horizontal",
+            showTitle: true,
+            feature: {
+              myTool2: {
+                show: true,
+                title: '数据视图',
+                icon: that.icon,
+                onclick: function () {
+                  top.jasTools.dialog.show({
+                    width: '60%',
+                    height: '80%',
+                    title: '数据视图',
+                    src: './pages/statistics/dialogs/progressViewData.html?isShow=progressByTenderKViewData&projectOid=' +
+                      that.sectionByProcessK.projectOid + "&date=" + that.sectionByProcessK.date,
+                    cbForClose: function () {
+
+                    }
+                  });
+                }
+              }
+            },
+            right: 30
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '7%',
+            containLabel: true
+          },
+          xAxis: [{
+              type: 'category',
+              data: ['焊接(KM)', '补口(KM)', '管沟回填(KM)', '地貌恢复(KM)'],
+              axisPointer: {
+                type: 'shadow'
+              },
+              position: 'bottom',
+              offset: 20,
+              axisTick: {
+                show: true,
+                length: 40,
+                lineStyle: {
+                  type: 'dotted'
+                }
+              }
+            }, {
+              type: 'category',
+              data: projectX,
+              position: 'bottom',
+              axisLabel: {
+                show: true
+              }
+            }],
+          yAxis: [{
+            type: 'value'
+          }],
+          series: serise,
+          color: color
+        };
+        that.sectionByProcessKChart.setOption(option, true);
+      },
+      renderSectionByProcessC: function (x, legend) {
+        var legendArr = [];
+        var serise = [];
+        var projectX = [];
+        for (var i = 0; i < x.length; i++) {
+          if (i == 0) {
+            for (var key in legend) {
+                legendArr.push(key);
+                projectX.push(key);
+                serise.push({
+                  name: key,
+                  type: 'bar',
+                  label: {
+                    show: true,
+                    position: 'top'
+                  },
+                  data: legend[key]
+                });
+            }
+          } else {
+            for (var key in legend) {
+              projectX.push(key);
+            }
+          }
+        }
+        console.log(projectX);
+        var that = this;
+        if (!that.sectionByProcessCChart) {
+          that.sectionByProcessCChart = echarts.init(document.getElementById('sectionByProcessCChart'));
+        }
+        option = {
+          title: {
+            left: 'center',
+            top: '10px',
+            text: "各工序分标段累计完成情况统计（口数）"
+          },
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: { // 坐标轴指示器，坐标轴触发有效
+              type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+            }
+          },
+          legend: {
+            data: legendArr,
+            bottom: "-5px"
+          },
+          toolbox: {
+            show: true,
+            orient: "horizontal",
+            showTitle: true,
+            feature: {
+              myTool2: {
+                show: true,
+                title: '数据视图',
+                icon: that.icon,
+                onclick: function () {
+                  top.jasTools.dialog.show({
+                    width: '60%',
+                    height: '80%',
+                    title: '数据视图',
+                    src: './pages/statistics/dialogs/progressViewData.html?isShow=progressByTenderCViewData&projectOid=' +
+                      that.sectionByProcessC.projectOid + "&date=" + that.sectionByProcessC.date,
+                    cbForClose: function () {
+
+                    }
+                  });
+                }
+              }
+            },
+            right: 30
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '7%',
+            containLabel: true
+          },
+          xAxis: [{
+              type: 'category',
+              data: ['焊接(口)', '补口(口)', '管沟回填(口)', '地貌恢复(口)'],
+              axisPointer: {
+                type: 'shadow'
+              },
+              position: 'bottom',
+              offset: 20,
+              axisTick: {
+                show: true,
+                length: 40,
+                lineStyle: {
+                  type: 'dotted'
+                }
+              }
+            }, {
+              type: 'category',
+              data: projectX,
+              position: 'bottom',
+              axisLabel: {
+                show: true
+              }
+            }],
+          yAxis: [{
+            type: 'value'
+          }],
+          series: serise,
+          color: color
+        };
+        that.sectionByProcessCChart.setOption(option, true);
+      }
+    },
+  });
+</script>
+
+</html>

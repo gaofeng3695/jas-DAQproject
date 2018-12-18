@@ -766,16 +766,17 @@ Vue.component('jas-table-for-list', {
 		'	<el-table ref="mytable" @selection-change="handleSelectionChange" @row-dblclick="preview" @row-click="checkRow" v-loading="loading" height="100%" :data="tableData" border :header-cell-style="headStyle" style="width: 100%" stripe>',
 		'    <el-table-column type="selection" width="55" align="center" fixed></el-table-column>',
 		'		<el-table-column label="序号" type="index" align="center" width="50" fixed>',
-		'		</el-table-column>',
-		'		<el-table-column v-for="item,index in fields" :key="item.oid" :fixed="index=== 0?true:false" :label="item.name" :prop="item.field" :formatter="item.formatter" min-width="130px" show-overflow-tooltip align="center">',
-
+		'</el-table-column>',
+		'<template  v-for="item,index in fields">',
+		'<el-table-column  v-if="isShowStatus(item)":key="item.oid" :fixed="index=== 0?true:false" :label="item.name" :prop="item.field" :formatter="item.formatter" min-width="130px" show-overflow-tooltip align="center">',
 		'<template slot-scope="scope" >',
-		'<div  v-if="isShowStatus(item)">',
 		'<el-tag  :type="isShowType(scope)" size="medium">{{ scope.row.approveStatusName }}</el-tag>',
-		'</div>',
-		'<span v-else>{{scope.row[item.field]}}</span>',
 		'</template>',
-		'		</el-table-column>',
+		'</el-table-column>',
+		'<el-table-column v-else   :key="item.oid" :fixed="index=== 0?true:false" :label="item.name" :prop="item.field" :formatter="item.formatter" min-width="130px" show-overflow-tooltip align="center">',
+
+		'</el-table-column>',
+		'</template>',
 		'		<el-table-column label="操作" align="center" width="180" fixed="right">',
 		'			<template slot-scope="scope">',
 		'				<el-button @click="locate(scope.row)"  v-if="isHasPrivilege(' + "'bt_position'" + ')" type="text" size="small">定位</el-button>',
@@ -2306,19 +2307,29 @@ Vue.component('jas-detail-table-link', {
 
 Vue.component('jas-project-select', {
 	props: {
+		projectarray: {
+			type: Array
+		},
 		selprojectoids: {
 			type: Array
 		},
+		label: {
+			type: String
+		},
+		url: {
+			type: String
+		}
 	},
 	data: function () {
+		var that = this;
 		return {
 			projectOids: [],
 			projectArray: [{
-				key: "项目群",
-				value: "项目群"
+				key: that.label,
+				value: that.label
 			}],
 			oldOptions: [], //表示上次选中的值
-			ids: ['项目群', ], //表示所有下拉选的id
+			ids: [that.label, ], //表示所有下拉选的id
 		}
 	},
 	template: [
@@ -2327,14 +2338,32 @@ Vue.component('jas-project-select', {
 		'</el-option>',
 		'</el-select>'
 	].join(''),
-	mounted: function () {
+	created: function () {
 		this.projectOids = this.selprojectoids;
 		this.requestProject();
 	},
 	methods: {
 		requestProject: function () {
 			var that = this;
-			var url = jasTools.base.rootPath + "/daq/privilege/getProjectList.do";
+			console.log(that.projectarray);
+			if (that.projectarray) {
+				setTimeout(function () {
+					if (that.projectarray.length > 0) {
+						that.projectarray.forEach(function (item) {
+							that.ids.push(item.key);
+							that.projectArray.push(item);
+						});
+						that.projectOids = that.ids;
+						that.oldOptions = that.projectOids;
+						var ids = that.projectOids.filter(function (item) {
+							return item != that.label
+						});
+						that.$emit("requestnet", ids);
+					}
+				}, 1);
+				return;
+			}
+			var url = jasTools.base.rootPath + that.url;
 			jasTools.ajax.post(url, {}, function (data) {
 				data.rows.forEach(function (item) {
 					that.ids.push(item.key);
@@ -2343,30 +2372,29 @@ Vue.component('jas-project-select', {
 				that.projectOids = that.ids;
 				that.oldOptions = that.projectOids;
 				var ids = that.projectOids.filter(function (item) {
-					return item != '项目群'
+					return item != that.label
 				});
 				that.$emit("requestnet", ids);
 			});
 		},
 		select: function (val) {
 			var that = this;
-			if (val.length == that.projectArray.length || (val.length == 1 && val[0] == "项目群") || (val.length == 0)) { //表示肯定是全选
+			if (val.length == that.projectArray.length || (val.length == 1 && val[0] == that.label) || (val.length == 0)) { //表示肯定是全选
 				that.projectOids = that.ids;
 				that.oldOptions = that.projectOids;
-				return;
 			}
-			if (val.indexOf("项目群") < 0) {
+			if (val.indexOf(that.label) < 0) {
 				if (that.oldOptions.length - 1 == val.length) {} else
 				if (val.length == that.projectArray.length - 1) {
 					that.projectOids = that.ids;
 					that.oldOptions = that.projectOids;
 				}
 			} else { //表示此时包含0
-				if (that.oldOptions.indexOf('项目群') > -1) { //此时表示取消全选操作
+				if (that.oldOptions.indexOf(that.label) > -1) { //此时表示取消全选操作
 					that.projectOids = [];
 					that.oldOptions = [];
 					val.forEach(function (item) {
-						if (item != "项目群") {
+						if (item != that.label) {
 							that.projectOids.push(item);
 							that.oldOptions.push(item);
 						}
@@ -2377,10 +2405,134 @@ Vue.component('jas-project-select', {
 				}
 			}
 			var ids = that.projectOids.filter(function (item) {
-				return item != '项目群'
+				return item != that.label
 			});
 			that.$emit("requestnet", ids);
 		}
 	}
 
+});
+
+
+// 统计标题
+Vue.component('statistic-group-project', { //项目群的分组
+	props: {
+		title: {
+			type: String
+		},
+		search: {
+			type: Object
+		},
+		datetype: {
+			type: Object
+		},
+		projectarray: {
+			type: Array
+		}
+	},
+	data: function () {
+		var that = this;
+		return {
+			projectOids: that.search.projectOids,
+			date: that.search.date
+		}
+	},
+	template: [
+		'<el-row style="background:#ececec;">',
+		'<div style="float:left;padding:10px 10px 5px 10px;">',
+		'{{title}}',
+		'</div>',
+		'<div style="float:right;padding:5px 10px;">',
+		'<jas-project-select @requestnet="requesttable" label="项目群" url="/daq/privilege/getProjectList.do" :projectarray="projectarray" :selprojectoids="projectOids" ></jas-project-select>',
+		'<slot name="unit"></slot>',
+		'<el-date-picker v-model="date" :type="datetype.type" :value-format="datetype.format" :placeholder="datetype.placeholder" style="padding-left:10px" size="mini" @change="select">',
+		'</el-date-picker>',
+		'</div>',
+		' </el-row>'
+	].join(''),
+	mounted: function () {
+
+	},
+	methods: {
+		requesttable: function (oids) {
+			var that = this;
+			that.projectOids = oids;
+			that.$emit("requestnet", that.projectOids, that.date);
+		},
+		select: function () {
+			var that = this;
+			that.$emit("requestnet", that.projectOids, that.date);
+		}
+	}
+});
+
+Vue.component('statistic-group', { //项目分组
+	props: {
+		title: {
+			type: String
+		},
+		search: {
+			type: Object
+		},
+		projectarray: {
+			type: Array
+		},
+		datetype: {
+			type: Object
+		}
+	},
+	data: function () {
+		var that = this;
+		return {
+			projectOids: that.search.projectOid,
+			projectArray: [],
+			date: that.search.date
+		}
+	},
+	template: [
+		'<el-row style="background:#ececec;">',
+		'<div style="float:left;padding:10px 10px 5px 10px;">',
+		'{{title}}',
+		'</div>',
+		'<div style="float:right;padding:5px 10px;">',
+		'<el-select size="mini" v-model="projectOids"  placeholder="请选择" @change="select">',
+		'<el-option v-for="project in projectArray" :key="project.key" :label="project.value" :value="project.key">',
+		'</el-option>',
+		'</el-select>',
+		'<el-date-picker v-model="date"  placeholder="选择日期" :type="datetype.type" :value-format="datetype.format"  style="padding-left:10px" size="mini"  @change="select">',
+		'</el-date-picker>',
+		'</div>',
+		' </el-row>'
+	].join(''),
+	mounted: function () {
+		var that = this;
+		that.requestProject();
+	},
+	methods: {
+		requestProject: function () {
+		
+			var that = this;
+			if(that.projectarray){
+				setTimeout(function () {
+					that.projectArray=that.projectarray;
+					that.projectOids = that.projectarray[0].key;
+					that.$emit("requestnet", that.projectOids, that.date);
+				},10);
+				return;
+			}
+			var url = jasTools.base.rootPath + "/daq/privilege/getProjectList.do";
+			jasTools.ajax.post(url, {}, function (data) {
+				data.rows.forEach(function (item) {
+					that.projectArray.push(item);
+				});
+				that.projectOids = that.projectArray[0].key;
+				that.$emit("requestnet", that.projectOids, that.date);
+			});
+			
+		},
+		select: function () {
+			var that = this;
+			that.$emit("requestnet", that.projectOids, that.date);
+		}
+	}
 });

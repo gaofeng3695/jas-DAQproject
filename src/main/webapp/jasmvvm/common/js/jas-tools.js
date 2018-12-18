@@ -20,8 +20,33 @@
 			var uuid = s.join("");
 			return uuid;
 		};
-
-
+		/**
+		 *日期转换
+		 */
+		var formatDate = function (oDate, sFormat) { // 入参：date对象，格式化格式
+			/*
+			 * 对Date的扩展，将 Date 转化为指定格式的String
+			 * 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，
+			 * 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
+			 * 例子：
+			 * formatDate(new Date(),"yyyy-MM-dd HH:mm:ss.S") ==> 2006-07-02 08:09:04.423
+			 * formatDate(new Date(),"yyyy-M-d H:m:s.S")      ==> 2006-7-2 8:9:4.18
+			 * formatDate(new Date(),"yyyyMMddHHmmssS")      ==> 20060702080904423
+			 */
+			var o = {
+				"M+": oDate.getMonth() + 1, //月份
+				"d+": oDate.getDate(), //日
+				"H+": oDate.getHours(), //小时
+				"m+": oDate.getMinutes(), //分
+				"s+": oDate.getSeconds(), //秒
+				"q+": Math.floor((oDate.getMonth() + 3) / 3), //季度
+				"S": oDate.getMilliseconds() //毫秒
+			};
+			if (/(y+)/.test(sFormat)) sFormat = sFormat.replace(RegExp.$1, (oDate.getFullYear() + "").substr(4 - RegExp.$1.length));
+			for (var k in o)
+				if (new RegExp("(" + k + ")").test(sFormat)) sFormat = sFormat.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+			return sFormat;
+		};
 		/**
 		 * @description 继承对象
 		 * @param target  要被继承的对象
@@ -156,6 +181,7 @@
 			rootPath: getRootPath(),
 			createuuid: createuuid,
 			extend: extend,
+			formatDate:formatDate,
 			getParamsInUrl: getParamsInUrl,
 			setParamsToUrl: setParamsToUrl,
 			getIdArrFromTree: getIdArrFromTree,
@@ -365,9 +391,9 @@
 
 	var ajax = (function () {
 		var ajax = function (type, url, params, cb_success, cb_fail) {
-			for(var key in params){
-				if(params[key]==undefined){
-					params[key]=null;
+			for (var key in params) {
+				if (params[key] == undefined) {
+					params[key] = null;
 				}
 			}
 			var data = type === 'GET' ? params : JSON.stringify(params)

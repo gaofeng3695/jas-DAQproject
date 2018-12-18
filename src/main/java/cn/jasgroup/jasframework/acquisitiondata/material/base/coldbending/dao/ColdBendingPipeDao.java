@@ -29,7 +29,7 @@ public class ColdBendingPipeDao extends BaseJdbcDao{
 	public List<Map<String,Object>>getList(String tendersOid){
 		String sql = "select t.oid as key,t.pipe_cold_bending_code as value,t.tenders_oid,t.front_is_use,back_is_use,t.approve_status,t.pipe_segment_or_cross_oid "
 				+ "from daq_material_pipe_cold_bending t "
-				+ "where t.active=1";
+				+ "where t.active=1 and is_check=0";
 		if(StringUtils.isNotBlank(tendersOid)){
 			sql += " and t.tenders_oid='"+tendersOid+"'";
 		}
