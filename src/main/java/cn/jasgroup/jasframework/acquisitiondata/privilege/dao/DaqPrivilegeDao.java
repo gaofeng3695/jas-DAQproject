@@ -1,6 +1,5 @@
 package cn.jasgroup.jasframework.acquisitiondata.privilege.dao;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,20 +7,26 @@ import java.util.UUID;
 
 import javax.annotation.Resource;
 
-import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import com.google.common.collect.ImmutableMap;
 
 import cn.jasgroup.jasframework.dataaccess.base.BaseJdbcDao;
 import cn.jasgroup.jasframework.dataaccess3.core.BaseJdbcTemplate;
+import cn.jasgroup.jasframework.engine.jdbc.dao.CommonDataJdbcDao;
 import cn.jasgroup.jasframework.utils.StringUtil;
 
 @Repository
 public class DaqPrivilegeDao extends BaseJdbcDao{
-	
+
 	@Resource
 	private BaseJdbcTemplate baseJdbcTemplate;
+	
+	@Autowired
+	 private CommonDataJdbcDao commonDataJdbcDao;
+	
 	/***
 	  * <p>功能描述：根据部门oid获取该部门及部门一下的项目列表。</p>
 	  * <p> 雷凯。</p>	
@@ -391,5 +396,11 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+
+	public List<Map<String, Object>> getConstructAndProjectUnitList(List<String> projectOids) {
+		String sql = "select DISTINCT t.oid as key,t.unit_name as value,t.hierarchy from pri_unit t left JOIN daq_implement_scope_ref i on t.oid=i.unit_oid where t.active=1 and t.hierarchy like 'Unit.0001.0001%' or t.hierarchy like 'Unit.0001.0005%' and i.project_oid in (:projectOids) ORDER BY t.hierarchy;";
+		return commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOids", projectOids));
 	}
 }
