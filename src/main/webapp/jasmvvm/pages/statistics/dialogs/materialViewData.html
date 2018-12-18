@@ -34,12 +34,10 @@
               </template>
             </tr>
             <template v-for="item in progressData">
-              <tr>
-                <td v-text="item.year"></td>
-                <td v-text="item.pipe"></td>
-                <td v-text="item.hot"></td>
-                <td v-text="item.total"></td>
-                <td v-text="item.grandTotal"></td>
+             <tr>
+                <template v-for="(value,key) in item">
+                  <td v-text="value"></td>
+                </template>
               </tr>
             </template>
           </table>
@@ -109,7 +107,6 @@
       if (param.dateTime) {
         that.searchObj.dateTime = param.dateTime;
       }
-      console.log(that.searchObj);
       that.requestNet();
     },
     methods: {
@@ -125,7 +122,7 @@
                     year: that.searchObj.year + "年" + (index + 1) + "月",
                     pipe: item,
                     hot: data.data.hot_pipe[index],
-                    total: item + data.data.hot_pipe[index],
+                    total: (item + data.data.hot_pipe[index]).toFixed(3),
                     grandTotal: data.data.grand_total[index]
                   }
                   that.progressData.push(obj);
@@ -139,7 +136,7 @@
                     year: key,
                     pipe: data.data.pipe[key],
                     hot: data.data.hot_pipe[key],
-                    total: data.data.pipe[key] + data.data.hot_pipe[key],
+                    total: (data.data.pipe[key] + data.data.hot_pipe[key]).toFixed(3),
                     grandTotal: data.data.grand_total[key]
                   }
                   that.progressData.push(obj);
@@ -148,20 +145,22 @@
               }
             case "materialByTenders":
               {
+            	var lastTotal=0;
                 for (var key in data.data.pipe) {
                   var obj = {
                     year: key,
                     pipe: data.data.pipe[key],
                     hot: data.data.hot_pipe[key],
-                    total: data.data.pipe[key] + data.data.hot_pipe[key],
+                    total:(data.data.pipe[key] + data.data.hot_pipe[key]).toFixed(3),
+                    grandTotal:0
                   }
+                  obj.grandTotal=(Number(obj.total)+Number(lastTotal)).toFixed(3);
+                  lastTotal=obj.grandTotal;
                   that.progressData.push(obj);
                 }
                 break;
               }
           }
-
-
         });
       }
     },

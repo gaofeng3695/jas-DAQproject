@@ -23,7 +23,9 @@
     th {
       background: #f3f8fc;
     }
-
+   .el-input__prefix{
+   left:10px !important;
+   }
     .chartTable tr th,
     .chartTable tr td {
       text-align: center;
@@ -41,7 +43,7 @@
 <body>
   <div id="app" v-cloak>
     <div style="padding:10px;box-sizing: border-box;height: 100%;">
-      <statistic-group-project title="线路物资分月统计" :search="materialByMonth" :datetype="proDate" @requestnet="requestMaterialByMonth"></statistic-group-project>
+      <statistic-group-project title="线路物资分月统计" :search="materialByMonth" :projectarray="projectArray" :datetype="proDate" @requestnet="requestMaterialByMonth"></statistic-group-project>
       <el-row :gutter="10" style="padding-top:10px">
         <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="height">
           <el-card style="margin-bottom: 10px">
@@ -53,7 +55,7 @@
       </el-row>
 
 
-      <statistic-group-project title="线路物资日统计" @requestnet="requestMaterialByDay" :datetype="tableDate" :search="materialByDay"></statistic-group-project>
+      <statistic-group-project title="线路物资日统计" @requestnet="requestMaterialByDay" :projectarray="projectArray" :datetype="tableDate" :search="materialByDay"></statistic-group-project>
       <el-row :gutter="10" style="padding-top:10px">
         <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="height">
           <el-card style="margin-bottom: 10px">
@@ -63,7 +65,7 @@
           </el-card>
         </el-col>
       </el-row>
-      <statistic-group title="标段-线路物资累计统计" @requestnet="requestMaterialByTenders" :datetype="materialDate" :search="materialByTenders"></statistic-group>
+      <statistic-group title="标段-线路物资累计统计" @requestnet="requestMaterialByTenders" :projectarray="projectArray" :datetype="materialDate" :search="materialByTenders"></statistic-group>
       <el-row :gutter="10" style="padding-top:10px">
         <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="height">
           <el-card style="margin-bottom: 10px">
@@ -74,7 +76,7 @@
         </el-col>
       </el-row>
 
-      <statistic-group title="标段-线路物资使用情况统计" @requestnet="requestTable" :datetype="tableDate" :search="searchTable"></statistic-group>
+      <statistic-group title="标段-线路物资使用情况统计" @requestnet="requestTable" :projectarray="projectArray" :datetype="tableDate" :search="searchTable"></statistic-group>
       <el-row :gutter="10" style="padding-top:10px">
         <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="height">
           <el-card style="margin-bottom: 10px">
@@ -101,32 +103,33 @@
                 </tr>
                 <template v-for="type in chartTable" v-if="type.dataList.length>0">
                   <tr>
-                    <td :rowspan="type.dataList.length" v-text="type.CONSTRUTIONNAME"></td>
-                    <td v-text="type.dataList[0].specification"></td>
-                    <td v-text="type.dataList[0].mpipetotal"></td>
-                    <td v-text="type.dataList[0].mpipeusetotal"></td>
-                    <td v-text="type.dataList[0].steelpipenum"></td>
-                    <td v-text="type.dataList[0].steelpipelength"></td>
-                    <td v-text="type.dataList[0].mpipetotallength"></td>
-                    <td v-text="type.dataList[0].hotpipetotal"></td>
-                    <td v-text="type.dataList[0].hotpipeusetotal"></td>
-                    <td v-text="type.dataList[0].hotpipetotalnum"></td>
-                    <td v-text="type.dataList[0].hotpipenums"></td>
-                    <td v-text="type.dataList[0].slength"></td>
+                    <td :rowspan="type.dataList.length" v-text="type.tendersName"></td>
+                    <td v-text="type.dataList[0].specifications"></td>
+                    <td v-text="type.dataList[0].pipe_total_receive"></td>
+                    <td v-text="type.dataList[0].pipe_total_use"></td>
+                    <td v-text="type.dataList[0].pipe_month_receive"></td>
+                    <td v-text="type.dataList[0].pipe_month_use"></td>
+                    <td v-text="type.dataList[0].pipe_total_overplus"></td>
+                    <td v-text="type.dataList[0].h_pipe_total_receive"></td>
+                    <td v-text="type.dataList[0].h_pipe_total_use"></td>
+                      <td v-text="type.dataList[0].h_pipe_month_receive"></td>
+                    <td v-text="type.dataList[0].h_pipe_month_use"></td>
+                    <td v-text="type.dataList[0].h_pipe_total_overplus"></td>
+                    
                   </tr>
                   <template v-for="item,index in type.dataList">
                     <tr v-if="index>0">
-                      <td v-text="item.specification"></td>
-                      <td v-text="item.mpipetotal"></td>
-                      <td v-text="item.mpipeusetotal"></td>
-                      <td v-text="item.steelpipenum"></td>
-                      <td v-text="item.steelpipelength"></td>
-                      <td v-text="item.mpipetotallength"></td>
-                      <td v-text="item.hotpipetotal"></td>
-                      <td v-text="item.hotpipeusetotal"></td>
-                      <td v-text="item.hotpipetotalnum"></td>
-                      <td v-text="item.hotpipenums"></td>
-                      <td v-text="item.slength"></td>
+	                    <td v-text="item.specifications"></td>
+	                    <td v-text="item.pipe_total_receive"></td>
+	                    <td v-text="item.pipe_total_use"></td>
+	                    <td v-text="item.pipe_month_receive"></td>
+	                    <td v-text="item.pipe_month_use"></td>
+	                    <td v-text="item.pipe_total_overplus"></td>
+	                    <td v-text="item.h_pipe_total_receive"></td>
+	                    <td v-text="item.h_pipe_total_use"></td>
+	                    <td v-text="item.h_pipe_month_receive"></td>
+	                    <td v-text="item.h_pipe_month_use"></td>
+	                    <td v-text="item.h_pipe_total_overplus"></td>
                     </tr>
                   </template>
                 </template>
@@ -197,10 +200,11 @@
           date: new Date(),
           projectOid: ""
         },
+        projectArray:[],//表示数组
       }
     },
-    watch: {
-
+    created: function(){
+          this.requestProject();
     },
     mounted: function () {
       var that = this;
@@ -211,14 +215,23 @@
       });
     },
     methods: {
+        requestProject: function () {
+            var that = this;
+            var url = jasTools.base.rootPath + "/daq/privilege/getProjectList.do";
+            jasTools.ajax.post(url, {}, function (data) {
+              data.rows.forEach(function (item) {
+                that.projectArray.push(item);
+              });
+            });
+          },
       requestTable: function (projectOid, date) {
         var that = this;
         that.searchTable.projectOid = projectOid;
         that.searchTable.date = date;
-        var url = "./data.json"
+        var url =  jasTools.base.rootPath + "/daq/materialStatistics/getMaterialUseStatustics.do";
         jasTools.ajax.post(url, {
-          projectOids: that.searchTable.projectOids,
-          date: that.searchTable.date
+          projectOid: that.searchTable.projectOid,
+          month: that.searchTable.date
         }, function (data) {
           that.chartTable = data.data;
         });

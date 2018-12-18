@@ -24,7 +24,7 @@
       <div style="padding-top:10px;">
         <el-form ref="form">
           <el-form-item label="项目名称" style="margin-bottom:0px">
-            <jas-project-select @requestnet="requestNet" :selprojectoids="topSearch.projectOids"></jas-project-select>
+            <jas-project-select @requestnet="requestNet" label="项目群" :selprojectoids="topSearch.projectOids" url="/daq/privilege/getProjectList.do"></jas-project-select>
           </el-form-item>
         </el-form>
       </div>
@@ -245,7 +245,9 @@
       },
       renderMonth: function (ledgend, serise, months) {
         var that = this;
-        that.month = echarts.init(document.getElementById('month'));
+        if(!that.month){
+           that.month = echarts.init(document.getElementById('month'));
+        }
         option = {
           title: {
             text: '各工序分月完成情况对比',
@@ -287,7 +289,9 @@
         y0[0] = y[2];
         y1[0] = y[1];
         y2[0] = y[0];
-        that.inputAndCheck = echarts.init(document.getElementById('inputAndCheck'));
+        if(!that.inputAndCheck){
+           that.inputAndCheck = echarts.init(document.getElementById('inputAndCheck'));	
+        }
         var option = {
           title: {
             text: '数据录入/审核统计',
@@ -355,7 +359,9 @@
       },
       renderYield: function (pass, noPass) {
         var that = this;
-        that.yield = echarts.init(document.getElementById('yield'));
+        if(!that.yield){
+        	that.yield = echarts.init(document.getElementById('yield'));	
+        }
         var option = {
           title: {
             text: '一次合格率统计',
@@ -403,7 +409,9 @@
       },
       renderChart: function (x, y) {
         var that = this;
-        that.myChart = echarts.init(document.getElementById('process'));
+        if(!that.myChart ){
+          that.myChart = echarts.init(document.getElementById('process'));	
+        }
         // 指定图表的配置项和数据
         var option = {
           title: {
