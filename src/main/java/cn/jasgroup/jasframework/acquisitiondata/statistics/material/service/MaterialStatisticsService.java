@@ -2,6 +2,7 @@ package cn.jasgroup.jasframework.acquisitiondata.statistics.material.service;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -170,8 +171,8 @@ public class MaterialStatisticsService {
 		String minDateTime = month + "-01";
 		String maxDateTime = month + "-" + maxDay;
 		List<Map<String, Object>> pipeData = this.materialStatisticsDao.getMaterialUseStatustics(projectOid, minDateTime, maxDateTime);
-		Map<String, String> tendersMap = new HashMap<>();
-		Map<String, List<Map<String,Object>>> tempDataMap = new HashMap<>();
+		Map<String, String> tendersMap = new LinkedHashMap<>();
+		Map<String, List<Map<String,Object>>> tempDataMap = new LinkedHashMap<>();
 		for (Map<String, Object> map : pipeData) {
 			String tendersOid = map.get("oid").toString();
 			if(tempDataMap.containsKey(tendersOid)){
@@ -226,6 +227,9 @@ public class MaterialStatisticsService {
 				tendersMap.put(tendersOid, map.get("tendersName").toString());
 			}
 		}
+		/**
+		 * 计算合计
+		 */
 		List<Map<String,Object>> result = new ArrayList<>();
 		for (Entry<String, List<Map<String,Object>>> entry : tempDataMap.entrySet()) {
 			String oid = entry.getKey();
@@ -271,15 +275,15 @@ public class MaterialStatisticsService {
 				h_pipe_total_overplus_sum+=hOverplus;
 			}
 			if(data!=null && data.size()>0){
-				DecimalFormat df = new DecimalFormat("#.000");
+				NumberFormat nf = NumberFormat.getNumberInstance();
 				Map<String,Object> sum = new LinkedHashMap<>();
 				sum.put("tendersOid", oid);
 				sum.put("specifications", "合计");
-				sum.put("pipe_month_use", df.format(pipe_month_use_sum));
-				sum.put("pipe_total_use_", df.format(pipe_total_use_sum));
-				sum.put("pipe_month_receive", df.format(pipe_month_receive_sum));
-				sum.put("pipe_total_receive", df.format(pipe_total_receive_sum));
-				sum.put("pipe_total_overplus", df.format(pipe_total_overplus_sum));
+				sum.put("pipe_month_use", nf.format(pipe_month_use_sum));
+				sum.put("pipe_total_use_", nf.format(pipe_total_use_sum));
+				sum.put("pipe_month_receive", nf.format(pipe_month_receive_sum));
+				sum.put("pipe_total_receive", nf.format(pipe_total_receive_sum));
+				sum.put("pipe_total_overplus", nf.format(pipe_total_overplus_sum));
 				sum.put("h_pipe_month_use", h_pipe_month_use_sum);
 				sum.put("h_pipe_total_use", h_pipe_total_use_sum);
 				sum.put("h_pipe_month_receive", h_pipe_month_receive_sum);
@@ -287,12 +291,115 @@ public class MaterialStatisticsService {
 				sum.put("h_pipe_total_overplus", h_pipe_total_overplus_sum);
 				data.add(sum);
 			}
-			Map<String,Object> obj = new HashMap<>();
+			Map<String,Object> obj = new LinkedHashMap<>();
 			obj.put("tendersOid", oid);
 			obj.put("tendersName", tendersMap.get(oid));
 			obj.put("dataList", data);
 			result.add(obj);
 		}
+		Map<String, Object> totalMap = this.getMaterialUseTotalStatustics(projectOid, maxDateTime, minDateTime);
+		result.add(totalMap);
 		return result;
+	}
+	
+	/****
+	  * <p>功能描述：物资使用情况合计统计。</p>
+	  * <p> 雷凯。</p>	
+	  * @param projectOid
+	  * @param maxDateTime
+	  * @param minDateTime
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月17日 上午11:25:36。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	private Map<String, Object> getMaterialUseTotalStatustics(String projectOid, String maxDateTime,String minDateTime) {
+		List<Map<String, Object>> totalData = this.materialStatisticsDao.getMaterialUseTotalStatustics(projectOid,minDateTime, maxDateTime);
+		Map<String, Map<String,Object>> tempMap = new LinkedHashMap<>();
+		for (Map<String, Object> map : totalData) {
+			if (map.get("specifications") != null) {
+				String specifications = map.get("specifications").toString();
+				if(tempMap.containsKey(specifications)){
+					Map<String,Object> obj = tempMap.get(specifications);
+					obj.put(map.get("dataType").toString(), map.get("pipeLength"));
+				}else{
+					Map<String,Object> obj = new LinkedHashMap<>();
+					obj.put("tendersOid", "");
+					obj.put("specifications", specifications);
+					obj.put("pipe_month_use", 0);
+					obj.put("pipe_total_use", 0);
+					obj.put("pipe_month_receive", 0);
+					obj.put("pipe_total_receive", 0);
+					obj.put("pipe_total_overplus", 0);
+					obj.put("h_pipe_month_use", 0);
+					obj.put("h_pipe_total_use", 0);
+					obj.put("h_pipe_month_receive", 0);
+					obj.put("h_pipe_total_receive", 0);
+					obj.put("h_pipe_total_overplus", 0);
+					obj.put(map.get("dataType").toString(), map.get("pipeLength"));
+					tempMap.put(specifications, obj);
+				}
+			}
+		}
+		NumberFormat nf = NumberFormat.getNumberInstance();
+		double pipe_month_use_sum=0d;
+		double pipe_total_use_sum=0d;
+		double pipe_month_receive_sum=0d;
+		double pipe_total_receive_sum=0d;
+		double pipe_total_overplus_sum=0d;
+		
+		int h_pipe_month_use_sum=0;
+		int h_pipe_total_use_sum=0;
+		int h_pipe_month_receive_sum=0;
+		int h_pipe_total_receive_sum=0;
+		int h_pipe_total_overplus_sum=0;
+		for(Map<String,Object> obj:tempMap.values()){
+			double pipeTotalUse = Double.parseDouble(obj.get("pipe_total_use").toString());
+			double pipeTotalReceive = Double.parseDouble(obj.get("pipe_total_receive").toString());
+			double pipeMonthUse = Double.parseDouble(obj.get("pipe_month_use").toString());
+			double pipeMonthReceive = Double.parseDouble(obj.get("pipe_month_receive").toString());
+			double overplus = pipeTotalReceive-pipeTotalUse;
+			obj.put("pipe_total_overplus", nf.format(overplus));
+			pipe_month_use_sum+=pipeMonthUse;
+			pipe_total_use_sum+=pipeTotalUse;
+			pipe_month_receive_sum+=pipeMonthReceive;
+			pipe_total_receive_sum+=pipeTotalReceive;
+			pipe_total_overplus_sum+=overplus;
+			
+			
+			int hPipeTotalUse = Integer.parseInt(obj.get("h_pipe_total_use").toString());
+			int hPipeTotalReceive = Integer.parseInt(obj.get("h_pipe_total_receive").toString());
+			int hPipeMonthUse = Integer.parseInt(obj.get("h_pipe_month_use").toString());
+			int hPipeMonthReceive = Integer.parseInt(obj.get("h_pipe_month_receive").toString());
+			int hOverplus = hPipeTotalReceive-hPipeTotalUse;
+			obj.put("h_pipe_total_overplus", hOverplus);
+			
+			h_pipe_month_use_sum+=hPipeMonthUse;
+			h_pipe_total_use_sum+=hPipeTotalUse;
+			h_pipe_month_receive_sum+=hPipeMonthReceive;
+			h_pipe_total_receive_sum+=hPipeTotalReceive;
+			h_pipe_total_overplus_sum+=hOverplus;
+		}
+		if(tempMap!=null && tempMap.size()>0){
+			Map<String,Object> sum = new LinkedHashMap<>();
+			sum.put("tendersOid", "");
+			sum.put("specifications", "合计");
+			sum.put("pipe_month_use", nf.format(pipe_month_use_sum));
+			sum.put("pipe_total_use_", nf.format(pipe_total_use_sum));
+			sum.put("pipe_month_receive", nf.format(pipe_month_receive_sum));
+			sum.put("pipe_total_receive", nf.format(pipe_total_receive_sum));
+			sum.put("pipe_total_overplus", nf.format(pipe_total_overplus_sum));
+			sum.put("h_pipe_month_use", h_pipe_month_use_sum);
+			sum.put("h_pipe_total_use", h_pipe_total_use_sum);
+			sum.put("h_pipe_month_receive", h_pipe_month_receive_sum);
+			sum.put("h_pipe_total_receive", h_pipe_total_receive_sum);
+			sum.put("h_pipe_total_overplus", h_pipe_total_overplus_sum);
+			tempMap.put("合计", sum);
+		}
+		Map<String, Object> resultMap = new LinkedHashMap<>();
+		resultMap.put("tendersOid", "");
+		resultMap.put("tendersName", "合计");
+		resultMap.put("dataList", tempMap.values());
+		return resultMap;
 	}
 }
