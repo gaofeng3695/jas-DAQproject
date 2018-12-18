@@ -6,12 +6,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.file.Path;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
-import org.apache.poi.xwpf.usermodel.TextAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
@@ -24,6 +27,10 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTxbxContent;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STLineSpacingRule;
 import org.w3c.dom.Node;
 
+import com.alibaba.druid.sql.SQLUtils;
+import com.alibaba.druid.sql.ast.SQLStatement;
+import com.alibaba.druid.sql.visitor.SchemaStatVisitor;
+import com.alibaba.druid.stat.TableStat;
 import com.deepoove.poi.XWPFTemplate;
 import com.deepoove.poi.data.DocxRenderData;
 import com.deepoove.poi.data.PictureRenderData;
@@ -35,6 +42,8 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.microsoft.schemas.vml.CTGroup;
 import com.microsoft.schemas.vml.CTShape;
+
+import cn.jasgroup.jasframework.utils.DateTimeUtil;
 
 
 public class ScannerTest {
@@ -148,7 +157,7 @@ public class ScannerTest {
 		}
 	}
 	
-	@Test
+//	@Test
 	public void dda(){
 		
 		try {
@@ -299,5 +308,13 @@ public class ScannerTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
+	}
+	@Test
+	public void sqlParser(){
+		DecimalFormat df = new DecimalFormat("#.000");
+		NumberFormat nf = NumberFormat.getNumberInstance();
+        nf.setMaximumFractionDigits(3);
+        System.out.println(nf.format(0.001001));
+		System.err.println(df.format(0.001001));
 	}
 }
