@@ -215,7 +215,14 @@ public class ProgressStatsService {
 							//获取月份对应的索引index，并将累计值放到data数组的index位置
 							String monthOfYear = dataList.get(j).getMonthOfYear();
 							int index = getIndex(monthArray,monthOfYear);
-							data[index] = Double.parseDouble(dataList.get(j).getTotalByMonth().toString());
+							double totalByMonth = Double.parseDouble(dataList.get(j).getTotalByMonth().toString());
+							for (int k = 0; k < monthArray.length; k++) {
+								if (k >= index) {
+									data[k] = totalByMonth;
+								}
+							}
+//							data[index] = Double.parseDouble(dataList.get(j).getTotalByMonth().toString());
+							
 						}
 					}
 				}
