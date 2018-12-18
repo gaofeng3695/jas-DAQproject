@@ -106,9 +106,7 @@ public class QualityStatsDao {
 	 */
 	public List<Map<String, Object>> getKindsOfDefectRateByProjects(List<String> projectOids, List<String> unitOids,
 			String month) {
-		String sql = "select tt.defect_properties,tt.count::NUMERIC/(SELECT count(*) FROM daq_detection_ray_sub sub INNER JOIN "
-					+ "(SELECT oid,detection_deta,project_oid,detection_unit,active,approve_status FROM	daq_detection_ray WHERE	active = 1 AND approve_status = 2) ray ON ray.oid = sub.parent_oid "
-					+ "WHERE ray.project_oid IN (:projectOids) AND ray.detection_unit IN (:unitOids) AND to_char(ray.detection_deta,'yyyy-MM') <= :month)::NUMERIC*100 as rate "
+		String sql = "select tt.defect_properties,tt.count "
 					+ "from (SELECT sub.defect_properties,count(sub.parent_oid) FROM	daq_detection_ray_sub sub INNER JOIN "
 					+ "(SELECT oid,detection_deta,project_oid,detection_unit,active,approve_status FROM	daq_detection_ray WHERE	active = 1 AND approve_status = 2) ray ON ray.oid = sub.parent_oid "
 					+ "WHERE ray.project_oid IN (:projectOids) AND ray.detection_unit IN (:unitOids) AND to_char(ray.detection_deta,'yyyy-MM') <= :month GROUP BY sub.defect_properties) tt";
@@ -149,9 +147,7 @@ public class QualityStatsDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String, Object>> getEachTendersUnQualifiedRateByProjects(String projectOid, String date) {
-		String sql = "select ray.tenders_oid,count(ray.weld_oid),count(ray.weld_oid)::NUMERIC/(select count(ray.weld_oid) from daq_detection_ray ray "
-					+ "INNER JOIN daq_construction_weld weld on weld.oid=ray.weld_oid where weld.active=1 and weld.approve_status=2 and ray.active=1 "
-					+ "and ray.approve_status=2 and weld.project_oid = :projectOid and to_char(ray.detection_deta,'yyyy-MM-dd') <= :date and ray.evaluation_result=0)::NUMERIC*100 as un_qualified_rate "
+		String sql = "select ray.tenders_oid,count(ray.weld_oid) as count "
 					+ "from daq_detection_ray ray INNER JOIN daq_construction_weld weld on weld.oid=ray.weld_oid where weld.active=1 and weld.approve_status=2 "
 					+ "and ray.active=1 and ray.approve_status=2 and weld.project_oid = :projectOid and to_char(ray.detection_deta,'yyyy-MM-dd') <= :date "
 					+ "and ray.evaluation_result=0 GROUP by ray.tenders_oid";
@@ -198,7 +194,7 @@ public class QualityStatsDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String, Object>> getEachUnitUnQualifiedRateByProjects(String projectOid, String date) {
-		String sql = "SELECT tt.*,u.unit_name from (select weld.construct_unit,count(ray.weld_oid),count(ray.weld_oid)::NUMERIC/(select count(ray.weld_oid) from daq_detection_ray ray "
+		String sql = "SELECT tt.*,u.unit_name from (select weld.construct_unit,count(ray.weld_oid) as count ,count(ray.weld_oid)::NUMERIC/(select count(ray.weld_oid) from daq_detection_ray ray "
 					+ "INNER JOIN daq_construction_weld weld on weld.oid=ray.weld_oid where weld.active=1 and weld.approve_status=2 and ray.active=1 and ray.approve_status=2 "
 					+ "and weld.project_oid = :projectOid and to_char(ray.detection_deta,'yyyy-MM-dd') <= :date and ray.evaluation_result=0)::NUMERIC*100 as un_qualified_rate "
 					+ "from daq_detection_ray ray INNER JOIN daq_construction_weld weld on weld.oid=ray.weld_oid where weld.active=1 and weld.approve_status=2 and ray.active=1 "
