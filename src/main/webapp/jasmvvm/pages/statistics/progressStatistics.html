@@ -29,7 +29,7 @@
       <el-row :gutter="10" style="padding-top:10px">
         <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="height">
           <el-card style="margin-bottom: 10px">
-            <div id="processByProject" style="width:100%;height:300px;">
+            <div id="processByProject" style="width:100%;height:400px;">
 
             </div>
           </el-card>
@@ -40,7 +40,7 @@
       <el-row :gutter="10" style="padding-top:10px">
         <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="height">
           <el-card style="margin-bottom: 10px">
-            <div id="processByCount" style="width:100%;height:300px;">
+            <div id="processByCount" style="width:100%;height:400px;">
 
             </div>
           </el-card>
@@ -73,7 +73,7 @@
       <el-row :gutter="10" style="padding-top:10px">
         <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="height">
           <el-card style="margin-bottom: 10px">
-            <div id="sectionByMonth" style="width:100%;height:300px;">
+            <div id="sectionByMonth" style="width:100%;height:400px;">
 
             </div>
           </el-card>
@@ -88,7 +88,7 @@
       <el-row :gutter="10" style="padding-top:10px">
         <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="height">
           <el-card style="margin-bottom: 10px">
-            <div id="sectionByProcessKChart" style="width:100%;height:300px;">
+            <div id="sectionByProcessKChart" style="width:100%;height:400px;">
 
             </div>
           </el-card>
@@ -100,7 +100,7 @@
       <el-row :gutter="10" style="padding-top:10px">
         <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="height">
           <el-card style="margin-bottom: 10px">
-            <div id="sectionByProcessCChart" style="width:100%;height:300px;">
+            <div id="sectionByProcessCChart" style="width:100%;height:400px;">
 
             </div>
           </el-card>
@@ -200,6 +200,7 @@
           data.rows.forEach(function (item) {
             that.projectArray.push(item);
           });
+          that.projectArray=data.rows;
           that.sectionByMonthObj.projectOid = that.projectArray[0].key;
           that.requestSectionByMonth();
         });
@@ -252,7 +253,7 @@
               x = item.month;
             }
             item.data = item.data.map(function (s) {
-              return s / 1000;
+              return s==0?s:(s/1000).toFixed(3);
             });
             series.push({
               name: item.tendersName,
@@ -309,6 +310,7 @@
               if (isConver) {
                 legend[proItem][index] = item.statsResult[index1] > 0 ? item.statsResult[index1] / 1000 :
                   0;
+                legend[proItem][index]=legend[proItem][index]==0?legend[proItem][index]:legend[proItem][index].toFixed(3);
               } else {
                 legend[proItem][index] = item.statsResult[index1]
               }
@@ -317,6 +319,7 @@
               if (isConver) {
                 legend[proItem][index] = item.statsResult[index1] > 0 ? item.statsResult[index1] / 1000 :
                   0;
+                legend[proItem][index]=legend[proItem][index]==0?legend[proItem][index]:legend[proItem][index].toFixed(3);
               } else {
                 legend[proItem][index] = item.statsResult[index1]
               }
@@ -337,6 +340,7 @@
               series.push({
                 name: key,
                 type: 'bar',
+                barMaxWidth:"20%",
                 label: {
                   show: true,
                   position: 'top'
@@ -351,7 +355,6 @@
           }
 
         }
-
         var that = this;
         if (!that.processByProject) {
           that.processByProject = echarts.init(document.getElementById('processByProject'));
@@ -368,10 +371,10 @@
               type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
             }
           },
-          legend: {
-            data: legendArr,
-            bottom: "-5px"
-          },
+         // legend: {
+           // data: legendArr,
+            //bottom: "-5px"
+          //},
           toolbox: {
             show: true,
             orient: "horizontal",
@@ -387,9 +390,7 @@
                     height: '80%',
                     title: '数据视图',
                     src: './pages/statistics/dialogs/progressViewData.html?isShow=progressViewData&projectOids=' +
-                      that.proByProject.projectOids + "&date=" + jasTools.base.formatDate(that.proByProject
-                        .date,
-                        'yyyy-MM-dd'),
+                      that.proByProject.projectOids + "&date=" + jasTools.base.formatDate(new Date(that.proByProject.date), 'yyyy-MM-dd'),
                     cbForClose: function () {
 
                     }
@@ -402,7 +403,7 @@
           grid: {
             left: '3%',
             right: '4%',
-            bottom: '7%',
+            bottom: '2%',
             containLabel: true
           },
           xAxis: [{
@@ -449,6 +450,7 @@
               series.push({
                 name: key,
                 type: 'bar',
+                barMaxWidth:"20%",
                 label: {
                   show: true,
                   position: 'top'
@@ -479,10 +481,10 @@
               type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
             }
           },
-          legend: {
-            data: legendArr,
-            bottom: "-5px"
-          },
+          //legend: {
+            //data: legendArr,
+            //bottom: "-5px"
+          //},
           toolbox: {
             show: true,
             orient: "horizontal",
@@ -498,8 +500,7 @@
                     height: '80%',
                     title: '数据视图',
                     src: './pages/statistics/dialogs/progressViewData.html?isShow=progressCountViewData&projectOids=' +
-                      that.proByProject.projectOids + "&date=" + jasTools.base.formatDate(that.proByProject
-                        .date,
+                      that.proByProject.projectOids + "&date=" + jasTools.base.formatDate(new Date(that.proByProject.date),
                         'yyyy-MM-dd'),
                     cbForClose: function () {
 
@@ -513,12 +514,12 @@
           grid: {
             left: '3%',
             right: '4%',
-            bottom: '7%',
+            bottom: '2%',
             containLabel: true
           },
           xAxis: [{
               type: 'category',
-              data: ['焊接(口)', '补口(口)', '管沟回填(口)', '地貌恢复(口)'],
+              data: ['焊接(口)', '补口(口)', '射线检测(口)', '焊口测量(口)'],
               axisPointer: {
                 type: 'shadow'
               },
@@ -595,6 +596,7 @@
                 serise.push({
                   name: key,
                   type: 'bar',
+                  barMaxWidth:"20%",
                   label: {
                     show: true,
                     position: 'top'
@@ -624,10 +626,10 @@
               type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
             }
           },
-          legend: {
-            data: legendArr,
-            bottom: "-5px"
-          },
+         // legend: {
+           // data: legendArr,
+            //bottom: "-5px"
+          //},
           toolbox: {
             show: true,
             orient: "horizontal",
@@ -656,7 +658,7 @@
           grid: {
             left: '3%',
             right: '4%',
-            bottom: '7%',
+            bottom: '2%',
             containLabel: true
           },
           xAxis: [{
@@ -702,6 +704,7 @@
                 serise.push({
                   name: key,
                   type: 'bar',
+                  barMaxWidth:"20%",
                   label: {
                     show: true,
                     position: 'top'
@@ -715,7 +718,6 @@
             }
           }
         }
-        console.log(projectX);
         var that = this;
         if (!that.sectionByProcessCChart) {
           that.sectionByProcessCChart = echarts.init(document.getElementById('sectionByProcessCChart'));
@@ -732,10 +734,10 @@
               type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
             }
           },
-          legend: {
-            data: legendArr,
-            bottom: "-5px"
-          },
+        //  legend: {
+          //  data: legendArr,
+           // bottom: "-5px"
+          //},
           toolbox: {
             show: true,
             orient: "horizontal",
@@ -764,12 +766,12 @@
           grid: {
             left: '3%',
             right: '4%',
-            bottom: '7%',
+            bottom: '2%',
             containLabel: true
           },
           xAxis: [{
               type: 'category',
-              data: ['焊接(口)', '补口(口)', '管沟回填(口)', '地貌恢复(口)'],
+              data: ['焊接(口)', '补口(口)', '射线检测(口)', '焊口测量(口)'],
               axisPointer: {
                 type: 'shadow'
               },

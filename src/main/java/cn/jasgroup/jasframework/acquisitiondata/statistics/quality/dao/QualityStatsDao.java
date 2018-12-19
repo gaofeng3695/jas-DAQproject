@@ -71,11 +71,12 @@ public class QualityStatsDao {
 	 */
 	public List<Map<String, Object>> getKindsOfDefectCountByProjects(List<String> projectOids, List<String> unitOids, String month) {
 		String sql = "select tt.*,u.unit_name from "
-					+ "(select ray.detection_unit,sub.defect_properties,count(sub.parent_oid) as count from daq_detection_ray_sub sub "
-					+ "INNER JOIN (select oid, detection_deta, project_oid,detection_unit,active,approve_status from daq_detection_ray where active=1 and approve_status=2) ray on ray.oid=sub.parent_oid "
-					+ "where ray.project_oid in (:projectOids) and ray.detection_unit in (:unitOids) and to_char(ray.detection_deta, 'yyyy-MM') <= :month "
-					+ "GROUP BY ray.detection_unit,sub.defect_properties"
-					+ ") tt LEFT JOIN (select * from pri_unit where active=1) u on u.oid=tt.detection_unit";
+					+ "(select weld.construct_unit,sub.defect_properties,count(sub.parent_oid) as count from daq_detection_ray_sub sub "
+					+ "INNER JOIN (select oid, weld_oid, detection_deta, project_oid,detection_unit,active,approve_status from daq_detection_ray where active=1 and approve_status=2) ray on ray.oid=sub.parent_oid "
+					+ "INNER JOIN (select oid,active,construct_unit from daq_construction_weld where active=1 and approve_status=2) weld on weld.oid=ray.weld_oid "
+					+ "where ray.project_oid in (:projectOids) and weld.construct_unit in (:unitOids) and to_char(ray.detection_deta, 'yyyy-MM') <= :month "
+					+ "GROUP BY weld.construct_unit,sub.defect_properties"
+					+ ") tt LEFT JOIN (select * from pri_unit where active=1) u on u.oid=tt.construct_unit";
 		List<Map<String, Object>> list = commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOids", projectOids, "unitOids", unitOids, "month", month));
 		return list;
 	}
@@ -108,8 +109,9 @@ public class QualityStatsDao {
 			String month) {
 		String sql = "select tt.defect_properties,tt.count "
 					+ "from (SELECT sub.defect_properties,count(sub.parent_oid) FROM	daq_detection_ray_sub sub INNER JOIN "
-					+ "(SELECT oid,detection_deta,project_oid,detection_unit,active,approve_status FROM	daq_detection_ray WHERE	active = 1 AND approve_status = 2) ray ON ray.oid = sub.parent_oid "
-					+ "WHERE ray.project_oid IN (:projectOids) AND ray.detection_unit IN (:unitOids) AND to_char(ray.detection_deta,'yyyy-MM') <= :month GROUP BY sub.defect_properties) tt";
+					+ "(SELECT oid,weld_oid,detection_deta,project_oid,detection_unit,active,approve_status FROM	daq_detection_ray WHERE	active = 1 AND approve_status = 2) ray ON ray.oid = sub.parent_oid "
+					+ "INNER JOIN (select oid,active,construct_unit from daq_construction_weld where active=1 and approve_status=2) weld on weld.oid=ray.weld_oid "
+					+ "WHERE ray.project_oid IN (:projectOids) AND weld.construct_unit IN (:unitOids) AND to_char(ray.detection_deta,'yyyy-MM') <= :month GROUP BY sub.defect_properties) tt";
 		return commonDataJdbcDao.queryForList(sql,ImmutableMap.of("projectOids", projectOids, "unitOids", unitOids, "month", month));
 	}
 
