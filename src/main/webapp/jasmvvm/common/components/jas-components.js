@@ -2388,6 +2388,11 @@ Vue.component('jas-project-select', {
 			if (val.length == that.projectArray.length || (val.length == 1 && val[0] == that.label) || (val.length == 0)) { //表示肯定是全选
 				that.projectOids = that.ids;
 				that.oldOptions = that.projectOids;
+				var ids = that.projectOids.filter(function (item) {
+					return item != that.label
+				});
+				that.$emit("requestnet", ids);
+				return;
 			}
 			if (val.indexOf(that.label) < 0) {
 				if (that.oldOptions.length - 1 == val.length) {} else

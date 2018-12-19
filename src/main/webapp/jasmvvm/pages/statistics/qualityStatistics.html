@@ -36,7 +36,7 @@
       <el-row :gutter="10" style="padding-top:10px">
         <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="height">
           <el-card style="margin-bottom: 10px">
-            <div id="qualityByMonthChart" style="width:100%;height:300px;">
+            <div id="qualityByMonthChart" style="width:100%;height:400px;">
 
             </div>
           </el-card>
@@ -55,14 +55,14 @@
       <el-row :gutter="10" style="padding-top:10px">
         <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="height">
           <el-card style="margin-bottom: 10px">
-            <div id="projectByNatureChartL" style="width:100%;height:300px;">
+            <div id="projectByNatureChartL" style="width:100%;height:400px;">
 
             </div>
           </el-card>
         </el-col>
         <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="height">
           <el-card style="margin-bottom: 10px">
-            <div id="projectByNatureChartR" style="width:100%;height:300px;">
+            <div id="projectByNatureChartR" style="width:100%;height:400px;">
 
             </div>
           </el-card>
@@ -77,14 +77,14 @@
       <el-row :gutter="10" style="padding-top:10px">
         <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="height">
           <el-card style="margin-bottom: 10px">
-            <div id="weldByTendersChartL" style="width:100%;height:300px;">
+            <div id="weldByTendersChartL" style="width:100%;height:400px;">
 
             </div>
           </el-card>
         </el-col>
         <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="height">
           <el-card style="margin-bottom: 10px">
-            <div id="weldByTendersChartR" style="width:100%;height:300px;">
+            <div id="weldByTendersChartR" style="width:100%;height:400px;">
 
             </div>
           </el-card>
@@ -99,14 +99,14 @@
       <el-row :gutter="10" style="padding-top:10px">
         <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="height">
           <el-card style="margin-bottom: 10px">
-            <div id="weldByUnitsChartL" style="width:100%;height:300px;">
+            <div id="weldByUnitsChartL" style="width:100%;height:400px;">
 
             </div>
           </el-card>
         </el-col>
         <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="height">
           <el-card style="margin-bottom: 10px">
-            <div id="weldByUnitsChartR" style="width:100%;height:300px;">
+            <div id="weldByUnitsChartR" style="width:100%;height:400px;">
 
             </div>
           </el-card>
@@ -586,7 +586,7 @@
           grid: {
             left: '3%',
             right: '4%',
-            bottom: '7%',
+            bottom: '15%',
             containLabel: true
           },
           xAxis: {
@@ -618,8 +618,7 @@
           grid: {
             left: '3%',
             right: '4%',
-            bottom: '10%',
-            containLabel: true
+            bottom: '5%'
           },
           legend: {
             data: legend,
@@ -630,7 +629,7 @@
             name: '缺陷类型',
             type: 'pie',
             radius: ['50%', '70%'],
-            center: ['50%', '60%'],
+            center: ['50%', '50%'],
             label: {
               show: true,
               formatter: '{b}:{d}%'
@@ -731,12 +730,6 @@
             trigger: 'item',
             formatter: "{a} <br/>{b} : {c} ({d}%)"
           },
-          grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '14%',
-            containLabel: true
-          },
           legend: {
             data: legend,
             bottom: "-5px"
@@ -746,7 +739,7 @@
             name: '缺陷类型',
             type: 'pie',
             radius: ['50%', '70%'],
-            center: ['50%', '60%'],
+            center: ['50%', '50%'],
             label: {
               show: true,
               formatter: '{b}:{d}%'
@@ -846,12 +839,6 @@
             trigger: 'item',
             formatter: "{a} <br/>{b} : {c} ({d}%)"
           },
-          grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '10%',
-            containLabel: true
-          },
           legend: {
             data: legend,
             bottom: "-5px"
@@ -861,7 +848,7 @@
             name: '单位',
             type: 'pie',
             radius: ['50%', '70%'],
-            center: ['50%', '60%'],
+            center: ['50%', '50%'],
             label: {
               show: true,
               formatter: '{b}:{d}%'
@@ -880,10 +867,16 @@
       },
       selectVal: function (val, key) {
         var that = this;
-        if (val.length == that[key].unitArray.length || (val.length == 1 && val[0] == that.label) || (val.length ==
+        if (val.length == that[key].unitArray.length || (val.length == 1 && val[0] =="所有单位") || (val.length ==
             0)) { //表示肯定是全选
           that[key].unitOids = that[key].allIds;
           that[key].oldOptions = that[key].unitOids;
+          if (key == "projectByNature") {
+              that.requestProjectByNature(that[key].unitOids);
+            } else {
+              that.requestQualitylByMonth(that[key].unitOids);
+            }
+          return;
         }
         if (val.indexOf("所有单位") < 0) {
           if (that[key].oldOptions.length - 1 == val.length) {} else
@@ -892,11 +885,11 @@
             that[key].oldOptions = that[key].unitOids;
           }
         } else { //表示此时包含0
-          if (that[key].oldOptions.indexOf(that.label) > -1) { //此时表示取消全选操作
+          if (that[key].oldOptions.indexOf("所有单位") > -1) { //此时表示取消全选操作
             that[key].unitOids = [];
             that[key].oldOptions = [];
             val.forEach(function (item) {
-              if (item != that.label) {
+              if (item != "所有单位") {
                 that[key].unitOids.push(item);
                 that[key].oldOptions.push(item);
               }
@@ -906,13 +899,13 @@
             that[key].oldOptions = that[key].unitOids;
           }
         }
-        var ids = that[key].unitOids.filter(function (item) {
-          return item != "所有单位"
-        });
+     //   var ids = that[key].unitOids.filter(function (item) {
+       //   return item != "所有单位"
+        //});
         if (key == "projectByNature") {
-          that.requestProjectByNature(ids);
+          that.requestProjectByNature(that[key].unitOids);
         } else {
-          that.requestQualitylByMonth(ids);
+          that.requestQualitylByMonth(that[key].unitOids);
         }
 
       },
