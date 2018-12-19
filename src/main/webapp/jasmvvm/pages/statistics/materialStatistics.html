@@ -23,9 +23,11 @@
     th {
       background: #f3f8fc;
     }
-   .el-input__prefix{
-   left:10px !important;
-   }
+
+    .el-input__prefix {
+      left: 10px !important;
+    }
+
     .chartTable tr th,
     .chartTable tr td {
       text-align: center;
@@ -55,7 +57,8 @@
       </el-row>
 
 
-      <statistic-group-project title="线路物资日统计" @requestnet="requestMaterialByDay" :projectarray="projectArray" :datetype="tableDate" :search="materialByDay"></statistic-group-project>
+      <statistic-group-project title="线路物资日统计" @requestnet="requestMaterialByDay" :projectarray="projectArray" :datetype="tableDate"
+        :search="materialByDay"></statistic-group-project>
       <el-row :gutter="10" style="padding-top:10px">
         <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="height">
           <el-card style="margin-bottom: 10px">
@@ -65,7 +68,8 @@
           </el-card>
         </el-col>
       </el-row>
-      <statistic-group title="标段-线路物资累计统计" @requestnet="requestMaterialByTenders" :projectarray="projectArray" :datetype="materialDate" :search="materialByTenders"></statistic-group>
+      <statistic-group title="标段-线路物资累计统计" @requestnet="requestMaterialByTenders" :projectarray="projectArray" :datetype="materialDate"
+        :search="materialByTenders"></statistic-group>
       <el-row :gutter="10" style="padding-top:10px">
         <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="height">
           <el-card style="margin-bottom: 10px">
@@ -112,24 +116,24 @@
                     <td v-text="type.dataList[0].pipe_total_overplus"></td>
                     <td v-text="type.dataList[0].h_pipe_total_receive"></td>
                     <td v-text="type.dataList[0].h_pipe_total_use"></td>
-                      <td v-text="type.dataList[0].h_pipe_month_receive"></td>
+                    <td v-text="type.dataList[0].h_pipe_month_receive"></td>
                     <td v-text="type.dataList[0].h_pipe_month_use"></td>
                     <td v-text="type.dataList[0].h_pipe_total_overplus"></td>
-                    
+
                   </tr>
                   <template v-for="item,index in type.dataList">
                     <tr v-if="index>0">
-	                    <td v-text="item.specifications"></td>
-	                    <td v-text="item.pipe_total_receive"></td>
-	                    <td v-text="item.pipe_total_use"></td>
-	                    <td v-text="item.pipe_month_receive"></td>
-	                    <td v-text="item.pipe_month_use"></td>
-	                    <td v-text="item.pipe_total_overplus"></td>
-	                    <td v-text="item.h_pipe_total_receive"></td>
-	                    <td v-text="item.h_pipe_total_use"></td>
-	                    <td v-text="item.h_pipe_month_receive"></td>
-	                    <td v-text="item.h_pipe_month_use"></td>
-	                    <td v-text="item.h_pipe_total_overplus"></td>
+                      <td v-text="item.specifications"></td>
+                      <td v-text="item.pipe_total_receive"></td>
+                      <td v-text="item.pipe_total_use"></td>
+                      <td v-text="item.pipe_month_receive"></td>
+                      <td v-text="item.pipe_month_use"></td>
+                      <td v-text="item.pipe_total_overplus"></td>
+                      <td v-text="item.h_pipe_total_receive"></td>
+                      <td v-text="item.h_pipe_total_use"></td>
+                      <td v-text="item.h_pipe_month_receive"></td>
+                      <td v-text="item.h_pipe_month_use"></td>
+                      <td v-text="item.h_pipe_total_overplus"></td>
                     </tr>
                   </template>
                 </template>
@@ -200,11 +204,38 @@
           date: new Date(),
           projectOid: ""
         },
-        projectArray:[],//表示数组
+        projectArray: [], //表示数组
+        bottom:'',
+        isThird:false,
+        isFour:false,
       }
     },
-    created: function(){
-          this.requestProject();
+    created: function () {
+      var that = this;
+      that.requestProject();
+      window.addEventListener("scroll", function () {
+        that.bottom = that.bottomVal()
+      });
+    },
+    watch: {
+      bottom: function () {
+         if(this.bottom>600){
+        	 this.isThird=true;
+         }
+         if(this.bottom>800){
+        	 this.isFour=true;
+         }
+      },
+      isFour:function(){
+    	  if(this.isFour){
+    		 this.requestTable(this.searchTable.projectOid,this.searchTable.date ); 
+    	  }
+      },
+      isThird:function(){
+    	  if(this.isThird){
+     		 this.requestMaterialByTenders(this.materialByTenders.projectOid,this.materialByTenders.date); 
+     	  }  
+      }
     },
     mounted: function () {
       var that = this;
@@ -215,21 +246,24 @@
       });
     },
     methods: {
-        requestProject: function () {
-            var that = this;
-            var url = jasTools.base.rootPath + "/daq/privilege/getProjectList.do";
-            jasTools.ajax.post(url, {}, function (data) {
-              data.rows.forEach(function (item) {
-                that.projectArray.push(item);
-              });
-              that.projectArray=data.rows;
-            });
-          },
+      requestProject: function () {
+        var that = this;
+        var url = jasTools.base.rootPath + "/daq/privilege/getProjectList.do";
+        jasTools.ajax.post(url, {}, function (data) {
+          data.rows.forEach(function (item) {
+            that.projectArray.push(item);
+          });
+          that.projectArray = data.rows;
+        });
+      },
       requestTable: function (projectOid, date) {
         var that = this;
         that.searchTable.projectOid = projectOid;
         that.searchTable.date = date;
-        var url =  jasTools.base.rootPath + "/daq/materialStatistics/getMaterialUseStatustics.do";
+        if(!that.isFour){
+        	return;
+        }
+        var url = jasTools.base.rootPath + "/daq/materialStatistics/getMaterialUseStatustics.do";
         jasTools.ajax.post(url, {
           projectOid: that.searchTable.projectOid,
           month: that.searchTable.date
@@ -307,6 +341,9 @@
         var that = this;
         that.materialByTenders.projectOid = projectOid;
         that.materialByTenders.date = date;
+        if(!that.isThird){
+        	return;
+        }
         var url = jasTools.base.rootPath + "/daq/materialStatistics/getTendersStatistics.do";
         jasTools.ajax.post(url, {
           projectOid: that.materialByTenders.projectOid,
@@ -392,14 +429,14 @@
           series: [{
               name: '钢管（KM）',
               type: 'bar',
-              barMaxWidth:"30%",
+              barMaxWidth: "30%",
               stack: '总量',
               data: data.pipe
             },
             {
               name: '热煨弯管（KM）',
               type: 'bar',
-              barMaxWidth:"30%",
+              barMaxWidth: "30%",
               stack: '总量',
               data: data.hot_pipe
             },
@@ -504,7 +541,7 @@
           series.push({
             name: that.map[key1],
             type: 'bar',
-            barMaxWidth:"15%",
+            barMaxWidth: "15%",
             label: {
               show: true,
               position: 'top'
@@ -546,7 +583,8 @@
                     height: '80%',
                     title: '数据视图',
                     src: './pages/statistics/dialogs/materialViewData.html?isShow=materialByTenders&projectOid=' +
-                      that.materialByTenders.projectOid + "&dateTime=" + jasTools.base.formatDate(new Date(that.materialByTenders.date),'yyyy-MM-dd'),
+                      that.materialByTenders.projectOid + "&dateTime=" + jasTools.base.formatDate(new Date(
+                        that.materialByTenders.date), 'yyyy-MM-dd'),
                     cbForClose: function () {
 
                     }
@@ -577,6 +615,10 @@
         }
         that.materialByTendersChart.setOption(option, true);
       },
+      bottomVal: function () {
+        var scrollY =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop       
+        return scrollY
+      }
     }
   });
 </script>
