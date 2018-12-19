@@ -96,48 +96,28 @@ public class ProgressStatsService {
 		default:
 			break;
 		}
-		//若dataList不为空，取对应数据封装
-		if (dataList.size() > 0) {
-			Double[] statsResult = new Double[projectList.size()];
-			//将statsResult数组数值默认填充为0.0
-			Arrays.fill(statsResult, 0.0);
-			String[] projectName = new String[projectList.size()];
-			String[] projectOid = new String[projectList.size()];
-			for (int i = 0; i < dataList.size(); i++) {
-				statsResult[i] = Double.parseDouble(dataList.get(i).getStatsResult().toString());
-				projectName[i] = dataList.get(i).getProjectName();
-				projectOid[i] = dataList.get(i).getProjectOid();
-			}
-			//若dataList中数据不包含传的项目，将遗失的项目及对应的数据补0
-			//用于判断向数组中哪个索引位置插值
-			int lastIndex = projectOid.length;
+		Double[] statsResult = new Double[projectList.size()];
+		Arrays.fill(statsResult, 0.0);
+		String[] projectNames = new String[projectList.size()];
+		String[] projectOids = new String[projectList.size()];
+		if (projectList.size() > 0) {
 			for (int i = 0; i < projectList.size(); i++) {
-				int index = getIndex(projectOid, projectList.get(i).get("oid"));
-				if (index == -1) {
-					lastIndex -= 1;
-					projectOid[lastIndex] = projectList.get(i).get("oid");
-					projectName[lastIndex] = projectList.get(i).get("projectName");
+				projectNames[i] = projectList.get(i).get("projectName");
+				projectOids[i] = projectList.get(i).get("oid");
+			}
+			if (dataList.size() > 0) {
+				for (int j = 0; j < dataList.size(); j++) {
+					int index = getIndex(projectOids, dataList.get(j).getProjectOid());
+					if (index != -1) {
+						statsResult[index] = Double.parseDouble(dataList.get(j).getStatsResult().toString());
+					}
 				}
 			}
-			map.put("statsResult", statsResult);
-			map.put("projectName", projectName);
-			map.put("projectOids", projectOid);
-			resultList.add(map);
-		} else {
-			//若dataList为空，封装项目oid和名称，将对应的长度封装为0
-			Double[] statsResult = new Double[projectList.size()];
-			String[] projectName = new String[projectList.size()];
-			String[] projectOid = new String[projectList.size()];
-			for (int i = 0; i < projectList.size(); i++) {
-				statsResult[i] = 0.0;
-				projectName[i] = projectList.get(i).get("projectName");
-				projectOid[i] = projectList.get(i).get("oid");
-			}
-			map.put("statsResult", statsResult);
-			map.put("projectName", projectName);
-			map.put("projectOids", projectOid);
-			resultList.add(map);
 		}
+		map.put("statsResult", statsResult);
+		map.put("tendersNames", projectNames);
+		map.put("tendersOids", projectOids);
+		resultList.add(map);
 	}
 
 	
@@ -321,48 +301,28 @@ public class ProgressStatsService {
 		default:
 			break;
 		}
-		//若dataList不为空，取对应数据封装
-		if (dataList.size() > 0) {
-			Double[] statsResult = new Double[tendersList.size()];
-			//将statsResult数组数值默认填充为0.0
-			Arrays.fill(statsResult, 0.0);
-			String[] tendersNames = new String[tendersList.size()];
-			String[] tendersOids = new String[tendersList.size()];
-			for (int i = 0; i < dataList.size(); i++) {
-				statsResult[i] = Double.parseDouble(dataList.get(i).getStatsResult().toString());
-				tendersNames[i] = dataList.get(i).getTendersName();
-				tendersOids[i] = dataList.get(i).getTendersOid();
-			}
-			//若dataList中数据不包含传的项目，将遗失的项目及对应的数据补0
-			//用于判断向数组中哪个索引位置插值
-			int lastIndex = tendersOids.length;
+		Double[] statsResult = new Double[tendersList.size()];
+		Arrays.fill(statsResult, 0.0);
+		String[] tendersNames = new String[tendersList.size()];
+		String[] tendersOids = new String[tendersList.size()];
+		if (tendersList.size() > 0) {
 			for (int i = 0; i < tendersList.size(); i++) {
-				int index = getIndex(tendersOids, tendersList.get(i).get("oid"));
-				if (index == -1) {
-					lastIndex --;
-					tendersOids[lastIndex] = tendersList.get(i).get("oid");
-					tendersNames[lastIndex] = tendersList.get(i).get("tendersName");
-				}
-			}
-			map.put("statsResult", statsResult);
-			map.put("tendersNames", tendersNames);
-			map.put("tendersOids", tendersOids);
-			resultList.add(map);
-		} else {
-			//若dataList为空，封装项目oid和名称，将对应的长度封装为0
-			Double[] statsResult = new Double[tendersList.size()];
-			String[] tendersNames = new String[tendersList.size()];
-			String[] tendersOids = new String[tendersList.size()];
-			for (int i = 0; i < tendersList.size(); i++) {
-				statsResult[i] = 0.0;
 				tendersNames[i] = tendersList.get(i).get("tendersName");
 				tendersOids[i] = tendersList.get(i).get("oid");
 			}
-			map.put("statsResult", statsResult);
-			map.put("tendersNames", tendersNames);
-			map.put("tendersOids", tendersOids);
-			resultList.add(map);
+			if (dataList.size() > 0) {
+				for (int j = 0; j < dataList.size(); j++) {
+					int index = getIndex(tendersOids, dataList.get(j).getTendersOid());
+					if (index != -1) {
+						statsResult[index] = Double.parseDouble(dataList.get(j).getStatsResult().toString());
+					}
+				}
+			}
 		}
+		map.put("statsResult", statsResult);
+		map.put("tendersNames", tendersNames);
+		map.put("tendersOids", tendersOids);
+		resultList.add(map);
 	}
 
 	/**
