@@ -1348,7 +1348,7 @@ Vue.component('jas-import-export-btns', {
 
 	},
 	mounted: function () {
-		console.log(this.importConfig);
+		//console.log(this.importConfig);
 	}
 });
 
@@ -2356,17 +2356,21 @@ Vue.component('jas-project-select', {
 	methods: {
 		requestProject: function () {
 			var that = this;
-				if (that.projectarray&&that.projectarray.length>0) {
-					that.projectarray.forEach(function (item) {
-						that.ids.push(item.key);
-						that.projectArray.push(item);
-					});
-					that.projectOids = that.ids;
-					that.oldOptions = that.projectOids;
-					var ids = that.projectOids.filter(function (item) {
-						return item != that.label
-					});
-					that.$emit("requestnet", ids);
+				if (that.projectarray) {
+					if(that.projectarray.length>0){
+						that.projectarray.forEach(function (item) {
+							that.ids.push(item.key);
+							that.projectArray.push(item);
+						});
+						that.projectOids = that.ids;
+						that.oldOptions = that.projectOids;
+						var ids = that.projectOids.filter(function (item) {
+							return item != that.label
+						});
+						that.$emit("requestnet", ids);
+					}else{var ids=[""];
+						that.$emit("requestnet",ids );
+					}	
 				return;
 			}
 			var url = jasTools.base.rootPath + that.url;
@@ -2380,6 +2384,9 @@ Vue.component('jas-project-select', {
 				var ids = that.projectOids.filter(function (item) {
 					return item != that.label
 				});
+				if(ids.length==0){
+					ids[0]='';
+				}
 				that.$emit("requestnet", ids);
 			});
 		},
@@ -2531,18 +2538,27 @@ Vue.component('statistic-group', { //项目分组
 	methods: {
 		requestProject: function () {
 			var that = this;
-			if(that.projectarray&&that.projectarray.length>0){
+			if(that.projectarray){
+				if(that.projectarray.length>0){
 					that.projectArray=that.projectarray;
 					that.projectOids = that.projectarray[0].key;
 					that.$emit("requestnet", that.projectOids, that.date);
-				return;
+				  
+				}else{
+					that.$emit("requestnet", '', that.date);
+				}
+				  return;
 			}
 			var url = jasTools.base.rootPath + "/daq/privilege/getProjectList.do";
 			jasTools.ajax.post(url, {}, function (data) {
 				data.rows.forEach(function (item) {
 					that.projectArray.push(item);
 				});
-				that.projectOids = that.projectArray[0].key;
+				if(that.projectArray.length>0){
+					that.projectOids = that.projectArray[0].key;	
+				}else{
+					that.projectOids ="";
+				}
 				that.$emit("requestnet", that.projectOids, that.date);
 			});
 

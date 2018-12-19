@@ -30,7 +30,7 @@
             <el-option v-for="project in qualityByMonth.unitArray" :key="project.key" :label="project.value" :value="project.key">
             </el-option>
           </el-select>
-          <!--<jas-project-select @requestnet="requestQualitylByMonth" label="所有单位" :selprojectoids="qualityByMonth.unitOids" :projectarray="qualityByMonth.unitArray"></jas-project-select>-->
+
         </template>
       </statistic-group-project>
       <el-row :gutter="10" style="padding-top:10px">
@@ -49,7 +49,7 @@
             <el-option v-for="project in projectByNature.unitArray" :key="project.key" :label="project.value" :value="project.key">
             </el-option>
           </el-select>
-          <!--<jas-project-select @requestnet="requestProjectByNature" label="所有单位" :selprojectoids="projectByNature.unitOids" :projectarray="projectByNature.unitArray"></jas-project-select>-->
+
         </template>
       </statistic-group-project>
       <el-row :gutter="10" style="padding-top:10px">
@@ -112,7 +112,7 @@
           </el-card>
         </el-col>
       </el-row>
-   
+
     </div>
   </div>
 
@@ -197,10 +197,10 @@
       var that = this;
       $(window).resize(function () {
     	if(that.qualityByMonthChart){
-    		that.qualityByMonthChart.resize();	
+    		that.qualityByMonthChart.resize();
     	}
         if(that.projectByNatureChartL){
-        	 that.projectByNatureChartL.resize();	
+        	 that.projectByNatureChartL.resize();
         }
         if(that.projectByNatureChartR){
         	 that.projectByNatureChartR.resize();
@@ -227,7 +227,9 @@
           data.rows.forEach(function (item) {
             that.projectArray.push(item);
           });
+          that.projectArray=data.rows;
         });
+
       },
       requestQualityUnit: function (projectOids, date) {
         var that = this;
@@ -495,7 +497,7 @@
                 icon: that.icon,
                 onclick: function () {
                   var ids=that.qualityByMonth.unitOids.filter(function(item){
-                	 return item !="所有单位"; 
+                	 return item !="所有单位";
                   });
                   top.jasTools.dialog.show({
                     width: '60%',
@@ -926,7 +928,7 @@
         }
 
       },
-     
+
     },
   });
 </script>

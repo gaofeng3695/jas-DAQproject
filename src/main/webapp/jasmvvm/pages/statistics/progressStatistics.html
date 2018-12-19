@@ -201,8 +201,10 @@
             that.projectArray.push(item);
           });
           that.projectArray=data.rows;
-          that.sectionByMonthObj.projectOid = that.projectArray[0].key;
-          that.requestSectionByMonth();
+          if(that.projectArray.length>0){
+        	  that.sectionByMonthObj.projectOid = that.projectArray[0].key;
+          }        
+         that.requestSectionByMonth();
         });
       },
       requestProcessByProject: function (projectOids, date) { //各工序分项目对比统计
