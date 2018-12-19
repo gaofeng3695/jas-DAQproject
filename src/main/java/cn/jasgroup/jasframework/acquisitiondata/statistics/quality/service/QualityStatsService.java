@@ -130,7 +130,7 @@ public class QualityStatsService {
 				// 判断统计数据是否为空
 				if (defectCountList.size() > 0) {
 					for (int h = 0; h < defectCountList.size(); h++) {
-						String unitOid = (String) defectCountList.get(h).get("detectionUnit");
+						String unitOid = (String) defectCountList.get(h).get("constructUnit");
 						//统计结果不为空，将对应的缺陷性质条数放到statsResult对应的位置
 						if (unitOid.equals(unitOidsArray[j]) && defectList.get(i).get("key").equals(defectCountList.get(h).get("defectProperties"))) {
 							statsResult[j] = Integer.parseInt(defectCountList.get(h).get("count").toString());
