@@ -51,6 +51,7 @@ public class MaterialStatisticsService {
 		Object[] pipeDataList = new Object[12];
 		Object[] hotPipeDataList = new Object[12];
 		Object[] grandTotalDataList = new Object[12];
+		NumberFormat nf = NumberFormat.getNumberInstance();
 		for (int i = 1; i < 13; i++) {
 			String yearMonth = i > 9 ? (year + "-" + i) : (year + "-0" + i);
 
@@ -59,15 +60,15 @@ public class MaterialStatisticsService {
 			grandTotalDataList[i - 1] = total;
 			for (Map<String, Object> map : monthlyData) {
 				if (map.containsValue(yearMonth)) {
+					double pipeLength = Double.parseDouble(map.get("pipeLength").toString());
 					if (map.get("type").toString().equals("pipe")) {
-						pipeDataList[i - 1] = map.get("pipeLength");
+						
+						pipeDataList[i - 1] = nf.format(pipeLength);
 					} else {
-						hotPipeDataList[i - 1] = map.get("pipeLength");
+						hotPipeDataList[i - 1] = nf.format(pipeLength);
 					}
 					total += Double.parseDouble(map.get("pipeLength").toString());
-					BigDecimal bg = new BigDecimal(total);
-					total = bg.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
-					grandTotalDataList[i - 1] = total;
+					grandTotalDataList[i - 1] = nf.format(total);
 				}
 			}
 		}
@@ -100,6 +101,7 @@ public class MaterialStatisticsService {
 		Map<String, Object> pipeData = new LinkedHashMap<>();
 		Map<String, Object> hotPipeData = new LinkedHashMap<>();
 		Map<String, Object> grandTotalData = new LinkedHashMap<>();
+		NumberFormat nf = NumberFormat.getNumberInstance();
 		for (int i = 1; i <= maxDay; i++) {
 			String monthDay = i > 9 ? (month + "-" + i) : (month + "-0" + i);
 			pipeData.put(monthDay, 0);
@@ -107,15 +109,14 @@ public class MaterialStatisticsService {
 			grandTotalData.put(monthDay, total);
 			for (Map<String, Object> map : dailyData) {
 				if (map.containsValue(monthDay)) {
+					double pipeLength = Double.parseDouble(map.get("pipeLength").toString());
 					if (map.get("type").toString().equals("pipe")) {
-						pipeData.put(monthDay, map.get("pipeLength"));
+						pipeData.put(monthDay, nf.format(pipeLength));
 					} else {
-						hotPipeData.put(monthDay, map.get("pipeLength"));
+						hotPipeData.put(monthDay, nf.format(pipeLength));
 					}
 					total += Double.parseDouble(map.get("pipeLength").toString());
-					BigDecimal bg = new BigDecimal(total);
-					total = bg.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
-					grandTotalData.put(monthDay, total);
+					grandTotalData.put(monthDay, nf.format(total));
 				}
 			}
 		}
@@ -140,11 +141,13 @@ public class MaterialStatisticsService {
 		
 		Map<String,Object> pipeData = new LinkedHashMap<>();
 		Map<String,Object> hotPipeData = new LinkedHashMap<>();
+		NumberFormat nf = NumberFormat.getNumberInstance();
 		for (Map<String, Object> map : tendersData) {
+			double pipeLength = Double.parseDouble(map.get("pipeLength").toString());
 			if (map.get("type").toString().equals("pipe")) {
-				pipeData.put(map.get("tendersName").toString(), map.get("pipeLength"));
+				pipeData.put(map.get("tendersName").toString(), nf.format(pipeLength));
 			}else{
-				hotPipeData.put(map.get("tendersName").toString(), map.get("pipeLength"));
+				hotPipeData.put(map.get("tendersName").toString(), nf.format(pipeLength));
 			}
 		}
 		Map<String, Object> result = new HashMap<>();
@@ -173,14 +176,16 @@ public class MaterialStatisticsService {
 		List<Map<String, Object>> pipeData = this.materialStatisticsDao.getMaterialUseStatustics(projectOid, minDateTime, maxDateTime);
 		Map<String, String> tendersMap = new LinkedHashMap<>();
 		Map<String, List<Map<String,Object>>> tempDataMap = new LinkedHashMap<>();
+		NumberFormat nf = NumberFormat.getNumberInstance();
 		for (Map<String, Object> map : pipeData) {
 			String tendersOid = map.get("oid").toString();
+			double pipeLength = Double.parseDouble(map.get("pipeLength").toString());
 			if(tempDataMap.containsKey(tendersOid)){
 				List<Map<String,Object>> mapData = tempDataMap.get(tendersOid);
 				boolean isExist = false;
 				for(Map<String,Object> obj : mapData){
 					if(map.get("specifications")!=null && map.get("specifications").toString().equals(obj.get("specifications"))){
-						obj.put(map.get("dataType").toString(), map.get("pipeLength"));
+						obj.put(map.get("dataType").toString(), nf.format(pipeLength));
 						isExist = true;
 						break;
 					}else if(map.get("specifications")!=null){
@@ -201,7 +206,7 @@ public class MaterialStatisticsService {
 					newObj.put("h_pipe_month_receive", 0);
 					newObj.put("h_pipe_total_receive", 0);
 					newObj.put("h_pipe_total_overplus", 0);
-					newObj.put(map.get("dataType").toString(), map.get("pipeLength"));
+					newObj.put(map.get("dataType").toString(), nf.format(pipeLength));
 					mapData.add(newObj);
 				}
 			}else{
@@ -220,7 +225,7 @@ public class MaterialStatisticsService {
 					obj.put("h_pipe_month_receive", 0);
 					obj.put("h_pipe_total_receive", 0);
 					obj.put("h_pipe_total_overplus", 0);
-					obj.put(map.get("dataType").toString(), map.get("pipeLength"));
+					obj.put(map.get("dataType").toString(), nf.format(pipeLength));
 					mapData.add(obj);
 				}
 				tempDataMap.put(tendersOid, mapData);
@@ -251,9 +256,7 @@ public class MaterialStatisticsService {
 				double pipeMonthUse = Double.parseDouble(obj.get("pipe_month_use").toString());
 				double pipeMonthReceive = Double.parseDouble(obj.get("pipe_month_receive").toString());
 				double overplus = pipeTotalReceive-pipeTotalUse;
-				BigDecimal bg = new BigDecimal(overplus);
-				overplus = bg.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
-				obj.put("pipe_total_overplus", overplus);
+				obj.put("pipe_total_overplus", nf.format(overplus));
 				pipe_month_use_sum+=pipeMonthUse;
 				pipe_total_use_sum+=pipeTotalUse;
 				pipe_month_receive_sum+=pipeMonthReceive;
@@ -275,7 +278,6 @@ public class MaterialStatisticsService {
 				h_pipe_total_overplus_sum+=hOverplus;
 			}
 			if(data!=null && data.size()>0){
-				NumberFormat nf = NumberFormat.getNumberInstance();
 				Map<String,Object> sum = new LinkedHashMap<>();
 				sum.put("tendersOid", oid);
 				sum.put("specifications", "合计");
@@ -316,12 +318,14 @@ public class MaterialStatisticsService {
 	private Map<String, Object> getMaterialUseTotalStatustics(String projectOid, String maxDateTime,String minDateTime) {
 		List<Map<String, Object>> totalData = this.materialStatisticsDao.getMaterialUseTotalStatustics(projectOid,minDateTime, maxDateTime);
 		Map<String, Map<String,Object>> tempMap = new LinkedHashMap<>();
+		NumberFormat nf = NumberFormat.getNumberInstance();
 		for (Map<String, Object> map : totalData) {
 			if (map.get("specifications") != null) {
 				String specifications = map.get("specifications").toString();
+				double pipeLength = Double.parseDouble(map.get("pipeLength").toString());
 				if(tempMap.containsKey(specifications)){
 					Map<String,Object> obj = tempMap.get(specifications);
-					obj.put(map.get("dataType").toString(), map.get("pipeLength"));
+					obj.put(map.get("dataType").toString(), nf.format(pipeLength));
 				}else{
 					Map<String,Object> obj = new LinkedHashMap<>();
 					obj.put("tendersOid", "");
@@ -336,12 +340,11 @@ public class MaterialStatisticsService {
 					obj.put("h_pipe_month_receive", 0);
 					obj.put("h_pipe_total_receive", 0);
 					obj.put("h_pipe_total_overplus", 0);
-					obj.put(map.get("dataType").toString(), map.get("pipeLength"));
+					obj.put(map.get("dataType").toString(), nf.format(pipeLength));
 					tempMap.put(specifications, obj);
 				}
 			}
 		}
-		NumberFormat nf = NumberFormat.getNumberInstance();
 		double pipe_month_use_sum=0d;
 		double pipe_total_use_sum=0d;
 		double pipe_month_receive_sum=0d;
