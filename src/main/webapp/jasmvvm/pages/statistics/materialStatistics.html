@@ -546,7 +546,7 @@
                     height: '80%',
                     title: '数据视图',
                     src: './pages/statistics/dialogs/materialViewData.html?isShow=materialByTenders&projectOid=' +
-                      that.materialByTenders.projectOid + "&dateTime=" + jasTools.base.formatDate(that.materialByTenders.date,'yyyy-MM-dd'),
+                      that.materialByTenders.projectOid + "&dateTime=" + jasTools.base.formatDate(new Date(that.materialByTenders.date),'yyyy-MM-dd'),
                     cbForClose: function () {
 
                     }

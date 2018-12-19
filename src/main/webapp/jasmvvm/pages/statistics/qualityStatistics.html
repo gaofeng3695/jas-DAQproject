@@ -53,14 +53,14 @@
         </template>
       </statistic-group-project>
       <el-row :gutter="10" style="padding-top:10px">
-        <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="height">
+        <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14" class="height">
           <el-card style="margin-bottom: 10px">
             <div id="projectByNatureChartL" style="width:100%;height:400px;">
 
             </div>
           </el-card>
         </el-col>
-        <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="height">
+        <el-col :xs="24" :sm="24" :md="10" :lg="10" :xl="10" class="height">
           <el-card style="margin-bottom: 10px">
             <div id="projectByNatureChartR" style="width:100%;height:400px;">
 
@@ -75,14 +75,14 @@
         @requestnet="requestWeldByTenders">
       </statistic-group>
       <el-row :gutter="10" style="padding-top:10px">
-        <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="height">
+        <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14" class="height">
           <el-card style="margin-bottom: 10px">
             <div id="weldByTendersChartL" style="width:100%;height:400px;">
 
             </div>
           </el-card>
         </el-col>
-        <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="height">
+        <el-col :xs="24" :sm="24" :md="10" :lg="10" :xl="10" class="height">
           <el-card style="margin-bottom: 10px">
             <div id="weldByTendersChartR" style="width:100%;height:400px;">
 
@@ -97,14 +97,14 @@
         @requestnet="requestWeldByUnits">
       </statistic-group>
       <el-row :gutter="10" style="padding-top:10px">
-        <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="height">
+        <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14" class="height">
           <el-card style="margin-bottom: 10px">
             <div id="weldByUnitsChartL" style="width:100%;height:400px;">
 
             </div>
           </el-card>
         </el-col>
-        <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="height">
+        <el-col :xs="24" :sm="24" :md="10" :lg="10" :xl="10" class="height">
           <el-card style="margin-bottom: 10px">
             <div id="weldByUnitsChartR" style="width:100%;height:400px;">
 
@@ -534,10 +534,9 @@
               data: data.qualifiedRate,
               label: {
                 show: true,
-                formatter: '{c}%'
-
+                formatter: '{c}%',
+                position: 'right'
               }
-
             }
           ],
           color: color
@@ -707,8 +706,8 @@
               data: data.rate,
               label: {
                 show: true,
-                formatter: '{c}%'
-
+                formatter: '{c}%',
+                position:'right'
               }
             }
           ],
@@ -803,6 +802,7 @@
                 series: [{
                     name: '焊口数量',
                     type: 'bar',
+                    barMaxWidth:"20%",
                     data: data.count,
                     label: {
                       show: true,
@@ -816,8 +816,8 @@
                     data: data.rate,
                     label: {
                       show: true,
-                      formatter: '{c}%'
-
+                      formatter: '{c}%',
+                      position:'right'
                     }
                   }
                 ],
