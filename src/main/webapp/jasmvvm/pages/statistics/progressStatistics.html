@@ -200,6 +200,7 @@
           data.rows.forEach(function (item) {
             that.projectArray.push(item);
           });
+          that.projectArray=data.rows;
           that.sectionByMonthObj.projectOid = that.projectArray[0].key;
           that.requestSectionByMonth();
         });
@@ -337,6 +338,7 @@
               series.push({
                 name: key,
                 type: 'bar',
+                barMaxWidth:"20%",
                 label: {
                   show: true,
                   position: 'top'
@@ -351,7 +353,6 @@
           }
 
         }
-
         var that = this;
         if (!that.processByProject) {
           that.processByProject = echarts.init(document.getElementById('processByProject'));
@@ -368,10 +369,10 @@
               type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
             }
           },
-          legend: {
-            data: legendArr,
-            bottom: "-5px"
-          },
+         // legend: {
+           // data: legendArr,
+            //bottom: "-5px"
+          //},
           toolbox: {
             show: true,
             orient: "horizontal",
@@ -449,6 +450,7 @@
               series.push({
                 name: key,
                 type: 'bar',
+                barMaxWidth:"20%",
                 label: {
                   show: true,
                   position: 'top'
@@ -479,10 +481,10 @@
               type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
             }
           },
-          legend: {
-            data: legendArr,
-            bottom: "-5px"
-          },
+          //legend: {
+            //data: legendArr,
+            //bottom: "-5px"
+          //},
           toolbox: {
             show: true,
             orient: "horizontal",
@@ -595,6 +597,7 @@
                 serise.push({
                   name: key,
                   type: 'bar',
+                  barMaxWidth:"20%",
                   label: {
                     show: true,
                     position: 'top'
@@ -624,10 +627,10 @@
               type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
             }
           },
-          legend: {
-            data: legendArr,
-            bottom: "-5px"
-          },
+         // legend: {
+           // data: legendArr,
+            //bottom: "-5px"
+          //},
           toolbox: {
             show: true,
             orient: "horizontal",
@@ -702,6 +705,7 @@
                 serise.push({
                   name: key,
                   type: 'bar',
+                  barMaxWidth:"20%",
                   label: {
                     show: true,
                     position: 'top'
@@ -715,7 +719,6 @@
             }
           }
         }
-        console.log(projectX);
         var that = this;
         if (!that.sectionByProcessCChart) {
           that.sectionByProcessCChart = echarts.init(document.getElementById('sectionByProcessCChart'));
@@ -732,10 +735,10 @@
               type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
             }
           },
-          legend: {
-            data: legendArr,
-            bottom: "-5px"
-          },
+        //  legend: {
+          //  data: legendArr,
+           // bottom: "-5px"
+          //},
           toolbox: {
             show: true,
             orient: "horizontal",

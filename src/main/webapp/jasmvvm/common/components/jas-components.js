@@ -2338,29 +2338,35 @@ Vue.component('jas-project-select', {
 		'</el-option>',
 		'</el-select>'
 	].join(''),
-	created: function () {
+	watch:{
+		projectarray:function(){
+			var that=this;
+			if(that.projectarray&&that.projectArray.length==1){
+				that.requestProject();
+			}
+
+		}
+	},
+	mounted: function () {
 		this.projectOids = this.selprojectoids;
-		this.requestProject();
+		if(!this.projectarray){
+		  this.requestProject();
+		}	   
 	},
 	methods: {
 		requestProject: function () {
 			var that = this;
-			console.log(that.projectarray);
-			if (that.projectarray) {
-				setTimeout(function () {
-					if (that.projectarray.length > 0) {
-						that.projectarray.forEach(function (item) {
-							that.ids.push(item.key);
-							that.projectArray.push(item);
-						});
-						that.projectOids = that.ids;
-						that.oldOptions = that.projectOids;
-						var ids = that.projectOids.filter(function (item) {
-							return item != that.label
-						});
-						that.$emit("requestnet", ids);
-					}
-				}, 1);
+				if (that.projectarray&&that.projectarray.length>0) {
+					that.projectarray.forEach(function (item) {
+						that.ids.push(item.key);
+						that.projectArray.push(item);
+					});
+					that.projectOids = that.ids;
+					that.oldOptions = that.projectOids;
+					var ids = that.projectOids.filter(function (item) {
+						return item != that.label
+					});
+					that.$emit("requestnet", ids);
 				return;
 			}
 			var url = jasTools.base.rootPath + that.url;
@@ -2504,20 +2510,26 @@ Vue.component('statistic-group', { //项目分组
 		'</div>',
 		' </el-row>'
 	].join(''),
+	watch:{
+		projectarray:function(){
+			var that=this;
+			if(that.projectarray&&that.projectArray.length==0){
+				that.requestProject();
+			}
+		}
+	},
 	mounted: function () {
-		var that = this;
-		that.requestProject();
+		if(!this.projectarray){
+			  this.requestProject();
+		}
 	},
 	methods: {
 		requestProject: function () {
-		
 			var that = this;
-			if(that.projectarray){
-				setTimeout(function () {
+			if(that.projectarray&&that.projectarray.length>0){
 					that.projectArray=that.projectarray;
 					that.projectOids = that.projectarray[0].key;
 					that.$emit("requestnet", that.projectOids, that.date);
-				},10);
 				return;
 			}
 			var url = jasTools.base.rootPath + "/daq/privilege/getProjectList.do";
@@ -2528,7 +2540,7 @@ Vue.component('statistic-group', { //项目分组
 				that.projectOids = that.projectArray[0].key;
 				that.$emit("requestnet", that.projectOids, that.date);
 			});
-			
+
 		},
 		select: function () {
 			var that = this;

@@ -222,6 +222,7 @@
               data.rows.forEach(function (item) {
                 that.projectArray.push(item);
               });
+              that.projectArray=data.rows;
             });
           },
       requestTable: function (projectOid, date) {
@@ -391,12 +392,14 @@
           series: [{
               name: '钢管（KM）',
               type: 'bar',
+              barMaxWidth:"20%",
               stack: '总量',
               data: data.pipe
             },
             {
               name: '热煨弯管（KM）',
               type: 'bar',
+              barMaxWidth:"20%",
               stack: '总量',
               data: data.hot_pipe
             },
@@ -501,6 +504,7 @@
           series.push({
             name: that.map[key1],
             type: 'bar',
+            barMaxWidth:"15%",
             label: {
               show: true,
               position: 'top'

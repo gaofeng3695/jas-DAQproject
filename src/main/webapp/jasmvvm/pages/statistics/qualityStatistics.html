@@ -225,7 +225,7 @@
         }];
         that.qualityByMonth.unitOids = ['所有单位'];
         that.qualityByMonth.allIds = ['所有单位'];
-        var url = jasTools.base.rootPath + "/daq/privilege/getConstructAndProjectUnitList.do";
+        var url = jasTools.base.rootPath + "/daq/privilege/getConstructUnitList.do";
         jasTools.ajax.post(url, {
           projectOids: projectOids,
         }, function (data) {
@@ -253,7 +253,7 @@
         }];
         that.projectByNature.allIds = ["所有单位"];
         that.projectByNature.unitOids = ['所有单位'];
-        var url = jasTools.base.rootPath + "/daq/privilege/getConstructAndProjectUnitList.do";
+        var url = jasTools.base.rootPath + "/daq/privilege/getConstructUnitList.do";
         jasTools.ajax.post(url, {
           projectOids: projectOids,
         }, function (data) {
@@ -520,6 +520,7 @@
           series: [{
               name: '当月焊口数量',
               type: 'bar',
+              barMaxWidth:"20%",
               data: data.weldCount,
               label: {
                 show: true,
@@ -552,6 +553,7 @@
           series.push({
             name: key,
             type: 'bar',
+            barMaxWidth:"20%",
             stack: '总量',
             label: {
               normal: {
@@ -692,6 +694,7 @@
           series: [{
               name: '焊口数量',
               type: 'bar',
+              barMaxWidth:"20%",
               data: data.count,
               label: {
                 show: true,
