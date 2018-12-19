@@ -295,8 +295,8 @@ public class QualityStatsService {
 	public Map<String, Object> getEachUnitQualifiedRateByProjects(String projectOid, String date) {
 		//封装返回值
 		Map<String, Object> map = new HashMap<>();
-		//查询项目下所有的建设单位和施工单位
-		List<Map<String, Object>> constructAndProjectUnitList = qualityStatsDao.getAllProjectAndConstructUnitByProjectOid(projectOid);
+		//查询项目下所有的施工单位
+		List<Map<String, Object>> constructAndProjectUnitList = qualityStatsDao.getConstructUnitByProjectOid(projectOid);
 		//根据项目和日期查询标段下施工单位的检测口数和一次合格率
 		List<Map<String, Object>> dataList = qualityStatsDao.getEachUnitQualifiedRateByProjects(projectOid, date);
 		String[] unitOidArray = new String[constructAndProjectUnitList.size()];
@@ -345,24 +345,18 @@ public class QualityStatsService {
 		Map<String, Object> map = new HashMap<>();
 		//查询项目下所有的施工单位
 		List<Map<String, Object>> constructUnitList = qualityStatsDao.getConstructUnitByProjectOid(projectOid);
-		//查询项目下所有的建设单位
-		List<Map<String, Object>> projectUnitList = qualityStatsDao.getAllProjectUnitByProjectOid(projectOid);
-		//所有施工单位和建设单位
-		List<Map<String, Object>> constructAndProjectUnitList = new ArrayList<>();
-		constructAndProjectUnitList.addAll(projectUnitList);
-		constructAndProjectUnitList.addAll(constructUnitList);
 		//根据项目和日期查询各单位不合格口数占比
 		List<Map<String, Object>> dataList = qualityStatsDao.getEachUnitUnQualifiedRateByProjects(projectOid,date);
-		String[] unitOidArray = new String[constructAndProjectUnitList.size()];
-		String[] unitNameArray = new String[constructAndProjectUnitList.size()];
-		Double[] rateArray = new Double[constructAndProjectUnitList.size()];
+		String[] unitOidArray = new String[constructUnitList.size()];
+		String[] unitNameArray = new String[constructUnitList.size()];
+		Double[] rateArray = new Double[constructUnitList.size()];
 		Arrays.fill(rateArray, 0.0);
-		Integer[] countArray = new Integer[constructAndProjectUnitList.size()];
+		Integer[] countArray = new Integer[constructUnitList.size()];
 		Arrays.fill(countArray, 0);
-		if (constructAndProjectUnitList.size() > 0) {
-			for (int i = 0; i < constructAndProjectUnitList.size(); i++) {
-				unitOidArray[i] = (String) constructAndProjectUnitList.get(i).get("key");
-				unitNameArray[i] = (String) constructAndProjectUnitList.get(i).get("value");
+		if (constructUnitList.size() > 0) {
+			for (int i = 0; i < constructUnitList.size(); i++) {
+				unitOidArray[i] = (String) constructUnitList.get(i).get("key");
+				unitNameArray[i] = (String) constructUnitList.get(i).get("value");
 			}
 			if (dataList.size() > 0) {
 				for (int j = 0; j < dataList.size(); j++) {
