@@ -196,13 +196,27 @@
     mounted: function () {
       var that = this;
       $(window).resize(function () {
-        that.qualityByMonthChart.resize();
-        that.projectByNatureChartL.resize();
-        that.projectByNatureChartR.resize();
-        that.weldByTendersChartL.resize();
-        that.weldByTendersChartR.resize();
-        that.weldByUnitsChartL.resize();
-        that.weldByUnitsChartR.resize();
+    	if(that.qualityByMonthChart){
+    		that.qualityByMonthChart.resize();	
+    	}
+        if(that.projectByNatureChartL){
+        	 that.projectByNatureChartL.resize();	
+        }
+        if(that.projectByNatureChartR){
+        	 that.projectByNatureChartR.resize();
+        }
+        if(that.weldByTendersChartL){
+        	  that.weldByTendersChartL.resize();
+       }
+        if(that.weldByTendersChartR){
+        	that.weldByTendersChartR.resize();
+       }
+        if(that.weldByUnitsChartL){
+        	 that.weldByUnitsChartL.resize();
+       }
+        if(that.weldByUnitsChartR){
+        	 that.weldByUnitsChartR.resize();
+       }
       });
     },
     methods: {
@@ -480,13 +494,16 @@
                 title: '数据视图',
                 icon: that.icon,
                 onclick: function () {
+                  var ids=that.qualityByMonth.unitOids.filter(function(item){
+                	 return item !="所有单位"; 
+                  });
                   top.jasTools.dialog.show({
                     width: '60%',
                     height: '80%',
                     title: '数据视图',
                     src: './pages/statistics/dialogs/qualityViewData.html?isShow=qualityByMonthViewData&projectOids=' +
                       that.qualityByMonth.projectOids + "&year=" + that.qualityByMonth.date +
-                      "&unitOids=" + that.qualityByMonth.unitOids,
+                      "&unitOids=" + ids,
                   });
                 }
               }
