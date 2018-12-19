@@ -42,8 +42,8 @@ public class ProgressStatsController {
 		try{
 			List<String> projectOids = (List<String>)params.get("projectOids");
 			String date = (String)params.get("date");
-			if (projectOids.size() == 0 || StringUtils.isBlank(date)) {
-				return new ListResult<>(-1,"400","请选择对应的项目或日期");
+			if (StringUtils.isBlank(date)) {
+				return new ListResult<>(-1,"400","请选择日期");
 			}
 			List<Map<String, Object>> rows = progressStatsService.getEachItemLengthStatsByProject(projectOids,date);
 			result = new ListResult<>(1,"200","ok",rows);
@@ -70,8 +70,8 @@ public class ProgressStatsController {
 		try{
 			List<String> projectOids = (List<String>)params.get("projectOids");
 			String date = (String)params.get("date");
-			if (projectOids.size() == 0 || StringUtils.isBlank(date)) {
-				return new ListResult<>(-1,"400","请选择对应的项目或日期");
+			if (StringUtils.isBlank(date)) {
+				return new ListResult<>(-1,"400","请选择日期");
 			}
 			List<Map<String, Object>> rows = progressStatsService.getEachItemCountStatsByProject(projectOids,date);
 			result = new ListResult<>(1,"200","ok",rows);
@@ -105,8 +105,8 @@ public class ProgressStatsController {
 			//起止日期
 			String beginMonth = (String)params.get("beginMonth");
 			String endMonth = (String)params.get("endMonth");
-			if (StringUtils.isBlank(projectOid) || StringUtils.isBlank(procedure) || StringUtils.isBlank(beginMonth) || StringUtils.isBlank(endMonth)) {
-				return new ListResult<>(-1,"400","请选择对应的项目或工序或起止日期");
+			if (StringUtils.isBlank(procedure) || StringUtils.isBlank(beginMonth) || StringUtils.isBlank(endMonth)) {
+				return new ListResult<>(-1,"400","请选择工序或起止日期");
 			}
 			List<Map<String, Object>> rows = progressStatsService.getCumulateStatsByProjectAndSingleItem(projectOid, procedure, beginMonth, endMonth);
 			result = new ListResult<>(1,"200","ok",rows);
@@ -133,8 +133,8 @@ public class ProgressStatsController {
 		try{
 			String projectOid = (String)params.get("projectOid");
 			String date = (String)params.get("date");
-			if (StringUtils.isBlank(projectOid) || StringUtils.isBlank(date)) {
-				return new ListResult<>(-1,"400","请选择对应的项目或日期");
+			if (StringUtils.isBlank(date)) {
+				return new ListResult<>(-1,"400","请选择日期");
 			}
 			List<Map<String, Object>> rows = progressStatsService.getEachItemLengthStatsByTenders(projectOid,date);
 			result = new ListResult<>(1,"200","ok",rows);
@@ -161,8 +161,8 @@ public class ProgressStatsController {
 		try{
 			String projectOid = (String)params.get("projectOid");
 			String date = (String)params.get("date");
-			if (StringUtils.isBlank(projectOid) || StringUtils.isBlank(date)) {
-				return new ListResult<>(-1,"400","请选择对应的项目或日期");
+			if (StringUtils.isBlank(date)) {
+				return new ListResult<>(-1,"400","请选择日期");
 			}
 			List<Map<String, Object>> rows = progressStatsService.getEachItemCountStatsByTendersAndDate(projectOid,date);
 			result = new ListResult<>(1,"200","ok",rows);

@@ -43,8 +43,8 @@ public class QualityStatsController {
 			List<String> unitOids = (List<String>)params.get("unitOids");
 			//年份
 			String year = (String)params.get("year");
-			if (projectOids.size() == 0 || StringUtils.isBlank(year) || unitOids.size() == 0) {
-				return new ListResult<>(-1,"400","请选择对应的项目或单位或日期");
+			if (StringUtils.isBlank(year)) {
+				return new ListResult<>(-1,"400","请选择日期");
 			}
 			Map<String, Object> rows = qualityStatsService.getMonthlyQualiifiedRateByProjectAndUnit(projectOids, unitOids, year);
 			result = new SimpleResult<>(1,"200","ok",rows);
@@ -75,8 +75,8 @@ public class QualityStatsController {
 			List<String> unitOids = (List<String>)params.get("unitOids");
 			//月份
 			String month = (String)params.get("month");
-			if (projectOids.size() == 0 || unitOids.size() == 0 || StringUtils.isBlank(month)) {
-				return new ListResult<>(-1,"400","请选择对应的项目或单位或日期");
+			if (StringUtils.isBlank(month)) {
+				return new ListResult<>(-1,"400","请选择日期");
 			}
 			List<Map<String, Object>> rows = qualityStatsService.getKindsOfDefectCountByProjects(projectOids, unitOids, month);
 			result = new ListResult<>(1,"200","ok",rows);
@@ -107,8 +107,8 @@ public class QualityStatsController {
 			List<String> unitOids = (List<String>)params.get("unitOids");
 			//月份
 			String month = (String)params.get("month");
-			if (projectOids.size() == 0 || unitOids.size() == 0 || StringUtils.isBlank(month)) {
-				return new ListResult<>(-1,"400","请选择对应的项目或单位或日期");
+			if (StringUtils.isBlank(month)) {
+				return new ListResult<>(-1,"400","请选择日期");
 			}
 			Map<String, Object> rows = qualityStatsService.getKindsOfDefectRateByProjects(projectOids, unitOids, month);
 			result = new SimpleResult<>(1,"200","ok",rows);
@@ -137,8 +137,8 @@ public class QualityStatsController {
 			String projectOid = (String)params.get("projectOid");
 			//月份
 			String date = (String)params.get("date");
-			if (StringUtils.isBlank(projectOid) || StringUtils.isBlank(date)) {
-				return new ListResult<>(-1,"400","请选择对应的项目或日期");
+			if (StringUtils.isBlank(date)) {
+				return new ListResult<>(-1,"400","请选择日期");
 			}
 			//根据项目、日期查询每个标段的检测口数和一次合格率
 			Map<String, Object> rows = qualityStatsService.getEachTendersQualifiedRateByProjects(projectOid, date);
@@ -168,8 +168,8 @@ public class QualityStatsController {
 			String projectOid = (String)params.get("projectOid");
 			//月份
 			String date = (String)params.get("date");
-			if (StringUtils.isBlank(projectOid) || StringUtils.isBlank(date)) {
-				return new ListResult<>(-1,"400","请选择对应的项目或日期");
+			if (StringUtils.isBlank(date)) {
+				return new ListResult<>(-1,"400","请选择日期");
 			}
 			//根据项目、日期查询每个标段的检测口数和一次合格率
 			Map<String, Object> rows = qualityStatsService.getEachTendersUnQualifiedRateByProjects(projectOid, date);
@@ -199,8 +199,8 @@ public class QualityStatsController {
 			String projectOid = (String)params.get("projectOid");
 			//月份
 			String date = (String)params.get("date");
-			if (StringUtils.isBlank(projectOid) || StringUtils.isBlank(date)) {
-				return new ListResult<>(-1,"400","请选择对应的项目或日期");
+			if (StringUtils.isBlank(date)) {
+				return new ListResult<>(-1,"400","请选择日期");
 			}
 			//根据项目、日期查询每个单位的检测口数和一次合格率
 			Map<String, Object> rows = qualityStatsService.getEachUnitQualifiedRateByProjects(projectOid, date);
@@ -230,8 +230,8 @@ public class QualityStatsController {
 			String projectOid = (String)params.get("projectOid");
 			//月份
 			String date = (String)params.get("date");
-			if (StringUtils.isBlank(projectOid) || StringUtils.isBlank(date)) {
-				return new ListResult<>(-1,"400","请选择对应的项目或日期");
+			if (StringUtils.isBlank(date)) {
+				return new ListResult<>(-1,"400","请选择日期");
 			}
 			//根据项目、日期查询每个单位的检测口数和一次合格率
 			Map<String, Object> rows = qualityStatsService.getEachUnitUnQualifiedRateByProjects(projectOid, date);
