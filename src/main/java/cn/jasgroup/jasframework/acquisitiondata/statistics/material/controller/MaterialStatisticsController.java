@@ -43,7 +43,7 @@ public class MaterialStatisticsController extends BaseController{
 		String year = param.get("year")!=null?param.get("year").toString():null;
 		List<Object> projectOid=(List<Object>)param.get("projectOid");
 		try {
-			if(StringUtils.isNotBlank(year) && projectOid!=null && projectOid.size()>0){
+			if(StringUtils.isNotBlank(year) && projectOid!=null){
 				Map<String,Object> data = this.materialStatisticsService.getMonthlyStatistics(projectOid,year);
 				result = new SimpleResult<Map<String,Object>>(0, "200","ok", data);
 			}else{
@@ -73,7 +73,7 @@ public class MaterialStatisticsController extends BaseController{
 		String month = param.get("month")!=null?param.get("month").toString():null;
 		List<Object> projectOid=(List<Object>)param.get("projectOid");
 		try {
-			if(StringUtils.isNotBlank(month) && projectOid!=null && projectOid.size()>0){
+			if(StringUtils.isNotBlank(month) && projectOid!=null ){
 				Map<String,Object> data = this.materialStatisticsService.getDailyStatistics(projectOid,month);
 				result = new SimpleResult<Map<String,Object>>(0, "200","ok", data);
 			}else{
@@ -102,7 +102,7 @@ public class MaterialStatisticsController extends BaseController{
 		String dateTime = param.get("dateTime");
 		String projectOid=param.get("projectOid");
 		try {
-			if(StringUtils.isNotBlank(dateTime) && StringUtils.isNotBlank(projectOid)){
+			if(StringUtils.isNotBlank(dateTime) && projectOid!=null){
 				Map<String,Object> data = this.materialStatisticsService.getTendersStatistics(projectOid,dateTime);
 				result = new SimpleResult<Map<String,Object>>(0, "200","ok", data);
 			}else{
@@ -132,7 +132,7 @@ public class MaterialStatisticsController extends BaseController{
 		String month = param.get("month");
 		String projectOid=param.get("projectOid");
 		try {
-			if(StringUtils.isNotBlank(month) && StringUtils.isNotBlank(projectOid)){
+			if(StringUtils.isNotBlank(month) && projectOid!=null){
 				List<Map<String,Object>> data = this.materialStatisticsService.getMaterialUseStatustics(projectOid,month);
 				result = new SimpleResult<List<Map<String,Object>>>(0, "200","ok", data);
 			}else{
