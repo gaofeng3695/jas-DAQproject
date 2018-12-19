@@ -73,7 +73,7 @@
           },
           progressCountViewData: {
             titleArr: ["工序", "项目", "累计（口数）"],
-            url: jasTools.base.rootPath + "/daq/progressStats/getEachItemLengthStatsByProject.do",
+            url: jasTools.base.rootPath + "/daq/progressStats/getEachItemCountStatsByProject.do.do",
             isChangeUnit: false,
           },
           progressByTenderKViewData: {
@@ -118,7 +118,7 @@
             dataName.forEach(function (proItem, index) {
               var data = item.statsResult[index];
               if (that.currentObj.isChangeUnit) {
-                data = item.statsResult[index] > 0 ? item.statsResult[index] / 1000 : 0;
+                data = item.statsResult[index] > 0 ? (item.statsResult[index] / 1000).toFixed(3) : 0;
               }
               var obj1 = {
                 name: proItem,

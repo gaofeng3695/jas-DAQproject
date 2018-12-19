@@ -53,14 +53,14 @@
         </template>
       </statistic-group-project>
       <el-row :gutter="10" style="padding-top:10px">
-        <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="height">
+        <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14" class="height">
           <el-card style="margin-bottom: 10px">
             <div id="projectByNatureChartL" style="width:100%;height:400px;">
 
             </div>
           </el-card>
         </el-col>
-        <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="height">
+        <el-col :xs="24" :sm="24" :md="10" :lg="10" :xl="10" class="height">
           <el-card style="margin-bottom: 10px">
             <div id="projectByNatureChartR" style="width:100%;height:400px;">
 
@@ -75,14 +75,14 @@
         @requestnet="requestWeldByTenders">
       </statistic-group>
       <el-row :gutter="10" style="padding-top:10px">
-        <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="height">
+        <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14" class="height">
           <el-card style="margin-bottom: 10px">
             <div id="weldByTendersChartL" style="width:100%;height:400px;">
 
             </div>
           </el-card>
         </el-col>
-        <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="height">
+        <el-col :xs="24" :sm="24" :md="10" :lg="10" :xl="10" class="height">
           <el-card style="margin-bottom: 10px">
             <div id="weldByTendersChartR" style="width:100%;height:400px;">
 
@@ -97,14 +97,14 @@
         @requestnet="requestWeldByUnits">
       </statistic-group>
       <el-row :gutter="10" style="padding-top:10px">
-        <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="height">
+        <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14" class="height">
           <el-card style="margin-bottom: 10px">
             <div id="weldByUnitsChartL" style="width:100%;height:400px;">
 
             </div>
           </el-card>
         </el-col>
-        <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="height">
+        <el-col :xs="24" :sm="24" :md="10" :lg="10" :xl="10" class="height">
           <el-card style="margin-bottom: 10px">
             <div id="weldByUnitsChartR" style="width:100%;height:400px;">
 
@@ -196,13 +196,27 @@
     mounted: function () {
       var that = this;
       $(window).resize(function () {
-        that.qualityByMonthChart.resize();
-        that.projectByNatureChartL.resize();
-        that.projectByNatureChartR.resize();
-        that.weldByTendersChartL.resize();
-        that.weldByTendersChartR.resize();
-        that.weldByUnitsChartL.resize();
-        that.weldByUnitsChartR.resize();
+    	if(that.qualityByMonthChart){
+    		that.qualityByMonthChart.resize();	
+    	}
+        if(that.projectByNatureChartL){
+        	 that.projectByNatureChartL.resize();	
+        }
+        if(that.projectByNatureChartR){
+        	 that.projectByNatureChartR.resize();
+        }
+        if(that.weldByTendersChartL){
+        	  that.weldByTendersChartL.resize();
+       }
+        if(that.weldByTendersChartR){
+        	that.weldByTendersChartR.resize();
+       }
+        if(that.weldByUnitsChartL){
+        	 that.weldByUnitsChartL.resize();
+       }
+        if(that.weldByUnitsChartR){
+        	 that.weldByUnitsChartR.resize();
+       }
       });
     },
     methods: {
@@ -480,13 +494,16 @@
                 title: '数据视图',
                 icon: that.icon,
                 onclick: function () {
+                  var ids=that.qualityByMonth.unitOids.filter(function(item){
+                	 return item !="所有单位"; 
+                  });
                   top.jasTools.dialog.show({
                     width: '60%',
                     height: '80%',
                     title: '数据视图',
                     src: './pages/statistics/dialogs/qualityViewData.html?isShow=qualityByMonthViewData&projectOids=' +
                       that.qualityByMonth.projectOids + "&year=" + that.qualityByMonth.date +
-                      "&unitOids=" + that.qualityByMonth.unitOids,
+                      "&unitOids=" + ids,
                   });
                 }
               }
@@ -534,10 +551,9 @@
               data: data.qualifiedRate,
               label: {
                 show: true,
-                formatter: '{c}%'
-
+                formatter: '{c}%',
+                position: 'right'
               }
-
             }
           ],
           color: color
@@ -707,8 +723,8 @@
               data: data.rate,
               label: {
                 show: true,
-                formatter: '{c}%'
-
+                formatter: '{c}%',
+                position:'right'
               }
             }
           ],
@@ -803,6 +819,7 @@
                 series: [{
                     name: '焊口数量',
                     type: 'bar',
+                    barMaxWidth:"20%",
                     data: data.count,
                     label: {
                       show: true,
@@ -816,8 +833,8 @@
                     data: data.rate,
                     label: {
                       show: true,
-                      formatter: '{c}%'
-
+                      formatter: '{c}%',
+                      position:'right'
                     }
                   }
                 ],

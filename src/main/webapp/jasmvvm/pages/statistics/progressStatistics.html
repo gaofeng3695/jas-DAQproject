@@ -253,7 +253,7 @@
               x = item.month;
             }
             item.data = item.data.map(function (s) {
-              return s / 1000;
+              return s==0?s:(s/1000).toFixed(3);
             });
             series.push({
               name: item.tendersName,
@@ -310,6 +310,7 @@
               if (isConver) {
                 legend[proItem][index] = item.statsResult[index1] > 0 ? item.statsResult[index1] / 1000 :
                   0;
+                legend[proItem][index]=legend[proItem][index]==0?legend[proItem][index]:legend[proItem][index].toFixed(3);
               } else {
                 legend[proItem][index] = item.statsResult[index1]
               }
@@ -318,6 +319,7 @@
               if (isConver) {
                 legend[proItem][index] = item.statsResult[index1] > 0 ? item.statsResult[index1] / 1000 :
                   0;
+                legend[proItem][index]=legend[proItem][index]==0?legend[proItem][index]:legend[proItem][index].toFixed(3);
               } else {
                 legend[proItem][index] = item.statsResult[index1]
               }
@@ -388,9 +390,7 @@
                     height: '80%',
                     title: '数据视图',
                     src: './pages/statistics/dialogs/progressViewData.html?isShow=progressViewData&projectOids=' +
-                      that.proByProject.projectOids + "&date=" + jasTools.base.formatDate(that.proByProject
-                        .date,
-                        'yyyy-MM-dd'),
+                      that.proByProject.projectOids + "&date=" + jasTools.base.formatDate(new Date(that.proByProject.date), 'yyyy-MM-dd'),
                     cbForClose: function () {
 
                     }
@@ -500,8 +500,7 @@
                     height: '80%',
                     title: '数据视图',
                     src: './pages/statistics/dialogs/progressViewData.html?isShow=progressCountViewData&projectOids=' +
-                      that.proByProject.projectOids + "&date=" + jasTools.base.formatDate(that.proByProject
-                        .date,
+                      that.proByProject.projectOids + "&date=" + jasTools.base.formatDate(new Date(that.proByProject.date),
                         'yyyy-MM-dd'),
                     cbForClose: function () {
 
