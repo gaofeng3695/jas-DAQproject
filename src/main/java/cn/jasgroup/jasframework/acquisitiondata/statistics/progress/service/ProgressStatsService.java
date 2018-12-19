@@ -210,6 +210,13 @@ public class ProgressStatsService {
 				map.put("data", data);
 				list.add(map);
 			}
+		} else {
+			Map<String, Object> map = new HashMap<>();
+			//创建指定长度且有默认值的数组
+			Double[] data = StatsUtils.getStaticDoubleArray(monthArray.length,0.0);
+			map.put("month", monthArray);
+			map.put("data", data);
+			list.add(map);
 		}
 		return list;
 	}
