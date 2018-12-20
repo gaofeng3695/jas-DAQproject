@@ -161,6 +161,7 @@
 				isLoading: true,
 				rules: [],
 				formData: {
+					remarks:"",
 				}, // 表单字段详情对象
 				formAttr: [], // 表单字段，分组排序，配置数组
 				// [{
@@ -208,13 +209,18 @@
 				that.menuCode = param.menuCode;
 			}
 			delete param.menuCode;
+			that.isAddPage = JSON.stringify(this.formDetail) == '{}';
 			var url = jasTools.base.rootPath + "/functionConfiguration/getDetailByCode.do";
 			jasTools.ajax.get(url, {
 				functionCode: that.menuCode
 			}, function (data) {  
 			   data.data.functionFieldsBoList.forEach(function(item){
 				  if(item.uiType=='UT_13') {
-					  that.$set(that.formData,item.fieldName, '');
+					  if(that.isAddPage){
+						  that.$set(that.formData,item.fieldName, '');  
+					  }else{
+						  that.$set(that.formData,item.fieldName, '  ');  
+					  }
 				  }
 			   });
 			});
@@ -330,7 +336,7 @@
 								ifLessToday: item.ifLessToday, //读取配置接口，暂时写死
 								lessDateScope: item.lessDateScope && item.lessDateScope.split(","), //小于日期
 								maxDateScope: item.maxDateScope && item.maxDateScope.split(","), //表示需要大于的日期
-								fieldLength:item.fieldLength
+								fieldLength:item.fieldLength||200
 							};
 							if (item.ifRequired == '1') {
 								obj.verify.push({
@@ -442,7 +448,7 @@
 								ifLessToday: item.ifLessToday, //读取配置接口，暂时写死
 								lessDateScope: item.lessDateScope && item.lessDateScope.split(","), //小于日期
 								maxDateScope: item.maxDateScope && item.maxDateScope.split(","), //表示需要大于的日期
-								fieldLength:item.fieldLength
+								fieldLength:item.fieldLength||200
 							};
 
 							if (item.updateable == '1') {
@@ -538,16 +544,11 @@
 				var url = jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/get.do";
 				//该接口需要入参主键，因为主键不确定，所以全部传入表单对象
 				jasTools.ajax.post(url, this.formDetail, function (data) {
-					// data.data.collection_date=''
-					/* for (var key in data.data) {
-						if (data.data[key] == null) {
-							data.data[key] = '';
-						}
-					} */
-					that.formData = data.data;
-					//	console.log(that.formData);
-					if (that.formData.remarks) {
-						that.remarks = 200 - that.formData.remarks.length; //表示备注长度 此时不具备通用性 必须名称为 remarks
+					console.log(that.formData);
+					for(var key in data.data){	
+						if(!that.formData[key]){
+							that.$set(that.formData,key, data.data[key]);	
+						}		
 					}
 					that.getEditField(fieldsGrouped);
 				});
