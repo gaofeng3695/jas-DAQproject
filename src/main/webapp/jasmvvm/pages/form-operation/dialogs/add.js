@@ -109,7 +109,8 @@ var vm = new Vue({
       return !!type;
     },
     isText: function (type) {
-      return type === 'UT_01' && this.isUi(type);
+      var inputType=['UT_01','UT_13'];
+      return inputType.indexOf(type) !==-1 && this.isUi(type);
     },
     isSql: function (row) {
       var type = row.uiType;

@@ -80,9 +80,9 @@
 								<el-form-item :prop="item.id" :label="item.name" :rules="item.verify">
 									<!--<textarea  v-if="item.type=='UT_13'"  rows="2" v-model="formData[item.id]"></textarea>-->
 									<el-input v-if="item.type=='UT_13'" :autosize="{ minRows: 2}" type="textarea" :rows="2" v-model="formData[item.id]" :disabled="item.disabled"
-									  :maxLength="200" @input="instructionNum(item.id,index)">
+									  :maxLength="item.fieldLength">
 									</el-input>
-									<p v-show="item.id=='remarks'" style="text-align:right;color:#999;">您还可以输入<span v-text="remarks"></span>字</p>
+									<p  style="text-align:right;color:#999;">您还可以输入<span>{{item.fieldLength-formData[item.id].length}}</span>字</p>
 								</el-form-item>
 							</el-col>
 							<el-col v-else :xs="formConfig.xs" :sm="formConfig.sm" :md="formConfig.md" :lg="formConfig.lg" :xl="formConfig.xl" :class="{'height' : item.type=='UT_14'||item.type=='UT_05'||item.type=='UT_06'||item.type=='UT_07'||item.type=='UT_08' }">
@@ -160,8 +160,8 @@
 			return {
 				isLoading: true,
 				rules: [],
-				remarks: 200,
-				formData: {}, // 表单字段详情对象
+				formData: {
+				}, // 表单字段详情对象
 				formAttr: [], // 表单字段，分组排序，配置数组
 				// [{
 				// 	groupName: '分组名',
@@ -201,20 +201,25 @@
 			this.requestRule();
 			this.requestFieldConfigByOid();
 		},
+		beforeCreate:function(){
+			var that=this;
+			var param = window.jasTools.base.getParamsInUrl(location.href);
+			if (param.menuCode) {
+				that.menuCode = param.menuCode;
+			}
+			delete param.menuCode;
+			var url = jasTools.base.rootPath + "/functionConfiguration/getDetailByCode.do";
+			jasTools.ajax.get(url, {
+				functionCode: that.menuCode
+			}, function (data) {  
+			   data.data.functionFieldsBoList.forEach(function(item){
+				  if(item.uiType=='UT_13') {
+					  that.$set(that.formData,item.fieldName, '');
+				  }
+			   });
+			});
+		},
 		methods: {
-			instructionNum: function (id, index) {
-				var that = this;
-				if(id!='remarks'){
-					return;
-				}
-				if (that.formData[id]) {
-					if (that.formData[id].trim().length > 199) {
-						that.formData[id] = that.formData[id].trim().substring(0, 200); //截取正确 但是未改变
-					}
-				}
-				var num = 200 - that.formData[id].trim().length;
-				that.remarks = num;
-			}, //剩余字数计算
 			requestConfig: function () {
 				var that = this;
 				$.ajax({
@@ -325,6 +330,7 @@
 								ifLessToday: item.ifLessToday, //读取配置接口，暂时写死
 								lessDateScope: item.lessDateScope && item.lessDateScope.split(","), //小于日期
 								maxDateScope: item.maxDateScope && item.maxDateScope.split(","), //表示需要大于的日期
+								fieldLength:item.fieldLength
 							};
 							if (item.ifRequired == '1') {
 								obj.verify.push({
@@ -436,6 +442,7 @@
 								ifLessToday: item.ifLessToday, //读取配置接口，暂时写死
 								lessDateScope: item.lessDateScope && item.lessDateScope.split(","), //小于日期
 								maxDateScope: item.maxDateScope && item.maxDateScope.split(","), //表示需要大于的日期
+								fieldLength:item.fieldLength
 							};
 
 							if (item.updateable == '1') {
