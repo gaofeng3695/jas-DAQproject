@@ -171,17 +171,22 @@ public class SteelPipe extends CommonJdbcEntity{
 	private Integer isColdBend; 
 
 	/** 
+	 * 是否热检查
+	 */
+	private Integer isCheck; 
+
+	/** 
 	 * 是否是子管
 	 */
 	private Integer isChild; 
 	
 	/** 
-	 * 是否是子管
+	 * 前端是否使用
 	 */
 	private Integer frontIsUse; 
 	
 	/** 
-	 * 是否是子管
+	 * 后端是否使用
 	 */
 	private Integer backIsUse; 
 
@@ -523,6 +528,16 @@ public class SteelPipe extends CommonJdbcEntity{
 		this.remarks = remarks; 
 		super.setField("remarks");
 	}
+	
+	public Integer getIsCheck() {
+		return isCheck;
+	}
+
+	public void setIsCheck(Integer isCheck) {
+		this.isCheck = isCheck;
+		super.setField("isCheck");
+	}
+
 	public String getConstructUnit() {
 		return constructUnit; 
 	}

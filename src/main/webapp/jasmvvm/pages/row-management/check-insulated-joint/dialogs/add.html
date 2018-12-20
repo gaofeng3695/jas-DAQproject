@@ -71,12 +71,12 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="生产厂家">
+							<el-form-item label="生产厂家" prop="manufacturer">
 								<el-input v-model="formData.manufacturer" clearable placeholder="请输入生产厂家" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="合格证编号">
+							<el-form-item label="合格证编号" prop="certificationNum">
 								<el-input v-model="formData.certificationNum" clearable placeholder="请输入合格证编号" size="small"></el-input>
 							</el-form-item>
 						</el-col>
@@ -96,23 +96,23 @@
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="测试仪器">
+							<el-form-item label="测试仪器" prop="testEquipment">
 								<el-input v-model="formData.testEquipment" clearable placeholder="请输入测试仪器" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="仪器规格型号">
+							<el-form-item label="仪器规格型号" prop="specandModel">
 								<el-input v-model="formData.specandModel" clearable placeholder="请输入仪器规格型号" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="实用绝缘电阻值(MΩ)">
+							<el-form-item label="实用绝缘电阻值(MΩ)"  prop="resistanceVal">
 								<el-input v-model="formData.resistanceVal" clearable placeholder="请输入实用绝缘电阻值(MΩ)" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="验收结论">
+							<el-form-item label="验收结论" prop="checkResults">
 								<el-input v-model="formData.checkResults" clearable placeholder="请输入验收结论" size="small"></el-input>
 							</el-form-item>
 						</el-col>
@@ -187,7 +187,37 @@
 						required: true,
 						message: '施工单位为必填项',
 						//trigger: 'change'
-					}]
+					}],
+					certificationNum:[{
+						min: "0",
+						max: 60,
+						message: "不能超过60字"
+					}],
+					manufacturer:[{
+						min: "0",
+						max: 50,
+						message: "不能超过50字"
+					}],
+					testEquipment:[{
+						min: "0",
+						max: 50,
+						message: "不能超过50字"
+					}],
+					specandModel:[{
+						min: "0",
+						max: 30,
+						message: "不能超过30字"
+					}],
+					resistanceVal:[{
+						min: "0",
+						max: 20,
+						message: "不能超过20字"
+					}],
+					checkResults:[{
+						min: "0",
+						max: 200,
+						message: "不能超过200字"
+					}],
 				},
 				formData: {
 					projectOid: "",

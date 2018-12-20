@@ -118,11 +118,12 @@
             case "materialByMonthViewData":
               {
                 data.data.pipe.forEach(function (item, index) {
+                 var total=Number(item) + Number(data.data.hot_pipe[index]);
                   var obj = {
                     year: that.searchObj.year + "年" + (index + 1) + "月",
                     pipe: item,
                     hot: data.data.hot_pipe[index],
-                    total: (item + data.data.hot_pipe[index]).toFixed(3),
+                    total:total==0?total:total.toFixed(3),
                     grandTotal: data.data.grand_total[index]
                   }
                   that.progressData.push(obj);
@@ -132,11 +133,12 @@
             case "materialByDayViewData":
               {
                 for (var key in data.data.pipe) {
+                  var total=Number(data.data.pipe[key]) + Number(data.data.hot_pipe[key]);
                   var obj = {
                     year: key,
                     pipe: data.data.pipe[key],
                     hot: data.data.hot_pipe[key],
-                    total: (data.data.pipe[key] + data.data.hot_pipe[key]).toFixed(3),
+                    total:total==0?total:total.toFixed(3),
                     grandTotal: data.data.grand_total[key]
                   }
                   that.progressData.push(obj);
@@ -147,11 +149,12 @@
               {
             	var lastTotal=0;
                 for (var key in data.data.pipe) {
+                  var total=Number(data.data.pipe[key]) + Number(data.data.hot_pipe[key]);
                   var obj = {
                     year: key,
                     pipe: data.data.pipe[key],
                     hot: data.data.hot_pipe[key],
-                    total:(data.data.pipe[key] + data.data.hot_pipe[key]).toFixed(3),
+                    total:total==0?total:total.toFixed(3),
                     grandTotal:0
                   }
                   obj.grandTotal=(Number(obj.total)+Number(lastTotal)).toFixed(3);

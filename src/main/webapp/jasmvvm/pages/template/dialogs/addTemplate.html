@@ -204,6 +204,9 @@
 		methods: {
 			instructionNum: function (id, index) {
 				var that = this;
+				if(id!='remarks'){
+					return;
+				}
 				if (that.formData[id]) {
 					if (that.formData[id].trim().length > 199) {
 						that.formData[id] = that.formData[id].trim().substring(0, 200); //截取正确 但是未改变

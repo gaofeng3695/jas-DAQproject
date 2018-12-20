@@ -237,7 +237,7 @@
         "id": "layerSet002",
         "label": "管道焊接补口",
         "layerSet": [{
-          "id": "daq_construction_weld",
+          "id": "v_daq_construction_weld",
           "label": "焊口信息",
           "index": 20,
           "renderer": {
@@ -259,7 +259,7 @@
           "loader": "jas",
           "format": "GeoJSON",
           "strategy": "all",
-          "outFields":"weld_code,project_oid"
+          "outFields":"oid,weld_code,construct_unit_name,to_char,work_unit_code"
         }, {
           "id": "daq_weld_rework_weld",
           "label": "焊口返修信息",
