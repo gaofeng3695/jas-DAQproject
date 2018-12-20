@@ -43,7 +43,7 @@ public class MaterialStatisticsController extends BaseController{
 		String year = param.get("year")!=null?param.get("year").toString():null;
 		List<Object> projectOid=(List<Object>)param.get("projectOid");
 		try {
-			if(StringUtils.isNotBlank(year) && projectOid!=null){
+			if(StringUtils.isNotBlank(year) && projectOid!=null && projectOid.size()>0){
 				Map<String,Object> data = this.materialStatisticsService.getMonthlyStatistics(projectOid,year);
 				result = new SimpleResult<Map<String,Object>>(0, "200","ok", data);
 			}else{
@@ -73,7 +73,7 @@ public class MaterialStatisticsController extends BaseController{
 		String month = param.get("month")!=null?param.get("month").toString():null;
 		List<Object> projectOid=(List<Object>)param.get("projectOid");
 		try {
-			if(StringUtils.isNotBlank(month) && projectOid!=null ){
+			if(StringUtils.isNotBlank(month) && projectOid!=null && projectOid.size()>0){
 				Map<String,Object> data = this.materialStatisticsService.getDailyStatistics(projectOid,month);
 				result = new SimpleResult<Map<String,Object>>(0, "200","ok", data);
 			}else{

@@ -85,3 +85,12 @@ create or replace view v_daq_weld_detection as
  */
 create or replace view v_daq_weld_measured_result as 
 	select m.*,t.weld_code from daq_weld_measured_result m left join (select oid,weld_code from daq_construction_weld) t on t.oid=m.weld_oid;
+
+/**
+ * 中线桩视图
+ */
+create or replace view v_daq_construction_weld as 
+	select t.oid,t.weld_code,u.unit_name as construct_unit_name,to_char(t.collection_date,'yyyy-mm-dd'),wu.work_unit_code,t.geom from daq_construction_weld t 
+	left join (select oid, unit_name, active from pri_unit where active=1) u on u.oid = t.construct_unit 
+	left join (select oid, work_unit_code, active from daq_work_unit where active=1) wu on wu.oid = t.work_unit_oid
+	where t.active=1;
