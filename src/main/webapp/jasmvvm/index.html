@@ -183,7 +183,7 @@
 				</el-aside>
 				<el-main>
 					<el-container style="height:100%">
-						<el-main style="height:100%">
+						<el-main style="height:100%;width:100%;overflow:hidden">
 
 							<jas-two-panel-resizer :showed="panelShowed" ref="resizer" layout="horizontal" length="40%" @paneresize="paneresize" @statuschanged="statuschanged">
 								<div slot="closePanel" id="jasMap" class="jasmap" style="height:100%;background-color: #ececec;"> </div>
