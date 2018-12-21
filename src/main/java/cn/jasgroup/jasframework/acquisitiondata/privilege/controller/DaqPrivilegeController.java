@@ -717,4 +717,30 @@ public class DaqPrivilegeController extends BaseController{
 		   }
 		   return unitList;
 		}
+	
+	/**
+	 * <p>功能描述：根据项目oids查询所有施工单位。</p>
+	  * <p> 葛建。</p>	
+	  * @param request
+	  * @param param
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月18日 上午9:46:37。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="getConstructUnitList",method = RequestMethod.POST)
+	@ResponseBody
+	public Object getConstructUnitList(HttpServletRequest request,@RequestBody Map<String, Object> param){
+		ListResult<Map<String,Object>> result=null;
+		//项目
+		List<String> projectOids = (List<String>)param.get("projectOids");
+		try {
+			List<Map<String,Object>> rows = this.daqPrivilegeService.getConstructUnitList(projectOids);
+			result = new ListResult<>(1, "200", "ok", rows);
+		} catch (Exception e) {
+			result = new ListResult<>(-1, "400", "error");
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

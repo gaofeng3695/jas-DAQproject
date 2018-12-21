@@ -24,14 +24,9 @@
       <div style="padding-top:10px;">
         <el-form ref="form">
           <el-form-item label="项目名称" style="margin-bottom:0px">
-            <el-select v-model="topSearch.projectOids" collapse-tags multiple placeholder="请选择" @change="select">
-              <el-option v-for="project in projectArray" :key="project.key" :label="project.value" :value="project.key">
-              </el-option>
-            </el-select>
+            <jas-project-select @requestnet="requestNet" label="项目群" :selprojectoids="topSearch.projectOids" url="/daq/privilege/getProjectList.do"></jas-project-select>
           </el-form-item>
         </el-form>
-
-        <!--<jas-search-for-list slot="search" :form="topSearch" :fields="fields" :fields-config="fieldsConfig" @search="searchList"></jas-search-for-list>-->
       </div>
       <el-row :gutter="10" style="padding-top:10px">
         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12" class="height">
@@ -88,16 +83,6 @@
           key: "项目群",
           value: "项目群"
         }],
-        // fields: [{
-        //   field: "projectOid",
-        //   name: "项目名称"
-        // }],
-        // fieldsConfig: {
-        //   projectOid: {
-        //     type: 'select',
-        //     optionUrl: '/daq/privilege/getProjectList.do',
-        //   },
-        // },
         fieldsMap: {
           "pipe": {
             name: '管材(km)',
@@ -137,8 +122,6 @@
         yield: "", //合格率
         inputAndCheck: "", //数据录入/审核统计
         month: "", //分月
-        ids: ['项目群', ], //表示所有下拉选的id
-        oldOptions: [] //表示上次选中的值
       }
     },
     watch: {
@@ -146,9 +129,6 @@
     },
     mounted: function () {
       var that = this;
-      that.requestProject(function () {
-        that.requestNet();
-      });
       $(window).resize(function () {
         that.myChart.resize();
         that.yield.resize();
@@ -157,25 +137,13 @@
       });
     },
     methods: {
-      requestNet: function () {
+      requestNet: function (oids) {
         var that = this;
+        that.topSearch.projectOids = oids;
         that.requestProcess();
         that.requestYield();
         that.requestInputAndCheck();
         that.requestMonth();
-      },
-      requestProject: function (callback) {
-        var that = this;
-        var url = jasTools.base.rootPath + "/daq/privilege/getProjectList.do";
-        jasTools.ajax.post(url, {}, function (data) {
-          data.rows.forEach(function (item) {
-            that.ids.push(item.key);
-            that.projectArray.push(item);
-          });
-          that.topSearch.projectOids = that.ids;
-          that.oldOptions = that.topSearch.projectOids;
-          callback();
-        });
       },
       requestMonth: function () {
         var that = this;
@@ -183,17 +151,19 @@
         var serise = [];
         var months = [];
         var url = jasTools.base.rootPath + "/overallStatistics/processMonthlyCompletion.do";
-        var ids= that.topSearch.projectOids.filter(function(item){
-        	return item!='项目群'
-        });
-        jasTools.ajax.post(url, {projectOids:ids}, function (data) {
-
+        jasTools.ajax.post(url, {
+          projectOids: that.topSearch.projectOids
+        }, function (data) {
           for (var key in data.data) {
+            if (key == "lay_surveying") {
+              continue;
+            }
+
             var x = [];
             var month = [];
             for (var key1 in data.data[key]) {
-              var d=data.data[key][key1]?data.data[key][key1]/1000:0;
-              var d1=d?d.toFixed(3):0;
+              var d = data.data[key][key1] ? data.data[key][key1] / 1000 : 0;
+              var d1 = d ? d.toFixed(3) : 0;
               x.push(d1);
               if (months.length == 0) {
                 month.push(key1);
@@ -205,27 +175,25 @@
             var item = {
               name: that.fieldsMap[key].name,
               type: 'line',
-              stack: '总量',
               itemStyle: {
                 color: that.fieldsMap[key].color
               },
               data: x
             };
-            ledgend.push(that.fieldsMap[key].name);
+            ledgend.push({
+              name: that.fieldsMap[key].name,
+            });
             serise.push(item);
-
           }
-          that.renderMonth(ledgend, serise,months);
+          that.renderMonth(ledgend, serise, months);
         });
       },
       requestYield: function () {
         var that = this;
         var url = jasTools.base.rootPath + "/overallStatistics/statsDetectionRayPassCount.do";
-        var ids= that.topSearch.projectOids.filter(function(item){
-        	return item!='项目群'
-        });
-        jasTools.ajax.post(url, {projectOids:ids}, function (data) {
-        	console.log(data);
+        jasTools.ajax.post(url, {
+          projectOids: that.topSearch.projectOids
+        }, function (data) {
           var pass;
           var noPass;
           if (data.data.count == 0) {
@@ -243,10 +211,9 @@
         var x = [];
         var y = [];
         var url = jasTools.base.rootPath + "/overallStatistics/dataEntryAudit.do";
-        var ids= that.topSearch.projectOids.filter(function(item){
-        	return item!='项目群'
-        });
-        jasTools.ajax.post(url, {projectOids:ids}, function (data) {
+        jasTools.ajax.post(url, {
+          projectOids: that.topSearch.projectOids
+        }, function (data) {
           for (var key in data.data) {
             x.push(that.fieldsMap[key].name);
             y.push(data.data[key]);
@@ -260,23 +227,27 @@
         var x = [];
         var y = [];
         var url = jasTools.base.rootPath + "/overallStatistics/processCumulativeCompletion.do";
-        var ids= that.topSearch.projectOids.filter(function(item){
-        	return item!='项目群'
-        });
-        jasTools.ajax.post(url, {projectOids:ids}, function (data) {
+        jasTools.ajax.post(url, {
+          projectOids: that.topSearch.projectOids
+        }, function (data) {
           data.data.forEach(function (item, index) {
             var type = item.statsType;
+            if(type=="lay_surveying"){
+            	 return;
+            }
             x.push(that.fieldsMap[type].name);
-            var result=item.statsResult?item.statsResult/1000:0;
-            var d1=result?result.toFixed(3):0;
+            var result = item.statsResult ? item.statsResult / 1000 : 0;
+            var d1 = result ? result.toFixed(3) : 0;
             y.push(d1);
           });
           that.renderChart(x, y);
         });
       },
-      renderMonth: function (ledgend, serise,months) {
+      renderMonth: function (ledgend, serise, months) {
         var that = this;
-        that.month = echarts.init(document.getElementById('month'));
+        if(!that.month){
+           that.month = echarts.init(document.getElementById('month'));
+        }
         option = {
           title: {
             text: '各工序分月完成情况对比',
@@ -286,6 +257,7 @@
           tooltip: {
             trigger: 'axis'
           },
+
           legend: {
             data: ledgend,
             bottom: "-5px"
@@ -300,7 +272,7 @@
           xAxis: {
             type: 'category',
             boundaryGap: false,
-            data:months
+            data: months
           },
           yAxis: {
             type: 'value'
@@ -317,7 +289,9 @@
         y0[0] = y[2];
         y1[0] = y[1];
         y2[0] = y[0];
-        that.inputAndCheck = echarts.init(document.getElementById('inputAndCheck'));
+        if(!that.inputAndCheck){
+           that.inputAndCheck = echarts.init(document.getElementById('inputAndCheck'));	
+        }
         var option = {
           title: {
             text: '数据录入/审核统计',
@@ -384,10 +358,10 @@
         that.inputAndCheck.setOption(option);
       },
       renderYield: function (pass, noPass) {
-    	  console.log(pass);
-    	  console.log(noPass);
         var that = this;
-        that.yield = echarts.init(document.getElementById('yield'));
+        if(!that.yield){
+        	that.yield = echarts.init(document.getElementById('yield'));	
+        }
         var option = {
           title: {
             text: '一次合格率统计',
@@ -435,7 +409,9 @@
       },
       renderChart: function (x, y) {
         var that = this;
-        that.myChart = echarts.init(document.getElementById('process'));
+        if(!that.myChart ){
+          that.myChart = echarts.init(document.getElementById('process'));	
+        }
         // 指定图表的配置项和数据
         var option = {
           title: {
@@ -467,50 +443,6 @@
           }]
         };
         that.myChart.setOption(option);
-      },
-      select: function (val) {
-        var that = this;
-        if (val.length == that.projectArray.length || (val.length == 1 && val[0] == "项目群")||(val.length==0)) { //表示肯定是全选
-          that.topSearch.projectOids = that.ids;
-          that.oldOptions = that.topSearch.projectOids;
-          return;
-        }
-        if (val.indexOf("项目群") < 0) {
-          if (that.oldOptions.length - 1 == val.length) {
-            // that.$toast("默认为全部选择");
-            // that.topSearch.projectOids = [];
-            // that.oldOptions = [];
-          } else
-           if (val.length == that.projectArray.length - 1) {
-            that.topSearch.projectOids = that.ids;
-            that.oldOptions = that.topSearch.projectOids;
-          }
-        } else { //表示此时包含0
-          if (val.length != that.oldOptions.length) { //此时选中的值与上一次选中值不一样。取消0；
-            var isExist = 0;
-            that.oldOptions.forEach(function (item) {
-              if (item == '项目群') {
-                isExist++;
-              }
-            });
-            that.topSearch.projectOids = [];
-            that.oldOptions = [];
-            if (isExist > 0) {
-              val.forEach(function (item) {
-                if (item != "项目群") {
-                  that.topSearch.projectOids.push(item);
-                  that.oldOptions.push(item);
-                }
-              });
-            } else {
-              that.topSearch.projectOids = that.ids;
-              that.oldOptions = that.topSearch.projectOids;
-            }
-
-          }
-
-        }
-        that.requestNet();
       }
     },
   });

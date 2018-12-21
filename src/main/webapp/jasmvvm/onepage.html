@@ -1079,6 +1079,9 @@
 				var types = [];
 				var values = [];
 				this.processCompletion.forEach(function (item) {
+					if(item.statsType=="lay_surveying"){
+						return;
+					}
 					types.push(item.cnName);
 					values.push((item.statsResult / 1000).toFixed(3) || 0);
 				});

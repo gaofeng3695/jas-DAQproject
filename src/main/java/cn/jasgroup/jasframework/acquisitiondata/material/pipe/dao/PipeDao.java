@@ -26,9 +26,9 @@ public class PipeDao {
 	public List<Map<String, Object>> getPipeList(String type,String projectOid) {
 		String sql = null;
 		if(type.equals("1")){
-			sql ="select oid as key,pipe_code as value,pipe_length as length,pipe_diameter,wall_thickness from daq_material_pipe where active=1 and is_use=0 and pipe_length >= 1 and is_cut=0 and project_oid='"+projectOid+"'";
+			sql ="select oid as key,pipe_code as value,pipe_length as length,pipe_diameter,wall_thickness from daq_material_pipe where active=1 and is_use=0 and pipe_length >= 1 and is_cut=0 and is_check=1 and project_oid='"+projectOid+"'";
 		}else{
-			sql ="select oid as key,pipe_code as value,pipe_length as length,pipe_diameter,wall_thickness from daq_material_pipe where active=1 and is_use=0 and is_cold_bend=0 and pipe_length >= 1 and is_cut=0 and project_oid='"+projectOid+"'";
+			sql ="select oid as key,pipe_code as value,pipe_length as length,pipe_diameter,wall_thickness from daq_material_pipe where active=1 and is_use=0 and is_cold_bend=0 and pipe_length >= 1 and is_cut=0 and is_check=1 and project_oid='"+projectOid+"'";
 		}
 		return baseJdbcDao.queryForList(sql, null);
 	}
@@ -52,7 +52,7 @@ public class PipeDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getMaterialPipeList(String projectOid){
-		String sql = "select oid as key,pipe_code as value,back_is_use,front_is_use,is_cold_bend,project_oid from daq_material_pipe where active=1 and is_cut=0";
+		String sql = "select oid as key,pipe_code as value,back_is_use,front_is_use,is_cold_bend,project_oid from daq_material_pipe where active=1 and is_cut=0 and is_cold_bend=0 and is_check=0";
 		if(StringUtils.isNotBlank(projectOid)){
 			sql += " and project_oid='"+projectOid+"'";
 		}
@@ -68,7 +68,7 @@ public class PipeDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getMaterialPipeList(List<String> projectOids){
-		String sql = "select oid as key,pipe_code as value,back_is_use,front_is_use,is_cold_bend,project_oid from daq_material_pipe where active=1 and is_cut=0";
+		String sql = "select oid as key,pipe_code as value,back_is_use,front_is_use,is_cold_bend,is_check,project_oid from daq_material_pipe where active=1 and is_cut=0 and is_cold_bend=0";
 		Map<String,Object> param = new HashMap<String,Object>();
 		if(projectOids!=null && projectOids.size()>0){
 			sql += " and project_oid in (:projectOids)";
@@ -86,7 +86,7 @@ public class PipeDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getMaterialHotBendsList(String projectOid){
-		String sql = "select oid as key,hot_bends_code as value,back_is_use,front_is_use,project_oid from daq_material_hot_bends where active=1";
+		String sql = "select oid as key,hot_bends_code as value,back_is_use,front_is_use,project_oid from daq_material_hot_bends where active=1 and is_check=0";
 		if(StringUtils.isNotBlank(projectOid)){
 			sql += " and project_oid='"+projectOid+"'";
 		}
@@ -102,7 +102,7 @@ public class PipeDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getMaterialHotBendsList(List<String> projectOids){
-		String sql = "select oid as key,hot_bends_code as value,back_is_use,front_is_use,project_oid from daq_material_hot_bends where active=1";
+		String sql = "select oid as key,hot_bends_code as value,back_is_use,front_is_use,project_oid,is_check from daq_material_hot_bends where active=1";
 		Map<String,Object> param = new HashMap<String,Object>();
 		if(projectOids!=null && projectOids.size()>0){
 			sql += " and project_oid in (:projectOids)";
@@ -255,7 +255,7 @@ public class PipeDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>>getPipeColdBendingList(List<String> projectOids){
-		String sql = "select t.oid as key,t.pipe_cold_bending_code as value,t.tenders_oid,t.front_is_use,back_is_use,t.approve_status,t.pipe_segment_or_cross_oid,project_oid "
+		String sql = "select t.oid as key,t.pipe_cold_bending_code as value,t.tenders_oid,t.front_is_use,back_is_use,t.approve_status,t.pipe_segment_or_cross_oid,is_check,project_oid "
 				+ "from daq_material_pipe_cold_bending t "
 				+ "where t.active=1";
 		Map<String,Object> param = new HashMap<String,Object>();

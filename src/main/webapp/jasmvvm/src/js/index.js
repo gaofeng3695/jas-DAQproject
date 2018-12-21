@@ -11,19 +11,18 @@ var gisMap = {
 			var feature = features[i].values_;
 			//var properties = feature.getProperties(); //属性信息
 			//var geom = feature.getGeometry(); // Point
-			var projectId=feature.project_oid;//先根据项目进行分组
-			var lineId = feature.pipeline_oid;//再根据管线id进行分组
+			var projectId = feature.project_oid; //先根据项目进行分组
+			var lineId = feature.pipeline_oid; //再根据管线id进行分组
 			obj.mileage = feature.mileage; //里程值
 			obj.lineId = lineId; //线路段
-			obj.projectId=projectId;//项目
+			obj.projectId = projectId; //项目
 			obj.coor = feature.geometry.flatCoordinates; //
-//			obj.mileage = source[i].mileage;
-//			obj.projectId = source[i].project_oid;
-//			obj.lineId = source[i].pipeline_oid;
-//			obj.coor = source[i].coor;
+			//			obj.mileage = source[i].mileage;
+			//			obj.projectId = source[i].project_oid;
+			//			obj.lineId = source[i].pipeline_oid;
+			//			obj.coor = source[i].coor;
 			pipelineArray.push(obj);
 		}
-
 		var map = {},
 			dataArray = [];
 		for (var i = 0; i < pipelineArray.length; i++) {
@@ -60,7 +59,7 @@ var gisMap = {
 				coors.push(stake.coor);
 			}
 			var color = that.randomColor(i);
-							console.log(color);
+			console.log(color);
 			jasMap.addPolylineGraphic(coors, {
 				color: color,
 				width: 3
@@ -70,8 +69,8 @@ var gisMap = {
 	},
 	randomColor: function (i) {
 		var that = this;
-		//, '', 
-		var colorArr = ['#CC0000','#00FF00','#0066FF','#CC33FF','#CCFF00','#FF66FF','#FFFF00','#00FFFF','#00FFCC'];
+		//, '',
+		var colorArr = ['#CC0000', '#00FF00', '#0066FF', '#CC33FF', '#CCFF00', '#FF66FF', '#FFFF00', '#00FFFF', '#00FFCC'];
 		if (i < colorArr.length) {
 			return colorArr[i];
 		} else {
@@ -101,7 +100,30 @@ var gisMap = {
 				return 0;
 			}
 		}
-	}
+	},
+
+}
+var showInfo = function (e) {
+	var coor = e.coordinate;
+	var obj = e.attributes;
+	var name = "<div class='map_item'><span style='color:#666'>焊口编号：</span>" + obj.weld_code + "</div>";
+	name += "<div  class='map_item'><span style='color:#666'>施工单位：</span>" + obj.construct_unit_name + "</div>";
+	name += "<div  class='map_item'><span style='color:#666'>施工日期：</span>" + obj.to_char + "</div>";
+	name += "<div  class='map_item'><span style='color:#666'>施工机组代号：</span>" + obj.work_unit_code + "</div>";
+	name += "<div class='map_more' onclick='showWeldInfo(`" + obj.oid+ "`)'>更多</div>"
+	app.jasMap.showInfoWindow(coor[0], coor[1], name, "焊口信息");
+}
+
+function showWeldInfo(oid) {
+	top.jasTools.dialog.show({
+		width: '60%',
+		height: '80%',
+		title: '焊口详情',
+		src: './pages/row-management/weld-info/dialogs/detail.html?oid='+oid,
+		cbForClose: function () {
+
+		}
+	});
 }
 window.app = new Vue({
 	el: '#app',
@@ -434,52 +456,53 @@ window.app = new Vue({
 						type: 'error'
 					});
 				},
-			    onOptionalLayersLoaded:function(){
-	               that.addMapListener();
-	            },
+				onOptionalLayersLoaded: function () {
+					that.addMapListener();
+				},
 				onLayerAdded: function (e) {
 					var layerId = e.data.layerId;
-					if (layerId === "daq_median_stake") {
+					if (layerId === "v_daq_construction_weld") { //焊口信息的时候
 						//添加单个图层的点击事件
-						this.addLayerClickEventListener(layerId, onCenterStakeLayerClicked);
+						this.addLayerClickEventListener(layerId, showInfo);
 					}
 				}
 			});
 		},
+
 		addMapListener: function () {
 			var jasMap = this.jasMap;
-		      var paramsArray = [] ;
-              paramsArray.push({
-                  layerId : 'daq_median_stake'
-              });
-              jasMap.queryFeatures(paramsArray,function(features){
-                 // console.info(features);
-               //   gisMap.drawLineByStakes(features, jasMap);
-              });
-              
+			var paramsArray = [];
+			paramsArray.push({
+				layerId: 'daq_median_stake'
+			});
+			jasMap.queryFeatures(paramsArray, function (features) {
+				// console.info(features);
+				//   gisMap.drawLineByStakes(features, jasMap);
+			});
+
 			//jasMap.removeEventListener(this.layerListener);
 			//进行中线桩数据的读取
-//			var url = jasTools.base.rootPath + "/jdbc/commonData/medianStake/getPage.do";
-//			jasTools.ajax.post(url, {
-//					pageNo: 1,
-//					pageSize: 100000,
-//				},
-//				function (data) {
-//					var source = [];
-//					data.rows.forEach(function (item) {
-//						//						var projectId=properties.project_oid;//先根据项目进行分组
-//						//						var lineId = properties.pipeline_oid;//再根据管线id进行分组
-//						//						obj.mileage = properties.mileage; //里程值
-//						source.push({
-//							project_oid: item.projectOid,
-//							pipeline_oid: item.pipelineOid,
-//							mileage: item.mileage,
-//							coor: [item.pointx, item.pointy]
-//						});
-//					});
-//
-//					gisMap.drawLineByStakes(source, jasMap);
-//				});
+			//			var url = jasTools.base.rootPath + "/jdbc/commonData/medianStake/getPage.do";
+			//			jasTools.ajax.post(url, {
+			//					pageNo: 1,
+			//					pageSize: 100000,
+			//				},
+			//				function (data) {
+			//					var source = [];
+			//					data.rows.forEach(function (item) {
+			//						//						var projectId=properties.project_oid;//先根据项目进行分组
+			//						//						var lineId = properties.pipeline_oid;//再根据管线id进行分组
+			//						//						obj.mileage = properties.mileage; //里程值
+			//						source.push({
+			//							project_oid: item.projectOid,
+			//							pipeline_oid: item.pipelineOid,
+			//							mileage: item.mileage,
+			//							coor: [item.pointx, item.pointy]
+			//						});
+			//					});
+			//
+			//					gisMap.drawLineByStakes(source, jasMap);
+			//				});
 		},
 		locate: function (id, tableCode) {
 			var that = this;

@@ -80,9 +80,9 @@
 								<el-form-item :prop="item.id" :label="item.name" :rules="item.verify">
 									<!--<textarea  v-if="item.type=='UT_13'"  rows="2" v-model="formData[item.id]"></textarea>-->
 									<el-input v-if="item.type=='UT_13'" :autosize="{ minRows: 2}" type="textarea" :rows="2" v-model="formData[item.id]" :disabled="item.disabled"
-									  :maxLength="200" @input="instructionNum(item.id,index)">
+									  :maxLength="item.fieldLength">
 									</el-input>
-									<p v-show="item.id=='remarks'" style="text-align:right;color:#999;">您还可以输入<span v-text="remarks"></span>字</p>
+									<p  style="text-align:right;color:#999;">您还可以输入<span>{{item.fieldLength-formData[item.id].length}}</span>字</p>
 								</el-form-item>
 							</el-col>
 							<el-col v-else :xs="formConfig.xs" :sm="formConfig.sm" :md="formConfig.md" :lg="formConfig.lg" :xl="formConfig.xl" :class="{'height' : item.type=='UT_14'||item.type=='UT_05'||item.type=='UT_06'||item.type=='UT_07'||item.type=='UT_08' }">
@@ -160,8 +160,9 @@
 			return {
 				isLoading: true,
 				rules: [],
-				remarks: 200,
-				formData: {}, // 表单字段详情对象
+				formData: {
+					remarks:"",
+				}, // 表单字段详情对象
 				formAttr: [], // 表单字段，分组排序，配置数组
 				// [{
 				// 	groupName: '分组名',
@@ -201,17 +202,24 @@
 			this.requestRule();
 			this.requestFieldConfigByOid();
 		},
+		beforeCreate:function(){
+			var that=this;
+			var param = window.jasTools.base.getParamsInUrl(location.href);
+			if (param.menuCode) {
+				that.menuCode = param.menuCode;
+			}
+			delete param.menuCode;
+			that.isAddPage = JSON.stringify(this.formDetail) == '{}';
+			var url = jasTools.base.rootPath + "/functionConfiguration/getDetailByCode.do";
+			jasTools.ajax.get(url, {
+				functionCode: that.menuCode
+			}, function (data) {  
+			   data.data.functionFieldsBoList.forEach(function(item){
+				   that.$set(that.formData,item.fieldName, '');  
+			   });
+			});
+		},
 		methods: {
-			instructionNum: function (id, index) {
-				var that = this;
-				if (that.formData[id]) {
-					if (that.formData[id].trim().length > 199) {
-						that.formData[id] = that.formData[id].trim().substring(0, 200); //截取正确 但是未改变
-					}
-				}
-				var num = 200 - that.formData[id].trim().length;
-				that.remarks = num;
-			}, //剩余字数计算
 			requestConfig: function () {
 				var that = this;
 				$.ajax({
@@ -322,6 +330,7 @@
 								ifLessToday: item.ifLessToday, //读取配置接口，暂时写死
 								lessDateScope: item.lessDateScope && item.lessDateScope.split(","), //小于日期
 								maxDateScope: item.maxDateScope && item.maxDateScope.split(","), //表示需要大于的日期
+								fieldLength:item.fieldLength||200
 							};
 							if (item.ifRequired == '1') {
 								obj.verify.push({
@@ -433,6 +442,7 @@
 								ifLessToday: item.ifLessToday, //读取配置接口，暂时写死
 								lessDateScope: item.lessDateScope && item.lessDateScope.split(","), //小于日期
 								maxDateScope: item.maxDateScope && item.maxDateScope.split(","), //表示需要大于的日期
+								fieldLength:item.fieldLength||200
 							};
 
 							if (item.updateable == '1') {
@@ -528,16 +538,10 @@
 				var url = jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/get.do";
 				//该接口需要入参主键，因为主键不确定，所以全部传入表单对象
 				jasTools.ajax.post(url, this.formDetail, function (data) {
-					// data.data.collection_date=''
-					/* for (var key in data.data) {
-						if (data.data[key] == null) {
-							data.data[key] = '';
-						}
-					} */
-					that.formData = data.data;
-					//	console.log(that.formData);
-					if (that.formData.remarks) {
-						that.remarks = 200 - that.formData.remarks.length; //表示备注长度 此时不具备通用性 必须名称为 remarks
+					for(var key in that.formData){	
+						if(data.data[key]){
+							that.formData[key]=data.data[key];
+						}	
 					}
 					that.getEditField(fieldsGrouped);
 				});
@@ -781,13 +785,17 @@
 								if (groupArr[j].id == item) {
 									groupArr[j].pickerOptions = Object.assign({}, groupArr[j].pickerOptions, {
 										disabledDate: function (time) {
+											var day=new Date(that.formData[obj.id]).getTime()-1000*24*60*60;//获取天数
 											if (groupArr[j].ifLessToday == "1") {
 												if (!that.formData[obj.id]) {
 													return time.getTime() > new Date().getTime()
 												}
-												return time.getTime() < new Date(that.formData[obj.id]).getTime() || time.getTime() > new Date().getTime();
+									    		return time.getTime() <new Date(day).getTime()||time.getTime()>new Date().getTime();
+									    		
+												//return time.getTime() < new Date(that.formData[obj.id]).getTime() || time.getTime() > new Date().getTime();
 											}
-											return time.getTime() < new Date(that.formData[obj.id]).getTime();
+											return time.getTime() <new Date(day).getTime();
+											//return time.getTime() < new Date(that.formData[obj.id]).getTime();
 										}
 									});
 									break aa;

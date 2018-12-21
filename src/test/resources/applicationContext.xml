@@ -267,7 +267,7 @@
 		<property name="defaultEncoding" value="UTF-8" />
 		<!--排除使用ServletFileUpload方式的请求, 逗号分隔可配置多个 -->
 		<property name="excludeUrls"
-			value="doccenter/uploadDoc.do,attachment/upload.do,importExcelController/importExcelData.do,jasframework/excelTemplate/upload.do,daq/weldcut/importExcelData.do" />
+			value="doccenter/uploadDoc.do,attachment/upload.do,importExcelController/importExcelData.do,jasframework/excelTemplate/upload.do,daq/weldcut/importExcelDataByName.do,daq/weldcut/importExcelDataByCode.do" />
 		<!-- 上传文件总大小 -->
 		<!-- <property name="maxUploadSize" value="200000"/> -->
 	</bean>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="./../../../lib/font-awesome-4.7.0/css/font-awesome.css">
+  <link rel="stylesheet" href="./../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+  <link rel="stylesheet" href="./../../../src/css/main.css">
+  <style>
+    .progressViewData {
+      padding-top: 20px;
+    }
+
+    td,
+    th {
+      text-align: center !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app" v-cloak>
+
+    <jas-approve-dialog>
+      <div class="progressViewData">
+        <div class="jas-detail-table">
+          <table class="table_wrap">
+            <tr>
+              <template v-for="title in currentObj.titleArr">
+                <th v-text="title"></th>
+              </template>
+            </tr>
+            <template v-for="item in progressData">
+              <tr>
+                <template v-for="(value,key) in item">
+                  <td v-text="value"></td>
+                </template>
+              </tr>
+            </template>
+          </table>
+        </div>
+      </div>
+    </jas-approve-dialog>
+  </div>
+</body>
+<script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../lib/vue/vue.js"></script>
+<script src="./../../../lib/element-ui/v2.4.1/index.min.js"></script>
+
+<script src="./../../../common/components/jas-components.js "></script>
+<script src="./../../../common/js/jas-tools.js"></script>
+
+<script>
+  var app = new Vue({
+    el: "#app",
+    data: function () {
+      var that = this;
+      return {
+        map: {
+          qualityByMonthViewData: {
+            type: "qualityByMonthViewData",
+            titleArr: ["月份", "当月焊口数量", "当月一次合格率"],
+            url: jasTools.base.rootPath + "/daq/qualityStats/getMonthlyQualiifiedRate.do",
+            isChangeUnit: false,
+          },
+        },
+        currentObj: {},
+        searchObj: {},
+        progressData: []
+      }
+    },
+    created: function () {
+      var that = this;
+      var param = window.jasTools.base.getParamsInUrl(location.href);
+      that.currentObj = that.map[param.isShow];
+      if (param.projectOids) {
+        that.searchObj.projectOids = param.projectOids.split(",");
+      } else {
+        that.searchObj.projectOid = param.projectOid;
+      }
+      if (param.unitOids) {
+        that.searchObj.unitOids = param.unitOids.split(",");
+      }
+      if (param.year) {
+        that.searchObj.year = param.year;
+      }
+      that.requestNet();
+    },
+    methods: {
+      requestNet: function () { //各工序分项目对比统计
+        var that = this;
+        jasTools.ajax.post(that.currentObj.url, that.searchObj, function (data) {
+          that.progressData = [];
+          switch (that.currentObj.type) {
+            case "qualityByMonthViewData":
+              {
+                data.data.month.forEach(function (item, index) {
+                  var obj = {
+                    year: that.searchObj.year + "年" + item,
+                    weldCount: data.data.weldCount[index],
+                    qualifiedRate: data.data.qualifiedRate[index] + "%"
+                  }
+                  that.progressData.push(obj);
+                });
+                break;
+              }
+          }
+        });
+      }
+    },
+  });
+</script>
+
+</html>

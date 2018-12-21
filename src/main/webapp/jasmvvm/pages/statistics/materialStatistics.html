@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>组织机构管理</title>
+  <!-- <link rel="stylesheet" href="./libelement-ui/element-#0E2B4A/src/index.css"> -->
+  <link rel="stylesheet" href="./../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+  <link rel="stylesheet" href="./../../lib/font-awesome-4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="./../../src/css/main.css">
+  <style>
+    .height {
+      height: 100% !important;
+    }
+
+    .chartTable {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background: #f3f8fc;
+    }
+
+    .el-input__prefix {
+      left: 10px !important;
+    }
+
+    .chartTable tr th,
+    .chartTable tr td {
+      text-align: center;
+      border: 1px solid #cad9ea;
+      padding: 6px 6px;
+      color: #333;
+      font-weight: normal;
+      word-wrap: break-word;
+      word-break: break-all;
+      line-height: 1.8;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app" v-cloak>
+    <div style="padding:10px;box-sizing: border-box;height: 100%;">
+      <statistic-group-project title="线路物资分月统计" :search="materialByMonth" :projectarray="projectArray" :datetype="proDate" @requestnet="requestMaterialByMonth"></statistic-group-project>
+      <el-row :gutter="10" style="padding-top:10px">
+        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="height">
+          <el-card style="margin-bottom: 10px">
+            <div id="materialByMonth" style="width:100%;height:400px;">
+
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+
+
+      <statistic-group-project title="线路物资日统计" @requestnet="requestMaterialByDay" :projectarray="projectArray" :datetype="tableDate"
+        :search="materialByDay"></statistic-group-project>
+      <el-row :gutter="10" style="padding-top:10px">
+        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="height">
+          <el-card style="margin-bottom: 10px">
+            <div id="materialByDayChart" style="width:100%;height:400px;">
+
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+      <statistic-group title="标段-线路物资累计统计" @requestnet="requestMaterialByTenders" :projectarray="projectArray" :datetype="materialDate"
+        :search="materialByTenders"></statistic-group>
+      <el-row :gutter="10" style="padding-top:10px">
+        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="height">
+          <el-card style="margin-bottom: 10px">
+            <div id="materialByTendersChart" style="width:100%;height:400px;">
+
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+
+      <statistic-group title="标段-线路物资使用情况统计" @requestnet="requestTable" :projectarray="projectArray" :datetype="tableDate" :search="searchTable"></statistic-group>
+      <el-row :gutter="10" style="padding-top:10px">
+        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="height">
+          <el-card style="margin-bottom: 10px">
+            <!--进行标段table表格的绘制-->
+            <div style="width:100%;">
+              <table class="chartTable">
+                <tr>
+                  <th rowspan="2">标段</th>
+                  <th rowspan="2">管材类型</th>
+                  <th colspan="5">管材（KM）</th>
+                  <th colspan="5">热弯（根）</th>
+                </tr>
+                <tr>
+                  <th>累计接收</th>
+                  <th>累计使用</th>
+                  <th>当月接收</th>
+                  <th>当月使用</th>
+                  <th>截止当月剩余</th>
+                  <th>累计接收</th>
+                  <th>累计使用</th>
+                  <th>当月接收</th>
+                  <th>当月使用</th>
+                  <th>截止当月剩余</th>
+                </tr>
+                <template v-for="type in chartTable" v-if="type.dataList.length>0">
+                  <tr>
+                    <td :rowspan="type.dataList.length" v-text="type.tendersName"></td>
+                    <td v-text="type.dataList[0].specifications"></td>
+                    <td v-text="type.dataList[0].pipe_total_receive"></td>
+                    <td v-text="type.dataList[0].pipe_total_use"></td>
+                    <td v-text="type.dataList[0].pipe_month_receive"></td>
+                    <td v-text="type.dataList[0].pipe_month_use"></td>
+                    <td v-text="type.dataList[0].pipe_total_overplus"></td>
+                    <td v-text="type.dataList[0].h_pipe_total_receive"></td>
+                    <td v-text="type.dataList[0].h_pipe_total_use"></td>
+                    <td v-text="type.dataList[0].h_pipe_month_receive"></td>
+                    <td v-text="type.dataList[0].h_pipe_month_use"></td>
+                    <td v-text="type.dataList[0].h_pipe_total_overplus"></td>
+
+                  </tr>
+                  <template v-for="item,index in type.dataList">
+                    <tr v-if="index>0">
+                      <td v-text="item.specifications"></td>
+                      <td v-text="item.pipe_total_receive"></td>
+                      <td v-text="item.pipe_total_use"></td>
+                      <td v-text="item.pipe_month_receive"></td>
+                      <td v-text="item.pipe_month_use"></td>
+                      <td v-text="item.pipe_total_overplus"></td>
+                      <td v-text="item.h_pipe_total_receive"></td>
+                      <td v-text="item.h_pipe_total_use"></td>
+                      <td v-text="item.h_pipe_month_receive"></td>
+                      <td v-text="item.h_pipe_month_use"></td>
+                      <td v-text="item.h_pipe_total_overplus"></td>
+                    </tr>
+                  </template>
+                </template>
+              </table>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+
+    </div>
+  </div>
+
+</body>
+
+<script src="./../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../lib/vue/vue.js"></script>
+<script src="./../../lib/echarts/echarts.js"></script>
+<script src="./../../lib/vue-multipane/vue-multipane.js"></script>
+<script src="./../../lib/element-ui/v2.4.1/index.min.js"></script>
+<script src="./../../common/components/jas-components.js"></script>
+<script src="./../../common/js/jas-tools.js"></script>
+<script>
+  var color = ['#396fff', '#5eb6f9', '#c2e4fd', '#dde6ff', '#e5e5e5', '#e1e9ff', '#FF99CC', '#99CCFF', '##FF9900',
+    '#FF9900', '#CCFF66'
+  ];
+  var vm = new Vue({
+    el: '#app',
+    data: function () {
+      return {
+        map: {
+          pipe: "钢管（KM）",
+          hot_pipe: "热煨弯管（KM）",
+          grand_total: "累计（KM）",
+        },
+        icon: 'path://M30.9,53.2C16.8,53.2,5.3,41.7,5.3,27.6S16.8,2,30.9,2C45,2,56.4,13.5,56.4,27.6S45,53.2,30.9,53.2z M30.9,3.5C17.6,3.5,6.8,14.4,6.8,27.6c0,13.3,10.8,24.1,24.101,24.1C44.2,51.7,55,40.9,55,27.6C54.9,14.4,44.1,3.5,30.9,3.5z M36.9,35.8c0,0.601-0.4,1-0.9,1h-1.3c-0.5,0-0.9-0.399-0.9-1V19.5c0-0.6,0.4-1,0.9-1H36c0.5,0,0.9,0.4,0.9,1V35.8z M27.8,35.8 c0,0.601-0.4,1-0.9,1h-1.3c-0.5,0-0.9-0.399-0.9-1V19.5c0-0.6,0.4-1,0.9-1H27c0.5,0,0.9,0.4,0.9,1L27.8,35.8L27.8,35.8z',
+        searchTable: {
+          projectOid: '',
+          date: new Date()
+        },
+        chartTable: [],
+        proDate: {
+          type: "year",
+          placeholder: "请选择年",
+          format: "yyyy"
+        },
+        tableDate: {
+          type: "month",
+          placeholder: "请选择年月",
+          format: "yyyy-MM"
+        },
+        materByMonthChart: "",
+        materialByMonth: {
+          projectOids: [],
+          date: new Date()
+        },
+        materialByDayChart: "",
+        materialByDay: {
+          projectOids: [],
+          date: new Date()
+        },
+        materialDate: {
+          type: "date",
+          placeholder: "请选择日期",
+          format: "yyyy-MM-dd"
+        },
+        materialByTendersChart: "",
+        materialByTenders: {
+          date: new Date(),
+          projectOid: ""
+        },
+        projectArray: [], //表示数组
+        bottom:'',
+        isThird:false,
+        isFour:false,
+      }
+    },
+    created: function () {
+      var that = this;
+      that.requestProject();
+      window.addEventListener("scroll", function () {
+        that.bottom = that.bottomVal()
+      });
+    },
+    watch: {
+      bottom: function () {
+         if(this.bottom>600){
+        	 this.isThird=true;
+         }
+         if(this.bottom>800){
+        	 this.isFour=true;
+         }
+      },
+      isFour:function(){
+    	  if(this.isFour){
+    		 this.requestTable(this.searchTable.projectOid,this.searchTable.date ); 
+    	  }
+      },
+      isThird:function(){
+    	  if(this.isThird){
+     		 this.requestMaterialByTenders(this.materialByTenders.projectOid,this.materialByTenders.date); 
+     	  }  
+      }
+    },
+    mounted: function () {
+      var that = this;
+      $(window).resize(function () {
+        that.materByMonthChart.resize();
+        that.materialByDayChart.resize();
+        that.materialByTendersChart.resize();
+      });
+    },
+    methods: {
+      requestProject: function () {
+        var that = this;
+        var url = jasTools.base.rootPath + "/daq/privilege/getProjectList.do";
+        jasTools.ajax.post(url, {}, function (data) {
+          data.rows.forEach(function (item) {
+            that.projectArray.push(item);
+          });
+          that.projectArray = data.rows;
+        });
+      },
+      requestTable: function (projectOid, date) {
+        var that = this;
+        that.searchTable.projectOid = projectOid;
+        that.searchTable.date = date;
+        if(!that.isFour){
+        	return;
+        }
+        var url = jasTools.base.rootPath + "/daq/materialStatistics/getMaterialUseStatustics.do";
+        jasTools.ajax.post(url, {
+          projectOid: that.searchTable.projectOid,
+          month: that.searchTable.date
+        }, function (data) {
+          that.chartTable = data.data;
+        });
+      },
+      requestMaterialByMonth: function (projectOids, date) {
+        var that = this;
+        that.materialByMonth.projectOids = projectOids;
+        that.materialByMonth.date = new Date(date).getFullYear();
+        var url = jasTools.base.rootPath + "/daq/materialStatistics/getMonthlyStatistics.do";
+        jasTools.ajax.post(url, {
+          projectOid: that.materialByMonth.projectOids,
+          year: that.materialByMonth.date
+        }, function (data) {
+          if (data.code == "400") {
+            top.Vue.prototype.$message({
+              message: "服务异常，请稍候尝试",
+              type: 'error'
+            });
+            return;
+          }
+
+          that._renderMaterialByMonth(data.data);
+        });
+      },
+      requestMaterialByDay: function (projectOids, date) {
+        var that = this;
+        that.materialByDay.projectOids = projectOids;
+        that.materialByDay.date = new Date(date).getFullYear() + "-" + (new Date(date).getMonth() + 1);
+        var url = jasTools.base.rootPath + "/daq/materialStatistics/getDailyStatistics.do";
+        jasTools.ajax.post(url, {
+          projectOid: that.materialByDay.projectOids,
+          month: that.materialByDay.date
+        }, function (data) {
+          if (data.code == "400") {
+            top.Vue.prototype.$message({
+              message: "服务异常，请稍候尝试",
+              type: 'error'
+            });
+            return;
+          }
+          var x = [];
+          var series = [];
+          for (var key in data.data) {
+            var z = [];
+            if (x.length == 0) {
+              for (var item in data.data[key]) {
+                x.push(item);
+                z.push(data.data[key][item]);
+              }
+
+            } else {
+              for (var item in data.data[key]) {
+                z.push(data.data[key][item]);
+              }
+            }
+            var type = key == "grand_total" ? "line" : "bar";
+            var obj = {
+              name: that.map[key],
+              type: type,
+              yAxisIndex: key == "grand_total" ? 1 : 0,
+              data: z
+            }
+            if (obj.type == "bar") {
+              obj.stack = '总量';
+            }
+            series.push(obj);
+          }
+          that._renderMaterialByDay(x, series);
+        });
+      },
+      requestMaterialByTenders: function (projectOid, date) {
+        var that = this;
+        that.materialByTenders.projectOid = projectOid;
+        that.materialByTenders.date = date;
+        if(!that.isThird){
+        	return;
+        }
+        var url = jasTools.base.rootPath + "/daq/materialStatistics/getTendersStatistics.do";
+        jasTools.ajax.post(url, {
+          projectOid: that.materialByTenders.projectOid,
+          dateTime: that.materialByTenders.date
+        }, function (data) {
+          if (data.code == "400") {
+            top.Vue.prototype.$message({
+              message: "服务异常，请稍候尝试",
+              type: 'error'
+            });
+            return;
+          }
+
+          that._renderMaterialByTenders(data.data);
+        });
+      },
+      _renderMaterialByMonth: function (data) {
+        var that = this;
+        if (!that.materByMonthChart) {
+          that.materByMonthChart = echarts.init(document.getElementById('materialByMonth'));
+        }
+        var option = {
+          title: {
+            left: 'center',
+            top: '10px',
+            text: "线路物资分月统计"
+          },
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'cross',
+              crossStyle: {
+                color: '#999'
+              }
+            }
+          },
+          toolbox: {
+            show: true,
+            orient: "horizontal",
+            showTitle: true,
+            feature: {
+              myTool2: {
+                show: true,
+                title: '数据视图',
+                icon: that.icon,
+                onclick: function () {
+                  top.jasTools.dialog.show({
+                    width: '60%',
+                    height: '80%',
+                    title: '数据视图',
+                    src: './pages/statistics/dialogs/materialViewData.html?isShow=materialByMonthViewData&projectOids=' +
+                      that.materialByMonth.projectOids + "&year=" + that.materialByMonth.date,
+                    cbForClose: function () {
+
+                    }
+                  });
+                }
+              }
+            },
+            right: 30
+          },
+          legend: {
+            data: ['钢管（KM）', '热煨弯管（KM）', '累计（KM）'],
+            bottom: "-5px"
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '7%',
+            containLabel: true
+          },
+          xAxis: [{
+            type: 'category',
+            data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+          }],
+          yAxis: [{
+              type: 'value',
+            },
+            {
+              type: 'value',
+            }
+          ],
+          series: [{
+              name: '钢管（KM）',
+              type: 'bar',
+              barMaxWidth: "30%",
+              stack: '总量',
+              data: data.pipe
+            },
+            {
+              name: '热煨弯管（KM）',
+              type: 'bar',
+              barMaxWidth: "30%",
+              stack: '总量',
+              data: data.hot_pipe
+            },
+            {
+              name: '累计（KM）',
+              type: 'line',
+              yAxisIndex: 1,
+              data: data.grand_total
+            }
+          ],
+          color: color
+        };
+        that.materByMonthChart.setOption(option, true);
+      },
+      _renderMaterialByDay: function (x, series) {
+        var that = this;
+        if (!that.materialByDayChart) {
+          that.materialByDayChart = echarts.init(document.getElementById('materialByDayChart'));
+        }
+        var option = {
+          title: {
+            left: 'center',
+            top: '10px',
+            text: "线路物资日统计"
+          },
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'cross',
+              crossStyle: {
+                color: '#999'
+              }
+            }
+          },
+          toolbox: {
+            show: true,
+            orient: "horizontal",
+            showTitle: true,
+            feature: {
+              myTool2: {
+                show: true,
+                title: '数据视图',
+                icon: that.icon,
+                onclick: function () {
+                  top.jasTools.dialog.show({
+                    width: '60%',
+                    height: '80%',
+                    title: '数据视图',
+                    src: './pages/statistics/dialogs/materialViewData.html?isShow=materialByDayViewData&projectOids=' +
+                      that.materialByDay.projectOids + "&month=" + that.materialByDay.date,
+                    cbForClose: function () {
+
+                    }
+                  });
+                }
+              }
+            },
+            right: 30
+          },
+          legend: {
+            data: ['钢管（KM）', '热煨弯管（KM）', '累计（KM）'],
+            bottom: "-5px"
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '7%',
+            containLabel: true
+          },
+          xAxis: [{
+            type: 'category',
+            data: x,
+          }],
+          yAxis: [{
+              type: 'value',
+            },
+            {
+              type: 'value',
+            }
+          ],
+          series: series,
+          color: color
+        };
+        that.materialByDayChart.setOption(option, true);
+      },
+      _renderMaterialByTenders: function (data) {
+        var that = this;
+        var x = [];
+        var series = [];
+        for (var key1 in data) {
+          var z = [];
+          if (x.length == 0) {
+            for (var key in data[key1]) {
+              x.push(key);
+              z.push(data[key1][key]);
+            }
+          } else {
+            for (var key in data[key1]) {
+              z.push(data[key1][key]);
+            }
+          }
+          series.push({
+            name: that.map[key1],
+            type: 'bar',
+            barMaxWidth: "15%",
+            label: {
+              show: true,
+              position: 'top'
+            },
+            data: z
+          });
+        }
+        if (!that.materialByTendersChart) {
+          that.materialByTendersChart = echarts.init(document.getElementById('materialByTendersChart'));
+        }
+        option = {
+          title: {
+            left: 'center',
+            top: '10px',
+            text: "标段-线路物资累计统计"
+          },
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: { // 坐标轴指示器，坐标轴触发有效
+              type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+            }
+          },
+          legend: {
+            data: ["钢管（KM）", "热煨弯管（KM）"],
+            bottom: "-5px"
+          },
+          toolbox: {
+            show: true,
+            orient: "horizontal",
+            showTitle: true,
+            feature: {
+              myTool2: {
+                show: true,
+                title: '数据视图',
+                icon: that.icon,
+                onclick: function () {
+                  top.jasTools.dialog.show({
+                    width: '60%',
+                    height: '80%',
+                    title: '数据视图',
+                    src: './pages/statistics/dialogs/materialViewData.html?isShow=materialByTenders&projectOid=' +
+                      that.materialByTenders.projectOid + "&dateTime=" + jasTools.base.formatDate(new Date(
+                        that.materialByTenders.date), 'yyyy-MM-dd'),
+                    cbForClose: function () {
+
+                    }
+                  });
+                }
+              }
+            },
+            right: 30
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '7%',
+            containLabel: true
+          },
+          xAxis: [{
+            type: 'category',
+            data: x,
+            axisLabel: {
+              show: true
+            }
+          }],
+          yAxis: [{
+            type: 'value'
+          }],
+          series: series,
+          color: color
+        }
+        that.materialByTendersChart.setOption(option, true);
+      },
+      bottomVal: function () {
+        var scrollY =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop       
+        return scrollY
+      }
+    }
+  });
+</script>
+
+</html>

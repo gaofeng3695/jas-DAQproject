@@ -194,5 +194,41 @@ public class StatsUtils {
         return Arrays.stream(values).filter(Objects::nonNull).findFirst().orElse(null);
     }
 
+    /**
+     * 通过起始月字符串，获取自开始月起到终止月的连续的月份数组
+     * @param dateStr
+     * @param format
+     * @return date
+     */
+    public static Object[] getMonthArray(String beginMonthStr, String endMonthStr, String format) {
+    	SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+    	try {
+			Date beginMonthDate = dateFormat.parse(beginMonthStr);
+			Date endMonthDate = dateFormat.parse(endMonthStr);
+			List<String> monthList = genContinuityYearMonthStr(beginMonthDate,endMonthDate,format);
+			return monthList.toArray();
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+    }
 
+
+    /**
+     * <p>功能描述：创建指定长度的默认值为0的double数组。</p>
+      * <p> 葛建。</p>	
+      * @param length
+      * @param i
+      * @return
+      * @since JDK1.8。
+      * <p>创建日期:2018年12月12日 下午1:51:58。</p>
+      * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+     */
+	public static Double[] getStaticDoubleArray(int length, Double i) {
+		Double[] array = new Double[length];
+		for (int j = 0; j < array.length; j++) {
+			array[j] = i;
+		}
+		return array;
+	}
 }

@@ -406,13 +406,13 @@ JasMap.require(function () {
 
  //中线桩连线   
  mapStyleTemplates.medianStakePolyline=function(feature){
-	 console.log(feature);
+	// console.log(feature);
 	 var colorArr = ['#CC0000','#00FF00','#CC33FF','#CCFF00','#FF66FF','#FFFF00','#00FFFF','#00FFCC'];
 	  if(!styleManager.medianStakePolylineStyle){
 		  styleManager.medianStakePolylineStyle={};  
 	  }
-	  var name = feature.get('pipeline_oid');
-	  console.log(name);
+	  var name = feature.get('pipeline_name');
+	  //console.log(name);
 	  if(!styleManager.medianStakePolylineStyle[name]){
 		  var style = new ol.style.Style({
            stroke: new ol.style.Stroke({
@@ -423,8 +423,45 @@ JasMap.require(function () {
 		  styleManager.medianStakePolylineStyle[name]=style;
 	  }
 	  return  styleManager.medianStakePolylineStyle[name];
- }
+ };
+ //标段连线   
+ mapStyleTemplates.tendersPolyline=function(feature){
+	 // console.log(feature);
+	 var colorArr = ['#CC0000','#00FF00','#CC33FF','#CCFF00','#FF66FF','#FFFF00','#00FFFF','#00FFCC'];
+	 if(!styleManager.tendersPolyline){
+		 styleManager.tendersPolyline={};  
+	 }
+	 var name = feature.get('tenders_name');
+	 //console.log(name);
+	 if(!styleManager.tendersPolyline[name]){
+		 var style = new ol.style.Style({
+			 stroke: new ol.style.Stroke({
+				 color: colorArr[random(0,8)] ,
+				 width:5
+			 })
+		 });
+		 styleManager.tendersPolyline[name]=style;
+	 }
+	 return  styleManager.tendersPolyline[name];
+ };
  
+ mapStyleTemplates.myLineLabelStyle = new ol.style.Style({
+     text: new ol.style.Text({
+         font: '16px Calibri,sans-serif',
+         placement:'line',
+         overflow: true,
+         textBaseline:"top",
+//         offsetY:10,
+//         offsetX:10,
+         fill: new ol.style.Fill({
+             color: '#fff'
+         }),
+         stroke: new ol.style.Stroke({
+             color: '#580087',
+             width: 2
+         })
+     })
+ });
 
   //<<<-------------------自定义样式结束----------------ss
   return mapStyleTemplates; //返回样式模版对象

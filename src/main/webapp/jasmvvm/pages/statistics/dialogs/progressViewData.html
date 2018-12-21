@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="./../../../lib/font-awesome-4.7.0/css/font-awesome.css">
+  <link rel="stylesheet" href="./../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+  <link rel="stylesheet" href="./../../../src/css/main.css">
+  <style>
+    .progressViewData {
+      padding-top: 20px;
+    }
+
+    td,
+    th {
+      text-align: center !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app" v-cloak>
+
+    <jas-approve-dialog>
+      <div class="progressViewData">
+        <div class="jas-detail-table">
+          <table class="table_wrap">
+            <tr>
+              <template v-for="title in currentObj.titleArr">
+                <th v-text="title"></th>
+              </template>
+            </tr>
+            <template v-for="item in progressData">
+              <tr>
+                <td :rowspan="item.rows.length" v-text="item.type"></td>
+                <td v-text="item.rows[0].name"></td>
+                <td v-text="item.rows[0].data"></td>
+              </tr>
+              <template v-if="item.rows.length>0" v-for="dataItem,index in item.rows">
+                <tr v-if="index>0">
+                  <td v-text="dataItem.name"></td>
+                  <td v-text="dataItem.data"></td>
+                </tr>
+              </template>
+            </template>
+          </table>
+        </div>
+      </div>
+    </jas-approve-dialog>
+  </div>
+</body>
+<script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../lib/vue/vue.js"></script>
+<script src="./../../../lib/element-ui/v2.4.1/index.min.js"></script>
+
+<script src="./../../../common/components/jas-components.js "></script>
+<script src="./../../../common/js/jas-tools.js"></script>
+
+<script>
+  var app = new Vue({
+    el: "#app",
+    data: function () {
+      var that = this;
+      return {
+        map: {
+          progressViewData: {
+            titleArr: ["工序", "项目", "累计（KM）"],
+            url: jasTools.base.rootPath + "/daq/progressStats/getEachItemLengthStatsByProject.do",
+            isChangeUnit: true,
+          },
+          progressCountViewData: {
+            titleArr: ["工序", "项目", "累计（口数）"],
+            url: jasTools.base.rootPath + "/daq/progressStats/getEachItemCountStatsByProject.do.do",
+            isChangeUnit: false,
+          },
+          progressByTenderKViewData: {
+            titleArr: ["工序", "标段", "累计"],
+            url: jasTools.base.rootPath + "/daq/progressStats/getEachItemLengthStatsByTenders.do",
+            isChangeUnit: true,
+          },
+          progressByTenderCViewData: {
+            titleArr: ["工序", "标段", "累计（口数）"],
+            url: jasTools.base.rootPath + "/daq/progressStats/getEachItemCountStatsByTenders.do",
+            isChangeUnit: false,
+          }
+        },
+        currentObj: {},
+        searchObj: {},
+        progressData: []
+      }
+    },
+    created: function () {
+      var that = this;
+      var param = window.jasTools.base.getParamsInUrl(location.href);
+      that.currentObj = that.map[param.isShow];
+      if (param.projectOids) {
+        that.searchObj.projectOids = param.projectOids.split(",");
+      } else {
+        that.searchObj.projectOid = param.projectOid;
+      }
+      that.searchObj.date = param.date;
+      that.requestNet();
+    },
+    methods: {
+      requestNet: function () { //各工序分项目对比统计
+        var that = this;
+        jasTools.ajax.post(that.currentObj.url, that.searchObj, function (data) {
+          that.progressData = [];
+          data.rows.forEach(function (item) {
+            var obj = {
+              type: item.typeName,
+              rows: []
+            };
+            var dataName = item.projectName || item.tendersNames;
+            dataName.forEach(function (proItem, index) {
+              var data = item.statsResult[index];
+              if (that.currentObj.isChangeUnit) {
+                data = item.statsResult[index] > 0 ? (item.statsResult[index] / 1000).toFixed(3) : 0;
+              }
+              var obj1 = {
+                name: proItem,
+                data: data
+              }
+              obj.rows.push(obj1);
+            });
+            that.progressData.push(obj);
+          });
+        });
+      }
+    },
+  });
+</script>
+
+</html>
