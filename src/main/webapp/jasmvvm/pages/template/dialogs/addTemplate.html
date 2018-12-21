@@ -215,13 +215,7 @@
 				functionCode: that.menuCode
 			}, function (data) {  
 			   data.data.functionFieldsBoList.forEach(function(item){
-				  if(item.uiType=='UT_13') {
-					  if(that.isAddPage){
-						  that.$set(that.formData,item.fieldName, '');  
-					  }else{
-						  that.$set(that.formData,item.fieldName, '  ');  
-					  }
-				  }
+				   that.$set(that.formData,item.fieldName, '');  
 			   });
 			});
 		},
@@ -544,11 +538,10 @@
 				var url = jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/get.do";
 				//该接口需要入参主键，因为主键不确定，所以全部传入表单对象
 				jasTools.ajax.post(url, this.formDetail, function (data) {
-					console.log(that.formData);
-					for(var key in data.data){	
-						if(!that.formData[key]){
-							that.$set(that.formData,key, data.data[key]);	
-						}		
+					for(var key in that.formData){	
+						if(data.data[key]){
+							that.formData[key]=data.data[key];
+						}	
 					}
 					that.getEditField(fieldsGrouped);
 				});
