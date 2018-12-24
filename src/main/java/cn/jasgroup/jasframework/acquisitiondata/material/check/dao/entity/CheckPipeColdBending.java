@@ -47,6 +47,9 @@ import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 @CommonDeleteConfig(
 	scene = "/checkPipeColdBending/delete",
 	afterAdvice = {
+			@Process(service = "checkService", method = "updateChanageBeforeAdvice()")
+		},
+	beforeAdvice = {
 		@Process(service = "checkService", method = "deleteChanagePipeColdBendingChecked()")
 	}
 )

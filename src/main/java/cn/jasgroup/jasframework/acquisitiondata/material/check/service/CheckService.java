@@ -65,7 +65,8 @@ public class CheckService extends CommonDataHibernateService{
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public void deleteChanagePipeColdBendingChecked(CheckPipeColdBending checkPipeColdBending){
-		this.checkDao.chanagePipeColdBendingChecked(checkPipeColdBending.getPipeColdBendingOid(), 0);
+		CheckPipeColdBending oldCheckPipeColdBending = (CheckPipeColdBending)BaseEntityThreadLocalHolder.getEntitySnap();
+		this.checkDao.chanagePipeColdBendingChecked(oldCheckPipeColdBending.getPipeColdBendingOid(), 0);
 	}
 	/***
 	  * <p>功能描述：修改钱信息获取。</p>
