@@ -6439,3 +6439,6 @@ comment on column daq_material_hot_bends.is_check is '是否检查';
 
 alter table daq_material_pipe_cold_bending add is_check smallint not null default 0;
 comment on column daq_material_pipe_cold_bending.is_check is '是否检查';
+
+alter table pri_role add data_filter_code varchar(45);
+comment on column pri_role.data_filter_code is '数据权限过滤规则';
