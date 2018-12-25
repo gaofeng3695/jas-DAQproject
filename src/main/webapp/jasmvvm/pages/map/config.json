@@ -198,27 +198,46 @@
         "strategy": "all",
         "outFields":"median_stake_code,mileage,pipeline_oid,project_oid"
       },{
-        "id": "v_daq_median_stake_polyline",
+        "id": "daq_median_stake_polyline",
         "label": "中线桩连线",
         "index": 12,
-        "renderer": {
-          "style": "medianStakePolyline",
-          "labelStyle": "",
-          "labelField": ""
-        },
+         "outFields":"pipeline_oid,project_oid,pipeline_name",
         "type": "Vector",
         "source": "Vector",
         "flash": true,
         "visible": true,
+        "declutter":false,
         "loader": "jas",
         "format": "GeoJSON",
         "strategy": "all",
-        "outFields":"pipeline_oid,project_oid"
+        "renderer": {
+         	"style": "medianStakePolyline",
+         	"labelStyle": "lineLabelStyle",
+         	"labelField": "pipeline_name"
+		  }
+      },{
+        "id": "daq_tenders_polyline",
+        "label": "标段",
+        "index": 10,
+         "outFields":"oid,tenders_name",
+        "type": "Vector",
+        "source": "Vector",
+        "flash": true,
+        "visible": true,
+        "declutter":false,
+        "loader": "jas",
+        "format": "GeoJSON",
+        "strategy": "all",
+        "renderer": {
+         	"style": "tendersPolyline",
+         	"labelStyle": "myLineLabelStyle",
+         	"labelField": "tenders_name"
+		  }
       }, {
         "id": "layerSet002",
         "label": "管道焊接补口",
         "layerSet": [{
-          "id": "daq_construction_weld",
+          "id": "v_daq_construction_weld",
           "label": "焊口信息",
           "index": 20,
           "renderer": {
@@ -233,7 +252,6 @@
 	          "template":"焊口编号:${weld_code}",
 	          "callback":""
           }},
-          "style": "pipesegment",
           "type": "Vector",
           "source": "Vector",
           "flash": true,
@@ -241,7 +259,7 @@
           "loader": "jas",
           "format": "GeoJSON",
           "strategy": "all",
-          "outFields":"weld_code,project_oid"
+          "outFields":"oid,weld_code,construct_unit_name,to_char,work_unit_code"
         }, {
           "id": "daq_weld_rework_weld",
           "label": "焊口返修信息",
@@ -269,7 +287,7 @@
           "strategy": "all",
             "outFields":"rework_weld_code,project_oid"
         }, {
-          "id": "v_daq_weld_measured_result",
+          "id": "daq_weld_measured_result",
           "label": "焊口测量成果信息",
           "index": 20,
           "renderer": {

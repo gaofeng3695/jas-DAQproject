@@ -59,7 +59,9 @@ create or replace view v_daq_material as
 	union all
 	select oid,closure_code as code,null as length from daq_material_closure where active=1
 	union all
-	select oid,pipe_cold_bending_code as code,pipe_length as length from daq_material_pipe_cold_bending where active=1;
+	select t.oid,t.pipe_cold_bending_code as code,tt.pipe_length as length from daq_material_pipe_cold_bending t left join (select oid,pipe_length from daq_material_pipe) tt on t.pipe_oid=tt.oid where active=1
+	union all
+	select t.oid,t.valve_name,null as length from daq_material_valve t where t.active=1;
 	
 /***
  *焊口检测视图
@@ -83,8 +85,12 @@ create or replace view v_daq_weld_detection as
  */
 create or replace view v_daq_weld_measured_result as 
 	select m.*,t.weld_code from daq_weld_measured_result m left join (select oid,weld_code from daq_construction_weld) t on t.oid=m.weld_oid;
-/***
- * 中线桩连线视图
- */	
-create or replace view v_daq_median_stake_polyline as
-	select t.project_oid,t.pipeline_oid,ST_GeomFromText(concat('LINESTRING(',string_agg(concat_ws(' ',t.pointx,t.pointy),','),')'),4490) as geom from (select project_oid,pipeline_oid,pointx,pointy from daq_median_stake where active=1 order by mileage) t  group by t.project_oid,t.pipeline_oid;	
+
+/**
+ * 中线桩视图
+ */
+create or replace view v_daq_construction_weld as 
+	select t.oid,t.weld_code,u.unit_name as construct_unit_name,to_char(t.collection_date,'yyyy-mm-dd'),wu.work_unit_code,t.geom from daq_construction_weld t 
+	left join (select oid, unit_name, active from pri_unit where active=1) u on u.oid = t.construct_unit 
+	left join (select oid, work_unit_code, active from daq_work_unit where active=1) wu on wu.oid = t.work_unit_oid
+	where t.active=1;

@@ -267,7 +267,7 @@
 		<property name="defaultEncoding" value="UTF-8" />
 		<!--排除使用ServletFileUpload方式的请求, 逗号分隔可配置多个 -->
 		<property name="excludeUrls"
-			value="doccenter/uploadDoc.do,attachment/upload.do,importExcelController/importExcelData.do,jasframework/excelTemplate/upload.do,daq/weldcut/importExcelData.do" />
+			value="doccenter/uploadDoc.do,attachment/upload.do,importExcelController/importExcelData.do,jasframework/excelTemplate/upload.do,daq/weldcut/importExcelDataByName.do,daq/weldcut/importExcelDataByCode.do" />
 		<!-- 上传文件总大小 -->
 		<!-- <property name="maxUploadSize" value="200000"/> -->
 	</bean>
@@ -300,13 +300,13 @@
     <rabbit:template id="amqpTemplate" connection-factory="rabbitConnectionFactory" />  
   
     <!--定义queue  说明：durable:是否持久化   exclusive: 仅创建者可以使用的私有队列，断开后自动删除   auto_delete: 当所有消费客户端连接断开后，是否自动删除队列-->  
-    <rabbit:queue name="mq.spatial" durable="true" auto-delete="false" exclusive="false" />  
+    <rabbit:queue name="${rabbit.queue.spatial}" durable="true" auto-delete="false" exclusive="false" />  
  
     
     <!--定义topic-exchange -->  
     <rabbit:topic-exchange name="mq.jasExChange" durable="true" auto-delete="false">  
         <rabbit:bindings>  
-            <rabbit:binding queue="mq.spatial" pattern="mq.spatial.send"></rabbit:binding>  
+            <rabbit:binding queue="${rabbit.queue.spatial}" pattern="mq.spatial.send"></rabbit:binding>  
             <!-- <rabbit:binding queue="mq.other" pattern="mq.other.send"></rabbit:binding>   -->
         </rabbit:bindings>  
     </rabbit:topic-exchange>   
@@ -316,7 +316,7 @@
     <bean id="spatialListener" class="cn.jasgroup.gis.data.opengis.SpatialPersistenceListener"></bean>
     <!-- queue litener 观察 监听模式 当有消息到达时会通知监听在对应的队列上的监听对象 -->  
     <rabbit:listener-container connection-factory="rabbitConnectionFactory" acknowledge="manual">  <!--  -->
-         <rabbit:listener  queues="mq.spatial"  ref="spatialListener"/>  
+         <rabbit:listener  queues="${rabbit.queue.spatial}"  ref="spatialListener"/>  
     </rabbit:listener-container>  
     <!--rabbit 配置-->
 	

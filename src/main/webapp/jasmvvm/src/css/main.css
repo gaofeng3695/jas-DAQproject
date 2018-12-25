@@ -61,10 +61,10 @@ button {
 
 input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0 1000px white inset;
-    /* 使用足够大的纯色内阴影覆盖黄色背景 */
+    /* 浣跨敤瓒冲澶х殑绾壊鍐呴槾褰辫鐩栭粍鑹茶儗鏅� */
 }
 
-/* element样式修正--开始 */
+/* element鏍峰紡淇--寮�濮� */
 
 .el-cascader {
     width: 100%;
@@ -106,9 +106,9 @@ input:-webkit-autofill {
     padding: 14px 0
 } */
 
-/* element样式修正--结束 */
+/* element鏍峰紡淇--缁撴潫 */
 
-/* 分栏样式--开始 */
+/* 鍒嗘爮鏍峰紡--寮�濮� */
 
 .multipane:not(.is-resizing) .resizepanel {
     transition: all 0.3s;
@@ -187,9 +187,9 @@ input:-webkit-autofill {
     opacity: 0.7;
 }
 
-/* 分栏样式--结束 */
+/* 鍒嗘爮鏍峰紡--缁撴潫 */
 
-/* 弹性盒子相关--开始 */
+/* 寮规�х洅瀛愮浉鍏�--寮�濮� */
 
 .jas-flex-box {
     display: -webkit-box;
@@ -240,9 +240,9 @@ input:-webkit-autofill {
     width: 0%;
 }
 
-/* 弹性盒子相关--结束 */
+/* 寮规�х洅瀛愮浉鍏�--缁撴潫 */
 
-/* v-bar自定义滚动条--开始 */
+/* v-bar鑷畾涔夋粴鍔ㄦ潯--寮�濮� */
 
 .vb>.vb-dragger {
     z-index: 5;
@@ -284,9 +284,9 @@ input:-webkit-autofill {
     background-color: rgba(48, 121, 244, .5);
 }
 
-/* v-bar自定义滚动条--结束 */
+/* v-bar鑷畾涔夋粴鍔ㄦ潯--缁撴潫 */
 
-/* font-awesome字体样式调整--开始 */
+/* font-awesome瀛椾綋鏍峰紡璋冩暣--寮�濮� */
 
 .el-menu-item [class^=fa] {
     margin-right: 5px;
@@ -310,9 +310,9 @@ input:-webkit-autofill {
     margin-left: 5px;
 }
 
-/* font-awesome字体样式调整--结束 */
+/* font-awesome瀛椾綋鏍峰紡璋冩暣--缁撴潫 */
 
-/* iframe弹出框样式--开始 */
+/* iframe寮瑰嚭妗嗘牱寮�--寮�濮� */
 
 .jas-iframe-dialog .el-dialog__header {
     padding: 10px 0 10px;
@@ -346,9 +346,9 @@ input:-webkit-autofill {
     height: 100%;
 }
 
-/* 弹出框样式--结束 */
+/* 寮瑰嚭妗嗘牱寮�--缁撴潫 */
 
-/* 详情表格--开始 */
+/* 璇︽儏琛ㄦ牸--寮�濮� */
 
 .jas-detail-table .table_wrap {
     width: 100%;
@@ -378,9 +378,9 @@ input:-webkit-autofill {
 
 /* .jas-detail-table .table_wrap td {} */
 
-/* 详情表格--结束 */
+/* 璇︽儏琛ㄦ牸--缁撴潫 */
 
-/* 附件展示--开始 */
+/* 闄勪欢灞曠ず--寮�濮� */
 
 .jas-file-list .tipBtn {
     position: absolute;
@@ -395,9 +395,9 @@ input:-webkit-autofill {
     opacity: 1;
 }
 
-/* 附件展示--结束 */
+/* 闄勪欢灞曠ず--缁撴潫 */
 
-/* jas-approve-dialog--开始 */
+/* jas-approve-dialog--寮�濮� */
 
 .jas-approve-dialog .el-tabs__content {
     width: 100%;
@@ -418,9 +418,19 @@ input:-webkit-autofill {
     margin-bottom: 10px;
 }
 
-/* jas-approve-dialog--结束 */
+/* jas-approve-dialog--缁撴潫 */
 
 .el-table td,
 .el-table th {
     padding: 8px 0;
 }
+
+
+	.el-tag--medium{
+		    display:inline-block;
+		    text-align:center;
+		    width:60px;
+		}
+		.el-tag{
+		    padding:0 !important
+		}

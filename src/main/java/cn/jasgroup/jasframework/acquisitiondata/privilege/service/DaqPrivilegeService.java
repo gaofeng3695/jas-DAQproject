@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 
 import cn.jasgroup.jasframework.acquisitiondata.privilege.dao.DaqPrivilegeDao;
 import cn.jasgroup.jasframework.base.service.BaseService;
+import cn.jasgroup.jasframework.security.AuthUser;
+import cn.jasgroup.jasframework.security.dao.entity.PriUnit;
+import cn.jasgroup.jasframework.security.service.UnitService;
 import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 
 @Service
@@ -23,6 +26,9 @@ public class DaqPrivilegeService extends BaseService{
 	
 	@Resource(name="daqPrivilegeDao")
 	private DaqPrivilegeDao daqPrivilegeDao;
+	
+	@Resource
+	private UnitService unitService;
 	
 	/***
 	  * <p>功能描述：获取当前用户所在部门下的项目列表。</p>
@@ -264,5 +270,33 @@ public class DaqPrivilegeService extends BaseService{
 	 */
 	public Map<String,Object> getFaceInfoByLoginName(String loginName){
 		return this.daqPrivilegeDao.getFaceInfoByLoginName(loginName);
+	}
+	
+	public List<Map<String,Object>> getCurrentUnitId(){
+		AuthUser currentUser = ThreadLocalHolder.getCurrentUser();
+		String unitOid = currentUser.getUnitId();
+		PriUnit unitEntity = (PriUnit)unitService.get(PriUnit.class,unitOid);
+		String hierarchy = unitEntity.getHierarchy();
+		String sql=null;
+		if(hierarchy.startsWith(UnitHierarchyEnum.project_unit.getHierarchy())){
+			sql = "select t.oid as key,t.unit_name as value from pri_unit t where t.active=1";
+		}else{
+			sql = "select uu.oid as key,uu.unit_name as value from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid='"+unitOid+"' and uu.active=1";
+		}
+		return this.daqPrivilegeDao.getCurrentUnitId(sql);
+	}
+
+
+	/**
+	 * <p>功能描述：根据项目查所有的施工单位。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOids
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年12月18日 下午4:35:15。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getConstructUnitList(List<String> projectOids) {
+		return daqPrivilegeDao.getConstructUnitList(projectOids);
 	}
 }

@@ -80,9 +80,9 @@
 								<el-form-item :prop="item.id" :label="item.name" :rules="item.verify">
 									<!--<textarea  v-if="item.type=='UT_13'"  rows="2" v-model="formData[item.id]"></textarea>-->
 									<el-input v-if="item.type=='UT_13'" :autosize="{ minRows: 2}" type="textarea" :rows="2" v-model="formData[item.id]" :disabled="item.disabled"
-									  :maxLength="200" @input="instructionNum(item.id,index)">
+									  :maxLength="item.fieldLength">
 									</el-input>
-									<p v-show="item.id=='remarks'" style="text-align:right;color:#999;">您还可以输入<span v-text="remarks"></span>字</p>
+									<p  style="text-align:right;color:#999;">您还可以输入<span>{{item.fieldLength-formData[item.id].length}}</span>字</p>
 								</el-form-item>
 							</el-col>
 							<el-col v-else :xs="formConfig.xs" :sm="formConfig.sm" :md="formConfig.md" :lg="formConfig.lg" :xl="formConfig.xl" :class="{'height' : item.type=='UT_14'||item.type=='UT_05'||item.type=='UT_06'||item.type=='UT_07'||item.type=='UT_08' }">
@@ -108,10 +108,10 @@
 									  :size="item.size">
 									</el-time-picker>
 									<el-date-picker v-if="item.type=='UT_04'" value-format="yyyy-MM-dd HH:mm:ss" v-model="formData[item.id]" type="datetime"
-									  placeholder="选择日期时间" :size="item.size" :disabled="item.disabled">
+									  placeholder="选择日期时间" :size="item.size" :disabled="item.disabled" :picker-options="item.pickerOptions" @change=fieldChanged(item)>
 									</el-date-picker>
 									<el-date-picker v-if="item.type=='UT_03'" value-format="yyyy-MM-dd" type="date" :placeholder="item.placeholder" v-model="formData[item.id]"
-									  :size="item.size" :disabled="item.disabled" style="width: 100%;">
+									  :size="item.size" :disabled="item.disabled" style="width: 100%;" :picker-options="item.pickerOptions" @change=fieldChanged(item)>
 									</el-date-picker>
 									<el-radio-group v-if="isRadio(item)" border v-model="formData[item.id]" size="small" :disabled="item.disabled">
 										<template v-for="radioItem in item.options">
@@ -160,8 +160,9 @@
 			return {
 				isLoading: true,
 				rules: [],
-				remarks: 200,
-				formData: {}, // 表单字段详情对象
+				formData: {
+					remarks:"",
+				}, // 表单字段详情对象
 				formAttr: [], // 表单字段，分组排序，配置数组
 				// [{
 				// 	groupName: '分组名',
@@ -201,17 +202,24 @@
 			this.requestRule();
 			this.requestFieldConfigByOid();
 		},
+		beforeCreate:function(){
+			var that=this;
+			var param = window.jasTools.base.getParamsInUrl(location.href);
+			if (param.menuCode) {
+				that.menuCode = param.menuCode;
+			}
+			delete param.menuCode;
+			that.isAddPage = JSON.stringify(this.formDetail) == '{}';
+			var url = jasTools.base.rootPath + "/functionConfiguration/getDetailByCode.do";
+			jasTools.ajax.get(url, {
+				functionCode: that.menuCode
+			}, function (data) {  
+			   data.data.functionFieldsBoList.forEach(function(item){
+				   that.$set(that.formData,item.fieldName, '');  
+			   });
+			});
+		},
 		methods: {
-			instructionNum: function (id, index) {
-				var that = this;
-				if (that.formData[id]) {
-					if (that.formData[id].trim().length > 199) {
-						that.formData[id] = that.formData[id].trim().substring(0, 200); //截取正确 但是未改变
-					}
-				}
-				var num = 200 - that.formData[id].trim().length;
-				that.remarks = num;
-			}, //剩余字数计算
 			requestConfig: function () {
 				var that = this;
 				$.ajax({
@@ -316,15 +324,18 @@
 								verify: [],
 								requestUrl: item.requestPath,
 								childField: item.childField,
-								min: item.min || item.min == 0 ? item.min : -Infinity,
+								min: item.min ,
 								max: item.max || Infinity,
 								index: item.rowIndex,
+								ifLessToday: item.ifLessToday, //读取配置接口，暂时写死
+								lessDateScope: item.lessDateScope && item.lessDateScope.split(","), //小于日期
+								maxDateScope: item.maxDateScope && item.maxDateScope.split(","), //表示需要大于的日期
+								fieldLength:item.fieldLength||200
 							};
 							if (item.ifRequired == '1') {
 								obj.verify.push({
 									required: true,
 									message: item.placeholder || '该字段为必填项',
-									// trigger: 'blur'
 								});
 
 							}
@@ -351,6 +362,17 @@
 									trigger: 'blur'
 								});
 							}
+							if (item.uiType == "UT_03" || item.uiType == "UT_04") { //表示时间类型
+								if (item.ifLessToday == "1") { //表示是否小于今天，默认为true
+									obj.pickerOptions = {
+										disabledDate: function (time) {
+											return time.getTime() > new Date().getTime()
+										}
+									};
+								} else {
+									obj.pickerOptions = {};
+								}
+							}
 							if (item.uiType == "UT_07" || item.uiType == "UT_08") {
 								that.$set(that.formData, item.fieldName, []);
 							}
@@ -361,7 +383,12 @@
 							}
 							if (item.uiType == 'UT_14') {
 								// 如果是数字，增加默认值
-								that.$set(that.formData, item.fieldName, obj.min || 0);
+								if(!obj.min){
+									obj.min=-10000;
+									that.$set(that.formData, item.fieldName, 0);
+								}else{
+									that.$set(that.formData, item.fieldName,obj.min);
+								}
 							}
 							groupAttr.push(obj);
 						}
@@ -385,7 +412,7 @@
 						if (item.ifPrimaryKey) {
 							that.pkArray.push(item.fieldName);
 						}
-					//	console.log(that.pkArray);
+						//	console.log(that.pkArray);
 						if (item.domainList) {
 							item.domainList.forEach(function (child) {
 								var obj = {};
@@ -409,9 +436,13 @@
 								requestUrl: item.requestPath,
 								childField: item.childField,
 								index: item.rowIndex,
-								min: item.min || item.min == 0 ? item.min : -Infinity,
+								min: item.min,
 								max: item.max || Infinity,
-								disabled: false
+								disabled: false,
+								ifLessToday: item.ifLessToday, //读取配置接口，暂时写死
+								lessDateScope: item.lessDateScope && item.lessDateScope.split(","), //小于日期
+								maxDateScope: item.maxDateScope && item.maxDateScope.split(","), //表示需要大于的日期
+								fieldLength:item.fieldLength||200
 							};
 
 							if (item.updateable == '1') {
@@ -440,8 +471,18 @@
 									message: "不能超过" + item.fieldLength + "字"
 								});
 							}
-							if (item.uiType == 'UT_04' || item.uiType == 'UT_03' || item.uiType == 'UT_02') {
-								/* that.formData[item.fieldName] = new Date(that.formData[item.fieldName]); */
+							if (item.uiType == "UT_03" || item.uiType == "UT_04") { //表示时间类型
+								if (item.ifLessToday == "1") { //表示是否小于今天，默认为true
+									obj.pickerOptions = {
+										disabledDate: function (time) {
+											return time.getTime() > new Date().getTime()
+										}
+									};
+								} else {
+									obj.pickerOptions = {};
+								}
+							 that.initFieldChanged(obj);
+							
 							}
 							if (item.regularExpression == '4' && item.min && item.max) {
 								obj.verify.push({
@@ -454,6 +495,19 @@
 							}
 							if (item.uiType == "UT_09" || item.uiType == "UT_10") {
 								that.$set(that.formData, item.fieldName, that.formData[item.fieldName].split(","));
+							}
+							if (item.uiType == 'UT_14') {
+								// 如果是数字，增加默认值
+								if(!that.formData[obj.id]){
+									if(obj.min){
+										that.$set(that.formData, item.fieldName, obj.min);	
+									}else{
+										obj.min=-10000;
+										that.$set(that.formData, item.fieldName, 0);
+									}
+								}else{
+									that.$set(that.formData, item.fieldName,that.formData[obj.id]);
+								}
 							}
 							groupAttr.push(obj);
 
@@ -477,23 +531,18 @@
 				that.$nextTick(function () {
 					that.$refs.upload.requestFile(that.formData[that.pkArray[0]]); // 触发附件请求
 				});
+				
 			},
 			requestDetailByObj: function (fieldsGrouped) { //请求表单详情
 				var that = this;
 				var url = jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/get.do";
 				//该接口需要入参主键，因为主键不确定，所以全部传入表单对象
 				jasTools.ajax.post(url, this.formDetail, function (data) {
-					// data.data.collection_date=''
-					/* for (var key in data.data) {
-						if (data.data[key] == null) {
-							data.data[key] = '';
-						}
-					} */
-					that.formData = data.data;
-				//	console.log(that.formData);
-				if(that.formData.remarks){
-					 that.remarks=200-that.formData.remarks.length;//表示备注长度 此时不具备通用性 必须名称为 remarks
-				}
+					for(var key in that.formData){	
+						if(data.data[key]){
+							that.formData[key]=data.data[key];
+						}	
+					}
 					that.getEditField(fieldsGrouped);
 				});
 			},
@@ -567,8 +616,8 @@
 									that.$set(that.formData, child.id, ""); // 清空子级联的value
 								}
 								//if (options.length === 1) { //只有一个选项就自动复制
-									//that.$set(that.formData, child.id, options[0].key); // 赋值 子级联的value
-							//	}
+								//that.$set(that.formData, child.id, options[0].key); // 赋值 子级联的value
+								//	}
 								that.$refs[child.id][0].$emit('change', { // 触发子级联的change事件
 									value: that.formData[child.id],
 									isInit: isInit
@@ -699,6 +748,85 @@
 					}
 				}
 				return arry;
+			},
+			initFieldChanged:function(obj){
+				var that = this;
+				if(obj.lessDateScope && obj.lessDateScope.length > 0){
+					obj.lessDateScope.forEach(function (item) {
+						if(that.formData[item]){//有值  表示需要小于的
+							 obj.pickerOptions=Object.assign({}, obj.pickerOptions, {
+								disabledDate:function(time){
+									return time.getTime()>new Date(that.formData[item]).getTime();
+								}
+							});
+						}
+					});
+				}
+				if(obj.maxDateScope && obj.maxDateScope.length > 0){
+					obj.maxDateScope.forEach(function (item) {
+						if(that.formData[item]){//有值  表示需要小于的
+					obj.pickerOptions=Object.assign({}, obj.pickerOptions, {
+								disabledDate:function(time){
+									return time.getTime()<new Date(that.formData[item]).getTime();
+								}
+							});
+						}
+					});
+				}
+			},
+			fieldChanged: function (obj) { //formAttr配置数组
+				
+				var that = this;
+				if (obj.lessDateScope && obj.lessDateScope.length > 0) {
+					obj.lessDateScope.forEach(function (item) {
+						aa: for (var i = 0; i < that.formAttr.length; i++) {
+							var groupArr = that.formAttr[i].data;
+							for (var j = 0; j < groupArr.length; j++) {
+								if (groupArr[j].id == item) {
+									groupArr[j].pickerOptions = Object.assign({}, groupArr[j].pickerOptions, {
+										disabledDate: function (time) {
+											var day=new Date(that.formData[obj.id]).getTime()-1000*24*60*60;//获取天数
+											if (groupArr[j].ifLessToday == "1") {
+												if (!that.formData[obj.id]) {
+													return time.getTime() > new Date().getTime()
+												}
+									    		return time.getTime() <new Date(day).getTime()||time.getTime()>new Date().getTime();
+									    		
+												//return time.getTime() < new Date(that.formData[obj.id]).getTime() || time.getTime() > new Date().getTime();
+											}
+											return time.getTime() <new Date(day).getTime();
+											//return time.getTime() < new Date(that.formData[obj.id]).getTime();
+										}
+									});
+									break aa;
+								}
+							}
+						}
+					});
+				}
+				if (obj.maxDateScope && obj.maxDateScope.length > 0) {
+					obj.maxDateScope.forEach(function (item) {
+						aa: for (var i = 0; i < that.formAttr.length; i++) {
+							var groupArr = that.formAttr[i].data;
+							for (var j = 0; j < groupArr.length; j++) {
+								if (groupArr[j].id == item) {
+									groupArr[j].pickerOptions = Object.assign({}, groupArr[j].pickerOptions, {
+										disabledDate: function (time) {
+											if (groupArr[j].ifLessToday == "1") {
+												if (!that.formData[obj.id]) {
+													return time.getTime() > new Date().getTime()
+												}
+												return time.getTime() > new Date(that.formData[obj.id]).getTime() || time.getTime() > new Date().getTime();
+											}
+											return time.getTime() > new Date(that.formData[obj.id]).getTime();
+										}
+									});
+									break aa;
+								}
+							}
+						}
+					});
+				}
 			}
 		},
 	});

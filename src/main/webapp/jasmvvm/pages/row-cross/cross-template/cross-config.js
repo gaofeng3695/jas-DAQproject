@@ -792,16 +792,29 @@ var crossConfig = {
     commencementDate: {
       type: 'date',
       name: '开工日期',
-      isRequired: true
+      isRequired: true,
+      lessDateScope:['completionDate'],//第一个数组表示 小于的日期，第二个数组表示大于的日期。默认是小于今天 today 默认为今天
+      maxDateScope:[],
+      isLessToday:true,//默认是小于今天的
+	  pickerOptions:{//用于设置默认是小于今天的
+	    	disabledDate:function(time){
+				return time.getTime()>new Date().getTime()
+			}
+	    }
     },
     completionDate: {
       type: 'date',
       name: '完工日期',
-      isRequired: true
+      isRequired: true,
+      lessDateScope:[],//表示小于的日期
+      maxDateScope:['commencementDate'],  //表示大于的日期
+      isLessToday:false,//默认是小于今天的
+      pickerOptions:{}
     },
     constructUnit: {
       type: 'select',
       name: '施工单位',
+      disabled:true,
       isRequired: true
     },
     constructUnitName: {

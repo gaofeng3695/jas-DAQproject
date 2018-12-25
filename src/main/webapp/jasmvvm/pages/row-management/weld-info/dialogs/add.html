@@ -494,9 +494,13 @@
 			var param = window.jasTools.base.getParamsInUrl(location.href);
 			var userBo = JSON.parse(localStorage.getItem("user"));
 			that.formData.constructUnit = userBo.unitId;
-			that.domain.constructUnits.push({
+			/* that.domain.constructUnits.push({
 				key: userBo.unitId,
-				value: userBo.unitName
+				value: userBo.unitName,
+
+			}); */
+			this.requestDomainFromBizTable('/daq/privilege/getCurrentUnitId.do', {}, function (arr) {
+				that.domain.constructUnits = arr;
 			});
 			this.requestDomainFromBizTable('/daq/privilege/getProjectList.do', {}, function (arr) {
 				that.domain.project = arr;
@@ -844,7 +848,7 @@
 				});
 				this.cancel(1);
 			},
-			 changeStart (){
+			 changeStart:function (){//collectionDate 采集日期    pickerOptionsStartbangd
 			    this.pickerOptionsStart = Object.assign({},this.pickerOptionsStart,{
 			     disabledDate: (time) => {
 			    	 if(!this.formData.collectionDate){
@@ -854,13 +858,15 @@
 			     }
 			    })
 			   },
-			   changeEnd (){
-			    this.pickerOptionsEnd = Object.assign({},this.pickerOptionsEnd,{
+			   changeEnd:function (){
+					 var that=this;
+			    that.pickerOptionsEnd = Object.assign({},that.pickerOptionsEnd,{
 			     disabledDate: (time) => {
-			    	 if(!this.formData.constructDate){
+			    	 if(!that.formData.constructDate){
 			    		 return time.getTime()>new Date().getTime()
 			    	 }
-			      return time.getTime() <new Date(this.formData.constructDate).getTime()||time.getTime()>new Date().getTime();
+			    		var day=new Date(that.formData.constructDate).getTime()-1000*24*60*60;//获取天数
+			    		return time.getTime() <new Date(day).getTime()||time.getTime()>new Date().getTime();
 			      }
 			    })
 			   },
@@ -870,31 +876,36 @@
 				jasTools.ajax.post(url, {
 					oid: that.oid
 				}, function (data) {
+
 					/* for (var key in that.formData) {
 						that.formData[key] = data.rows[0][key];
 					} */
 					that.formData = data.rows[0];
-					that.domain.frontPipeOids.push({
-						value: that.formData.frontPipeCode,
-						key: that.formData.frontPipeOid
-					});
-					that.domain.backPipeOids.push({
-						value: that.formData.backPipeCode,
-						key: that.formData.backPipeOid
-					});
-					if (that.formData.coverOid.length == 0) {
+					if(that.formData.frontPipeType=='pipe_type_code_001'||that.formData.frontPipeType=='pipe_type_code_008'||that.formData.frontPipeType=='pipe_type_code_002'){//直钢管、冷弯、热煨弯管
+						that.domain.frontPipeOids.push({
+							value: that.formData.frontPipeCode,
+							key: that.formData.frontPipeOid
+						});
+					}
+					if(that.formData.backPipeType=='pipe_type_code_0011'||that.formData.backPipeType=='pipe_type_code_0021'||that.formData.backPipeType=='pipe_type_code_0081'){//直钢管、
+						that.domain.backPipeOids.push({
+							value: that.formData.backPipeCode,
+							key: that.formData.backPipeOid
+						});
+					}
+					if (!that.formData.coverOid||that.formData.coverOid.length == 0) {
 						that.formData.coverOid = [];
 					} else {
 						that.formData.coverOid = that.formData.coverOid.split(",");
 					}
 
-					if (that.formData.renderOid.length == 0) {
+					if (!that.formData.renderOid||that.formData.renderOid.length == 0) {
 						that.formData.renderOid = [];
 					} else {
 						that.formData.renderOid = that.formData.renderOid.split(",");
 					}
 
-					if (that.formData.padderOid.length == 0) {
+					if (!that.formData.padderOid||that.formData.padderOid.length == 0) {
 						that.formData.padderOid = [];
 					} else {
 						that.formData.padderOid = that.formData.padderOid.split(",");

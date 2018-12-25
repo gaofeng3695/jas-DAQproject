@@ -65,7 +65,7 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="施工单位" prop="constructUnit" required>
-								<el-select v-model="formData.constructUnit" clearable placeholder="请选择施工单位" size="small">
+								<el-select v-model="formData.constructUnit" clearable disabled placeholder="请选择施工单位" size="small">
 									<el-option v-for="item in domain.constructUnitArr" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
@@ -144,7 +144,7 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="检查日期" prop="checkedDate">
-								<el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="请输入检查日期" v-model="formData.checkedDate" size="small" style="width: 100%;">
+								<el-date-picker value-format="yyyy-MM-dd" :picker-options="disabledToday" type="date" placeholder="请输入检查日期" v-model="formData.checkedDate" size="small" style="width: 100%;">
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
@@ -263,7 +263,12 @@
 					"checkedBy": "",
 					"checkedDate": "",
 					"remarks": ""
-				}
+				},
+				disabledToday: {
+					disabledDate:function(time){
+						return time.getTime()>new Date().getTime()
+					}
+				},
 			}
 		},
 
@@ -408,11 +413,12 @@
 			},
 			getConstructUnit: function () {
 				var that = this;
+				var userBo = JSON.parse(localStorage.getItem("user"));
+				that.formData.constructUnit = userBo.unitId;
 				this.requestDomainFromBizTable(
 					'/daq/privilege/getCurrentUnitId.do', {},
 					function (arr) {
 						that.domain.constructUnitArr = arr;
-						that.formData.constructUnit = arr[0].key;
 					}
 				);
 

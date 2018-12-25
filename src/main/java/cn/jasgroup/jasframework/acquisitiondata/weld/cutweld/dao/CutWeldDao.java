@@ -26,7 +26,7 @@ public class CutWeldDao {
 	  * <p>创建日期:2018年10月24日 上午9:45:14。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public String getOidByCode(String cellValue, String tableName, String code) {
+	public String getOidByUniqueField(String cellValue, String tableName, String code) {
 		String sql = "select oid from "+tableName+" where active=1 and "+code+"='"+cellValue+"'";
 		List<Map<String, Object>> list = baseJdbcDao.queryForList(sql, null);
 		if (list.size() == 0) {

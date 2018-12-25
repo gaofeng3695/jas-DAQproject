@@ -134,11 +134,6 @@ public class DaqDetectionFaUltrasonic extends CommonJdbcEntity {
 	private Date collectionDate; 
 
 	/**
-	 * 审核状态 
-	 */
-	private Integer approveStatus = 0; 
-
-	/**
 	 * 备注 
 	 */
 	private String remarks; 
@@ -294,15 +289,6 @@ public class DaqDetectionFaUltrasonic extends CommonJdbcEntity {
 	public void setCollectionDate(Date collectionDate) {
 		this.collectionDate = collectionDate; 
 		super.setField("collectionDate");
-	}
-
-	public Integer getApproveStatus() {
-		return approveStatus; 
-	}
-
-	public void setApproveStatus(Integer approveStatus) {
-		this.approveStatus = approveStatus; 
-		super.setField("approveStatus");
 	}
 
 	public String getRemarks() {

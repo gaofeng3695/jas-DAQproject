@@ -5,6 +5,7 @@ var vm = new Vue({
   data: function () {
     return {
       uniqueFileds: [],
+      allcheck: false, //表示全选
       uniqueFieldOption: [],
       linkedFieldOption: [],
       mirrorConfig: {
@@ -108,7 +109,8 @@ var vm = new Vue({
       return !!type;
     },
     isText: function (type) {
-      return type === 'UT_01' && this.isUi(type);
+      var inputType=['UT_01','UT_13'];
+      return inputType.indexOf(type) !==-1 && this.isUi(type);
     },
     isSql: function (row) {
       var type = row.uiType;
@@ -135,6 +137,13 @@ var vm = new Vue({
     },
     isSqlSelect: function (type) {
       return type === 'UT_11' && this.isUi(type);
+    },
+    isSwitch:function(row){
+    	var type=row.uiType;
+    	return (type==='UT_03'||type==='UT_04')&&this.isUi(type);
+    },
+    isDate:function(type){
+    	return (type==='UT_03'||type==='UT_04')&&this.isUi(type);
     },
     isUrl: function (row) {
       var type = row.uiType;
@@ -402,15 +411,35 @@ var vm = new Vue({
             updateable: obj.updateable,
             min: obj.min,
             max: obj.max,
+            ifLessToday: obj.ifLessToday == "1" ? true : false,
+            lessDateScope: obj.lessDateScope || null,
+            lessDateScopeArr: obj.lessDateScope ? obj.lessDateScope.split(",") : [],
+            maxDateScope: obj.maxDateScope || null,
+            maxDateScopeArr: obj.maxDateScope ? obj.maxDateScope.split(",") : [],
           };
         });
       });
 
     },
     changeFieldIfAdd: function (row) {
+      var that = this;
       row.ifDetails = row.ifSave;
       row.ifUpdate = row.ifSave;
       row.ifList = row.ifSave;
+      var isexist = 0;
+      for (var i = 0; i < that.privateTable.length; i++) {
+        if (that.privateTable[i].fieldSource == "table" && that.privateTable[i].ifSave == "0") {
+          isexist++;
+        }
+        if (isexist > 0) {
+          break;
+        }
+      }
+      if (isexist > 0) {
+        that.allcheck = false;
+      } else {
+        that.allcheck = true;
+      }
     },
     goToUiTable: function () {
 
@@ -650,6 +679,15 @@ var vm = new Vue({
       if (isSort) {
         var funFunctionFieldsForms = this.privateTable.map(function (item) {
           item.childField = item.childFieldArr.join(',');
+          if (item.lessDateScopeArr) {
+            item.lessDateScope = item.lessDateScopeArr.join(',');
+          }
+          if (item.maxDateScopeArr) {
+            item.maxDateScope = item.maxDateScopeArr.join(',');
+          }
+          if (item.uiType == 'UT_03') {
+            item.ifLessToday = item.ifLessToday ? "1" : "0";
+          }
           return item;
         });
         jasTools.ajax.post(jasTools.base.rootPath + '/functionFields/save.do', {
@@ -734,6 +772,39 @@ var vm = new Vue({
         uniqueField: "",
         uniqueFieldMessage: "",
       });
+    },
+    renderHeader: function (h, data) {
+      var that = this;
+      return h("div", [ h("el-checkbox", {
+        props: {
+          value: that.allcheck //此处如何让数据双向绑定
+        },
+        on: {
+          change: function (val) {
+            that.allcheck = val;
+            if (val) {
+              that.privateTable.forEach(function (item) {
+                if (item.fieldSource == "table") {
+                  item.ifSave = "1";
+                  item.ifDetails = item.ifSave;
+                  item.ifUpdate = item.ifSave;
+                  item.ifList = item.ifSave;
+                }
+              });
+            } else {
+              that.privateTable.forEach(function (item) {
+                if (item.fieldSource == "table") {
+                  item.ifSave = "0";
+                  item.ifDetails = item.ifSave;
+                  item.ifUpdate = item.ifSave;
+                  item.ifList = item.ifSave;
+                }
+              });
+            }
+          }
+        },
+
+      }, "新增"),   ])
     }
   },
 });

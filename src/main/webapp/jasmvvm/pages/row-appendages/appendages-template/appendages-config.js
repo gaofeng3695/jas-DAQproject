@@ -729,7 +729,8 @@ var crossConfig = {
     constructUnit: {
       type: 'select',
       name: '施工单位',
-      isRequired: true
+      isRequired: true,
+      disabled:true
     },
     constructUnitName: {
       type: 'input',
@@ -1185,10 +1186,12 @@ var crossConfig = {
       name: '施工机组',
       requestParams: {
         types: 'work_unit_type_code_014,work_unit_type_code_015'
-      }
+      },
+      isRequired: true
     }, //: "4a62dc52-5663-499a-9868-50b86a994c97",
     "workUnitName": {
-      name: '施工机组'
+      name: '施工机组',
+      isRequired: true
     }, //: "机组A",
 
     // 666666

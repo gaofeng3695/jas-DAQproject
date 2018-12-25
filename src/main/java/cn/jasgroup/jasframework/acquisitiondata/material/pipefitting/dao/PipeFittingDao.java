@@ -28,22 +28,22 @@ public class PipeFittingDao{
 		String sql= null;
 		switch (pipeTypeCode) {
 		case "pipe_type_code_001"://前直钢管
-			sql = "select oid as key,pipe_code as value from daq_material_pipe t where active=1 and front_is_use=0 and is_cold_bend=0 and is_cut=0 and project_oid='"+projectOid+"'";
+			sql = "select oid as key,pipe_code as value from daq_material_pipe t where active=1 and front_is_use=0 and is_cold_bend=0 and is_cut=0 and is_check=1 and project_oid='"+projectOid+"'";
 			break;
 		case "pipe_type_code_0011"://后直钢管
-			sql = "select oid as key,pipe_code as value from daq_material_pipe t where active=1 and back_is_use=0 and is_cold_bend=0 and is_cut=0 and project_oid='"+projectOid+"'";
+			sql = "select oid as key,pipe_code as value from daq_material_pipe t where active=1 and back_is_use=0 and is_cold_bend=0 and is_cut=0 and is_check=1 and project_oid='"+projectOid+"'";
 			break;
 		case "pipe_type_code_002"://前热煨弯管
-			sql = "select oid as key,hot_bends_code as value from daq_material_hot_bends  t where active=1 and front_is_use=0 and project_oid='"+projectOid+"'";
+			sql = "select oid as key,hot_bends_code as value from daq_material_hot_bends  t where active=1 and front_is_use=0 and is_check=1 and project_oid='"+projectOid+"'";
 			break;
 		case "pipe_type_code_0021"://后热煨弯管
-			sql = "select oid as key,hot_bends_code as value from daq_material_hot_bends  t where active=1 and back_is_use=0 and project_oid='"+projectOid+"'";
+			sql = "select oid as key,hot_bends_code as value from daq_material_hot_bends  t where active=1 and back_is_use=0 and is_check=1 and project_oid='"+projectOid+"'";
 			break;
 		case "pipe_type_code_003"://三通
 			sql = "select oid as key,tee_code as value from daq_material_tee  t where active=1 and project_oid='"+projectOid+"'";
 			break;
 		case "pipe_type_code_004"://阀门
-			sql = "select t.oid as key,t.valve_name as value from daq_material_valve t where t.project_oid='"+projectOid+"'";
+			sql = "select t.oid as key,t.valve_name as value from daq_material_valve t where active=1 and t.project_oid='"+projectOid+"'";
 			break;
 		case "pipe_type_code_005"://绝缘接头
 			sql = "select oid as key,manufacturer_code as value from daq_material_insulated_joint  t where active=1 and project_oid='"+projectOid+"'";
@@ -55,10 +55,10 @@ public class PipeFittingDao{
 			sql = "select oid as key,closure_code as value from daq_material_closure  t where active=1 and project_oid='"+projectOid+"'";
 			break;
 		case "pipe_type_code_008"://前冷弯管
-			sql = "select oid as key,pipe_cold_bending_code as value from daq_material_pipe_cold_bending  t where active=1 and front_is_use=0 and pipe_segment_or_cross_oid='"+pipeSegmentOrCrossOid+"' and approve_status=2";
+			sql = "select oid as key,pipe_cold_bending_code as value from daq_material_pipe_cold_bending  t where active=1 and front_is_use=0 and is_check=1 and pipe_segment_or_cross_oid='"+pipeSegmentOrCrossOid+"' and approve_status=2";
 			break;
 		case "pipe_type_code_0081"://后冷弯管
-			sql = "select oid as key,pipe_cold_bending_code as value from daq_material_pipe_cold_bending  t where active=1 and back_is_use=0 and pipe_segment_or_cross_oid='"+pipeSegmentOrCrossOid+"' and approve_status=2";
+			sql = "select oid as key,pipe_cold_bending_code as value from daq_material_pipe_cold_bending  t where active=1 and back_is_use=0 and is_check=1 and pipe_segment_or_cross_oid='"+pipeSegmentOrCrossOid+"' and approve_status=2";
 			break;
 		}
 		if(StringUtils.isBlank(sql)){
@@ -142,7 +142,7 @@ public class PipeFittingDao{
 			sql = "update daq_material_closure set tenders_oid='"+tendersOid+"',pipeline_oid='"+pipelineOid+"',is_use="+isUse+" where oid='"+pipeOid+"'";
 			break;
 		case "pipe_type_code_0081"://冷弯管
-			sql = "update daq_material_pipe_cold_bending set back_is_use="+isUse+" where oid='"+pipeOid+"'";
+			sql = "update daq_material_pipe_cold_bending set back_is_use="+isUse+",is_use="+isUse+" where oid='"+pipeOid+"'";
 			break;
 		}
 		if(StringUtils.isBlank(sql)){
