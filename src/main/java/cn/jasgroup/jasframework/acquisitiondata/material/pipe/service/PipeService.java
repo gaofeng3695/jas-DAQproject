@@ -60,8 +60,8 @@ public class PipeService {
 	  * <p>创建日期:2018年9月17日 上午10:18:46。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public List<Map<String, Object>> getMaterialPipeList(String projectOid) {
-		return pipeDao.getMaterialPipeList(projectOid);
+	public List<Map<String, Object>> getMaterialPipeList(String projectOid,String type) {
+		return pipeDao.getMaterialPipeList(projectOid,type);
 	}
 	/***
 	  * <p>功能描述：根据项目获取所有的钢管列表。</p>
@@ -84,8 +84,8 @@ public class PipeService {
 	  * <p>创建日期:2018年9月17日 上午10:19:09。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public List<Map<String, Object>> getMaterialHotBendsList(String projectOid) {
-		return pipeDao.getMaterialHotBendsList(projectOid);
+	public List<Map<String, Object>> getMaterialHotBendsList(String projectOid,String type) {
+		return pipeDao.getMaterialHotBendsList(projectOid,type);
 	}
 	/***
 	  * <p>功能描述：根据项目获取所有的热煨弯管列表。</p>
