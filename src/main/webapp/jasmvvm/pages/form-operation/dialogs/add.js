@@ -411,6 +411,7 @@ var vm = new Vue({
             updateable: obj.updateable,
             min: obj.min,
             max: obj.max,
+            precision:obj.precision||0,
             ifLessToday: obj.ifLessToday == "1" ? true : false,
             lessDateScope: obj.lessDateScope || null,
             lessDateScopeArr: obj.lessDateScope ? obj.lessDateScope.split(",") : [],
