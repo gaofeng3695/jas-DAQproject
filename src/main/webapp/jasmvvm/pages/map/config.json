@@ -295,14 +295,6 @@
             "labelStyle": "",
             "labelField": ""
           },
-           "listener":{
-          "onHover":{
-	          "responseType":"tip",
-	          "fieldNames":"weld_code",
-	          "template":"焊口编号：${weld_code}",
-	          "callback":""
-	          }
-          },
           "style": "pipesegment",
           "type": "Vector",
           "source": "Vector",
@@ -310,8 +302,7 @@
           "visible": false,
           "loader": "jas",
           "format": "GeoJSON",
-          "strategy": "all",
-           "outFields":"weld_code,project_oid"
+          "strategy": "all"
         }]
       }, {
         "id": "layerSet003",

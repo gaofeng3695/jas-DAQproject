@@ -124,7 +124,7 @@
 										</template>
 									</el-checkbox-group>
 									<el-input-number v-if="item.type=='UT_14'" :size="item.size" v-model="formData[item.id]" controls-position="right" :min="item.min"
-									  :max="item.max"></el-input-number>
+									  :max="item.max" :precision="item.precision"></el-input-number>
 								</el-form-item>
 							</el-col>
 						</template>
@@ -214,7 +214,7 @@
 			jasTools.ajax.get(url, {
 				functionCode: that.menuCode
 			}, function (data) {
-				if (data.data.functionFieldsBoList&&data.data.functionFieldsBoList.length > 0) {
+				if (data.data.functionFieldsBoList && data.data.functionFieldsBoList.length > 0) {
 					if (that.isAddPage) {
 						data.data.functionFieldsBoList.forEach(function (item) {
 							if (item.uiType) {
@@ -224,7 +224,6 @@
 					} else {
 						data.data.functionFieldsBoList.forEach(function (item) {
 							that.$set(that.formData, item.fieldName, '');
-
 						});
 					}
 				}
@@ -337,6 +336,7 @@
 								childField: item.childField,
 								min: item.min,
 								max: item.max || Infinity,
+								precision:item.precision||0,
 								index: item.rowIndex,
 								ifLessToday: item.ifLessToday, //读取配置接口，暂时写死
 								lessDateScope: item.lessDateScope && item.lessDateScope.split(","), //小于日期
@@ -449,6 +449,7 @@
 								index: item.rowIndex,
 								min: item.min,
 								max: item.max || Infinity,
+								precision:item.precision||0,
 								disabled: false,
 								ifLessToday: item.ifLessToday, //读取配置接口，暂时写死
 								lessDateScope: item.lessDateScope && item.lessDateScope.split(","), //小于日期
@@ -550,7 +551,7 @@
 				//该接口需要入参主键，因为主键不确定，所以全部传入表单对象
 				jasTools.ajax.post(url, this.formDetail, function (data) {
 					for (var key in that.formData) {
-						if (data.data[key]) {
+						if (data.data[key]||data.data[key]==0) {
 							that.formData[key] = data.data[key];
 						}
 					}

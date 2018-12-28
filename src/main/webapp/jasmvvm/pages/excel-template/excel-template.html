@@ -159,11 +159,12 @@
 				var that = this;
 				that.loading = true;
 				var url = jasTools.base.rootPath + "/jasframework/excelTemplate/getPage.do";
+				//console.log(this.currentPage);
 				jasTools.ajax.post(url, {
 					excelTemplateName: that.topSearch.excelTemplateName,
 					excelTemplateCode: that.topSearch.excelTemplateCode,
-					pageNo: this.currentPage,
-					pageSize: this.pageSize,
+					pageNo: that.currentPage,
+					pageSize: that.pageSize,
 				}, function (data) {
 					setTimeout(function () {
 						that.loading = false;
