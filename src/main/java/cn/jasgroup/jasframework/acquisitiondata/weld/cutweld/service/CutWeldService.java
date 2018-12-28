@@ -968,7 +968,7 @@ public class CutWeldService {
 			cutWeld.setPipeDiameter(pipeDiameter);
 			double wallThickness = 0;
 			if (pipeInfo.get(0).get("wall_thickness") != null) {
-				pipeDiameter = Double.parseDouble(pipeInfo.get(0).get("wall_thickness").toString());
+				wallThickness = Double.parseDouble(pipeInfo.get(0).get("wall_thickness").toString());
 			}
 			cutWeld.setWallThickness(wallThickness);
 			int segmentsNum = (int) row.getCell(4).getNumericCellValue();
