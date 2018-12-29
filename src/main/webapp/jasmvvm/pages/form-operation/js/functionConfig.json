@@ -14,6 +14,7 @@
     "MODIFY_USER_NAME" : "current_user_name",
     "MODIFY_TIME" : "current_datetime",
     "MODIFY_DATETIME" : "current_datetime",
-    "AVTIVE" : "active"
+    "AVTIVE" : "active",
+    "active":"active"
   }
 }

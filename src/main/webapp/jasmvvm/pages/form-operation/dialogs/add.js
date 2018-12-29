@@ -366,8 +366,6 @@ var vm = new Vue({
               type: 'error'
             });
           });
-
-
         } else {
           return false;
         }
@@ -380,7 +378,22 @@ var vm = new Vue({
         functionId: fId
       }, function (data) {
         that.isLoadingFieldInfo = false;
-        that.privateTable = data.data.map(function (obj) {
+        var result=data.data.filter(function(obj){
+        	if(!that.fieldParams[obj.fieldName]){
+        		return obj;
+        	}
+        });
+        that.privateTable = result.map(function (obj) {
+         var uiType="";
+         if(obj.fieldType=="varchar"){
+        	 uiType="UT_01";
+         }
+         if(obj.fieldType=="numeric"||obj.fieldType=="int2"){
+        	 uiType="UT_14";
+         }
+         if(obj.fieldType=="timestamp"){
+        	 uiType="UT_02";
+         }
           return {
             functionId: fId,
             fieldName: obj.fieldName,
@@ -393,11 +406,11 @@ var vm = new Vue({
             ifDetails: obj.ifDetails || "0",
             fieldLength: obj.fieldLength,
             fieldType: obj.fieldType,
-            uiType: obj.uiType || "",
+            uiType: obj.uiType || uiType,
             domain: obj.domain || null,
-            regularExpression: obj.regularExpression || null,
+            regularExpression: obj.regularExpression || '0',
             groupName: obj.groupName || null,
-            placeholder: obj.placeholder || "",
+            placeholder: obj.placeholder || "请输入" + obj.fieldNameCn,
             childField: obj.childField || null,
             childFieldArr: obj.childField ? obj.childField.split(',') : [],
             requestPath: obj.requestPath || null,
@@ -419,6 +432,7 @@ var vm = new Vue({
             maxDateScopeArr: obj.maxDateScope ? obj.maxDateScope.split(",") : [],
           };
         });
+        
       });
 
     },
