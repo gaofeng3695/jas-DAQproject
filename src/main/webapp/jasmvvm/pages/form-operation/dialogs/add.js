@@ -380,6 +380,7 @@ var vm = new Vue({
         that.isLoadingFieldInfo = false;
         var result=data.data.filter(function(obj){
         	if(!that.fieldParams[obj.fieldName]){
+        		console.log(obj.fieldName);
         		return obj;
         	}
         });
@@ -402,13 +403,13 @@ var vm = new Vue({
             ifSave: obj.ifSave || "0",
             ifUpdate: obj.ifUpdate || "0",
             ifQuery: obj.ifQuery || "0",
-            ifList: obj.ifList || "0",
-            ifDetails: obj.ifDetails || "0",
+            ifList: obj.ifList || (obj.fieldSource=="view"?"1":"0"),
+            ifDetails: obj.ifDetails || (obj.fieldSource=="view"?"1":"0"),
             fieldLength: obj.fieldLength,
             fieldType: obj.fieldType,
             uiType: obj.uiType || uiType,
             domain: obj.domain || null,
-            regularExpression: obj.regularExpression || '0',
+            regularExpression: obj.regularExpression || "01",
             groupName: obj.groupName || null,
             placeholder: obj.placeholder || "请输入" + obj.fieldNameCn,
             childField: obj.childField || null,
@@ -432,7 +433,7 @@ var vm = new Vue({
             maxDateScopeArr: obj.maxDateScope ? obj.maxDateScope.split(",") : [],
           };
         });
-        
+
       });
 
     },
