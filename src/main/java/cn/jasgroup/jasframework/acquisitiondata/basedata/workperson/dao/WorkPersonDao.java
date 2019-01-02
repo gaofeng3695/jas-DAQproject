@@ -53,4 +53,19 @@ public class WorkPersonDao {
 		String sql ="select oid as key, personnel_name as value,work_unit_oid,personnel_type from daq_work_personnel where active=1";
 		return baseJdbcDao.queryForList(sql, null);
 	}
+	
+	/**
+	 * <p>功能描述：查询机组下的焊工列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param workUnitOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月2日 上午11:38:39。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getWeldersList(String workUnitOid) {
+		String sql ="select oid as key,personnel_name as value from daq_work_personnel "
+				+ "where active=1 and personnel_type in ('personnel_type_code_006','personnel_type_code_005') and work_unit_oid = '"+workUnitOid+"'";
+		return baseJdbcDao.queryForList(sql, null);
+	}
 }
