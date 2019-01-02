@@ -273,7 +273,7 @@
 								<el-table-column label="输入限制" align="center" min-width="220px">
 									<template slot-scope="scope">
 										<el-select size="small" v-model="scope.row.regularExpression" placeholder="请选择输入限制" v-show="scope.row.uiType === 'UT_01'">
-											<el-option label="不限" value="0"></el-option>
+											<el-option label="不限" value="01"></el-option>
 											<el-option v-for="option in regexpOption" :label="option.name" :value="option.id"></el-option>
 										</el-select>
 										<div v-show="isNumber(scope.row)">
