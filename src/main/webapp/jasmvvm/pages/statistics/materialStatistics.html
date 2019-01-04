@@ -307,7 +307,8 @@
       requestMaterialByDay: function (projectOids, date) {
         var that = this;
         that.materialByDay.projectOids = projectOids;
-        that.materialByDay.date = new Date(date).getFullYear() + "-" + (new Date(date).getMonth() + 1);
+        var month=(new Date(date).getMonth() + 1)>9?(new Date(date).getMonth() + 1):"0"+(new Date(date).getMonth() + 1)
+        that.materialByDay.date = new Date(date).getFullYear() + "-" + month;
         var url = jasTools.base.rootPath + "/daq/materialStatistics/getDailyStatistics.do";
         jasTools.ajax.post(url, {
           projectOid: that.materialByDay.projectOids,
