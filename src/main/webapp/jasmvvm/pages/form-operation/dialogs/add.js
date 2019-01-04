@@ -380,7 +380,6 @@ var vm = new Vue({
         that.isLoadingFieldInfo = false;
         var result=data.data.filter(function(obj){
         	if(!that.fieldParams[obj.fieldName]){
-        		console.log(obj.fieldName);
         		return obj;
         	}
         });
