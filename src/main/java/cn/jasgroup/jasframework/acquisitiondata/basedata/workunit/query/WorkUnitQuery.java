@@ -59,6 +59,7 @@ public class WorkUnitQuery extends BaseJavaQuery{
 				if(StringUtils.isNotBlank(workUnitCode)){
 					sql +=" and t.work_unit_code like :workUnitCode";
 				}
+				sql +=  this.dataAuthoritySql;
 				sql +=" order by t.create_datetime desc";
 			}
 		return sql;
