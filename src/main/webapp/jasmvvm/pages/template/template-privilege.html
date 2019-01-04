@@ -277,6 +277,7 @@
 		},
 		created: function () {
 			var param = window.jasTools.base.getParamsInUrl(location.href);
+			console.log(param);
 			this.menuCode = param.menuCode;
 			this.isApprove = param.isApprove;
 			this.isScanner = param.isScanner;
