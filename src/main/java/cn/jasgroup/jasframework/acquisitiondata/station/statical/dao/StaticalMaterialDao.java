@@ -36,5 +36,19 @@ public class StaticalMaterialDao {
 		return baseJdbcDao.queryForList(sql, null);
 	}
 
+	/**
+	 * <p>功能描述：根据项目查询放空火炬物资列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月4日 下午4:26:00。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getMaterialFlareList(String projectOid) {
+		String sql = "select oid as key,manufacture_number as value from daq_s_material_flare where active=1 and project_oid='"+projectOid+"'";
+		return baseJdbcDao.queryForList(sql, null);
+	}
+
 
 }
