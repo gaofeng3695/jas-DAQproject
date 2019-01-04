@@ -80,15 +80,15 @@
 								<el-form-item :prop="item.id" :label="item.name" :rules="item.verify">
 									<!--<textarea  v-if="item.type=='UT_13'"  rows="2" v-model="formData[item.id]"></textarea>-->
 									<el-input v-if="item.type=='UT_13'" :autosize="{ minRows: 2}" type="textarea" :rows="2" v-model="formData[item.id]" :disabled="item.disabled"
-									  :maxLength="200" @input="instructionNum(item.id,index)">
+									  :maxLength="item.fieldLength" @change="changeRule($event,item)">
 									</el-input>
-									<p v-show="item.id=='remarks'" style="text-align:right;color:#999;">您还可以输入<span v-text="remarks"></span>字</p>
+									<p style="text-align:right;color:#999;">您还可以输入<span>{{item.fieldLength-formData[item.id].length}}</span>字</p>
 								</el-form-item>
 							</el-col>
 							<el-col v-else :xs="formConfig.xs" :sm="formConfig.sm" :md="formConfig.md" :lg="formConfig.lg" :xl="formConfig.xl" :class="{'height' : item.type=='UT_14'||item.type=='UT_05'||item.type=='UT_06'||item.type=='UT_07'||item.type=='UT_08' }">
 								<el-form-item :prop="item.id" :label="item.name" :rules="item.verify" initial="off">
 									<el-input v-if="item.type=='UT_01'" :placeholder="item.placeholder" v-model="formData[item.id]" :size="item.size" :disabled="item.disabled"
-									  clearable>
+									  clearable @change="changeRule($event,item)">
 									</el-input>
 									<el-select v-model="formData[item.id]" multiple v-if="isMultiSelect(item)" style="width:100%" :size="item.size" :disabled="item.disabled"
 									  clearable @visible-change="visibleChange($event,item)" @change="getChildOpts($event,item)">
@@ -123,8 +123,8 @@
 											<el-checkbox :label="checkboxItem.key">{{checkboxItem.value}}</el-checkbox>
 										</template>
 									</el-checkbox-group>
-									<el-input-number v-if="item.type=='UT_14'" :size="item.size" v-model="formData[item.id]" controls-position="right" :min="item.min"
-									  :max="item.max"></el-input-number>
+									<el-input-number v-if="item.type=='UT_14'" :size="item.size" v-model="formData[item.id]" :disabled="item.disabled" controls-position="right"
+									  :min="item.min" :max="item.max" :precision="item.precision"></el-input-number>
 								</el-form-item>
 							</el-col>
 						</template>
@@ -160,8 +160,9 @@
 			return {
 				isLoading: true,
 				rules: [],
-				remarks: 200,
-				formData: {}, // 表单字段详情对象
+				formData: {
+					remarks: "",
+				}, // 表单字段详情对象
 				formAttr: [], // 表单字段，分组排序，配置数组
 				// [{
 				// 	groupName: '分组名',
@@ -187,6 +188,7 @@
 				limitNum: 2,
 				autoUpload: false,
 				actionURL: jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token"),
+				fieldRuleObj: {}
 			}
 		},
 		mounted: function () {
@@ -199,22 +201,69 @@
 			this.isAddPage = JSON.stringify(this.formDetail) == '{}'; // 根据URL中传入的数据判断该页面是否处于编辑页面
 			this.requestConfig();
 			this.requestRule();
-			this.requestFieldConfigByOid();
+			this.requestFieldRule();
+			// this.requestFieldConfigByOid();
 		},
-		methods: {
-			instructionNum: function (id, index) {
-				var that = this;
-				if(id!='remarks'){
-					return;
-				}
-				if (that.formData[id]) {
-					if (that.formData[id].trim().length > 199) {
-						that.formData[id] = that.formData[id].trim().substring(0, 200); //截取正确 但是未改变
+		beforeCreate: function () {
+			var that = this;
+			var param = window.jasTools.base.getParamsInUrl(location.href);
+			if (param.menuCode) {
+				that.menuCode = param.menuCode;
+			}
+			delete param.menuCode;
+			that.isAddPage = JSON.stringify(this.formDetail) == '{}';
+			var url = jasTools.base.rootPath + "/functionConfiguration/getDetailByCode.do";
+			jasTools.ajax.get(url, {
+				functionCode: that.menuCode
+			}, function (data) {
+				that.isLoading = false;
+				that.ifAttachment = !!(data.data.ifAttachment == 1); //是否存在附件
+				var fieldsGrouped = that._formatFieldsByGroup(data.data.functionFieldsBoList);
+				if (data.data.functionFieldsBoList && data.data.functionFieldsBoList.length > 0) {
+					if (that.isAddPage) {
+						data.data.functionFieldsBoList.forEach(function (item) {
+							if (item.uiType) {
+								that.$set(that.formData, item.fieldName, '');
+							}
+						});
+						that.getAddField(fieldsGrouped);
+					} else {
+						data.data.functionFieldsBoList.forEach(function (item) {
+							that.$set(that.formData, item.fieldName, '');
+						});
+						that.requestDetailByObj(fieldsGrouped); //请求表单详情
 					}
 				}
-				var num = 200 - that.formData[id].trim().length;
-				that.remarks = num;
-			}, //剩余字数计算
+			});
+		},
+		watch: {
+
+		},
+		methods: {
+			requestFieldRule: function () {
+				var that = this;
+				$.ajax({
+					type: "get",
+					url: "../js/addSpecialField.json",
+					dataType: "json",
+					async: true,
+					success: function (data) {
+						if (data.special.length > 0) {
+							var s = 0;
+							for (var i = 0; i < data.special.length; i++) {
+								if (data.special[i].functionCode == that.menuCode) {
+									s++;
+									that.fieldRuleObj = data.special[i].fieldConfig;
+								}
+								if (s > 0) {
+									break;
+								}
+							}
+						}
+					}
+				});
+
+			},
 			requestConfig: function () {
 				var that = this;
 				$.ajax({
@@ -234,7 +283,6 @@
 			},
 			requestRule: function () { //显示请求规则，成功之后再去请求所有的
 				var that = this;
-
 				$.ajax({
 					type: "get",
 					url: "../../form-operation/js/regexp.json",
@@ -247,6 +295,7 @@
 					}
 				});
 			},
+
 			requestFieldConfigByOid: function () { // 获取各个字段的配置信息
 				var that = this;
 				var url = jasTools.base.rootPath + "/functionConfiguration/getDetailByCode.do";
@@ -308,24 +357,31 @@
 								options.push(obj);
 							});
 						}
-						if (item.ifSave == '1') { //
+						if (item.ifSave == '1') {
 							obj = {
 								id: item.fieldName,
 								name: item.fieldNameCn,
 								type: item.uiType,
 								size: "small",
-								placeholder: item.placeholder,
+								placeholder: item.placeholder||"请输入"+item.fieldNameCn,
 								options: options,
 								verify: [],
 								requestUrl: item.requestPath,
 								childField: item.childField,
-								min: item.min ,
+								min: item.min,
 								max: item.max || Infinity,
+								precision: item.precision || 0,
 								index: item.rowIndex,
 								ifLessToday: item.ifLessToday, //读取配置接口，暂时写死
 								lessDateScope: item.lessDateScope && item.lessDateScope.split(","), //小于日期
 								maxDateScope: item.maxDateScope && item.maxDateScope.split(","), //表示需要大于的日期
+								fieldLength: item.fieldLength || 200,
+								disabled:false,
+								fieldRule: that.fieldRuleObj && that.fieldRuleObj[item.fieldName]
 							};
+							if (that.fieldRuleObj && that.fieldRuleObj.frozenFile&&that.fieldRuleObj.frozenFile.indexOf(obj.id) > -1) {
+								obj.disabled = true;
+							}
 							if (item.ifRequired == '1') {
 								obj.verify.push({
 									required: true,
@@ -377,11 +433,11 @@
 							}
 							if (item.uiType == 'UT_14') {
 								// 如果是数字，增加默认值
-								if(!obj.min){
-									obj.min=-10000;
+								if (!obj.min) {
+									obj.min = -10000;
 									that.$set(that.formData, item.fieldName, 0);
-								}else{
-									that.$set(that.formData, item.fieldName,obj.min);
+								} else {
+									that.$set(that.formData, item.fieldName, obj.min);
 								}
 							}
 							groupAttr.push(obj);
@@ -406,7 +462,6 @@
 						if (item.ifPrimaryKey) {
 							that.pkArray.push(item.fieldName);
 						}
-						//	console.log(that.pkArray);
 						if (item.domainList) {
 							item.domainList.forEach(function (child) {
 								var obj = {};
@@ -424,7 +479,7 @@
 								name: item.fieldNameCn,
 								type: item.uiType,
 								size: "small",
-								placeholder: item.placeholder,
+								placeholder: item.placeholder||"请输入"+item.fieldNameCn,
 								options: options,
 								verify: [],
 								requestUrl: item.requestPath,
@@ -432,12 +487,15 @@
 								index: item.rowIndex,
 								min: item.min,
 								max: item.max || Infinity,
+								precision: item.precision || 0,
 								disabled: false,
 								ifLessToday: item.ifLessToday, //读取配置接口，暂时写死
 								lessDateScope: item.lessDateScope && item.lessDateScope.split(","), //小于日期
 								maxDateScope: item.maxDateScope && item.maxDateScope.split(","), //表示需要大于的日期
+								fieldLength: item.fieldLength || 200,
+								fieldRule: that.fieldRuleObj && that.fieldRuleObj[item.fieldName]
 							};
-
+                            
 							if (item.updateable == '1') {
 								obj.disabled = true;
 							}
@@ -474,8 +532,8 @@
 								} else {
 									obj.pickerOptions = {};
 								}
-							 that.initFieldChanged(obj);
-							
+								that.initFieldChanged(obj);
+
 							}
 							if (item.regularExpression == '4' && item.min && item.max) {
 								obj.verify.push({
@@ -491,15 +549,15 @@
 							}
 							if (item.uiType == 'UT_14') {
 								// 如果是数字，增加默认值
-								if(!that.formData[obj.id]){
-									if(obj.min){
-										that.$set(that.formData, item.fieldName, obj.min);	
-									}else{
-										obj.min=-10000;
+								if (!that.formData[obj.id]) {
+									if (obj.min) {
+										that.$set(that.formData, item.fieldName, obj.min);
+									} else {
+										obj.min = -10000;
 										that.$set(that.formData, item.fieldName, 0);
 									}
-								}else{
-									that.$set(that.formData, item.fieldName,that.formData[obj.id]);
+								} else {
+									that.$set(that.formData, item.fieldName, that.formData[obj.id]);
 								}
 							}
 							groupAttr.push(obj);
@@ -524,23 +582,17 @@
 				that.$nextTick(function () {
 					that.$refs.upload.requestFile(that.formData[that.pkArray[0]]); // 触发附件请求
 				});
-				
+
 			},
 			requestDetailByObj: function (fieldsGrouped) { //请求表单详情
 				var that = this;
 				var url = jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/get.do";
 				//该接口需要入参主键，因为主键不确定，所以全部传入表单对象
 				jasTools.ajax.post(url, this.formDetail, function (data) {
-					// data.data.collection_date=''
-					/* for (var key in data.data) {
-						if (data.data[key] == null) {
-							data.data[key] = '';
+					for (var key in that.formData) {
+						if (data.data[key] || data.data[key] == 0) {
+							that.formData[key] = data.data[key];
 						}
-					} */
-					that.formData = data.data;
-					//	console.log(that.formData);
-					if (that.formData.remarks) {
-						that.remarks = 200 - that.formData.remarks.length; //表示备注长度 此时不具备通用性 必须名称为 remarks
 					}
 					that.getEditField(fieldsGrouped);
 				});
@@ -621,8 +673,6 @@
 									value: that.formData[child.id],
 									isInit: isInit
 								});
-
-
 							}
 						});
 					});
@@ -650,6 +700,25 @@
 					var url = urls[index] || urls[0];
 					getAndSet(childField, url);
 				});
+				that.changeRule(oParam, oFieldConfig);
+			},
+			changeRule: function ($event, item) {
+				var that = this;
+				if (!item.fieldRule) {
+					return;
+				}
+				if (item.options.length > 0) {
+					for (var i = 0; i < item.options.length; i++) {
+						if (item.options[i].key == that.formData[item.id]) {
+							item.fieldRule.forEach(function (ruleItem) {
+								that.formData[ruleItem.source] = item.options[i][ruleItem.value] + ruleItem.custom;
+							});
+							break;
+						}
+					}
+					return;
+				}
+				that.formData[item.fieldRule.source] = that.formData[item.id] + item.fieldRule.custom;
 			},
 			visibleChange: function (falg, item) {
 				var that = this;
@@ -748,25 +817,25 @@
 				}
 				return arry;
 			},
-			initFieldChanged:function(obj){
+			initFieldChanged: function (obj) {
 				var that = this;
-				if(obj.lessDateScope && obj.lessDateScope.length > 0){
+				if (obj.lessDateScope && obj.lessDateScope.length > 0) {
 					obj.lessDateScope.forEach(function (item) {
-						if(that.formData[item]){//有值  表示需要小于的
-							 obj.pickerOptions=Object.assign({}, obj.pickerOptions, {
-								disabledDate:function(time){
-									return time.getTime()>new Date(that.formData[item]).getTime();
+						if (that.formData[item]) { //有值  表示需要小于的
+							obj.pickerOptions = Object.assign({}, obj.pickerOptions, {
+								disabledDate: function (time) {
+									return time.getTime() > new Date(that.formData[item]).getTime();
 								}
 							});
 						}
 					});
 				}
-				if(obj.maxDateScope && obj.maxDateScope.length > 0){
+				if (obj.maxDateScope && obj.maxDateScope.length > 0) {
 					obj.maxDateScope.forEach(function (item) {
-						if(that.formData[item]){//有值  表示需要小于的
-					obj.pickerOptions=Object.assign({}, obj.pickerOptions, {
-								disabledDate:function(time){
-									return time.getTime()<new Date(that.formData[item]).getTime();
+						if (that.formData[item]) { //有值  表示需要小于的
+							obj.pickerOptions = Object.assign({}, obj.pickerOptions, {
+								disabledDate: function (time) {
+									return time.getTime() < new Date(that.formData[item]).getTime();
 								}
 							});
 						}
@@ -774,7 +843,7 @@
 				}
 			},
 			fieldChanged: function (obj) { //formAttr配置数组
-				
+
 				var that = this;
 				if (obj.lessDateScope && obj.lessDateScope.length > 0) {
 					obj.lessDateScope.forEach(function (item) {
@@ -784,16 +853,16 @@
 								if (groupArr[j].id == item) {
 									groupArr[j].pickerOptions = Object.assign({}, groupArr[j].pickerOptions, {
 										disabledDate: function (time) {
-											var day=new Date(that.formData[obj.id]).getTime()-1000*24*60*60;//获取天数
+											var day = new Date(that.formData[obj.id]).getTime() - 1000 * 24 * 60 * 60; //获取天数
 											if (groupArr[j].ifLessToday == "1") {
 												if (!that.formData[obj.id]) {
 													return time.getTime() > new Date().getTime()
 												}
-									    		return time.getTime() <new Date(day).getTime()||time.getTime()>new Date().getTime();
-									    		
+												return time.getTime() < new Date(day).getTime() || time.getTime() > new Date().getTime();
+
 												//return time.getTime() < new Date(that.formData[obj.id]).getTime() || time.getTime() > new Date().getTime();
 											}
-											return time.getTime() <new Date(day).getTime();
+											return time.getTime() < new Date(day).getTime();
 											//return time.getTime() < new Date(that.formData[obj.id]).getTime();
 										}
 									});

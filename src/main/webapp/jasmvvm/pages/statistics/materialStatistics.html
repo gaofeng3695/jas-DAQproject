@@ -156,9 +156,7 @@
 <script src="./../../common/components/jas-components.js"></script>
 <script src="./../../common/js/jas-tools.js"></script>
 <script>
-  var color = ['#396fff', '#5eb6f9', '#c2e4fd', '#dde6ff', '#e5e5e5', '#e1e9ff', '#FF99CC', '#99CCFF', '##FF9900',
-    '#FF9900', '#CCFF66'
-  ];
+  var color = ['#386eff', '#5eb7fa', '#00cdcd', '#bdd9ff', '#767edd', '#ff95a9', '#fcc14a', '#0acf8a', '#ff669b'];
   var vm = new Vue({
     el: '#app',
     data: function () {
@@ -177,12 +175,22 @@
         proDate: {
           type: "year",
           placeholder: "请选择年",
-          format: "yyyy"
+          format: "yyyy",
+          pickerOptions: {
+            disabledDate: function (time) {
+              return time.getTime() > new Date().getTime()
+            }
+          }
         },
         tableDate: {
           type: "month",
           placeholder: "请选择年月",
-          format: "yyyy-MM"
+          format: "yyyy-MM",
+          pickerOptions: {
+            disabledDate: function (time) {
+              return time.getTime() > new Date().getTime()
+            }
+          }
         },
         materByMonthChart: "",
         materialByMonth: {
@@ -197,7 +205,12 @@
         materialDate: {
           type: "date",
           placeholder: "请选择日期",
-          format: "yyyy-MM-dd"
+          format: "yyyy-MM-dd",
+          pickerOptions: {
+            disabledDate: function (time) {
+              return time.getTime() > new Date().getTime()
+            }
+          }
         },
         materialByTendersChart: "",
         materialByTenders: {
@@ -205,9 +218,9 @@
           projectOid: ""
         },
         projectArray: [], //表示数组
-        bottom:'',
-        isThird:false,
-        isFour:false,
+        bottom: '',
+        isThird: false,
+        isFour: false,
       }
     },
     created: function () {
@@ -219,22 +232,22 @@
     },
     watch: {
       bottom: function () {
-         if(this.bottom>600){
-        	 this.isThird=true;
-         }
-         if(this.bottom>800){
-        	 this.isFour=true;
-         }
+        if (this.bottom > 600) {
+          this.isThird = true;
+        }
+        if (this.bottom > 800) {
+          this.isFour = true;
+        }
       },
-      isFour:function(){
-    	  if(this.isFour){
-    		 this.requestTable(this.searchTable.projectOid,this.searchTable.date ); 
-    	  }
+      isFour: function () {
+        if (this.isFour) {
+          this.requestTable(this.searchTable.projectOid, this.searchTable.date);
+        }
       },
-      isThird:function(){
-    	  if(this.isThird){
-     		 this.requestMaterialByTenders(this.materialByTenders.projectOid,this.materialByTenders.date); 
-     	  }  
+      isThird: function () {
+        if (this.isThird) {
+          this.requestMaterialByTenders(this.materialByTenders.projectOid, this.materialByTenders.date);
+        }
       }
     },
     mounted: function () {
@@ -260,8 +273,8 @@
         var that = this;
         that.searchTable.projectOid = projectOid;
         that.searchTable.date = date;
-        if(!that.isFour){
-        	return;
+        if (!that.isFour) {
+          return;
         }
         var url = jasTools.base.rootPath + "/daq/materialStatistics/getMaterialUseStatustics.do";
         jasTools.ajax.post(url, {
@@ -294,7 +307,8 @@
       requestMaterialByDay: function (projectOids, date) {
         var that = this;
         that.materialByDay.projectOids = projectOids;
-        that.materialByDay.date = new Date(date).getFullYear() + "-" + (new Date(date).getMonth() + 1);
+        var month=(new Date(date).getMonth() + 1)>9?(new Date(date).getMonth() + 1):"0"+(new Date(date).getMonth() + 1)
+        that.materialByDay.date = new Date(date).getFullYear() + "-" + month;
         var url = jasTools.base.rootPath + "/daq/materialStatistics/getDailyStatistics.do";
         jasTools.ajax.post(url, {
           projectOid: that.materialByDay.projectOids,
@@ -309,19 +323,24 @@
           }
           var x = [];
           var series = [];
-          for (var key in data.data) {
+          var result=data.data;
+      	//两个日期的比较，如果Key大于就截取
+          for (var key in result) {
             var z = [];
             if (x.length == 0) {
-              for (var item in data.data[key]) {
+              for (var item in result[key]) {
                 x.push(item);
-                z.push(data.data[key][item]);
+                z.push(result[key][item]);
               }
 
             } else {
-              for (var item in data.data[key]) {
-                z.push(data.data[key][item]);
+              for (var item in result[key]) {
+                z.push(result[key][item]);
               }
             }
+          	 if(new Date(that.materialByDay.date).getFullYear()==new Date().getFullYear()&&new Date(that.materialByDay.date).getMonth()==new Date().getMonth()){
+           	   z=z.slice(0,new Date().getDate());
+           	 }
             var type = key == "grand_total" ? "line" : "bar";
             var obj = {
               name: that.map[key],
@@ -341,8 +360,8 @@
         var that = this;
         that.materialByTenders.projectOid = projectOid;
         that.materialByTenders.date = date;
-        if(!that.isThird){
-        	return;
+        if (!that.isThird) {
+          return;
         }
         var url = jasTools.base.rootPath + "/daq/materialStatistics/getTendersStatistics.do";
         jasTools.ajax.post(url, {
@@ -364,6 +383,13 @@
         var that = this;
         if (!that.materByMonthChart) {
           that.materByMonthChart = echarts.init(document.getElementById('materialByMonth'));
+        }
+        //数据截取月份
+        if (that.materialByMonth.date == new Date().getFullYear()) {
+          var month = new Date().getMonth() + 1;
+          data.pipe = data.pipe.slice(0, month);
+          data.hot_pipe = data.hot_pipe.slice(0, month);
+          data.grand_total = data.grand_total.slice(0, month);
         }
         var option = {
           title: {
@@ -616,7 +642,7 @@
         that.materialByTendersChart.setOption(option, true);
       },
       bottomVal: function () {
-        var scrollY =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop       
+        var scrollY = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
         return scrollY
       }
     }

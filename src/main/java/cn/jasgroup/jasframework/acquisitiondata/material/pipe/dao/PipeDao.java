@@ -51,8 +51,13 @@ public class PipeDao {
 	  * <p>创建日期:2018年9月17日 上午10:17:23。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public List<Map<String,Object>> getMaterialPipeList(String projectOid){
-		String sql = "select oid as key,pipe_code as value,back_is_use,front_is_use,is_cold_bend,project_oid from daq_material_pipe where active=1 and is_cut=0 and is_cold_bend=0 and is_check=0";
+	public List<Map<String,Object>> getMaterialPipeList(String projectOid,String type){
+		String sql = null;
+		if(type.equals("0")){
+			sql = "select oid as key,pipe_code as value,back_is_use,front_is_use,is_cold_bend,project_oid from daq_material_pipe where active=1 and is_cut=0 and is_cold_bend=0";
+		}else{
+			sql = "select oid as key,pipe_code as value,back_is_use,front_is_use,is_cold_bend,project_oid from daq_material_pipe where active=1 and is_cut=0 and is_cold_bend=0 and is_check=0";
+		}
 		if(StringUtils.isNotBlank(projectOid)){
 			sql += " and project_oid='"+projectOid+"'";
 		}
@@ -85,8 +90,13 @@ public class PipeDao {
 	  * <p>创建日期:2018年9月17日 上午10:18:05。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public List<Map<String,Object>> getMaterialHotBendsList(String projectOid){
-		String sql = "select oid as key,hot_bends_code as value,back_is_use,front_is_use,project_oid from daq_material_hot_bends where active=1 and is_check=0";
+	public List<Map<String,Object>> getMaterialHotBendsList(String projectOid,String type){
+		String sql = null;
+		if(type.equals("0")){
+			sql = "select oid as key,hot_bends_code as value,back_is_use,front_is_use,project_oid from daq_material_hot_bends where active=1";
+		}else{
+			sql = "select oid as key,hot_bends_code as value,back_is_use,front_is_use,project_oid from daq_material_hot_bends where active=1 and is_check=0";
+		}
 		if(StringUtils.isNotBlank(projectOid)){
 			sql += " and project_oid='"+projectOid+"'";
 		}

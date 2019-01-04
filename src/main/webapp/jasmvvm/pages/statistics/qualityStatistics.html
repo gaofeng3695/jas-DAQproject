@@ -126,12 +126,7 @@
 <script src="./../../common/components/jas-components.js"></script>
 <script src="./../../common/js/jas-tools.js"></script>
 <script>
-  //  var color = ['#0175ee', '#d89446', '#373693', '#25ae4f', '#06b5c6', '#009e9a', '#ac266f', '#99CCFF', '##FF9900',
-  //   '#FF9900', '#CCFF66'
-  //  ];
-  var color = ['#396fff', '#5eb6f9', '#c2e4fd', '#dde6ff', '#e5e5e5', '#e1e9ff', '#FF99CC', '#99CCFF', '##FF9900',
-    '#FF9900', '#CCFF66'
-  ];
+  var color = ['#386eff', '#5eb7fa', '#00cdcd', '#bdd9ff', '#767edd', '#ff95a9', '#fcc14a', '#0acf8a', '#ff669b'];
   var vm = new Vue({
     el: '#app',
     data: function () {
@@ -139,7 +134,12 @@
         proDate: {
           type: "year",
           placeholder: "请选择年",
-          format: "yyyy"
+          format: "yyyy",
+          pickerOptions: {
+              disabledDate: function (time) {
+                return time.getTime() > new Date().getTime()
+              }
+            }
         },
         qualityByMonthChart: "",
         qualityByMonth: {
@@ -157,7 +157,12 @@
         proNatureDate: {
           type: "month",
           placeholder: "请选择年月",
-          format: "yyyy-MM"
+          format: "yyyy-MM",
+          pickerOptions: {
+              disabledDate: function (time) {
+                return time.getTime() > new Date().getTime()
+              }
+            }
         },
         projectByNature: {
           unitOids: [],
@@ -180,7 +185,12 @@
         weldByTendersDate: {
           type: "date",
           placeholder: "请选择日期",
-          format: "yyyy-MM-dd"
+          format: "yyyy-MM-dd",
+          pickerOptions: {
+              disabledDate: function (time) {
+                return time.getTime() > new Date().getTime()
+              }
+            }
         },
         weldByTendersChartL: "",
         weldByTendersChartR: "",
@@ -309,6 +319,12 @@
               type: 'error'
             });
             return;
+          }
+          //数据截取月份
+          if (that.qualityByMonth.date == new Date().getFullYear()) {
+            var month = new Date().getMonth() + 1;
+            data.data.qualifiedRate = data.data.qualifiedRate.slice(0, month);
+            data.data.weldCount = data.data.weldCount.slice(0, month);
           }
           that._renderQualityByMonth(data.data);
         });
@@ -531,6 +547,8 @@
             },
             {
               type: 'value',
+              max:100,
+              min:0,
               axisLabel: {
                 formatter: '{value} %'
               }
@@ -703,6 +721,8 @@
             },
             {
               type: 'value',
+              max:100,
+              min:0,
               axisLabel: {
                 formatter: '{value} %'
               }
@@ -813,6 +833,8 @@
                   },
                   {
                     type: 'value',
+                    max:100,
+                    min:0,
                     axisLabel: {
                       formatter: '{value} %'
                     }

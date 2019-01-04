@@ -85,7 +85,11 @@ public class PipeController {
 		ListResult<Map<String, Object>> result= null;
 		try{
 			String projectOid = param.get("projectOid");
-			List<Map<String,Object>> pipeRows = this.pipeService.getMaterialPipeList(projectOid);
+			String type = param.get("type")==null?request.getParameter("type"):param.get("type");
+			if(StringUtils.isBlank(type)){
+				type = "1";
+			}
+			List<Map<String,Object>> pipeRows = this.pipeService.getMaterialPipeList(projectOid,type);
 			result = new ListResult<>(1,"200","ok",pipeRows);
 		}catch(Exception e){
 			result = new ListResult<>(-1,"400","error");
@@ -109,7 +113,11 @@ public class PipeController {
 		ListResult<Map<String, Object>> result= null;
 		try{
 			String projectOid = param.get("projectOid");
-			List<Map<String,Object>> hotBendsRows = this.pipeService.getMaterialHotBendsList(projectOid);
+			String type = param.get("type")==null?request.getParameter("type"):param.get("type");
+			if(StringUtils.isBlank(type)){
+				type = "1";
+			}
+			List<Map<String,Object>> hotBendsRows = this.pipeService.getMaterialHotBendsList(projectOid,type);
 			result = new ListResult<>(1,"200","ok",hotBendsRows);
 		}catch(Exception e){
 			result = new ListResult<>(-1,"400","error");

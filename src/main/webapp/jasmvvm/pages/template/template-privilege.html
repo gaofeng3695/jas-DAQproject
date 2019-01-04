@@ -277,6 +277,7 @@
 		},
 		created: function () {
 			var param = window.jasTools.base.getParamsInUrl(location.href);
+			console.log(param);
 			this.menuCode = param.menuCode;
 			this.isApprove = param.isApprove;
 			this.isScanner = param.isScanner;
@@ -287,7 +288,7 @@
 			if (param.privilegeCode) {
 				this._requestPrivilege(param.privilegeCode); //请求权限
 			} else {
-				this.privilege = ['bt_add', 'bt_update', 'bt_delete', 'bt_select', 'bt_export', 'bt_import', 'bt_position'];
+				this.privilege = ['bt_add', 'bt_update', 'bt_delete', 'bt_select', 'bt_export', 'bt_import'];
 				this.requestConfig(); //请求模板的配置文件
 			}
 		},

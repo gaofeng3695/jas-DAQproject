@@ -109,7 +109,8 @@ var vm = new Vue({
       return !!type;
     },
     isText: function (type) {
-      return type === 'UT_01' && this.isUi(type);
+      var inputType=['UT_01','UT_13'];
+      return inputType.indexOf(type) !==-1 && this.isUi(type);
     },
     isSql: function (row) {
       var type = row.uiType;
@@ -365,8 +366,6 @@ var vm = new Vue({
               type: 'error'
             });
           });
-
-
         } else {
           return false;
         }
@@ -379,7 +378,22 @@ var vm = new Vue({
         functionId: fId
       }, function (data) {
         that.isLoadingFieldInfo = false;
-        that.privateTable = data.data.map(function (obj) {
+        var result=data.data.filter(function(obj){
+        	if(!that.fieldParams[obj.fieldName]){
+        		return obj;
+        	}
+        });
+        that.privateTable = result.map(function (obj) {
+         var uiType="";
+         if(obj.fieldType=="varchar"){
+        	 uiType="UT_01";
+         }
+         if(obj.fieldType=="numeric"||obj.fieldType=="int2"){
+        	 uiType="UT_14";
+         }
+         if(obj.fieldType=="timestamp"){
+        	 uiType="UT_02";
+         }
           return {
             functionId: fId,
             fieldName: obj.fieldName,
@@ -388,15 +402,15 @@ var vm = new Vue({
             ifSave: obj.ifSave || "0",
             ifUpdate: obj.ifUpdate || "0",
             ifQuery: obj.ifQuery || "0",
-            ifList: obj.ifList || "0",
-            ifDetails: obj.ifDetails || "0",
+            ifList: obj.ifList || (obj.fieldSource=="view"?"1":"0"),
+            ifDetails: obj.ifDetails || (obj.fieldSource=="view"?"1":"0"),
             fieldLength: obj.fieldLength,
             fieldType: obj.fieldType,
-            uiType: obj.uiType || "",
+            uiType: obj.uiType || uiType,
             domain: obj.domain || null,
-            regularExpression: obj.regularExpression || null,
+            regularExpression: obj.regularExpression || "01",
             groupName: obj.groupName || null,
-            placeholder: obj.placeholder || "",
+            placeholder: obj.placeholder || "请输入" + obj.fieldNameCn,
             childField: obj.childField || null,
             childFieldArr: obj.childField ? obj.childField.split(',') : [],
             requestPath: obj.requestPath || null,
@@ -410,6 +424,7 @@ var vm = new Vue({
             updateable: obj.updateable,
             min: obj.min,
             max: obj.max,
+            precision:obj.precision||0,
             ifLessToday: obj.ifLessToday == "1" ? true : false,
             lessDateScope: obj.lessDateScope || null,
             lessDateScopeArr: obj.lessDateScope ? obj.lessDateScope.split(",") : [],
@@ -417,6 +432,7 @@ var vm = new Vue({
             maxDateScopeArr: obj.maxDateScope ? obj.maxDateScope.split(",") : [],
           };
         });
+
       });
 
     },

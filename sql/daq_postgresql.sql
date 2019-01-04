@@ -16,7 +16,7 @@ CREATE TABLE daq_project (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_project is '项目表';
 comment on column daq_project.oid is '主键';
@@ -50,7 +50,7 @@ CREATE TABLE daq_pipeline (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_pipeline is '管线表';
 comment on column daq_pipeline.oid is '主键';
@@ -88,7 +88,7 @@ CREATE TABLE daq_pipe_segment (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_pipe_segment is '线路段表';
 comment on column daq_pipe_segment.oid is '主键';
@@ -126,7 +126,7 @@ CREATE TABLE daq_cross (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_cross is '穿跨越表';
 comment on column daq_cross.oid is '主键';
@@ -162,7 +162,7 @@ CREATE TABLE daq_pipe_station (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_pipe_station is '站场/阀室表';
 comment on column daq_pipe_station.oid is '主键';
@@ -195,7 +195,7 @@ CREATE TABLE daq_maintenance_road (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_maintenance_road is '伴行道路管理表';
 comment on column daq_maintenance_road.oid is '主键';
@@ -230,7 +230,7 @@ CREATE TABLE daq_power_line (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_power_line is '外供电线路表';
 comment on column daq_power_line.oid is '主键';
@@ -262,7 +262,7 @@ CREATE TABLE daq_tenders (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_tenders is '标段表';
 comment on column daq_tenders.oid is '主键';
@@ -295,7 +295,7 @@ CREATE TABLE daq_median_stake (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_median_stake is '中线桩表';
 comment on column daq_median_stake.oid is '主键';
@@ -326,7 +326,7 @@ CREATE TABLE daq_tenders_scope_ref (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_tenders_scope_ref is '标段范围关联表';
 comment on column daq_tenders_scope_ref.oid is '主键';
@@ -362,7 +362,7 @@ CREATE TABLE daq_implement_scope_ref (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 
 comment on table daq_implement_scope_ref is '实施范围关联表';
@@ -401,7 +401,7 @@ CREATE TABLE daq_weld_produce_specification (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_weld_produce_specification IS '焊接工艺规程表';
 comment on column daq_weld_produce_specification.oid IS '主键';
@@ -436,7 +436,7 @@ CREATE TABLE daq_work_personnel (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_work_personnel IS '机组人员表';
 comment on column daq_work_personnel.oid IS '主键';
@@ -470,7 +470,7 @@ CREATE TABLE daq_work_unit (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_work_unit IS '施工机组表';
 comment on column daq_work_unit.oid IS '主键';
@@ -524,7 +524,7 @@ CREATE TABLE daq_material_closure (
 	modify_user_id varchar(36),
 	modify_user_name varchar(50),
 	modify_datetime timestamp(6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_material_closure IS '封堵物信息表';
 comment on column daq_material_closure.oid IS '主键';
@@ -576,7 +576,7 @@ CREATE TABLE daq_material_flange (
 	modify_user_id varchar(36),
 	modify_user_name varchar(50),
 	modify_datetime timestamp(6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_material_flange IS '法兰信息表';
 comment on column daq_material_flange.oid IS '主键';
@@ -646,7 +646,7 @@ CREATE TABLE daq_material_hot_bends (
 	modify_user_id varchar(36),
 	modify_user_name varchar(50),
 	modify_datetime timestamp(6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_material_hot_bends IS '热煨弯管表';
 comment on column daq_material_hot_bends.oid IS '主键';
@@ -713,7 +713,7 @@ CREATE TABLE daq_material_insulated_joint (
 	modify_user_id varchar(36),
 	modify_user_name varchar(50),
 	modify_datetime timestamp(6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_material_insulated_joint IS '绝缘接头信息表';
 comment on column daq_material_insulated_joint.oid IS '主键';
@@ -778,7 +778,7 @@ CREATE TABLE daq_material_pipe (
 	modify_user_id varchar(36),
 	modify_user_name varchar(50),
 	modify_datetime timestamp(6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_material_pipe IS '钢管表';
 comment on column daq_material_pipe.oid IS '主键';
@@ -856,7 +856,7 @@ CREATE TABLE daq_material_pipe_cold_bending (
 	modify_user_id varchar(36),
 	modify_user_name varchar(50),
 	modify_datetime timestamp(6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_material_pipe_cold_bending IS '冷弯管表';
 comment on column daq_material_pipe_cold_bending.oid IS '主键';
@@ -920,7 +920,7 @@ CREATE TABLE daq_material_reducer (
 	modify_user_id varchar(36),
 	modify_user_name varchar(50),
 	modify_datetime timestamp(6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_material_reducer IS '大小头信息表';
 comment on column daq_material_reducer.oid IS '主键';
@@ -979,7 +979,7 @@ CREATE TABLE daq_material_tee (
 	modify_user_id varchar(36),
 	modify_user_name varchar(50),
 	modify_datetime timestamp(6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_material_tee IS '三通信息表';
 comment on column daq_material_tee.oid IS '主键';
@@ -1054,7 +1054,7 @@ create table daq_check_coating_pipe(
 	modify_user_id varchar(36),
 	modify_user_name varchar(50),
 	modify_datetime timestamp(6),
-	active smallint not null  
+	active smallint not null default 1
 ); 
 comment on table daq_check_coating_pipe is '防腐管检查及信息记录表';
 comment on column daq_check_coating_pipe.oid is '主键';
@@ -1101,7 +1101,7 @@ create table daq_check_hot_bends(
 	modify_user_id varchar(36),
 	modify_user_name varchar(50),
 	modify_datetime timestamp(6),
-	active smallint not null
+	active smallint not null default 1
 );
 comment on table daq_check_hot_bends is '热煨弯管检查信息记录表';
 comment on column daq_check_hot_bends.oid is '主键';
@@ -1147,7 +1147,7 @@ CREATE TABLE daq_check_insulated_joint (
 	modify_user_id varchar(36),
 	modify_user_name varchar(50),
 	modify_datetime timestamp(6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_check_insulated_joint IS '绝缘接头检查及信息记录表';
 comment on column daq_check_insulated_joint.oid IS '主键';
@@ -1198,7 +1198,7 @@ create table daq_check_pipe_cold_bending(
 	modify_user_id varchar(36),
 	modify_user_name varchar(50),
 	modify_datetime timestamp(6),
-	active smallint not null
+	active smallint not null default 1
 ); 
 comment on table daq_check_pipe_cold_bending is '冷弯管检查及信息记录表';
 comment on column daq_check_pipe_cold_bending.oid is '主键';
@@ -1247,7 +1247,7 @@ create_datetime timestamp(6),
 modify_user_id varchar(36),
 modify_user_name varchar(50),
 modify_datetime timestamp(6),
-active smallint not null
+active smallint not null default 1
 ); 
 comment on table daq_check_reducer is '大小头检查及信息记录表';
 comment on column daq_check_reducer.oid is '主键';
@@ -1291,7 +1291,7 @@ create table daq_check_tee(
 	modify_user_id varchar(36),
 	modify_user_name varchar(50),
 	modify_datetime timestamp(6),
-	active smallint not null  
+	active smallint not null default 1
 ); 
 
 comment on table daq_check_tee is '三通检查及信息记录表';
@@ -1365,7 +1365,7 @@ create table daq_material_valve(
 	modify_user_id varchar(36)  ,
 	modify_user_name varchar(50)  ,
 	modify_datetime timestamp(6)  ,
-	active smallint  default 1  
+	active smallint not null default 1  
 ); 
 comment on table daq_material_valve is '阀门表';
 comment on column daq_material_valve.oid is '主键';
@@ -1444,7 +1444,7 @@ CREATE TABLE daq_construction_weld (
 	modify_user_id varchar(36),
 	modify_user_name varchar(50),
 	modify_datetime timestamp(6),
-	active SMALLINT default 0 NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_construction_weld IS '焊口信息表';
 comment on column daq_construction_weld.oid IS '主键';
@@ -1541,7 +1541,7 @@ CREATE TABLE daq_weld_anticorrosion_check (
 	modify_user_id varchar(36),
 	modify_user_name varchar(50),
 	modify_datetime timestamp(6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_weld_anticorrosion_check IS '防腐补口检查信息表';
 comment on column daq_weld_anticorrosion_check.oid IS '主键';
@@ -1607,7 +1607,7 @@ CREATE TABLE daq_weld_anticorrosion_repair (
 	modify_user_id varchar(36),
 	modify_user_name varchar(50),
 	modify_datetime timestamp(6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_weld_anticorrosion_repair IS '防腐补伤信息表';
 comment on column daq_weld_anticorrosion_repair.oid IS '主键';
@@ -1665,7 +1665,7 @@ CREATE TABLE daq_weld_anticorrosion_test (
 	modify_user_id varchar(36),
 	modify_user_name varchar(50),
 	modify_datetime timestamp(6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_weld_anticorrosion_test IS '防腐补口剥离强度试验信息表';
 comment on column daq_weld_anticorrosion_test.oid IS '主键';
@@ -1720,7 +1720,7 @@ CREATE TABLE daq_weld_cut (
 	modify_user_id varchar(36),
 	modify_user_name varchar(50),
 	modify_datetime timestamp(6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_weld_cut IS '焊口割口信息表';
 comment on column daq_weld_cut.oid IS '主键';
@@ -1778,7 +1778,7 @@ CREATE TABLE daq_weld_rework_weld (
 	modify_user_id varchar(36),
 	modify_user_name varchar(50),
 	modify_datetime timestamp(6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_weld_rework_weld IS '焊口返修信息表';
 comment on column daq_weld_rework_weld.oid IS '主键';
@@ -1873,7 +1873,7 @@ CREATE TABLE daq_cut_pipe (
 	modify_user_id varchar(36),
 	modify_user_name varchar(50),
 	modify_datetime timestamp(6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_cut_pipe IS '钢管切管信息表';
 comment on column daq_cut_pipe.oid IS '主键';
@@ -1935,7 +1935,7 @@ CREATE TABLE daq_weld_measured_result (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL default 0
+	active smallint not null default 1
 );
 comment on table daq_weld_measured_result is '焊口测量成果信息表';
 comment on column daq_weld_measured_result.oid is '主键';
@@ -1999,7 +1999,7 @@ CREATE TABLE daq_detection_ray (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL default 0
+	active smallint not null default 1
 );
 comment on table daq_detection_ray is '射线检测';
 comment on column daq_detection_ray.oid is '主键';
@@ -2044,7 +2044,7 @@ CREATE TABLE daq_detection_ray_sub (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_detection_ray_sub is '射线检测子表';
 comment on column daq_detection_ray_sub.oid is '主键';
@@ -2089,7 +2089,7 @@ CREATE TABLE daq_detection_ultrasonic (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL default 0
+	active smallint not null default 1
 );
 comment on table daq_detection_ultrasonic is '超声波检测表';
 comment on column daq_detection_ultrasonic.oid is '主键';
@@ -2135,7 +2135,7 @@ CREATE TABLE daq_detection_ultrasonic_sub (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_detection_ultrasonic_sub is '超声波检测子表';
 comment on column daq_detection_ultrasonic_sub.oid is '主键';
@@ -2178,7 +2178,7 @@ CREATE TABLE daq_detection_infiltration (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL default 0
+	active smallint not null default 1
 );
 comment on table daq_detection_infiltration is '渗透检测';
 comment on column daq_detection_infiltration.oid is '主键';
@@ -2222,7 +2222,7 @@ CREATE TABLE daq_detection_infiltration_sub (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_detection_infiltration_sub is '渗透检测子表';
 comment on column daq_detection_infiltration_sub.oid is '主键';
@@ -2265,7 +2265,7 @@ CREATE TABLE daq_detection_magnetic_powder (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL default 0
+	active smallint not null default 1
 );
 comment on table daq_detection_magnetic_powder is '磁粉检测表';
 comment on column daq_detection_magnetic_powder.oid is '主键';
@@ -2309,7 +2309,7 @@ CREATE TABLE daq_detection_magnetic_powder_sub (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_detection_magnetic_powder_sub is '磁粉检测子表';
 comment on column daq_detection_magnetic_powder_sub.oid is '主键';
@@ -2353,7 +2353,7 @@ CREATE TABLE daq_detection_fa_ultrasonic (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL default 0
+	active smallint not null default 1
 );
 comment on table daq_detection_fa_ultrasonic is '全自动超声波检测表';
 comment on column daq_detection_fa_ultrasonic.oid is '主键';
@@ -2400,7 +2400,7 @@ CREATE TABLE daq_detection_fa_ultrasonic_sub (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_detection_fa_ultrasonic_sub is '全自动超声波检测子表';
 comment on column daq_detection_fa_ultrasonic_sub.oid is '主键';
@@ -2446,7 +2446,7 @@ CREATE TABLE daq_detection_pa_ultrasonic (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL default 0
+	active smallint not null default 1
 );
 comment on table daq_detection_pa_ultrasonic is '相控阵超声波检测表';
 comment on column daq_detection_pa_ultrasonic.oid is '主键';
@@ -2493,7 +2493,7 @@ CREATE TABLE daq_detection_pa_ultrasonic_sub (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_detection_pa_ultrasonic_sub is '相控阵超声波检测子表';
 comment on column daq_detection_pa_ultrasonic_sub.oid is '主键';
@@ -2541,7 +2541,7 @@ CREATE TABLE daq_lay_surveying (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL default 0
+	active smallint not null default 1
 );
 
 comment on table daq_lay_surveying is '测量放线表';
@@ -2607,7 +2607,7 @@ CREATE TABLE daq_lay_pipe_trench_excavation (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL default 0
+	active smallint not null default 1
 );
 
 comment on table daq_lay_pipe_trench_excavation is '管沟开挖表';
@@ -2679,7 +2679,7 @@ CREATE TABLE daq_lay_pipe_trench_backfill (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL default 0
+	active smallint not null default 1
 );
 comment on table daq_lay_pipe_trench_backfill is '回填表';
 comment on column daq_lay_pipe_trench_backfill.oid is '主键';
@@ -2744,7 +2744,7 @@ CREATE TABLE daq_lay_land_restoration (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL default 0
+	active smallint not null default 1
 );
 
 comment on table daq_lay_land_restoration is '地貌恢复表';
@@ -2809,7 +2809,7 @@ CREATE TABLE daq_lay_thermal_insulation (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL default 0
+	active smallint not null default 1
 );
 comment on table daq_lay_thermal_insulation is '保温表';
 comment on column daq_lay_thermal_insulation.oid is '主键';
@@ -2882,7 +2882,7 @@ CREATE TABLE daq_cross_excavation (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL  default 0
+	active smallint not null default 1
 );
 comment on table daq_cross_excavation is '开挖穿越表';
 comment on column daq_cross_excavation.oid is '主键';
@@ -2959,7 +2959,7 @@ CREATE TABLE daq_cross_pipe_jacking (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL default 0
+	active smallint not null default 1
 );
 comment on table daq_cross_pipe_jacking is '顶管穿越表';
 comment on column daq_cross_pipe_jacking.oid is '主键';
@@ -3035,7 +3035,7 @@ CREATE TABLE daq_cross_box_culvert (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL default 0
+	active smallint not null default 1
 );
 comment on table daq_cross_box_culvert is '箱涵穿越表';
 comment on column daq_cross_box_culvert.oid is '主键';
@@ -3112,7 +3112,7 @@ CREATE TABLE daq_cross_drilling (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL default 0
+	active smallint not null default 1
 );
 comment on table daq_cross_drilling is '定向钻穿越表';
 comment on column daq_cross_drilling.oid is '主键';
@@ -3190,7 +3190,7 @@ CREATE TABLE daq_cross_shield (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL default 0
+	active smallint not null default 1
 );
 comment on table daq_cross_shield is '盾构隧道穿越表';
 comment on column daq_cross_shield.oid is '主键';
@@ -3269,7 +3269,7 @@ CREATE TABLE daq_cross_drilling_blasting (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL default 0
+	active smallint not null default 1
 );
 comment on table daq_cross_drilling_blasting is '钻爆隧道穿越表';
 comment on column daq_cross_drilling_blasting.oid is '主键';
@@ -3349,7 +3349,7 @@ CREATE TABLE daq_cross_across (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL default 0
+	active smallint not null default 1
 );
 comment on table daq_cross_across is '跨越表';
 comment on column daq_cross_across.oid is '主键';
@@ -3424,7 +3424,7 @@ CREATE TABLE daq_cathodic_isolating_piece (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL default 0
+	active smallint not null default 1
 );
 comment on table daq_cathodic_isolating_piece is '绝缘件表';
 comment on column daq_cathodic_isolating_piece.oid is '主键';
@@ -3498,7 +3498,7 @@ CREATE TABLE daq_cathodic_cable_protection (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL default 0
+	active smallint not null default 1
 );
 comment on table daq_cathodic_cable_protection is '阴保电缆表';
 comment on column daq_cathodic_cable_protection.oid is '主键';
@@ -3586,7 +3586,7 @@ CREATE TABLE daq_cathodic_sacrifice_anode (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL default 0
+	active smallint not null default 1
 );
 comment on table daq_cathodic_sacrifice_anode is '牺牲阳极表';
 comment on column daq_cathodic_sacrifice_anode.oid is '主键';
@@ -3666,7 +3666,7 @@ CREATE TABLE daq_cathodic_insulated_joint (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL default 0
+	active smallint not null default 1
 );
 comment on table daq_cathodic_insulated_joint is '绝缘接头保护器表';
 comment on column daq_cathodic_insulated_joint.oid is '主键';
@@ -3724,7 +3724,7 @@ CREATE TABLE daq_cathodic_solid_decoupler (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL default 0
+	active smallint not null default 1
 );
 
 comment on table daq_cathodic_solid_decoupler is '固态去耦合器表';
@@ -3789,7 +3789,7 @@ CREATE TABLE daq_cathodic_test_stake (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL default 0
+	active smallint not null default 1
 );
 comment on table daq_cathodic_test_stake is '测试桩表';
 comment on column daq_cathodic_test_stake.oid is '主键';
@@ -3874,7 +3874,7 @@ CREATE TABLE daq_cathodic_polarity_drainage (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL default 0
+	active smallint not null default 1
 );
 
 comment on table daq_cathodic_polarity_drainage is '极性排流器表';
@@ -3971,7 +3971,7 @@ CREATE TABLE daq_cathodic_anode_bed (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL default 0
+	active smallint not null default 1
 );
 
 comment on table daq_cathodic_anode_bed is '辅助阳极地床表';
@@ -4049,7 +4049,7 @@ CREATE TABLE daq_cathodic_electrical_parameter_test (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL default 0
+	active smallint not null default 1
 );
 comment on table daq_cathodic_electrical_parameter_test is '牺牲阳极电参数测试记录表';
 comment on column daq_cathodic_electrical_parameter_test.oid is '主键';
@@ -4108,7 +4108,7 @@ CREATE TABLE daq_cathodic_impressed_current_test (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL default 0
+	active smallint not null default 1
 );
 comment on table daq_cathodic_impressed_current_test is '外加电流电参数测试记录表';
 comment on column daq_cathodic_impressed_current_test.oid is '主键';
@@ -4231,7 +4231,7 @@ CREATE TABLE daq_appendages_mark_stake (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL DEFAULT 0
+	active smallint not null default 1
 );
 
 comment on table daq_appendages_mark_stake is '标志桩表';
@@ -4295,7 +4295,7 @@ CREATE TABLE daq_appendages_electronic_label (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL DEFAULT 0
+	active smallint not null default 1
 );
 comment on table daq_appendages_electronic_label is '电子标签表';
 comment on column daq_appendages_electronic_label.oid is '主键';
@@ -4365,7 +4365,7 @@ CREATE TABLE daq_appendages_hand_hole (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL DEFAULT 0
+	active smallint not null default 1
 );
 comment on table daq_appendages_hand_hole is '手孔表';
 comment on column daq_appendages_hand_hole.oid is '主键';
@@ -4439,7 +4439,7 @@ CREATE TABLE daq_appendages_obstacle (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL DEFAULT 0
+	active smallint not null default 1
 );
 comment on table daq_appendages_obstacle is '地下障碍物表';
 comment on column daq_appendages_obstacle.oid is '主键';
@@ -4513,7 +4513,7 @@ CREATE TABLE daq_appendages_hydraulic_protection (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL DEFAULT 0
+	active smallint not null default 1
 );
 comment on table daq_appendages_hydraulic_protection is '水工保护表';
 comment on column daq_appendages_hydraulic_protection.oid is '主键';
@@ -4580,7 +4580,7 @@ CREATE TABLE daq_appendages_concomitant_road (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL DEFAULT 0
+	active smallint not null default 1
 );
 comment on table daq_appendages_concomitant_road is '伴行道路表';
 comment on column daq_appendages_concomitant_road.oid is '主键';
@@ -4644,7 +4644,7 @@ CREATE TABLE daq_appendages_casing_pipe (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL DEFAULT 0
+	active smallint not null default 1
 );
 comment on table daq_appendages_casing_pipe is '套管表';
 comment on column daq_appendages_casing_pipe.oid is '主键';
@@ -4707,7 +4707,7 @@ CREATE TABLE daq_mv_pipe_node (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 
 comment on table daq_mv_pipe_node is '节点信息表';
@@ -4772,7 +4772,7 @@ CREATE TABLE daq_mv_pipe_section (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 
 comment on table daq_mv_pipe_section is '管段信息表';
@@ -4845,7 +4845,7 @@ CREATE TABLE daq_mv_across_info (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 
 comment on table daq_mv_across_info is '穿越信息表';
@@ -4916,7 +4916,7 @@ CREATE TABLE daq_mv_stride_across_info (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 
 comment on table daq_mv_stride_across_info is '跨越信息表';
@@ -4976,7 +4976,7 @@ CREATE TABLE daq_mv_pipe_trench_protect (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 
 comment on table daq_mv_pipe_trench_protect is '管沟信息表';
@@ -5017,7 +5017,7 @@ CREATE TABLE daq_data_approve (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_datetime TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 comment on table daq_data_approve is '数据审核记录表';
 comment on column daq_data_approve.oid is '主键';
@@ -5126,7 +5126,7 @@ CREATE TABLE SYS_ATTACHMENT (
 	modify_user_id VARCHAR (36),
 	modify_user_name VARCHAR (50),
 	modify_time TIMESTAMP (6),
-	active SMALLINT NOT NULL
+	active smallint not null default 1
 );
 
 CREATE TABLE SYS_ATTACHMENTBUSINESSRELATION (
@@ -6439,3 +6439,15 @@ comment on column daq_material_hot_bends.is_check is '是否检查';
 
 alter table daq_material_pipe_cold_bending add is_check smallint not null default 0;
 comment on column daq_material_pipe_cold_bending.is_check is '是否检查';
+
+alter table pri_role add data_filter_code varchar(45);
+comment on column pri_role.data_filter_code is '数据权限过滤规则';
+
+
+ALTER TABLE custom_fun_fields 
+  ADD COLUMN precision int2;
+
+COMMENT ON COLUMN custom_fun_fields.precision IS 'xiao shu dian bao liu ji wei';
+
+
+ALTER TABLE custom_fun_fields ALTER COLUMN child_field TYPE varchar(100) ;
