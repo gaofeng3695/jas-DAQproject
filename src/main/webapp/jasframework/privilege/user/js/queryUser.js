@@ -14,7 +14,7 @@ var userDatagridID = "10060201";
 
 $(function(){
 	$('#tt').tree({		
-		url: rootPath+'jasframework/privilege/unit/getLeftTree.do',
+		url: rootPath+'jasframework/privilege/unit/getLeftTree.do?isroot=true',
 		onLoadSuccess:function(node,data) {
 		 	var aa=$('#tt').tree('select',$('#tt').tree('getRoot').target);
 			var url = rootPath+"jasframework/privilege/user/getList.do?unitId="+$('#tt').tree('getRoot').id;
