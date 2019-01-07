@@ -2351,7 +2351,7 @@ Vue.component('jas-project-select', {
 		this.projectOids = this.selprojectoids;
 		if(!this.projectarray){
 		  this.requestProject();
-		}	   
+		}
 	},
 	methods: {
 		requestProject: function () {
@@ -2370,7 +2370,7 @@ Vue.component('jas-project-select', {
 						that.$emit("requestnet", ids);
 					}else{var ids=[""];
 						that.$emit("requestnet",ids );
-					}	
+					}
 				return;
 			}
 			var url = jasTools.base.rootPath + that.url;
@@ -2463,7 +2463,7 @@ Vue.component('statistic-group-project', { //项目群的分组
 		'<div style="float:right;padding:5px 10px;">',
 		'<jas-project-select @requestnet="requesttable" label="项目群" url="/daq/privilege/getProjectList.do" :projectarray="projectarray" :selprojectoids="projectOids" ></jas-project-select>',
 		'<slot name="unit"></slot>',
-		'<el-date-picker v-model="date" :type="datetype.type" :value-format="datetype.format" :placeholder="datetype.placeholder" style="padding-left:10px" size="mini" @change="select">',
+		'<el-date-picker v-model="date" :picker-options="datetype.pickerOptions" :type="datetype.type" :value-format="datetype.format" :placeholder="datetype.placeholder" style="padding-left:10px" size="mini" @change="select">',
 		'</el-date-picker>',
 		'</div>',
 		' </el-row>'
@@ -2517,7 +2517,7 @@ Vue.component('statistic-group', { //项目分组
 		'<el-option v-for="project in projectArray" :key="project.key" :label="project.value" :value="project.key">',
 		'</el-option>',
 		'</el-select>',
-		'<el-date-picker v-model="date"  placeholder="选择日期" :type="datetype.type" :value-format="datetype.format"  style="padding-left:10px" size="mini"  @change="select">',
+		'<el-date-picker v-model="date" :picker-options="datetype.pickerOptions" placeholder="选择日期" :type="datetype.type" :value-format="datetype.format"  style="padding-left:10px" size="mini"  @change="select">',
 		'</el-date-picker>',
 		'</div>',
 		' </el-row>'
@@ -2543,7 +2543,7 @@ Vue.component('statistic-group', { //项目分组
 					that.projectArray=that.projectarray;
 					that.projectOids = that.projectarray[0].key;
 					that.$emit("requestnet", that.projectOids, that.date);
-				  
+
 				}else{
 					that.$emit("requestnet", '', that.date);
 				}
@@ -2555,7 +2555,7 @@ Vue.component('statistic-group', { //项目分组
 					that.projectArray.push(item);
 				});
 				if(that.projectArray.length>0){
-					that.projectOids = that.projectArray[0].key;	
+					that.projectOids = that.projectArray[0].key;
 				}else{
 					that.projectOids ="";
 				}
