@@ -256,6 +256,10 @@
 				function (
 					arr) {
 					that.domain.project = arr;
+					if(!that.isEdit){
+						that.formData.projectOid=arr[0].key;
+						that.projectChanged(that.formData.projectOid,false,true);//false:表示为是否编辑，true表示新增
+					}
 				});
 		
 			this.getconstructUnit();
@@ -281,7 +285,7 @@
 					cb && cb([]);
 				});
 			},
-			projectChanged: function (val,edit) {
+			projectChanged: function (val,edit,add) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -290,13 +294,15 @@
 						},
 						function (arr) {
 							that.domain.tenders = arr;
+							if(add){
+								that.formData.tendersOid=arr[0].key;
+							}
 						});
 				} else {
 					that.domain.tenders = [];
 				}
 				if(!edit){
 					that.formData.tendersOid = '';
-				
 				}
 				that.getCode(val,edit);
 			},
@@ -364,13 +370,6 @@
 				});
 
 			},
-			// uploadSuccess: function () {
-			// 	top.Vue.prototype.$message({
-			// 		type: 'success',
-			// 		message: !this.isEdit ? '保存成功' : '修改成功'
-			// 	});
-			// 	this.cancel(1);
-			// },
 			getDetailByObjectId: function () {
 				var that = this;
 				var url = jasTools.base.rootPath +
@@ -380,7 +379,7 @@
 						that.formData[key] = data.rows[0][key];
 					}
 					that.projectChanged(data.rows[0].projectOid,true);
-					that.getCode(data.rows[0].projectOid,true);
+					//that.getCode(data.rows[0].projectOid,true);
 				});
 
 			},

@@ -143,24 +143,28 @@
 						childSelect: ['tendersOid'],
 						childUrl: ['/daq/privilege/getTendersList.do'],
 						isRequired: true,
+						isInit:true
 					},
 					tendersOid: {
 						type: 'select',
 						childSelect: ['pipelineOid', 'supervisionUnit'],
 						childUrl: ['/daq/privilege/getPipelineListByTendersOid.do', '/daq/privilege/getSupervisionUnitByTendersOid.do'],
 						isRequired: true,
+						isInit:true
 					},
 					pipelineOid: {
 						type: 'select',
 						childSelect: ['pipeSegmentOrCrossOid'],
 						childUrl: ['/daq/privilege/getPipeSegmentOrCrossList.do'],
 						isRequired: true,
+						isInit:true
 					},
 					pipeSegmentOrCrossOid: {
 						type: 'select',
 						childSelect: ['weldOid'],
 						childUrl: ['/daq/weld/getAllWeldList.do'],
 						isRequired: true,
+						isInit:true
 					},
 					weldOid: {
 						type: 'select',

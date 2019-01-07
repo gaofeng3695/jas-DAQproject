@@ -43,21 +43,21 @@
 					<el-row :gutter="10">
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="项目名称" prop="projectOid" required>
-								<el-select v-model="formData.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
+								<el-select v-model="formData.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged($event,false,true)">
 									<el-option v-for="item in domain.project" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="标段名称" prop="tendersOid" required>
-								<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged" @visible-change="childChange($event,'projectOid','项目名称')">
+								<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged($event,false,true)" @visible-change="childChange($event,'projectOid','项目名称')">
 									<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="管线名称" prop="pipelineOid" required>
-								<el-select v-model="formData.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged" @visible-change="childChange($event,'tendersOid','标段名称')">
+								<el-select v-model="formData.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged($event,false,true)" @visible-change="childChange($event,'tendersOid','标段名称')">
 									<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
@@ -320,6 +320,10 @@
 
 			this.requestDomainFromBizTable('/daq/privilege/getProjectList.do', {}, function (arr) {
 				that.domain.project = arr;
+				if(!that.isEdit){
+					that.formData.projectOid=arr[0].key;
+					that.projectChanged(that.formData.projectOid,false,true);//false:表示为是否编辑，true表示新增	
+				}
 			});
 		
 		},
@@ -364,7 +368,7 @@
 					cb && cb([]);
 				});
 			},
-			projectChanged: function (val,edit) {
+			projectChanged: function (val,edit,add) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -373,6 +377,10 @@
 						},
 						function (arr) {
 							that.domain.tenders = arr;
+							if(add){
+								that.formData.tendersOid=arr[0].key;
+								that.tendersChanged(that.formData.tendersOid,false,true);
+							}
 						});
 				}else{
 					that.domain.tenders=[];
@@ -386,6 +394,8 @@
 					that.formData.pipeSegmentOrCrossOid = '';
 					that.domain.supervisionUnits = [];
 					that.formData.supervisionUnit = '';
+					that.domain.welds=[];
+					that.formData.weldOid = '';
 					
 				}
 				that.getWorkUints(val, edit); //获取机组
@@ -411,7 +421,7 @@
 			
 				}
 			},
-			tendersChanged: function (val, edit) { //根据标段触发管线列表
+			tendersChanged: function (val, edit,add) { //根据标段触发管线列表
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -420,15 +430,22 @@
 						},
 						function (arr) {
 							that.domain.pipeline = arr;
+							if(add){
+								that.formData.pipelineOid=arr[0].key;	
+								that.pipelineChanged(that.formData.pipelineOid,false,true);
+								}
 						});
 				}else{
 					that.domain.pipeline=[];
+		
 				}
 				if (!edit) {
 					
 					that.formData.pipelineOid = '';
 					that.domain.pipeSegment = [];
 					that.formData.pipeSegmentOrCrossOid = '';
+					that.domain.welds=[];
+					that.formData.weldOid = '';
 				}
 				that.getSupervisionUnit(val, edit); //根据标段获取监理单位
 			},
@@ -449,7 +466,7 @@
 					that.formData.supervisionUnit = '';
 				}
 			},
-			pipelineChanged: function (val, edit) { //根据管线触发线路段/穿跨越
+			pipelineChanged: function (val, edit,add) { //根据管线触发线路段/穿跨越
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -458,6 +475,10 @@
 						},
 						function (arr) {
 							that.domain.pipeSegment = arr;
+							if(add){
+								that.formData.pipeSegmentOrCrossOid=arr[0].key;	
+								that.pipeSegmentChanged(that.formData.pipeSegmentOrCrossOid);
+							}
 						});
 				}else{
 					that.domain.pipeSegment=[];
@@ -490,7 +511,6 @@
 					that.domain.welds=[];
 				}
 				if (!edit||!val) {
-					
 					that.formData.weldOid = '';
 				}
 			},

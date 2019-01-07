@@ -20,10 +20,13 @@
 	<div id="app" v-cloak>
 
 		<jas-dialog-wrapper>
-			<el-form ref="formData" :rules="rules" :model="form" label-width="120px">
+			<el-form ref="formData"  :model="form" label-width="120px">
 
 				<jas-base-group-title name="基础数据"></jas-base-group-title>
-				<el-row :gutter="10">
+				<jas-form-items ref="mainForm" :form="form" :fields="baseFields" :fields-config="fieldsConfig"></jas-form-items>
+				<jas-base-group-title name="位置数据"></jas-base-group-title>
+				<jas-form-items ref="mainForm" :form="form" :fields="locationFields" :fields-config="fieldsConfig"></jas-form-items>
+				<!--<el-row :gutter="10">
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="项目名称" prop="projectOid" required>
 							<el-select v-model="form.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
@@ -95,9 +98,9 @@
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
-				</el-row>
-				<jas-base-group-title name="位置数据"></jas-base-group-title>
-				<el-row>
+				</el-row>-->
+
+				<!--<el-row>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="桩号" prop="medianStakeOid" required>
 							<el-select v-model="form.medianStakeOid" clearable placeholder="请选择桩号" size="small" @visible-change="childChange($event,'pipeSegmentOrCrossOid','线路段/穿跨越')">
@@ -105,7 +108,7 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-				</el-row>
+				</el-row>-->
 
 
 				<jas-base-group-title name="测量放线数据"></jas-base-group-title>
@@ -114,9 +117,6 @@
 				<el-row>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 						<jas-remarks :remarks="form.remarks" @changevalue="changevalue"></jas-remarks>
-						<!--<el-form-item label="备注">
-							<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="form.remarks"></el-input>
-						</el-form-item>-->
 					</el-col>
 				</el-row>
 				<jas-base-group-title name="附件信息"></jas-base-group-title>
@@ -159,6 +159,43 @@
 						name: '管道中心线右侧放线宽度(m)'
 					}
 				],
+				baseFields: [ //
+					{
+						field: "projectOid",
+						name: '项目名称'
+					}, {
+						field: "tendersOid",
+						name: '标段名称'
+					}, {
+						field: "pipelineOid",
+						name: '管线名称'
+					}, {
+						field: "pipeSegmentOrCrossOid",
+						name: '线路段/穿跨越'
+					}, {
+						field: "constructUnit",
+						name: '施工单位'
+					}, {
+						field: "constructDate",
+						name: '施工日期'
+					}, {
+						field: "supervisionUnit",
+						name: '监理单位'
+					}, {
+						field: "supervisionEngineer",
+						name: '监理工程师'
+					}, {
+						field: "collectionPerson",
+						name: "采集人员"
+					}, {
+						field: "collectionDate",
+						name: '采集日期'
+					}
+				],
+				locationFields: [{
+					name: "桩号",
+					field: "medianStakeOid"
+				}],
 				sonFormDefault: {
 					relativeMileage: '',
 					measuredAngle: '', // 实测转角(°)
@@ -194,72 +231,90 @@
 						precision: 3,
 					},
 				},
-				domain: {
-					project: [],
-					pipeline: [],
-					tenders: [],
-					pipeSegment: [],
-					supervisionUnits: [], //监理单位
-					constructUnits: [], //施工单位
-					medianStakes: []
-				},
-				rules: {
-					projectOid: [{
-						required: true,
-						message: '项目名称为必填项',
-						//trigger: 'change'
-					}],
-					constructUnit: [{
-						required: true,
-						message: '施工单位为必填项',
-						//trigger: 'change'
-					}],
-					constructDate: [{
-						required: true,
-						message: '施工日期为必填项',
-						//trigger: 'change'
-					}],
-					supervisionUnit: [{
-						required: true,
-						message: '监理单位为必填项',
-						//trigger: 'change'
-					}],
-					tendersOid: [{
-						required: true,
-						message: '标段名称为必填项',
-						//trigger: 'change'
-					}],
-					pipelineOid: [{
-						required: true,
-						message: '管线名称为必填项',
-						//trigger: 'change'
-					}],
-					pipeSegmentOrCrossOid: [{
-						required: true,
-						message: '线路段/穿跨越为必填项',
-						//trigger: 'change'
-					}],
-
-					medianStakeOid: [{
-						required: true,
-						message: '桩号为必填项',
-						//trigger: 'change'
-					}],
-					collectionDate: [{
-						required: true,
-						message: '采集日期为必填项',
-						//trigger: 'change'
-					}],
-					supervisionEngineer: [{
-						min: "0",
-						max: 50,
-						message: "不能超过50个字"
-					}],
-					collectionPerson: [{
-						min: "0",
-						max: 30,
-						message: "不能超过30个字"
-					}]
+				fieldsConfig: {
+					projectOid: {
+						type: 'select',
+						optionUrl: '/daq/privilege/getProjectList.do',
+						childSelect: ['tendersOid'],
+						childUrl: ['/daq/privilege/getTendersList.do'],
+						isRequired: true,
+						isInit: true
+					},
+					tendersOid: {
+						type: 'select',
+						childSelect: ['pipelineOid', 'supervisionUnit'],
+						childUrl: ['/daq/privilege/getPipelineListByTendersOid.do', '/daq/privilege/getSupervisionUnitByTendersOid.do'],
+						isRequired: true,
+						isInit: true
+					},
+					pipelineOid: {
+						type: 'select',
+						childSelect: ['pipeSegmentOrCrossOid'],
+						childUrl: ['/daq/privilege/getPipeSegmentOrCrossList.do'],
+						isRequired: true,
+						isInit: true
+					},
+					pipeSegmentOrCrossOid: {
+						type: 'select',
+						childSelect: ['medianStakeOid'],
+						childUrl: ['/daq/privilege/getMedianStakeList.do'],
+						isRequired: true,
+						isInit: true
+					},
+					constructUnit: {
+						type: 'select',
+						disabled: true,
+						optionUrl: '/daq/privilege/getCurrentUnitId.do',
+						isRequired: true
+					},
+					constructDate: {
+						type: 'date',
+						isRequired: true,
+						lessDateScope: ['collectionDate'], //第一个数组表示 小于的日期，第二个数组表示大于的日期。默认是小于今天 today 默认为今天
+						maxDateScope: [],
+						isLessToday: true, //默认是小于今天的
+						pickerOptions: { //用于设置默认是小于今天的
+							disabledDate: function (time) {
+								return time.getTime() > new Date().getTime()
+							}
+						},
+					},
+					supervisionUnit: {
+						type: 'select',
+						isRequired: true,
+					},
+					supervisionEngineer: {
+						type: 'input',
+						rules: [{
+							min: "0",
+							max: 50,
+							message: "不能超过50个字"
+						}]
+					},
+					collectionPerson: {
+						type: 'input',
+						rules: [{
+							min: "0",
+							max: 30,
+							message: "不能超过30个字"
+						}]
+					},
+					collectionDate: {
+						type: 'date',
+						isRequired: true,
+						lessDateScope: [], //第一个数组表示 小于的日期，第二个数组表示大于的日期。默认是小于今天 today 默认为今天
+						maxDateScope: ['constructDate'],
+						isLessToday: true, //默认是小于今天的
+						pickerOptions: { //用于设置默认是小于今天的
+							disabledDate: function (time) {
+								return time.getTime() > new Date().getTime()
+							}
+						},
+					},
+					medianStakeOid: {
+						type: 'select',
+						isRequired: true,
+					}
 				},
 				form: {
 					relativeMileage: '',
@@ -279,17 +334,7 @@
 					supervisionEngineer: "",
 					collectionPerson: "",
 					remarks: ""
-				},
-				pickerOptionsStart: {
-					disabledDate: function (time) {
-						return time.getTime() > new Date().getTime()
-					}
-				},
-				pickerOptionsEnd: {
-					disabledDate: function (time) {
-						return time.getTime() > new Date().getTime()
-					}
-				},
+				}
 			}
 		},
 
@@ -298,14 +343,6 @@
 			var param = window.jasTools.base.getParamsInUrl(location.href);
 			var userBo = JSON.parse(localStorage.getItem("user"));
 			that.form.constructUnit = userBo.unitId;
-			/* that.domain.constructUnits = [{
-				key: userBo.unitId,
-				value: userBo.unitName
-			}]; */
-			this.requestDomainFromBizTable('/daq/privilege/getCurrentUnitId.do', {}, function (arr) {
-				that.domain.constructUnits = arr;
-			});
-
 			if (param.oid) {
 				this.oid = param.oid;
 				this.form.oid = this.oid;
@@ -313,132 +350,10 @@
 				this.getDetailByObjectId();
 				this.$refs.upload.requestFile(this.oid);
 			};
-
-			this.requestDomainFromBizTable('/daq/privilege/getProjectList.do', {}, function (arr) {
-				that.domain.project = arr;
-			});
-
 		},
 		methods: {
 			changevalue: function (msg) {
 				this.form.remarks = msg;
-			},
-			requestDomainFromBizTable: function (url, obj, cb) {
-				var that = this;
-				var url = jasTools.base.rootPath + url;
-				jasTools.ajax.post(url, obj, function (data) {
-					cb && cb(data.rows);
-				}, function () {
-					cb && cb([]);
-				});
-			},
-			childChange: function (event, id, name) {
-				if (event && !this.form[id]) {
-					top.Vue.prototype.$message({
-						type: 'warning',
-						message: "请先选择" + name
-					});
-				}
-			},
-			projectChanged: function (val, edit) {
-				var that = this;
-				if (val) {
-					this.requestDomainFromBizTable(
-						'/daq/privilege/getTendersList.do', {
-							projectOid: val
-						},
-						function (arr) {
-							that.domain.tenders = arr;
-						});
-				} else {
-					that.domain.tenders = [];
-				}
-				if (!edit) {
-					that.form.tendersOid = '';
-					that.domain.pipeline = [];
-					that.form.pipelineOid = '';
-					that.domain.pipeSegment = [];
-					that.form.pipeSegmentOrCrossOid = '';
-					that.domain.supervisionUnits = [];
-					that.form.supervisionUnit = '';
-					that.domain.medianStakes = [];
-					that.form.medianStakeOid = '';
-				}
-			},
-			tendersChanged: function (val, edit) { //根据标段触发管线列表
-				var that = this;
-				if (val) {
-					this.requestDomainFromBizTable(
-						'/daq/privilege/getPipelineListByTendersOid.do', {
-							tendersOid: val
-						},
-						function (arr) {
-							that.domain.pipeline = arr;
-						});
-				} else {
-					that.domain.pipeline = [];
-				}
-				if (!edit) {
-					that.form.pipelineOid = '';
-					that.domain.pipeSegment = [];
-					that.form.pipeSegmentOrCrossOid = '';
-					that.domain.medianStakes = [];
-					that.form.medianStakeOid = '';
-				}
-				that.getSupervisionUnit(val, edit); //根据标段获取监理单位
-			},
-			getSupervisionUnit: function (val, edit) {
-				var that = this;
-				if (val) {
-					this.requestDomainFromBizTable(
-						'/daq/privilege/getSupervisionUnitByTendersOid.do', {
-							tendersOid: val
-						},
-						function (arr) {
-							that.domain.supervisionUnits = arr;
-						});
-				} else {
-					that.domain.supervisionUnits = [];
-				}
-				if (!edit) {
-					that.form.supervisionUnit = '';
-				}
-			},
-			pipelineChanged: function (val, edit) { //根据管线触发线路段/穿跨越
-				var that = this;
-				if (val) {
-					this.requestDomainFromBizTable(
-						'/daq/privilege/getPipeSegmentOrCrossList.do', {
-							pipelineOid: val
-						},
-						function (arr) {
-							that.domain.pipeSegment = arr;
-						});
-				} else {
-					that.domain.pipeSegment = [];
-				}
-				if (!edit) {
-					that.form.pipeSegmentOrCrossOid = '';
-					that.domain.medianStakes = [];
-					that.form.medianStakeOid = '';
-				}
-			},
-			pipeSegmentChanged: function (val, edit) {
-				var that = this;
-				if (val) {
-					this.requestDomainFromBizTable(
-						'/daq/privilege/getMedianStakeList.do', {
-							pipeSegmentOrCrossOid: val
-						},
-						function (arr) {
-							that.domain.medianStakes = arr;
-						});
-				} else {
-					that.domain.medianStakes = [];
-				}
-				if (!edit) {
-					that.form.medianStakeOid = '';
-				}
 			},
 			cancel: function (param) {
 				window.parent.jasTools.dialog.close(param);
@@ -468,9 +383,7 @@
 					that.$refs.upload.uploadFile(data.data || that.oid);
 
 				});
-
 			},
-
 			uploadSuccess: function () {
 				top.Vue.prototype.$message({
 					type: 'success',
@@ -485,37 +398,10 @@
 					oid: that.oid
 				}, function (data) {
 					that.form = data.rows[0];
-					that.projectChanged(data.rows[0].projectOid, true);
-					that.tendersChanged(data.rows[0].tendersOid, true);
-					that.pipelineChanged(data.rows[0].pipelineOid, true);
-					that.pipeSegmentChanged(data.rows[0].pipeSegmentOrCrossOid, true);
+					that.$refs['mainForm'].triggerFatherSelectsChange();
 
 				});
-			},
-			changeStart: function () {
-				var that = this;
-				that.pickerOptionsStart = Object.assign({}, that.pickerOptionsStart, {
-					disabledDate: function (time) {
-						if (!that.form.collectionDate) {
-							return time.getTime() > new Date().getTime()
-						}
-						return time.getTime() > new Date(that.form.collectionDate).getTime() || time.getTime() > new Date().getTime();
-					}
-				})
-			},
-			changeEnd: function () {
-				var that = this;
-				that.pickerOptionsEnd = Object.assign({}, that.pickerOptionsEnd, {
-					disabledDate: function (time) {
-						if (!that.form.constructDate) {
-							return time.getTime() > new Date().getTime()
-						}
-						var day = new Date(that.form.constructDate).getTime() - 1000 * 24 * 60 * 60; //获取天数
-						return time.getTime() < new Date(day).getTime() || time.getTime() > new Date().getTime();
-						//  return time.getTime() <new Date(that.form.constructDate).getTime()||time.getTime()>new Date().getTime();
-					}
-				})
-			},
+			}
 		},
 	});
 </script>
