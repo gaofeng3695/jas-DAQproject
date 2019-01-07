@@ -20,99 +20,15 @@
 	<div id="app" v-cloak>
 
 		<jas-dialog-wrapper>
-			<el-form ref="formData"  :model="form" label-width="120px">
+			<el-form ref="formData" :model="form" label-width="120px">
+				<jas-form-items-group ref="mainForm" :form="form" :fields-config="fieldsConfig" :names-group="['基础数据','位置数据','测量放线数据']" :fields-group="[baseFields,locationFields,subFields]"></jas-form-items-group>
 
-				<jas-base-group-title name="基础数据"></jas-base-group-title>
+				<!--<jas-base-group-title name="基础数据"></jas-base-group-title>
 				<jas-form-items ref="mainForm" :form="form" :fields="baseFields" :fields-config="fieldsConfig"></jas-form-items>
 				<jas-base-group-title name="位置数据"></jas-base-group-title>
 				<jas-form-items ref="mainForm" :form="form" :fields="locationFields" :fields-config="fieldsConfig"></jas-form-items>
-				<!--<el-row :gutter="10">
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="项目名称" prop="projectOid" required>
-							<el-select v-model="form.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
-								<el-option v-for="item in domain.project" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="标段名称" prop="tendersOid" required>
-							<el-select v-model="form.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged" @visible-change="childChange($event,'projectOid','项目名称')">
-								<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="管线名称" prop="pipelineOid" required>
-							<el-select v-model="form.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged" @visible-change="childChange($event,'tendersOid','标段名称')">
-								<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="线路段/穿跨越" prop="pipeSegmentOrCrossOid" required>
-							<el-select v-model="form.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small" @change="pipeSegmentChanged"
-							  @visible-change="childChange($event,'pipelineOid','管线名称')">
-								<el-option v-for="item in domain.pipeSegment" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="施工单位" prop="constructUnit" required>
-							<el-select v-model="form.constructUnit" disabled placeholder="请选择施工单位" size="small">
-								<el-option v-for="item in domain.constructUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="施工日期" prop="constructDate" required>
-							<el-date-picker value-format="yyyy-MM-dd" :picker-options="pickerOptionsStart" @change="changeEnd" type="date" placeholder="请输入施工日期"
-							  v-model="form.constructDate" size="small" style="width: 100%;">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="监理单位" prop="supervisionUnit" required>
-							<el-select v-model="form.supervisionUnit" clearable placeholder="请选择监理单位" size="small" @visible-change="childChange($event,'tendersOid','标段名称')">
-								<el-option v-for="item in domain.supervisionUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="监理工程师" prop="supervisionEngineer">
-							<el-input v-model="form.supervisionEngineer" clearable placeholder="请输入监理工程师" size="small"></el-input>
-						</el-form-item>
-					</el-col>
-
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="采集人员" prop="collectionPerson">
-							<el-input v-model="form.collectionPerson" clearable placeholder="请输入采集人员" size="small"></el-input>
-						</el-form-item>
-					</el-col>
-
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="采集日期" prop="collectionDate" required>
-							<el-date-picker value-format="yyyy-MM-dd" :picker-options="pickerOptionsEnd" @change="changeStart" type="date" placeholder="请输入采集日期"
-							  v-model="form.collectionDate" size="small" style="width: 100%;">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
-				</el-row>-->
-
-				<!--<el-row>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-						<el-form-item label="桩号" prop="medianStakeOid" required>
-							<el-select v-model="form.medianStakeOid" clearable placeholder="请选择桩号" size="small" @visible-change="childChange($event,'pipeSegmentOrCrossOid','线路段/穿跨越')">
-								<el-option v-for="item in domain.medianStakes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-				</el-row>-->
-
-
 				<jas-base-group-title name="测量放线数据"></jas-base-group-title>
-				<jas-form-items ref="mainForm" :form="form" :fields="subFields" :fields-config="sonFieldsConfig"></jas-form-items>
+				<jas-form-items ref="mainForm" :form="form" :fields="subFields" :fields-config="sonFieldsConfig"></jas-form-items>-->
 				<jas-base-group-title name="其他信息"></jas-base-group-title>
 				<el-row>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -203,7 +119,8 @@
 					leftWidth: '', // 管道中心线左侧放线宽度(m
 					rightWidth: '' //管道中心线右侧放线宽度(m)
 				},
-				sonFieldsConfig: {
+				fieldsConfig: {
+
 					relativeMileage: {
 						type: 'number',
 						max: 999999,
@@ -230,8 +147,6 @@
 						max: 99999,
 						precision: 3,
 					},
-				},
-				fieldsConfig: {
 					projectOid: {
 						type: 'select',
 						optionUrl: '/daq/privilege/getProjectList.do',

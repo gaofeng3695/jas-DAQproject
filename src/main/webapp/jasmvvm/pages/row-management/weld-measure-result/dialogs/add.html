@@ -429,6 +429,8 @@
 					that.formData.supervisionUnit = '';
 					that.formData.weldOid='';
 					that.domain.welds=[];
+					that.domain.medianStakes=[];
+					that.formData.medianStakeOid='';
 					
 				}
 				that.getWorkUints(val, edit); //进行获取施工机组
@@ -474,6 +476,8 @@
 					that.formData.pipeSegmentOrCrossOid = '';
 					that.formData.weldOid='';
 					that.domain.welds=[];
+					that.domain.medianStakes=[];
+					that.formData.medianStakeOid='';
 				}
 				that.getSupervisionUnit(val, edit); //根据标段获取监理单位
 			},
@@ -515,6 +519,8 @@
 					that.formData.pipeSegmentOrCrossOid = '';
 					that.formData.weldOid='';
 					that.domain.welds=[];
+					that.domain.medianStakes=[];
+					that.formData.medianStakeOid='';
 				}
 			},
 			pipeSegmentChanged: function (val, edit) {

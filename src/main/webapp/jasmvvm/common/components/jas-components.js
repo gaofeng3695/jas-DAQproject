@@ -1405,7 +1405,6 @@ Vue.component('jas-form-items', {
 			return value;
 		},
 		triggerFatherSelectsChange: function (fatherSelectList) {
-			console.log("sss");
 			var that = this;
 			var SelectList = fatherSelectList || that.fatherSelectList;
 			setTimeout(function () {
@@ -1480,6 +1479,7 @@ Vue.component('jas-form-items', {
 
 		},
 		visibleChange: function (isShowOptions, currentField) {
+			console.log(currentField);
 			if (!isShowOptions) return;
 			var fieldArr = [];
 			var fieldNameArr = [];
@@ -1489,8 +1489,10 @@ Vue.component('jas-form-items', {
 				fieldArr.push(item.field);
 				fieldNameArr.push(item.name);
 			});
+			console.log(fieldNameArr);
 			for (var field in fieldsConfig) {
 				var fieldIndex = fieldArr.indexOf(field);
+				console.log(fieldIndex);
 				if (fieldIndex > -1 && fieldsConfig.hasOwnProperty(field)) {
 					if (fieldsConfig[field].childSelect && fieldsConfig[field].childSelect.indexOf(currentField) > -1) {
 						if (!this.form[field]) {
@@ -1523,7 +1525,10 @@ Vue.component('jas-form-items', {
 				}
 				var length = that.fieldsConfig[childField].options.length;
 				!isInit && (form[childField] = '');
-				if(!form[fatherField]) form[childField] = '';
+				if(!form[fatherField]){
+					form[childField] = '';
+					that.fieldsConfig[childField].options=[];
+				} 
 				if(that.fieldsConfig[childField].isInit){
 					if(options.length>0 && !that.form[childField]) that.form[childField] = options[0].key;
 					that.$refs[childField][0].$emit('change', true);
@@ -1809,7 +1814,10 @@ Vue.component('jas-form-items-group', {
 				// }else{
 				// 	form[childField] = '';
 				// }
-				if(!form[fatherField]) form[childField] = '';
+				if(!form[fatherField]) {
+					form[childField] = '';
+					that.fieldsConfig[childField].options=[];
+				}
 				if(that.fieldsConfig[childField].isInit){
 					if(options.length>0 && !that.form[childField]) that.form[childField] = options[0].key;	
 					that.$refs[childField][0].$emit('change', true);

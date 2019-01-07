@@ -128,14 +128,14 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="前焊口编号" prop="frontWeldOid" required>
-								<el-select v-model="formData.frontWeldOid" clearable placeholder="请选择前焊口编号" size="small" @change="frontWeldChanged">
+								<el-select v-model="formData.frontWeldOid" clearable placeholder="请选择前焊口编号" size="small" @change="frontWeldChanged" @visible-change="childChange($event,'weldOid','割口编号')">
 									<el-option v-for="item in domain.frontWeldOids" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="后焊口编号" prop="backWeldOid" required>
-								<el-select v-model="formData.backWeldOid" clearable placeholder="请选择后焊口编号" size="small">
+								<el-select v-model="formData.backWeldOid" clearable placeholder="请选择后焊口编号" size="small"  @visible-change="childChange($event,'frontWeldOid','前焊口编号')">
 									<el-option v-for="item in domain.backWeldOids" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
@@ -396,6 +396,10 @@
 					that.formData.supervisionUnit = '';
 					that.domain.welds=[];
 					that.formData.weldOid = '';
+					that.domain.frontWeldOids=[];
+					that.formData.frontWeldOid = '';
+					that.domain.backWeldOids=[];
+					that.formData.backWeldOid = '';
 					
 				}
 				that.getWorkUints(val, edit); //获取机组
@@ -446,6 +450,10 @@
 					that.formData.pipeSegmentOrCrossOid = '';
 					that.domain.welds=[];
 					that.formData.weldOid = '';
+					that.domain.frontWeldOids=[];
+					that.formData.frontWeldOid = '';
+					that.domain.backWeldOids=[];
+					that.formData.backWeldOid = '';
 				}
 				that.getSupervisionUnit(val, edit); //根据标段获取监理单位
 			},
@@ -488,6 +496,10 @@
 				
 					that.domain.welds=[];
 					that.formData.weldOid = '';
+					that.domain.frontWeldOids=[];
+					that.formData.frontWeldOid = '';
+					that.domain.backWeldOids=[];
+					that.formData.backWeldOid = '';
 				}
 			},
 			pipeSegmentChanged: function (val, edit) {
@@ -512,6 +524,10 @@
 				}
 				if (!edit||!val) {
 					that.formData.weldOid = '';
+					that.domain.frontWeldOids=[];
+					that.formData.frontWeldOid = '';
+					that.domain.backWeldOids=[];
+					that.formData.backWeldOid = '';
 				}
 			},
 			weldChanged: function (val, edit) {
@@ -530,6 +546,8 @@
 				}
 				if (!edit) {
 					that.formData.frontWeldOid = '';
+					that.domain.backWeldOids=[];
+					that.formData.backWeldOid = '';
 				}
 			},
 			frontWeldChanged: function (val, edit) {

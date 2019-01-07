@@ -21,13 +21,14 @@
 
 		<jas-dialog-wrapper>
 			<el-form ref="formData" :rules="rules" :model="form" label-width="140px">
+				<jas-form-items-group ref="mainForm" :form="form" :fields-config="fieldsConfig" :names-group="['基础数据','位置数据','管沟开挖数据']" :fields-group="[baseFields,locationFields,fields]"></jas-form-items-group>
 
-				<jas-base-group-title name="基础数据"></jas-base-group-title>
+				<!--<jas-base-group-title name="基础数据"></jas-base-group-title>
 				<jas-form-items ref="mainForm" :form="form" :fields="baseFields" :fields-config="fieldsConfig"></jas-form-items>
 				<jas-base-group-title name="位置数据"></jas-base-group-title>
 				<jas-form-items ref="mainForm" :form="form" :fields="locationFields" :fields-config="fieldsConfig"></jas-form-items>
 				<jas-base-group-title name="管沟开挖数据"></jas-base-group-title>
-				<jas-form-items ref="mainForm" :form="form" :fields="fields" :fields-config="fieldsConfig"></jas-form-items>
+				<jas-form-items ref="mainForm" :form="form" :fields="fields" :fields-config="fieldsConfig"></jas-form-items>-->
 				<jas-base-group-title name="其他信息"></jas-base-group-title>
 				<el-row>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">

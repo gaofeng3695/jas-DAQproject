@@ -39,114 +39,12 @@
 		<jas-dialog-wrapper>
 			<div class="content">
 				<el-form ref="formData" :rules="rules" :model="formData" label-width="150px">
-					<jas-base-group-title name="基础数据"></jas-base-group-title>
+					<jas-form-items-group ref="mainForm" :form="formData" :fields-config="fieldsConfig" :names-group="['基础数据','位置数据']"
+					  :fields-group="[baseFields,locationFields]"></jas-form-items-group>
+					<!--<jas-base-group-title name="基础数据"></jas-base-group-title>
 						<jas-form-items ref="mainForm" :form="formData" :fields="baseFields" :fields-config="fieldsConfig"></jas-form-items>
-					<!--<el-row :gutter="10">
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="项目名称" prop="projectOid" required>
-								<el-select v-model="formData.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
-									<el-option v-for="item in domain.project" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-								</el-select>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="标段名称" prop="tendersOid" required>
-								<el-select v-model="formData.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged" @visible-change="childChange($event,'projectOid','项目名称')">
-									<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-								</el-select>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="管线名称" prop="pipelineOid" required>
-								<el-select v-model="formData.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged" @visible-change="childChange($event,'tendersOid','标段名称')">
-									<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-								</el-select>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="线路段名称" prop="pipeSegmentOid" required>
-								<el-select v-model="formData.pipeSegmentOid" clearable placeholder="请选择线路段" size="small" @change="pipeSegmentChanged" @visible-change="childChange($event,'pipelineOid','管线名称')">
-									<el-option v-for="item in domain.pipeSegment" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-								</el-select>
-							</el-form-item>
-						</el-col>
-
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="施工单位" prop="constructUnit" required>
-								<el-select v-model="formData.constructUnit" disabled placeholder="请选择施工单位" size="small">
-									<el-option v-for="item in domain.constructUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-								</el-select>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="施工日期">
-								<el-date-picker value-format="yyyy-MM-dd" type="date" :picker-options="pickerOptionsStart" @change="changeEnd" placeholder="请输入施工日期"
-								  v-model="formData.constructDate" size="small" style="width: 100%;">
-								</el-date-picker>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="监理单位" prop="supervisionUnit" required>
-								<el-select v-model="formData.supervisionUnit" clearable placeholder="请选择监理单位" size="small" @visible-change="childChange($event,'tendersOid','标段名称')">
-									<el-option v-for="item in domain.supervisionUnits" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-								</el-select>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="监理工程师" prop="supervisionEngineer">
-								<el-input v-model="formData.supervisionEngineer" clearable placeholder="请输入监理工程师" size="small"></el-input>
-							</el-form-item>
-						</el-col>
-
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="采集人员" prop="collectionPerson">
-								<el-input v-model="formData.collectionPerson" clearable placeholder="请输入采集人员" size="small"></el-input>
-							</el-form-item>
-						</el-col>
-
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="采集日期" prop="collectionDate" required>
-								<el-date-picker value-format="yyyy-MM-dd" :picker-options="pickerOptionsEnd" @change="changeStart" type="date" placeholder="请输入采集日期"
-								  v-model="formData.collectionDate" size="small" style="width: 100%;">
-								</el-date-picker>
-							</el-form-item>
-						</el-col>
-					</el-row>-->
 					<jas-base-group-title name="位置数据"></jas-base-group-title>
-						<jas-form-items ref="mainForm" :form="formData" :fields="locationFields" :fields-config="fieldsConfig"></jas-form-items>
-					<!--<el-row>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="桩号" prop="medianStakeOid" required>
-								<el-select v-model="formData.medianStakeOid" clearable placeholder="请选择桩号" size="small" @visible-change="childChange($event,'pipeSegmentOid','线路段名称')">
-									<el-option v-for="item in domain.medianStakes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-								</el-select>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="相对桩距离(m)" prop="relativeMileage" required>
-								<el-input-number :precision="0" :step="1" :max="99999999" controls-position="right" v-model="formData.relativeMileage" clearable
-								  placeholder="请输入相对桩距离(m)" size="small"></el-input-number>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="X坐标">
-								<el-input-number :precision="3" :step="1" :max="999999" controls-position="right" v-model="formData.pointx" clearable placeholder="请输入X坐标"
-								  size="small"></el-input-number>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="Y坐标">
-								<el-input-number :precision="3" :step="1" :max="999999" controls-position="right" v-model="formData.pointy" clearable placeholder="请输入Y坐标"
-								  size="small"></el-input-number>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
-							<el-form-item label="高程(m)">
-								<el-input-number :precision="3" :step="1" :max="999999" controls-position="right" v-model="formData.pointz" clearable placeholder="请输入高程(m)"
-								  size="small"></el-input-number>
-							</el-form-item>
-						</el-col>
-					</el-row>-->
+						<jas-form-items ref="mainForm" :form="formData" :fields="locationFields" :fields-config="fieldsConfig"></jas-form-items>-->
 					<jas-base-group-title name="测试桩数据"></jas-base-group-title>
 					<jas-form-items ref="mainForm" :form="formData" :fields="fields" :fields-config="fieldsConfig"></jas-form-items>
 					<el-form-item label="桩功能" prop="stakeFunction" required>
