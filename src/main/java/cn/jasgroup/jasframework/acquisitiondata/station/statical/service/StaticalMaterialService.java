@@ -36,4 +36,17 @@ public class StaticalMaterialService {
 		return staticalMaterialDao.getMaterialLauncherList(projectOid);
 	}
 
+	/**
+	 * <p>功能描述：根据项目查询放空火炬物资列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月4日 下午4:25:34。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getMaterialFlareList(String projectOid) {
+		return staticalMaterialDao.getMaterialFlareList(projectOid);
+	}
+
 }
