@@ -43,7 +43,7 @@
 					<el-row :gutter="10">
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="项目名称" prop="projectOid" required>
-								<el-select v-model="formData.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
+								<el-select v-model="formData.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged($event,false,true)">
 									<el-option v-for="item in domain.project" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>
@@ -291,6 +291,10 @@
 				function (
 					arr) {
 					that.domain.project = arr;
+					if(!that.isEdit){
+						that.formData.projectOid=arr[0].key;
+						that.projectChanged(that.formData.projectOid,false,true);//false:表示为是否编辑，true表示新增	
+					}
 				});
 			this.getConstructUnit();
 		},
@@ -315,7 +319,7 @@
 					cb && cb([]);
 				});
 			},
-			projectChanged: function (val,edit) {
+			projectChanged: function (val,edit,add) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable(
@@ -324,10 +328,10 @@
 						},
 						function (arr) {
 							that.domain.tenders = arr;
-							//if (arr.length > 0) {
-								// that.formData.tendersOid = arr[0].key;
-								//that.tendersChanged(that.formData.tendersOid);
-							//}
+							if(add){
+								that.formData.tendersOid=arr[0].key;
+								that.tendersChanged(that.formData.tendersOid);
+							}
 						});
 				}else{
 					that.domain.tenders=[];
@@ -348,9 +352,6 @@
 							},
 							function (arr) {
 								that.domain.pipeColdBendingOidArr = arr;
-								// if (arr.length > 0) {
-								// 	that.formData.pipeColdBendingOid = arr[0].key;
-								// }
 
 							});
 				}else{
@@ -358,7 +359,6 @@
 				}
 				if (!edit) {
 					that.formData.pipeColdBendingOid = '';
-					
 				}
 			},
 			cancel: function (param) {
@@ -403,9 +403,11 @@
 				var url = jasTools.base.rootPath +
 					"/jdbc/commonData/checkPipeColdBending/getPage.do";
 				jasTools.ajax.post(url, that.formData, function (data) {
-					
-						that.formData = data.rows[0];
-						
+					that.formData = data.rows[0];
+					that.domain.pipeColdBendingOidArr.push({
+						key:that.formData.pipeColdBendingOid,
+						value:that.formData.pipeColdBendingCode
+					});	
 					that.projectChanged(data.rows[0].projectOid, true);
 					that.tendersChanged(data.rows[0].tendersOid, true);
 				});

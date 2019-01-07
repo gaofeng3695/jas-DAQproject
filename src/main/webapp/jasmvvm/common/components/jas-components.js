@@ -1463,6 +1463,10 @@ Vue.component('jas-form-items', {
 						(function (field, config) {
 							jasTools.ajax.post(jasTools.base.rootPath + "/" + config.optionUrl, {}, function (data) {
 								config.options = data.rows;
+								if(config.isInit){
+									that.form[field]=config.options[0].key;
+									that.$refs[field][0].$emit('change', false);
+								}
 							});
 						})(field, config)
 					}
@@ -1475,6 +1479,7 @@ Vue.component('jas-form-items', {
 
 		},
 		visibleChange: function (isShowOptions, currentField) {
+			console.log(currentField);
 			if (!isShowOptions) return;
 			var fieldArr = [];
 			var fieldNameArr = [];
@@ -1484,8 +1489,10 @@ Vue.component('jas-form-items', {
 				fieldArr.push(item.field);
 				fieldNameArr.push(item.name);
 			});
+			console.log(fieldNameArr);
 			for (var field in fieldsConfig) {
 				var fieldIndex = fieldArr.indexOf(field);
+				console.log(fieldIndex);
 				if (fieldIndex > -1 && fieldsConfig.hasOwnProperty(field)) {
 					if (fieldsConfig[field].childSelect && fieldsConfig[field].childSelect.indexOf(currentField) > -1) {
 						if (!this.form[field]) {
@@ -1506,6 +1513,7 @@ Vue.component('jas-form-items', {
 			var fieldConfig = this.fieldsConfig[fatherField];
 			var form = this.form;
 			var setChildOptionsAndValue = function (childField, options) { // 入参下拉选项
+				
 				if (that.form.weldOid != "" && childField == "weldOid") {
 					options.push({
 						key: that.form.weldOid,
@@ -1517,11 +1525,15 @@ Vue.component('jas-form-items', {
 				}
 				var length = that.fieldsConfig[childField].options.length;
 				!isInit && (form[childField] = '');
-				//form[childField] = '';
-				//if (options.length === 1) { //只有一个选项就自动复制
-				//form[childField] = options[0].key;
-				that.$refs[childField][0].$emit('change', isInit);
-				//}
+				if(!form[fatherField]){
+					form[childField] = '';
+					that.fieldsConfig[childField].options=[];
+				} 
+				if(that.fieldsConfig[childField].isInit){
+					if(options.length>0 && !that.form[childField]) that.form[childField] = options[0].key;
+					that.$refs[childField][0].$emit('change', true);
+				}
+				
 
 			};
 
@@ -1745,7 +1757,12 @@ Vue.component('jas-form-items-group', {
 								obj = jasTools.base.extend(obj, config.requestParams);
 							}
 							jasTools.ajax.post(jasTools.base.rootPath + "/" + config.optionUrl, obj, function (data) {
+								//下拉框是否进行初始化显示
 								config.options = data.rows;
+								if(config.isInit){
+									that.form[field]=config.options[0].key;
+									that.$refs[field][0].$emit('change', false);
+								}
 							});
 						})(field, config)
 					}
@@ -1791,14 +1808,21 @@ Vue.component('jas-form-items-group', {
 			var setChildOptionsAndValue = function (childField, options) { // 入参下拉选项
 				that.fieldsConfig[childField].options = options;
 				!isInit && (form[childField] = '');
-
 				// if (options.length === 1) { //只有一个选项就自动复制
 				// 	form[childField] = options[0].key;
 
 				// }else{
 				// 	form[childField] = '';
 				// }
-				that.$refs[childField][0].$emit('change', isInit);
+				if(!form[fatherField]) {
+					form[childField] = '';
+					that.fieldsConfig[childField].options=[];
+				}
+				if(that.fieldsConfig[childField].isInit){
+					if(options.length>0 && !that.form[childField]) that.form[childField] = options[0].key;	
+					that.$refs[childField][0].$emit('change', true);
+				}
+				
 			};
 
 			var getAndSet = function (fatherField, fatherValue, childField, requestUrl) {
