@@ -6450,5 +6450,4 @@ ALTER TABLE custom_fun_fields
 
 COMMENT ON COLUMN custom_fun_fields.precision IS 'xiao shu dian bao liu ji wei';
 
-
 ALTER TABLE custom_fun_fields ALTER COLUMN child_field TYPE varchar(100) ;
