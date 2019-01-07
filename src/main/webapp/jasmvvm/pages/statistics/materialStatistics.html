@@ -324,6 +324,7 @@
           var x = [];
           var series = [];
           var result=data.data;
+          var total={};
       	//两个日期的比较，如果Key大于就截取
           for (var key in result) {
             var z = [];
@@ -350,9 +351,12 @@
             }
             if (obj.type == "bar") {
               obj.stack = '总量';
+              series.push(obj);	
+            }else{
+            	total=obj;
             }
-            series.push(obj);
           }
+          series.push(total);
           that._renderMaterialByDay(x, series);
         });
       },
