@@ -49,4 +49,43 @@ public class StaticalMaterialService {
 		return staticalMaterialDao.getMaterialFlareList(projectOid);
 	}
 
+	/**
+	 * <p>功能描述：根据项目查询过滤器物资列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月7日 下午2:19:38。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getMaterialFilterList(String projectOid) {
+		return staticalMaterialDao.getMaterialFilterList(projectOid);
+	}
+
+	/**
+	 * <p>功能描述：根据项目查询管壳式热交换器物资列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月7日 下午2:39:25。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getMaterialExchangerList(String projectOid) {
+		return staticalMaterialDao.getMaterialExchangerList(projectOid);
+	}
+
+	/**
+	 * <p>功能描述：根据项目查询加热炉物资列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月7日 下午4:47:34。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getMaterialHeaterList(String projectOid) {
+		return staticalMaterialDao.getMaterialHeaterList(projectOid);
+	}
+
 }

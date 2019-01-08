@@ -50,5 +50,47 @@ public class StaticalMaterialDao {
 		return baseJdbcDao.queryForList(sql, null);
 	}
 
+	/**
+	 * <p>功能描述：根据项目查询过滤器物资列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月7日 下午2:20:11。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getMaterialFilterList(String projectOid) {
+		String sql = "select oid as key,manufacture_number as value from daq_s_material_filter where active=1 and project_oid='"+projectOid+"'";
+		return baseJdbcDao.queryForList(sql, null);
+	}
+
+	/**
+	 * <p>功能描述：根据项目查询管壳式热交换器物资列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月7日 下午2:39:45。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getMaterialExchangerList(String projectOid) {
+		String sql = "select oid as key,manufacture_number as value from daq_s_material_exchanger where active=1 and project_oid='"+projectOid+"'";
+		return baseJdbcDao.queryForList(sql, null);
+	}
+
+	/**
+	 * <p>功能描述：根据项目查询加热炉物资列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月7日 下午4:47:51。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getMaterialHeaterList(String projectOid) {
+		String sql = "select oid as key,manufacture_number as value from daq_s_material_heater where active=1 and project_oid='"+projectOid+"'";
+		return baseJdbcDao.queryForList(sql, null);
+	}
+
 
 }
