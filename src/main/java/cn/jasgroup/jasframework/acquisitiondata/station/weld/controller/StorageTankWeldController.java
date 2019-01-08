@@ -28,10 +28,10 @@ public class StorageTankWeldController {
      */
     @RequestMapping("getStorageTankWeldList")
     public Object getStorageTankWeldList(@RequestBody Map<String,String> param){
-        String projectOid = (String)param.get("projectOid");
+        String pipeStationOid = (String)param.get("pipeStationOid");
         ListResult<Map<String, Object>> result= null;
         try{
-            List<Map<String, Object>> rows = this.storageTankWeldService.getStorageTankWeldList(projectOid);
+            List<Map<String, Object>> rows = this.storageTankWeldService.getStorageTankWeldList(pipeStationOid);
             result = new ListResult<>(1,"200","ok",rows);
         }catch(Exception e){
             result = new ListResult<>(-1,"400","error");
