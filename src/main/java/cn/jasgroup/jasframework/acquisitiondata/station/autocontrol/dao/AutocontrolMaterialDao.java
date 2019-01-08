@@ -162,5 +162,117 @@ public class AutocontrolMaterialDao {
 		return baseJdbcDao.queryForList(sql, null);
 	}
 
+	/**
+	 * <p>功能描述：根据项目查询差压表物资列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月8日 下午1:21:55。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getMaterialDifferenceGaugeList(String projectOid) {
+		String sql = "select oid as key,manufacture_number as value from daq_s_material_pressure_difference_gauge where active=1 and project_oid='"+projectOid+"'";
+		return baseJdbcDao.queryForList(sql, null);
+	}
+
+	/**
+	 * <p>功能描述：根据项目查询温度变送器物资列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月8日 下午1:25:30。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getMaterialTemperatureTransmitterList(String projectOid) {
+		String sql = "select oid as key,manufacture_number as value from daq_s_material_temperature_transmitter where active=1 and project_oid='"+projectOid+"'";
+		return baseJdbcDao.queryForList(sql, null);
+	}
+
+	/**
+	 * <p>功能描述：根据项目查询双金属温度计物资列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月8日 下午1:28:25。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getMaterialBimetallicThermometerList(String projectOid) {
+		String sql = "select oid as key,manufacture_number as value from daq_s_material_bimetallic_thermometer where active=1 and project_oid='"+projectOid+"'";
+		return baseJdbcDao.queryForList(sql, null);
+	}
+
+	/**
+	 * <p>功能描述：根据项目查询铂电阻物资列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月8日 下午1:30:55。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getMaterialTemperatureElementList(String projectOid) {
+		String sql = "select oid as key,manufacture_number as value from daq_s_material_temperature_element where active=1 and project_oid='"+projectOid+"'";
+		return baseJdbcDao.queryForList(sql, null);
+	}
+
+	/**
+	 * <p>功能描述：根据项目查询平均温度计物资列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月8日 下午1:33:55。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getMaterialAgeTemperatureList(String projectOid) {
+		String sql = "select oid as key,manufacture_number as value from daq_s_material_age_temperature_transmitter where active=1 and project_oid='"+projectOid+"'";
+		return baseJdbcDao.queryForList(sql, null);
+	}
+
+	/**
+	 * <p>功能描述：根据项目查询液位变送器物资列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月8日 下午1:36:22。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getMaterialLitLevelList(String projectOid) {
+		String sql = "select oid as key,manufacture_number as value from daq_s_material_lit_level_transmitter where active=1 and project_oid='"+projectOid+"'";
+		return baseJdbcDao.queryForList(sql, null);
+	}
+
+	/**
+	 * <p>功能描述：根据项目查询液位计物资列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月8日 下午1:38:54。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getMaterialLevelGaugeList(String projectOid) {
+		String sql = "select oid as key,manufacture_number as value from daq_s_material_level_gauge where active=1 and project_oid='"+projectOid+"'";
+		return baseJdbcDao.queryForList(sql, null);
+	}
+
+	/**
+	 * <p>功能描述：根据项目查询调节阀物资列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月8日 下午1:41:38。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getMaterialControlValveList(String projectOid) {
+		String sql = "select oid as key,manufacture_number as value from daq_s_material_control_valve where active=1 and project_oid='"+projectOid+"'";
+		return baseJdbcDao.queryForList(sql, null);
+	}
+
 	
 }
