@@ -154,4 +154,108 @@ public class AutocontrolMaterialService {
 		return autocontrolMaterialDao.getMaterialDifferenceTransmitterList(projectOid);
 	}
 
+	/**
+	 * <p>功能描述：根据项目查询差压表物资列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月8日 下午1:21:35。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getMaterialDifferenceGaugeList(String projectOid) {
+		return autocontrolMaterialDao.getMaterialDifferenceGaugeList(projectOid);
+	}
+
+	/**
+	 * <p>功能描述：根据项目查询温度变送器物资列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月8日 下午1:25:10。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getMaterialTemperatureTransmitterList(String projectOid) {
+		return autocontrolMaterialDao.getMaterialTemperatureTransmitterList(projectOid);
+	}
+
+	/**
+	 * <p>功能描述：根据项目查询双金属温度计物资列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月8日 下午1:28:06。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getMaterialBimetallicThermometerList(String projectOid) {
+		return autocontrolMaterialDao.getMaterialBimetallicThermometerList(projectOid);
+	}
+
+	/**
+	 * <p>功能描述：根据项目查询铂电阻物资列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月8日 下午1:30:34。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getMaterialTemperatureElementList(String projectOid) {
+		return autocontrolMaterialDao.getMaterialTemperatureElementList(projectOid);
+	}
+
+	/**
+	 * <p>功能描述：根据项目查询平均温度计物资列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月8日 下午1:33:37。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getMaterialAgeTemperatureList(String projectOid) {
+		return autocontrolMaterialDao.getMaterialAgeTemperatureList(projectOid);
+	}
+
+	/**
+	 * <p>功能描述：根据项目查询液位变送器物资列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月8日 下午1:36:01。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getMaterialLitLevelList(String projectOid) {
+		return autocontrolMaterialDao.getMaterialLitLevelList(projectOid);
+	}
+
+	/**
+	 * <p>功能描述：根据项目查询液位计物资列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月8日 下午1:39:20。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getMaterialLevelGaugeList(String projectOid) {
+		return autocontrolMaterialDao.getMaterialLevelGaugeList(projectOid);
+	}
+
+	/**
+	 * <p>功能描述：根据项目查询调节阀物资列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月8日 下午1:41:38。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getMaterialControlValveList(String projectOid) {
+		return autocontrolMaterialDao.getMaterialControlValveList(projectOid);
+	}
+	
 }
