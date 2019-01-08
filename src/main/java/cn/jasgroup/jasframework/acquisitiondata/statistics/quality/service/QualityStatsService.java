@@ -46,7 +46,7 @@ public class QualityStatsService {
 		//根据条件查询每月射线检测的焊口口数及对应的一次合格率
 		List<Map<String, Object>> weldCountAndRateList = qualityStatsDao.getMonthlyQualiifiedRateByProjectAndUnit(projectOids, unitOids, year);
 		//定义1-12月的数组
-		String[] monthArray = new String[]{"1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"};
+		String[] monthArray = new String[]{"01月","02月","03月","04月","05月","06月","07月","08月","09月","10月","11月","12月"};
 		//定义焊口数数组,并将数据填充为0
 		int[] weldCount = new int[12];
 		Arrays.fill(weldCount, 0);
