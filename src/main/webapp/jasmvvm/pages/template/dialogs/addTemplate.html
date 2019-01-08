@@ -624,18 +624,22 @@
 				var str = that.isAddPage ? "save" : "update";
 				var url = jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/" + str + ".do"
 				/*属性里面是数组的进行转换成字符串*/
-				for (key in that.formData) {
+				//console.log(that.formData);
+				var obj={};
+				for (var key in that.formData) {
 					if (that.formData[key] instanceof Array) {
-						that.formData[key] = that.formData[key].length>0?that.formData[key].join(","):that.formData[key]
+						obj[key] = that.formData[key].length>0?that.formData[key].join(","):that.formData[key]
 					} else if (that.formData[key] === '') {
-						that.formData[key] = null;
+						obj[key] = null;
+					}else{
+						obj[key]=that.formData[key]
 					}
 				}
-				jasTools.ajax.post(url, that.formData, function () {
+				jasTools.ajax.post(url, obj, function () {
 					if (that.ifAttachment) {
-					  that.$refs.upload.uploadFile(that.formData[that.pkArray[0]]); //触发上传附件
+					 that.$refs.upload.uploadFile(that.formData[that.pkArray[0]]); //触发上传附件
 					} else {
-						that.uploadSuccess();
+					that.uploadSuccess();
 					}
 				});
 			},
