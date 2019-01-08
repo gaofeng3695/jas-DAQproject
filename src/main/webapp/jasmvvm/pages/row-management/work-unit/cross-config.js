@@ -41,7 +41,7 @@ var crossConfig = {
       type: 'select',
       name: '项目名称',
       optionUrl: '/daq/privilege/getProjectList.do',
-
+      isInit: true,
       isRequired: true
     },
     projectName: {
