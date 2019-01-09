@@ -694,7 +694,8 @@ var crossConfig = {
       optionUrl: '/daq/privilege/getProjectList.do',
       childSelect: ['tendersOid', 'workUnitOid'],
       childUrl: ['/daq/privilege/getTendersList.do', '/daq/workUnit/getWorkUnitList.do'],
-      isRequired: true
+      isRequired: true,
+      isInit:true
     },
     tendersName: {
       name: '标段名称',
@@ -704,7 +705,8 @@ var crossConfig = {
       name: '标段名称',
       childSelect: ['pipelineOid', 'supervisionUnit'],
       childUrl: ['/daq/privilege/getPipelineListByTendersOid.do', '/daq/privilege/getSupervisionUnitByTendersOid.do'],
-      isRequired: true
+      isRequired: true,
+      isInit:true
     },
     pipelineName: {
       name: '管线名称',
@@ -714,7 +716,8 @@ var crossConfig = {
       name: '管线名称',
       childSelect: ['pipeSegmentOrCrossOid'],
       childUrl: ['/daq/privilege/getPipeSegmentOrCrossList.do'],
-      isRequired: true
+      isRequired: true,
+      isInit:true
     },
     pipeSegmentOrCrossName: {
       name: '线路段/穿跨越',
@@ -724,7 +727,8 @@ var crossConfig = {
       name: '线路段/穿跨越',
       childSelect: ['medianStakeOid', 'startMedianStakeOid', 'endMedianStakeOid'],
       childUrl: ['/daq/privilege/getMedianStakeList.do', '/daq/privilege/getMedianStakeList.do', '/daq/privilege/getMedianStakeList.do'],
-      isRequired: true
+      isRequired: true,
+      isInit:true
     },
     constructUnit: {
       type: 'select',

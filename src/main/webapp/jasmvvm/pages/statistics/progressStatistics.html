@@ -263,7 +263,9 @@
             series.push({
               name: item.tendersName,
               type: "line",
-              data: item.data
+              data: item.data,
+              symbol:"emptyCircle",
+              symbolSize:8
             })
           });
           that.renderSectionByMonth(legend, x, series);

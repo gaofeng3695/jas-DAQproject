@@ -6,32 +6,32 @@
  */
 /****地图基本控件****/
 var BaseMapModule = function () {
-    this.mapApi = null; //
-    this.index = null; //
-    this.state = "closed"; //open/closed /hidden/ show
-    this.container = null; //容器dom
-    this.dom = null; //模块的dom节点
-    this.moduleClass = "base-map-module"; //模块类
-    this.template = null;
-    this.startup = function () {
-        this.mapApi.publish(this.mapApi.Events.ModuleStartupEvent, {
-            id: this.id
+    var _self = this ;
+    _self.mapApi = null; //
+    _self.index = null; //
+    _self.state = "closed"; //open/closed /hidden/ show
+    _self.container = null; //容器dom
+    _self.dom = null; //模块的dom节点
+    _self.moduleClass = "base-map-module"; //模块类
+    _self.template = null;
+    _self.startup = function () {
+        _self.mapApi.publish(_self.mapApi.Events.ModuleStartupEvent, {
+            id: _self.id
         });
 
     };
-    this.domCreate = function () {
-        var _this = this;
-        $(_this.template).load(function (e) {
-            _this.mapApi.publish(_this.mapApi.Events.ModuleInitEvent, {
-                target: _this
+    _self.domCreate = function () {
+        $(_self.template).load(function (e) {
+            _self.mapApi.publish(_self.mapApi.Events.ModuleInitEvent, {
+                target: _self
             });
         });
     };
-    this.show = function (flg) {
+    _self.show = function (flg) {
         //true:show , false:hidden
 
     };
-    this.open = function (flg) {
+    _self.open = function (flg) {
         //true:open , false:close
 
     };
@@ -266,11 +266,14 @@ var LayerListTree = function (options) {
     var defaults = {
         title: "图层控制",
         right: 30,
-        top: 80,
+        top: 60,
         left: null,
         bottom: null,
         width: 250,
-        height: 500
+        height: 500,
+        appendDrawLayers:true,
+        drawLayerGroupName:"绘制图层",
+
     };
     var params = $.extend(defaults, options);
     var _self = this;
@@ -280,12 +283,15 @@ var LayerListTree = function (options) {
     _self.$tree = null;
     _self.template = "" +
         "<div class='" + _self.moduleClass + " easyui-dialog'>" +
-        "    <div class='form'></div>" +
         "    <div class='tree'>" +
         "        <ul id='layerListTree'></ul>" +
         "    </div>" +
         "</div>";
-
+    //
+    _self.contextMenuTemplate = '<div id="mm" class="easyui-menu" style="width:120px;">' +
+        //'<div data-options="iconCls:\'icon-add\'">Append</div> ' +
+        '<div data-operator="reload" data-options="iconCls:\'icon-reload\'">刷新</div>' +
+        '</div>';
     _self.onNodeCheckedChanged = function (node, checked) {
         if (node.attributes.layerSet == false)
             _self.mapApi.layerVisibleSwitch(node.id, checked);
@@ -313,7 +319,18 @@ var LayerListTree = function (options) {
             });
         }
     };
-
+    var onLayerVisibleChanged = function(e){
+        var layerId = e.data.layerId;
+        var visible = e.data.visible ;
+        var layerNode = _self.$tree.tree("find", layerId);
+        if(layerNode){ //remove
+            if(visible){
+                _self.$tree.tree("check", layerNode.target);
+            }else{
+                _self.$tree.tree("uncheck", layerNode.target);
+            }
+        }
+    };
     var onLayerAdded = function (e) {
         var layerId = e.data.layerId;
         var layer = _self.mapApi.getLayerById(layerId);
@@ -321,24 +338,36 @@ var LayerListTree = function (options) {
         var layerNode = _self.$tree.tree("find", layerId);
         if (layerNode && layerVisible) {
             _self.$tree.tree("check", layerNode.target);
-        } else if (!layerNode) {
-            // var node = {
-            //     "id": layer.id,
-            //     "text":layer.label ? layer.label : layer.id,
-            //     "checked":true
-            // };
-            // var unGrouped = _self.$tree.tree("find", _self.unGroupeId);
-            // if(unGrouped){
-            //     var unGroupSet = {
-            //         "id":_self.unGroupedId,
-            //         "text":"未分组",
-            //         "checked":true,
-            //         "children":[ node ]
-            //     };
-            //     self.$tree.tree("append",{ data:[unGroupSet] });
-            // }else{
-            //     //self.$tree.tree("append",{ parent:unGrouped,dataaccess:[node] });
-            // }
+            return
+        }
+        if (!layerNode ) {
+            if(params.appendDrawLayers && layerId.toLowerCase().indexOf("drawlayer") >= 0){
+                var node = {
+                    "id": layerId,
+                    "text":layer.get("label") ? layer.get("label") : "未命名图层",
+                    "checked":true
+                };
+                var unGrouped = _self.$tree.tree("find", _self.unGroupedId);
+                if(!unGrouped){
+                    var unGroupSet = {
+                        "id":_self.unGroupedId,
+                        "text":params.drawLayerGroupName,
+                        "checked":true,
+                        "children":[ node ]
+                    };
+                    _self.$tree.tree("append",{ data:[unGroupSet] });
+                }else{
+                    _self.$tree.tree("append",{ parent:unGrouped.target,data:[node] });
+                }
+            }
+        }
+    };
+    var onLayerRemoved = function(e){
+        var layerId = e.data.layerId;
+        var layerNode = _self.$tree.tree("find", layerId);
+        if(layerNode){ //remove
+            _self.$tree.tree("remove", layerNode.target);
+
         }
     };
     var onLayersConfigChanged = function (newLayers, newConfig) {
@@ -363,8 +392,6 @@ var LayerListTree = function (options) {
         return result;
     };
     var processMapConfig = function (optionallayers) {
-        //var conf = _self.mapApi.apiConfig;
-        //var optionallayers = conf.map.optionallayers;
         var treedata = [];
         var flag = _checkConfigs(null, optionallayers);
         if (!flag) {
@@ -464,7 +491,19 @@ var LayerListTree = function (options) {
         }
         return result;
     };
-
+    var getContextMenu = function(){
+        return _self.contextMenuTemplate;
+    };
+    var onMenuClick = function(e ,node){
+        var operator = $(e.target).attr("data-operator")  ;
+        var layerId = node.id ;
+        switch (operator){
+            case "reload":
+                _self.mapApi.refreshLayerById(layerId);
+                break;
+            default:;
+        }
+    };
     _self.open = function (flg) {
         if (flg === false) {
             $(_self.dom).dialog('closed');
@@ -488,7 +527,20 @@ var LayerListTree = function (options) {
                 "text": "正在加载数据,请稍等。"
             }],
             onCheck: _self.onNodeCheckedChanged,
-            onClick: _self.onNodeClick
+            onClick: _self.onNodeClick,
+            onContextMenu: function(e ,node){
+                e.preventDefault();
+                var menuTemplate = getContextMenu();
+                var $menu = $(menuTemplate) ;
+                $menu.menu({
+                    onClick:function(evt){
+                        onMenuClick(evt ,node);
+                    }
+                }).menu('show', {
+                    left: e.pageX,
+                    top: e.pageY
+                });
+            }
         });
         var options = {
             title: params.title,
@@ -516,8 +568,10 @@ var LayerListTree = function (options) {
         $(_self.dom).parent().remove();
     };
     _self.startup = function () {
-        _self.mapApi.subscribe(_self.mapApi.Events.OptionalLayerAddedEvent, onLayerAdded);
         parseLayerConfig();
+        _self.mapApi.subscribe(_self.mapApi.Events.OptionalLayerAddedEvent, onLayerAdded);
+        _self.mapApi.subscribe(_self.mapApi.Events.LayerRemovedEvent, onLayerRemoved);
+        _self.mapApi.subscribe(_self.mapApi.Events.LayerVisibleChangedEvent, onLayerVisibleChanged);
     };
 };
 /**
@@ -537,11 +591,11 @@ var CoorsPicker = function (options) {
     _self.config = {
         "inputname": "CoorsSystemType",
         "coorsystem": [{
-                "value": "",
-                "text": "地理坐标",
-                "x": "经度",
-                "y": "纬度"
-            }
+            "value": "",
+            "text": "地理坐标",
+            "x": "经度",
+            "y": "纬度"
+        }
             //{"value":"","text":"投影坐标" ,"x":"x","y":"y"},
             //{"value":"","text":"3度带" ,"x":"x","y":"y"},
             //{"value":"","text":"6度带" ,"x":"x","y":"y"}
@@ -587,11 +641,13 @@ var DrawBox = function (options) {
         title: "地图标绘",
         top:110,
         right:30,
+        enableAttrPanel:false,
         left:null,
         bottom:null,
         width: 330,
         height: 560,
-        types: [{
+        types: [
+            {
                 "text": "删除",
                 "value": "Delete",
                 "icon": "basepath:styles/lightblue/images/delete.png"
@@ -627,17 +683,18 @@ var DrawBox = function (options) {
                 "icon": "basepath:styles/lightblue/images/polygon.png"
             }
         ],
-        pictureData: [{
+        pictureData: [
+            {
                 "label": "政府大楼",
-                "icon": "basepath:images/plot/pic_government.png"
+                "icon": "stylepath:images/pic_government.png"
             },
             {
                 "label": "学校",
-                "icon": "basepath:images/plot/pic_school.png"
+                "icon": "stylepath:images/pic_school.png"
             },
             {
                 "label": "汽车",
-                "icon": "basepath:images/plot/pic_vehicle.gif"
+                "icon": "stylepath:images/pic_vehicle.gif"
             }
         ]
     };
@@ -680,9 +737,10 @@ var DrawBox = function (options) {
         "<tr>" +
         "<td class='tr_title'><label class='style_title'>图标：</label></td>" +
         "<td>" +
-        "<select name='picture' class='style_input' >" +
+        "<select class='selector' >" +
         "<option value=''>无</option>" +
         "</select>" +
+        "<input class='picUrl' name='picture' class='style_input' type='hidden'>" +
         "</td>" +
         "<td>" +
         "<img src=''>" +
@@ -851,7 +909,9 @@ var DrawBox = function (options) {
             }
             $selector.change(function (e) {
                 var url = $(this).val();
+                $(".picUrl",$firstTR).val(url);
                 $("td", $firstTR).last().find("img").attr("src", url);
+                activeDrawTool("Picture");
             });
             var $firstOption = $selector.find("option").first();
             $firstOption.attr("selected", true);
@@ -869,13 +929,13 @@ var DrawBox = function (options) {
         var $styles = $(".styles", _self.dom);
         var tab = $("." + type, $styles);
         if (!tab[0]) {
-            $styles.append(templates[type]); //
+            var temp = templates[type];
+            $styles.append(temp);
             //添加后要监听相关事件
             if (type === "picture") {
                 tab = $("." + type, $styles);
                 initPictureControlls(tab);
             }
-
         }
         var timeout = setTimeout(function (e) {
             $styles.children("div.style").not("." + type).hide();
@@ -909,6 +969,12 @@ var DrawBox = function (options) {
         for ( i = 0; i < colors.size(); i++) {
             var name = $(colors[i]).attr("name");
             var value = $(colors[i]).val();
+            symbolParam[name] = value;
+        }
+        var hiddenInputs = $("input:hidden", $tab);
+        for (var i = 0; i < hiddenInputs.size(); i++) {
+            var name = $(hiddenInputs[i]).attr("name");
+            var value = $(hiddenInputs[i]).val();
             symbolParam[name] = value;
         }
         return symbolParam;
@@ -987,12 +1053,12 @@ var DrawBox = function (options) {
     _self.$attrTable = null;
     _self.state = "closed";
     _self.template = "<div class='" + _self.moduleClass + "'>" +
-        "<div style='height:100%;overflow-x:hidden;overflow-y:scroll'><div class='title'><strong>类型</strong></div>" +
+        "<div class='title'><strong>类型</strong></div>" +
         "<div class='tools'></div>" +
         "<div class='title'><strong>样式</strong></div>" +
         "<div class='styles'></div>" +
-        "<div class='title'><strong>属性</strong></div>" +
-        "<div class='attributes mCustomScrollbar'>" +
+        "<div class='title' style='display: none'><strong>属性</strong></div>" +
+        "<div class='attributes mCustomScrollbar' style='display: none'>" +
         "<table>" +
         "<thead>" +
         "<tr>" +
@@ -1011,7 +1077,7 @@ var DrawBox = function (options) {
         "</tr>" +
         "</tbody>" +
         "</table>" +
-        "</div></div>" +
+        "</div>" +
         "<div class='buttons'>" +
 
         //"<input dataaccess-class='save' value='保存' type='button' >" +
@@ -1088,7 +1154,7 @@ var BaseMapsGallary = function (options) {
     var _self = this;
 
     _self.moduleClass = "map-module-basemapsgallary";
-    _self.template = "<div class='" + _self.moduleClass + "' style='height:70px !important'><ul></ul></div>";
+    _self.template = "<div class='" + _self.moduleClass + "'><ul></ul></div>";
 
     _self.showIndex = 0;
     _self.state = params.folded === true ? "open":"folded";
@@ -1096,9 +1162,8 @@ var BaseMapsGallary = function (options) {
     var imgWidth = params.imgWidth ? params.imgWidth : 100;
     var imgHeight = params.imgHeight ? params.imgHeight : 60;
     var containerWidth = imgWidth + 10;
-   // var containerHeight = imgHeight + 25;
-    var containerHeight=70;
-    console.log(containerHeight);
+    var containerHeight = imgHeight + 25;
+
     var getBaseInfo = function (config) {
         return {
             "id": config.id,
@@ -1158,7 +1223,7 @@ var BaseMapsGallary = function (options) {
             showWidth +=  itemWidth;
             $(_self.dom).width(showWidth);
             _self.state = "folded";
-        };
+        }
         toggleShowUnSelectedItems(flg);
     };
     /**
@@ -1345,7 +1410,7 @@ var CoorsPosition = function (options) {
         //鼠标监听
         _self.pointMoveListener = _self.mapApi.addMouseMoveEventListener(function (e) {
             if (e.coordinate && e.coordinate[0] && e.coordinate[1]) {
-               _self.refreshCurrentCoors(e.coordinate[0], e.coordinate[1]);
+                _self.refreshCurrentCoors(e.coordinate[0], e.coordinate[1]);
             }
         });
         _self.pointClickListener = _self.mapApi.addMouseClickEventListener(function (e) {
@@ -1419,7 +1484,7 @@ var CoorsPosition = function (options) {
             _self.mapApi.map.addControl(_self.control);
 
         }
-     };
+    };
 };
 /**
  * 地图控件-鹰眼
@@ -1471,14 +1536,14 @@ var OverViewMap = function (options) {
  * 地图控件-多边形查询
  ***/
 var QueryByGeometry = function () {
-    var _class = this;
-    _class.domCreate = function () {
+    var _self = this;
+    _self.domCreate = function () {
 
     };
-    _class.startup = function () {
+    _self.startup = function () {
 
     };
-    _class.open = function (flg) {
+    _self.open = function (flg) {
 
     };
 };
@@ -1486,7 +1551,7 @@ var QueryByGeometry = function () {
  * 地图控件-导出
  ***/
 var MapExport = function () {
-    var _class = this;
+    var _self = this;
     //
     var loadImage = function () {
         var imageData = mapCanvas.toDataURL("image/png");
@@ -1501,15 +1566,15 @@ var MapExport = function () {
 
             }
         };
-        _class.mapApi.commonUtil.simpleAjaxLoader(request);
+        _self.mapApi.commonUtil.simpleAjaxLoader(request);
     };
-    _class.domCreate = function () {
+    _self.domCreate = function () {
 
     };
-    _class.startup = function () {
+    _self.startup = function () {
 
     };
-    _class.open = function (flg) {
+    _self.open = function (flg) {
         loadImage();
     };
 };
@@ -1517,120 +1582,16 @@ var MapExport = function () {
  * 地图控件-打印
  ***/
 var MapPrint = function () {
-    var _class = this;
-    _class.domCreate = function () {
+    var _self = this;
+    _self.domCreate = function () {
 
     };
-    _class.startup = function () {
+    _self.startup = function () {
 
     };
-    _class.open = function (flg) {
+    _self.open = function (flg) {
 
     };
-};
-/** 地图控件-量测**/
-var MeasureBox = function () {
-    var _class = this;
-    /**
-     * Currently drawn feature.
-     * @type {ol.Feature}
-     */
-    var sketch;
-    /**
-     * The help tooltip element.
-     * @type {Element}
-     */
-    var helpTooltipElement;
-    /**
-     * Overlay to show the help messages.
-     * @type {ol.Overlay}
-     */
-    var helpTooltip;
-    /**
-     * The measure tooltip element.
-     * @type {Element}
-     */
-    var measureTooltipElement;
-    /**
-     * Overlay to show the measurement.
-     * @type {ol.Overlay}
-     */
-    var measureTooltip;
-    /**
-     * Message to show when the user is drawing a polygon.
-     * @type {string}
-     */
-    var continuePolygonMsg = 'Click to continue drawing the polygon';
-    /**
-     * Message to show when the user is drawing a line.
-     * @type {string}
-     */
-    var continueLineMsg = 'Click to continue drawing the line';
-
-    var draw; // global so we can remove it later
-
-    /**
-     *
-     * @param e
-     */
-    var onMouseMove = function (evt) {
-        if (evt.dragging) {
-            return;
-        }
-        /** @type {string} */
-        var helpMsg = 'Click to start drawing';
-        if (sketch) {
-            var geom = (sketch.getGeometry());
-            if (geom instanceof ol.geom.Polygon) {
-                helpMsg = continuePolygonMsg;
-            } else if (geom instanceof ol.geom.LineString) {
-                helpMsg = continueLineMsg;
-            }
-        }
-        helpTooltipElement.innerHTML = helpMsg;
-        helpTooltip.setPosition(evt.coordinate);
-        helpTooltipElement.classList.remove('hidden');
-    };
-    /**
-     *
-     * @param e
-     */
-    var onMouseOut = function (e) {
-        helpTooltipElement.classList.add('hidden');
-    };
-    /**
-     * Creates a new help tooltip
-     */
-    function createHelpTooltip() {
-        if (helpTooltipElement) {
-            helpTooltipElement.parentNode.removeChild(helpTooltipElement);
-        }
-        helpTooltipElement = document.createElement('div');
-        helpTooltipElement.className = 'tooltip hidden';
-        helpTooltip = new ol.Overlay({
-            element: helpTooltipElement,
-            offset: [15, 0],
-            positioning: 'center-left'
-        });
-        map.addOverlay(helpTooltip);
-    }
-
-    /**
-     * Creates a new measure tooltip
-     */
-    function createMeasureTooltip() {
-        if (measureTooltipElement) {
-            measureTooltipElement.parentNode.removeChild(measureTooltipElement);
-        }
-        measureTooltipElement = document.createElement('div');
-        measureTooltipElement.className = 'tooltip tooltip-measure';
-        measureTooltip = new ol.Overlay({
-            element: measureTooltipElement,
-            offset: [0, -15],
-            positioning: 'bottom-center'
-        });
-        map.addOverlay(measureTooltip);
-    }
 };
 /**
  *
@@ -1753,7 +1714,8 @@ var CircleQuery = function (options) {
      * 创建表格
      * @param option
      */
-    _self.createDatagrid = function($dom){
+    _self.createDatagrid = function(){
+        var $dom = $("#result", _self.dom);
         var columns = params.columns ? params.columns:[];
         if(columns.length > 0){
             if(params.indexEnable){
@@ -1776,7 +1738,7 @@ var CircleQuery = function (options) {
                     "field":"tools-column","title":"操作","align":'center'
                 };
                 columns.push(position) ;
-            };
+            }
         }
         _self.$table = $dom.datagrid({
             fitColumns:true,
@@ -1869,9 +1831,9 @@ var CircleQuery = function (options) {
         _self.$drawBtn = $('input.drawbt', _self.dom).click(function (e) {
             _self.doDraw();
         });
-        _self.srsnames = parseQueryParam(params);
+        _self.srsnames = parseQueryParam();
 
-        _self.createDatagrid($("#result", _self.dom));
+        _self.createDatagrid();
 
         _self.doClear();
     };
@@ -1959,7 +1921,9 @@ var PolygonQuery = function (options) {
         "<div class='" + _self.moduleClass + "'>" +
         "<table style='height: 100%;width:100%;'>" +
         "<tr style='height: 90%'>" +
-        "<td><table id='result' style='width: 100%;height:100%;'></table></td>" +
+        "<td>" +
+        "<table =id'result' style='width: 100%;height:100%;'></table>" +
+        "</td>" +
         "</tr>" +
         "<tr style='height: 10%'>" +
         "<td align='center'>" +
@@ -1971,7 +1935,6 @@ var PolygonQuery = function (options) {
         "</table>" +
         "</div>";
 
-    //
     var parseQueryParam = function(){
         return params.query ? params.query :{} ;
     };
@@ -1991,7 +1954,8 @@ var PolygonQuery = function (options) {
      * 创建表格
      * @param option
      */
-    _self.createDatagrid = function($dom){
+    _self.createDatagrid = function(){
+        var $dom = $("#result", _self.dom) ;
         var columns = params.columns ? params.columns:[];
         if(columns.length > 0){
             if(params.indexEnable){
@@ -2014,7 +1978,7 @@ var PolygonQuery = function (options) {
                     "field":"tools-column","title":"操作","align":'center'
                 };
                 columns.push(position) ;
-            };
+            }
         }
         _self.$table = $dom.datagrid({
             fitColumns:true,
@@ -2154,9 +2118,9 @@ var PolygonQuery = function (options) {
         _self.$drawBtn = $('input.drawbt', _self.dom).click(function (e) {
             _self.doDraw();
         });
-        _self.srsnames = parseQueryParam(params);
+        _self.srsnames = parseQueryParam();
 
-        _self.createDatagrid($("#result", _self.dom));
+        _self.createDatagrid();
 
         _self.doClear();
     };
@@ -2201,4 +2165,182 @@ var PolygonQuery = function (options) {
         _self.mapApi.moduleDialog(options,$(_self.dom) ,_self.container);
     };
 
+};
+/**
+ * 图例控件
+ * @param options
+ * @constructor
+ */
+var LegendBox = function(options){
+    var _self = this;
+    var defaults = {
+        right: 30,
+        top: 60,
+        left: null,
+        bottom: null,
+        folded:true,
+        iconDivWidth: 30,
+        iconDivHeight: 20
+    };
+    var params = $.extend({} , defaults ,options);
+    _self.moduleClass = "map-module-legendbox";
+    _self.dom = null;
+    _self.icon = "stylepath:images/queryByPolygon.png";
+    _self.label = "图例";
+    _self.folded = "true" ;
+    _self.template = [
+        "<div class='"+ _self.moduleClass +"'>" ,
+        "<div class='icon'>L</div>" ,
+        "<div class='panel'>aaa</div>" ,
+        "</div>"
+    ].join("");
+    _self.startup = function(){
+
+    };
+    _self.domCreate = function(){
+        $(_self.container).append(_self.template);
+        _self.dom = $("." + _self.moduleClass, _self.container)[0];
+
+
+    };
+    var createPolygonLegend = function(polygonSybol){
+        var colorDiv = document.createElement("div");
+        if(polygonSybol.fill){
+            var color = parseColor(polygonSybol.fillColor, polygonSybol.fillOpacity);
+            colorDiv.style.background = color;
+        }
+        if(polygonSybol.stroke){
+            var dashStyle = polygonSybol.strokeDashstyle;
+            var color = parseColor(polygonSybol.strokeColor, polygonSybol.strokeOpacity);
+            var width = polygonSybol.strokeWidth + "px";
+            colorDiv.style.border = width + " " + dashStyle + " " + color;
+        }
+        colorDiv.style.height = params.iconDivHeight + "px";
+        colorDiv.style.width = params.iconDivWidth + "px";
+        return colorDiv;
+    };
+    /*
+     * <svg><polyline points="20,27,34,21" fill="none" stroke="#550000" stroke-opacity="1" stroke-width="3"
+     * stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none"></polyline></svg>
+     * */
+    var createLineLegend = function(lineSybol){
+        var colorDiv = document.createElement("div");
+        colorDiv.style.height = params.iconDivHeight + "px";
+        colorDiv.style.width = params.iconDivWidth + "px";
+
+        var lineHtml = '<svg width="100%" height="100%">';
+        lineHtml += '<polyline points="2,2,28,18" fill="none" stroke="' + lineSybol.stroke.color
+            + '" stroke-opacity="'+ lineSybol.strokeOpacity +'" stroke-width="'+ lineSybol.strokeWidth + '"';
+        lineHtml += ' stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none"></polyline></svg>';
+        colorDiv.innerHTML = lineHtml;
+
+        return colorDiv;
+    };
+    var createPointLegend = function(svgId, label){
+        var trDiv = document.createElement("tr");
+        var svgEle = document.getElementById(svgId);
+        if(!svgEle){
+            return trDiv;
+        }
+        var colorTd = document.createElement("td");
+        trDiv.appendChild(colorTd);
+
+        var labelTd = document.createElement("td");
+        trDiv.appendChild(labelTd);
+        var itemLabel = document.createElement("label");
+        itemLabel.style = "margin-left:5px;position:relative;top:3px;";
+        itemLabel.innerHTML = label;
+        labelTd.appendChild(itemLabel);
+
+        var colorDiv = document.createElement("div");
+        colorTd.appendChild(colorDiv);
+        var divHeight = params.iconDivHeight;
+        var divWidth = params.iconDivWidth;
+
+        var cln = svgEle.cloneNode(true);
+        if(cln.nodeName.toLowerCase() != "svg"){    //circle,image
+            var rVal = cln.getAttribute("r");
+            if(cln.hasAttribute("x") && cln.hasAttribute("y")){
+                cln.setAttribute("x", rVal);
+                cln.setAttribute("y", rVal);
+            }
+            if(cln.hasAttribute("cx") && cln.hasAttribute("cy")){
+                cln.setAttribute("cx", rVal);
+                cln.setAttribute("cy", rVal);
+            }
+            if(cln.hasAttribute("transform")){
+                var transform = cln.getAttribute("transform");
+                if(transform.indexOf('rotate(') >= 0){
+                    var transValues = transform.split('rotate(');
+                    var kk = null;
+                    if(transValues.length == 1){
+                        kk = 0;
+                    }
+                    else if(transValues.length > 1){
+                        kk = 1;
+                    }
+                    if(kk != null){
+                        var str = transValues[kk];
+                        var sp = str.indexOf(')');
+                        var rotString = str.substring(0, sp);
+
+                        var ww = parseFloat(cln.getAttribute('width'));
+                        var hh = parseFloat(cln.getAttribute('height'));
+                        if(ww >= divWidth)
+                            divWidth = ww + 2;
+                        if(hh >= divWidth)
+                            divHeight = hh + 2;
+
+                        var rotValues = rotString.split(' ');
+                        rotValues[1] = ww / 2;
+                        rotValues[2] = hh / 2;
+
+                        transValues[kk] = rotValues.join(' ') + str.substring(sp);
+                        cln.setAttribute('transform',transValues.join('rotate('));
+                    }
+                }
+            }
+            //innerHTML
+            colorDiv.innerHTML = '<svg width="100%" height="100%"></svg>';
+            var svgNode = colorDiv.firstChild;
+            svgNode.appendChild(cln);
+            colorDiv.appendChild(svgNode);
+        }
+        else{
+            //change viewBox --from(0,0)
+            var viewBox = cln.getAttribute('viewBox');    // Grab the object representing the SVG element's viewBox attribute.
+            var viewBoxValues = viewBox.split(' ');                // Create an array and insert each individual view box attribute value (assume they're seperated by a single whitespace character).
+
+            /* The array is filled with strings, convert the first two viewBox values to floats: */
+            viewBoxValues[0] = parseFloat(viewBoxValues[0]);    // Represent the x-coordinate on the viewBox attribute.
+            viewBoxValues[1] = parseFloat(viewBoxValues[1]);    // Represent the y coordinate on the viewBox attribute.
+            viewBoxValues[2] = parseFloat(viewBoxValues[2]);    // Represent the y coordinate on the viewBox attribute.
+
+            if(viewBoxValues[2] > 300){    //star
+                viewBoxValues[0] = 250;
+                viewBoxValues[1] = 75;
+            }
+            else{
+                viewBoxValues[0] = 0;
+                viewBoxValues[1] = 0;
+            }
+            cln.setAttribute('viewBox', viewBoxValues.join(' '));
+            colorDiv.appendChild(cln);
+        }
+        colorDiv.style.height = divHeight + "px";
+        colorDiv.style.width = divWidth + "px";
+        return trDiv;
+    };
+    var parseColor = function(value, opacity){
+        if(value.length === 7){
+            var str = value.substr(1,6);
+            var rgb1 = parseInt(str.substr(0, 2), 16);
+            var rgb2 = parseInt(str.substr(2, 2), 16);
+            var rgb3 = parseInt(str.substr(4, 2), 16);
+            return "rgba("+rgb1+","+rgb2+","+rgb3+","+opacity+")";
+        }
+        else{
+            return value;
+        }
+    };
 };

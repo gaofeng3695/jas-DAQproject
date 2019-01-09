@@ -90,14 +90,14 @@
 									<el-input v-if="item.type=='UT_01'" :placeholder="item.placeholder" v-model="formData[item.id]" :size="item.size" :disabled="item.disabled"
 									  clearable @change="changeRule($event,item)">
 									</el-input>
-									<el-select v-model="formData[item.id]" multiple v-if="isMultiSelect(item)" style="width:100%" :size="item.size" :disabled="item.disabled"
-									  clearable @visible-change="visibleChange($event,item)" @change="getChildOpts($event,item)">
+									<el-select multiple v-if="isMultiSelect(item)" :ref="item.id" v-model="formData[item.id]" style="width:100%" :size="item.size"
+									  :disabled="item.disabled" clearable @visible-change="visibleChange($event,item)" @change="getChildOpts($event,item)">
 										<template v-for="option in item.options">
 											<el-option :label="option.value" :value="option.key">
 											</el-option>
 										</template>
 									</el-select>
-									<el-select v-model="formData[item.id]" :disabled="item.disabled" v-if="isSelect(item)" :ref="item.id" style="width:100%"
+									<el-select v-if="isSelect(item)" :ref="item.id" v-model="formData[item.id]" :disabled="item.disabled" style="width:100%"
 									  :size="item.size" clearable @visible-change="visibleChange($event,item)" @change="getChildOpts($event,item)">
 										<template v-for="option in item.options">
 											<el-option :label="option.value" :value="option.key">
@@ -162,6 +162,7 @@
 				rules: [],
 				formData: {
 					remarks: "",
+					oid:""
 				}, // 表单字段详情对象
 				formAttr: [], // 表单字段，分组排序，配置数组
 				// [{
@@ -223,7 +224,11 @@
 					if (that.isAddPage) {
 						data.data.functionFieldsBoList.forEach(function (item) {
 							if (item.uiType) {
-								that.$set(that.formData, item.fieldName, '');
+								if(item.fieldName=='construct_unit'){
+									that.$set(that.formData, item.fieldName, JSON.parse(localStorage.getItem("user")).unitId);	
+								}else{
+									that.$set(that.formData, item.fieldName, '');	
+								}
 							}
 						});
 						that.getAddField(fieldsGrouped);
@@ -363,7 +368,7 @@
 								name: item.fieldNameCn,
 								type: item.uiType,
 								size: "small",
-								placeholder: item.placeholder||"请输入"+item.fieldNameCn,
+								placeholder: item.placeholder || "请输入" + item.fieldNameCn,
 								options: options,
 								verify: [],
 								requestUrl: item.requestPath,
@@ -376,10 +381,11 @@
 								lessDateScope: item.lessDateScope && item.lessDateScope.split(","), //小于日期
 								maxDateScope: item.maxDateScope && item.maxDateScope.split(","), //表示需要大于的日期
 								fieldLength: item.fieldLength || 200,
-								disabled:false,
+								disabled:item.fieldName=='construct_unit'?true:false,
 								fieldRule: that.fieldRuleObj && that.fieldRuleObj[item.fieldName]
 							};
-							if (that.fieldRuleObj && that.fieldRuleObj.frozenFile&&that.fieldRuleObj.frozenFile.indexOf(obj.id) > -1) {
+							if (that.fieldRuleObj && that.fieldRuleObj.frozenFile && that.fieldRuleObj.frozenFile.indexOf(obj.id) > -
+								1) {
 								obj.disabled = true;
 							}
 							if (item.ifRequired == '1') {
@@ -440,6 +446,9 @@
 									that.$set(that.formData, item.fieldName, obj.min);
 								}
 							}
+							if (item.uiType == 'UT_11' || item.uiType == 'UT_12') {
+								that._isInit(obj.id, obj.options,true);
+							}
 							groupAttr.push(obj);
 						}
 					});
@@ -479,7 +488,7 @@
 								name: item.fieldNameCn,
 								type: item.uiType,
 								size: "small",
-								placeholder: item.placeholder||"请输入"+item.fieldNameCn,
+								placeholder: item.placeholder || "请输入" + item.fieldNameCn,
 								options: options,
 								verify: [],
 								requestUrl: item.requestPath,
@@ -488,14 +497,14 @@
 								min: item.min,
 								max: item.max || Infinity,
 								precision: item.precision || 0,
-								disabled: false,
+								disabled:item.fieldName=='construct_unit'?true:false,
 								ifLessToday: item.ifLessToday, //读取配置接口，暂时写死
 								lessDateScope: item.lessDateScope && item.lessDateScope.split(","), //小于日期
 								maxDateScope: item.maxDateScope && item.maxDateScope.split(","), //表示需要大于的日期
 								fieldLength: item.fieldLength || 200,
 								fieldRule: that.fieldRuleObj && that.fieldRuleObj[item.fieldName]
 							};
-                            
+
 							if (item.updateable == '1') {
 								obj.disabled = true;
 							}
@@ -619,19 +628,22 @@
 				var str = that.isAddPage ? "save" : "update";
 				var url = jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/" + str + ".do"
 				/*属性里面是数组的进行转换成字符串*/
-				for (key in that.formData) {
+				//console.log(that.formData);
+				var obj={};
+				for (var key in that.formData) {
 					if (that.formData[key] instanceof Array) {
-						that.formData[key] = that.formData[key].join(",")
+						obj[key] = that.formData[key].length>0?that.formData[key].join(","):that.formData[key]
 					} else if (that.formData[key] === '') {
-						that.formData[key] = null;
+						obj[key] = null;
+					}else{
+						obj[key]=that.formData[key]
 					}
 				}
-
-				jasTools.ajax.post(url, that.formData, function () {
+				jasTools.ajax.post(url, obj, function () {
 					if (that.ifAttachment) {
-						that.$refs.upload.uploadFile(that.formData[that.pkArray[0]]); //触发上传附件
+					 that.$refs.upload.uploadFile(that.formData[that.pkArray[0]]); //触发上传附件
 					} else {
-						that.uploadSuccess();
+					that.uploadSuccess();
 					}
 				});
 			},
@@ -663,12 +675,13 @@
 								} else {
 									child.options = []; // 清空下拉选项
 								}
-								if (!isInit) { // 不是初始化
+								if (!isInit && childField!='construct_unit') { // 不是初始化
 									that.$set(that.formData, child.id, ""); // 清空子级联的value
 								}
 								//if (options.length === 1) { //只有一个选项就自动复制
 								//that.$set(that.formData, child.id, options[0].key); // 赋值 子级联的value
 								//	}
+								that._isInit(child.id, options,false);
 								that.$refs[child.id][0].$emit('change', { // 触发子级联的change事件
 									value: that.formData[child.id],
 									isInit: isInit
@@ -894,6 +907,22 @@
 							}
 						}
 					});
+				}
+			},
+			_isInit: function (id, options,isChange) {
+				var that = this;
+				var initArry = ['project_oid', 'pipeline_oid', 'tenders_oid', 'pipe_segment_or_cross_oid'];
+				if (initArry.indexOf(id) > -1 && options.length > 0) {
+					if(!that.formData[id]) that.$set(that.formData, id, options[0].key);
+					if(isChange){
+						setTimeout(function () {
+							that.$refs[id][0].$emit('change', {//进行change事件的触发
+								value: options[0].key,
+						isInit: true,
+							});
+						});	
+					}
+					
 				}
 			}
 		},

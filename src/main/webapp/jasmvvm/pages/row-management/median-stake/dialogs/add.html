@@ -211,6 +211,10 @@
 			// });
 			this.requestDomainFromBizTable('/daq/project/getList.do', {}, function (arr) {
 				that.domain.project = arr;
+				if(!that.isEdit && arr.length>0){
+					that.formData.projectOid=arr[0].key;
+					that.projectChanged(that.formData.projectOid,false,true);//false:表示为是否编辑，true表示新增	
+				}
 			});
 		},
 		methods: {
@@ -246,13 +250,16 @@
 					cb && cb([]);
 				});
 			},
-			projectChanged: function (val, edit) {
+			projectChanged: function (val, edit,add) {
 				var that = this;
 				if (val) {
 					this.requestDomainFromBizTable('/daq/pipeline/getList.do', {
 						projectOid: val
 					}, function (arr) {
 						that.domain.pipeline = arr;
+						if(add && arr.length>0){
+							that.formData.pipelineOid=arr[0].key;
+						}
 					});
 				}else{
 					that.domain.pipeline=[];
