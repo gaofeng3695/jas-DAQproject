@@ -15,7 +15,10 @@ import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
   *<p>创建日期：2018年8月2日 上午10:10:38。</p>
  */
 @QueryConfig(scene = "/workUnit/getPage", 
-	resultClass = WorkUnitBo.class
+	resultClass = WorkUnitBo.class,
+	queryBeforeProcess = {
+			 @Process(service = "daqInjectService" , method = "injectDataAuthoritySql(dataAuthoritySql)")
+	}
 )
 public class WorkUnitQuery extends BaseJavaQuery{
 	

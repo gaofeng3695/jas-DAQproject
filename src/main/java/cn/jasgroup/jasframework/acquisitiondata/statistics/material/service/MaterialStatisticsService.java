@@ -120,10 +120,10 @@ public class MaterialStatisticsService {
 				}
 			}
 		}
-		Map<String, Object> result = new HashMap<>();
+		Map<String, Object> result = new LinkedHashMap<>();
+		result.put("grand_total", grandTotalData);
 		result.put("pipe", pipeData);
 		result.put("hot_pipe", hotPipeData);
-		result.put("grand_total", grandTotalData);
 		return result;
 	}
 	/***
