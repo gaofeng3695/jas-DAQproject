@@ -1,5 +1,6 @@
 package cn.jasgroup.jasframework.acquisitiondata.statistics.progress.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import cn.jasgroup.framework.data.result.ListResult;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.progress.common.ProgressStatsQueryBo;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.progress.service.ProgressStatsService;
+import cn.jasgroup.jasframework.utils.DateTimeUtil;
 
 @RestController
 @RequestMapping("daq/progressStats")
@@ -105,6 +107,10 @@ public class ProgressStatsController {
 			//起止日期
 			String beginMonth = (String)params.get("beginMonth");
 			String endMonth = (String)params.get("endMonth");
+			Date beginDate = DateTimeUtil.getDateFromDateString(beginMonth, "yyyy-MM");
+			Date endDate = DateTimeUtil.getDateFromDateString(endMonth, "yyyy-MM");
+			beginMonth = DateTimeUtil.getFormatDate(beginDate, "yyyy-MM");
+			endMonth = DateTimeUtil.getFormatDate(endDate, "yyyy-MM");
 			if (StringUtils.isBlank(procedure) || StringUtils.isBlank(beginMonth) || StringUtils.isBlank(endMonth)) {
 				return new ListResult<>(-1,"400","请选择工序或起止日期");
 			}
