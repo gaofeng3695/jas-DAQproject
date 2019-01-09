@@ -20,7 +20,7 @@
 	<div id="app" v-cloak>
 
 		<jas-dialog-wrapper>
-			<el-form ref="formData" :rules="rules" :model="form" label-width="140px">
+			<el-form ref="formData"  :model="form" label-width="140px">
 				<jas-form-items-group ref="mainForm" :form="form" :fields-config="fieldsConfig" :names-group="['基础数据','位置数据','管沟开挖数据']" :fields-group="[baseFields,locationFields,fields]"></jas-form-items-group>
 
 				<!--<jas-base-group-title name="基础数据"></jas-base-group-title>
