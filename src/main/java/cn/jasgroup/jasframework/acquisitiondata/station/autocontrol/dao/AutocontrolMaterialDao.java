@@ -288,5 +288,19 @@ public class AutocontrolMaterialDao {
 		return baseJdbcDao.queryForList(sql, null);
 	}
 
+	/**
+	 * <p>功能描述：根据项目查询分析设备物资列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param param
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月10日 上午9:24:50。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getMaterialAnalysisTransmitter(String projectOid) {
+		String sql = "select oid as key,manufacture_number as value from daq_s_material_analysis_transmitter where active=1 and project_oid='"+projectOid+"'";
+		return baseJdbcDao.queryForList(sql, null);
+	}
+
 	
 }
