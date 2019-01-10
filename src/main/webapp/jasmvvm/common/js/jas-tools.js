@@ -396,27 +396,29 @@
 					params[key] = null;
 				}
 			}
-			var data = type === 'GET' ? params : JSON.stringify(params)
+			var data = type === 'POST' ? JSON.stringify(params) : params;
+			var contentType = type === 'POSTFORM' ? ' application/x-www-form-urlencoded' : 'application/json';
+			var ajaxType = type === 'POSTFORM' ? 'POST' : type;
 			$.ajax({
-				type: type || "GET",
+				type: ajaxType || "GET",
 				url: tools.setParamsToUrl(url, {
 					token: localStorage.getItem('token')
 				}),
-				contentType: "application/json",
+				contentType: contentType,
 				data: data,
 				// dataType: "json",
 				success: function (data, status) {
-					if (data.success == -1) { // token失效或者过期，会返回-1
-						window.top.Vue.prototype.$confirm('登录信息失效，请重新登录', '提示', {
-							type: 'warning',
-							callback: function (action) {
-								if (action === 'confirm') {
-									window.top.location.href = 'login.html';
-								}
-							}
-						});
-						return;
-					}
+					// if (data.success == -1) { // token失效或者过期，会返回-1
+					// 	window.top.Vue.prototype.$confirm('登录信息失效，请重新登录', '提示', {
+					// 		type: 'warning',
+					// 		callback: function (action) {
+					// 			if (action === 'confirm') {
+					// 				window.top.location.href = 'login.html';
+					// 			}
+					// 		}
+					// 	});
+					// 	return;
+					// }
 					if (data.status == -1 && data.code == "402") { // token失效或者过期，会返回-1
 						window.top.Vue.prototype.$confirm('登录信息失效，请重新登录', '提示', {
 							type: 'warning',
@@ -438,11 +440,19 @@
 					if (data.status == 1) {
 						cb_success && cb_success(data);
 					} else if (!data.status && data) {
-						cb_success && cb_success(data);
+						if (data.success == -1) {
+							cb_fail && cb_fail(data);
+							window.top.Vue.prototype.$message({
+								message: data.msg || data.message || '服务器连接失败，请稍后再试',
+								type: 'error'
+							});
+						} else {
+							cb_success && cb_success(data);
+						}
 					} else {
 						cb_fail && cb_fail(data);
 						window.top.Vue.prototype.$message({
-							message: data.msg || '服务器连接失败，请稍后再试',
+							message: data.msg || data.message || '服务器连接失败，请稍后再试',
 							type: 'error'
 						});
 					}
@@ -493,38 +503,42 @@
 			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			xhr.responseType = "blob"; // 返回类型blob
 			// 定义请求完成的处理函数，请求前也可以增加加载框/禁用下载按钮逻辑
-			xhr.onload = function () {
+			xhr.onload = function (param) {
 				// 请求完成
 				// content-disposition: attachment;filename=custom_desktop.java
 				if (this.status === 200) {
 					// 获取文件名
 					var filename = 'download.txt';
 					var sName = xhr.getResponseHeader('content-disposition');
-					sName.split(';').forEach(function (item) {
-						var arr = item.split('=');
-						if (arr[0] === 'filename') {
-							filename = arr[1];
-							filename = decodeURIComponent(filename);
+					if (sName) {
+						sName.split(';').forEach(function (item) {
+							var arr = item.split('=');
+							if (arr[0] === 'filename') {
+								filename = arr[1];
+								filename = decodeURIComponent(filename);
+							}
+						});
+						// 返回200
+						var blob = this.response;
+						var reader = new FileReader();
+						reader.readAsDataURL(blob); // 转换为base64，可以直接放入a表情href
+						reader.onload = function (e) {
+							// 转换完成，创建一个a标签用于下载
+							var a = document.createElement('a');
+							a.download = filename;
+							a.href = e.target.result;
+							document.getElementsByTagName('body')[0].appendChild(a); // 修复firefox中无法触发click
+							// $(a).trigger('click');
+							a.click();
+							// a.remove();
+							a.parentNode.removeChild(a);
+							cbsuccess && cbsuccess(xhr);
 						}
-					});
-					// 返回200
-					var blob = this.response;
-					var reader = new FileReader();
-					reader.readAsDataURL(blob); // 转换为base64，可以直接放入a表情href
-					reader.onload = function (e) {
-						// 转换完成，创建一个a标签用于下载
-						var a = document.createElement('a');
-						a.download = filename;
-						a.href = e.target.result;
-						document.getElementsByTagName('body')[0].appendChild(a); // 修复firefox中无法触发click
-						// $(a).trigger('click');
-						a.click();
-						// a.remove();
-						a.parentNode.removeChild(a);
-						cbsuccess && cbsuccess(xhr);
+					} else {
+						cbfail && cbfail(param, this);
 					}
 				} else {
-					cbfail && cbfail();
+					cbfail && cbfail(param, this);
 				}
 			};
 			// 发送ajax请求
@@ -543,6 +557,7 @@
 			ajax: ajax,
 			get: ajax.bind(null, 'GET'),
 			post: ajax.bind(null, 'POST'),
+			postForm: ajax.bind(null, 'POSTFORM'),
 			downloadByIframe: downloadByIframe,
 			downloadByPost: downloadByPost,
 		};
