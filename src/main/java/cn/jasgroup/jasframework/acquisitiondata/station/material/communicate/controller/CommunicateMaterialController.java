@@ -93,6 +93,34 @@ public class CommunicateMaterialController {
 		}catch(Exception e){
 			result = new ListResult<>(-1,"400","error");
 			e.printStackTrace();
+			
+		}
+		return result;
+	}
+	
+	/**
+	 * <p>功能描述：根据项目查询高频开关电源设备物资列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月11日 上午11:07:13。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping("getMaterialHighFrequencySwitchList")
+	public Object getMaterialHighFrequencySwitchList(@RequestBody Map<String, Object> param){
+		String projectOid = (String)param.get("projectOid");
+		if (StringUtils.isBlank(projectOid)) {
+			return new ListResult<>(-1,"400","项目Oid不能为空");
+		}
+		ListResult<Map<String, Object>> result= null;
+		try{
+			List<Map<String, Object>> rows = this.communicateMaterialService.getMaterialHighFrequencySwitchList(projectOid);
+			result = new ListResult<>(1,"200","ok",rows);
+		}catch(Exception e){
+			result = new ListResult<>(-1,"400","error");
+			e.printStackTrace();
+			
 		}
 		return result;
 	}
