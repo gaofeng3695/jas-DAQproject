@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -376,7 +377,8 @@ public class CutWeldService {
 					pipeList2 = pipeService.getPipeList("1", cellValue);
 					break;
 				case 1:
-					cellValue = cutWeldDao.getOidByUniqueField(cellValue, "daq_tenders", "tenders_code");
+//					cellValue = cutWeldDao.getOidByUniqueField(cellValue, "daq_tenders", "tenders_code");
+					cellValue = cutWeldDao.getOidBytendersName("code",cellValue, row.getCell(0).getStringCellValue());
 					if (StringUtils.isBlank(cellValue)) {
 						effectiveBuffer.append("第" + (1 + i) + "行，第" + ((char)(j + 65)) + "列数据无效;<br>");
 					}
@@ -399,7 +401,8 @@ public class CutWeldService {
 
 					break;
 				case 2:
-					cellValue = cutWeldDao.getOidByUniqueField(cellValue, "daq_pipeline", "pipeline_code");
+//					cellValue = cutWeldDao.getOidByUniqueField(cellValue, "daq_pipeline", "pipeline_code");
+					cellValue = cutWeldDao.getOidByPipelineName("code",cellValue, row.getCell(0).getStringCellValue());
 					if (StringUtils.isBlank(cellValue)) {
 						effectiveBuffer.append("第" + (1 + i) + "行，第" + ((char)(j + 65)) + "列数据无效;<br>");
 					}
@@ -417,7 +420,8 @@ public class CutWeldService {
 					}
 					break;
 				case 3:
-					cellValue = cutWeldDao.getOidByUniqueField(cellValue, "daq_material_pipe", "pipe_code");
+//					cellValue = cutWeldDao.getOidByUniqueField(cellValue, "daq_material_pipe", "pipe_code");
+					cellValue = cutWeldDao.getOidByPipeCode(cellValue, row.getCell(0).getStringCellValue());
 					if (StringUtils.isBlank(cellValue)) {
 						effectiveBuffer.append("第" + (1 + i) + "行，第" + ((char)(j + 65)) + "列数据无效;<br>");
 					}
@@ -587,15 +591,16 @@ public class CutWeldService {
 				int numericValue = -1;
 				double doubleValue = 0;
 				if (j < 4 || j > 9) {
-					// 获取每个单元格的值
-					cellValue = row.getCell(j).getStringCellValue();
-					// ---------------------------判断非空----------------------
-					if (j < 4 || j == 10 || j == 11) {
-						if (StringUtils.isBlank(cellValue)) {
-							nullBuffer.append("第" + (1 + i) + "行，第" + ((char)(j + 65)) + "列数据必填;<br>");
+					if (row.getCell(j) != null) {
+						// 获取每个单元格的值
+						cellValue = row.getCell(j).getStringCellValue();
+						// ---------------------------判断非空----------------------
+						if (j < 4 || j == 10 || j == 11) {
+							if (StringUtils.isBlank(cellValue)) {
+								nullBuffer.append("第" + (1 + i) + "行，第" + ((char)(j + 65)) + "列数据必填;<br>");
+							}
 						}
 					}
-
 				} else {
 					if (j == 4) {
 						numericValue = (int) row.getCell(j).getNumericCellValue();
@@ -690,7 +695,8 @@ public class CutWeldService {
 					pipeList2 = pipeService.getPipeList("1", cellValue);
 					break;
 				case 1:
-					cellValue = cutWeldDao.getOidByUniqueField(cellValue, "daq_tenders", "tenders_name");
+//					cellValue = cutWeldDao.getOidByUniqueField(cellValue, "daq_tenders", "tenders_name");
+					cellValue = cutWeldDao.getOidBytendersName("name",cellValue, row.getCell(0).getStringCellValue());
 					if (StringUtils.isBlank(cellValue)) {
 						effectiveBuffer.append("第" + (1 + i) + "行，第" + ((char)(j + 65)) + "列数据无效;<br>");
 					}
@@ -700,7 +706,6 @@ public class CutWeldService {
 						if (tendersList.get(k).get("key").equals(cellValue)) {
 							flag = true;
 						}
-						
 					}
 					if (flag == false) {
 						effectiveBuffer.append("第" + (1 + i) + "行，第" + ((char)(j + 65)) + "列数据无效;<br>");
@@ -712,7 +717,8 @@ public class CutWeldService {
 					
 					break;
 				case 2:
-					cellValue = cutWeldDao.getOidByUniqueField(cellValue, "daq_pipeline", "pipeline_name");
+//					cellValue = cutWeldDao.getOidByUniqueField(cellValue, "daq_pipeline", "pipeline_name");
+					cellValue = cutWeldDao.getOidByPipelineName("name",cellValue, row.getCell(0).getStringCellValue());
 					if (StringUtils.isBlank(cellValue)) {
 						effectiveBuffer.append("第" + (1 + i) + "行，第" + ((char)(j + 65)) + "列数据无效;<br>");
 					}
@@ -729,7 +735,8 @@ public class CutWeldService {
 					}
 					break;
 				case 3:
-					cellValue = cutWeldDao.getOidByUniqueField(cellValue, "daq_material_pipe", "pipe_code");
+//					cellValue = cutWeldDao.getOidByUniqueField(cellValue, "daq_material_pipe", "pipe_code");
+					cellValue = cutWeldDao.getOidByPipeCode(cellValue, row.getCell(0).getStringCellValue());
 					if (StringUtils.isBlank(cellValue)) {
 						effectiveBuffer.append("第" + (1 + i) + "行，第" + ((char)(j + 65)) + "列数据无效;<br>");
 					}
@@ -873,14 +880,11 @@ public class CutWeldService {
 			String projectOid = cutWeldDao.getOidByUniqueField(row.getCell(0).getStringCellValue(), "daq_project",
 					"project_code");
 			cutWeld.setProjectOid(projectOid);
-			String tendersOid = cutWeldDao.getOidByUniqueField(row.getCell(1).getStringCellValue(), "daq_tenders",
-					"tenders_code");
+			String tendersOid = cutWeldDao.getOidBytendersName("code",row.getCell(1).getStringCellValue(), row.getCell(0).getStringCellValue());
 			cutWeld.setTendersOid(tendersOid);
-			String pipelineOid = cutWeldDao.getOidByUniqueField(row.getCell(2).getStringCellValue(), "daq_pipeline",
-					"pipeline_code");
+			String pipelineOid = cutWeldDao.getOidByPipelineName("code",row.getCell(2).getStringCellValue(), row.getCell(0).getStringCellValue());
 			cutWeld.setPipelineOid(pipelineOid);
-			String pipeOid = cutWeldDao.getOidByUniqueField(row.getCell(3).getStringCellValue(), "daq_material_pipe",
-					"pipe_code");
+			String pipeOid = cutWeldDao.getOidByPipeCode(row.getCell(3).getStringCellValue(), row.getCell(0).getStringCellValue());
 			cutWeld.setPipeOid(pipeOid);
 			List<Map<String, Object>> pipeInfo = cutWeldDao.getPipeInfo(pipeOid);
 			double pipeDiameter = 0;
@@ -890,7 +894,7 @@ public class CutWeldService {
 			cutWeld.setPipeDiameter(pipeDiameter);
 			double wallThickness = 0;
 			if (pipeInfo.get(0).get("wall_thickness") != null) {
-				pipeDiameter = Double.parseDouble(pipeInfo.get(0).get("wall_thickness").toString());
+				wallThickness = Double.parseDouble(pipeInfo.get(0).get("wall_thickness").toString());
 			}
 			cutWeld.setWallThickness(wallThickness);
 			int segmentsNum = (int) row.getCell(4).getNumericCellValue();
@@ -918,10 +922,14 @@ public class CutWeldService {
 			String supervisionUnit = cutWeldDao.getOidByUniqueField(row.getCell(11).getStringCellValue(), "pri_unit",
 					"unit_code");
 			cutWeld.setSupervisionUnit(supervisionUnit);
-			String supervisionEngineer = row.getCell(12).getStringCellValue();
-			cutWeld.setSupervisionEngineer(supervisionEngineer);
-			String remarks = row.getCell(13).getStringCellValue();
-			cutWeld.setRemarks(remarks);
+			if (row.getCell(12) != null) {
+				String supervisionEngineer = row.getCell(12).getStringCellValue();
+				cutWeld.setSupervisionEngineer(supervisionEngineer);
+			}
+			if (row.getCell(13) != null) {
+				String remarks = row.getCell(13).getStringCellValue();
+				cutWeld.setRemarks(remarks);
+			}
 			try {
 				commonDataJdbcService.save(cutWeld);
 			} catch (Exception e) {
@@ -951,14 +959,11 @@ public class CutWeldService {
 			String projectOid = cutWeldDao.getOidByUniqueField(row.getCell(0).getStringCellValue(), "daq_project",
 					"project_name");
 			cutWeld.setProjectOid(projectOid);
-			String tendersOid = cutWeldDao.getOidByUniqueField(row.getCell(1).getStringCellValue(), "daq_tenders",
-					"tenders_name");
+			String tendersOid = cutWeldDao.getOidBytendersName("name",row.getCell(1).getStringCellValue(), row.getCell(0).getStringCellValue());
 			cutWeld.setTendersOid(tendersOid);
-			String pipelineOid = cutWeldDao.getOidByUniqueField(row.getCell(2).getStringCellValue(), "daq_pipeline",
-					"pipeline_name");
+			String pipelineOid = cutWeldDao.getOidByPipelineName("name",row.getCell(2).getStringCellValue(), row.getCell(0).getStringCellValue());
 			cutWeld.setPipelineOid(pipelineOid);
-			String pipeOid = cutWeldDao.getOidByUniqueField(row.getCell(3).getStringCellValue(), "daq_material_pipe",
-					"pipe_code");
+			String pipeOid = cutWeldDao.getOidByPipeCode(row.getCell(3).getStringCellValue(), row.getCell(0).getStringCellValue());
 			cutWeld.setPipeOid(pipeOid);
 			List<Map<String, Object>> pipeInfo = cutWeldDao.getPipeInfo(pipeOid);
 			double pipeDiameter = 0;
@@ -996,10 +1001,14 @@ public class CutWeldService {
 			String supervisionUnit = cutWeldDao.getOidByUniqueField(row.getCell(11).getStringCellValue(), "pri_unit",
 					"unit_name");
 			cutWeld.setSupervisionUnit(supervisionUnit);
-			String supervisionEngineer = row.getCell(12).getStringCellValue();
-			cutWeld.setSupervisionEngineer(supervisionEngineer);
-			String remarks = row.getCell(13).getStringCellValue();
-			cutWeld.setRemarks(remarks);
+			if (row.getCell(12) != null) {
+				String supervisionEngineer = row.getCell(12).getStringCellValue();
+				cutWeld.setSupervisionEngineer(supervisionEngineer);
+			}
+			if (row.getCell(13) != null) {
+				String remarks = row.getCell(13).getStringCellValue();
+				cutWeld.setRemarks(remarks);
+			}
 			try {
 				commonDataJdbcService.save(cutWeld);
 			} catch (Exception e) {
