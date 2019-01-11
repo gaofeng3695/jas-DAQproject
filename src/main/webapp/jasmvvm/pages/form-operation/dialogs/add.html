@@ -296,7 +296,7 @@
 									<template slot-scope="scope">
 										<el-select size="small" v-model="scope.row.childFieldArr" multiple placeholder="" v-show="isSqlSelect1(scope.row)">
 											<!-- <el-option label="无" value=""></el-option> -->
-											<el-option v-for="option in filterTableClomuns" v-show="isSqlSelect(option.uiType)" :label="option.fieldNameCn" :value="option.fieldName"></el-option>
+											<el-option v-for="option in filterTable" v-show="isSqlSelect(option.uiType)" :label="option.fieldNameCn" :value="option.fieldName"></el-option>
 										</el-select>
 									</template>
 								</el-table-column>
@@ -315,7 +315,7 @@
 									<template slot-scope="scope">
 										<el-select size="small" v-model="scope.row.lessDateScopeArr" multiple placeholder="" v-show="isSwitch(scope.row)">
 											<!-- <el-option label="无" value=""></el-option> -->
-											<el-option v-for="option in filterTableClomuns" :label="option.fieldNameCn" v-show=isDate(option.uiType) :value="option.fieldName"></el-option>
+											<el-option v-for="option in filterTable" :label="option.fieldNameCn" v-show=isDate(option.uiType) :value="option.fieldName"></el-option>
 										</el-select>
 									</template>
 								</el-table-column>
@@ -323,7 +323,7 @@
 									<template slot-scope="scope">
 										<el-select size="small" v-model="scope.row.maxDateScopeArr" multiple placeholder="" v-show="isSwitch(scope.row)">
 											<!-- <el-option label="无" value=""></el-option> -->
-											<el-option v-for="option in filterTableClomuns" :label="option.fieldNameCn" v-show=isDate(option.uiType) :value="option.fieldName"></el-option>
+											<el-option v-for="option in filterTable" :label="option.fieldNameCn" v-show=isDate(option.uiType) :value="option.fieldName"></el-option>
 										</el-select>
 									</template>
 								</el-table-column>
