@@ -29,11 +29,9 @@ public class DaqStationDetectionInfiltrationService {
     public void injectinfiltrationSubList(List<DaqStationDetectionInfiltrationBo> infiltrationList){
         if(infiltrationList.size() == 1){
             DaqStationDetectionInfiltrationBo daqStationDetectionInfiltrationBo= infiltrationList.get(0);
-            if(StringUtils.isNotBlank(daqStationDetectionInfiltrationBo.getOid())){
-                String parentOid = daqStationDetectionInfiltrationBo.getOid();
-                List<DaqStationDetectionInfiltrationSubBo> infiltrationSubList = daqStationDetectionInfiltrationSubDao.getDaqStationDetectionInfiltrationSubListByParentOid(parentOid);
-                daqStationDetectionInfiltrationBo.setInfiltrationSubList(infiltrationSubList);
-            }
+            String parentOid = daqStationDetectionInfiltrationBo.getOid();
+            List<DaqStationDetectionInfiltrationSubBo> infiltrationSubList = daqStationDetectionInfiltrationSubDao.getDaqStationDetectionInfiltrationSubListByParentOid(parentOid);
+            daqStationDetectionInfiltrationBo.setInfiltrationSubList(infiltrationSubList);
         }
 
     }
