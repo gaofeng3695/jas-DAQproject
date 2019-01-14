@@ -50,7 +50,7 @@ public class DaqStationDetectionUltrasonicQuery extends BaseJavaQuery {
                 + " d1.code_name as detection_type_name, d2.code_name as evaluation_grade_name,"
                 + "	p.project_name, l.pipeline_name,	dt.tenders_name,	dps.pipe_station_name pipe_station_name,"
                 + "	u1.unit_name as detection_unit_name,	u2.unit_name as supervision_unit_name,"
-                + " vdwi.weld_code "
+                + " dspw.weld_code "
                 + " from daq_station_detection_ultrasonic dsdu "
                 + " left join (select code_id,code_name from sys_domain where active=1) d1 on d1.code_id = dsdu.detection_type"
                 + " left join (select code_id,code_name from sys_domain where active=1) d2 on d2.code_id = dsdu.evaluation_grade"
@@ -60,7 +60,7 @@ public class DaqStationDetectionUltrasonicQuery extends BaseJavaQuery {
                 + " left join (select oid,pipe_station_name from daq_pipe_station where active=1) dps on dps.oid=dsdu.pipe_station_oid "
                 + " left join (select oid,unit_name from pri_unit where active=1) u1 on u1.oid=dsdu.detection_unit "
                 + " left join (select oid,unit_name from pri_unit where active=1) u2 on u2.oid=dsdu.supervision_unit "
-                + " left join (select oid,weld_code from v_daq_weld_info) vdwi on vdwi.oid=dsdu.weld_oid "
+                + " left join (select oid,weld_code from daq_station_process_weld where active=1 and approve_status=2) dspw on dspw.oid=dsdu.weld_oid "
                 + " where 1=1 and dsdu.active = 1";
         if (StringUtils.isNotBlank(oid)) {
             sql += " and dsdu.oid=:oid ";
