@@ -1,13 +1,10 @@
-package cn.jasgroup.jasframework.acquisitiondata.station.detetion.infiltration.query.bo;
+package cn.jasgroup.jasframework.acquisitiondata.station.detection.infiltration.query.bo;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import cn.jasgroup.jasframework.acquisitiondata.station.detetion.infiltration.dao.entity.DaqStationDetectionInfiltrationSub;
-import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
 import cn.jasgroup.jasframework.base.data.CommonBaseBo;
-import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**

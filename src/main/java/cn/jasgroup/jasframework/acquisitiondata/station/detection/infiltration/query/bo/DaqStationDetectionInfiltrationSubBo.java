@@ -1,27 +1,36 @@
-package cn.jasgroup.jasframework.acquisitiondata.station.detetion.infiltration.dao.entity;
+package cn.jasgroup.jasframework.acquisitiondata.station.detection.infiltration.query.bo;
 
 import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
+import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 
 /**
- * <p>渗透检测(站场)子表</p>
- * @author cuixianing 。
+ * <p>渗透检测(站场)子表bo</p>
+ * @author cuixianing
  * @version v1.0.0.1。
  * @since JDK1.8.0_181。
  * <p>创建日期：2019-01-14 10:22:29。</p>
  */
-@JdbcEntity(name="daq_station_detection_infiltration_sub")
-public class DaqStationDetectionInfiltrationSub extends CommonJdbcEntity {
+public class DaqStationDetectionInfiltrationSubBo extends CommonBaseBo {
 
+    /**
+     * oid
+     */
+    private String oid;
     /**
      * 主表oid
      */
     private String parentOid;
 
     /**
-     * 焊口编号
+     * 焊口oid
      */
     private String weldOid;
+
+    /**
+     * 焊口编号
+     */
+    private String weldCode;
 
     /**
      * 缺陷位置
@@ -34,6 +43,11 @@ public class DaqStationDetectionInfiltrationSub extends CommonJdbcEntity {
     private String defectProperties;
 
     /**
+     * 缺陷性质名称
+     */
+    private String defectPropertiesName;
+
+    /**
      * 缺陷长度(mm)
      */
     private Double defectLength;
@@ -44,7 +58,6 @@ public class DaqStationDetectionInfiltrationSub extends CommonJdbcEntity {
 
     public void setParentOid(String parentOid) {
         this.parentOid = parentOid;
-        super.setField("parentOid");
     }
 
     public String getWeldOid() {
@@ -53,7 +66,14 @@ public class DaqStationDetectionInfiltrationSub extends CommonJdbcEntity {
 
     public void setWeldOid(String weldOid) {
         this.weldOid = weldOid;
-        super.setField("weldOid");
+    }
+
+    public String getWeldCode() {
+        return weldCode;
+    }
+
+    public void setWeldCode(String weldCode) {
+        this.weldCode = weldCode;
     }
 
     public String getDefectPosition() {
@@ -62,7 +82,6 @@ public class DaqStationDetectionInfiltrationSub extends CommonJdbcEntity {
 
     public void setDefectPosition(String defectPosition) {
         this.defectPosition = defectPosition;
-        super.setField("defectPosition");
     }
 
     public String getDefectProperties() {
@@ -71,7 +90,14 @@ public class DaqStationDetectionInfiltrationSub extends CommonJdbcEntity {
 
     public void setDefectProperties(String defectProperties) {
         this.defectProperties = defectProperties;
-        super.setField("defectProperties");
+    }
+
+    public String getDefectPropertiesName() {
+        return defectPropertiesName;
+    }
+
+    public void setDefectPropertiesName(String defectPropertiesName) {
+        this.defectPropertiesName = defectPropertiesName;
     }
 
     public Double getDefectLength() {
@@ -80,7 +106,13 @@ public class DaqStationDetectionInfiltrationSub extends CommonJdbcEntity {
 
     public void setDefectLength(Double defectLength) {
         this.defectLength = defectLength;
-        super.setField("defectLength");
     }
 
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
+    }
 }
