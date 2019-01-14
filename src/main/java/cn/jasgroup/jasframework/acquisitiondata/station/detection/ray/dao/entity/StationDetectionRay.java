@@ -20,6 +20,8 @@ import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
 import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
 import cn.jasgroup.jasframework.base.annotation.Merge;
 import cn.jasgroup.jasframework.base.annotation.Process;
+import cn.jasgroup.jasframework.base.annotation.UniqueConstraintStrategy;
+import cn.jasgroup.jasframework.base.annotation.UniqueConstraints;
 import cn.jasgroup.jasframework.base.annotation.assist.MergeType;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 
@@ -35,6 +37,14 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 @CommonUpdateConfig(scene = "/stationDetectionRay/update")
 @CommonDeleteConfig(scene = "/stationDetectionRay/delete")
 @JdbcEntity(name="daq_station_detection_ray")
+@UniqueConstraints(
+strategys ={
+		@UniqueConstraintStrategy(
+			columnNames={"pipeStationOid","weldOid"},
+			name="同一线站场/阀室下焊口编号不能重复"
+		)
+	}
+)
 public class StationDetectionRay extends CommonJdbcEntity {
 
 	/**
