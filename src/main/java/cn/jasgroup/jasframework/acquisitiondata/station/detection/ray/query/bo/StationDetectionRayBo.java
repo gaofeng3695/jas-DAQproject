@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import cn.jasgroup.jasframework.acquisitiondata.station.detection.ray.dao.entity.StationDetectionRaySub;
 import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 
@@ -268,6 +273,8 @@ public class StationDetectionRayBo extends CommonBaseBo {
 		this.detectionReportNum = detectionReportNum;
 	}
 
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+	@Temporal(TemporalType.DATE)
 	public Date getDetectionDate() {
 		return detectionDate;
 	}
@@ -380,6 +387,8 @@ public class StationDetectionRayBo extends CommonBaseBo {
 		this.supervisionEngineer = supervisionEngineer;
 	}
 
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+	@Temporal(TemporalType.DATE)
 	public Date getCollectionDate() {
 		return collectionDate;
 	}
