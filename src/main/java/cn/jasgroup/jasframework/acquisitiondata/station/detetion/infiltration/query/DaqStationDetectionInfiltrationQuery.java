@@ -14,6 +14,8 @@ import java.util.List;
  * @date 2018年7月12日上午10:19:04
  * @version V1.0
  * @since JDK 1.80
+ * {@link cn.jasgroup.jasframework.acquisitiondata.variate.DaqInjectService #injectDataAuthoritySql()}
+ * {@link cn.jasgroup.jasframework.acquisitiondata.station.detetion.infiltration.service.DaqStationDetectionInfiltrationService #injectinfiltrationSubList()}
  */
 
 @QueryConfig(
