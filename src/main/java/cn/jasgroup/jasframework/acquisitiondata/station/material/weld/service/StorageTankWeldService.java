@@ -1,8 +1,9 @@
-package cn.jasgroup.jasframework.acquisitiondata.station.weld.service;
+package cn.jasgroup.jasframework.acquisitiondata.station.material.weld.service;
 
-import cn.jasgroup.jasframework.acquisitiondata.station.weld.dao.StorageTankWeldDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import cn.jasgroup.jasframework.acquisitiondata.station.material.weld.dao.StorageTankWeldDao;
 
 import java.util.List;
 import java.util.Map;
