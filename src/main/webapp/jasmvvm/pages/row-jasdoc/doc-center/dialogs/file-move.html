@@ -21,8 +21,8 @@
 				<el-row>
 					<el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8">
 						<el-form-item label="移动到的位置" prop="targetFolderId">
-							<treeselect aria-placeholder="请选择文件夹" placeholder="请选择文档位置" @input="valueChanged" :options="treeList" :load-options="queryChildrenFolderTree"
-							  :normalizer="normalizer" v-model="form.targetFolderId">
+							<treeselect aria-placeholder="请选择文件夹" placeholder="请选择文档位置" @input="valueChanged" :options="treeList"
+							 :load-options="queryChildrenFolderTree" :flat="true" :normalizer="normalizer" v-model="form.targetFolderId">
 							</treeselect>
 						</el-form-item>
 					</el-col>
@@ -62,11 +62,10 @@
 			return {
 				rules: {
 					targetFolderId: [{
-							required: true,
-							message: '该字段为必填项',
-							trigger: 'blur'
-						},
-					]
+						required: true,
+						message: '该字段为必填项',
+						trigger: 'blur'
+					}, ]
 				},
 				form: {
 					targetFolderId: null,
@@ -120,12 +119,15 @@
 				var url = jasTools.base.rootPath + "/jasdoc/folder/doccenter/queryFavoriteFolderTree.do";
 				jasTools.ajax.postForm(url, {}, function (data) {
 					data[0].children.forEach(function (item) {
+						// item.isDisabled = false;
 						if (item.state == null) {
 							item.children = undefined;
 						} else {
 							item.children = null;
 						}
-					})
+					});
+					data[0].isDisabled = true;
+
 					that.treeList = data;
 				});
 			},
