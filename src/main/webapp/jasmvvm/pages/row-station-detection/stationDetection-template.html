@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>自定义表单配置</title>
+	<!-- <link rel="stylesheet" href="./libelement-ui/element-#0E2B4A/src/index.css"> -->
+	<link rel="stylesheet" href="./../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../lib/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="./../../src/css/main.css">
+
+</head>
+
+<body>
+	<div id="app" v-cloak>
+
+
+		<jas-list-wrapper>
+			<jas-search-for-list slot="search" :form="topSearch" :fields="fields" :fields-config="fieldsConfig" @search="searchList"></jas-search-for-list>
+			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" :search-path="searchPath"
+			  :add-url="addUrl" :detail-url="detailUrl" :delete-path="deletePath" :upcall-path="upcallPath" :class-name="className"
+			  :template-code="templateCode" @locate="locate"></jas-table-for-list>
+		</jas-list-wrapper>
+
+
+	</div>
+</body>
+
+<script src="./../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../lib/vue/vue.js"></script>
+<script src="./../../lib/element-ui/v2.4.1/index.min.js"></script>
+<script src="./../../common/components/jas-components.js"></script>
+<script src="./../../common/js/jas-tools.js"></script>
+
+<script src="./stationDetection-config.js"></script>
+<script>
+	var vm = new Vue({
+		el: '#app',
+		data: function () {
+			return {
+				className: '',
+				templateCode: '',
+				searchPath: '',
+				deletePath: '',
+				upcallPath: '',
+				addUrl: './pages/row-station-detection/dialogs/add.html',
+				detailUrl: './pages/row-station-detection/dialogs/detail.html',
+				privilegeCode: '',
+				topSearch: {
+					'projectOid': '',
+					'tendersOid': '',
+					'pipelineOid': '',
+					'pipeStationOid': '',
+					'weldOid': ''
+				},
+				fields: [], //搜索字段
+				fieldsConfig: [],
+				tableFields: [],
+			}
+		},
+		created: function () {
+			var that = this;
+			var tableNameMap = {
+				stationRay: 'daq_station_detection_ray',
+				stationUltrasonic:'daq_station_detection_ultrasonic',
+				stationInfiltration:'daq_station_detection_infiltration'
+			};
+			var param = window.jasTools.base.getParamsInUrl(location.href);
+			this.privilegeCode = param.privilegeCode;
+			this.templateCode = param.templateCode;
+			this.pageCode = param.pageCode;
+			this.tableName = tableNameMap[param.pageCode];
+			this.className = param.className;
+			this.addUrl = './pages/row-station-detection/dialogs/add.html?pageCode=' + this.pageCode;
+			this.detailUrl = './pages/row-station-detection/dialogs/detail.html?pageCode=' + this.pageCode;
+			this.searchPath = stationConfig[this.pageCode].getList;; //查询 page;
+			this.deletePath = stationConfig[this.pageCode].deleteUrl;
+			this.fieldsConfig = stationConfig.fieldsConfig;
+			this.fields = stationConfig.methods.formatFields(stationConfig[this.pageCode].searchFields, stationConfig.fieldsConfig,
+				this.pageCode);
+			this.tableFields = stationConfig.methods.formatFields(stationConfig[this.pageCode].tableFields, stationConfig.fieldsConfig,
+				this.pageCode);
+
+		},
+		mounted: function () {
+
+		},
+		methods: {
+			searchList: function () {
+				this.$refs.table.search();
+			},
+			locate: function (row) {
+				var code = this.tableName;
+				top.app.locate(row.oid, code);
+			},
+		},
+	});
+</script>
+
+</html>

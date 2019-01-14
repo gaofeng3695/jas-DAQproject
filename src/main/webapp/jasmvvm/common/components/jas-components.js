@@ -1479,7 +1479,7 @@ Vue.component('jas-form-items', {
 
 		},
 		visibleChange: function (isShowOptions, currentField) {
-			console.log(currentField);
+			
 			if (!isShowOptions) return;
 			var fieldArr = [];
 			var fieldNameArr = [];
@@ -1489,10 +1489,9 @@ Vue.component('jas-form-items', {
 				fieldArr.push(item.field);
 				fieldNameArr.push(item.name);
 			});
-			console.log(fieldNameArr);
+			
 			for (var field in fieldsConfig) {
-				var fieldIndex = fieldArr.indexOf(field);
-				console.log(fieldIndex);
+				var fieldIndex = fieldArr.indexOf(field);			
 				if (fieldIndex > -1 && fieldsConfig.hasOwnProperty(field)) {
 					if (fieldsConfig[field].childSelect && fieldsConfig[field].childSelect.indexOf(currentField) > -1) {
 						if (!this.form[field]) {
@@ -1513,8 +1512,7 @@ Vue.component('jas-form-items', {
 			var fieldConfig = this.fieldsConfig[fatherField];
 			var form = this.form;
 			var setChildOptionsAndValue = function (childField, options) { // 入参下拉选项
-				
-				if (that.form.weldOid != "" && childField == "weldOid") {
+				if (that.form.weldOid != "" && childField == "weldOid" && !that.form.isNoAddOid ) {//that.form.isNoAddOid  如果不需要增加oid，则页面配置该属性 并且为 true
 					options.push({
 						key: that.form.weldOid,
 						value: that.form.weldCode
@@ -1959,8 +1957,8 @@ Vue.component('jas-sub-form-group', {
 		'	<div v-for="row,index in formList" >',
 		'		<div style="padding-top: 10px;float: right;">',
 		'			<el-button v-show="formList.length-1==index" @click="addFormGroup(formList)"  type="text" size="small">新增</el-button>',
-		'			<el-button v-show="row.operationFlag != -1" @click="removeFormGroup(formList,index)" type="text" size="small">删除</el-button>',
-		'			<el-button v-show="row.operationFlag == -1" @click="resetFormGroup(formList,index)" type="text" size="small">恢复</el-button>',
+		'			<el-button v-show="row.operationFlag != -1" @click="removeFormGroup(index)" type="text" size="small">删除</el-button>',
+		'			<el-button v-show="row.operationFlag == -1" @click="resetFormGroup(index)" type="text" size="small">恢复</el-button>',
 		'		</div>',
 		'		<jas-base-group-title :name="groupName+(index+1)"></jas-base-group-title>',
 		'		<jas-form-items v-show="row.operationFlag != -1" :form="row" :fields="fields" :fields-config="fieldsConfig"></jas-form-items>',
@@ -1969,14 +1967,18 @@ Vue.component('jas-sub-form-group', {
 		'</div>',
 	].join(''),
 	methods: {
-		resetFormGroup: function (formList, index) {
-			formList[index].operationFlag = 2; // -1（删除），0（不变），1（新增），2（修改）
+		resetFormGroup: function (index) {
+			var that=this;
+			that.formList[index].operationFlag = 2; // -1（删除），0（不变），1（新增），2（修改）
+			that.$set(that.formList,index,that.formList[index]);
 		},
-		removeFormGroup: function (formList, index) {
-			if (formList[index].oid) {
-				formList[index].operationFlag = -1;
+		removeFormGroup: function ( index) {
+			var that=this;
+			if (that.formList[index].oid) {
+				that.formList[index].operationFlag = -1;
+				that.$set(that.formList,index,that.formList[index]);
 			} else {
-				formList.splice(index, 1);
+				that.formList.splice(index, 1);
 			}
 		},
 		addFormGroup: function (formList) {
