@@ -31,10 +31,9 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
   * @since JDK1.8。
   *<p>创建日期：2019年1月14日 上午10:13:33。</p>
  */
-@CommonSaveConfig(scene = "/stationDetectionFaUltrasonic/save")
-@CommonUpdateConfig(scene = "/stationDetectionFaUltrasonic/update")
-@CommonDeleteConfig(scene = "/stationDetectionFaUltrasonic/delete")
-@CommonDeleteBatchConfig(scene = "/stationDetectionFaUltrasonic/deleteBatch")
+@CommonSaveConfig(scene = "/stationDetectionRay/save")
+@CommonUpdateConfig(scene = "/stationDetectionRay/update")
+@CommonDeleteConfig(scene = "/stationDetectionRay/delete")
 @JdbcEntity(name="daq_station_detection_ray")
 public class StationDetectionRay extends CommonJdbcEntity {
 
