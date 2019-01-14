@@ -1,4 +1,4 @@
-package cn.jasgroup.jasframework.acquisitiondata.station.weld.dao;
+package cn.jasgroup.jasframework.acquisitiondata.station.material.weld.dao;
 
 import cn.jasgroup.jasframework.dataaccess.base.BaseJdbcDao;
 import org.springframework.beans.factory.annotation.Autowired;

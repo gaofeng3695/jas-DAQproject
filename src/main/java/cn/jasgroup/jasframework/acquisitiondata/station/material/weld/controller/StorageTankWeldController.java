@@ -1,7 +1,8 @@
-package cn.jasgroup.jasframework.acquisitiondata.station.weld.controller;
+package cn.jasgroup.jasframework.acquisitiondata.station.material.weld.controller;
 
 import cn.jasgroup.framework.data.result.ListResult;
-import cn.jasgroup.jasframework.acquisitiondata.station.weld.service.StorageTankWeldService;
+import cn.jasgroup.jasframework.acquisitiondata.station.material.weld.service.StorageTankWeldService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
