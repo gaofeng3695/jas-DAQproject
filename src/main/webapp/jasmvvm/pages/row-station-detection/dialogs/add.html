@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>组件的形式关于主子表信息的展示</title>
+	<link rel="stylesheet" href="./../../../lib/font-awesome-4.7.0/css/font-awesome.css">
+	<link rel="stylesheet" href="./../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../src/css/main.css">
+	<style>
+		.el-form-item {
+			margin-bottom: 15px !important;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="app" v-cloak>
+
+		<jas-dialog-wrapper>
+			<el-form ref="formData" :model="form" label-width="120px">
+				<jas-base-group-title :name="addName1"></jas-base-group-title>
+				<jas-form-items ref="mainForm" :form="form" :fields="fields" :fields-config="fieldsConfig"></jas-form-items>				
+				<jas-sub-form-group :group-name="addName2" :form-default="sonFormDefault" :form-list="form[subListMap[pageCode]]" :fields="subFields"
+				  :fields-config="fieldsConfig"></jas-sub-form-group>
+				<jas-base-group-title name="其他信息"></jas-base-group-title>
+				<el-row>
+					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+						<jas-remarks :remarks="form.remarks" @changevalue="changevalue"></jas-remarks>
+					</el-col>
+				</el-row>
+				<jas-base-group-title name="附件信息"></jas-base-group-title>
+				<jas-file-upload ref="upload" @success="uploadSuccess"></jas-file-upload>
+			</el-form>
+			<div slot="footer">
+				<el-button size="small" @click="cancel()">取 消</el-button>
+				<el-button size="small" type="primary" @click="submit('formData')">确 定</el-button>
+			</div>
+		</jas-dialog-wrapper>
+	</div>
+</body>
+<script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../lib/vue/vue.js"></script>
+<script src="./../../../lib/element-ui/v2.4.1/index.min.js"></script>
+<script src="./../../../common/components/jas-components.js "></script>
+<script src="./../../../common/js/jas-tools.js"></script>
+<script src="./../stationDetection-config.js"></script>
+<script>
+	var app = new Vue({
+		el: "#app",
+		data: function () {
+			var that = this;
+			return {
+				fields: [ //主表配置字段
+				],
+				subFields: [ //子表配置字段
+
+				],
+				sonFormDefault: {
+				},
+				fieldsConfig: {
+				},
+				addName1:"",
+				addName2:"",
+				form: {
+					remarks:"",
+				},
+				subListMap:{
+					stationRay: 'faUltrasonicSubList',
+					stationUltrasonic:'stationDetectionUltrasonicSubList',
+					stationInfiltration:'infiltrationSubList'
+				}
+			}
+		},
+		created: function () {
+			var that = this;
+			var param = window.jasTools.base.getParamsInUrl(location.href);
+			this.pageCode = param.pageCode;
+			this.form[this.subListMap[this.pageCode]]=[];
+			var fields = stationConfig[this.pageCode].addFields;
+			var subFields = stationConfig[this.pageCode].subFields;
+			this.addName1= stationConfig[this.pageCode].addName[0];
+			this.addName2= stationConfig[this.pageCode].addName[1];
+			this.addUrl=stationConfig[this.pageCode].addUrl;
+			this.updateUrl=stationConfig[this.pageCode].updateUrl;
+			this.detailUrl=stationConfig[this.pageCode].detailUrl;
+			this.fieldsConfig = stationConfig.fieldsConfig;
+			this.sonFormDefault=stationConfig[this.pageCode].sonFormDefault
+			this.fields = stationConfig.methods.formatFields(fields, stationConfig.fieldsConfig, this.pageCode);
+			this.subFields = stationConfig.methods.formatFields(subFields, stationConfig.fieldsConfig, this.pageCode);
+			this.form = stationConfig.methods.formatForm(fields,this.subListMap[this.pageCode]);
+		},
+		mounted: function () {
+			var that = this;
+			var param = window.jasTools.base.getParamsInUrl(location.href);
+			var userBo = JSON.parse(localStorage.getItem("user"));
+			that.form.detectionUnit = userBo.unitId;//检测单位
+			if (param.oid) {
+				this.oid = param.oid;
+				this.form.oid = this.oid;
+				this.isEdit = true;
+				this.getDetailByObjectId();
+				this.$refs.upload.requestFile(this.oid);
+			};
+		},
+		methods: {
+			changevalue: function (msg) {
+				this.form.remarks = msg;
+			},
+			cancel: function (param) {
+				window.parent.jasTools.dialog.close(param);
+			},
+			submit: function (formName) {
+				var that = this;
+				this.$refs[formName].validate(function (valid) {
+					if (valid) {
+						that.save();
+					}
+				});
+			},
+			save: function () {
+				var that = this;
+				var msg = "";
+				if (!this.isEdit) {
+					msg = "增加成功";
+					url = jasTools.base.rootPath + that.addUrl;
+				} else {
+					msg = "修改成功";
+					url = jasTools.base.rootPath +that.updateUrl;
+				}
+				jasTools.ajax.post(url, that.form, function (data) {
+					that.$refs.upload.uploadFile(data.data || that.oid);
+				});
+			},
+			uploadSuccess: function () {
+				top.Vue.prototype.$message({
+					type: 'success',
+					message: !this.isEdit ? '保存成功' : '修改成功'
+				});
+				this.cancel(1);
+			},
+			getDetailByObjectId: function () {
+				var that = this;
+				var url = jasTools.base.rootPath +that.detailUrl;
+				jasTools.ajax.post(url, {
+					oid: that.oid
+				}, function (data) {
+					that.form = data.rows[0];
+					that.form.isNoAddOid=true;//表示是否增加weldOid;
+				//	that.fieldsConfig.weldOid.options = [{
+					//	key: that.form.weldOid,
+						//value: that.form.weldCode
+					//}];
+					that.$refs['mainForm'].triggerFatherSelectsChange();
+					that.form[that.subListMap[that.pageCode]].forEach(function (item) {
+						item.operationFlag = 2;
+					});
+				});
+			}
+		},
+	});
+</script>
+
+</html>
