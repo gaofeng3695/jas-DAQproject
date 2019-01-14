@@ -115,15 +115,25 @@ var vm = new Vue({
     isSql: function (row) {
       var type = row.uiType;
       var sql = ['UT_05', 'UT_07', 'UT_09', 'UT_11'];
-      return sql.indexOf(type) !== -1 && this.isUi(type);
+      var isShow=sql.indexOf(type) !== -1 && this.isUi(type);
+      if(!isShow) row.domain=null;
+      return isShow;
     },
     isUpdateable: function (row) {
       var type = row.uiType;
-      return +row.ifUpdate && this.isUi(type);
+      var isShow=+row.ifUpdate && this.isUi(type);
+      if(!isShow) row.updateable=null;
+      return isShow;
     },
     isNumber: function (row) {
       var type = row.uiType;
-      return type === 'UT_14' && this.isUi(type);
+      var isShow=type === 'UT_14' && this.isUi(type);
+      if(!isShow) {
+        row.min=null;
+        row.max=null;
+        row.precision=0;
+      }
+      return isShow;
     },
     isPlaceholder: function (row) {
       var type = row.uiType;
@@ -133,21 +143,41 @@ var vm = new Vue({
     isJson: function (row) {
       var type = row.uiType;
       var json = ['UT_06', 'UT_08', 'UT_10', 'UT_12'];
-      return json.indexOf(type) !== -1 && this.isUi(type);
+      var isShow=json.indexOf(type) !== -1 && this.isUi(type);
+       if(!isShow) row.domain=null;
+      return isShow;
     },
     isSqlSelect: function (type) {
       return type === 'UT_11' && this.isUi(type);
     },
+    isSqlSelect1: function (row) {
+    	var type=row.uiType;
+    	var isShow = type === 'UT_11' && this.isUi(type);
+//    	console.log(isShow);
+//    	if(!isShow)  {
+//    		row.childFieldArr=[];
+//    		row.childField="";
+//    	}
+        return isShow;
+      },
     isSwitch:function(row){
     	var type=row.uiType;
-    	return (type==='UT_03'||type==='UT_04')&&this.isUi(type);
+    	var isShow=(type==='UT_03'||type==='UT_04')&&this.isUi(type);
+//    	if(!isShow){
+//    		row.lessDateScopeArr=[]
+//    	}
+    	return isShow;
     },
     isDate:function(type){
     	return (type==='UT_03'||type==='UT_04')&&this.isUi(type);
     },
     isUrl: function (row) {
       var type = row.uiType;
-      return this.isSqlSelect(type) && row.childFieldArr && row.childFieldArr.length > 0;
+      var isShow=this.isSqlSelect(type) && row.childFieldArr && row.childFieldArr.length > 0;
+      if(!isShow) {
+    	  row.requestPath=null; 
+      }
+      return isShow;
     },
     isTableSource: function (row) {
       var type = row.fieldSource;
