@@ -1,8 +1,8 @@
-package cn.jasgroup.jasframework.acquisitiondata.station.detetion.infiltration.service;
+package cn.jasgroup.jasframework.acquisitiondata.station.detection.infiltration.service;
 
-import cn.jasgroup.jasframework.acquisitiondata.station.detetion.infiltration.dao.DaqStationDetectionInfiltrationSubDao;
-import cn.jasgroup.jasframework.acquisitiondata.station.detetion.infiltration.query.bo.DaqStationDetectionInfiltrationBo;
-import cn.jasgroup.jasframework.acquisitiondata.station.detetion.infiltration.query.bo.DaqStationDetectionInfiltrationSubBo;
+import cn.jasgroup.jasframework.acquisitiondata.station.detection.infiltration.dao.DaqStationDetectionInfiltrationSubDao;
+import cn.jasgroup.jasframework.acquisitiondata.station.detection.infiltration.query.bo.DaqStationDetectionInfiltrationBo;
+import cn.jasgroup.jasframework.acquisitiondata.station.detection.infiltration.query.bo.DaqStationDetectionInfiltrationSubBo;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,11 +29,9 @@ public class DaqStationDetectionInfiltrationService {
     public void injectinfiltrationSubList(List<DaqStationDetectionInfiltrationBo> infiltrationList){
         if(infiltrationList.size() == 1){
             DaqStationDetectionInfiltrationBo daqStationDetectionInfiltrationBo= infiltrationList.get(0);
-            if(StringUtils.isNotBlank(daqStationDetectionInfiltrationBo.getOid())){
-                String parentOid = daqStationDetectionInfiltrationBo.getOid();
-                List<DaqStationDetectionInfiltrationSubBo> infiltrationSubList = daqStationDetectionInfiltrationSubDao.getDaqStationDetectionInfiltrationSubListByParentOid(parentOid);
-                daqStationDetectionInfiltrationBo.setInfiltrationSubList(infiltrationSubList);
-            }
+            String parentOid = daqStationDetectionInfiltrationBo.getOid();
+            List<DaqStationDetectionInfiltrationSubBo> infiltrationSubList = daqStationDetectionInfiltrationSubDao.getDaqStationDetectionInfiltrationSubListByParentOid(parentOid);
+            daqStationDetectionInfiltrationBo.setInfiltrationSubList(infiltrationSubList);
         }
 
     }

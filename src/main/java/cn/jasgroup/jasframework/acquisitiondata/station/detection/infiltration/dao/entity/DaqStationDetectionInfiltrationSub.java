@@ -1,17 +1,17 @@
-package cn.jasgroup.jasframework.acquisitiondata.station.detetion.infiltration.query.bo;
+package cn.jasgroup.jasframework.acquisitiondata.station.detection.infiltration.dao.entity;
 
 import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
-import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 
 /**
- * <p>渗透检测(站场)子表bo</p>
- * @author cuixianing
+ * <p>渗透检测(站场)子表</p>
+ * @author cuixianing 。
  * @version v1.0.0.1。
  * @since JDK1.8.0_181。
  * <p>创建日期：2019-01-14 10:22:29。</p>
  */
-public class DaqStationDetectionInfiltrationSubBo extends CommonBaseBo {
+@JdbcEntity(name="daq_station_detection_infiltration_sub")
+public class DaqStationDetectionInfiltrationSub extends CommonJdbcEntity {
 
     /**
      * 主表oid
@@ -19,14 +19,9 @@ public class DaqStationDetectionInfiltrationSubBo extends CommonBaseBo {
     private String parentOid;
 
     /**
-     * 焊口oid
-     */
-    private String weldOid;
-
-    /**
      * 焊口编号
      */
-    private String weldCode;
+    private String weldOid;
 
     /**
      * 缺陷位置
@@ -39,11 +34,6 @@ public class DaqStationDetectionInfiltrationSubBo extends CommonBaseBo {
     private String defectProperties;
 
     /**
-     * 缺陷性质名称
-     */
-    private String defectPropertiesName;
-
-    /**
      * 缺陷长度(mm)
      */
     private Double defectLength;
@@ -54,6 +44,7 @@ public class DaqStationDetectionInfiltrationSubBo extends CommonBaseBo {
 
     public void setParentOid(String parentOid) {
         this.parentOid = parentOid;
+        super.setField("parentOid");
     }
 
     public String getWeldOid() {
@@ -62,14 +53,7 @@ public class DaqStationDetectionInfiltrationSubBo extends CommonBaseBo {
 
     public void setWeldOid(String weldOid) {
         this.weldOid = weldOid;
-    }
-
-    public String getWeldCode() {
-        return weldCode;
-    }
-
-    public void setWeldCode(String weldCode) {
-        this.weldCode = weldCode;
+        super.setField("weldOid");
     }
 
     public String getDefectPosition() {
@@ -78,6 +62,7 @@ public class DaqStationDetectionInfiltrationSubBo extends CommonBaseBo {
 
     public void setDefectPosition(String defectPosition) {
         this.defectPosition = defectPosition;
+        super.setField("defectPosition");
     }
 
     public String getDefectProperties() {
@@ -86,14 +71,7 @@ public class DaqStationDetectionInfiltrationSubBo extends CommonBaseBo {
 
     public void setDefectProperties(String defectProperties) {
         this.defectProperties = defectProperties;
-    }
-
-    public String getDefectPropertiesName() {
-        return defectPropertiesName;
-    }
-
-    public void setDefectPropertiesName(String defectPropertiesName) {
-        this.defectPropertiesName = defectPropertiesName;
+        super.setField("defectProperties");
     }
 
     public Double getDefectLength() {
@@ -102,5 +80,7 @@ public class DaqStationDetectionInfiltrationSubBo extends CommonBaseBo {
 
     public void setDefectLength(Double defectLength) {
         this.defectLength = defectLength;
+        super.setField("defectLength");
     }
+
 }
