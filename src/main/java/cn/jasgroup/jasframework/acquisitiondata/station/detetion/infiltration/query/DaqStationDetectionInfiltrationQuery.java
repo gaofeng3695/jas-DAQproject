@@ -80,7 +80,7 @@ public class DaqStationDetectionInfiltrationQuery extends BaseJavaQuery {
                 conditionSql += " and wc.pipe_station_oid = :pipeStationOid";
             }
             if (StringUtils.isNotBlank(weldOid)) {
-                conditionSql += " and wc.weldOid = :weldOid";
+                conditionSql += " and wc.weld_oid = :weldOid";
             }
             conditionSql += this.dataAuthoritySql;
         }
