@@ -86,7 +86,9 @@ public class StationDetectionRayQuery extends BaseJavaQuery {
 
 	private String conditionSql() {
 		String conditionSql= "";
-		if (StringUtils.isBlank(oid)) {
+		if (StringUtils.isNotBlank(oid)) {
+			conditionSql += " and sta.oid=:oid";
+		}else{
 			if (StringUtils.isNotBlank(projectOid)) {
 				conditionSql += " and sta.project_oid = :projectOid";
 			}
