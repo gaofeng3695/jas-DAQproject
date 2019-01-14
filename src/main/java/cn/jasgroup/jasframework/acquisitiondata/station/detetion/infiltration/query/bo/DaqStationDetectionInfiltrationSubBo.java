@@ -14,6 +14,10 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 public class DaqStationDetectionInfiltrationSubBo extends CommonBaseBo {
 
     /**
+     * oid
+     */
+    private String oid;
+    /**
      * 主表oid
      */
     private String parentOid;
@@ -102,5 +106,13 @@ public class DaqStationDetectionInfiltrationSubBo extends CommonBaseBo {
 
     public void setDefectLength(Double defectLength) {
         this.defectLength = defectLength;
+    }
+
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
     }
 }
