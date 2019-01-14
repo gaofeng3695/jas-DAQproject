@@ -136,17 +136,17 @@ public class DaqStationDetectionInfiltration extends CommonJdbcEntity {
     /**
      *子表集合
      */
-    private List<DaqStationDetectionInfiltrationSub> infiltrationSub = new ArrayList<DaqStationDetectionInfiltrationSub>();
+    private List<DaqStationDetectionInfiltrationSub> infiltrationSubList = new ArrayList<DaqStationDetectionInfiltrationSub>();
 
     @OneToMany(mappedBy="parentOid")
     @Cascade(value = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE })
     @Merge(mergeType = MergeType.OPERATION_FLAG)
-    public List<DaqStationDetectionInfiltrationSub> getInfiltrationSub() {
-        return infiltrationSub;
+    public List<DaqStationDetectionInfiltrationSub> getInfiltrationSubList() {
+        return infiltrationSubList;
     }
 
-    public void setInfiltrationSub(List<DaqStationDetectionInfiltrationSub> infiltrationSub) {
-        this.infiltrationSub = infiltrationSub;
+    public void setInfiltrationSubList(List<DaqStationDetectionInfiltrationSub> infiltrationSubList) {
+        this.infiltrationSubList = infiltrationSubList;
     }
 
     public String getProjectOid() {

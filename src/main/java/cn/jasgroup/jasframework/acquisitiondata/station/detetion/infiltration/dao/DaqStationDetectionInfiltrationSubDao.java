@@ -23,9 +23,11 @@ public class DaqStationDetectionInfiltrationSubDao {
      * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]</p>
      */
     public List<DaqStationDetectionInfiltrationSubBo> getDaqStationDetectionInfiltrationSubListByParentOid(String parentOid){
-        String sql = "select wc.*, dspw.weld_code " +
+        String sql = "select wc.*, dspw.weld_code,doma.code_name defect_properties_name " +
                 "from daq_station_detection_infiltration_sub wc " +
-                "LEFT JOIN (select oid,weld_code from daq_station_process_weld where active=1 and approve_status=2) dspw on dspw.oid = wc.weld_oid where wc.parent_oid=?";
+                "LEFT JOIN (select oid,weld_code from daq_station_process_weld where active=1 and approve_status=2) dspw on dspw.oid = wc.weld_oid " +
+                "LEFT JOIN (SELECT code_id,code_name,active FROM sys_domain where domain_name = 'defect_properties_domain' and active=1 ) doma ON doma.code_id = wc.defect_properties " +
+                "where wc.parent_oid=?";
         return baseJdbcDao.queryForList(sql,new Object[]{parentOid},DaqStationDetectionInfiltrationSubBo.class);
     }
 }

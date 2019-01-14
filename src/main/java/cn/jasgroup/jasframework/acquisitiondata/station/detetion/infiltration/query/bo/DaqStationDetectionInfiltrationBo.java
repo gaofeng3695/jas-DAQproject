@@ -28,6 +28,11 @@ public class DaqStationDetectionInfiltrationBo extends CommonBaseBo {
     private String projectOid;
 
     /**
+     * 项目名称
+     */
+    private String projectName;
+
+    /**
      * 标段oid
      */
     private String tendersOid;
@@ -108,6 +113,11 @@ public class DaqStationDetectionInfiltrationBo extends CommonBaseBo {
     private Integer evaluationResult;
 
     /**
+     * 评定结果名称
+     */
+    private Integer evaluationResultName;
+
+    /**
      * 检测单位
      */
     private String detectionUnit;
@@ -146,6 +156,11 @@ public class DaqStationDetectionInfiltrationBo extends CommonBaseBo {
      * 审核状态
      */
     private Integer approveStatus;
+
+    /**
+     * 审核状态名称
+     */
+    private Integer approveStatusName;
 
     /**
      * 备注
@@ -381,5 +396,29 @@ public class DaqStationDetectionInfiltrationBo extends CommonBaseBo {
 
     public void setInfiltrationSubList(List<DaqStationDetectionInfiltrationSubBo> infiltrationSubList) {
         this.infiltrationSubList = infiltrationSubList;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public Integer getEvaluationResultName() {
+        return evaluationResultName;
+    }
+
+    public void setEvaluationResultName(Integer evaluationResultName) {
+        this.evaluationResultName = evaluationResultName;
+    }
+
+    public Integer getApproveStatusName() {
+        return approveStatusName;
+    }
+
+    public void setApproveStatusName(Integer approveStatusName) {
+        this.approveStatusName = approveStatusName;
     }
 }

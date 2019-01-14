@@ -33,7 +33,7 @@ public class DaqStationDetectionInfiltrationQuery extends BaseJavaQuery {
     private String projectOid;
     private String pipelineOid;
     private String tendersOid;
-    private String pipeSegmentOrCrossOid;
+    private String pipeStationOid;
     private String weldOid;
     @Override
     public String getQuerySql() {
@@ -57,7 +57,7 @@ public class DaqStationDetectionInfiltrationQuery extends BaseJavaQuery {
                 "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) u on u.oid = wc.detection_unit " +
                 "LEFT JOIN (select oid,weld_code from daq_station_process_weld where active=1 and approve_status=2) dspw on dspw.oid = wc.weld_oid " +
                 "LEFT JOIN (SELECT code_id,code_name,active FROM sys_domain where domain_name = 'detection_type_domain' and active=1 ) doma ON doma.code_id = wc.detection_type " +
-                "LEFT JOIN (SELECT code_id,code_name,active FROM sys_domain where domain_name = 'evaluation_grade_domain' and active=1 ) doma1 ON doma1.code_id = wc.evaluation_grade where 1=1 ");
+                "LEFT JOIN (SELECT code_id,code_name,active FROM sys_domain where domain_name = 'evaluation_grade_domain' and active=1 ) doma1 ON doma1.code_id = wc.evaluation_grade where wc.active = 1 ");
 
         sqlBuffer.append(getConditionSql());
         return sqlBuffer.toString();
@@ -76,8 +76,8 @@ public class DaqStationDetectionInfiltrationQuery extends BaseJavaQuery {
             if (StringUtils.isNotBlank(pipelineOid)) {
                 conditionSql += " and wc.pipeline_oid = :pipelineOid";
             }
-            if (StringUtils.isNotBlank(pipeSegmentOrCrossOid)) {
-                conditionSql += " and wc.pipe_oid = :pipeOid";
+            if (StringUtils.isNotBlank(pipeStationOid)) {
+                conditionSql += " and wc.pipe_station_oid = :pipeStationOid";
             }
             if (StringUtils.isNotBlank(weldOid)) {
                 conditionSql += " and wc.weldOid = :weldOid";
@@ -112,12 +112,12 @@ public class DaqStationDetectionInfiltrationQuery extends BaseJavaQuery {
         this.tendersOid = tendersOid;
     }
 
-    public String getPipeSegmentOrCrossOid() {
-        return pipeSegmentOrCrossOid;
+    public String getPipeStationOid() {
+        return pipeStationOid;
     }
 
-    public void setPipeSegmentOrCrossOid(String pipeSegmentOrCrossOid) {
-        this.pipeSegmentOrCrossOid = pipeSegmentOrCrossOid;
+    public void setPipeStationOid(String pipeStationOid) {
+        this.pipeStationOid = pipeStationOid;
     }
 
     public String getWeldOid() {

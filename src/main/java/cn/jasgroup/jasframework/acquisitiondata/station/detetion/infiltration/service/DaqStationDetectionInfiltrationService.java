@@ -19,18 +19,22 @@ public class DaqStationDetectionInfiltrationService {
     /**
      * <p>功能描述：向DaqStationDetectionInfiltrationBo实体插入 infiltrationSubList字段</p>
      * <p> cuixianing</p>
-     * @param daqStationDetectionInfiltrationBo
+     * @param infiltrationList
      * @return void
      * @since JDK1.8
      * <p>创建日期:2019/1/14 14:32</p>
      * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]</p>
      */
     @Transactional
-    public void injectinfiltrationSubList(DaqStationDetectionInfiltrationBo daqStationDetectionInfiltrationBo){
-        if(StringUtils.isNotBlank(daqStationDetectionInfiltrationBo.getOid())){
-            String parentOid = daqStationDetectionInfiltrationBo.getOid();
-            List<DaqStationDetectionInfiltrationSubBo> infiltrationSubList = daqStationDetectionInfiltrationSubDao.getDaqStationDetectionInfiltrationSubListByParentOid(parentOid);
-            daqStationDetectionInfiltrationBo.setInfiltrationSubList(infiltrationSubList);
+    public void injectinfiltrationSubList(List<DaqStationDetectionInfiltrationBo> infiltrationList){
+        if(infiltrationList.size() == 1){
+            DaqStationDetectionInfiltrationBo daqStationDetectionInfiltrationBo= infiltrationList.get(0);
+            if(StringUtils.isNotBlank(daqStationDetectionInfiltrationBo.getOid())){
+                String parentOid = daqStationDetectionInfiltrationBo.getOid();
+                List<DaqStationDetectionInfiltrationSubBo> infiltrationSubList = daqStationDetectionInfiltrationSubDao.getDaqStationDetectionInfiltrationSubListByParentOid(parentOid);
+                daqStationDetectionInfiltrationBo.setInfiltrationSubList(infiltrationSubList);
+            }
         }
+
     }
 }
