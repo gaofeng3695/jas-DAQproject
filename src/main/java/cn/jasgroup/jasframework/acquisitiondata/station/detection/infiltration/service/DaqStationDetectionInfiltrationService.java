@@ -1,8 +1,8 @@
-package cn.jasgroup.jasframework.acquisitiondata.station.detetion.infiltration.service;
+package cn.jasgroup.jasframework.acquisitiondata.station.detection.infiltration.service;
 
-import cn.jasgroup.jasframework.acquisitiondata.station.detetion.infiltration.dao.DaqStationDetectionInfiltrationSubDao;
-import cn.jasgroup.jasframework.acquisitiondata.station.detetion.infiltration.query.bo.DaqStationDetectionInfiltrationBo;
-import cn.jasgroup.jasframework.acquisitiondata.station.detetion.infiltration.query.bo.DaqStationDetectionInfiltrationSubBo;
+import cn.jasgroup.jasframework.acquisitiondata.station.detection.infiltration.dao.DaqStationDetectionInfiltrationSubDao;
+import cn.jasgroup.jasframework.acquisitiondata.station.detection.infiltration.query.bo.DaqStationDetectionInfiltrationBo;
+import cn.jasgroup.jasframework.acquisitiondata.station.detection.infiltration.query.bo.DaqStationDetectionInfiltrationSubBo;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

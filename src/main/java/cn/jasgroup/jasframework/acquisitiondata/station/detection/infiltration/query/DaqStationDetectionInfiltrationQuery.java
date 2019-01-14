@@ -1,12 +1,11 @@
-package cn.jasgroup.jasframework.acquisitiondata.station.detetion.infiltration.query;
+package cn.jasgroup.jasframework.acquisitiondata.station.detection.infiltration.query;
 
-import cn.jasgroup.jasframework.acquisitiondata.station.detetion.infiltration.query.bo.DaqStationDetectionInfiltrationBo;
+import cn.jasgroup.jasframework.acquisitiondata.station.detection.infiltration.query.bo.DaqStationDetectionInfiltrationBo;
+import cn.jasgroup.jasframework.acquisitiondata.station.detection.infiltration.service.DaqStationDetectionInfiltrationService;
 import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 import org.apache.commons.lang.StringUtils;
-
-import java.util.List;
 
 /**
  * @description 渗透检测(站场)
@@ -15,7 +14,7 @@ import java.util.List;
  * @version V1.0
  * @since JDK 1.80
  * {@link cn.jasgroup.jasframework.acquisitiondata.variate.DaqInjectService #injectDataAuthoritySql()}
- * {@link cn.jasgroup.jasframework.acquisitiondata.station.detetion.infiltration.service.DaqStationDetectionInfiltrationService #injectinfiltrationSubList()}
+ * {@link DaqStationDetectionInfiltrationService #injectinfiltrationSubList()}
  */
 
 @QueryConfig(
@@ -47,7 +46,9 @@ public class DaqStationDetectionInfiltrationQuery extends BaseJavaQuery {
                 " u.unit_name AS detection_unit_name," +
                 " dspw.weld_code," +
                 " doma.code_name detection_type_name," +
-                " doma1.code_name evaluation_grade_name " +
+                " doma1.code_name evaluation_grade_name," +
+                " case when wc.evaluation_result=1 then '合格' when wc.evaluation_result=0 then '不合格' end as evaluation_result_name, " +
+                " case when wc.approve_status = -1 then '驳回' when wc.approve_status = 1 then '待审核' when wc.approve_status = 2 then '审核通过' else '未上报' end as approve_status_name " +
                 "from daq_station_detection_infiltration wc " +
                 "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = wc.project_oid " +
                 "LEFT JOIN (SELECT oid, tenders_name, active FROM daq_tenders where active=1) te ON te.oid = wc.tenders_oid " +

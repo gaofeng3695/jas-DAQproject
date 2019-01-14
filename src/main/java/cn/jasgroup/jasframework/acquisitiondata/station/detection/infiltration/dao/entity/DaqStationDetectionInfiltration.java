@@ -1,4 +1,4 @@
-package cn.jasgroup.jasframework.acquisitiondata.station.detetion.infiltration.dao.entity;
+package cn.jasgroup.jasframework.acquisitiondata.station.detection.infiltration.dao.entity;
 
 import java.util.ArrayList;
 import java.util.Date;
