@@ -1,6 +1,7 @@
 package cn.jasgroup.jasframework.acquisitiondata.station.detection.ultrasonic.query.bo;
 
 import cn.jasgroup.jasframework.acquisitiondata.station.detection.ultrasonic.dao.entity.DaqStationDetectionUltrasonicSub;
+import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.List;
  * @since JDK1.8.0_181。
  * <p>创建日期：2019-01-14 11:00:31。</p>
  */
-public class DaqStationDetectionUltrasonicBo {
+public class DaqStationDetectionUltrasonicBo extends CommonBaseBo {
     /**
      * oid
      */

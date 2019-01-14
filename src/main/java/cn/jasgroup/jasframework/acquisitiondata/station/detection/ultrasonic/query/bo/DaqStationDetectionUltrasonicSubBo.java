@@ -1,5 +1,6 @@
 package cn.jasgroup.jasframework.acquisitiondata.station.detection.ultrasonic.query.bo;
 
+import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 import cn.jasgroup.jasframework.domain.utils.DomainUtil;
 
 import javax.persistence.Transient;
@@ -11,7 +12,11 @@ import javax.persistence.Transient;
  * @since JDK1.8.0_181。
  * <p>创建日期：2019-01-14 11:48:13。</p>
  */
-public class DaqStationDetectionUltrasonicSubBo {
+public class DaqStationDetectionUltrasonicSubBo extends CommonBaseBo {
+    /**
+     * oid
+     */
+    private String oid;
     /**
      * 主表oid
      */
@@ -48,6 +53,14 @@ public class DaqStationDetectionUltrasonicSubBo {
      * 缺陷深度(mm)
      */
     private Double defectDepth;
+
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
+    }
 
     public String getParentOid() {
         return parentOid;
