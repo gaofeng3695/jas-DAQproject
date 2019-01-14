@@ -17,7 +17,7 @@ import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
   * {@link cn.jasgroup.jasframework.acquisitiondata.station.detection.ray.service.StationDetectionRayService #injectStationDetectionRaySubList()}
  */
 @QueryConfig(
-		scene ="/stationDetectionFaUltrasonic/getPage",
+		scene ="/stationDetectionRay/getPage",
 		resultClass= StationDetectionRayBo.class,
 		queryBeforeProcess = {
 			@Process(service = "daqInjectService" , method = "injectDataAuthoritySql(dataAuthoritySql)")
