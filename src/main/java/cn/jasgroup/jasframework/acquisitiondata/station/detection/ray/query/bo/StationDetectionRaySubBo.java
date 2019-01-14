@@ -2,6 +2,14 @@ package cn.jasgroup.jasframework.acquisitiondata.station.detection.ray.query.bo;
 
 import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 
+/**
+ * 
+  *<p>类描述：站场射线检测子表Bo。</p>
+  * @author 葛建 。
+  * @version v1.0.0.1。
+  * @since JDK1.8。
+  *<p>创建日期：2019年1月14日 下午3:13:12。</p>
+ */
 public class StationDetectionRaySubBo extends CommonBaseBo{
 	
 	/**

@@ -35,11 +35,13 @@ public class StationDetectionRayService extends CommonDataJdbcService {
 	  * <p>创建日期:2019年1月14日 下午2:15:14。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public void injectStationDetectionRaySubList(StationDetectionRayBo stationDetectionRayBo){
-		if (StringUtils.isNotBlank(stationDetectionRayBo.getOid())) {
+	public void injectStationDetectionRaySubList(List<StationDetectionRayBo> stationDetectionRayBoList){
+		if(stationDetectionRayBoList.size()==1){
+			StationDetectionRayBo stationDetectionRayBo = stationDetectionRayBoList.get(0);
 			List<StationDetectionRaySubBo> subBoList = stationDetectionRayDao.queryStationDetectionRaySubList(stationDetectionRayBo.getOid());
 			stationDetectionRayBo.setFaUltrasonicSubList(subBoList);
 		}
+		System.err.println(stationDetectionRayBoList.size());
 	}
 	
 }
