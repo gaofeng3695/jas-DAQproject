@@ -53,7 +53,8 @@ public class DaqStationPipeSweepingQuery extends BaseJavaQuery {
                 "pu.unit_name AS supervision_unit_name," +
                 "u.unit_name AS construct_unit_name," +
                 "case when wc.sweeping_medium=1 then '水' when wc.sweeping_medium=2 then '空气' when wc.sweeping_medium=3 then '氮气'  end as sweeping_medium_name," +
-                "case when wc.approve_status = -1 then '驳回' when wc.approve_status = 1 then '待审核' when wc.approve_status = 2 then '审核通过' else '未上报' end as approve_status_name " +
+                "case when wc.approve_status = -1 then '驳回' when wc.approve_status = 1 then '待审核' when wc.approve_status = 2 then '审核通过' else '未上报' end as approve_status_name," +
+                "med.median_stake_code as end_median_stake_code,me.median_stake_code as start_median_stake_code " +
                 "from " +
                 "daq_station_pipe_sweeping wc " +
                 "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = wc.project_oid  " +
@@ -61,7 +62,10 @@ public class DaqStationPipeSweepingQuery extends BaseJavaQuery {
                 "LEFT JOIN (SELECT oid, pipeline_name, active FROM daq_pipeline where active=1) pi ON pi.oid = wc.pipeline_oid  " +
                 "LEFT JOIN (select oid,pipe_station_name, active from daq_pipe_station where active=1) ps ON ps.oid=wc.pipe_station_oid " +
                 "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) pu on pu.oid = wc.supervision_unit  " +
-                "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) u on u.oid = wc.construct_unit WHERE wc.active = 1 ");
+                "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) u on u.oid = wc.construct_unit " +
+                "LEFT JOIN (select oid,median_stake_code from daq_median_stake where active=1) me ON me.oid = wc.start_median_stake_oid " +
+                "LEFT JOIN (select oid,median_stake_code from daq_median_stake where active=1) med ON med.oid = wc.end_median_stake_oid " +
+                "WHERE wc.active = 1 ");
         bufferSql.append(conditionSql());
         return bufferSql.toString();
     }
