@@ -61,6 +61,11 @@ public class DaqStationIcDetectionSysQuery extends BaseJavaQuery {
      */
     private String deviceCode;
 
+    /**
+     * 设备名称
+     */
+    private String deviceName;
+
     @Override
     public String getQuerySql() {
         String sql = "SELECT dsids.oid, dsids.project_oid, pro.project_name, dsids.tenders_oid, te.tenders_name, dsids.pipeline_oid, pi.pipeline_name, dsids.pipe_station_oid, ps.pipe_station_name, " +
@@ -111,7 +116,10 @@ public class DaqStationIcDetectionSysQuery extends BaseJavaQuery {
                 conditionSql += " and dsids.end_median_stake_oid = :endMedianStakeOid";
             }
             if (StringUtils.isNotBlank(deviceCode)) {
-                conditionSql += " and dsids.device_code = :deviceCode";
+                conditionSql += " and dsids.device_code like :deviceCode";
+            }
+            if (StringUtils.isNotBlank(deviceName)) {
+                conditionSql += " and dscps.device_name like :deviceName";
             }
             conditionSql +=  this.dataAuthoritySql;
         }
@@ -178,10 +186,23 @@ public class DaqStationIcDetectionSysQuery extends BaseJavaQuery {
     }
 
     public String getDeviceCode() {
-        return deviceCode;
+        if(StringUtils.isNotBlank(deviceCode)){
+            return "%"+deviceCode+"%";
+        }
+        return null;
     }
-
     public void setDeviceCode(String deviceCode) {
         this.deviceCode = deviceCode;
+    }
+
+    public String getDeviceName() {
+        if(StringUtils.isNotBlank(deviceName)){
+            return "%"+deviceName+"%";
+        }
+        return null;
+    }
+
+    public void setDeviceName(String deviceName) {
+        this.deviceName = deviceName;
     }
 }

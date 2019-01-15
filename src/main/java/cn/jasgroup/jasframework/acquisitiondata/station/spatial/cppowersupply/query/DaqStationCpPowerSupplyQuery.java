@@ -52,6 +52,11 @@ public class DaqStationCpPowerSupplyQuery extends BaseJavaQuery {
      */
     private String deviceCode;
 
+    /**
+     * 设备名称
+     */
+    private String deviceName;
+
     @Override
     public String getQuerySql() {
         String sql = "SELECT dscps.oid, dscps.project_oid, pro.project_name, dscps.tenders_oid, te.tenders_name, dscps.pipeline_oid, pi.pipeline_name, " +
@@ -95,7 +100,10 @@ public class DaqStationCpPowerSupplyQuery extends BaseJavaQuery {
                 conditionSql += " and dscps.pipe_station_oid = :pipeStationOid";
             }
             if (StringUtils.isNotBlank(deviceCode)) {
-                conditionSql += " and dscps.device_code = :deviceCode";
+                conditionSql += " and dscps.device_code like :deviceCode";
+            }
+            if (StringUtils.isNotBlank(deviceName)) {
+                conditionSql += " and dscps.device_name like :deviceName";
             }
             conditionSql +=  this.dataAuthoritySql;
         }
@@ -147,10 +155,24 @@ public class DaqStationCpPowerSupplyQuery extends BaseJavaQuery {
     }
 
     public String getDeviceCode() {
-        return deviceCode;
+        if(StringUtils.isNotBlank(deviceCode)){
+            return "%"+deviceCode+"%";
+        }
+        return null;
     }
 
     public void setDeviceCode(String deviceCode) {
         this.deviceCode = deviceCode;
+    }
+
+    public String getDeviceName() {
+        if(StringUtils.isNotBlank(deviceName)){
+            return "%"+deviceName+"%";
+        }
+        return null;
+    }
+
+    public void setDeviceName(String deviceName) {
+        this.deviceName = deviceName;
     }
 }
