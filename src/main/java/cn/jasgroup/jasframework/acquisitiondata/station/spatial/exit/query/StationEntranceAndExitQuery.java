@@ -2,7 +2,7 @@ package cn.jasgroup.jasframework.acquisitiondata.station.spatial.exit.query;
 
 import org.apache.commons.lang.StringUtils;
 
-import cn.jasgroup.jasframework.acquisitiondata.station.spatial.riser.query.bo.StationVentStackBo;
+import cn.jasgroup.jasframework.acquisitiondata.station.spatial.exit.query.bo.StationEntranceAndExitBo;
 import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
@@ -17,7 +17,7 @@ import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
  */
 @QueryConfig(
 		scene ="/entranceAndExit/getPage",
-		resultClass= StationVentStackBo.class,
+		resultClass= StationEntranceAndExitBo.class,
 		queryBeforeProcess = {
 			@Process(service = "daqInjectService" , method = "injectDataAuthoritySql(dataAuthoritySql)")
 		}
