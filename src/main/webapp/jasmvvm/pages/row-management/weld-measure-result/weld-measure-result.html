@@ -25,50 +25,6 @@
 	<div id="app" v-cloak>
 		<jas-list-wrapper slot="mainPanel">
 			<jas-search-for-list slot="search" :form="topSearch" :fields="fields" :fields-config="fieldsConfig" @search="searchList"></jas-search-for-list>
-
-			<!--<el-form slot="search" :model="topSearch" label-width="100px">
-				<el-row>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item label="项目名称" prop="projectOid">
-							<el-select v-model="topSearch.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
-								<el-option v-for="item in domain.project" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item label="标段名称" prop="tendersOid">
-							<el-select v-model="topSearch.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged">
-								<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item label="管线名称" prop="pipelineOid">
-							<el-select v-model="topSearch.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged">
-								<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item label="线路段/穿跨越" prop="pipeSegmentOrCrossOid">
-							<el-select v-model="topSearch.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small" @change="pipeSegmentChanged">
-								<el-option v-for="item in domain.pipeSegment" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item label="焊口编号">
-						   <el-input v-model="topSearch.weldCode" clearable placeholder="请输入焊口编号" size="small"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item style="float: right;">
-							<el-button size="small" type="primary" @click="searchList">查询</el-button>
-							<el-button size="small" @click="reset">重置</el-button>
-						</el-form-item>
-					</el-col>
-				</el-row>
-			</el-form>-->
 			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" search-path="/jdbc/commonData/weldMeasuredResult/getPage.do"
 			  :add-url="addUrl" :detail-url="detailUrl" delete-path="/jdbc/commonData/weldMeasuredResult/delete.do" :class-name="className"
 			  :template-code="templateCode" @locate="locate"></jas-table-for-list>
@@ -237,15 +193,6 @@
 		},
 		methods: {
 			searchList: function () {
-				this.$refs.table.search();
-			},
-			reset: function () {
-				this.topSearch.projectOid = '';
-				this.topSearch.pipelineOid = '';
-				this.topSearch.tendersOid = '';
-				this.topSearch.weldOid = '';
-				this.topSearch.pipeSegmentOrCrossOid = '';
-
 				this.$refs.table.search();
 			},
 			locate: function (row) {
