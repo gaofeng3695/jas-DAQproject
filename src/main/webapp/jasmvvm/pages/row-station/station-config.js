@@ -622,10 +622,10 @@ var stationConfig = {
       'deviceCode',
       'deviceName',
       'deviceType',
-      'weldOid',
+      'weldCode',
       'connectionPipelineType',
       'connectionPipelineCode',
-      'medianStakeOid',
+      'medianStakeCode',
       'pointx',
       'pointy',
       'pointz',
@@ -675,13 +675,13 @@ var stationConfig = {
       'approveStatus'
     ],
     detailFields1: [ //
-      'medianStakeOid',
+      'medianStakeCode',
       'pointx',
       'pointy',
       'pointz',
     ],
     detailFields2: [ //
-      'weldOid',
+      'weldCode',
       'deviceCode',
       'deviceName',
       'deviceType',
@@ -796,6 +796,9 @@ var stationConfig = {
         name: '桩号',
         isRequired: true
       },
+      medianStakeCode:{
+    	name:"桩号"  
+      },
       pointx: {
         type: "number",
         name: "x坐标",
@@ -818,6 +821,9 @@ var stationConfig = {
         type: "select",
         name: "焊口编号",
         isRequired: true
+      },
+      weldCode:{
+    	name: "焊口编号"  
       },
       deviceCode: {
         type: "input",
