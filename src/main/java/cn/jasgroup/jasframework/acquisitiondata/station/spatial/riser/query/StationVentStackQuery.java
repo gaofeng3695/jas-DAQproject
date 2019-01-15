@@ -1,28 +1,28 @@
-package cn.jasgroup.jasframework.acquisitiondata.station.spatial.pressure.query;
+package cn.jasgroup.jasframework.acquisitiondata.station.spatial.riser.query;
 
 import org.apache.commons.lang.StringUtils;
 
-import cn.jasgroup.jasframework.acquisitiondata.station.spatial.pressure.query.bo.StationPipePressureTestBo;
+import cn.jasgroup.jasframework.acquisitiondata.station.spatial.riser.query.bo.StationVentStackBo;
 import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 
 /**
  * 
-  *<p>类描述：站场管道试压query。</p>
+  *<p>类描述：放空立管query。</p>
   * @author 葛建 。
   * @version v1.0.0.1。
   * @since JDK1.8。
-  *<p>创建日期：2019年1月15日 上午9:17:40。</p>
+  *<p>创建日期：2019年1月15日 上午11:11:33。</p>
  */
 @QueryConfig(
-		scene ="/pipePressureTest/getPage",
-		resultClass= StationPipePressureTestBo.class,
+		scene ="/ventStack/getPage",
+		resultClass= StationVentStackBo.class,
 		queryBeforeProcess = {
 			@Process(service = "daqInjectService" , method = "injectDataAuthoritySql(dataAuthoritySql)")
 		}
 )
-public class StationPipePressureTestQuery extends BaseJavaQuery {
+public class StationVentStackQuery extends BaseJavaQuery {
 	
 	/**
 	 * oid
@@ -48,46 +48,37 @@ public class StationPipePressureTestQuery extends BaseJavaQuery {
 	 * 站场/阀室编号 
 	 */
 	private String pipeStationOid; 
-	
+
 	/**
-	 * 起始桩
+	 * 设备编号 
 	 */
-	private String startMedianStakeOid;
-	
-	/**
-	 * 终点桩
-	 */
-	private String endMedianStakeOid;
+	private String deviceCode; 
+
 
 	@Override
 	public String getQuerySql() {
-		String sql = "SELECT sta.oid,sta.start_median_stake_oid,me.median_stake_code as start_median_stake_code,sta.start_relative_mileage,"
-					+ "sta.end_median_stake_oid,med.median_stake_code as end_median_stake_code,sta.end_relative_mileage,sta.pressure_test_length,"
-					+ "sta.pipe_specification,sta.pressure_test_medium,case when sta.pressure_test_medium = 1 then '水' "
-					+ "when sta.pressure_test_medium = 2 then '空气' when sta.pressure_test_medium = 3 then '氮气' else '' end as pressure_test_medium_name,"
-					+ "sta.design_pressure,sta.process_description,sta.pressure_test_result,"
-					+ "case when sta.pressure_test_result = 0 then '管道强度、严密性试验经检查不合格' when sta.pressure_test_result = 1 then '管道强度、严密性试验经检查合格' else '' end as pressure_test_result_name,"
-					+ "sta.construct_unit,sta.supervision_unit,sta.supervision_engineer,sta.collection_person,sta.approve_status,sta.geo_state,"
-					+ "sta.remarks,sta.create_user_id,sta.create_user_name,sta.create_datetime,sta.modify_user_id,sta.modify_user_name,"
-					+ "sta.modify_datetime,sta.active,sta.geom,sta.project_oid,pro.project_name,sta.tenders_oid,te.tenders_name, "
-					+ "sta.pipeline_oid,pi.pipeline_name,sta.pipe_station_oid,ps.pipe_station_name,u.unit_name as construct_unit_name,"
-					+ "pu.unit_name as supervision_unit_name,to_char(sta.pressure_test_date, 'YYYY-MM-DD') as pressure_test_date,"
+		String sql = "SELECT sta.oid,sta.device_code,sta.manufacture_number,mac.manufacture_number_name,mac.material_device_name,sta.pointx,sta.pointy,"
+					+ "sta.POSITION,d.code_name as position_name, sta.distance,sta.construct_unit,sta.supervision_unit,sta.supervision_engineer,"
+					+ "sta.collection_person,sta.approve_status,sta.geo_state,sta.remarks,sta.create_user_id,sta.create_user_name,sta.create_datetime,"
+					+ "sta.modify_user_id,sta.modify_user_name,sta.modify_datetime,sta.active,sta.geom,sta.project_oid,pro.project_name,sta.tenders_oid,"
+					+ "te.tenders_name, sta.pipeline_oid,pi.pipeline_name,sta.pipe_station_oid,ps.pipe_station_name,u.unit_name as construct_unit_name,"
+					+ "pu.unit_name as supervision_unit_name,to_char(sta.construct_date, 'YYYY-MM-DD') as construct_date,"
 					+ "to_char(sta.collection_date, 'YYYY-MM-DD') as collection_date,case when sta.approve_status = -1 then '驳回' "
 					+ "when sta.approve_status = 1 then '待审核' when sta.approve_status = 2 then '审核通过' else '未上报' end as approve_status_name "
-					+ "FROM daq_station_pipe_pressure_test sta "
+					+ "FROM daq_station_vent_stack sta "
 					+ "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = sta.project_oid "
 					+ "LEFT JOIN (SELECT oid, pipeline_name, active FROM daq_pipeline where active=1) pi ON pi.oid =sta.pipeline_oid "
 					+ "LEFT JOIN (SELECT oid, tenders_name, active FROM daq_tenders where active=1) te ON te.oid =sta.tenders_oid "
 					+ "LEFT JOIN (select oid,pipe_station_name, active from daq_pipe_station where active=1) ps ON ps.oid=sta.pipe_station_oid "
 					+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) pu on pu.oid = sta.supervision_unit "
 					+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) u on u.oid = sta.construct_unit "
-					+ "LEFT JOIN (select oid,median_stake_code from daq_median_stake where active=1) me ON me.oid = sta.start_median_stake_oid "
-					+ "LEFT JOIN (select oid,median_stake_code from daq_median_stake where active=1) med ON med.oid = sta.end_median_stake_oid "
+					+ "LEFT JOIN (select oid, manufacture_number as manufacture_number_name,device_name as material_device_name, active from daq_s_material_vent_stack where active=1) mac on mac.oid = sta.manufacture_number "
+					+ "left join (select code_id,code_name from sys_domain where active=1) d on d.code_id=sta.POSITION "
 					+ "WHERE 1 = 1 AND sta.active = 1";
 		sql += conditionSql();
 		return sql;
 	}
-	
+
 	private String conditionSql() {
 		String conditionSql= "";
 		if (StringUtils.isNotBlank(oid)) {
@@ -105,11 +96,8 @@ public class StationPipePressureTestQuery extends BaseJavaQuery {
 			if (StringUtils.isNotBlank(pipeStationOid)) {
 				conditionSql += " and sta.pipe_station_oid = :pipeStationOid";
 			}
-			if (StringUtils.isNotBlank(startMedianStakeOid)) {
-				conditionSql += " and sta.start_median_stake_oid = :startMedianStakeOid";
-			}
-			if (StringUtils.isNotBlank(endMedianStakeOid)) {
-				conditionSql += " and sta.end_median_stake_oid = :endMedianStakeOid";
+			if (StringUtils.isNotBlank(deviceCode)) {
+				conditionSql += " and sta.device_code like :deviceCode";
 			}
 			conditionSql +=  this.dataAuthoritySql;
 		}
@@ -157,20 +145,15 @@ public class StationPipePressureTestQuery extends BaseJavaQuery {
 		this.pipeStationOid = pipeStationOid;
 	}
 
-	public String getStartMedianStakeOid() {
-		return startMedianStakeOid;
+	public String getDeviceCode() {
+		if (StringUtils.isNotBlank(deviceCode)) {
+			return "%"+deviceCode+"%";
+		}
+		return null;
 	}
 
-	public void setStartMedianStakeOid(String startMedianStakeOid) {
-		this.startMedianStakeOid = startMedianStakeOid;
+	public void setDeviceCode(String deviceCode) {
+		this.deviceCode = deviceCode;
 	}
-
-	public String getEndMedianStakeOid() {
-		return endMedianStakeOid;
-	}
-
-	public void setEndMedianStakeOid(String endMedianStakeOid) {
-		this.endMedianStakeOid = endMedianStakeOid;
-	}
-
+	
 }
