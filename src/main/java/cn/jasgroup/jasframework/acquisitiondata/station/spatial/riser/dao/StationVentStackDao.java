@@ -34,12 +34,12 @@ public class StationVentStackDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public void updateMaterialData(String tendersOid, String pipelineOid, String pipeStationOid, String materialOid) {
-		String sql = "update daq_s_material_vent_stack set tenders_oid='"+tendersOid+"',pipeline_oid='"+pipelineOid+"',pipe_station_oid="+pipeStationOid+" where oid='"+materialOid+"'";
+		String sql = "update daq_s_material_vent_stack set tenders_oid='"+tendersOid+"',pipeline_oid='"+pipelineOid+"',pipe_station_oid='"+pipeStationOid+"' where oid='"+materialOid+"'";
 		baseJdbcDao.update(sql, null);
 	}
 
 	public StationVentStack find(String oid) {
-		String sql = "select * daq_station_vent_stack where oid = ?";
+		String sql = "select * from daq_station_vent_stack where oid = ?";
 		List<StationVentStack> list = baseJdbcDao.queryForList(sql, new Object[]{oid}, StationVentStack.class);
 		if(list!=null && list.size()>0){
 			return list.get(0);

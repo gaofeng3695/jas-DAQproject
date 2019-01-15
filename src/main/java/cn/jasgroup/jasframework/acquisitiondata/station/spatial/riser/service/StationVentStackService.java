@@ -1,5 +1,6 @@
 package cn.jasgroup.jasframework.acquisitiondata.station.spatial.riser.service;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +34,9 @@ public class StationVentStackService extends CommonDataJdbcService {
 	 */
 	public void updateMaterialAfterSaveEntity(StationVentStack stationVentStack){
 		String materialOid = stationVentStack.getManufactureNumber();
-		stationVentStackDao.updateMaterialData(stationVentStack.getTendersOid(), stationVentStack.getPipelineOid(), stationVentStack.getPipeStationOid(), materialOid);
+		if (StringUtils.isNotBlank(materialOid)) {
+			stationVentStackDao.updateMaterialData(stationVentStack.getTendersOid(), stationVentStack.getPipelineOid(), stationVentStack.getPipeStationOid(), materialOid);
+		}
 	}
 	
 	/**
@@ -46,7 +49,9 @@ public class StationVentStackService extends CommonDataJdbcService {
 	 */
 	public void updateMaterialBeforeUpdateEntity(StationVentStack stationVentStack){
 		String materialOid = stationVentStack.getManufactureNumber();
-		stationVentStackDao.updateMaterialData("", "", "", materialOid);
+		if (StringUtils.isNotBlank(materialOid)) {
+			stationVentStackDao.updateMaterialData("", "", "", materialOid);
+		}
 	}
 	
 	/**
@@ -59,7 +64,9 @@ public class StationVentStackService extends CommonDataJdbcService {
 	 */
 	public void updateMaterialAfterUpdateEntity(StationVentStack stationVentStack){
 		String materialOid = stationVentStack.getManufactureNumber();
-		stationVentStackDao.updateMaterialData(stationVentStack.getTendersOid(), stationVentStack.getPipelineOid(), stationVentStack.getPipeStationOid(), materialOid);
+		if (StringUtils.isNotBlank(materialOid)) {
+			stationVentStackDao.updateMaterialData(stationVentStack.getTendersOid(), stationVentStack.getPipelineOid(), stationVentStack.getPipeStationOid(), materialOid);
+		}
 	}
 	
 	/**
@@ -74,7 +81,9 @@ public class StationVentStackService extends CommonDataJdbcService {
 		stationVentStack = stationVentStackDao.find(stationVentStack.getOid());
 		if (stationVentStack != null) {
 			String materialOid = stationVentStack.getManufactureNumber();
-			stationVentStackDao.updateMaterialData(stationVentStack.getTendersOid(), stationVentStack.getPipelineOid(), stationVentStack.getPipeStationOid(), materialOid);
+			if (StringUtils.isNotBlank(materialOid)) {
+				stationVentStackDao.updateMaterialData(stationVentStack.getTendersOid(), stationVentStack.getPipelineOid(), stationVentStack.getPipeStationOid(), materialOid);
+			}
 		}
 	}
 	
