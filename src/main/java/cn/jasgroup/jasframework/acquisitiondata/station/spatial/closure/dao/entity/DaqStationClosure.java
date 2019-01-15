@@ -4,10 +4,7 @@ import java.util.Date;
 
 import cn.jasgroup.framework.spatial.annotation.Point;
 import cn.jasgroup.framework.spatial.support.enumeration.CalculateType;
-import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
-import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
-import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
-import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
+import cn.jasgroup.jasframework.base.annotation.*;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -36,6 +33,11 @@ import javax.persistence.TemporalType;
         z = "pointz",
         geometryColumnName = "geom",
         calculateType = CalculateType.Coordinates
+)
+@UniqueConstraints(
+        strategys ={
+                @UniqueConstraintStrategy(columnNames={"pipeStationOid","deviceCode"},name="编号")
+        }
 )
 @JdbcEntity(name="daq_station_closure")
 public class DaqStationClosure extends CommonJdbcEntity {

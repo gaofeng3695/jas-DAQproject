@@ -6,10 +6,7 @@ import cn.jasgroup.framework.spatial.annotation.Point;
 import cn.jasgroup.framework.spatial.support.enumeration.CalculateType;
 import cn.jasgroup.framework.spatial.support.enumeration.ScopeType;
 import cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.dao.entity.MedianStake;
-import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
-import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
-import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
-import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
+import cn.jasgroup.jasframework.base.annotation.*;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -43,6 +40,11 @@ import javax.persistence.TemporalType;
         anchorClass=MedianStake.class,
         anchorOid="medianStakeOid",
         deviation="relativeMileage"
+)
+@UniqueConstraints(
+        strategys ={
+                @UniqueConstraintStrategy(columnNames={"pipeStationOid","deviceCode"},name="编号")
+        }
 )
 @JdbcEntity(name="daq_station_condensing_tube")
 public class DaqStationCondensingTube extends CommonJdbcEntity {
