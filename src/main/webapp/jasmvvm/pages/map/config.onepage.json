@@ -48,6 +48,10 @@
     {
       "type": "js",
       "url": "basepath:mapmodules.js"
+    },{
+      "type": "js",
+      "url": "basepath:mapstyles/default.js",
+      "relyOn": "ol.js"
     },
     {
       "type": "js",
@@ -113,12 +117,12 @@
         "index": 0,
         "label": "行政区划图",
         "icon": "stylepath:images/basemap_shp.png",
-        "visible": false,
         "type": "Tile",
         "source": "TileWMS",
         "url": "http://geoserver.zyax.cn/geoserver/jasgroup/wms",
         "params": {
-          "LAYERS": "jasgroup:china_canton_op"
+          "LAYERS2": "jasgroup:china_canton_op",
+          "LAYERS": "jasgroup:china_canton_dark"
         }
       }]
     },
@@ -128,8 +132,7 @@
       "layerSet": [{
         "id": "daq_median_stake",
         "label": "中线桩",
-        "index": 30,
-        "type": "Vector",
+        "index": 90,
         "renderer": {
           "style": "centerlinestake",
           "labelStyle": "",
@@ -138,35 +141,32 @@
         "listener": {
           "onHover": {
             "responseType": "tip",
-            "fieldNames": "median_stake_code",
-            "template": "桩号：${median_stake_code}",
-            "callback": ""
+            "template": "桩号：${median_stake_code}"
           }
         },
-         "maxScale":200000,
+        "maxScale":200000,
         "outFields": "median_stake_code,mileage,pipeline_oid,project_oid",
-        "source": "Vector",
         "flash": true,
-        "visible": false,
-        "loader": "jas",
-        "format": "GeoJSON",
         "strategy": "all"
       }]
     },{
         "id": "daq_median_stake_polyline",
         "label": "中线桩连线",
-        "index": 90,
+        "index":60,
         "renderer": {
-          "style": "medianStakePolyline",
-         "labelStyle": "lineLabelStyle",
+          "style2": "medianStakePolyline",
+          "style": "pipesegment",
+          "labelStyle": "lineLabelStyle",
           "labelField": "pipeline_name"
         },
-        "type": "Vector",
-        "source": "Vector",
+      "listener": {
+        "onHover": {
+          "responseType": "tip",
+          "template": "线路段：${pipeline_name}"
+        }
+      },
         "flash": true,
-        "visible": true,
-        "loader": "jas",
-        "format": "GeoJSON",
+        "declutter": true,
         "strategy": "all",
         "outFields":"pipeline_oid,project_oid,pipeline_name"
       }]
