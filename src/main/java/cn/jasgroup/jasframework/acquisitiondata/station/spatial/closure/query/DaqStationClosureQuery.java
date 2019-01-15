@@ -1,26 +1,26 @@
-package cn.jasgroup.jasframework.acquisitiondata.station.spatial.condensingtube.query;
+package cn.jasgroup.jasframework.acquisitiondata.station.spatial.closure.query;
 
-import cn.jasgroup.jasframework.acquisitiondata.station.spatial.condensingtube.query.bo.DaqStationCondensingTubeBo;
+import cn.jasgroup.jasframework.acquisitiondata.station.spatial.closure.query.bo.DaqStationClosureBo;
 import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * <p>排凝管getPage</p>
- * @author cuixianing
+ * <p>封堵物getPage</p>
+ * @author cuixianing。
  * @version v1.0.0.1。
  * @since JDK1.8.0_181。
- * <p>创建日期：2019-01-15 10:43:37。</p>
+ * <p>创建日期：2019-01-15 15:18:32。</p>
  */
 @QueryConfig(
-        scene ="/daqStationCondensingTube/getPage",
-        resultClass= DaqStationCondensingTubeBo.class,
+        scene ="/daqStationClosure/getPage",
+        resultClass= DaqStationClosureBo.class,
         queryBeforeProcess = {
                 @Process(service = "daqInjectService" , method = "injectDataAuthoritySql(dataAuthoritySql)")
         }
 )
-public class DaqStationCondensingTubeQuery extends BaseJavaQuery {
+public class DaqStationClosureQuery extends BaseJavaQuery {
 
     /**
      * 项目oid
@@ -52,34 +52,33 @@ public class DaqStationCondensingTubeQuery extends BaseJavaQuery {
      */
     private String deviceName;
 
-    /**
-     * 桩号
-     */
-    private String medianStakeOid;
-
     @Override
     public String getQuerySql() {
         StringBuffer bufferSql = new StringBuffer();
         bufferSql.append("SELECT " +
-                " wc.*, pro.project_name, " +
-                " te.tenders_name, " +
-                " pi.pipeline_name, " +
-                " ps.pipe_station_name, " +
-                " pu.unit_name AS supervision_unit_name, " +
-                " u.unit_name AS construct_unit_name, " +
-                " case when wc.condensing_tube_material=1 then '未知' when wc.condensing_tube_material=2 then '钢材' when wc.condensing_tube_material=3 then '塑料'  " +
-                " when wc.condensing_tube_material=4 then '其他' end as condensing_tube_material_name, " +
-                " case when wc.approve_status = -1 then '驳回' when wc.approve_status = 1 then '待审核' when wc.approve_status = 2 then '审核通过' else '未上报' end as approve_status_name," +
-                " med.median_stake_code  median_stake_code " +
+                "wc.*, pro.project_name, " +
+                "te.tenders_name, " +
+                "pi.pipeline_name, " +
+                "ps.pipe_station_name, " +
+                "pu.unit_name AS supervision_unit_name, " +
+                "u.unit_name AS construct_unit_name, " +
+                "doma.code_name closure_mold_name, " +
+                "case when wc.closure_material=1 then '未知' when wc.closure_material=2 then '钢材' when wc.closure_material=3 then '塑料'  " +
+                "when wc.closure_material=4 then '其他' end as closure_material_name, " +
+                "doma1.code_name closure_connection_methods_name, " +
+                "doma2.code_name tube_making_methods_name, " +
+                "case when wc.approve_status = -1 then '驳回' when wc.approve_status = 1 then '待审核' when wc.approve_status = 2 then '审核通过' else '未上报' end as approve_status_name " +
                 "from  " +
-                "daq_station_condensing_tube wc " +
+                "daq_station_closure wc " +
                 "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = wc.project_oid  " +
                 "LEFT JOIN (SELECT oid, tenders_name, active FROM daq_tenders where active=1) te ON te.oid = wc.tenders_oid  " +
                 "LEFT JOIN (SELECT oid, pipeline_name, active FROM daq_pipeline where active=1) pi ON pi.oid = wc.pipeline_oid  " +
                 "LEFT JOIN (select oid,pipe_station_name, active from daq_pipe_station where active=1) ps ON ps.oid=wc.pipe_station_oid " +
                 "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) pu on pu.oid = wc.supervision_unit  " +
-                "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) u on u.oid = wc.construct_unit " +
-                "LEFT JOIN (select oid,median_stake_code from daq_median_stake where active=1) med ON med.oid = wc.median_stake_oid  " +
+                "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) u on u.oid = wc.construct_unit  " +
+                "LEFT JOIN (SELECT code_id,code_name,active FROM sys_domain where domain_name = 'closure_mold_domain' and active=1 ) doma ON doma.code_id = wc.closure_mold " +
+                "LEFT JOIN (SELECT code_id,code_name,active FROM sys_domain where domain_name = 'closure_connection_methods_domain' and active=1 ) doma1 ON doma1.code_id = wc.closure_connection_methods " +
+                "LEFT JOIN (SELECT code_id,code_name,active FROM sys_domain where domain_name = 'tube_making_methods_domain' and active=1 ) doma2 ON doma2.code_id = wc.tube_making_methods " +
                 "WHERE wc.active = 1 ");
         bufferSql.append(conditionSql());
         return bufferSql.toString();
@@ -108,9 +107,6 @@ public class DaqStationCondensingTubeQuery extends BaseJavaQuery {
             }
             if (StringUtils.isNotBlank(deviceName)) {
                 conditionSql += " and wc.device_name  like :deviceName";
-            }
-            if (StringUtils.isNotBlank(medianStakeOid)) {
-                conditionSql += " and wc.median_stake_oid  = :medianStakeOid";
             }
             conditionSql +=  this.dataAuthoritySql;
         }
@@ -170,13 +166,5 @@ public class DaqStationCondensingTubeQuery extends BaseJavaQuery {
 
     public void setDeviceName(String deviceName) {
         this.deviceName = deviceName;
-    }
-
-    public String getMedianStakeOid() {
-        return medianStakeOid;
-    }
-
-    public void setMedianStakeOid(String medianStakeOid) {
-        this.medianStakeOid = medianStakeOid;
     }
 }
