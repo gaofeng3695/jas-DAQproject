@@ -1,22 +1,20 @@
-package cn.jasgroup.jasframework.acquisitiondata.station.spatial.sweeping.query.bo;
+package cn.jasgroup.jasframework.acquisitiondata.station.spatial.condensingtube.query.bo;
 
+import java.util.Date;
 import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import java.util.Date;
 
 /**
- * <p>管道扫水</p>
+ * <p>排凝管Bo</p>
  * @author cuixianing
  * @version v1.0.0.1。
  * @since JDK1.8.0_181。
- * <p>创建日期：2019-01-15 10:43:37。</p>
+ * <p>创建日期：2019-01-15 14:05:15。</p>
  */
-
-public class DaqStationPipeSweepingBo extends CommonBaseBo {
-
+public class DaqStationCondensingTubeBo extends CommonBaseBo {
     /**
      * oid
      */
@@ -63,84 +61,74 @@ public class DaqStationPipeSweepingBo extends CommonBaseBo {
     private String pipeStationName;
 
     /**
-     * 试压起始桩号
+     * 编号
      */
-    private String startMedianStakeOid;
+    private String deviceCode;
 
     /**
-     * 试压起始桩号
+     * 名称
      */
-    private String startMedianStakeCode;
+    private String deviceName;
 
     /**
-     * 相对起始桩位置(m)
+     * 排放介质
      */
-    private Double startRelativeMileage;
+    private String emissionMedium;
 
     /**
-     * 试压结束桩号
+     * 排凝管管径（mm）
      */
-    private String endMedianStakeOid;
+    private Double condensingTubeDiameter;
 
     /**
-     * 试压结束桩号
+     * 排凝管材质{1未知;2:钢材;3:塑料;4:其他}
      */
-    private String endMedianStakeCode;
+    private Integer condensingTubeMaterial;
 
     /**
-     * 相对结束桩位置(m)
+     * 排凝管材质{1未知;2:钢材;3:塑料;4:其他}名称
      */
-    private Double endRelativeMileage;
+    private String condensingTubeMaterialName;
 
     /**
-     * 管道长度
+     * 压力等级（mpa)
      */
-    private Double pipeLength;
+    private Double pressureGrade;
 
     /**
-     * 管道规格
+     * 桩号
      */
-    private String pipeSpecification;
+    private String medianStakeOid;
 
     /**
-     * 管段最大高差(m)
+     * 桩号
      */
-    private Double maximumHeightDifference;
+    private String medianStakeCode;
 
     /**
-     * 管段最高点距清管器发送端距离(km)
+     * 相对里程（m）
      */
-    private Double maxHeightDistance;
+    private Double relativeMileage;
 
     /**
-     * 吹扫介质{1:水;2:空气;3:氮气}
+     * 东坐标
      */
-    private Integer sweepingMedium;
+    private Double pointx;
 
     /**
-     * 吹扫介质{1:水;2:空气;3:氮气}名称
+     * 北坐标
      */
-    private String sweepingMediumName;
+    private Double pointy;
 
     /**
-     * 空气压缩机型号及规格
+     * 高程
      */
-    private String airCompressorModel;
+    private Double pointz;
 
     /**
-     * 运行时间(h)
+     * 执行机构
      */
-    private Double runningTime;
-
-    /**
-     * 扫水情况描述
-     */
-    private String processDescription;
-
-    /**
-     * 结论
-     */
-    private String pressureTestResult;
+    private String executingAgency;
 
     /**
      * 施工单位
@@ -264,116 +252,108 @@ public class DaqStationPipeSweepingBo extends CommonBaseBo {
         this.pipeStationName = pipeStationName;
     }
 
-    public String getStartMedianStakeOid() {
-        return startMedianStakeOid;
+    public String getDeviceCode() {
+        return deviceCode;
     }
 
-    public void setStartMedianStakeOid(String startMedianStakeOid) {
-        this.startMedianStakeOid = startMedianStakeOid;
+    public void setDeviceCode(String deviceCode) {
+        this.deviceCode = deviceCode;
     }
 
-    public Double getStartRelativeMileage() {
-        return startRelativeMileage;
+    public String getDeviceName() {
+        return deviceName;
     }
 
-    public void setStartRelativeMileage(Double startRelativeMileage) {
-        this.startRelativeMileage = startRelativeMileage;
+    public void setDeviceName(String deviceName) {
+        this.deviceName = deviceName;
     }
 
-    public String getEndMedianStakeOid() {
-        return endMedianStakeOid;
+    public String getEmissionMedium() {
+        return emissionMedium;
     }
 
-    public void setEndMedianStakeOid(String endMedianStakeOid) {
-        this.endMedianStakeOid = endMedianStakeOid;
+    public void setEmissionMedium(String emissionMedium) {
+        this.emissionMedium = emissionMedium;
     }
 
-    public Double getEndRelativeMileage() {
-        return endRelativeMileage;
+    public Double getCondensingTubeDiameter() {
+        return condensingTubeDiameter;
     }
 
-    public void setEndRelativeMileage(Double endRelativeMileage) {
-        this.endRelativeMileage = endRelativeMileage;
+    public void setCondensingTubeDiameter(Double condensingTubeDiameter) {
+        this.condensingTubeDiameter = condensingTubeDiameter;
     }
 
-    public Double getPipeLength() {
-        return pipeLength;
+    public Integer getCondensingTubeMaterial() {
+        return condensingTubeMaterial;
     }
 
-    public void setPipeLength(Double pipeLength) {
-        this.pipeLength = pipeLength;
+    public void setCondensingTubeMaterial(Integer condensingTubeMaterial) {
+        this.condensingTubeMaterial = condensingTubeMaterial;
     }
 
-    public String getPipeSpecification() {
-        return pipeSpecification;
+    public String getCondensingTubeMaterialName() {
+        return condensingTubeMaterialName;
     }
 
-    public void setPipeSpecification(String pipeSpecification) {
-        this.pipeSpecification = pipeSpecification;
+    public void setCondensingTubeMaterialName(String condensingTubeMaterialName) {
+        this.condensingTubeMaterialName = condensingTubeMaterialName;
     }
 
-    public Double getMaximumHeightDifference() {
-        return maximumHeightDifference;
+    public Double getPressureGrade() {
+        return pressureGrade;
     }
 
-    public void setMaximumHeightDifference(Double maximumHeightDifference) {
-        this.maximumHeightDifference = maximumHeightDifference;
+    public void setPressureGrade(Double pressureGrade) {
+        this.pressureGrade = pressureGrade;
     }
 
-    public Double getMaxHeightDistance() {
-        return maxHeightDistance;
+    public String getMedianStakeOid() {
+        return medianStakeOid;
     }
 
-    public void setMaxHeightDistance(Double maxHeightDistance) {
-        this.maxHeightDistance = maxHeightDistance;
+    public void setMedianStakeOid(String medianStakeOid) {
+        this.medianStakeOid = medianStakeOid;
     }
 
-    public Integer getSweepingMedium() {
-        return sweepingMedium;
+    public Double getRelativeMileage() {
+        return relativeMileage;
     }
 
-    public void setSweepingMedium(Integer sweepingMedium) {
-        this.sweepingMedium = sweepingMedium;
+    public void setRelativeMileage(Double relativeMileage) {
+        this.relativeMileage = relativeMileage;
     }
 
-    public String getSweepingMediumName() {
-        return sweepingMediumName;
+    public Double getPointx() {
+        return pointx;
     }
 
-    public void setSweepingMediumName(String sweepingMediumName) {
-        this.sweepingMediumName = sweepingMediumName;
+    public void setPointx(Double pointx) {
+        this.pointx = pointx;
     }
 
-    public String getAirCompressorModel() {
-        return airCompressorModel;
+    public Double getPointy() {
+        return pointy;
     }
 
-    public void setAirCompressorModel(String airCompressorModel) {
-        this.airCompressorModel = airCompressorModel;
+    public void setPointy(Double pointy) {
+        this.pointy = pointy;
     }
 
-    public Double getRunningTime() {
-        return runningTime;
+    public Double getPointz() {
+        return pointz;
     }
 
-    public void setRunningTime(Double runningTime) {
-        this.runningTime = runningTime;
+    public void setPointz(Double pointz) {
+        this.pointz = pointz;
     }
 
-    public String getProcessDescription() {
-        return processDescription;
+    public String getExecutingAgency() {
+        return executingAgency;
     }
 
-    public void setProcessDescription(String processDescription) {
-        this.processDescription = processDescription;
-    }
-
-    public String getPressureTestResult() {
-        return pressureTestResult;
-    }
-
-    public void setPressureTestResult(String pressureTestResult) {
-        this.pressureTestResult = pressureTestResult;
+    public void setExecutingAgency(String executingAgency) {
+        this.executingAgency = executingAgency;
     }
 
     public String getConstructUnit() {
@@ -458,19 +438,11 @@ public class DaqStationPipeSweepingBo extends CommonBaseBo {
         this.remarks = remarks;
     }
 
-    public String getStartMedianStakeCode() {
-        return startMedianStakeCode;
+    public String getMedianStakeCode() {
+        return medianStakeCode;
     }
 
-    public void setStartMedianStakeCode(String startMedianStakeCode) {
-        this.startMedianStakeCode = startMedianStakeCode;
-    }
-
-    public String getEndMedianStakeCode() {
-        return endMedianStakeCode;
-    }
-
-    public void setEndMedianStakeCode(String endMedianStakeCode) {
-        this.endMedianStakeCode = endMedianStakeCode;
+    public void setMedianStakeCode(String medianStakeCode) {
+        this.medianStakeCode = medianStakeCode;
     }
 }

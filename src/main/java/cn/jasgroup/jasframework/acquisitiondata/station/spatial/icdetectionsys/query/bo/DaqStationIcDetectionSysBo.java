@@ -1,4 +1,4 @@
-package cn.jasgroup.jasframework.acquisitiondata.station.spatial.sweeping.query.bo;
+package cn.jasgroup.jasframework.acquisitiondata.station.spatial.icdetectionsys.query.bo;
 
 import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -8,15 +8,14 @@ import javax.persistence.TemporalType;
 import java.util.Date;
 
 /**
- * <p>管道扫水</p>
- * @author cuixianing
- * @version v1.0.0.1。
- * @since JDK1.8.0_181。
- * <p>创建日期：2019-01-15 10:43:37。</p>
+ * @version V1.0
+ * @description 内腐蚀检测系统Bo
+ * @Author: 陈祥思
+ * @Date: 2019/1/15 13:45
+ * @since JDK 1.80
  */
 
-public class DaqStationPipeSweepingBo extends CommonBaseBo {
-
+public class DaqStationIcDetectionSysBo extends CommonBaseBo {
     /**
      * oid
      */
@@ -33,16 +32,6 @@ public class DaqStationPipeSweepingBo extends CommonBaseBo {
     private String projectName;
 
     /**
-     * 标段oid
-     */
-    private String tendersOid;
-
-    /**
-     * 标段名称
-     */
-    private String tendersName;
-
-    /**
      * 管线oid
      */
     private String pipelineOid;
@@ -51,6 +40,16 @@ public class DaqStationPipeSweepingBo extends CommonBaseBo {
      * 管线名称
      */
     private String pipelineName;
+
+    /**
+     * 标段oid
+     */
+    private String tendersOid;
+
+    /**
+     * 标段名称
+     */
+    private String tendersName;
 
     /**
      * 站场/阀室编号
@@ -63,84 +62,84 @@ public class DaqStationPipeSweepingBo extends CommonBaseBo {
     private String pipeStationName;
 
     /**
-     * 试压起始桩号
+     * 设备编号
+     */
+    private String deviceCode;
+
+    /**
+     * 设备名称
+     */
+    private String deviceName;
+
+    /**
+     * 出厂编号
+     */
+    private String manufactureNumber;
+
+    /**
+     * 起始桩号
      */
     private String startMedianStakeOid;
 
     /**
-     * 试压起始桩号
+     * 起始桩号
      */
     private String startMedianStakeCode;
 
     /**
-     * 相对起始桩位置(m)
+     * 相对起始桩里程(m)
      */
     private Double startRelativeMileage;
 
     /**
-     * 试压结束桩号
+     * 结束桩号
      */
     private String endMedianStakeOid;
 
     /**
-     * 试压结束桩号
+     * 结束桩号
      */
     private String endMedianStakeCode;
 
     /**
-     * 相对结束桩位置(m)
+     * 相对结束桩里程(m)
      */
     private Double endRelativeMileage;
 
     /**
-     * 管道长度
+     * 系统类型,域值：system_type_domain
      */
-    private Double pipeLength;
+    private String systemType;
 
     /**
-     * 管道规格
+     * 系统类型,域值：system_type_domain
      */
-    private String pipeSpecification;
+    private String systemTypeName;
 
     /**
-     * 管段最大高差(m)
+     * 系统原理，域值：system_principle_domain
      */
-    private Double maximumHeightDifference;
+    private String systemPrinciple;
 
     /**
-     * 管段最高点距清管器发送端距离(km)
+     * 系统原理，域值：system_principle_domain
      */
-    private Double maxHeightDistance;
+    private String systemPrincipleName;
 
     /**
-     * 吹扫介质{1:水;2:空气;3:氮气}
+     * 研发单位
      */
-    private Integer sweepingMedium;
+    private String developmentUnit;
 
     /**
-     * 吹扫介质{1:水;2:空气;3:氮气}名称
+     * 投用日期
      */
-    private String sweepingMediumName;
+    private Date putIntoDate;
 
     /**
-     * 空气压缩机型号及规格
+     * 施工日期
      */
-    private String airCompressorModel;
-
-    /**
-     * 运行时间(h)
-     */
-    private Double runningTime;
-
-    /**
-     * 扫水情况描述
-     */
-    private String processDescription;
-
-    /**
-     * 结论
-     */
-    private String pressureTestResult;
+    private Date constructDate;
 
     /**
      * 施工单位
@@ -148,7 +147,7 @@ public class DaqStationPipeSweepingBo extends CommonBaseBo {
     private String constructUnit;
 
     /**
-     * 施工单位名称
+     * 施工单位
      */
     private String constructUnitName;
 
@@ -158,7 +157,7 @@ public class DaqStationPipeSweepingBo extends CommonBaseBo {
     private String supervisionUnit;
 
     /**
-     * 监理单位名称
+     * 监理单位
      */
     private String supervisionUnitName;
 
@@ -183,7 +182,7 @@ public class DaqStationPipeSweepingBo extends CommonBaseBo {
     private Integer approveStatus;
 
     /**
-     * 审核状态名称
+     * 审核状态
      */
     private String approveStatusName;
 
@@ -216,22 +215,6 @@ public class DaqStationPipeSweepingBo extends CommonBaseBo {
         this.projectName = projectName;
     }
 
-    public String getTendersOid() {
-        return tendersOid;
-    }
-
-    public void setTendersOid(String tendersOid) {
-        this.tendersOid = tendersOid;
-    }
-
-    public String getTendersName() {
-        return tendersName;
-    }
-
-    public void setTendersName(String tendersName) {
-        this.tendersName = tendersName;
-    }
-
     public String getPipelineOid() {
         return pipelineOid;
     }
@@ -246,6 +229,22 @@ public class DaqStationPipeSweepingBo extends CommonBaseBo {
 
     public void setPipelineName(String pipelineName) {
         this.pipelineName = pipelineName;
+    }
+
+    public String getTendersOid() {
+        return tendersOid;
+    }
+
+    public void setTendersOid(String tendersOid) {
+        this.tendersOid = tendersOid;
+    }
+
+    public String getTendersName() {
+        return tendersName;
+    }
+
+    public void setTendersName(String tendersName) {
+        this.tendersName = tendersName;
     }
 
     public String getPipeStationOid() {
@@ -264,12 +263,44 @@ public class DaqStationPipeSweepingBo extends CommonBaseBo {
         this.pipeStationName = pipeStationName;
     }
 
+    public String getDeviceCode() {
+        return deviceCode;
+    }
+
+    public void setDeviceCode(String deviceCode) {
+        this.deviceCode = deviceCode;
+    }
+
+    public String getDeviceName() {
+        return deviceName;
+    }
+
+    public void setDeviceName(String deviceName) {
+        this.deviceName = deviceName;
+    }
+
+    public String getManufactureNumber() {
+        return manufactureNumber;
+    }
+
+    public void setManufactureNumber(String manufactureNumber) {
+        this.manufactureNumber = manufactureNumber;
+    }
+
     public String getStartMedianStakeOid() {
         return startMedianStakeOid;
     }
 
     public void setStartMedianStakeOid(String startMedianStakeOid) {
         this.startMedianStakeOid = startMedianStakeOid;
+    }
+
+    public String getStartMedianStakeCode() {
+        return startMedianStakeCode;
+    }
+
+    public void setStartMedianStakeCode(String startMedianStakeCode) {
+        this.startMedianStakeCode = startMedianStakeCode;
     }
 
     public Double getStartRelativeMileage() {
@@ -288,6 +319,14 @@ public class DaqStationPipeSweepingBo extends CommonBaseBo {
         this.endMedianStakeOid = endMedianStakeOid;
     }
 
+    public String getEndMedianStakeCode() {
+        return endMedianStakeCode;
+    }
+
+    public void setEndMedianStakeCode(String endMedianStakeCode) {
+        this.endMedianStakeCode = endMedianStakeCode;
+    }
+
     public Double getEndRelativeMileage() {
         return endRelativeMileage;
     }
@@ -296,84 +335,64 @@ public class DaqStationPipeSweepingBo extends CommonBaseBo {
         this.endRelativeMileage = endRelativeMileage;
     }
 
-    public Double getPipeLength() {
-        return pipeLength;
+    public String getSystemType() {
+        return systemType;
     }
 
-    public void setPipeLength(Double pipeLength) {
-        this.pipeLength = pipeLength;
+    public void setSystemType(String systemType) {
+        this.systemType = systemType;
     }
 
-    public String getPipeSpecification() {
-        return pipeSpecification;
+    public String getSystemTypeName() {
+        return systemTypeName;
     }
 
-    public void setPipeSpecification(String pipeSpecification) {
-        this.pipeSpecification = pipeSpecification;
+    public void setSystemTypeName(String systemTypeName) {
+        this.systemTypeName = systemTypeName;
     }
 
-    public Double getMaximumHeightDifference() {
-        return maximumHeightDifference;
+    public String getSystemPrinciple() {
+        return systemPrinciple;
     }
 
-    public void setMaximumHeightDifference(Double maximumHeightDifference) {
-        this.maximumHeightDifference = maximumHeightDifference;
+    public void setSystemPrinciple(String systemPrinciple) {
+        this.systemPrinciple = systemPrinciple;
     }
 
-    public Double getMaxHeightDistance() {
-        return maxHeightDistance;
+    public String getSystemPrincipleName() {
+        return systemPrincipleName;
     }
 
-    public void setMaxHeightDistance(Double maxHeightDistance) {
-        this.maxHeightDistance = maxHeightDistance;
+    public void setSystemPrincipleName(String systemPrincipleName) {
+        this.systemPrincipleName = systemPrincipleName;
     }
 
-    public Integer getSweepingMedium() {
-        return sweepingMedium;
+    public String getDevelopmentUnit() {
+        return developmentUnit;
     }
 
-    public void setSweepingMedium(Integer sweepingMedium) {
-        this.sweepingMedium = sweepingMedium;
+    public void setDevelopmentUnit(String developmentUnit) {
+        this.developmentUnit = developmentUnit;
     }
 
-    public String getSweepingMediumName() {
-        return sweepingMediumName;
+    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+    @Temporal(TemporalType.DATE)
+    public Date getPutIntoDate() {
+        return putIntoDate;
     }
 
-    public void setSweepingMediumName(String sweepingMediumName) {
-        this.sweepingMediumName = sweepingMediumName;
+    public void setPutIntoDate(Date putIntoDate) {
+        this.putIntoDate = putIntoDate;
     }
 
-    public String getAirCompressorModel() {
-        return airCompressorModel;
+    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+    @Temporal(TemporalType.DATE)
+    public Date getConstructDate() {
+        return constructDate;
     }
 
-    public void setAirCompressorModel(String airCompressorModel) {
-        this.airCompressorModel = airCompressorModel;
-    }
-
-    public Double getRunningTime() {
-        return runningTime;
-    }
-
-    public void setRunningTime(Double runningTime) {
-        this.runningTime = runningTime;
-    }
-
-    public String getProcessDescription() {
-        return processDescription;
-    }
-
-    public void setProcessDescription(String processDescription) {
-        this.processDescription = processDescription;
-    }
-
-    public String getPressureTestResult() {
-        return pressureTestResult;
-    }
-
-    public void setPressureTestResult(String pressureTestResult) {
-        this.pressureTestResult = pressureTestResult;
+    public void setConstructDate(Date constructDate) {
+        this.constructDate = constructDate;
     }
 
     public String getConstructUnit() {
@@ -456,21 +475,5 @@ public class DaqStationPipeSweepingBo extends CommonBaseBo {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
-    }
-
-    public String getStartMedianStakeCode() {
-        return startMedianStakeCode;
-    }
-
-    public void setStartMedianStakeCode(String startMedianStakeCode) {
-        this.startMedianStakeCode = startMedianStakeCode;
-    }
-
-    public String getEndMedianStakeCode() {
-        return endMedianStakeCode;
-    }
-
-    public void setEndMedianStakeCode(String endMedianStakeCode) {
-        this.endMedianStakeCode = endMedianStakeCode;
     }
 }
