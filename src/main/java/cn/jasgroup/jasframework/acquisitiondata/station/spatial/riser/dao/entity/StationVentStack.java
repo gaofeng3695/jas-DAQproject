@@ -14,6 +14,8 @@ import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
 import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
 import cn.jasgroup.jasframework.base.annotation.Process;
+import cn.jasgroup.jasframework.base.annotation.UniqueConstraintStrategy;
+import cn.jasgroup.jasframework.base.annotation.UniqueConstraints;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 /**
  * 
@@ -47,6 +49,18 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 	afterAdvice= {
 		@Process(service = "stationVentStackService", method = "updateMaterialAfterDeleteEntity()")
 	}
+)
+@UniqueConstraints(
+    strategys ={
+        @UniqueConstraintStrategy(
+            columnNames={"pipeStationOid","deviceCode"},
+            name="同一线站场/阀室下编号不能重复"
+        ),
+        @UniqueConstraintStrategy(
+        	columnNames={"projectOid","manufactureNumber"},
+        	name="同一项目下出厂编号不能重复")
+    }
+    
 )
 @Point(
 	x = "pointx",
