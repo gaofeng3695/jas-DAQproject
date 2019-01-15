@@ -1,26 +1,26 @@
-package cn.jasgroup.jasframework.acquisitiondata.station.spatial.sweeping.query;
+package cn.jasgroup.jasframework.acquisitiondata.station.spatial.condensingtube.query;
 
-import cn.jasgroup.jasframework.acquisitiondata.station.spatial.sweeping.query.bo.DaqStationPipeSweepingBo;
+import cn.jasgroup.jasframework.acquisitiondata.station.spatial.condensingtube.query.bo.DaqStationCondensingTubeBo;
 import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * <p>管道扫水getPage</p>
+ * <p>排凝管getPage</p>
  * @author cuixianing
  * @version v1.0.0.1。
  * @since JDK1.8.0_181。
  * <p>创建日期：2019-01-15 10:43:37。</p>
  */
 @QueryConfig(
-        scene ="/daqStationPipeSweeping/getPage",
-        resultClass= DaqStationPipeSweepingBo.class,
+        scene ="/daqStationCondensingTube/getPage",
+        resultClass= DaqStationCondensingTubeBo.class,
         queryBeforeProcess = {
                 @Process(service = "daqInjectService" , method = "injectDataAuthoritySql(dataAuthoritySql)")
         }
 )
-public class DaqStationPipeSweepingQuery extends BaseJavaQuery {
+public class DaqStationCondensingTubeQuery extends BaseJavaQuery {
 
     /**
      * 项目oid
@@ -43,41 +43,47 @@ public class DaqStationPipeSweepingQuery extends BaseJavaQuery {
     private String pipeStationOid;
 
     /**
-     * 试压起始桩号
+     * 编号
      */
-    private String startMedianStakeOid;
+    private String deviceCode;
 
     /**
-     * 试压结束桩号
+     * 名称
      */
-    private String endMedianStakeOid;
+    private String deviceName;
+
+    /**
+     * 桩号
+     */
+    private String medianStakeOid;
 
     @Override
     public String getQuerySql() {
         StringBuffer bufferSql = new StringBuffer();
         bufferSql.append("SELECT " +
-                "wc.*, pro.project_name," +
-                "te.tenders_name," +
-                "pi.pipeline_name," +
-                "ps.pipe_station_name," +
-                "pu.unit_name AS supervision_unit_name," +
-                "u.unit_name AS construct_unit_name," +
-                "case when wc.sweeping_medium=1 then '水' when wc.sweeping_medium=2 then '空气' when wc.sweeping_medium=3 then '氮气'  end as sweeping_medium_name," +
-                "case when wc.approve_status = -1 then '驳回' when wc.approve_status = 1 then '待审核' when wc.approve_status = 2 then '审核通过' else '未上报' end as approve_status_name," +
-                "med.median_stake_code as end_median_stake_code,me.median_stake_code as start_median_stake_code " +
-                "from " +
-                "daq_station_pipe_sweeping wc " +
+                " wc.*, pro.project_name, " +
+                " te.tenders_name, " +
+                " pi.pipeline_name, " +
+                " ps.pipe_station_name, " +
+                " pu.unit_name AS supervision_unit_name, " +
+                " u.unit_name AS construct_unit_name, " +
+                " case when wc.condensing_tube_material=1 then '未知' when wc.condensing_tube_material=2 then '钢材' when wc.condensing_tube_material=3 then '塑料'  " +
+                " when wc.condensing_tube_material=4 then '其他' end as condensing_tube_material_name, " +
+                " case when wc.approve_status = -1 then '驳回' when wc.approve_status = 1 then '待审核' when wc.approve_status = 2 then '审核通过' else '未上报' end as approve_status_name," +
+                " med.median_stake_code  median_stake_code " +
+                "from  " +
+                "daq_station_condensing_tube wc " +
                 "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = wc.project_oid  " +
                 "LEFT JOIN (SELECT oid, tenders_name, active FROM daq_tenders where active=1) te ON te.oid = wc.tenders_oid  " +
                 "LEFT JOIN (SELECT oid, pipeline_name, active FROM daq_pipeline where active=1) pi ON pi.oid = wc.pipeline_oid  " +
                 "LEFT JOIN (select oid,pipe_station_name, active from daq_pipe_station where active=1) ps ON ps.oid=wc.pipe_station_oid " +
                 "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) pu on pu.oid = wc.supervision_unit  " +
                 "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) u on u.oid = wc.construct_unit " +
-                "LEFT JOIN (select oid,median_stake_code from daq_median_stake where active=1) me ON me.oid = wc.start_median_stake_oid " +
-                "LEFT JOIN (select oid,median_stake_code from daq_median_stake where active=1) med ON med.oid = wc.end_median_stake_oid " +
+                "LEFT JOIN (select oid,median_stake_code from daq_median_stake where active=1) med ON med.oid = wc.median_stake_oid  " +
                 "WHERE wc.active = 1 ");
         bufferSql.append(conditionSql());
         return bufferSql.toString();
+
     }
 
     private String conditionSql() {
@@ -97,11 +103,14 @@ public class DaqStationPipeSweepingQuery extends BaseJavaQuery {
             if (StringUtils.isNotBlank(pipeStationOid)) {
                 conditionSql += " and wc.pipe_station_oid = :pipeStationOid";
             }
-            if (StringUtils.isNotBlank(startMedianStakeOid)) {
-                conditionSql += " and wc.start_median_stake_oid = :startMedianStakeOid";
+            if (StringUtils.isNotBlank(deviceCode)) {
+                conditionSql += " and wc.device_code = :deviceCode";
             }
-            if (StringUtils.isNotBlank(endMedianStakeOid)) {
-                conditionSql += " and wc.end_median_stake_oid = :endMedianStakeOid";
+            if (StringUtils.isNotBlank(deviceName)) {
+                conditionSql += " and wc.device_name  = :deviceName";
+            }
+            if (StringUtils.isNotBlank(medianStakeOid)) {
+                conditionSql += " and wc.median_stake_oid  = :medianStakeOid";
             }
             conditionSql +=  this.dataAuthoritySql;
         }
@@ -141,19 +150,27 @@ public class DaqStationPipeSweepingQuery extends BaseJavaQuery {
         this.pipeStationOid = pipeStationOid;
     }
 
-    public String getStartMedianStakeOid() {
-        return startMedianStakeOid;
+    public String getDeviceCode() {
+        return deviceCode;
     }
 
-    public void setStartMedianStakeOid(String startMedianStakeOid) {
-        this.startMedianStakeOid = startMedianStakeOid;
+    public void setDeviceCode(String deviceCode) {
+        this.deviceCode = deviceCode;
     }
 
-    public String getEndMedianStakeOid() {
-        return endMedianStakeOid;
+    public String getDeviceName() {
+        return deviceName;
     }
 
-    public void setEndMedianStakeOid(String endMedianStakeOid) {
-        this.endMedianStakeOid = endMedianStakeOid;
+    public void setDeviceName(String deviceName) {
+        this.deviceName = deviceName;
+    }
+
+    public String getMedianStakeOid() {
+        return medianStakeOid;
+    }
+
+    public void setMedianStakeOid(String medianStakeOid) {
+        this.medianStakeOid = medianStakeOid;
     }
 }
