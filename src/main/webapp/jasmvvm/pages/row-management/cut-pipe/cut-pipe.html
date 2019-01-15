@@ -170,13 +170,6 @@
 			searchList: function () {
 				this.$refs.table.search();
 			},
-			reset: function () {
-				this.topSearch.projectOid = '';
-				this.topSearch.pipelineOid = '';
-				this.topSearch.tendersOid = '';
-				this.topSearch.pipeOid = '';
-				this.$refs.table.search();
-			},
 			locate: function (row) {
 				var code = this.tableName;
 				top.app.locate(row.oid, code);
