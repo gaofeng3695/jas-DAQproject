@@ -68,6 +68,11 @@ public class DaqStationPipeSweepingBo extends CommonBaseBo {
     private String startMedianStakeOid;
 
     /**
+     * 试压起始桩号
+     */
+    private String startMedianStakeCode;
+
+    /**
      * 相对起始桩位置(m)
      */
     private Double startRelativeMileage;
@@ -76,6 +81,11 @@ public class DaqStationPipeSweepingBo extends CommonBaseBo {
      * 试压结束桩号
      */
     private String endMedianStakeOid;
+
+    /**
+     * 试压结束桩号
+     */
+    private String endMedianStakeCode;
 
     /**
      * 相对结束桩位置(m)
@@ -446,5 +456,21 @@ public class DaqStationPipeSweepingBo extends CommonBaseBo {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public String getStartMedianStakeCode() {
+        return startMedianStakeCode;
+    }
+
+    public void setStartMedianStakeCode(String startMedianStakeCode) {
+        this.startMedianStakeCode = startMedianStakeCode;
+    }
+
+    public String getEndMedianStakeCode() {
+        return endMedianStakeCode;
+    }
+
+    public void setEndMedianStakeCode(String endMedianStakeCode) {
+        this.endMedianStakeCode = endMedianStakeCode;
     }
 }
