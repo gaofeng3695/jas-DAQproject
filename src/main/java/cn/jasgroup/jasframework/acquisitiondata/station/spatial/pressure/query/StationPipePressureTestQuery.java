@@ -48,6 +48,16 @@ public class StationPipePressureTestQuery extends BaseJavaQuery {
 	 * 站场/阀室编号 
 	 */
 	private String pipeStationOid; 
+	
+	/**
+	 * 起始桩
+	 */
+	private String startMedianStakeOid;
+	
+	/**
+	 * 终点桩
+	 */
+	private String endMedianStakeOid;
 
 	@Override
 	public String getQuerySql() {
@@ -94,6 +104,12 @@ public class StationPipePressureTestQuery extends BaseJavaQuery {
 			}
 			if (StringUtils.isNotBlank(pipeStationOid)) {
 				conditionSql += " and sta.pipe_station_oid = :pipeStationOid";
+			}
+			if (StringUtils.isNotBlank(startMedianStakeOid)) {
+				conditionSql += " and sta.start_median_stake_oid = :startMedianStakeOid";
+			}
+			if (StringUtils.isNotBlank(endMedianStakeOid)) {
+				conditionSql += " and sta.end_median_stake_oid = :endMedianStakeOid";
 			}
 			conditionSql +=  this.dataAuthoritySql;
 		}
