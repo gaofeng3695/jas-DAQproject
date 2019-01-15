@@ -60,7 +60,7 @@ public class DaqStationAuxiliaryAnodeBedQuery extends BaseJavaQuery {
     @Override
     public String getQuerySql() {
         String sql = "SELECT dsaab.oid, dsaab.project_oid, pro.project_name, dsaab.tenders_oid, te.tenders_name, dsaab.pipeline_oid, pi.pipeline_name, dsaab.pipe_station_oid, ps.pipe_station_name, " +
-                "dsaab.device_code, dsaab.median_stake_oid, dsaab.relative_mileage, dsaab.install_location_des, dsaab.burying_depth, " +
+                "dsaab.device_code, dsaab.median_stake_oid, me.median_stake_code, dsaab.relative_mileage, dsaab.install_location_des, dsaab.burying_depth, " +
                 "dsaab.is_temporary, case when dsaab.is_temporary=1 then '是' when dsaab.is_temporary=0 then '否' end as is_temporary_name, " +
                 "dsaab.design_life, dsaab.backfill_material, doma.code_name as backfill_material_name, dsaab.auxiliary_anode_num, dsaab.burial_way, doma1.code_name as burial_way_name, dsaab.gross_weight, " +
                 "dsaab.pointx, dsaab.pointy, dsaab.pointz, dsaab.cable_length, dsaab.protect_length, dsaab.anode_material, doma2.code_name as anode_material_name, dsaab.anode_specification, dsaab.anode_resistance, " +
@@ -87,6 +87,7 @@ public class DaqStationAuxiliaryAnodeBedQuery extends BaseJavaQuery {
         return sql;
     }
 
+
     private String conditionSql() {
         String conditionSql = "";
         if (StringUtils.isNotBlank(oid)) {
@@ -105,7 +106,7 @@ public class DaqStationAuxiliaryAnodeBedQuery extends BaseJavaQuery {
                 conditionSql += " and dsaab.pipe_station_oid = :pipeStationOid";
             }
             if (StringUtils.isNotBlank(deviceCode)) {
-                conditionSql += " and dsaab.device_code = :deviceCode";
+                conditionSql += " and dsaab.device_code like :deviceCode";
             }
             if (StringUtils.isNotBlank(medianStakeOid)) {
                 conditionSql += " and dsaab.median_stake_oid = :medianStakeOid";
@@ -159,7 +160,10 @@ public class DaqStationAuxiliaryAnodeBedQuery extends BaseJavaQuery {
     }
 
     public String getDeviceCode() {
-        return deviceCode;
+        if(StringUtils.isNotBlank(deviceCode)){
+            return "%"+deviceCode+"%";
+        }
+        return null;
     }
 
     public void setDeviceCode(String deviceCode) {
