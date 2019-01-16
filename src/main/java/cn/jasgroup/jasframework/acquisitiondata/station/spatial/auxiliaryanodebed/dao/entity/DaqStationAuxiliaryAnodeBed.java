@@ -212,6 +212,20 @@ public class DaqStationAuxiliaryAnodeBed extends CommonJdbcEntity {
      */
     private String remarks;
 
+	/**
+	 * 空间数据状态 
+	 */
+	private String geoState; 
+    
+	public String getGeoState() {
+		return geoState; 
+	}
+
+	public void setGeoState(String geoState) {
+		this.geoState = geoState; 
+		super.setField("geoState");
+	}
+
 
     public String getProjectOid() {
         return projectOid;
