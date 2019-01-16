@@ -70,12 +70,12 @@ var vm = new Vue({
     }
   },
   computed: {
-    selectNames: function () {
-      var that = this;
-      return this.filterTable.filter(function (item) {
-        return that.isSqlSelect(item.uiType)
-      });
-    }
+//    selectNames: function () {
+//      var that = this;
+//      return this.filterTable.filter(function (item) {
+//        return that.isSqlSelect(item.uiType)
+//      });
+//    }
   },
 
   created: function () {
@@ -158,7 +158,7 @@ var vm = new Vue({
     	var type=row.uiType;
     	var isShow=(type==='UT_03'||type==='UT_04')&&this.isUi(type);
 //    	if(!isShow){
-//    		row.lessDateScopeArr=[]
+//    		row.lessDateScopeArr=[];
 //    	}
     	return isShow;
     },
@@ -717,19 +717,29 @@ var vm = new Vue({
       var isSort = this._formatSortInfo();
       if (isSort) {
         var funFunctionFieldsForms = this.privateTable.map(function (item) {
-        	if(item.fieldName=="drive_type"){
-        		console.log(JSON.stringify(item));
+        	if(item.uiType=="UT_11"){
+        		 item.childField = item.childFieldArr.join(',');	
+        	}else{
+        		item.childFieldArr=[];
+        		item.childField="";
         	}
-          item.childField = item.childFieldArr.join(',');
-          if (item.lessDateScopeArr) {
-            item.lessDateScope = item.lessDateScopeArr.join(',');
+          if(item.uiType=="UT_03"||item.uiType=="UT_04"){
+        	  if (item.lessDateScopeArr) {
+                  item.lessDateScope = item.lessDateScopeArr.join(',');
+                }
+                if (item.maxDateScopeArr) {
+                  item.maxDateScope = item.maxDateScopeArr.join(',');
+                }
+                if (item.uiType == 'UT_03') {
+                  item.ifLessToday = item.ifLessToday ? "1" : "0";
+                }  
+          }else{
+        	  item.lessDateScope="";
+        	  item.maxDateScope="";
+        	  item.lessDateScopeArr=[];
+        	  item.maxDateScopeArr=[]; 
           }
-          if (item.maxDateScopeArr) {
-            item.maxDateScope = item.maxDateScopeArr.join(',');
-          }
-          if (item.uiType == 'UT_03') {
-            item.ifLessToday = item.ifLessToday ? "1" : "0";
-          }
+        
           return item;
         });
         jasTools.ajax.post(jasTools.base.rootPath + '/functionFields/save.do', {

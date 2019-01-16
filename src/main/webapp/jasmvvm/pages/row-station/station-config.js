@@ -946,7 +946,7 @@ var stationConfig = {
       'pressureGrade',
       'executingAgency',
     ],
-    addNames: ["基本信息", "位置信息", "进出站口信息"],
+    addNames: ["基本信息", "位置信息", "排凝管信息"],
     detailFields0: [ //
       "projectName",
       "tendersName",
@@ -1294,8 +1294,8 @@ var stationConfig = {
       pipelineOid: {
         type: 'select',
         name: '管线名称',
-        childSelect: ['pipeStationOid', 'medianStakeOid'],
-        childUrl: ['/daq/privilege/getPipeStationListByPipelineOid.do', '/daq/privilege/getMedianStakeList.do'],
+        childSelect: ['pipeStationOid'],
+        childUrl: ['/daq/privilege/getPipeStationListByPipelineOid.do'],
         isRequired: true,
         isInit: true
       },
@@ -1578,8 +1578,8 @@ var stationConfig = {
       pipelineOid: {
         type: 'select',
         name: '管线名称',
-        childSelect: ['pipeStationOid', 'medianStakeOid'],
-        childUrl: ['/daq/privilege/getPipeStationListByPipelineOid.do', '/daq/privilege/getMedianStakeList.do'],
+        childSelect: ['pipeStationOid'],
+        childUrl: ['/daq/privilege/getPipeStationListByPipelineOid.do'],
         isRequired: true,
         isInit: true
       },
@@ -1888,7 +1888,16 @@ var stationConfig = {
       },
       constructDate: {
         type: "date",
-        name: "施工日期"
+        isRequired: true,
+        name: "施工日期",
+        lessDateScope:['collectionDate'],//第一个数组表示 小于的日期，第二个数组表示大于的日期。默认是小于今天 today 默认为今天
+        maxDateScope:[],
+        isLessToday:true,//默认是小于今天的
+  	    pickerOptions:{//用于设置默认是小于今天的
+  	    	disabledDate:function(time){
+  				return time.getTime()>new Date().getTime()
+  			}
+  	    }
       },
       constructUnit: {
         type: 'select',
@@ -1932,7 +1941,15 @@ var stationConfig = {
       collectionDate: {
         type: "date",
         isRequired: true,
-        name: "采集日期"
+        name: "采集日期",
+        lessDateScope:[],//表示小于的日期
+        maxDateScope:['constructDate'],  //表示大于的日期
+        isLessToday:true,//默认是小于今天的
+  	    pickerOptions:{//用于设置默认是小于今天的
+  	    	disabledDate:function(time){
+  				return time.getTime()>new Date().getTime()
+  			}
+  	    }
       },
       approveStatus: {
         type: 'input',
@@ -1969,7 +1986,7 @@ var stationConfig = {
       },
       deviceCode: {
         type: "input",
-        name: "编号",
+        name: "设备编号",
         rules: [{
           min: "0",
           max: 40,
@@ -2182,7 +2199,16 @@ var stationConfig = {
       },
       constructDate: {
         type: "date",
-        name: "施工日期"
+        name: "施工日期",
+        isRequired: true,
+        lessDateScope:['collectionDate'],//表示小于的日期
+        maxDateScope:[],  //表示大于的日期
+        isLessToday:true,//默认是小于今天的
+  	    pickerOptions:{//用于设置默认是小于今天的
+  	    	disabledDate:function(time){
+  				return time.getTime()>new Date().getTime()
+  			}
+  	    }
       },
       constructUnit: {
         type: 'select',
@@ -2226,7 +2252,15 @@ var stationConfig = {
       collectionDate: {
         type: "date",
         isRequired: true,
-        name: "采集日期"
+        name: "采集日期",
+        lessDateScope:[],//表示小于的日期
+        maxDateScope:['constructDate'],  //表示大于的日期
+        isLessToday:true,//默认是小于今天的
+  	    pickerOptions:{//用于设置默认是小于今天的
+  	    	disabledDate:function(time){
+  				return time.getTime()>new Date().getTime()
+  			}
+  	    }
       },
       approveStatus: {
         type: 'input',
@@ -2274,7 +2308,7 @@ var stationConfig = {
       },
       deviceCode: {
         type: "input",
-        name: "编号",
+        name: "地床编号",
         rules: [{
           min: "0",
           max: 40,
@@ -2607,12 +2641,28 @@ var stationConfig = {
       collectionDate: {
         type: "date",
         isRequired: true,
-        name: "采集日期"
+        name: "采集日期",
+        lessDateScope:[],//表示小于的日期
+        maxDateScope:['constructDate'],  //表示大于的日期
+        isLessToday:true,//默认是小于今天的
+  	    pickerOptions:{//用于设置默认是小于今天的
+  	    	disabledDate:function(time){
+  				return time.getTime()>new Date().getTime()
+  			}
+  	    }
       },
       constructDate: {
         type: "date",
         isRequired: true,
-        name: "施工日期"
+        name: "施工日期",
+        lessDateScope:['collectionDate'],//表示小于的日期
+        maxDateScope:[],  //表示大于的日期
+        isLessToday:true,//默认是小于今天的
+  	    pickerOptions:{//用于设置默认是小于今天的
+  	    	disabledDate:function(time){
+  				return time.getTime()>new Date().getTime()
+  			}
+  	    }
       },
       approveStatus: {
         type: 'input',
@@ -2655,7 +2705,7 @@ var stationConfig = {
       },
       deviceCode: {
         type: "input",
-        name: "编号",
+        name: "设备编号",
         rules: [{
           min: "0",
           max: 40,
@@ -2664,7 +2714,7 @@ var stationConfig = {
       },
       deviceName: {
         type: "input",
-        name: "名称",
+        name: "设备名称",
         rules: [{
           min: "0",
           max: 45,
@@ -2879,7 +2929,16 @@ var stationConfig = {
       },
       constructDate: {
         type: "date",
-        name: "施工日期"
+        name: "施工日期",
+        isRequired: true,
+        lessDateScope:['collectionDate'],//表示小于的日期
+        maxDateScope:[],  //表示大于的日期
+        isLessToday:true,//默认是小于今天的
+  	    pickerOptions:{//用于设置默认是小于今天的
+  	    	disabledDate:function(time){
+  				return time.getTime()>new Date().getTime()
+  			}
+  	    }
       },
       constructUnit: {
         type: 'select',
@@ -2923,7 +2982,15 @@ var stationConfig = {
       collectionDate: {
         type: "date",
         isRequired: true,
-        name: "采集日期"
+        name: "采集日期",
+        lessDateScope:[],//表示小于的日期
+        maxDateScope:['constructDate'],  //表示大于的日期
+        isLessToday:true,//默认是小于今天的
+  	    pickerOptions:{//用于设置默认是小于今天的
+  	    	disabledDate:function(time){
+  				return time.getTime()>new Date().getTime()
+  			}
+  	    }
       },
       approveStatus: {
         type: 'input',
