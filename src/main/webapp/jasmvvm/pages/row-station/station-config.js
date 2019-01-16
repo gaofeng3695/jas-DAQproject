@@ -796,8 +796,8 @@ var stationConfig = {
         name: '桩号',
         isRequired: true
       },
-      medianStakeCode:{
-    	name:"桩号"  
+      medianStakeCode: {
+        name: "桩号"
       },
       pointx: {
         type: "number",
@@ -822,8 +822,8 @@ var stationConfig = {
         name: "焊口编号",
         isRequired: true
       },
-      weldCode:{
-    	name: "焊口编号"  
+      weldCode: {
+        name: "焊口编号"
       },
       deviceCode: {
         type: "input",
@@ -1779,11 +1779,11 @@ var stationConfig = {
       'pipelineName',
       'pipeStationName',
       'deviceCode',
-      'deviceName',
-      'manufactureNumber',
+      'materialDeviceName',
+      'manufactureNumberName',
       'pointx',
       'pointy',
-      'position',
+      'positionName',
       'distance',
       'constructDate',
       'constructUnitName',
@@ -1832,12 +1832,12 @@ var stationConfig = {
     detailFields1: [ //
       'pointx',
       'pointy',
-      'position',
+      'positionName',
     ],
     detailFields2: [ //
       'deviceCode',
-      'deviceName',
-      'manufactureNumber',
+      'materialDeviceName',
+      'manufactureNumberName',
       'distance',
     ],
     fieldsConfig: {
@@ -1961,8 +1961,11 @@ var stationConfig = {
       },
       position: {
         type: "select",
-        name:"方位",
+        name: "方位",
         domainName: "position_domain"
+      },
+      positionName: {
+        name: "方位"
       },
       deviceCode: {
         type: "input",
@@ -1973,9 +1976,9 @@ var stationConfig = {
           message: "不能超过40个字"
         }]
       },
-      deviceName: {
+      materialDeviceName: {
         type: "input",
-        name: "名称",
+        name: "物资名称",
         rules: [{
           min: "0",
           max: 45,
@@ -1990,6 +1993,9 @@ var stationConfig = {
         //   max: 70,
         //   message: "不能超过70个字"
         // }]
+      },
+      manufactureNumberName: {
+        name: "出厂编号"
       },
       distance: {
         type: "number",
@@ -2625,11 +2631,11 @@ var stationConfig = {
         type: "select",
         name: "起始桩号"
       },
-      startMedianStakeCode:{
-    	  name: "起始桩号"
+      startMedianStakeCode: {
+        name: "起始桩号"
       },
-      endMedianStakeCode:{
-    	  name: "结束桩号"
+      endMedianStakeCode: {
+        name: "结束桩号"
       },
       startRelativeMileage: {
         type: "number",
@@ -2679,11 +2685,11 @@ var stationConfig = {
         name: "系统类型",
         domainName: "system_type_domain"
       },
-      systemTypeName:{
-    	  name: "系统类型",
+      systemTypeName: {
+        name: "系统类型",
       },
-      systemPrincipleName:{
-    	  name: "系统原理",
+      systemPrincipleName: {
+        name: "系统原理",
       },
       systemPrinciple: {
         type: "select",
@@ -2982,11 +2988,11 @@ var stationConfig = {
         name: "保护对象",
         domainName: "protect_object_domain"
       },
-      protectObjectName:{
-    	    name: "保护对象",
+      protectObjectName: {
+        name: "保护对象",
       },
-      powerSupplyTypeName:{
-    	name:"电源类型"
+      powerSupplyTypeName: {
+        name: "电源类型"
       },
       ratedCurrent: {
         type: "number",

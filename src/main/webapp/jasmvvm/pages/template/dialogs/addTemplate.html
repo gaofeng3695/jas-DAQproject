@@ -911,7 +911,7 @@
 			},
 			_isInit: function (id, options,isChange) {
 				var that = this;
-				var initArry = ['project_oid', 'pipeline_oid', 'tenders_oid', 'pipe_segment_or_cross_oid'];
+				var initArry = ['project_oid', 'pipeline_oid', 'tenders_oid', 'pipe_segment_or_cross_oid','pipe_station_oid'];
 				if (initArry.indexOf(id) > -1 && options.length > 0) {
 					if(!that.formData[id]) that.$set(that.formData, id, options[0].key);
 					if(isChange){
