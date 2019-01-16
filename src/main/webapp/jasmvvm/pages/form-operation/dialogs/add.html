@@ -288,7 +288,7 @@
 
 								<el-table-column label="阈值" align="center" min-width="120px">
 									<template slot-scope="scope">
-										<el-input v-model="scope.row.domain" v-show="isSql(scope.row) || isJson(scope.row)" placeholder="阈值语句" size="small"></el-input>
+										<el-input v-model="scope.row.domain" v-show="isSqlorJson(scope.row)" placeholder="阈值语句" size="small"></el-input>
 									</template>
 								</el-table-column>
 

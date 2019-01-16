@@ -757,7 +757,133 @@
           "format": "GeoJSON",
           "strategy": "all"
         }]
-      }]
+      },
+         {
+        "id": "layerSet007",
+        "label": "工艺",
+        "layerSet": [{
+          "id": "daq_station_pipe_pressure_test",
+          "label": "管道试压",
+          "index": 20,
+          "type": "Vector",
+          "source": "Vector",
+          "flash": true,
+          "visible": false,
+          "loader": "jas",
+          "format": "GeoJSON",
+          "strategy": "all",
+          "outFields":"oid"
+        },{
+          "id": "daq_station_pipe_sweeping",
+          "label": "管道扫水",
+          "index": 20,
+          "type": "Vector",
+          "source": "Vector",
+          "flash": true,
+          "visible": false,
+          "loader": "jas",
+          "format": "GeoJSON",
+          "strategy": "all",
+          "outFields":"oid"
+        },{
+          "id": "daq_station_entrance_and_exit",
+          "label": "进出站口",
+          "index": 20,
+          "type": "Vector",
+          "source": "Vector",
+          "flash": true,
+          "visible": false,
+          "loader": "jas",
+          "format": "GeoJSON",
+          "strategy": "all",
+          "outFields":"oid"
+        },{
+          "id": "daq_station_condensing_tube",
+          "label": "排凝管",
+          "index": 20,
+          "type": "Vector",
+          "source": "Vector",
+          "flash": true,
+          "visible": false,
+          "loader": "jas",
+          "format": "GeoJSON",
+          "strategy": "all",
+          "outFields":"oid"
+        },{
+          "id": "daq_station_reserved_interface",
+          "label": "预留甩头",
+          "index": 20,
+          "type": "Vector",
+          "source": "Vector",
+          "flash": true,
+          "visible": false,
+          "loader": "jas",
+          "format": "GeoJSON",
+          "strategy": "all",
+          "outFields":"oid"
+        },{
+          "id": "daq_station_closure",
+          "label": "封堵物",
+          "index": 20,
+          "type": "Vector",
+          "source": "Vector",
+          "flash": true,
+          "visible": false,
+          "loader": "jas",
+          "format": "GeoJSON",
+          "strategy": "all",
+          "outFields":"oid"
+        },{
+          "id": "daq_station_vent_stack",
+          "label": "放空立管",
+          "index": 20,
+          "type": "Vector",
+          "source": "Vector",
+          "flash": true,
+          "visible": false,
+          "loader": "jas",
+          "format": "GeoJSON",
+          "strategy": "all",
+          "outFields":"oid"
+        },{
+          "id": "daq_station_auxiliary_anode_bed",
+          "label": "辅助阳极地床",
+          "index": 20,
+          "type": "Vector",
+          "source": "Vector",
+          "flash": true,
+          "visible": false,
+          "loader": "jas",
+          "format": "GeoJSON",
+          "strategy": "all",
+          "outFields":"oid"
+        },{
+          "id": "daq_station_internal_corrosion_detection_sys",
+          "label": "内腐蚀检测系统",
+          "index": 20,
+          "type": "Vector",
+          "source": "Vector",
+          "flash": true,
+          "visible": false,
+          "loader": "jas",
+          "format": "GeoJSON",
+          "strategy": "all",
+          "outFields":"oid"
+        },{
+          "id": "daq_station_cp_power_supply",
+          "label": "阴保电源",
+          "index": 20,
+          "type": "Vector",
+          "source": "Vector",
+          "flash": true,
+          "visible": false,
+          "loader": "jas",
+          "format": "GeoJSON",
+          "strategy": "all",
+          "outFields":"oid"
+        }]
+         }
+      ]
     }]
   },
   "proxy": [],
