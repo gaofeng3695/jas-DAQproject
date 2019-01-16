@@ -141,7 +141,7 @@ var stationConfig = {
         optionUrl: '/daq/privilege/getCurrentUnitId.do',
         isRequired: true,
         disabled: true,
-        isInit: true
+//        isInit: true
       },
       constructUnitName: {
         name: '施工单位',
@@ -440,7 +440,7 @@ var stationConfig = {
         optionUrl: '/daq/privilege/getCurrentUnitId.do',
         isRequired: true,
         disabled: true,
-        isInit: true
+//        isInit: true
       },
       constructUnitName: {
         name: '施工单位',
@@ -740,7 +740,7 @@ var stationConfig = {
         optionUrl: '/daq/privilege/getCurrentUnitId.do',
         isRequired: true,
         disabled: true,
-        isInit: true
+//        isInit: true
       },
       constructUnitName: {
         name: '施工单位',
@@ -1027,7 +1027,7 @@ var stationConfig = {
         optionUrl: '/daq/privilege/getCurrentUnitId.do',
         isRequired: true,
         disabled: true,
-        isInit: true
+//        isInit: true
       },
       constructUnitName: {
         name: '施工单位',
@@ -1322,7 +1322,7 @@ var stationConfig = {
         optionUrl: '/daq/privilege/getCurrentUnitId.do',
         isRequired: true,
         disabled: true,
-        isInit: true
+//        isInit: true
       },
       constructUnitName: {
         name: '施工单位',
@@ -1606,7 +1606,7 @@ var stationConfig = {
         optionUrl: '/daq/privilege/getCurrentUnitId.do',
         isRequired: true,
         disabled: true,
-        isInit: true
+//        isInit: true
       },
       constructUnitName: {
         name: '施工单位',
@@ -1905,7 +1905,7 @@ var stationConfig = {
         optionUrl: '/daq/privilege/getCurrentUnitId.do',
         isRequired: true,
         disabled: true,
-        isInit: true
+//        isInit: true
       },
       constructUnitName: {
         name: '施工单位',
@@ -2216,7 +2216,7 @@ var stationConfig = {
         optionUrl: '/daq/privilege/getCurrentUnitId.do',
         isRequired: true,
         disabled: true,
-        isInit: true
+//        isInit: true
       },
       constructUnitName: {
         name: '施工单位',
@@ -2605,7 +2605,7 @@ var stationConfig = {
         optionUrl: '/daq/privilege/getCurrentUnitId.do',
         isRequired: true,
         disabled: true,
-        isInit: true
+//        isInit: true
       },
       constructUnitName: {
         name: '施工单位',
@@ -2946,7 +2946,7 @@ var stationConfig = {
         optionUrl: '/daq/privilege/getCurrentUnitId.do',
         isRequired: true,
         disabled: true,
-        isInit: true
+//        isInit: true
       },
       constructUnitName: {
         name: '施工单位',
