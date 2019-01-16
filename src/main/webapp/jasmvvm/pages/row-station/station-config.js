@@ -2905,8 +2905,8 @@ var stationConfig = {
       pipelineOid: {
         type: 'select',
         name: '管线名称',
-        childSelect: ['pipeStationOid', 'medianStakeOid'],
-        childUrl: ['/daq/privilege/getPipeStationListByPipelineOid.do', '/daq/privilege/getMedianStakeList.do'],
+        childSelect: ['pipeStationOid'],
+        childUrl: ['/daq/privilege/getPipeStationListByPipelineOid.do'],
         isRequired: true,
         isInit: true
       },
