@@ -29,11 +29,31 @@ import org.apache.commons.lang.StringUtils;
 )
 public class DaqStationDetectionInfiltrationQuery extends BaseJavaQuery {
 
+    /**
+     * 项目oid
+     */
     private String projectOid;
-    private String pipelineOid;
+
+    /**
+     * 标段oid
+     */
     private String tendersOid;
+
+    /**
+     * 管线oid
+     */
+    private String pipelineOid;
+
+    /**
+     * 站场/阀室编号
+     */
     private String pipeStationOid;
+
+    /**
+     * 焊口编号
+     */
     private String weldOid;
+
     @Override
     public String getQuerySql() {
         StringBuffer sqlBuffer = new StringBuffer();
