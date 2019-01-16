@@ -43,7 +43,7 @@ import javax.persistence.TemporalType;
 )
 @UniqueConstraints(
         strategys ={
-                @UniqueConstraintStrategy(columnNames={"pipeStationOid","deviceCode"},name="编号")
+                @UniqueConstraintStrategy(columnNames={"pipeStationOid","deviceCode"},name="同一线站场/阀室下编号不能重复")
         }
 )
 @JdbcEntity(name="daq_station_condensing_tube")
