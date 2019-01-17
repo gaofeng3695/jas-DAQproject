@@ -153,6 +153,11 @@ public class StationReservedInterfaceBo extends CommonBaseBo {
 	 * 采集日期 
 	 */
 	private Date collectionDate; 
+	
+	/**
+	 * 施工日期 
+	 */
+	private Date constructDate; 
 
 	/**
 	 * 审核状态 
@@ -385,6 +390,16 @@ public class StationReservedInterfaceBo extends CommonBaseBo {
 
 	public void setCollectionDate(Date collectionDate) {
 		this.collectionDate = collectionDate;
+	}
+
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+	@Temporal(TemporalType.DATE)
+	public Date getConstructDate() {
+		return constructDate;
+	}
+
+	public void setConstructDate(Date constructDate) {
+		this.constructDate = constructDate;
 	}
 
 	public Integer getApproveStatus() {
