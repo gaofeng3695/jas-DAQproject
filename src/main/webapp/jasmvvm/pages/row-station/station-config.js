@@ -13,7 +13,7 @@ var stationConfig = {
       'startMedianStakeOid',
       'endMedianStakeOid',
     ],
-    tableFields: [ //
+    tableFields: [
       'approveStatus',
       'projectName',
       'tendersName',
@@ -141,7 +141,6 @@ var stationConfig = {
         optionUrl: '/daq/privilege/getCurrentUnitId.do',
         isRequired: true,
         disabled: true,
-//        isInit: true
       },
       constructUnitName: {
         name: '施工单位',
@@ -176,7 +175,6 @@ var stationConfig = {
       },
       collectionDate: {
         type: "date",
-        isRequired: true,
         name: "采集日期",
       },
       approveStatus: {
@@ -203,6 +201,7 @@ var stationConfig = {
       startRelativeMileage: {
         type: "number",
         name: "相对起始桩位置(m)",
+        isRequired: true,
         max: 999999,
         precision: 2
       },
@@ -217,6 +216,7 @@ var stationConfig = {
       endRelativeMileage: {
         type: "number",
         name: "相对结束桩位置(m)",
+        isRequired: true,
         max: 999999,
         precision: 2
       },
@@ -262,7 +262,8 @@ var stationConfig = {
       },
       pressureTestDate: {
         type: "date",
-        name: "试压日期"
+        name: "试压日期",
+        isRequired: true,
       },
       processDescription: {
         type: "input",
@@ -426,8 +427,6 @@ var stationConfig = {
       pipeStationOid: {
         type: 'select',
         name: '站场/阀室编号',
-        //  childSelect: ['weldOid'],
-        //childUrl: ['daq/processWeld/getProcessWeldList.do'],
         isRequired: true,
         isInit: true
       },
@@ -440,7 +439,6 @@ var stationConfig = {
         optionUrl: '/daq/privilege/getCurrentUnitId.do',
         isRequired: true,
         disabled: true,
-//        isInit: true
       },
       constructUnitName: {
         name: '施工单位',
@@ -475,7 +473,6 @@ var stationConfig = {
       },
       collectionDate: {
         type: "date",
-        isRequired: true,
         name: "采集日期"
       },
       approveStatus: {
@@ -502,6 +499,7 @@ var stationConfig = {
       startRelativeMileage: {
         type: "number",
         name: "相对起始桩位置(m)",
+        isRequired: true,
         max: 999999,
         precision: 2
       },
@@ -516,6 +514,7 @@ var stationConfig = {
       endRelativeMileage: {
         type: "number",
         name: "相对结束桩位置(m)",
+        isRequired: true,
         max: 999999,
         precision: 2
       },
@@ -629,11 +628,12 @@ var stationConfig = {
       'pointx',
       'pointy',
       'pointz',
+      'constructDate',
       'constructUnitName',
-      'supervisionUnitName',
-      'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
+      'supervisionUnitName',
+      'supervisionEngineer',
       'remarks'
     ],
     addFields0: [
@@ -641,11 +641,12 @@ var stationConfig = {
       "tendersOid",
       "pipelineOid",
       "pipeStationOid",
+      'constructDate',
       'constructUnit',
-      'supervisionUnit',
-      'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
+      'supervisionUnit',
+      'supervisionEngineer',
     ],
     addFields1: [ //
       'medianStakeOid',
@@ -654,10 +655,10 @@ var stationConfig = {
       'pointz',
     ],
     addFields2: [ //
-      'weldOid',
       'deviceCode',
       'deviceName',
       'deviceType',
+      'weldOid',
       'connectionPipelineType',
       'connectionPipelineCode',
     ],
@@ -667,11 +668,12 @@ var stationConfig = {
       "tendersName",
       "pipelineName",
       "pipeStationName",
+      'constructDate',
       'constructUnitName',
-      'supervisionUnitName',
-      'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
+      'supervisionUnitName',
+      'supervisionEngineer',
       'approveStatus'
     ],
     detailFields1: [ //
@@ -681,10 +683,10 @@ var stationConfig = {
       'pointz',
     ],
     detailFields2: [ //
-      'weldCode',
       'deviceCode',
       'deviceName',
       'deviceType',
+      'weldCode',
       'connectionPipelineType',
       'connectionPipelineCode',
     ],
@@ -734,13 +736,17 @@ var stationConfig = {
       pipeStationName: {
         name: '站场/阀室编号',
       },
+      constructDate: {
+        type: "date",
+        isRequired: true,
+        name: "施工日期",
+      },
       constructUnit: {
         type: 'select',
         name: '施工单位',
         optionUrl: '/daq/privilege/getCurrentUnitId.do',
         isRequired: true,
         disabled: true,
-//        isInit: true
       },
       constructUnitName: {
         name: '施工单位',
@@ -767,6 +773,7 @@ var stationConfig = {
       supervisionEngineer: {
         type: 'input',
         name: '监理工程师',
+        isRequired: true,
         rules: [{
           min: "0",
           max: 50,
@@ -775,7 +782,7 @@ var stationConfig = {
       },
       collectionDate: {
         type: "date",
-        isRequired: true,
+
         name: "采集日期"
       },
       approveStatus: {
@@ -794,7 +801,7 @@ var stationConfig = {
       medianStakeOid: {
         type: 'select',
         name: '桩号',
-        isRequired: true
+
       },
       medianStakeCode: {
         name: "桩号"
@@ -820,7 +827,7 @@ var stationConfig = {
       weldOid: {
         type: "select",
         name: "焊口编号",
-        isRequired: true
+
       },
       weldCode: {
         name: "焊口编号"
@@ -828,6 +835,7 @@ var stationConfig = {
       deviceCode: {
         type: "input",
         name: "编号",
+        isRequired: true,
         rules: [{
           min: "0",
           max: 40,
@@ -837,6 +845,7 @@ var stationConfig = {
       deviceName: {
         type: "input",
         name: "名称",
+        isRequired: true,
         rules: [{
           min: "0",
           max: 45,
@@ -846,6 +855,7 @@ var stationConfig = {
       deviceType: {
         type: "select",
         name: "类型",
+        isRequired: true,
         options: [{
           key: 1,
           value: "进站"
@@ -912,11 +922,12 @@ var stationConfig = {
       'pointy',
       'pointz',
       'executingAgency',
+      'constructDate',
       'constructUnitName',
-      'supervisionUnitName',
-      'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
+      'supervisionUnitName',
+      'supervisionEngineer',
       'remarks'
     ],
     addFields0: [
@@ -925,10 +936,11 @@ var stationConfig = {
       "pipelineOid",
       "pipeStationOid",
       'constructUnit',
-      'supervisionUnit',
-      'supervisionEngineer',
+      'constructDate',
       'collectionPerson',
       'collectionDate',
+      'supervisionUnit',
+      'supervisionEngineer',
     ],
     addFields1: [ //
       'medianStakeOid',
@@ -952,11 +964,12 @@ var stationConfig = {
       "tendersName",
       "pipelineName",
       "pipeStationName",
+      'constructDate',
       'constructUnitName',
-      'supervisionUnitName',
-      'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
+      'supervisionUnitName',
+      'supervisionEngineer',
       'approveStatus'
     ],
     detailFields1: [ //
@@ -1013,13 +1026,16 @@ var stationConfig = {
       pipeStationOid: {
         type: 'select',
         name: '站场/阀室编号',
-        // childSelect: ['weldOid'],
-        // childUrl: ['daq/processWeld/getProcessWeldList.do'],
         isRequired: true,
         isInit: true
       },
       pipeStationName: {
         name: '站场/阀室编号',
+      },
+      constructDate: {
+        type: "date",
+        isRequired: true,
+        name: "施工日期"
       },
       constructUnit: {
         type: 'select',
@@ -1027,7 +1043,6 @@ var stationConfig = {
         optionUrl: '/daq/privilege/getCurrentUnitId.do',
         isRequired: true,
         disabled: true,
-//        isInit: true
       },
       constructUnitName: {
         name: '施工单位',
@@ -1058,11 +1073,11 @@ var stationConfig = {
           min: "0",
           max: 50,
           message: "不能超过50个字"
-        }]
+        }],
+        isRequired: true
       },
       collectionDate: {
         type: "date",
-        isRequired: true,
         name: "采集日期"
       },
       approveStatus: {
@@ -1080,8 +1095,7 @@ var stationConfig = {
       },
       medianStakeOid: {
         type: 'select',
-        name: '桩号',
-        isRequired: true
+        name: '桩号'
       },
       medianStakeCode: {
         name: '桩号',
@@ -1113,6 +1127,7 @@ var stationConfig = {
       deviceCode: {
         type: "input",
         name: "编号",
+        isRequired: true,
         rules: [{
           min: "0",
           max: 40,
@@ -1122,6 +1137,7 @@ var stationConfig = {
       deviceName: {
         type: "input",
         name: "名称",
+        isRequired: true,
         rules: [{
           min: "0",
           max: 45,
@@ -1211,6 +1227,7 @@ var stationConfig = {
       'pointy',
       'pointz',
       'address',
+      'constructDate',
       'constructUnitName',
       'supervisionUnitName',
       'supervisionEngineer',
@@ -1223,11 +1240,13 @@ var stationConfig = {
       "tendersOid",
       "pipelineOid",
       "pipeStationOid",
+      'constructDate',
       'constructUnit',
-      'supervisionUnit',
-      'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
+      'supervisionUnit',
+      'supervisionEngineer',
+
     ],
     addFields1: [ //
       'pointx',
@@ -1249,11 +1268,12 @@ var stationConfig = {
       "tendersName",
       "pipelineName",
       "pipeStationName",
+      'constructDate',
       'constructUnitName',
-      'supervisionUnitName',
-      'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
+      'supervisionUnitName',
+      'supervisionEngineer',
       'approveStatus'
     ],
     detailFields1: [ //
@@ -1308,13 +1328,16 @@ var stationConfig = {
       pipeStationOid: {
         type: 'select',
         name: '站场/阀室编号',
-        // childSelect: ['weldOid'],
-        // childUrl: ['daq/processWeld/getProcessWeldList.do'],
         isRequired: true,
         isInit: true
       },
       pipeStationName: {
         name: '站场/阀室编号',
+      },
+      constructDate: {
+        type: "date",
+        isRequired: true,
+        name: "施工日期"
       },
       constructUnit: {
         type: 'select',
@@ -1322,7 +1345,6 @@ var stationConfig = {
         optionUrl: '/daq/privilege/getCurrentUnitId.do',
         isRequired: true,
         disabled: true,
-//        isInit: true
       },
       constructUnitName: {
         name: '施工单位',
@@ -1348,6 +1370,7 @@ var stationConfig = {
       },
       supervisionEngineer: {
         type: 'input',
+        isRequired: true,
         name: '监理工程师',
         rules: [{
           min: "0",
@@ -1357,7 +1380,6 @@ var stationConfig = {
       },
       collectionDate: {
         type: "date",
-        isRequired: true,
         name: "采集日期"
       },
       approveStatus: {
@@ -1394,6 +1416,7 @@ var stationConfig = {
       deviceCode: {
         type: "input",
         name: "编号",
+        isRequired: true,
         rules: [{
           min: "0",
           max: 40,
@@ -1403,6 +1426,7 @@ var stationConfig = {
       deviceName: {
         type: "input",
         name: "名称",
+        isRequired: true,
         rules: [{
           min: "0",
           max: 45,
@@ -1493,11 +1517,12 @@ var stationConfig = {
       'pointz',
       'address',
       'tubeMakingMethodsName',
+      'constructDate',
       'constructUnitName',
-      'supervisionUnitName',
-      'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
+      'supervisionUnitName',
+      'supervisionEngineer',
       'remarks'
     ],
     addFields0: [
@@ -1505,11 +1530,12 @@ var stationConfig = {
       "tendersOid",
       "pipelineOid",
       "pipeStationOid",
+      'constructDate',
       'constructUnit',
-      'supervisionUnit',
-      'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
+      'supervisionUnit',
+      'supervisionEngineer',
     ],
     addFields1: [ //
       'pointx',
@@ -1532,11 +1558,12 @@ var stationConfig = {
       "tendersName",
       "pipelineName",
       "pipeStationName",
+      'constructDate',
       'constructUnitName',
-      'supervisionUnitName',
-      'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
+      'supervisionUnitName',
+      'supervisionEngineer',
       'approveStatus'
     ],
     detailFields1: [ //
@@ -1592,13 +1619,16 @@ var stationConfig = {
       pipeStationOid: {
         type: 'select',
         name: '站场/阀室编号',
-        // childSelect: ['weldOid'],
-        // childUrl: ['daq/processWeld/getProcessWeldList.do'],
         isRequired: true,
         isInit: true
       },
       pipeStationName: {
         name: '站场/阀室编号',
+      },
+      constructDate: {
+        name: "施工日期",
+        type: "date",
+        isRequired: true,
       },
       constructUnit: {
         type: 'select',
@@ -1606,7 +1636,6 @@ var stationConfig = {
         optionUrl: '/daq/privilege/getCurrentUnitId.do',
         isRequired: true,
         disabled: true,
-//        isInit: true
       },
       constructUnitName: {
         name: '施工单位',
@@ -1633,6 +1662,7 @@ var stationConfig = {
       supervisionEngineer: {
         type: 'input',
         name: '监理工程师',
+        isRequired: true,
         rules: [{
           min: "0",
           max: 50,
@@ -1641,7 +1671,6 @@ var stationConfig = {
       },
       collectionDate: {
         type: "date",
-        isRequired: true,
         name: "采集日期"
       },
       approveStatus: {
@@ -1677,6 +1706,7 @@ var stationConfig = {
       },
       deviceCode: {
         type: "input",
+        isRequired: true,
         name: "编号",
         rules: [{
           min: "0",
@@ -1687,6 +1717,7 @@ var stationConfig = {
       deviceName: {
         type: "input",
         name: "名称",
+        isRequired: true,
         rules: [{
           min: "0",
           max: 45,
@@ -1751,7 +1782,7 @@ var stationConfig = {
       },
       address: {
         type: "input",
-        name: "地址",
+        name: "具体地址",
         rules: [{
           min: "0",
           max: 100,
@@ -1787,10 +1818,10 @@ var stationConfig = {
       'distance',
       'constructDate',
       'constructUnitName',
-      'supervisionUnitName',
-      'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
+      'supervisionUnitName',
+      'supervisionEngineer',
       'remarks'
     ],
     addFields0: [
@@ -1800,10 +1831,10 @@ var stationConfig = {
       "pipeStationOid",
       'constructDate',
       'constructUnit',
-      'supervisionUnit',
-      'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
+      'supervisionUnit',
+      'supervisionEngineer',
     ],
     addFields1: [ //
       'pointx',
@@ -1812,7 +1843,6 @@ var stationConfig = {
     ],
     addFields2: [ //
       'deviceCode',
-      // 'deviceName',
       'manufactureNumber',
       'distance',
     ],
@@ -1822,11 +1852,12 @@ var stationConfig = {
       "tendersName",
       "pipelineName",
       "pipeStationName",
+      'constructDate',
       'constructUnitName',
-      'supervisionUnitName',
-      'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
+      'supervisionUnitName',
+      'supervisionEngineer',
       'approveStatus'
     ],
     detailFields1: [ //
@@ -1878,8 +1909,6 @@ var stationConfig = {
       pipeStationOid: {
         type: 'select',
         name: '站场/阀室编号',
-        // childSelect: ['weldOid'],
-        // childUrl: ['daq/processWeld/getProcessWeldList.do'],
         isRequired: true,
         isInit: true
       },
@@ -1890,14 +1919,14 @@ var stationConfig = {
         type: "date",
         isRequired: true,
         name: "施工日期",
-        lessDateScope:['collectionDate'],//第一个数组表示 小于的日期，第二个数组表示大于的日期。默认是小于今天 today 默认为今天
-        maxDateScope:[],
-        isLessToday:true,//默认是小于今天的
-  	    pickerOptions:{//用于设置默认是小于今天的
-  	    	disabledDate:function(time){
-  				return time.getTime()>new Date().getTime()
-  			}
-  	    }
+        lessDateScope: ['collectionDate'], //第一个数组表示 小于的日期，第二个数组表示大于的日期。默认是小于今天 today 默认为今天
+        maxDateScope: [],
+        isLessToday: true, //默认是小于今天的
+        pickerOptions: { //用于设置默认是小于今天的
+          disabledDate: function (time) {
+            return time.getTime() > new Date().getTime()
+          }
+        }
       },
       constructUnit: {
         type: 'select',
@@ -1905,7 +1934,6 @@ var stationConfig = {
         optionUrl: '/daq/privilege/getCurrentUnitId.do',
         isRequired: true,
         disabled: true,
-//        isInit: true
       },
       constructUnitName: {
         name: '施工单位',
@@ -1932,6 +1960,7 @@ var stationConfig = {
       supervisionEngineer: {
         type: 'input',
         name: '监理工程师',
+        isRequired: true,
         rules: [{
           min: "0",
           max: 50,
@@ -1940,16 +1969,15 @@ var stationConfig = {
       },
       collectionDate: {
         type: "date",
-        isRequired: true,
         name: "采集日期",
-        lessDateScope:[],//表示小于的日期
-        maxDateScope:['constructDate'],  //表示大于的日期
-        isLessToday:true,//默认是小于今天的
-  	    pickerOptions:{//用于设置默认是小于今天的
-  	    	disabledDate:function(time){
-  				return time.getTime()>new Date().getTime()
-  			}
-  	    }
+        lessDateScope: [], //表示小于的日期
+        maxDateScope: ['constructDate'], //表示大于的日期
+        isLessToday: true, //默认是小于今天的
+        pickerOptions: { //用于设置默认是小于今天的
+          disabledDate: function (time) {
+            return time.getTime() > new Date().getTime()
+          }
+        }
       },
       approveStatus: {
         type: 'input',
@@ -1987,6 +2015,7 @@ var stationConfig = {
       deviceCode: {
         type: "input",
         name: "设备编号",
+        isRequired: true,
         rules: [{
           min: "0",
           max: 40,
@@ -2005,6 +2034,7 @@ var stationConfig = {
       manufactureNumber: {
         type: "select",
         name: "出厂编号",
+        isRequired: true,
         // rules: [{
         //   min: "0",
         //   max: 70,
@@ -2049,10 +2079,10 @@ var stationConfig = {
       'backfillMaterialName',
       'auxiliaryAnodeNum',
       'burialWayName',
+      'grossWeight',
       'pointx',
       'pointy',
       'pointz',
-      'grossWeight',
       'cableLength',
       'protectLength',
       'anodeMaterialName',
@@ -2062,12 +2092,12 @@ var stationConfig = {
       'hasVentHole',
       'anodeBedConnectionPower',
       'embedmentDate',
-      'constructDate',
+      // 'constructDate',
       'constructUnitName',
-      'supervisionUnitName',
-      'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
+      'supervisionUnitName',
+      'supervisionEngineer',
       'installLocationDes',
       'remarks'
     ],
@@ -2076,12 +2106,13 @@ var stationConfig = {
       "tendersOid",
       "pipelineOid",
       "pipeStationOid",
-      'constructDate',
+      'embedmentDate',
       'constructUnit',
-      'supervisionUnit',
-      'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
+      'supervisionUnit',
+      'supervisionEngineer',
+
     ],
     addFields1: [ //
       'medianStakeOid',
@@ -2108,7 +2139,6 @@ var stationConfig = {
       'hasWaterFloodingSys',
       'hasVentHole',
       'anodeBedConnectionPower',
-      'embedmentDate',
     ],
     addNames: ["基本信息", "位置信息", "辅助阳极地床信息"],
     detailFields0: [ //
@@ -2116,12 +2146,12 @@ var stationConfig = {
       "tendersName",
       "pipelineName",
       "pipeStationName",
-      "constructDate",
+      "embedmentDate",
       'constructUnitName',
-      'supervisionUnitName',
-      'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
+      'supervisionUnitName',
+      'supervisionEngineer',
       'approveStatus'
     ],
     detailFields1: [ //
@@ -2149,7 +2179,6 @@ var stationConfig = {
       'hasWaterFloodingSys',
       'hasVentHole',
       'anodeBedConnectionPower',
-      'embedmentDate',
     ],
     fieldsConfig: {
       projectOid: {
@@ -2200,15 +2229,15 @@ var stationConfig = {
       constructDate: {
         type: "date",
         name: "施工日期",
-        isRequired: true,
-        lessDateScope:['collectionDate'],//表示小于的日期
-        maxDateScope:[],  //表示大于的日期
-        isLessToday:true,//默认是小于今天的
-  	    pickerOptions:{//用于设置默认是小于今天的
-  	    	disabledDate:function(time){
-  				return time.getTime()>new Date().getTime()
-  			}
-  	    }
+        // isRequired: true,
+        // lessDateScope: ['collectionDate'], //表示小于的日期
+        // maxDateScope: [], //表示大于的日期
+        isLessToday: true, //默认是小于今天的
+        pickerOptions: { //用于设置默认是小于今天的
+          disabledDate: function (time) {
+            return time.getTime() > new Date().getTime()
+          }
+        }
       },
       constructUnit: {
         type: 'select',
@@ -2216,7 +2245,7 @@ var stationConfig = {
         optionUrl: '/daq/privilege/getCurrentUnitId.do',
         isRequired: true,
         disabled: true,
-//        isInit: true
+        //        isInit: true
       },
       constructUnitName: {
         name: '施工单位',
@@ -2243,6 +2272,7 @@ var stationConfig = {
       supervisionEngineer: {
         type: 'input',
         name: '监理工程师',
+        isRequired: true,
         rules: [{
           min: "0",
           max: 50,
@@ -2251,16 +2281,16 @@ var stationConfig = {
       },
       collectionDate: {
         type: "date",
-        isRequired: true,
+        // isRequired: true,
         name: "采集日期",
-        lessDateScope:[],//表示小于的日期
-        maxDateScope:['constructDate'],  //表示大于的日期
-        isLessToday:true,//默认是小于今天的
-  	    pickerOptions:{//用于设置默认是小于今天的
-  	    	disabledDate:function(time){
-  				return time.getTime()>new Date().getTime()
-  			}
-  	    }
+        // lessDateScope: [], //表示小于的日期
+        // maxDateScope: ['constructDate'], //表示大于的日期
+        // isLessToday: true, //默认是小于今天的
+        // pickerOptions: { //用于设置默认是小于今天的
+        //   disabledDate: function (time) {
+        //     return time.getTime() > new Date().getTime()
+        //   }
+        // }
       },
       approveStatus: {
         type: 'input',
@@ -2277,14 +2307,16 @@ var stationConfig = {
       },
       medianStakeOid: {
         type: "select",
-        name: "桩号"
+        name: "桩号",
+        isRequired: true,
       },
       medianStakeCode: {
         name: "桩号"
       },
       relativeMileage: {
         type: "number",
-        name: "相对里程(m)",
+        name: "相对桩位置(m)",
+        isRequired: true,
         max: 999999,
         precision: 2
       },
@@ -2309,6 +2341,7 @@ var stationConfig = {
       deviceCode: {
         type: "input",
         name: "地床编号",
+        isRequired: true,
         rules: [{
           min: "0",
           max: 40,
@@ -2366,12 +2399,12 @@ var stationConfig = {
         precision: 0
       },
       burialWay: {
-        name: "埋设",
+        name: "埋设方式",
         type: "select",
         domainName: "burial_way_domain"
       },
       burialWayName: {
-        name: "埋设"
+        name: "埋设方式"
       },
       grossWeight: {
         type: "number",
@@ -2455,7 +2488,8 @@ var stationConfig = {
       },
       embedmentDate: {
         type: "date",
-        name: "埋设日期"
+        name: "埋设日期",
+        isRequired: true
       }
     }
   },
@@ -2489,12 +2523,13 @@ var stationConfig = {
       'systemPrincipleName',
       'developmentUnit',
       'putIntoDate',
-      'constructDate',
+      // 'constructDate',
       'constructUnitName',
-      'supervisionUnitName',
-      'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
+      'supervisionUnitName',
+      'supervisionEngineer',
+
       'remarks'
     ],
     addFields0: [
@@ -2503,11 +2538,12 @@ var stationConfig = {
       "pipelineOid",
       "pipeStationOid",
       'constructUnit',
-      'constructDate',
-      'supervisionUnit',
-      'supervisionEngineer',
+      'putIntoDate',
       'collectionPerson',
       'collectionDate',
+      'supervisionUnit',
+      'supervisionEngineer',
+
     ],
     addFields1: [ //
       'startMedianStakeOid',
@@ -2522,7 +2558,6 @@ var stationConfig = {
       'systemType',
       'systemPrinciple',
       'developmentUnit',
-      'putIntoDate',
     ],
     addNames: ["基本信息", "位置信息", "内腐蚀检测信息"],
     detailFields0: [ //
@@ -2530,12 +2565,12 @@ var stationConfig = {
       "tendersName",
       "pipelineName",
       "pipeStationName",
-      'constructDate',
+      'putIntoDate',
       'constructUnitName',
-      'supervisionUnitName',
-      'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
+      'supervisionUnitName',
+      'supervisionEngineer',
       'approveStatus'
     ],
     detailFields1: [ //
@@ -2551,7 +2586,6 @@ var stationConfig = {
       'systemTypeName',
       'systemPrincipleName',
       'developmentUnit',
-      'putIntoDate',
     ],
     fieldsConfig: {
       projectOid: {
@@ -2605,7 +2639,7 @@ var stationConfig = {
         optionUrl: '/daq/privilege/getCurrentUnitId.do',
         isRequired: true,
         disabled: true,
-//        isInit: true
+        //        isInit: true
       },
       constructUnitName: {
         name: '施工单位',
@@ -2632,6 +2666,7 @@ var stationConfig = {
       supervisionEngineer: {
         type: 'input',
         name: '监理工程师',
+        isRequired: true,
         rules: [{
           min: "0",
           max: 50,
@@ -2640,30 +2675,30 @@ var stationConfig = {
       },
       collectionDate: {
         type: "date",
-        isRequired: true,
+        // isRequired: true,
         name: "采集日期",
-        lessDateScope:[],//表示小于的日期
-        maxDateScope:['constructDate'],  //表示大于的日期
-        isLessToday:true,//默认是小于今天的
-  	    pickerOptions:{//用于设置默认是小于今天的
-  	    	disabledDate:function(time){
-  				return time.getTime()>new Date().getTime()
-  			}
-  	    }
+        // lessDateScope: [], //表示小于的日期
+        // maxDateScope: ['constructDate'], //表示大于的日期
+        isLessToday: true, //默认是小于今天的
+        pickerOptions: { //用于设置默认是小于今天的
+          disabledDate: function (time) {
+            return time.getTime() > new Date().getTime()
+          }
+        }
       },
-      constructDate: {
-        type: "date",
-        isRequired: true,
-        name: "施工日期",
-        lessDateScope:['collectionDate'],//表示小于的日期
-        maxDateScope:[],  //表示大于的日期
-        isLessToday:true,//默认是小于今天的
-  	    pickerOptions:{//用于设置默认是小于今天的
-  	    	disabledDate:function(time){
-  				return time.getTime()>new Date().getTime()
-  			}
-  	    }
-      },
+      // constructDate: {
+      //   type: "date",
+      //   isRequired: true,
+      //   name: "施工日期",
+      //   lessDateScope: ['collectionDate'], //表示小于的日期
+      //   maxDateScope: [], //表示大于的日期
+      //   isLessToday: true, //默认是小于今天的
+      //   pickerOptions: { //用于设置默认是小于今天的
+      //     disabledDate: function (time) {
+      //       return time.getTime() > new Date().getTime()
+      //     }
+      //   }
+      // },
       approveStatus: {
         type: 'input',
         name: '审核状态',
@@ -2679,7 +2714,8 @@ var stationConfig = {
       },
       startMedianStakeOid: {
         type: "select",
-        name: "起始桩号"
+        name: "起始桩号",
+        isRequired: true,
       },
       startMedianStakeCode: {
         name: "起始桩号"
@@ -2690,22 +2726,26 @@ var stationConfig = {
       startRelativeMileage: {
         type: "number",
         name: "相对起始桩里程(m)",
+        isRequired: true,
         max: 999999,
         precision: 2
       },
       endMedianStakeOid: {
         type: "select",
-        name: "结束桩号"
+        name: "结束桩号",
+        isRequired: true,
       },
       endRelativeMileage: {
         type: "number",
         name: "相对结束桩里程(m)",
+        isRequired: true,
         max: 999999,
         precision: 2
       },
       deviceCode: {
         type: "input",
         name: "设备编号",
+        isRequired: true,
         rules: [{
           min: "0",
           max: 40,
@@ -2724,6 +2764,7 @@ var stationConfig = {
       manufactureNumber: {
         type: "input",
         name: "出厂编号",
+        isRequired: true,
         rules: [{
           min: "0",
           max: 70,
@@ -2799,12 +2840,12 @@ var stationConfig = {
       'electrifiedPoint',
       'givenVoltage',
       'referenceVoltage',
-      'constructDate',
+      // 'constructDate',
       'constructUnitName',
-      'supervisionUnitName',
-      'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
+      'supervisionUnitName',
+      'supervisionEngineer',
       'remarks'
     ],
     addFields0: [
@@ -2812,12 +2853,12 @@ var stationConfig = {
       "tendersOid",
       "pipelineOid",
       "pipeStationOid",
-      'constructDate',
+      'putIntoDate',
       'constructUnit',
-      'supervisionUnit',
-      'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
+      'supervisionUnit',
+      'supervisionEngineer',
     ],
     addFields1: [
       'pointx',
@@ -2837,7 +2878,6 @@ var stationConfig = {
       'anodeNum',
       'powerSupplyType',
       'manufacturerName',
-      'putIntoDate',
       'designLife',
       'electrifiedPoint',
       'givenVoltage',
@@ -2849,12 +2889,12 @@ var stationConfig = {
       "tendersName",
       "pipelineName",
       "pipeStationName",
-      "constructDate",
+      "putIntoDate",
       'constructUnitName',
-      'supervisionUnitName',
-      'supervisionEngineer',
       'collectionPerson',
       'collectionDate',
+      'supervisionUnitName',
+      'supervisionEngineer',
       'approveStatus'
     ],
     detailFields1: [ //
@@ -2875,7 +2915,6 @@ var stationConfig = {
       'anodeNum',
       'powerSupplyTypeName',
       'manufacturerName',
-      'putIntoDate',
       'designLife',
       'electrifiedPoint',
       'givenVoltage',
@@ -2927,26 +2966,26 @@ var stationConfig = {
       pipeStationName: {
         name: '站场/阀室编号',
       },
-      constructDate: {
-        type: "date",
-        name: "施工日期",
-        isRequired: true,
-        lessDateScope:['collectionDate'],//表示小于的日期
-        maxDateScope:[],  //表示大于的日期
-        isLessToday:true,//默认是小于今天的
-  	    pickerOptions:{//用于设置默认是小于今天的
-  	    	disabledDate:function(time){
-  				return time.getTime()>new Date().getTime()
-  			}
-  	    }
-      },
+      // constructDate: {
+      //   type: "date",
+      //   name: "施工日期",
+      //   isRequired: true,
+      //   lessDateScope: ['collectionDate'], //表示小于的日期
+      //   maxDateScope: [], //表示大于的日期
+      //   isLessToday: true, //默认是小于今天的
+      //   pickerOptions: { //用于设置默认是小于今天的
+      //     disabledDate: function (time) {
+      //       return time.getTime() > new Date().getTime()
+      //     }
+      //   }
+      // },
       constructUnit: {
         type: 'select',
         name: '施工单位',
         optionUrl: '/daq/privilege/getCurrentUnitId.do',
         isRequired: true,
         disabled: true,
-//        isInit: true
+        //        isInit: true
       },
       constructUnitName: {
         name: '施工单位',
@@ -2973,6 +3012,7 @@ var stationConfig = {
       supervisionEngineer: {
         type: 'input',
         name: '监理工程师',
+        isRequired: true,
         rules: [{
           min: "0",
           max: 50,
@@ -2981,16 +3021,16 @@ var stationConfig = {
       },
       collectionDate: {
         type: "date",
-        isRequired: true,
+        // isRequired: true,
         name: "采集日期",
-        lessDateScope:[],//表示小于的日期
-        maxDateScope:['constructDate'],  //表示大于的日期
-        isLessToday:true,//默认是小于今天的
-  	    pickerOptions:{//用于设置默认是小于今天的
-  	    	disabledDate:function(time){
-  				return time.getTime()>new Date().getTime()
-  			}
-  	    }
+        // lessDateScope: [], //表示小于的日期
+        // maxDateScope: ['constructDate'], //表示大于的日期
+        isLessToday: true, //默认是小于今天的
+        pickerOptions: { //用于设置默认是小于今天的
+          disabledDate: function (time) {
+            return time.getTime() > new Date().getTime()
+          }
+        }
       },
       approveStatus: {
         type: 'input',
@@ -3026,6 +3066,7 @@ var stationConfig = {
       deviceCode: {
         type: "input",
         name: "设备编号",
+        isRequired: true,
         rules: [{
           min: "0",
           max: 40,
@@ -3035,6 +3076,7 @@ var stationConfig = {
       deviceName: {
         type: "input",
         name: "设备名称",
+        isRequired: true,
         rules: [{
           min: "0",
           max: 45,
@@ -3044,6 +3086,7 @@ var stationConfig = {
       manufactureNumber: {
         type: "input",
         name: "出厂编号",
+        isRequired: true,
         rules: [{
           min: "0",
           max: 70,
