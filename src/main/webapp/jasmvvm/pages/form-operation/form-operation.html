@@ -143,7 +143,7 @@
 		mounted: function () {
 			//this.getdataSoucreAndType();
 			// this.add();
-			this.search();
+			this._requestTable();
 		},
 		methods: {
 			add: function () {
@@ -157,6 +157,7 @@
 				});
 			},
 			search: function () {
+				this.currentPage = 1;
 				this._requestTable();
 			},
 			_requestTable: function (str, cb) {
@@ -297,11 +298,11 @@
 			},
 			handleSizeChange: function (val) {
 				this.pageSize = val;
-				this.search();
+				this._requestTable();
 			},
 			handleCurrentChange: function (val) {
 				this.currentPage = val;
-				this.search();
+				this._requestTable();
 			}
 		},
 	});
