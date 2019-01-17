@@ -60,7 +60,7 @@ public class StationReservedInterfaceQuery extends BaseJavaQuery {
 				+ "sta.create_user_name,sta.create_datetime,sta.modify_user_id,sta.modify_user_name,sta.modify_datetime,sta.active,sta.geom,"
 				+ "sta.project_oid,pro.project_name,sta.tenders_oid,te.tenders_name, sta.pipeline_oid,pi.pipeline_name,sta.pipe_station_oid,"
 				+ "ps.pipe_station_name,u.unit_name as construct_unit_name,pu.unit_name as supervision_unit_name,to_char(sta.collection_date, 'YYYY-MM-DD') as collection_date,"
-				+ "case when sta.approve_status = -1 then '驳回' when sta.approve_status = 1 then '待审核' when sta.approve_status = 2 then '审核通过' "
+				+ "to_char(sta.construct_date, 'YYYY-MM-DD') as construct_date,case when sta.approve_status = -1 then '驳回' when sta.approve_status = 1 then '待审核' when sta.approve_status = 2 then '审核通过' "
 				+ "else '未上报' end as approve_status_name FROM daq_station_reserved_interface sta "
 				+ "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = sta.project_oid "
 				+ "LEFT JOIN (SELECT oid, pipeline_name, active FROM daq_pipeline where active=1) pi ON pi.oid =sta.pipeline_oid "
