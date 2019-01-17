@@ -148,6 +148,11 @@ public class StationEntranceAndExit extends CommonJdbcEntity {
 	private Date collectionDate; 
 
 	/**
+	 * 施工日期 
+	 */
+	private Date constructDate; 
+
+	/**
 	 * 备注 
 	 */
 	private String remarks; 
@@ -337,6 +342,16 @@ public class StationEntranceAndExit extends CommonJdbcEntity {
 	public void setCollectionDate(Date collectionDate) {
 		this.collectionDate = collectionDate; 
 		super.setField("collectionDate");
+	}
+
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+	@Temporal(TemporalType.DATE)
+	public Date getConstructDate() {
+		return constructDate;
+	}
+
+	public void setConstructDate(Date constructDate) {
+		this.constructDate = constructDate;
 	}
 
 	public String getRemarks() {
