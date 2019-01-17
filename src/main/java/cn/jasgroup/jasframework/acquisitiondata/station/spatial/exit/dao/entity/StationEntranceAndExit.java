@@ -352,6 +352,7 @@ public class StationEntranceAndExit extends CommonJdbcEntity {
 
 	public void setConstructDate(Date constructDate) {
 		this.constructDate = constructDate;
+		super.setField("constructDate");
 	}
 
 	public String getRemarks() {
