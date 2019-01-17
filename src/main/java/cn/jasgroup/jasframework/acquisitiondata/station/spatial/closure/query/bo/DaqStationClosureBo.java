@@ -138,6 +138,11 @@ public class DaqStationClosureBo extends CommonBaseBo {
     private String tubeMakingMethodsName;
 
     /**
+     * 施工日期
+     */
+    private Date constructDate;
+
+    /**
      * 施工单位
      */
     private String constructUnit;
@@ -186,6 +191,16 @@ public class DaqStationClosureBo extends CommonBaseBo {
      * 备注
      */
     private String remarks;
+
+    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+    @Temporal(TemporalType.DATE)
+    public Date getConstructDate() {
+        return constructDate;
+    }
+
+    public void setConstructDate(Date constructDate) {
+        this.constructDate = constructDate;
+    }
 
     public String getOid() {
         return oid;

@@ -130,6 +130,11 @@ public class DaqStationCondensingTube extends CommonJdbcEntity {
     private String executingAgency;
 
     /**
+     * 施工日期
+     */
+    private Date constructDate;
+
+    /**
      * 施工单位
      */
     private String constructUnit;
@@ -162,9 +167,20 @@ public class DaqStationCondensingTube extends CommonJdbcEntity {
 	/**
 	 * 空间数据状态 
 	 */
-	private String geoState; 
-    
-	public String getGeoState() {
+	private String geoState;
+
+    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+    @Temporal(TemporalType.DATE)
+    public Date getConstructDate() {
+        return constructDate;
+    }
+
+    public void setConstructDate(Date constructDate) {
+        this.constructDate = constructDate;
+        super.setField("constructDate");
+    }
+
+    public String getGeoState() {
 		return geoState; 
 	}
 
