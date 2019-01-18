@@ -147,7 +147,22 @@
 		    <artifactId>poi-tl</artifactId>
 		    <version>1.4.1</version>
 		</dependency>
-		
+		<dependency>
+			<groupId>cn.jasgroup.jasframework</groupId>
+			<artifactId>jasframework-document</artifactId>
+			<version>3.0.1-SNAPSHOT</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.elasticsearch.client</groupId>
+					<artifactId>transport</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.elasticsearch.client</groupId>
+			<artifactId>transport</artifactId>
+			<version>6.2.2</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
