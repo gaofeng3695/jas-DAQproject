@@ -350,20 +350,21 @@ public class PipeDao {
 	 */
 	public List<PipeScannerBo> queryHotPipeScannerInfo(List<String> oids){
 		Map<String,Object> param = new HashMap<String,Object>();
-		String sql = "select concat_ws(';','Z',p.project_code,pipe_code,pipe_diameter||'*'||wall_thickness,tt.code_name,ttt.code_name,pipe_length,pipe_weight,stove_serial_num,tttt.code_name,manufacture_factory,coating_factory,to_char(production_date,'yyyy-MM-dd')) as scanner_context,"
-				+ "p.project_code,pipe_code,pipe_length,pipe_weight,stove_serial_num,tttt.code_name as external_coating_type,manufacture_factory,coating_factory,to_char(production_date,'yyyy-MM-dd') as production_date,"
-				+ "concat_ws(',',pipe_diameter||'*'||wall_thickness,tt.code_name,ttt.code_name) as pipe_info "
-				+ "from daq_material_pipe t "
-				+ "left join (select code_id,code_name from sys_domain t where t.domain_name='pipe_forming_method_domain' and t.active=1) tt on tt.code_id=t.pipe_forming_method "
-				+ "left join (select code_id,code_name from sys_domain t where t.domain_name='grade_domain' and t.active=1) ttt on ttt.code_id=t.grade "
-				+ "left join (select code_id,code_name from sys_domain t where t.domain_name='coating_type_domain' and t.active=1) tttt on tttt.code_id=t.external_coating_type "
-				+ "left join (select oid,project_code from daq_project) p on p.oid=t.project_oid "
-				+ "where t.active=1 and t.is_cut=0 ";
+		String sql = "select concat_ws(';','RW',p.project_code,t.hot_bends_code,t.diameter||'*'||t.wall_thickness,pf.code_name,tt.code_name,t.pipe_length,t.curve_length,t.angle_bending,ct.code_name,t.manufacture_factory,to_char(t.production_date,'yyyy-MM-dd')) as scanner_context,"
+					+ "p.project_code,t.hot_bends_code as pipe_code,"
+					+"concat_ws(',',t.diameter||'*'||t.wall_thickness,pf.code_name,tt.code_name)as pipe_info,"
+					+"t.pipe_length,t.curve_length,t.angle_bending,ct.code_name as external_coating_type,t.manufacture_factory,to_char(production_date,'yyyy-MM-dd') as production_date"
+					+" from daq_material_hot_bends t " 
+					+"left join (select oid,project_code from daq_project where active=1) p on p.oid=t.project_oid "
+					+"left join (select code_id,code_name from sys_domain t where t.domain_name='pipe_forming_method_domain' and t.active=1) pf on pf.code_id=t.pipe_forming_method "
+					+"left join (select code_id,code_name from sys_domain t where t.domain_name='grade_domain' and t.active=1) tt on tt.code_id=t.pipe_grade "
+					+"left join (select code_id,code_name from sys_domain t where t.domain_name='coating_type_domain' and t.active=1) ct on ct.code_id=t.external_coating_type "
+					+"where t.active=1";
 		if(oids!=null && oids.size()>0){
 			sql += "and t.oid in (:oids) ";
 			param.put("oids", oids);
 		}
-		sql += " order by t.pipe_code";
+		sql += " order by t.hot_bends_code";
 		return this.baseNamedParameterJdbcTemplate.queryForList(sql, param,PipeScannerBo.class);
 	}
 	
