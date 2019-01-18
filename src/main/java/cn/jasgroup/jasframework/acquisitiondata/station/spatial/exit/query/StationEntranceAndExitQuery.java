@@ -62,7 +62,7 @@ public class StationEntranceAndExitQuery extends BaseJavaQuery {
 	@Override
 	public String getQuerySql() {
 		String sql = "SELECT sta.oid,sta.device_code,sta.device_name,sta.device_type,case when sta.device_type = 0 then '进站' when sta.device_type = 1 then '出站' when sta.device_type = 2 then '分输' else '' end as device_type_name,"
-					+ "	sta.weld_oid,spw.weld_code,sta.connection_pipeline_type,sta.connection_pipeline_code,sta.median_stake_oid,me.median_stake_code,sta.relative_mileage, "
+					+ "	sta.weld_oid,spw.weld_code,sta.connection_pipeline_type,sta.connection_pipeline_code,sta.median_stake_oid,me.median_stake_code,sta.relative_mileage,"
 					+ "sta.pointx,sta.pointy,sta.pointz,sta.construct_unit,sta.supervision_unit,sta.supervision_engineer,sta.collection_person,"
 					+ "sta.approve_status,sta.geo_state,sta.remarks,sta.create_user_id,sta.create_user_name,sta.create_datetime,sta.modify_user_id,"
 					+ "sta.modify_user_name,sta.modify_datetime,sta.active,sta.geom,sta.project_oid,pro.project_name,sta.tenders_oid,te.tenders_name, "
