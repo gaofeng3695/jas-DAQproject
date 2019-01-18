@@ -32,125 +32,161 @@ JasMap.require(function () {
 	//      }
 	//      return styleManager.pipesegment_renderer_by_pipename_style[name]
 	//  };
+	//管道试压
+	mapStyleTemplates.pipePressureTest = new ol.style.Style({
+		stroke: new ol.style.Stroke({
+			color: '#000079',
+			width: 5
+		})
+	});
+	//管道扫水
+	mapStyleTemplates.pipeSweeping = new ol.style.Style({
+		stroke: new ol.style.Stroke({
+			color: '#003e3e',
+			width: 5
+		})
+	});
+	//进出站口 点
+	mapStyleTemplates.entranceAndExit = new ol.style.Style({
+		image: new ol.style.Circle({
+			fill: new ol.style.Fill({
+				color: '#82ff46'
+			}),
+			stroke: new ol.style.Stroke({
+				color: '#409EFF',
+				width: 2
+			}),
+			radius: 5,
+		})
+	});
+	//排凝管
+	mapStyleTemplates.condensingTube = new ol.style.Style({
+		image: new ol.style.Circle({
+			fill: new ol.style.Fill({
+				color: '#ff9224'
+			}),
+			stroke: new ol.style.Stroke({
+				color: '#409EFF',
+				width: 2
+			}),
+			radius: 5,
+		})
+	});
+	//预留甩头 reservedInterface #
+	mapStyleTemplates.reservedInterface = new ol.style.Style({
+		image: new ol.style.Circle({
+			fill: new ol.style.Fill({
+				color: '#FF00FF'
+			}),
+			stroke: new ol.style.Stroke({
+				color: '#409EFF',
+				width: 2
+			}),
+			radius: 5,
+		})
+	});
+	//封堵物
+	mapStyleTemplates.stationClosure = new ol.style.Style({
+		image: new ol.style.Circle({
+			fill: new ol.style.Fill({
+				color: '#008000'
+			}),
+			stroke: new ol.style.Stroke({
+				color: '#409EFF',
+				width: 2
+			}),
+			radius: 5,
+		})
+	});
+	//辅助阳极地床
+	mapStyleTemplates.auxiliaryAnodeBed = new ol.style.Style({
+		image: new ol.style.Circle({
+			stroke: new ol.style.Stroke({
+				color: '#409EFF',
+				width: 2
+			}),
+			radius: 5,
+		})
+	});
+	// 内腐蚀检测系统
+	mapStyleTemplates.corrosionDetectionSys = new ol.style.Style({
+		stroke: new ol.style.Stroke({
+			color: '#008000',
+			width: 5
+		})
+	}); 
+	//放空立管
+	mapStyleTemplates.ventStack = new ol.style.Style({
+		image: new ol.style.Circle({
+			fill: new ol.style.Fill({
+				color: '##FFFF00'
+			}),
+			stroke: new ol.style.Stroke({
+				color: '#409EFF',
+				width: 2
+			}),
+			radius: 5,
+		})
+	});
+	// 阴保电源
+	mapStyleTemplates.cpPowerSupply = new ol.style.Style({
+		image: new ol.style.Circle({
+			stroke: new ol.style.Stroke({
+				color: '#FF00FF',
+				width: 2
+			}),
+			radius: 5,
+		})
+	});
 	//开挖穿越
-
-	mapStyleTemplates.crossExcavation = function (feature) {
-		if (!styleManager.crossExcavationStyle) {
-			styleManager.crossExcavationStyle = {};
-		}
-		var name = feature.get('pipesegmentname');
-		if (!styleManager.crossExcavationStyle[name]) {
-			var style = new ol.style.Style({
-				stroke: new ol.style.Stroke({
-					color: '#1100b7',
-					width: 5
-				})
-			});
-			styleManager.crossExcavationStyle[name] = style;
-		}
-		return styleManager.crossExcavationStyle[name];
-	}
+	mapStyleTemplates.crossExcavation = new ol.style.Style({
+		stroke: new ol.style.Stroke({
+			color: '#1100b7',
+			width: 5
+		})
+	});
 	//穿跨越
-	mapStyleTemplates.crossAcross = function (feature) {
-		if (!styleManager.crossAcrossStyle) {
-			styleManager.crossAcrossStyle = {};
-		}
-		var name = feature.get('pipesegmentname');
-		if (!styleManager.crossAcrossStyle[name]) {
-			var style = new ol.style.Style({
-				stroke: new ol.style.Stroke({
-					color: '#fec880',
-					width: 5
-				})
-			});
-			styleManager.crossAcrossStyle[name] = style;
-		}
-		return styleManager.crossAcrossStyle[name];
-	}
+	mapStyleTemplates.crossAcross = new ol.style.Style({
+		stroke: new ol.style.Stroke({
+			color: '#fec880',
+			width: 5
+		})
+	});
 	//钻爆隧道穿越
-	mapStyleTemplates.crossDrillingBlasting = function (feature) {
-		if (!styleManager.crossDrillingBlastingStyle) {
-			styleManager.crossDrillingBlastingStyle = {};
-		}
-		var name = feature.get('pipesegmentname');
-		if (!styleManager.crossDrillingBlastingStyle[name]) {
-			var style = new ol.style.Style({
-				stroke: new ol.style.Stroke({
-					color: '#f9ff00',
-					width: 5
-				})
-			});
-			styleManager.crossDrillingBlastingStyle[name] = style;
-		}
-		return styleManager.crossDrillingBlastingStyle[name];
-	}
+	mapStyleTemplates.crossDrillingBlasting = style = new ol.style.Style({
+		stroke: new ol.style.Stroke({
+			color: '#f9ff00',
+			width: 5
+		})
+	});
 	//盾构隧道穿越
-	mapStyleTemplates.crossShield = function (feature) {
-		if (!styleManager.crossShieldStyle) {
-			styleManager.crossShieldStyle = {};
-		}
-		var name = feature.get('pipesegmentname');
-		if (!styleManager.crossShieldStyle[name]) {
-			var style = new ol.style.Style({
-				stroke: new ol.style.Stroke({
-					color: '#ccf068',
-					width: 5
-				})
-			});
-			styleManager.crossShieldStyle[name] = style;
-		}
-		return styleManager.crossShieldStyle[name];
-	} //定向钻穿越
-	mapStyleTemplates.crossDrilling = function (feature) {
-		if (!styleManager.crossDrillingStyle) {
-			styleManager.crossDrillingStyle = {};
-		}
-		var name = feature.get('pipesegmentname');
-		if (!styleManager.crossDrillingStyle[name]) {
-			var style = new ol.style.Style({
-				stroke: new ol.style.Stroke({
-					color: '#00e0fc',
-					width: 5
-				})
-			});
-			styleManager.crossDrillingStyle[name] = style;
-		}
-		return styleManager.crossDrillingStyle[name];
-	}
+	mapStyleTemplates.crossShield = new ol.style.Style({
+		stroke: new ol.style.Stroke({
+			color: '#ccf068',
+			width: 5
+		})
+	});
+	//定向钻穿越
+	mapStyleTemplates.crossDrilling = new ol.style.Style({
+		stroke: new ol.style.Stroke({
+			color: '#00e0fc',
+			width: 5
+		})
+	});
 	//箱涵穿越
-	mapStyleTemplates.crossBoxCulvert = function (feature) {
-		if (!styleManager.crossBoxCulvertStyle) {
-			styleManager.crossBoxCulvertStyle = {};
-		}
-		var name = feature.get('pipesegmentname');
-		if (!styleManager.crossBoxCulvertStyle[name]) {
-			var style = new ol.style.Style({
-				stroke: new ol.style.Stroke({
-					color: '#ae20ff',
-					width: 5
-				})
-			});
-			styleManager.crossBoxCulvertStyle[name] = style;
-		}
-		return styleManager.crossBoxCulvertStyle[name];
-	}
+	mapStyleTemplates.crossBoxCulvert = new ol.style.Style({
+		stroke: new ol.style.Stroke({
+			color: '#ae20ff',
+			width: 5
+		})
+	});
 	//顶管穿越
-	mapStyleTemplates.crossPipeJacking = function (feature) {
-		if (!styleManager.crossPipeJackingStyle) {
-			styleManager.crossPipeJackingStyle = {};
-		}
-		var name = feature.get('pipesegmentname');
-		if (!styleManager.crossPipeJackingStyle[name]) {
-			var style = new ol.style.Style({
-				stroke: new ol.style.Stroke({
-					color: '#fd22d8',
-					width: 5
-				})
-			});
-			styleManager.crossPipeJackingStyle[name] = style;
-		}
-		return styleManager.crossPipeJackingStyle[name];
-	}
+	mapStyleTemplates.crossPipeJacking = new ol.style.Style({
+		stroke: new ol.style.Stroke({
+			color: '#fd22d8',
+			width: 5
+		})
+	});
 	/**
 	 *管道焊口信息
 	 * @type {ol.style.Style}
@@ -334,39 +370,19 @@ JasMap.require(function () {
 		})
 	});
 	//水工保护
-	mapStyleTemplates.appendagesHydraulicProtection = function (feature) {
-		if (!styleManager.appendagesHydraulicProtectionStyle) {
-			styleManager.appendagesHydraulicProtectionStyle = {};
-		}
-		var name = feature.get('pipesegmentname');
-		if (!styleManager.appendagesHydraulicProtectionStyle[name]) {
-			var style = new ol.style.Style({
-				stroke: new ol.style.Stroke({
-					color: '#feff7f',
-					width: 5
-				})
-			});
-			styleManager.appendagesHydraulicProtectionStyle[name] = style;
-		}
-		return styleManager.appendagesHydraulicProtectionStyle[name];
-	}
+	mapStyleTemplates.appendagesHydraulicProtection = new ol.style.Style({
+		stroke: new ol.style.Stroke({
+			color: '#feff7f',
+			width: 5
+		})
+	});
 	//套管
-	mapStyleTemplates.appendagesCasingPipe = function (feature) {
-		if (!styleManager.appendagesCasingPipeStyle) {
-			styleManager.appendagesCasingPipeStyle = {};
-		}
-		var name = feature.get('pipesegmentname');
-		if (!styleManager.appendagesCasingPipeStyle[name]) {
-			var style = new ol.style.Style({
-				stroke: new ol.style.Stroke({
-					color: '#fd22d8',
-					width: 5
-				})
-			});
-			styleManager.appendagesCasingPipeStyle[name] = style;
-		}
-		return styleManager.appendagesCasingPipeStyle[name];
-	}
+	mapStyleTemplates.appendagesCasingPipe = new ol.style.Style({
+		stroke: new ol.style.Stroke({
+			color: '#fd22d8',
+			width: 5
+		})
+	});
 	/**管道敷设  三角形**/
 	//测量放线
 	mapStyleTemplates.laySurveying = new ol.style.Style({
