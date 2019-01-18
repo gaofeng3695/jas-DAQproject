@@ -2,6 +2,9 @@
   "description": "基于产品 JasOpenGIS 1.0",
   "style": "lightblue",
   "basePath": "",
+  "context":{
+    "tdt-key":"8922eb4987bee3daeade54e57fbabdf8"
+  },
   "resources": [{
       "type": "css",
       "url": "basepath:../lib/openlayer_v5.0.2/ol.css"
