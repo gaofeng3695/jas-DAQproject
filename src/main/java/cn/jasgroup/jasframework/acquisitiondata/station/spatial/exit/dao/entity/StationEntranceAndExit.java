@@ -9,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import cn.jasgroup.framework.spatial.annotation.Point;
 import cn.jasgroup.framework.spatial.support.enumeration.CalculateType;
+import cn.jasgroup.framework.spatial.support.enumeration.ScopeType;
+import cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.dao.entity.MedianStake;
 import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
@@ -43,11 +45,16 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
     }
 )
 @Point(
-	x = "pointx",
-	y = "pointy",
-	z = "pointz",
-	geometryColumnName = "geom",
-	calculateType = CalculateType.Coordinates
+	x="pointx",
+	y="pointy" ,
+	z="pointz" ,
+	scopeFieldName="pipelineOid",
+	scopeType=ScopeType.CURRENT,
+	geometryColumnName="geom",
+	calculateType=CalculateType.SingleAnchorAndDeviation,
+	anchorClass=MedianStake.class,
+	anchorOid="medianStakeOid",
+	deviation="relativeMileage"
 )
 @JdbcEntity(name="daq_station_entrance_and_exit")
 public class StationEntranceAndExit extends CommonJdbcEntity {
@@ -106,6 +113,11 @@ public class StationEntranceAndExit extends CommonJdbcEntity {
 	 * 中线桩(点)号 
 	 */
 	private String medianStakeOid; 
+
+	/**
+	 * 相对里程（m） 
+	 */
+	private Double relativeMileage; 
 
 	/**
 	 * 东坐标 
@@ -268,6 +280,15 @@ public class StationEntranceAndExit extends CommonJdbcEntity {
 	public void setMedianStakeOid(String medianStakeOid) {
 		this.medianStakeOid = medianStakeOid; 
 		super.setField("medianStakeOid");
+	}
+
+	public Double getRelativeMileage() {
+		return relativeMileage; 
+	}
+
+	public void setRelativeMileage(Double relativeMileage) {
+		this.relativeMileage = relativeMileage; 
+		super.setField("relativeMileage");
 	}
 
 	public Double getPointx() {

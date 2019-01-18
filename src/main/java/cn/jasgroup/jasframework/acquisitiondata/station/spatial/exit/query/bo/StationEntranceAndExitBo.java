@@ -115,6 +115,11 @@ public class StationEntranceAndExitBo extends CommonBaseBo{
 	private String medianStakeCode; 
 
 	/**
+	 * 相对里程（m） 
+	 */
+	private Double relativeMileage; 
+
+	/**
 	 * 东坐标 
 	 */
 	private Double pointx; 
@@ -334,6 +339,14 @@ public class StationEntranceAndExitBo extends CommonBaseBo{
 
 	public void setMedianStakeCode(String medianStakeCode) {
 		this.medianStakeCode = medianStakeCode;
+	}
+
+	public Double getRelativeMileage() {
+		return relativeMileage;
+	}
+
+	public void setRelativeMileage(Double relativeMileage) {
+		this.relativeMileage = relativeMileage;
 	}
 
 	public Double getPointx() {
