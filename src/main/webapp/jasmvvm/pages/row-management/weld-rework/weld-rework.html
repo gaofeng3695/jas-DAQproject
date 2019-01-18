@@ -24,51 +24,7 @@
 <body>
 	<div id="app" v-cloak>
 		<jas-list-wrapper slot="mainPanel">
-			<el-form slot="search" :model="topSearch" label-width="100px">
-				<el-row>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item label="项目名称" prop="projectOid">
-							<el-select v-model="topSearch.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
-								<el-option v-for="item in domain.project" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item label="标段名称" prop="tendersOid">
-							<el-select v-model="topSearch.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged" @visible-change="childChange($event,'projectOid','项目名称')">
-								<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item label="管线名称" prop="pipelineOid">
-							<el-select v-model="topSearch.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged" @visible-change="childChange($event,'tendersOid','标段名称')">
-								<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item label="线路段/穿跨越" prop="pipeSegmentOrCrossOid">
-							<el-select v-model="topSearch.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small" @change="pipeSegmentChanged" @visible-change="childChange($event,'pipelineOid','管线名称')">
-								<el-option v-for="item in domain.pipeSegment" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item label="返修口编号">
-							<el-select v-model="topSearch.weldOid" clearable placeholder="请选择返修口编号" size="small" @change="searchList" @visible-change="childChange($event,'pipeSegmentOrCrossOid','线路段/穿跨越')">
-								<el-option v-for="item in domain.welds" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item style="float: right;">
-							<el-button size="small" type="primary" @click="searchList">查询</el-button>
-							<el-button size="small" @click="reset">重置</el-button>
-						</el-form-item>
-					</el-col>
-				</el-row>
-			</el-form>
+			<jas-search-for-list slot="search" :form="topSearch" :fields="fields" :fields-config="fieldsConfig" @search="searchList"></jas-search-for-list>
 			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" search-path="/jdbc/commonData/reworkWeld/getPage.do"
 			  :add-url="addUrl" :detail-url="detailUrl" delete-path="/jdbc/commonData/reworkWeld/delete.do" :class-name="className"
 			  :template-code="templateCode" @locate="locate"></jas-table-for-list>
@@ -100,6 +56,50 @@
 					pipelineOid: '',
 					pipeSegmentOrCrossOid: '', //线路段
 					weldOid: '',
+				},
+				fields: [ //
+					{
+						field: "projectOid",
+						name: '项目名称'
+					}, {
+						field: "tendersOid",
+						name: '标段名称'
+					}, {
+						field: "pipelineOid",
+						name: '管线名称'
+					}, {
+						field: "pipeSegmentOrCrossOid",
+						name: '线路段/穿跨越'
+					}, {
+						name: '返修口编号',
+						field: 'weldOid'
+					}
+				],
+				fieldsConfig: {
+					projectOid: {
+						type: 'select',
+						optionUrl: '/daq/privilege/getProjectList.do',
+						childSelect: ['tendersOid'],
+						childUrl: ['/daq/privilege/getTendersList.do'],
+					},
+					tendersOid: {
+						type: 'select',
+						childSelect: ['pipelineOid'],
+						childUrl: ['/daq/privilege/getPipelineListByTendersOid.do'],
+					},
+					pipelineOid: {
+						type: 'select',
+						childSelect: ['pipeSegmentOrCrossOid'],
+						childUrl: ['/daq/privilege/getPipeSegmentOrCrossList.do'],
+					},
+					pipeSegmentOrCrossOid: {
+						type: 'select',
+						childSelect: ['weldOid'],
+						childUrl: ['/daq/weld/getOnlyWeldList.do'],
+					},
+					weldOid: {
+						type: "select"
+					}
 				},
 				tableFields: [{
 						field: 'approveStatus',
@@ -171,14 +171,7 @@
 						name: '采集日期',
 						field: 'collectionDate'
 					}
-				],
-				domain: {
-					project: [], //项目
-					tenders: [], //标段
-					pipeline: [], //管线
-					pipeSegment: [],
-					welds: [] //焊口编号
-				}
+				]
 			}
 		},
 
@@ -189,129 +182,10 @@
 			this.privilegeCode = param.privilegeCode;
 			this.templateCode = param.templateCode; //|| "stake-2";
 			this.className = param.className; // || 'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';
-			this.requestDomainFromBizTable(
-				'/daq/privilege/getProjectList.do', {},
-				function (
-					arr) {
-					that.domain.project = arr;
-				});
 
 		},
 		methods: {
-			requestDomainFromBizTable: function (url, obj, cb) {
-				var that = this;
-				var url = jasTools.base.rootPath + url;
-				jasTools.ajax.post(url, obj, function (data) {
-					cb && cb(data.rows);
-				}, function () {
-					cb && cb([]);
-				});
-			},
-			childChange: function (event, id, name) {
-				if (event && !this.topSearch[id]) {
-					top.Vue.prototype.$message({
-						type: 'warning',
-						message: "请先选择" + name
-					});
-				}
-			},
-			projectChanged: function (val) {
-				var that = this;
-				if (val) {
-					this.requestDomainFromBizTable(
-						'/daq/privilege/getTendersList.do', {
-							projectOid: val
-						},
-						function (arr) {
-							that.domain.tenders = arr;
-						});
-				}
-				  else {
-					 that.domain.tenders = [];
-				 }
-				that.topSearch.tendersOid = '';
-				that.domain.pipeline = [];
-				that.topSearch.pipelineOid = '';
-				that.domain.pipeSegment = [];
-				that.topSearch.pipeSegmentOrCrossOid = '';
-				that.domain.welds = [];
-				that.topSearch.weldOid = '';
-				that.searchList();
-			},
-			tendersChanged: function (val) { //根据标段触发管线列表
-				var that = this;
-				if (val) {
-					this
-						.requestDomainFromBizTable(
-							'/daq/privilege/getPipelineListByTendersOid.do', {
-								tendersOid: val
-							},
-							function (arr) {
-								that.domain.pipeline = arr;
-							});
-				}
-				 else {
-					 that.domain.pipeline = [];
-				}
-				that.topSearch.pipelineOid = '';
-				that.domain.pipeSegment = [];
-				that.topSearch.pipeSegmentOrCrossOid = '';
-				that.domain.welds = [];
-				that.topSearch.weldOid = '';
-				that.searchList();
-			},
-			pipelineChanged: function (val) { //根据管线触发线路段/穿跨越
-				var that = this;
-				if (val) {
-					this
-						.requestDomainFromBizTable(
-							'/daq/privilege/getPipeSegmentOrCrossList.do', {
-								pipelineOid: val
-							},
-							function (arr) {
-								that.domain.pipeSegment = arr;
-							});
-				}
-				 else {
-					 that.domain.pipeSegment = [];
-				 }
-				that.topSearch.pipeSegmentOrCrossOid = '';
-				that.domain.welds = [];
-				that.topSearch.weldOid = '';
-				that.searchList();
-			},
-			pipeSegmentChanged: function (val) {
-				var that = this;
-				if (val) {
-					this
-						.requestDomainFromBizTable(
-							'/daq/weld/getOnlyWeldList.do', {
-								pipeSegmentOrCrossOid: val
-							},
-							function (arr) {
-								that.domain.welds = arr;
-							});
-				}
-				 else {
-					 that.domain.welds = [];
-	
-				}
-				that.topSearch.weldOid = '';
-				that.searchList();
-			},
 			searchList: function () {
-				this.$refs.table.search();
-			},
-			reset: function () {
-				this.topSearch.projectOid = '';
-				this.topSearch.pipelineOid = '';
-				this.topSearch.tendersOid = '';
-				this.topSearch.weldOid = '';
-				this.topSearch.pipeSegmentOrCrossOid = '';
-				this.domain.tenders = [];
-				this.domain.pipeline = [];
-				this.domain.pipeSegment = [];
-			    this.domain.welds = [];
 				this.$refs.table.search();
 			},
 			locate: function (row) {

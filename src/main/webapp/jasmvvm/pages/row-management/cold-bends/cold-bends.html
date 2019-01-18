@@ -26,56 +26,7 @@
 
 
 		<jas-list-wrapper slot="mainPanel">
-			<el-form slot="search" :model="topSearch" label-width="100px">
-				<el-row>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item label="项目名称" prop="projectOid">
-							<el-select v-model="topSearch.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
-								<el-option v-for="item in domain.project" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item label="标段名称" prop="tendersOid">
-							<el-select v-model="topSearch.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged" @visible-change="childChange($event,'projectOid','项目名称')">
-								<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item label="管线名称" prop="pipelineOid">
-							<el-select v-model="topSearch.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="pipelineChanged" @visible-change="childChange($event,'tendersOid','标段名称')">
-								<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item label="线路段/穿跨越" prop="pipeSegmentOrCrossOid">
-							<el-select v-model="topSearch.pipeSegmentOrCrossOid" clearable placeholder="请选择线路段" size="small" @change="searchList" @visible-change="childChange($event,'pipelineOid','管线名称')">
-								<el-option v-for="item in domain.pipeSegment" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item label="冷弯管编号">
-							<el-input v-model="topSearch.pipeColdBendingCode" clearable placeholder="请输入冷弯管编号" size="small"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item label="是否使用">
-							<el-select v-model="topSearch.isUse" clearable placeholder="请选择是否使用" size="small" @change="searchList">
-								<el-option v-for="item in domain.isUses" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-						<el-form-item style="float: right;">
-							<el-button size="small" type="primary" @click="searchList">查询</el-button>
-							<el-button size="small" @click="reset">重置</el-button>
-						</el-form-item>
-					</el-col>
-				</el-row>
-			</el-form>
+			<jas-search-for-list slot="search" :form="topSearch" :fields="fields" :fields-config="fieldsConfig" @search="searchList"></jas-search-for-list>
 			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" search-path="/jdbc/commonData/coldBendingPipe/getPage.do"
 			  :add-url="addUrl" :detail-url="detailUrl" delete-path="/daq/clodBendingPipe/delete.do" :class-name="className" :template-code="templateCode"></jas-table-for-list>
 		</jas-list-wrapper>
@@ -108,88 +59,145 @@
 					pipeColdBendingCode: '', //冷弯管编号
 					isUse: ''
 				},
-				tableFields: [ {
-					field: 'approveStatus',
-					name: '审核状态',
-					formatter: function (a, b, value, c) {
-						if (value == -1) return '驳回';
-						if (value == 0) return '未上报';
-						if (value == 1) return '待审核';
-						if (value == 2) return '通过';
-						return value;
+				fields: [ //
+					{
+						field: "projectOid",
+						name: '项目名称'
+					}, {
+						field: "tendersOid",
+						name: '标段名称'
+					}, {
+						field: "pipelineOid",
+						name: '管线名称'
+					}, {
+						field: "pipeSegmentOrCrossOid",
+						name: '线路段/穿跨越'
+					}, {
+						name: '冷弯管编号',
+						field: 'pipeColdBendingCode'
+					},
+					{
+						name: '是否使用',
+						field: 'isUse'
 					}
-				},{
-					name: '项目名称',
-					field: 'projectName'
-				},{
-					name: '是否使用',
-					field: 'isUse'
-				}, {
-					name: '管线名称',
-					field: 'pipelineName'
-				},  {
-					name: '标段名称',
-					field: 'tendersName'
-				},{
-					name:"线路段名称",
-					field:"pipeSegmentOrCrossName"
-				},{
-					name: '冷弯管编号',
-					field: 'pipeColdBendingCode'
-				},{
-					name: '原材料钢管编号',
-					field: 'pipeCode'
-				}, {
-					name: '管子弯曲设计要求技术标准',
-					field: 'pipeBendingStandards'
-				},  {
-					name: '曲率半径（mm)',
-					field: 'bendingRadius'
-				}, {
-					name: '弯曲角度(°)',
-					field: 'bendingAngle'
-				}, {
-					name: '曲线长度(m)',
-					field: 'curveLength'
-				}, {
-					name: '直管段最小长度(m)',
-					field: 'straightPipeLength'
-				},{
-					name: '椭圆率(%)',
-					field: 'ellipticity'
-				},  {
-					name: '壁厚减薄率(%)',
-					field: 'wallThicknessRedurate'
+				],
+				fieldsConfig: {
+					projectOid: {
+						type: 'select',
+						optionUrl: '/daq/privilege/getProjectList.do',
+						childSelect: ['tendersOid'],
+						childUrl: ['/daq/privilege/getTendersList.do'],
+					},
+					tendersOid: {
+						type: 'select',
+						childSelect: ['pipelineOid'],
+						childUrl: ['/daq/privilege/getPipelineListByTendersOid.do'],
+					},
+					pipelineOid: {
+						type: 'select',
+						childSelect: ['pipeSegmentOrCrossOid'],
+						childUrl: ['/daq/privilege/getPipeSegmentOrCrossList.do'],
+					},
+					pipeSegmentOrCrossOid: {
+						type: 'select',
+					},
+					pipeColdBendingCode: {
+						type: 'input'
+					},
+					isUse: {
+						type: 'select',
+						options: [{
+							key: 0,
+							value: '否'
+						}, {
+							key: 1,
+							value: '是'
+						}],
+					}
 				},
-				{
-					name: '长度(m)',
-					field: 'pipeLength'
-				},  {
-					name: '管径(mm)',
-					field: 'pipeDiameter'
-				}, {
-					name: '壁厚(mm)',
-					field: 'wallThickness'
-				},
-				{
-					name: '制作时间',
-					field: 'produceDate'
-				}, {
-					name: '施工单位',
-					field: 'constructUnitName'
-				}, {
-					name: '监理单位',
-					field: 'supervisionUnitName'
-				}, {
-					name: '数据采集人',
-					field: 'collectionPerson'
-				}, {
-					name: '监理工程师',
-					field: 'supervisionEngineer'
-				}, {
-					name: '采集时间',
-					field: 'collectionDate'
-				}],
+				tableFields: [{
+						field: 'approveStatus',
+						name: '审核状态',
+						formatter: function (a, b, value, c) {
+							if (value == -1) return '驳回';
+							if (value == 0) return '未上报';
+							if (value == 1) return '待审核';
+							if (value == 2) return '通过';
+							return value;
+						}
+					}, {
+						name: '项目名称',
+						field: 'projectName'
+					}, {
+						name: '是否使用',
+						field: 'isUse'
+					}, {
+						name: '管线名称',
+						field: 'pipelineName'
+					}, {
+						name: '标段名称',
+						field: 'tendersName'
+					}, {
+						name: "线路段名称",
+						field: "pipeSegmentOrCrossName"
+					}, {
+						name: '冷弯管编号',
+						field: 'pipeColdBendingCode'
+					}, {
+						name: '原材料钢管编号',
+						field: 'pipeCode'
+					}, {
+						name: '管子弯曲设计要求技术标准',
+						field: 'pipeBendingStandards'
+					}, {
+						name: '曲率半径（mm)',
+						field: 'bendingRadius'
+					}, {
+						name: '弯曲角度(°)',
+						field: 'bendingAngle'
+					}, {
+						name: '曲线长度(m)',
+						field: 'curveLength'
+					}, {
+						name: '直管段最小长度(m)',
+						field: 'straightPipeLength'
+					}, {
+						name: '椭圆率(%)',
+						field: 'ellipticity'
+					}, {
+						name: '壁厚减薄率(%)',
+						field: 'wallThicknessRedurate'
+					},
+					{
+						name: '长度(m)',
+						field: 'pipeLength'
+					}, {
+						name: '管径(mm)',
+						field: 'pipeDiameter'
+					}, {
+						name: '壁厚(mm)',
+						field: 'wallThickness'
+					},
+					{
+						name: '制作时间',
+						field: 'produceDate'
+					}, {
+						name: '施工单位',
+						field: 'constructUnitName'
+					}, {
+						name: '监理单位',
+						field: 'supervisionUnitName'
+					}, {
+						name: '数据采集人',
+						field: 'collectionPerson'
+					}, {
+						name: '监理工程师',
+						field: 'supervisionEngineer'
+					}, {
+						name: '采集时间',
+						field: 'collectionDate'
+					}
+				],
 				domain: {
 					project: [], //项目
 					tenders: [], //标段
@@ -213,106 +221,12 @@
 			this.privilegeCode = param.privilegeCode;
 			this.templateCode = param.templateCode; //|| "stake-2";
 			this.className = param.className; // || 'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';
-					this.requestDomainFromBizTable(
-				'/daq/privilege/getProjectList.do', {},
-				function (
-					arr) {
-					that.domain.project = arr;
-				});
 		},
 		methods: {
-			childChange: function (event, id, name) {
-				if (event && !this.topSearch[id]) {
-					top.Vue.prototype.$message({
-						type: 'warning',
-						message: "请先选择" + name
-					});
-				}
-			},
-			requestDomainFromBizTable: function (url, obj, cb) {
-				var that = this;
-				var url = jasTools.base.rootPath + url;
-				jasTools.ajax.post(url, obj, function (data) {
-					cb && cb(data.rows);
-				}, function () {
-					cb && cb([]);
-				});
-			},
-			projectChanged: function (val) {
-				var that = this;
-				if (val) {
-					this.requestDomainFromBizTable(
-						'/daq/privilege/getTendersList.do', {
-							projectOid: val
-						},
-						function (arr) {
-							that.domain.tenders = arr;
-						});
-				}
-				  else {
-					 that.domain.tenders = [];
-				 }
-				that.topSearch.tendersOid = '';
-				that.domain.pipeline = [];
-				that.topSearch.pipelineOid = '';
-				that.domain.pipeSegment = [];
-				that.topSearch.pipeSegmentOrCrossOid = '';
-				that.searchList();
-			},
-			tendersChanged: function (val) { //根据标段触发管线列表
-				var that = this;
-				if (val) {
-					this
-						.requestDomainFromBizTable(
-							'/daq/privilege/getPipelineListByTendersOid.do', {
-								tendersOid: val
-							},
-							function (arr) {
-								that.domain.pipeline = arr;
-							});
-				}
-				else {
-					 that.domain.pipeline = [];
-				 }
-				that.topSearch.pipelineOid = '';
-				that.domain.pipeSegment = [];
-				that.topSearch.pipeSegmentOrCrossOid = '';
-				that.searchList();
-			},
-			pipelineChanged: function (val) { //根据管线触发线路段/穿跨越
-				var that = this;
-				if (val) {
-					this
-						.requestDomainFromBizTable(
-							'/daq/privilege/getPipeSegmentOrCrossList.do', {
-								pipelineOid: val
-							},
-							function (arr) {
-								that.domain.pipeSegment = arr;
-							});
-				}
-				 else {
-					that.domain.pipeSegment = [];
-	
-				 }
-				that.topSearch.pipeSegmentOrCrossOid = '';
-				that.searchList();
-			},
 			searchList: function () {
 				this.$refs.table.search();
 			},
-			reset: function () {
-				this.topSearch.projectOid = '';
-				this.topSearch.pipelineOid = '';
-				this.topSearch.tendersOid = '';
-				this.topSearch.pipeSegmentOrCrossOid = '';
-				this.topSearch.pipeColdBendingCode = '';
-				this.topSearch.isUse='';
-				this.domain.tenders = [];
-				this.domain.pipeline = [];
-				this.domain.pipeSegment = [];
-				this.$refs.table.search();
-			},
+
 		},
 	});
 </script>

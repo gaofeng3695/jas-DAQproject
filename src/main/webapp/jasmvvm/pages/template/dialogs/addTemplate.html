@@ -224,7 +224,11 @@
 					if (that.isAddPage) {
 						data.data.functionFieldsBoList.forEach(function (item) {
 							if (item.uiType) {
-								that.$set(that.formData, item.fieldName, '');
+								if(item.fieldName=='construct_unit'){
+									that.$set(that.formData, item.fieldName, JSON.parse(localStorage.getItem("user")).unitId);	
+								}else{
+									that.$set(that.formData, item.fieldName, '');	
+								}
 							}
 						});
 						that.getAddField(fieldsGrouped);
@@ -377,7 +381,7 @@
 								lessDateScope: item.lessDateScope && item.lessDateScope.split(","), //小于日期
 								maxDateScope: item.maxDateScope && item.maxDateScope.split(","), //表示需要大于的日期
 								fieldLength: item.fieldLength || 200,
-								disabled: false,
+								disabled:item.fieldName=='construct_unit'?true:false,
 								fieldRule: that.fieldRuleObj && that.fieldRuleObj[item.fieldName]
 							};
 							if (that.fieldRuleObj && that.fieldRuleObj.frozenFile && that.fieldRuleObj.frozenFile.indexOf(obj.id) > -
@@ -493,7 +497,7 @@
 								min: item.min,
 								max: item.max || Infinity,
 								precision: item.precision || 0,
-								disabled: false,
+								disabled:item.fieldName=='construct_unit'?true:false,
 								ifLessToday: item.ifLessToday, //读取配置接口，暂时写死
 								lessDateScope: item.lessDateScope && item.lessDateScope.split(","), //小于日期
 								maxDateScope: item.maxDateScope && item.maxDateScope.split(","), //表示需要大于的日期
@@ -671,7 +675,7 @@
 								} else {
 									child.options = []; // 清空下拉选项
 								}
-								if (!isInit) { // 不是初始化
+								if (!isInit && childField!='construct_unit') { // 不是初始化
 									that.$set(that.formData, child.id, ""); // 清空子级联的value
 								}
 								//if (options.length === 1) { //只有一个选项就自动复制
@@ -907,7 +911,7 @@
 			},
 			_isInit: function (id, options,isChange) {
 				var that = this;
-				var initArry = ['project_oid', 'pipeline_oid', 'tenders_oid', 'pipe_segment_or_cross_oid'];
+				var initArry = ['project_oid', 'pipeline_oid', 'tenders_oid', 'pipe_segment_or_cross_oid','pipe_station_oid'];
 				if (initArry.indexOf(id) > -1 && options.length > 0) {
 					if(!that.formData[id]) that.$set(that.formData, id, options[0].key);
 					if(isChange){

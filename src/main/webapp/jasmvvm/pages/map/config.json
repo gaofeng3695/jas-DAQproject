@@ -173,591 +173,724 @@
       "id": "layerSet001",
       "label": "业务图层",
       "layerSet": [{
-        "id": "daq_median_stake",
-        "label": "中线桩",
-        "index": 30,
-        "renderer": {
-          "style": "centerlinestake",
-          "labelStyle": "",
-          "labelField": ""
-        },
-        "maxScale":100000,
-        "listener":{
-        "onHover":{
-          "responseType":"tip",
-          "fieldNames":"median_stake_code",
-          "template":"桩号:${median_stake_code}",
-          "callback":""
+          "id": "daq_median_stake",
+          "label": "中线桩",
+          "index": 30,
+          "renderer": {
+            "style": "centerlinestake",
+            "labelStyle": "",
+            "labelField": ""
+          },
+          "maxScale": 100000,
+          "listener": {
+            "onHover": {
+              "responseType": "tip",
+              "fieldNames": "median_stake_code",
+              "template": "桩号:${median_stake_code}",
+              "callback": ""
+            }
+          },
+          "type": "Vector",
+          "source": "Vector",
+          "flash": true,
+          "visible": false,
+          "loader": "jas",
+          "format": "GeoJSON",
+          "strategy": "all",
+          "outFields": "median_stake_code,mileage,pipeline_oid,project_oid"
+        }, {
+          "id": "daq_median_stake_polyline",
+          "label": "中线桩连线",
+          "index": 12,
+          "outFields": "pipeline_oid,project_oid,pipeline_name",
+          "type": "Vector",
+          "source": "Vector",
+          "flash": true,
+          "visible": true,
+          "declutter": false,
+          "loader": "jas",
+          "format": "GeoJSON",
+          "strategy": "all",
+          "renderer": {
+            "style": "medianStakePolyline",
+            "labelStyle": "lineLabelStyle",
+            "labelField": "pipeline_name"
           }
-        },        "type": "Vector",
-        "source": "Vector",
-        "flash": true,
-        "visible": false,
-        "loader": "jas",
-        "format": "GeoJSON",
-        "strategy": "all",
-        "outFields":"median_stake_code,mileage,pipeline_oid,project_oid"
-      },{
-        "id": "daq_median_stake_polyline",
-        "label": "中线桩连线",
-        "index": 12,
-         "outFields":"pipeline_oid,project_oid,pipeline_name",
-        "type": "Vector",
-        "source": "Vector",
-        "flash": true,
-        "visible": true,
-        "declutter":false,
-        "loader": "jas",
-        "format": "GeoJSON",
-        "strategy": "all",
-        "renderer": {
-         	"style": "medianStakePolyline",
-         	"labelStyle": "lineLabelStyle",
-         	"labelField": "pipeline_name"
-		  }
-      },{
-        "id": "daq_tenders_polyline",
-        "label": "标段",
-        "index": 10,
-         "outFields":"oid,tenders_name",
-        "type": "Vector",
-        "source": "Vector",
-        "flash": true,
-        "visible": true,
-        "declutter":false,
-        "loader": "jas",
-        "format": "GeoJSON",
-        "strategy": "all",
-        "renderer": {
-         	"style": "tendersPolyline",
-         	"labelStyle": "myLineLabelStyle",
-         	"labelField": "tenders_name"
-		  }
-      }, {
-        "id": "layerSet002",
-        "label": "管道焊接补口",
-        "layerSet": [{
-          "id": "v_daq_construction_weld",
-          "label": "焊口信息",
-          "index": 20,
-          "renderer": {
-            "style": "constructionWeld",
-            "labelStyle": "",
-            "labelField": "weld_code"
-          },
-           "listener":{
-          "onHover":{
-	          "responseType":"tip",
-	          "fieldNames":"weld_code",
-	          "template":"焊口编号:${weld_code}",
-	          "callback":""
-          }},
+        }, {
+          "id": "daq_tenders_polyline",
+          "label": "标段",
+          "index": 10,
+          "outFields": "oid,tenders_name",
           "type": "Vector",
           "source": "Vector",
           "flash": true,
-          "visible": false,
+          "visible": true,
+          "declutter": false,
           "loader": "jas",
           "format": "GeoJSON",
           "strategy": "all",
-          "outFields":"oid,weld_code,construct_unit_name,to_char,work_unit_code"
-        }, {
-          "id": "daq_weld_rework_weld",
-          "label": "焊口返修信息",
-          "index": 20,
           "renderer": {
-            "style": "weldrework",
-            "labelStyle": "",
-            "labelField": ""
-          },
-           "listener":{
-          "onHover":{
-	          "responseType":"tip",
-	          "fieldNames":"rework_weld_code",
-	          "template":"焊口返修编号：${rework_weld_code}",
-	          "callback":""
-	          }
-          },
-          "style": "pipesegment",
-          "type": "Vector",
-          "source": "Vector",
-          "flash": true,
-          "visible": false,
-          "loader": "jas",
-          "format": "GeoJSON",
-          "strategy": "all",
-            "outFields":"rework_weld_code,project_oid"
+            "style": "tendersPolyline",
+            "labelStyle": "myLineLabelStyle",
+            "labelField": "tenders_name"
+          }
         }, {
-          "id": "daq_weld_measured_result",
-          "label": "焊口测量成果信息",
-          "index": 20,
-          "renderer": {
-            "style": "weldmeasured",
-            "labelStyle": "",
-            "labelField": ""
-          },
-          "style": "pipesegment",
-          "type": "Vector",
-          "source": "Vector",
-          "flash": true,
-          "visible": false,
-          "loader": "jas",
-          "format": "GeoJSON",
-          "strategy": "all"
-        }]
-      }, {
-        "id": "layerSet003",
-        "label": "管道敷设",
-        "layerSet": [{
-          "id": "daq_lay_surveying",
-          "label": "测量放线",
-          "index": 20,
-           "renderer": {
-            "style": "laySurveying",
-            "labelStyle": "",
-            "labelField": ""
-          },
-          "style": "pipesegment",
-          "type": "Vector",
-          "source": "Vector",
-          "flash": true,
-          "visible": false,
-          "loader": "jas",
-          "format": "GeoJSON",
-          "strategy": "all"
-        }, {
-          "id": "daq_lay_pipe_trench_excavation",
-          "label": "管沟开挖",
-          "index": 20,
-           "renderer": {
-            "style": "layPipeTrenchExcavation",
-            "labelStyle": "",
-            "labelField": ""
-          },
-          "style": "pipesegment",
-          "type": "Vector",
-          "source": "Vector",
-          "flash": true,
-          "visible": false,
-          "loader": "jas",
-          "format": "GeoJSON",
-          "strategy": "all"
-        }, {
-          "id": "daq_lay_pipe_trench_backfill",
-          "label": "管沟回填",
-          "index": 20,
-           "renderer": {
-            "style": "layPipeTrenchBackfill",
-            "labelStyle": "",
-            "labelField": ""
-          },
-          "style": "pipesegment",
-          "type": "Vector",
-          "source": "Vector",
-          "flash": true,
-          "visible": false,
-          "loader": "jas",
-          "format": "GeoJSON",
-          "strategy": "all"
-        }, {
-          "id": "daq_lay_land_restoration",
-          "label": "地貌恢复",
-          "index": 20,
-           "renderer": {
-            "style": "layLandRestoration",
-            "labelStyle": "",
-            "labelField": ""
-          },
-          "style": "pipesegment",
-          "type": "Vector",
-          "source": "Vector",
-          "flash": true,
-          "visible": false,
-          "loader": "jas",
-          "format": "GeoJSON",
-          "strategy": "all"
-        }, {
-          "id": "daq_lay_thermal_insulation",
-          "label": "保温",
-          "index": 20,
-          "style": "pipesegment",
-                "renderer": {
-            "style": "layThermalInsulation",
-            "labelStyle": "",
-            "labelField": ""
-          },
-          "type": "Vector",
-          "source": "Vector",
-          "flash": true,
-          "visible": false,
-          "loader": "jas",
-          "format": "GeoJSON",
-          "strategy": "all"
-        }]
-      }, {
-        "id": "layerSet004",
-        "label": "穿跨越",
-        "layerSet": [{
-          "id": "daq_cross_excavation",
-          "label": "开挖穿越",
-          "index": 20,
-          "style": "pipesegment",
-          "type": "Vector",
-          "source": "Vector",
-          "flash": true,
-          "visible": false,
-          "loader": "jas",
-          "format": "GeoJSON",
-          "strategy": "all"
-        }, {
-          "id": "daq_cross_pipe_jacking",
-          "label": "顶管穿越",
-          "index": 20,
-          "style": "pipesegment",
-           "renderer": {
-            "style": "crossPipeJacking",
-            "labelStyle": "",
-            "labelField": ""
-          },
-          "type": "Vector",
-          "source": "Vector",
-          "flash": true,
-          "visible": false,
-          "loader": "jas",
-          "format": "GeoJSON",
-          "strategy": "all"
-        }, {
-          "id": "daq_cross_box_culvert",
-          "label": "箱涵穿越",
-          "index": 20,
-          "style": "pipesegment",
-                  "renderer": {
-            "style": "crossBoxCulvert",
-            "labelStyle": "",
-            "labelField": ""
-          },
-          "type": "Vector",
-          "source": "Vector",
-          "flash": true,
-          "visible": false,
-          "loader": "jas",
-          "format": "GeoJSON",
-          "strategy": "all"
-        }, {
-          "id": "daq_cross_drilling",
-          "label": "定向钻穿越",
-          "index": 20,
-          "style": "pipesegment",
-               "renderer": {
-            "style": "crossDrilling",
-            "labelStyle": "",
-            "labelField": ""
-          },
-          "type": "Vector",
-          "source": "Vector",
-          "flash": true,
-          "visible": false,
-          "loader": "jas",
-          "format": "GeoJSON",
-          "strategy": "all"
-        }, {
-          "id": "daq_cross_shield",
-          "label": "盾构隧道穿越",
-          "index": 20,
-          "style": "pipesegment",
-              "renderer": {
-            "style": "crossShield",
-            "labelStyle": "",
-            "labelField": ""
-          },
-          "type": "Vector",
-          "source": "Vector",
-          "flash": true,
-          "visible": false,
-          "loader": "jas",
-          "format": "GeoJSON",
-          "strategy": "all"
-        }, {
-          "id": "daq_cross_drilling_blasting",
-          "label": "钻爆隧道穿越",
-          "index": 20,
-          "style": "pipesegment",
-              "renderer": {
-            "style": "crossDrillingBlasting",
-            "labelStyle": "",
-            "labelField": ""
-          },
-          "type": "Vector",
-          "source": "Vector",
-          "flash": true,
-          "visible": false,
-          "loader": "jas",
-          "format": "GeoJSON",
-          "strategy": "all"
-        }, {
-          "id": "daq_cross_across",
-          "label": "跨越",
-          "index": 20,
-          "style": "pipesegment",
+          "id": "layerSet002",
+          "label": "管道焊接补口",
+          "layerSet": [{
+            "id": "v_daq_construction_weld",
+            "label": "焊口信息",
+            "index": 20,
             "renderer": {
-            "style": "crossAcross",
-            "labelStyle": "",
-            "labelField": ""
-          },
-          "type": "Vector",
-          "source": "Vector",
-          "flash": true,
-          "visible": false,
-          "loader": "jas",
-          "format": "GeoJSON",
-          "strategy": "all"
-        }]
-      }, {
-        "id": "layerSet005",
-        "label": "管道阴保",
-        "layerSet": [{
-          "id": "daq_cathodic_isolating_piece",
-          "label": "绝缘件",
-          "index": 20,
-           "renderer": {
-            "style": "cathodicIsolatingPiece",
-            "labelStyle": "",
-            "labelField": ""
-          },
-          "style": "pipesegment",
-          "type": "Vector",
-          "source": "Vector",
-          "flash": true,
-          "visible": false,
-          "loader": "jas",
-          "format": "GeoJSON",
-          "strategy": "all"
-        }, {
-          "id": "daq_cathodic_cable_protection",
-          "label": "阴保电缆",
-          "index": 20,
+              "style": "constructionWeld",
+              "labelStyle": "",
+              "labelField": "weld_code"
+            },
+            "listener": {
+              "onHover": {
+                "responseType": "tip",
+                "fieldNames": "weld_code",
+                "template": "焊口编号:${weld_code}",
+                "callback": ""
+              }
+            },
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all",
+            "outFields": "oid,weld_code,construct_unit_name,to_char,work_unit_code"
+          }, {
+            "id": "daq_weld_rework_weld",
+            "label": "焊口返修信息",
+            "index": 20,
             "renderer": {
-            "style": "cathodicCableProtection",
-            "labelStyle": "",
-            "labelField": ""
-          },
-          "style": "pipesegment",
-          "type": "Vector",
-          "source": "Vector",
-          "flash": true,
-          "visible": false,
-          "loader": "jas",
-          "format": "GeoJSON",
-          "strategy": "all"
+              "style": "weldrework",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "listener": {
+              "onHover": {
+                "responseType": "tip",
+                "fieldNames": "rework_weld_code",
+                "template": "焊口返修编号：${rework_weld_code}",
+                "callback": ""
+              }
+            },
+            "style": "pipesegment",
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all",
+            "outFields": "rework_weld_code,project_oid"
+          }, {
+            "id": "daq_weld_measured_result",
+            "label": "焊口测量成果信息",
+            "index": 20,
+            "renderer": {
+              "style": "weldmeasured",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "style": "pipesegment",
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all"
+          }]
         }, {
-          "id": "daq_cathodic_sacrifice_anode",
-          "label": "牺牲阳极",
-          "index": 20,
-              "renderer": {
-            "style": "cathodicSacrificeAnode",
-            "labelStyle": "",
-            "labelField": ""
-          },
-          "style": "pipesegment",
-          "type": "Vector",
-          "source": "Vector",
-          "flash": true,
-          "visible": false,
-          "loader": "jas",
-          "format": "GeoJSON",
-          "strategy": "all"
+          "id": "layerSet003",
+          "label": "管道敷设",
+          "layerSet": [{
+            "id": "daq_lay_surveying",
+            "label": "测量放线",
+            "index": 20,
+            "renderer": {
+              "style": "laySurveying",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "style": "pipesegment",
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all"
+          }, {
+            "id": "daq_lay_pipe_trench_excavation",
+            "label": "管沟开挖",
+            "index": 20,
+            "renderer": {
+              "style": "layPipeTrenchExcavation",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "style": "pipesegment",
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all"
+          }, {
+            "id": "daq_lay_pipe_trench_backfill",
+            "label": "管沟回填",
+            "index": 20,
+            "renderer": {
+              "style": "layPipeTrenchBackfill",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "style": "pipesegment",
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all"
+          }, {
+            "id": "daq_lay_land_restoration",
+            "label": "地貌恢复",
+            "index": 20,
+            "renderer": {
+              "style": "layLandRestoration",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "style": "pipesegment",
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all"
+          }, {
+            "id": "daq_lay_thermal_insulation",
+            "label": "保温",
+            "index": 20,
+            "style": "pipesegment",
+            "renderer": {
+              "style": "layThermalInsulation",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all"
+          }]
         }, {
-          "id": "daq_cathodic_insulated_joint",
-          "label": "绝缘接头保护器",
-          "index": 20,
-              "renderer": {
-            "style": "cathodicInsulatedJoint",
-            "labelStyle": "",
-            "labelField": ""
-          },
-          "style": "pipesegment",
-          "type": "Vector",
-          "source": "Vector",
-          "flash": true,
-          "visible": false,
-          "loader": "jas",
-          "format": "GeoJSON",
-          "strategy": "all"
+          "id": "layerSet004",
+          "label": "穿跨越",
+          "layerSet": [{
+            "id": "daq_cross_excavation",
+            "label": "开挖穿越",
+            "index": 20,
+            "style": "pipesegment",
+            "renderer": {
+              "style": "crossExcavation",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all"
+          }, {
+            "id": "daq_cross_pipe_jacking",
+            "label": "顶管穿越",
+            "index": 20,
+            "style": "pipesegment",
+            "renderer": {
+              "style": "crossPipeJacking",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all"
+          }, {
+            "id": "daq_cross_box_culvert",
+            "label": "箱涵穿越",
+            "index": 20,
+            "style": "pipesegment",
+            "renderer": {
+              "style": "crossBoxCulvert",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all"
+          }, {
+            "id": "daq_cross_drilling",
+            "label": "定向钻穿越",
+            "index": 20,
+            "style": "pipesegment",
+            "renderer": {
+              "style": "crossDrilling",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all"
+          }, {
+            "id": "daq_cross_shield",
+            "label": "盾构隧道穿越",
+            "index": 20,
+            "style": "pipesegment",
+            "renderer": {
+              "style": "crossShield",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all"
+          }, {
+            "id": "daq_cross_drilling_blasting",
+            "label": "钻爆隧道穿越",
+            "index": 20,
+            "style": "pipesegment",
+            "renderer": {
+              "style": "crossDrillingBlasting",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all"
+          }, {
+            "id": "daq_cross_across",
+            "label": "跨越",
+            "index": 20,
+            "style": "pipesegment",
+            "renderer": {
+              "style": "crossAcross",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all"
+          }]
         }, {
-          "id": "daq_cathodic_solid_decoupler",
-          "label": "固态去耦合器",
-          "index": 20,
-                "renderer": {
-            "style": "cathodicSolidDecoupler",
-            "labelStyle": "",
-            "labelField": ""
-          },
-          "style": "pipesegment",
-          "type": "Vector",
-          "source": "Vector",
-          "flash": true,
-          "visible": false,
-          "loader": "jas",
-          "format": "GeoJSON",
-          "strategy": "all"
+          "id": "layerSet005",
+          "label": "管道阴保",
+          "layerSet": [{
+            "id": "daq_cathodic_isolating_piece",
+            "label": "绝缘件",
+            "index": 20,
+            "renderer": {
+              "style": "cathodicIsolatingPiece",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "style": "pipesegment",
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all"
+          }, {
+            "id": "daq_cathodic_cable_protection",
+            "label": "阴保电缆",
+            "index": 20,
+            "renderer": {
+              "style": "cathodicCableProtection",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "style": "pipesegment",
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all"
+          }, {
+            "id": "daq_cathodic_sacrifice_anode",
+            "label": "牺牲阳极",
+            "index": 20,
+            "renderer": {
+              "style": "cathodicSacrificeAnode",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "style": "pipesegment",
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all"
+          }, {
+            "id": "daq_cathodic_insulated_joint",
+            "label": "绝缘接头保护器",
+            "index": 20,
+            "renderer": {
+              "style": "cathodicInsulatedJoint",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "style": "pipesegment",
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all"
+          }, {
+            "id": "daq_cathodic_solid_decoupler",
+            "label": "固态去耦合器",
+            "index": 20,
+            "renderer": {
+              "style": "cathodicSolidDecoupler",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "style": "pipesegment",
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all"
+          }, {
+            "id": "daq_cathodic_test_stake",
+            "label": "测试桩",
+            "index": 20,
+            "renderer": {
+              "style": "cathodicTestStake",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "style": "pipesegment",
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all"
+          }, {
+            "id": "daq_cathodic_polarity_drainage",
+            "label": "极性排流器",
+            "index": 20,
+            "renderer": {
+              "style": "cathodicPolarityDrainage",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "style": "pipesegment",
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all"
+          }, {
+            "id": "daq_cathodic_anode_bed",
+            "label": "辅助阳极地床",
+            "index": 20,
+            "renderer": {
+              "style": "cathodicAnodeBed",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "style": "pipesegment",
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all"
+          }]
         }, {
-          "id": "daq_cathodic_test_stake",
-          "label": "测试桩",
-          "index": 20,
-                "renderer": {
-            "style": "cathodicTestStake",
-            "labelStyle": "",
-            "labelField": ""
-          },
-          "style": "pipesegment",
-          "type": "Vector",
-          "source": "Vector",
-          "flash": true,
-          "visible": false,
-          "loader": "jas",
-          "format": "GeoJSON",
-          "strategy": "all"
-        }, {
-          "id": "daq_cathodic_polarity_drainage",
-          "label": "极性排流器",
-          "index": 20,
-                "renderer": {
-            "style": "cathodicPolarityDrainage",
-            "labelStyle": "",
-            "labelField": ""
-          },
-          "style": "pipesegment",
-          "type": "Vector",
-          "source": "Vector",
-          "flash": true,
-          "visible": false,
-          "loader": "jas",
-          "format": "GeoJSON",
-          "strategy": "all"
-        }, {
-          "id": "daq_cathodic_anode_bed",
-          "label": "辅助阳极地床",
-          "index": 20,
-                "renderer": {
-            "style": "cathodicAnodeBed",
-            "labelStyle": "",
-            "labelField": ""
-          },
-          "style": "pipesegment",
-          "type": "Vector",
-          "source": "Vector",
-          "flash": true,
-          "visible": false,
-          "loader": "jas",
-          "format": "GeoJSON",
-          "strategy": "all"
-        }]
-      }, {
-        "id": "layerSet006",
-        "label": "附属物",
-        "layerSet": [{
-          "id": "daq_appendages_mark_stake",
-          "label": "标志桩",
-          "index": 20,
-          "style": "pipesegment",
-           "renderer": {
-            "style": "appendagesMarkStake",
-            "labelStyle": "",
-            "labelField": ""
-          },
-          "type": "Vector",
-          "source": "Vector",
-          "flash": true,
-          "visible": false,
-          "loader": "jas",
-          "format": "GeoJSON",
-          "strategy": "all"
-        }, {
-          "id": "daq_appendages_electronic_label",
-          "label": "电子标签",
-          "index": 20,
-              "renderer": {
-            "style": "appendagesElectronicLabel",
-            "labelStyle": "",
-            "labelField": ""
-          },
-          "style": "pipesegment",
-          "type": "Vector",
-          "source": "Vector",
-          "flash": true,
-          "visible": false,
-          "loader": "jas",
-          "format": "GeoJSON",
-          "strategy": "all"
-        }, {
-          "id": "daq_appendages_hand_hole",
-          "label": "手孔",
-          "index": 20,
-               "renderer": {
-            "style": "appendagesHandHole",
-            "labelStyle": "",
-            "labelField": ""
-          },
-          "style": "pipesegment",
-          "type": "Vector",
-          "source": "Vector",
-          "flash": true,
-          "visible": false,
-          "loader": "jas",
-          "format": "GeoJSON",
-          "strategy": "all"
-        }, {
-          "id": "daq_appendages_obstacle",
-          "label": "地下障碍物",
-          "index": 20,
-               "renderer": {
-            "style": "appendagesObstacle",
-            "labelStyle": "",
-            "labelField": ""
-          },
-          "style": "pipesegment",
-          "type": "Vector",
-          "source": "Vector",
-          "flash": true,
-          "visible": false,
-          "loader": "jas",
-          "format": "GeoJSON",
-          "strategy": "all"
-        }, {
-          "id": "daq_appendages_hydraulic_protection",
-          "label": "水工保护",
-          "index": 20,
-          "style": "pipesegment",
-           "renderer": {
-            "style": "appendagesHydraulicProtection",
-            "labelStyle": "",
-            "labelField": ""
-          },
-          "type": "Vector",
-          "source": "Vector",
-          "flash": true,
-          "visible": false,
-          "loader": "jas",
-          "format": "GeoJSON",
-          "strategy": "all"
-        }, {
-          "id": "daq_appendages_casing_pipe",
-          "label": "套管",
-          "index": 20,
-          "style": "pipesegment",
-           "renderer": {
-            "style": "appendagesCasingPipe",
-            "labelStyle": "",
-            "labelField": ""
-          },
-          "type": "Vector",
-          "source": "Vector",
-          "flash": true,
-          "visible": false,
-          "loader": "jas",
-          "format": "GeoJSON",
-          "strategy": "all"
-        }]
-      }]
+          "id": "layerSet006",
+          "label": "附属物",
+          "layerSet": [{
+            "id": "daq_appendages_mark_stake",
+            "label": "标志桩",
+            "index": 20,
+            "style": "pipesegment",
+            "renderer": {
+              "style": "appendagesMarkStake",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all"
+          }, {
+            "id": "daq_appendages_electronic_label",
+            "label": "电子标签",
+            "index": 20,
+            "renderer": {
+              "style": "appendagesElectronicLabel",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "style": "pipesegment",
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all"
+          }, {
+            "id": "daq_appendages_hand_hole",
+            "label": "手孔",
+            "index": 20,
+            "renderer": {
+              "style": "appendagesHandHole",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "style": "pipesegment",
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all"
+          }, {
+            "id": "daq_appendages_obstacle",
+            "label": "地下障碍物",
+            "index": 20,
+            "renderer": {
+              "style": "appendagesObstacle",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "style": "pipesegment",
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all"
+          }, {
+            "id": "daq_appendages_hydraulic_protection",
+            "label": "水工保护",
+            "index": 20,
+            "style": "pipesegment",
+            "renderer": {
+              "style": "appendagesHydraulicProtection",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all"
+          }, {
+            "id": "daq_appendages_casing_pipe",
+            "label": "套管",
+            "index": 20,
+            "style": "pipesegment",
+            "renderer": {
+              "style": "appendagesCasingPipe",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all"
+          }]
+        },
+        {
+          "id": "layerSet007",
+          "label": "工艺",
+          "layerSet": [{
+            "id": "daq_station_pipe_pressure_test",
+            "label": "管道试压",
+            "index": 20,
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all",
+            "outFields": "oid"
+          }, {
+            "id": "daq_station_pipe_sweeping",
+            "label": "管道扫水",
+            "index": 20,
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all",
+            "outFields": "oid"
+          }, {
+            "id": "daq_station_entrance_and_exit",
+            "label": "进出站口",
+            "index": 20,
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all",
+            "outFields": "oid"
+          }, {
+            "id": "daq_station_condensing_tube",
+            "label": "排凝管",
+            "index": 20,
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all",
+            "outFields": "oid"
+          }, {
+            "id": "daq_station_reserved_interface",
+            "label": "预留甩头",
+            "index": 20,
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all",
+            "outFields": "oid"
+          }, {
+            "id": "daq_station_closure",
+            "label": "封堵物",
+            "index": 20,
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all",
+            "outFields": "oid"
+          }, {
+            "id": "daq_station_vent_stack",
+            "label": "放空立管",
+            "index": 20,
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all",
+            "outFields": "oid"
+          }, {
+            "id": "daq_station_auxiliary_anode_bed",
+            "label": "辅助阳极地床",
+            "index": 20,
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all",
+            "outFields": "oid"
+          }, {
+            "id": "daq_station_internal_corrosion_detection_sys",
+            "label": "内腐蚀检测系统",
+            "index": 20,
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all",
+            "outFields": "oid"
+          }, {
+            "id": "daq_station_cp_power_supply",
+            "label": "阴保电源",
+            "index": 20,
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all",
+            "outFields": "oid"
+          }]
+        }
+      ]
     }]
   },
   "proxy": [],

@@ -122,7 +122,7 @@ JasMap.require(function(){
      */
     mapStyleTemplates.lineLabelStyle = new ol.style.Style({
         text: new ol.style.Text({
-            font: '16px Calibri,sans-serif',
+            font: '13px Calibri,sans-serif',
             placement:'line',
             overflow: true,
             textBaseline:"bottom",
@@ -386,6 +386,16 @@ JasMap.require(function(){
         }),
         fill: new  ol.style.Fill({
             color: 'rgba(255,0,255,0.5)'
+        })
+    });
+    //
+    mapStyleTemplates[jasMap.Keys.defaultBufferAreaStyleName] = new ol.style.Style({
+        stroke: new  ol.style.Stroke({
+            color: '#f00',
+            width: 2
+        }),
+        fill: new  ol.style.Fill({
+            color: 'rgba(255,0,0,0.5)'
         })
     });
     return mapStyleTemplates;

@@ -56,7 +56,7 @@ JasMap.require(function(){
     mapStyleTemplates.pipesegment = new ol.style.Style({
         stroke: new ol.style.Stroke({
             color: '#ff0000',
-            width: 6
+            width: 4
         }),
         fill: new ol.style.Fill({
             color: 'rgba(225, 0, 255, 1)'
@@ -122,9 +122,9 @@ JasMap.require(function(){
      */
     mapStyleTemplates.lineLabelStyle = new ol.style.Style({
         text: new ol.style.Text({
-            font: '16px Calibri,sans-serif',
+            font: '12px 黑体,sans-serif',
             placement:'line',
-            overflow: true,
+            overflow: false,
             textBaseline:"bottom",
 //            offsetY:10,
 //            offsetX:10,

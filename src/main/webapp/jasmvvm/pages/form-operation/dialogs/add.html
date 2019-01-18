@@ -288,13 +288,13 @@
 
 								<el-table-column label="阈值" align="center" min-width="120px">
 									<template slot-scope="scope">
-										<el-input v-model="scope.row.domain" v-show="isSql(scope.row) || isJson(scope.row)" placeholder="阈值语句" size="small"></el-input>
+										<el-input v-model="scope.row.domain" v-show="isSqlorJson(scope.row)" placeholder="阈值语句" size="small"></el-input>
 									</template>
 								</el-table-column>
 
 								<el-table-column label="级联子级" align="center" min-width="120px">
 									<template slot-scope="scope">
-										<el-select size="small" v-model="scope.row.childFieldArr" multiple placeholder="" v-show="isSqlSelect(scope.row.uiType)">
+										<el-select size="small" v-model="scope.row.childFieldArr" multiple placeholder="" v-show="isSqlSelect1(scope.row)">
 											<!-- <el-option label="无" value=""></el-option> -->
 											<el-option v-for="option in filterTable" v-show="isSqlSelect(option.uiType)" :label="option.fieldNameCn" :value="option.fieldName"></el-option>
 										</el-select>

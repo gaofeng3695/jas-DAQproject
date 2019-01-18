@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<link rel="stylesheet" href="./../../../lib/font-awesome-4.7.0/css/font-awesome.css">
+	<link rel="stylesheet" href="./../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../src/css/main.css">
+	<style>
+	</style>
+</head>
+
+<body>
+	<div id="app" v-cloak>
+
+		<jas-approve-dialog>
+			<div>
+				<template v-for="(item,index) in addNames">
+					<jas-base-group-title :name="item"></jas-base-group-title>
+					<jas-detail-table :titles="fieldsGroup[index]" :detail="detail"></jas-detail-table>
+				</template>
+				<jas-base-group-title name="其他信息"></jas-base-group-title>
+				<jas-detail-table :titles="otherArr" :detail="detail"></jas-detail-table>
+				<jas-base-group-title name="附件信息"></jas-base-group-title>
+				<jas-file-list :biz-id="oid"></jas-file-list>
+
+			</div>
+		</jas-approve-dialog>
+
+
+	</div>
+</body>
+<script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../lib/vue/vue.js"></script>
+<script src="./../../../lib/element-ui/v2.4.1/index.min.js"></script>
+
+<script src="./../../../common/components/jas-components.js "></script>
+<script src="./../../../common/js/jas-tools.js"></script>
+<script src="./../station-config.js"></script>
+<script>
+	var app = new Vue({
+		el: "#app",
+		data: function () {
+			var that = this;
+			return {
+				// fields: [],
+				// fields2: [],
+				// fields3: [],
+				otherArr: [{
+					name: '备注',
+					field: 'remarks',
+				}],
+				detail: {},
+				columnNum: 2,
+				oid: '',
+				addNames: [],
+				fieldsGroup: [],
+			}
+		},
+		created: function () {
+			var that = this;
+			var param = window.jasTools.base.getParamsInUrl(location.href);
+
+			that.pageCode = param.pageCode;
+			that.detailUrl = stationConfig[that.pageCode].detailUrl;
+			that.addNames = stationConfig[that.pageCode].addNames;
+			that.addNames.forEach(function (item, index) {
+				var field = stationConfig[that.pageCode]["detailFields" + index];
+				var fieldArr = stationConfig.methods.formatFields(field, stationConfig[that.pageCode].fieldsConfig,
+					that.pageCode);
+				that["fields" + index]=fieldArr;
+				that.fieldsGroup.push(fieldArr);
+			});
+		//	console.log(that.fieldsGroup);
+			if (param.oid) {
+				that.oid = param.oid;
+				that.params = param;
+				that.getDetailByObjectId();
+			};
+		},
+		methods: {
+			getDetailByObjectId: function () {
+				var that = this;
+				var url = jasTools.base.rootPath + that.detailUrl;
+				var obj = {
+					oid: that.oid
+				}
+				jasTools.ajax.post(url, obj, function (data) {
+					that.detail = data.rows[0];
+				});
+			},
+		},
+	});
+</script>
+
+</html>
+
