@@ -351,6 +351,7 @@ public class StationReservedInterface extends CommonJdbcEntity {
 
 	public void setConstructDate(Date constructDate) {
 		this.constructDate = constructDate;
+		super.setField("constructDate");
 	}
 
 	public String getRemarks() {
@@ -359,6 +360,7 @@ public class StationReservedInterface extends CommonJdbcEntity {
 
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
+		super.setField("remarks");
 	}
 
 }
