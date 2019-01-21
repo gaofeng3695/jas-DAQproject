@@ -228,7 +228,11 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 //					+ "on st.pipeline_oid=vt.pipeline_oid where st.active=1 order by st.mileage";
 		return this.queryForList(sql, new Object[]{});
 	}
-	
+	public List<Map<String,Object>> getMedianStakeListByPipelineOid(String pipelineOid){
+		String sql = "select oid as key,median_stake_code as value from daq_median_stake t where t.pipeline_oid='"+pipelineOid+"' and t.active=1 order by t.mileage";
+		
+		return this.queryForList(sql, new Object[]{});
+	}
 	/***
 	  * <p>功能描述：根据管线oid和穿越类型获取当前用户所在部门及下级部门下的穿越列表。</p>
 	  * <p> 雷凯。</p>	

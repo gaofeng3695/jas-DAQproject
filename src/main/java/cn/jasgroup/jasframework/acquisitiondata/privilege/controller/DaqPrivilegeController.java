@@ -287,7 +287,13 @@ public class DaqPrivilegeController extends BaseController{
 			}else if(StringUtils.isNotBlank(param.get("pipeSegmentOid"))){
 				pipeSegmentOrCrossOid = param.get("pipeSegmentOid");
 			}
-			List<Map<String,Object>> rows = this.daqPrivilegeService.getMedianStakeList(pipeSegmentOrCrossOid);
+			List<Map<String,Object>> rows = null;
+			String pipelineOid = param.get("pipelineOid");
+			if(StringUtils.isNotBlank(pipelineOid)){
+				rows = this.daqPrivilegeService.getMedianStakeListByPipelineOid(pipelineOid);
+			}else{
+				rows = this.daqPrivilegeService.getMedianStakeList(pipeSegmentOrCrossOid);
+			}
 			result = new ListResult<>(1, "200", "ok", rows);
 		} catch (Exception e) {
 			result = new ListResult<>(-1, "400", "error");
