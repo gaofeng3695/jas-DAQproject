@@ -65,7 +65,7 @@
 
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="钢管编号" prop="pipeOid" required>
-								<el-select v-model="formData.pipeOid" clearable :disabled="isEdit&&isInit" placeholder="请选择钢管编号" size="small" @change="changePipe">
+								<el-select v-model="formData.pipeOid" clearable :disabled="isEdit&&isInit" placeholder="请选择钢管编号" size="small"  @visible-change="childChange($event,'projectOid','项目名称')" @change="changePipe">
 									<el-option v-for="item in domain.pipes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
 								</el-select>
 							</el-form-item>

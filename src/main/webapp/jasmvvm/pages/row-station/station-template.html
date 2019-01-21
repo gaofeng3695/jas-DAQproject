@@ -20,8 +20,8 @@
 		<jas-list-wrapper>
 			<jas-search-for-list slot="search" :form="topSearch" :fields="fields" :fields-config="fieldsConfig" @search="searchList"></jas-search-for-list>
 			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" :search-path="searchPath"
-			  :add-url="addUrl" :detail-url="detailUrl" :delete-path="deletePath" :upcall-path="upcallPath" :class-name="className"
-			  :template-code="templateCode" @locate="locate"></jas-table-for-list>
+			  :add-url="addUrl" :detail-url="detailUrl" :delete-path="deletePath" :class-name="className" :template-code="templateCode"
+			  @locate="locate"></jas-table-for-list>
 		</jas-list-wrapper>
 
 
@@ -48,7 +48,12 @@
 				detailUrl: '',
 				privilegeCode: '',
 				topSearch: {
-
+					'projectOid': "",
+					'tendersOid': "",
+					'pipelineOid': "",
+					'pipeStationOid': "",
+					'startMedianStakeOid': "",
+					'endMedianStakeOid': "",
 				},
 				fields: [],
 				fieldsConfig: [],
@@ -59,7 +64,15 @@
 			var that = this;
 			var tableNameMap = {
 				pipePressureTest: 'daq_station_pipe_pressure_test',
-
+				pipeSweeping: 'daq_station_pipe_sweeping',
+				entranceAndExit: 'daq_station_entrance_and_exit',
+				condensingTube: 'daq_station_condensing_tube',
+				reservedInterface: "daq_station_reserved_interface",
+				stationClosure: "daq_station_closure",
+				ventStack: "daq_station_vent_stack",
+				auxiliaryAnodeBed: "daq_station_auxiliary_anode_bed",
+				corrosionDetectionSys: "daq_station_ic_detection_sys",
+				cpPowerSupply: "daq_station_cp_power_supply"
 			};
 			var param = window.jasTools.base.getParamsInUrl(location.href);
 			this.privilegeCode = param.privilegeCode;
@@ -69,12 +82,12 @@
 			this.className = param.className;
 			this.addUrl = './pages/row-station/dialogs/add.html?pageCode=' + this.pageCode;
 			this.detailUrl = './pages/row-station/dialogs/detail.html?pageCode=' + this.pageCode;
-			this.searchPath = stationConfig[this.pageCode].getList;; //查询 page;
+			this.searchPath = stationConfig[this.pageCode].getList; //查询 page;
 			this.deletePath = stationConfig[this.pageCode].deleteUrl;
-			this.fieldsConfig = stationConfig.fieldsConfig;
-			this.fields = stationConfig.methods.formatFields(stationConfig[this.pageCode].searchFields, stationConfig.fieldsConfig,
+			this.fieldsConfig = stationConfig[this.pageCode].fieldsConfig;
+			this.fields = stationConfig.methods.formatFields(stationConfig[this.pageCode].searchFields, this.fieldsConfig,
 				this.pageCode);
-			this.tableFields = stationConfig.methods.formatFields(stationConfig[this.pageCode].tableFields, stationConfig.fieldsConfig,
+			this.tableFields = stationConfig.methods.formatFields(stationConfig[this.pageCode].tableFields, this.fieldsConfig,
 				this.pageCode);
 
 		},

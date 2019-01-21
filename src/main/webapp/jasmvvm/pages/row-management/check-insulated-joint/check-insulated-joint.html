@@ -24,7 +24,9 @@
 <body>
 	<div id="app" v-cloak>
 		<jas-list-wrapper>
-			<el-form slot="search" :model="topSearch" label-width="100px">
+			<jas-search-for-list slot="search" :form="topSearch" :fields="fields" :fields-config="fieldsConfig" @search="searchList"></jas-search-for-list>
+
+			<!--<el-form slot="search" :model="topSearch" label-width="100px">
 				<el-row>
 					<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
 						<el-form-item label="项目名称" prop="projectOid">
@@ -61,7 +63,7 @@
 						</el-form-item>
 					</el-col>
 				</el-row>
-			</el-form>
+			</el-form>-->
 
 			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" search-path="/jdbc/commonData/checkInsulatedJoint/getPage.do"
 			  :add-url="addUrl" :detail-url="detailUrl" delete-path="/jdbc/commonData/checkInsulatedJoint/delete.do" :class-name="className"
@@ -90,6 +92,42 @@
 					projectOid: "",
 					tendersOid: "",
 					constructUnit: ""
+				},
+				fields: [ //
+					{
+						field: "projectOid",
+						name: '项目名称'
+					}, {
+						field: "tendersOid",
+						name: '标段名称'
+					}, {
+						field: "constructUnit",
+						name: '施工单位'
+					}, {
+						field: "manufacturerCode",
+						name: '出厂编号'
+					}
+				],
+				fieldsConfig: {
+					projectOid: {
+						type: 'select',
+						optionUrl: '/daq/privilege/getProjectList.do',
+						childSelect: ['tendersOid','manufacturerCode'],
+						childUrl: ['/daq/privilege/getTendersList.do','/daq/check/getManufacturerCode.do'],
+
+					},
+					tendersOid: {
+						type: 'select',
+					},
+					constructUnit: {
+						type: 'select',
+						optionUrl: '/daq/privilege/getCurrentUnitId.do'
+
+					},
+					manufacturerCode: {
+						type: 'select',
+					},
+
 				},
 				tableFields: [{
 					name: '项目名称',
@@ -145,87 +183,12 @@
 			this.privilegeCode = param.privilegeCode;
 			this.templateCode = param.templateCode; //|| "stake-2";
 			this.className = param.className; // || 'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';
-			this.requestDomainFromBizTable(
-				'/daq/privilege/getProjectList.do', {},
-				function (
-					arr) {
-					that.domain.project = arr;
-				});
-			this.getConstructUnit();
+
 		},
 		methods: {
-			childChange: function (e) {
-				if (e && !this.topSearch.projectOid) {
-					top.Vue.prototype.$message({
-						type: 'warning',
-						message: "请先选择项目名称"
-					});
-				}
-			},
-			requestDomainFromBizTable: function (url, obj, cb) {
-				var that = this;
-				var url = jasTools.base.rootPath + url;
-				jasTools.ajax.post(url, obj, function (data) {
-					cb && cb(data.rows);
-				}, function () {
-					cb && cb([]);
-				});
-			},
-			projectChanged: function (val) {
-				var that = this;
-				if (val) {
-					this.requestDomainFromBizTable(
-						'/daq/privilege/getTendersList.do', {
-							projectOid: val
-						},
-						function (arr) {
-							that.domain.tenders = arr;
-						});
-				}else {
-					that.domain.tenders = [];
-				}
-				that.topSearch.tendersOid = '';
-				that.getCode(val);
-				that.searchList();
-			},
-			getCode:function(val){
-				var that=this;
-				if(val){
-					this.requestDomainFromBizTable(
-							'/daq/check/getManufacturerCode.do', {
-								projectOid:val
-							},
-							function (
-								arr) {
-								that.domain.manufacturerCodeArr = arr;
-							});	
-				}else{
-					that.domain.manufacturerCodeArr=[];
-				}
-				  that.topSearch.manufacturerCode = '';
-			},
-			getConstructUnit: function () { //根据标段触发管线列表
-				var that = this;				
-					this
-						.requestDomainFromBizTable(
-							'/daq/privilege/getCurrentUnitId.do', {},
-							function (arr) {
-								that.domain.constructUnitArr = arr;
-							});
-			
-			},
 			searchList: function () {
 				this.$refs.table.search();
 			},
-			reset: function () {
-				this.topSearch.manufacturerCode = '';
-				this.topSearch.constructUnit = '';
-				this.topSearch.projectOid = '';
-				this.topSearch.tendersOid = '';
-				this.domain.tenders = [];
-				this.domain.manufacturerCodeArr=[];
-				this.$refs.table.search();
-			}
 		},
 	});
 </script>

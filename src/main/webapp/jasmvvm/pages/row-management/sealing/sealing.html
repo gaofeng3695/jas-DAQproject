@@ -26,60 +26,7 @@
 
 
 		<jas-list-wrapper slot="mainPanel">
-			<el-form slot="search" :model="topSearch" label-width="100px">
-				<el-row>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item label="项目名称" prop="projectOid">
-							<el-select v-model="topSearch.projectOid" clearable placeholder="请选择项目名称" size="small" @change="projectChanged">
-								<el-option v-for="item in domain.project" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item label="标段名称" prop="tendersOid">
-							<el-select v-model="topSearch.tendersOid" clearable placeholder="请选择标段名称" size="small" @change="tendersChanged"  @visible-change="childChange($event,'projectOid','项目名称')">
-								<el-option v-for="item in domain.tenders" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item label="管线名称" prop="pipelineOid">
-							<el-select v-model="topSearch.pipelineOid" clearable placeholder="请选择管线名称" size="small" @change="searchList"  @visible-change="childChange($event,'tendersOid','标段名称')">
-								<el-option v-for="item in domain.pipeline" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item label="封堵物编号" prop="closureCode">
-							<el-input v-model="topSearch.closureCode" clearable placeholder="请输入封堵物编号" size="small"></el-input>
-						</el-form-item>
-					</el-col>
-
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item label="封堵物类型" prop="closureType">
-							<el-select v-model="topSearch.closureType" clearable placeholder="请选择封堵物类型" size="small" @change="searchList">
-								<el-option v-for="item in domain.closureTypes" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-
-					<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-						<el-form-item label="是否使用" prop="isUse">
-							<el-select v-model="topSearch.isUse" clearable placeholder="请选择是否使用" size="small" @change="searchList">
-								<el-option v-for="item in domain.isUses" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-
-
-					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-						<el-form-item style="float: right;">
-							<el-button size="small" type="primary" @click="searchList">查询</el-button>
-							<el-button size="small" @click="reset">重置</el-button>
-						</el-form-item>
-					</el-col>
-				</el-row>
-			</el-form>
+			<jas-search-for-list slot="search" :form="topSearch" :fields="fields" :fields-config="fieldsConfig" @search="searchList"></jas-search-for-list>
 			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" search-path="/jdbc/commonData/closure/getPage.do"
 			  :add-url="addUrl" :detail-url="detailUrl" delete-path="/jdbc/commonData/closure/delete.do" :class-name="className" :template-code="templateCode"></jas-table-for-list>
 		</jas-list-wrapper>
@@ -113,6 +60,68 @@
 					isUse: '',
 					"page": 1,
 					"rows": 10
+				},
+				fields: [ //
+					{
+						field: "projectOid",
+						name: '项目名称'
+					}, {
+						field: "tendersOid",
+						name: '标段名称'
+					}, {
+						field: "pipelineOid",
+						name: '管线名称'
+					}, {
+						field: "closureCode",
+						name: '封堵物编号'
+					}, {
+						name: '封堵物类型',
+						field: 'closureType'
+					}, {
+						name: '是否使用',
+						field: 'isUse'
+					}
+				],
+				fieldsConfig: {
+					projectOid: {
+						type: 'select',
+						optionUrl: '/daq/privilege/getProjectList.do',
+						childSelect: ['tendersOid'],
+						childUrl: ['/daq/privilege/getTendersList.do'],
+					},
+					tendersOid: {
+						type: 'select',
+						childSelect: ['pipelineOid'],
+						childUrl: ['/daq/privilege/getPipelineListByTendersOid.do'],
+					},
+					pipelineOid: {
+						type: 'select',
+						childSelect: ['pipeSegmentOrCrossOid'],
+						childUrl: ['/daq/privilege/getPipeSegmentOrCrossList.do'],
+					},
+					closureCode: {
+						type: 'input'
+					},
+					closureType: {
+						type: 'select',
+						options: [{
+							key: '0',
+							value: '钢质'
+						}, {
+							key: '1',
+							value: '其他'
+						}],
+					},
+					isUse: {
+						type: 'select',
+						options: [{
+							key: 0,
+							value: '否'
+						}, {
+							key: 1,
+							value: '是'
+						}],
+					}
 				},
 				tableFields: [{
 					name: '项目名称',
@@ -170,31 +179,12 @@
 					formatter: function (row, column, cellvalue, index) {
 						if (cellvalue == '0') return '否';
 						if (cellvalue == '1') return '是';
-						return cellvalue;						
+						return cellvalue;
 					}
 				}, {
 					name: '备注',
 					field: 'remarks'
 				}],
-				domain: {
-					project: [], //项目
-					tenders: [], //标段
-					pipeline: [], //管线
-					closureTypes: [{
-						key: '0',
-						value: '钢质'
-					}, {
-						key: '1',
-						value: '其他'
-					}], //材质
-					isUses: [{
-						key: 0,
-						value: '否'
-					}, {
-						key: 1,
-						value: '是'
-					}],
-				}
 			}
 		},
 		mounted: function () {
@@ -204,83 +194,11 @@
 			this.privilegeCode = param.privilegeCode;
 			this.templateCode = param.templateCode; //|| "stake-2";
 			this.className = param.className; // || 'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';
-			this.requestDomainFromBizTable(
-				'/daq/privilege/getProjectList.do', {},
-				function (
-					arr) {
-					that.domain.project = arr;
-				});
 		},
 		methods: {
-			requestDomainFromBizTable: function (url, obj, cb) {
-				var that = this;
-				var url = jasTools.base.rootPath + url;
-				jasTools.ajax.post(url, obj, function (data) {
-					cb && cb(data.rows);
-				}, function () {
-					cb && cb([]);
-				});
-			},		
-			childChange: function (event, id, name) {
-				if (event && !this.topSearch[id]) {
-					top.Vue.prototype.$message({
-						type: 'warning',
-						message: "请先选择" + name
-					});
-				}
-			},
-			projectChanged: function (val) {
-				var that = this;
-				if (val) {
-					this.requestDomainFromBizTable(
-						'/daq/privilege/getTendersList.do', {
-							projectOid: val
-						},
-						function (arr) {
-							that.domain.tenders = arr;
-						});
-				} else {
-					that.domain.tenders = [];
-
-				}
-				that.topSearch.tendersOid = '';
-				that.domain.pipeline = [];
-				that.topSearch.pipelineOid = '';
-				that.searchList();
-			},
-			tendersChanged: function (val) { //根据标段触发管线列表
-				var that = this;
-				if (val) {
-					this
-						.requestDomainFromBizTable(
-							'/daq/privilege/getPipelineListByTendersOid.do', {
-								tendersOid: val
-							},
-							function (arr) {
-								that.domain.pipeline = arr;
-							});
-				} else {
-
-					that.topSearch.pipelineOid = '';
-				}
-				that.domain.pipeline = [];
-				that.searchList();
-			},
-
 			searchList: function () {
 				this.$refs.table.search();
-			},
-			reset: function () {
-				this.topSearch.projectOid = '';
-				this.topSearch.pipelineOid = '';
-				this.topSearch.tendersOid = '';
-				this.topSearch.closureCode = '';
-				this.topSearch.closureType = '';
-				this.topSearch.isUse = '';
-				this.domain.tenders = [];
-				this.domain.pipeline = [];
-				this.$refs.table.search();
-			},
+			}
 		},
 	});
 </script>

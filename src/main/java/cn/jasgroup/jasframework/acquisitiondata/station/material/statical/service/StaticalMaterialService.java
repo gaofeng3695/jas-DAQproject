@@ -88,4 +88,17 @@ public class StaticalMaterialService {
 		return staticalMaterialDao.getMaterialHeaterList(projectOid);
 	}
 
+	/**
+	 * <p>功能描述：根据项目查询放空立管物资列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月15日 上午9:35:38。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getMaterialVentStackList(String projectOid) {
+		return staticalMaterialDao.getMaterialVentStackList(projectOid);
+	}
+
 }

@@ -436,7 +436,7 @@ Vue.component('jas-search-for-list', {
 		'	    		<el-form-item :label="item.name"  :prop="item.field" :rules="fieldsConfig[item.field] && fieldsConfig[item.field].rules" style="margin-bottom: 15px ">',
 		'	    			<template v-if="fieldsConfig[item.field].type == \'select\'">',
 		'	    				<el-select :ref="item.field" v-model="form[item.field]" clearable :placeholder="\'请选择\'+item.name" size="small" @visible-change="visibleChange($event,item.field)"  @change="fatherSelectChanged($event,item.field)">',
-		'	    					<el-option v-for="option in fieldsConfig[item.field].options" :key="option.key" :label="option.value" :value="option.key"></el-option>',
+		'	    					<el-option v-for="(option,index) in fieldsConfig[item.field].options" :key="index" :label="option.value" :value="option.key"></el-option>',
 		'	    				</el-select>',
 		'	    			</template>',
 		'	    			<template v-if="fieldsConfig[item.field].type == \'input\'">',
@@ -1655,7 +1655,7 @@ Vue.component('jas-form-items-group', {
 	template: [
 
 		'<div>',
-		'<div v-for="fields,index in fieldsGroup">',
+		'<div v-for="fields,index in fieldsGroup" v-if="fields.length>0">',
 		'	<jas-base-group-title :name="namesGroup[index]"></jas-base-group-title>',
 
 		'<el-row>',
@@ -1664,7 +1664,7 @@ Vue.component('jas-form-items-group', {
 		'			<el-form-item :ref="item.field + 123" :label="item.name"  :prop="item.field" :rules="fieldsConfig[item.field] && fieldsConfig[item.field].rules" style="margin-bottom: 15px ">',
 		'				<template v-if="fieldsConfig[item.field].type == \'select\'">',
 		'					<el-select v-bind:disabled=fieldsConfig[item.field].disabled :ref="item.field" v-model="form[item.field]" clearable :placeholder="\'请选择\'+item.name" size="small" @visible-change="visibleChange($event,item.field)"  @change="fatherSelectChanged($event,item.field)">',
-		'						<el-option v-for="option in fieldsConfig[item.field].options" :key="option.key" :label="option.value" :value="option.key"></el-option>',
+		'						<el-option v-for="(option,index) in fieldsConfig[item.field].options" :key="index" :label="option.value" :value="option.key"></el-option>',
 		'					</el-select>',
 		'				</template>',
 		'				<template v-if="fieldsConfig[item.field].type == \'multiSelect\'">',
@@ -1679,7 +1679,7 @@ Vue.component('jas-form-items-group', {
 		'					<el-input @change="fieldChanged(item.field)" v-model="form[item.field]" :placeholder="\'请输入\'+item.name" size="small" clearable></el-input>',
 		'				</template>',
 		'	    	<template v-if="fieldsConfig[item.field].type == \'number\'">',
-		'					<el-input-number @change="fieldChanged(item.field)" v-model="form[item.field]" :precision="fieldsConfig[item.field].precision || 3" :step="1" :max="fieldsConfig[item.field].max || 999999" controls-position="right" clearable :placeholder="\'请输入\'+item.name" size="small"></el-input-number>',
+		'					<el-input-number @change="fieldChanged(item.field)" v-model="form[item.field]" :precision="fieldsConfig[item.field].precision" :step="1" :max="fieldsConfig[item.field].max || 999999" controls-position="right" clearable :placeholder="\'请输入\'+item.name" size="small"></el-input-number>',
 		'	    	</template>',
 		'				<template v-if="fieldsConfig[item.field].type == \'date\'">',
 		'					<el-date-picker clearable value-format="yyyy-MM-dd" type="date" :picker-options="fieldsConfig[item.field].pickerOptions" :placeholder="\'请选择\'+item.name" @change="fieldChanged(item.field)" v-model="form[item.field]" size="small" style="width: 100%;"></el-date-picker>',

@@ -287,7 +287,7 @@ public class PipeService {
 			}
 
 			XWPFTemplate template = XWPFTemplate.compile(new File(root+"/story.docx")).render(data);
-			String scannerFilePath = tempPath+File.separator+"直管二维码.docx";
+			String scannerFilePath = tempPath+File.separator+titleName+"二维码.docx";
 			FileOutputStream out = new FileOutputStream(scannerFilePath);
 			template.write(out);
 			out.flush();

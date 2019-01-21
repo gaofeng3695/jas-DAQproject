@@ -112,7 +112,7 @@ public class DaqStationDetectionInfiltrationBo extends CommonBaseBo {
     /**
      * 评定结果名称
      */
-    private Integer evaluationResultName;
+    private String evaluationResultName;
 
     /**
      * 检测单位
@@ -157,7 +157,7 @@ public class DaqStationDetectionInfiltrationBo extends CommonBaseBo {
     /**
      * 审核状态名称
      */
-    private Integer approveStatusName;
+    private String approveStatusName;
 
     /**
      * 备注
@@ -403,19 +403,19 @@ public class DaqStationDetectionInfiltrationBo extends CommonBaseBo {
         this.projectName = projectName;
     }
 
-    public Integer getEvaluationResultName() {
+    public String getEvaluationResultName() {
         return evaluationResultName;
     }
 
-    public void setEvaluationResultName(Integer evaluationResultName) {
+    public void setEvaluationResultName(String evaluationResultName) {
         this.evaluationResultName = evaluationResultName;
     }
 
-    public Integer getApproveStatusName() {
+    public String getApproveStatusName() {
         return approveStatusName;
     }
 
-    public void setApproveStatusName(Integer approveStatusName) {
+    public void setApproveStatusName(String approveStatusName) {
         this.approveStatusName = approveStatusName;
     }
 }

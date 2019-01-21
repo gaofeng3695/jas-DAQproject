@@ -317,7 +317,7 @@ public class PipeController {
 			if(StringUtils.isNotBlank(filePath)){
 				InputStream inputstream = new FileInputStream(new File(filePath));
 				String fileNameMid = "";
-				fileNameMid = URLEncoder.encode("直管二维码.docx", "utf-8");
+				fileNameMid = URLEncoder.encode(new File(filePath).getName(), "utf-8");
 				response.setHeader("Content-Disposition", "attachment;filename=" + fileNameMid);
 				OutputStream utputStream = response.getOutputStream();
 				byte[] filedata = new byte[1024];
