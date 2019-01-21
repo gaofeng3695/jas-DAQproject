@@ -156,6 +156,9 @@ public class DaqPrivilegeService extends BaseService{
 //			return null;
 //		}
 	}
+	public List<Map<String,Object>> getMedianStakeListByPipelineOid(String pipelineOid){
+		return this.daqPrivilegeDao.getMedianStakeListByPipelineOid(pipelineOid);
+	}
 	/**
 	  * <p>功能描述：根据管线oid和穿越类型获取当前用户所在部门及下级部门下的穿越列表。</p>
 	  * <p> 雷凯。</p>	

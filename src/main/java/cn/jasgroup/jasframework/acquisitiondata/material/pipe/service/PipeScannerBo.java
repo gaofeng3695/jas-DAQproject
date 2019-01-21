@@ -52,6 +52,17 @@ public class PipeScannerBo {
 	 */
 	@Name("production_date")
 	private String productionDate;
+	/**
+	 * 曲线长度
+	 */
+	@Name("curve_length")
+	private String curveLength;
+	
+	/**
+	 * 弯制角度
+	 */
+	@Name("angle_bending")
+	private String angleBending;
 	
 	private String scannerContext;
 	
@@ -129,6 +140,18 @@ public class PipeScannerBo {
 	}
 	public void setPicture(PictureRenderData picture) {
 		this.picture = picture;
+	}
+	public String getCurveLength() {
+		return curveLength;
+	}
+	public void setCurveLength(String curveLength) {
+		this.curveLength = curveLength;
+	}
+	public String getAngleBending() {
+		return angleBending;
+	}
+	public void setAngleBending(String angleBending) {
+		this.angleBending = angleBending;
 	}
 	
 }

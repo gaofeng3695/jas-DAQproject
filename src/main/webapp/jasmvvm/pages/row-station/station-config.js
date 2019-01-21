@@ -625,6 +625,7 @@ var stationConfig = {
       'connectionPipelineType',
       'connectionPipelineCode',
       'medianStakeCode',
+      'relativeMileage',
       'pointx',
       'pointy',
       'pointz',
@@ -650,6 +651,7 @@ var stationConfig = {
     ],
     addFields1: [ //
       'medianStakeOid',
+      'relativeMileage',
       'pointx',
       'pointy',
       'pointz',
@@ -678,6 +680,7 @@ var stationConfig = {
     ],
     detailFields1: [ //
       'medianStakeCode',
+      'relativeMileage',
       'pointx',
       'pointy',
       'pointz',
@@ -802,6 +805,12 @@ var stationConfig = {
         type: 'select',
         name: '桩号',
 
+      },
+      relativeMileage: {
+        type: "number",
+        name: "相对里程(m)",
+        max: 999999,
+        precision: 2
       },
       medianStakeCode: {
         name: "桩号"

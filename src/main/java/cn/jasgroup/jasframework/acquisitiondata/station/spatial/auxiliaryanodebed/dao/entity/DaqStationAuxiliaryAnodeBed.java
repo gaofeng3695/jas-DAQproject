@@ -3,6 +3,8 @@ import java.util.Date;
 
 import cn.jasgroup.framework.spatial.annotation.Point;
 import cn.jasgroup.framework.spatial.support.enumeration.CalculateType;
+import cn.jasgroup.framework.spatial.support.enumeration.ScopeType;
+import cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.dao.entity.MedianStake;
 import cn.jasgroup.jasframework.base.annotation.*;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 /**
@@ -23,8 +25,13 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
         x = "pointx",
         y = "pointy",
         z = "pointz",
+        scopeFieldName="pipelineOid",
+        scopeType=ScopeType.CURRENT,
         geometryColumnName = "geom",
-        calculateType = CalculateType.Coordinates
+        calculateType=CalculateType.SingleAnchorAndDeviation,
+        anchorClass=MedianStake.class,
+    	anchorOid="medianStakeOid",
+    	deviation="relativeMileage"
 )
 @UniqueConstraints(
     strategys ={

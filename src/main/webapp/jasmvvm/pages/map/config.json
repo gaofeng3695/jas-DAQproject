@@ -2,6 +2,9 @@
   "description": "基于产品 JasOpenGIS 1.0",
   "style": "lightblue",
   "basePath": "",
+  "context":{
+    "tdt-key":"8922eb4987bee3daeade54e57fbabdf8"
+  },
   "resources": [{
       "type": "css",
       "url": "basepath:../lib/openlayer_v5.0.2/ol.css"
@@ -775,6 +778,11 @@
             "type": "Vector",
             "source": "Vector",
             "flash": true,
+            "renderer": {
+              "style": "pipePressureTest",
+              "labelStyle": "",
+              "labelField": ""
+            },
             "visible": false,
             "loader": "jas",
             "format": "GeoJSON",
@@ -788,6 +796,11 @@
             "source": "Vector",
             "flash": true,
             "visible": false,
+            "renderer": {
+              "style": "pipeSweeping",
+              "labelStyle": "",
+              "labelField": ""
+            },
             "loader": "jas",
             "format": "GeoJSON",
             "strategy": "all",
@@ -800,6 +813,11 @@
             "source": "Vector",
             "flash": true,
             "visible": false,
+            "renderer": {
+              "style": "entranceAndExit",
+              "labelStyle": "",
+              "labelField": ""
+            },
             "loader": "jas",
             "format": "GeoJSON",
             "strategy": "all",
@@ -812,6 +830,11 @@
             "source": "Vector",
             "flash": true,
             "visible": false,
+            "renderer": {
+              "style": "condensingTube",
+              "labelStyle": "",
+              "labelField": ""
+            },
             "loader": "jas",
             "format": "GeoJSON",
             "strategy": "all",
@@ -824,6 +847,11 @@
             "source": "Vector",
             "flash": true,
             "visible": false,
+            "renderer": {
+              "style": "reservedInterface",
+              "labelStyle": "",
+              "labelField": ""
+            },
             "loader": "jas",
             "format": "GeoJSON",
             "strategy": "all",
@@ -836,6 +864,11 @@
             "source": "Vector",
             "flash": true,
             "visible": false,
+            "renderer": {
+              "style": "stationClosure",
+              "labelStyle": "",
+              "labelField": ""
+            },
             "loader": "jas",
             "format": "GeoJSON",
             "strategy": "all",
@@ -848,11 +881,21 @@
             "source": "Vector",
             "flash": true,
             "visible": false,
+            "renderer": {
+              "style": "ventStack",
+              "labelStyle": "",
+              "labelField": ""
+            },
             "loader": "jas",
             "format": "GeoJSON",
             "strategy": "all",
             "outFields": "oid"
-          }, {
+          }]
+        },
+        {
+          "id": "layerSet008",
+          "label": "站场腐蚀与防护",
+          "layerSet": [{
             "id": "daq_station_auxiliary_anode_bed",
             "label": "辅助阳极地床",
             "index": 20,
@@ -860,18 +903,28 @@
             "source": "Vector",
             "flash": true,
             "visible": false,
+            "renderer": {
+              "style": "auxiliaryAnodeBed",
+              "labelStyle": "",
+              "labelField": ""
+            },
             "loader": "jas",
             "format": "GeoJSON",
             "strategy": "all",
             "outFields": "oid"
           }, {
-            "id": "daq_station_internal_corrosion_detection_sys",
+            "id": "daq_station_ic_detection_sys",
             "label": "内腐蚀检测系统",
             "index": 20,
             "type": "Vector",
             "source": "Vector",
             "flash": true,
             "visible": false,
+            "renderer": {
+              "style": "corrosionDetectionSys",
+              "labelStyle": "",
+              "labelField": ""
+            },
             "loader": "jas",
             "format": "GeoJSON",
             "strategy": "all",
@@ -884,6 +937,11 @@
             "source": "Vector",
             "flash": true,
             "visible": false,
+            "renderer": {
+              "style": "cpPowerSupply",
+              "labelStyle": "",
+              "labelField": ""
+            },
             "loader": "jas",
             "format": "GeoJSON",
             "strategy": "all",
