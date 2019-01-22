@@ -228,6 +228,15 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 //					+ "on st.pipeline_oid=vt.pipeline_oid where st.active=1 order by st.mileage";
 		return this.queryForList(sql, new Object[]{});
 	}
+	/***
+	  * <p>功能描述：根据管线oid获取中线桩列表。</p>
+	  * <p> 雷凯。</p>	
+	  * @param pipelineOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月21日 上午11:06:29。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
 	public List<Map<String,Object>> getMedianStakeListByPipelineOid(String pipelineOid){
 		String sql = "select oid as key,median_stake_code as value from daq_median_stake t where t.pipeline_oid='"+pipelineOid+"' and t.active=1 order by t.mileage";
 		
