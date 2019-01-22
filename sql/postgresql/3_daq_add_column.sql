@@ -82,7 +82,7 @@ comment on column daq_material_pipe_cold_bending.is_check is '是否检查';
 alter table pri_role add data_filter_code varchar(45);
 comment on column pri_role.data_filter_code is '数据权限过滤规则';
 
-alter daq_weld_produce_specification add column construct_unit varchar(36);
+alter table daq_weld_produce_specification add construct_unit varchar(36);
 
 alter table custom_fun_fields add column precision int2;
 
