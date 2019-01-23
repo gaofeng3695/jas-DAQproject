@@ -71,7 +71,7 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="采集人员" prop="collectionPerson">
-								<el-input v-model="formData.collectionPerson" clearable placeholder="请输入采集人员" size="small"></el-input>
+								<el-input v-model.trim="formData.collectionPerson" clearable placeholder="请输入采集人员" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
@@ -97,7 +97,7 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="监理工程师" prop="supervisionEngineer">
-								<el-input v-model="formData.supervisionEngineer" clearable placeholder="请输入监理工程师" size="small"></el-input>
+								<el-input v-model.trim="formData.supervisionEngineer" clearable placeholder="请输入监理工程师" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -112,12 +112,12 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="冷弯编号" prop="pipeColdBendingCode" required>
-								<el-input v-model="formData.pipeColdBendingCode" disabled placeholder="请输入冷湾编号" size="small"></el-input>
+								<el-input v-model.trim="formData.pipeColdBendingCode" disabled placeholder="请输入冷湾编号" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="管子弯曲设计标准" prop="pipeBendingStandards" >
-								<el-input v-model="formData.pipeBendingStandards" placeholder="请输入管子弯曲设计标准" size="small"></el-input>
+								<el-input v-model.trim="formData.pipeBendingStandards" placeholder="请输入管子弯曲设计标准" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
