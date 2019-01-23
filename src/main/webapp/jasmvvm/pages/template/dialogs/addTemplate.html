@@ -79,7 +79,7 @@
 							<el-col v-if="item.type=='UT_13'" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 								<el-form-item :prop="item.id" :label="item.name" :rules="item.verify">
 									<!--<textarea  v-if="item.type=='UT_13'"  rows="2" v-model="formData[item.id]"></textarea>-->
-									<el-input v-if="item.type=='UT_13'" :autosize="{ minRows: 2}" type="textarea" :rows="2" v-model="formData[item.id]" :disabled="item.disabled"
+									<el-input v-if="item.type=='UT_13'" :autosize="{ minRows: 2}" type="textarea" :rows="2" v-model.trim="formData[item.id]" :disabled="item.disabled"
 									  :maxLength="item.fieldLength" @change="changeRule($event,item)">
 									</el-input>
 									<p style="text-align:right;color:#999;">您还可以输入<span>{{item.fieldLength-formData[item.id].length}}</span>字</p>
@@ -87,7 +87,7 @@
 							</el-col>
 							<el-col v-else :xs="formConfig.xs" :sm="formConfig.sm" :md="formConfig.md" :lg="formConfig.lg" :xl="formConfig.xl" :class="{'height' : item.type=='UT_14'||item.type=='UT_05'||item.type=='UT_06'||item.type=='UT_07'||item.type=='UT_08' }">
 								<el-form-item :prop="item.id" :label="item.name" :rules="item.verify" initial="off">
-									<el-input v-if="item.type=='UT_01'" :placeholder="item.placeholder" v-model="formData[item.id]" :size="item.size" :disabled="item.disabled"
+									<el-input v-if="item.type=='UT_01'" :placeholder="item.placeholder" v-model.trim="formData[item.id]" :size="item.size" :disabled="item.disabled"
 									  clearable @change="changeRule($event,item)">
 									</el-input>
 									<el-select multiple v-if="isMultiSelect(item)" :ref="item.id" v-model="formData[item.id]" style="width:100%" :size="item.size"

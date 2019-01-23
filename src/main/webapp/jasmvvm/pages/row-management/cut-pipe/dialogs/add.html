@@ -72,14 +72,14 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="管长(m)">
-								<el-input v-model="formData.pipeLength" disabled size="small"></el-input>
+								<el-input v-model.trim="formData.pipeLength" disabled size="small"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="管径(mm)">
 								<!-- <el-input-number :precision="3" :step="1" disabled :max="1000000" controls-position="right" v-model="formData.pipeDiameter" clearable
 								  placeholder="请输入管径(mm)" size="small"></el-input-number> -->
-								<el-input v-model="formData.pipeDiameter" disabled size="small"></el-input>
+								<el-input v-model.trim="formData.pipeDiameter" disabled size="small"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
@@ -120,7 +120,7 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="监理工程师" prop="supervisionEngineer">
-								<el-input v-model="formData.supervisionEngineer" clearable placeholder="请输入监理工程师" size="small"></el-input>
+								<el-input v-model.trim="formData.supervisionEngineer" clearable placeholder="请输入监理工程师" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>

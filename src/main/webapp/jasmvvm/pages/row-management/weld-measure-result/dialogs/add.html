@@ -100,12 +100,12 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="监理工程师" prop="supervisionEngineer" required>
-								<el-input v-model="formData.supervisionEngineer" clearable placeholder="请输入监理工程师" size="small"></el-input>
+								<el-input v-model.trim="formData.supervisionEngineer" clearable placeholder="请输入监理工程师" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="测量人" prop="surveyCrew" required>
-								<el-input v-model="formData.surveyCrew" clearable placeholder="请输入测量人" size="small"></el-input>
+								<el-input v-model.trim="formData.surveyCrew" clearable placeholder="请输入测量人" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 
@@ -117,7 +117,7 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="数据采集人员" prop="collectionPerson">
-								<el-input v-model="formData.collectionPerson" clearable placeholder="请输入数据采集人员" size="small"></el-input>
+								<el-input v-model.trim="formData.collectionPerson" clearable placeholder="请输入数据采集人员" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 

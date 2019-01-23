@@ -440,7 +440,7 @@ Vue.component('jas-search-for-list', {
 		'	    				</el-select>',
 		'	    			</template>',
 		'	    			<template v-if="fieldsConfig[item.field].type == \'input\'">',
-		'	    				<el-input v-model="form[item.field]" :placeholder="\'请输入\'+item.name" size="small" clearable></el-input>',
+		'	    				<el-input v-model.trim="form[item.field]" :placeholder="\'请输入\'+item.name" size="small" clearable></el-input>',
 		'	    			</template>',
 		'	    			<template v-if="fieldsConfig[item.field].type == \'number\'">',
 		'							<el-input-number v-model="form[item.field]" :precision="fieldsConfig[item.field].precision" :step="1" :max="fieldsConfig[item.field].max" controls-position="right" clearable :placeholder="\'请输入\'+item.name" size="small"></el-input-number>',
@@ -1385,7 +1385,7 @@ Vue.component('jas-form-items', {
 		'				</template>',
 
 		'				<template v-if="fieldsConfig[item.field].type == \'input\'">',
-		'					<el-input @change="fieldChanged(item.field)" v-model="form[item.field]" :placeholder="\'请输入\'+item.name" size="small" clearable></el-input>',
+		'					<el-input @change="fieldChanged(item.field)" v-model.trim="form[item.field]" :placeholder="\'请输入\'+item.name" size="small" clearable></el-input>',
 		'				</template>',
 		'	    	<template v-if="fieldsConfig[item.field].type == \'number\'">',
 		'					<el-input-number @change="fieldChanged(item.field)" v-model="form[item.field]" :precision="precision(fieldsConfig[item.field].precision)" :step="1" :max="fieldsConfig[item.field].max || 999999" controls-position="right" clearable :placeholder="\'请输入\'+item.name" size="small"></el-input-number>',
@@ -1676,7 +1676,7 @@ Vue.component('jas-form-items-group', {
 		'				</template>',
 
 		'				<template v-if="fieldsConfig[item.field].type == \'input\'">',
-		'					<el-input @change="fieldChanged(item.field)" v-model="form[item.field]" :placeholder="\'请输入\'+item.name" size="small" clearable></el-input>',
+		'					<el-input @change="fieldChanged(item.field)" v-model.trim="form[item.field]" :placeholder="\'请输入\'+item.name" size="small" clearable></el-input>',
 		'				</template>',
 		'	    	<template v-if="fieldsConfig[item.field].type == \'number\'">',
 		'					<el-input-number @change="fieldChanged(item.field)" v-model="form[item.field]" :precision="fieldsConfig[item.field].precision" :step="1" :max="fieldsConfig[item.field].max || 999999" controls-position="right" clearable :placeholder="\'请输入\'+item.name" size="small"></el-input-number>',
@@ -2080,7 +2080,7 @@ Vue.component('jas-approve-dialog', {
 		'							<div>',
 		'								<el-form label-width="80px">',
 		'									<el-form-item label="审批意见">',
-		'										<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="remarks"></el-input>',
+		'										<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model.trim="remarks"></el-input>',
 		'									</el-form-item>',
 		'								</el-form>',
 		'							</div>',
@@ -2208,7 +2208,7 @@ Vue.component('jas-remarks', {
 	},
 	template: [
 		'<el-form-item label="备注">',
-		'<el-input type="textarea"  :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="remark"',
+		'<el-input type="textarea"  :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model.trim="remark"',
 		':maxLength="200"  @input="instructionNum"></el-input>',
 		'<p style="text-align:right;color:#999;">您还可以输入<span v-text="remarksDesc"></span>字</p>',
 		'</el-form-item>'
