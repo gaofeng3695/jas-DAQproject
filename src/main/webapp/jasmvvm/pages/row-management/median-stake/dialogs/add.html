@@ -61,7 +61,7 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 						<el-form-item label="中线桩编号" prop="medianStakeCode">
-							<el-input v-model="formData.medianStakeCode" clearable placeholder="请输入中线桩编号" size="small"></el-input>
+							<el-input v-model.trim="formData.medianStakeCode" clearable placeholder="请输入中线桩编号" size="small"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
@@ -93,7 +93,7 @@
 				<el-row>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 						<el-form-item label="备注" prop="remarks">
-							<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model="formData.remarks" :maxLength="200"
+							<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" :rows="2" size="small" v-model.trim="formData.remarks" :maxLength="200"
 							  @input="instructionNum"></el-input>
 							<p style="text-align:right;color:#999;">您还可以输入<span v-text="remarks"></span>字</p>
 						</el-form-item>
