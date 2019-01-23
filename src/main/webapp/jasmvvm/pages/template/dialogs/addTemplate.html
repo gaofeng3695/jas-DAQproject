@@ -439,11 +439,15 @@
 							}
 							if (item.uiType == 'UT_14') {
 								// 如果是数字，增加默认值
-								if (!obj.min) {
+								if (!obj.min && obj.min!=0) {
 									obj.min = -10000;
 									that.$set(that.formData, item.fieldName, 0);
 								} else {
-									that.$set(that.formData, item.fieldName, obj.min);
+									if(obj.min < 0){
+										that.$set(that.formData, item.fieldName, 0);	
+									}else{
+										that.$set(that.formData, item.fieldName, obj.min);	
+									}
 								}
 							}
 							if (item.uiType == 'UT_11' || item.uiType == 'UT_12') {
@@ -559,7 +563,7 @@
 							if (item.uiType == 'UT_14') {
 								// 如果是数字，增加默认值
 								if (!that.formData[obj.id]) {
-									if (obj.min) {
+									if (obj.min||obj.min==0) {
 										that.$set(that.formData, item.fieldName, obj.min);
 									} else {
 										obj.min = -10000;
