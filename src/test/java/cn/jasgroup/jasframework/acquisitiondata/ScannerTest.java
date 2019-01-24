@@ -1,9 +1,12 @@
 package cn.jasgroup.jasframework.acquisitiondata;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.math.BigInteger;
 import java.nio.file.Path;
 import java.text.DecimalFormat;
@@ -309,12 +312,44 @@ public class ScannerTest {
 			e.printStackTrace();
 		} 
 	}
-	@Test
+//	@Test
 	public void sqlParser(){
 		DecimalFormat df = new DecimalFormat("#.000");
 		NumberFormat nf = NumberFormat.getNumberInstance();
         nf.setMaximumFractionDigits(3);
         System.out.println(nf.format(0.001001));
 		System.err.println(df.format(0.001001));
+	}
+	@Test
+	public void testShareFile(){
+//		try{
+//			String sFilePath = "D:/test.png";
+//			String folderPath = "//192.168.40.113/123123/1";
+//			if(!(new File(folderPath)).exists()){
+//				new File(folderPath).mkdirs();
+//			}
+//			String filePath = folderPath+"/test.png";
+//			
+//			InputStream is = new FileInputStream(new File(sFilePath));
+//			OutputStream os = new FileOutputStream(new File(filePath));
+//			int i = 0;
+//			byte[] buffer = new byte[1024];
+//			i = is.read(buffer);
+//			while (i != -1) {
+//				os.write(buffer, 0, i);
+//				i = is.read(buffer);
+//			}
+//			is.close();
+//			os.flush();
+//			os.close();
+//		}catch(Exception e){
+//			e.printStackTrace();
+//		}
+		boolean flag = false;
+		String folderPath = "E:/test1234";
+		if(!new File(folderPath).exists()){
+			flag = new File(folderPath).mkdirs();
+		}
+		System.err.println(flag);
 	}
 }
