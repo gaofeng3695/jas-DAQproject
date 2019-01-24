@@ -3,7 +3,6 @@ package cn.jasgroup.jasframework.acquisitiondata.mesolow.pipenode.controller;
 import cn.jasgroup.framework.data.result.ListResult;
 import cn.jasgroup.jasframework.acquisitiondata.mesolow.pipenode.service.DaqMvPipeNodeService;
 import cn.jasgroup.jasframework.base.controller.BaseController;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
