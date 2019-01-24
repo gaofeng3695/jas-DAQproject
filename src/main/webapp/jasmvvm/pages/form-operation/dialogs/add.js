@@ -5,6 +5,7 @@ var vm = new Vue({
   data: function () {
     return {
       uniqueFileds: [],
+      precision:6,
       allcheck: false, //表示全选
       uniqueFieldOption: [],
       linkedFieldOption: [],

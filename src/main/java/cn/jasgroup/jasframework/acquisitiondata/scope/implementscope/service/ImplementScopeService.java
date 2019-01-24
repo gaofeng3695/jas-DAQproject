@@ -46,6 +46,24 @@ public class ImplementScopeService extends BaseService{
 				item.setAttributes(attributes);
 				item.setChildren(getProjectChildren(obj.get("oid").toString(),null,treeDataList,dataRefList));
 				resultTree.add(item);
+			}else if(obj.get("parent_oid")==null && type.equals("6")){
+				TreeItem item = new TreeItem();
+				String id = obj.get("oid").toString();
+				item.setId(id);
+				item.setText(obj.get("name").toString());
+				Map<String,String> attributes = new HashMap<>();
+				attributes.put("type", type);
+				attributes.put("projectOid", obj.get("oid").toString());
+				item.setAttributes(attributes);
+				item.setChildren(new ArrayList<TreeItem>());
+				for(Map<String,Object> map:dataRefList){
+					String projectrOid = map.get("project_oid")!=null?map.get("project_oid").toString():"";
+					if(projectrOid.equals(id)){
+						item.setChecked(true);
+						break;
+					}
+				}
+				resultTree.add(item);
 			}
 		}
 		return resultTree;

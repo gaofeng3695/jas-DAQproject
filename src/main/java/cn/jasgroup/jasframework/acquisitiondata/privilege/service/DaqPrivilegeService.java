@@ -1,6 +1,7 @@
 package cn.jasgroup.jasframework.acquisitiondata.privilege.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -40,7 +41,9 @@ public class DaqPrivilegeService extends BaseService{
 	 */
 	public List<Map<String,Object>>getProject(String pipeNetworkTypeCode){
 		String unitOid = ThreadLocalHolder.getCurrentUser().getUnitId();
-		return this.daqPrivilegeDao.getProjectList(unitOid,pipeNetworkTypeCode);
+		String[] pipeNetworkTypeCodes = pipeNetworkTypeCode.split(",");
+		List<String> pipeNetworkTypeCodeList = Arrays.asList(pipeNetworkTypeCodes);
+		return this.daqPrivilegeDao.getProjectList(unitOid,pipeNetworkTypeCodeList);
 	}
 
 
@@ -156,6 +159,15 @@ public class DaqPrivilegeService extends BaseService{
 //			return null;
 //		}
 	}
+	/**
+	 * <p>功能描述：根据管线oid获取中线桩列表。</p>
+	  * <p> 雷凯。</p>	
+	  * @param pipelineOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月21日 上午11:05:52。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
 	public List<Map<String,Object>> getMedianStakeListByPipelineOid(String pipelineOid){
 		return this.daqPrivilegeDao.getMedianStakeListByPipelineOid(pipelineOid);
 	}
@@ -301,5 +313,18 @@ public class DaqPrivilegeService extends BaseService{
 	 */
 	public List<Map<String, Object>> getConstructUnitList(List<String> projectOids) {
 		return daqPrivilegeDao.getConstructUnitList(projectOids);
+	}
+	
+	/***
+	  * <p>功能描述：根据项目oid获取监理单位。</p>
+	  * <p> 雷凯。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月24日 下午2:47:26。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String,Object>>getSupervisionUnitByProjectOid(String projectOid){
+		return this.daqPrivilegeDao.getSupervisionUnitByProjectOid(projectOid);
 	}
 }

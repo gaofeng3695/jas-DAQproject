@@ -72,12 +72,12 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="合格编号" prop="certificateNum" required>
-								<el-input v-model="formData.certificateNum" clearable placeholder="请输入合格编号" size="small"></el-input>
+								<el-input v-model.trim="formData.certificateNum" clearable placeholder="请输入合格编号" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="弯制单位" prop="productionUnit">
-								<el-input v-model="formData.productionUnit" clearable placeholder="请输入弯制单位" size="small"></el-input>
+								<el-input v-model.trim="formData.productionUnit" clearable placeholder="请输入弯制单位" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
@@ -150,7 +150,7 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="检查人" prop="checkedBy">
-								<el-input v-model="formData.checkedBy" clearable placeholder="请输入检查人" size="small"></el-input>
+								<el-input v-model.trim="formData.checkedBy" clearable placeholder="请输入检查人" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>

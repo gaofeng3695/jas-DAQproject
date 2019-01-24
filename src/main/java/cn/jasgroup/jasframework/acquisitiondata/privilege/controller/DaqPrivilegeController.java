@@ -749,4 +749,29 @@ public class DaqPrivilegeController extends BaseController{
 		}
 		return result;
 	}
+	
+	/**
+	  * <p>功能描述：根据项目oid获取监理单位。</p>
+	  * <p> 雷凯。</p>	
+	  * @param request
+	  * @param param
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月24日 下午2:46:54。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="/getSupervisionUnitByProjectOid",method = RequestMethod.POST)
+	@ResponseBody
+	public Object getSupervisionUnitByProjectOid(HttpServletRequest request,@RequestBody Map<String,String> param){
+		ListResult<Map<String,Object>> result = null;
+		try {
+			String projectOid = param.get("projectOid");
+			List<Map<String,Object>> rows = this.daqPrivilegeService.getSupervisionUnitByProjectOid(projectOid);
+			result = new ListResult<>(1, "200", "ok", rows);
+		} catch (Exception e) {
+			result = new ListResult<>(-1, "400", "error");
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

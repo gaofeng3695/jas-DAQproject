@@ -49,19 +49,19 @@
 					<el-row>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="阴保电缆编号" prop="cableCode" required>
-								<el-input v-model="formData.cableCode" clearable placeholder="请输入阴保电缆编号" size="small"></el-input>
+								<el-input v-model.trim="formData.cableCode" clearable placeholder="请输入阴保电缆编号" size="small"></el-input>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="电缆规格型号" prop="cableSpecification">
-								<el-input v-model="formData.cableSpecification" clearable placeholder="请输入电缆规格型号" size="small"></el-input>
+								<el-input v-model.trim="formData.cableSpecification" clearable placeholder="请输入电缆规格型号" size="small"></el-input>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="电缆盘号" prop="cableTrayNum">
-								<el-input v-model="formData.cableTrayNum" clearable placeholder="请输入电缆盘号" size="small"></el-input>
+								<el-input v-model.trim="formData.cableTrayNum" clearable placeholder="请输入电缆盘号" size="small"></el-input>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="电缆批次" prop="cableBatche">
-								<el-input v-model="formData.cableBatche" clearable placeholder="请输入电缆批次" size="small"></el-input>
+								<el-input v-model.trim="formData.cableBatche" clearable placeholder="请输入电缆批次" size="small"></el-input>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="电缆保护结构">
@@ -72,7 +72,7 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="电缆敷设图编号" prop="cableLayoutCode">
-								<el-input v-model="formData.cableLayoutCode" clearable placeholder="请输入电缆敷设图编号" size="small"></el-input>
+								<el-input v-model.trim="formData.cableLayoutCode" clearable placeholder="请输入电缆敷设图编号" size="small"></el-input>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="电缆敷设方式">
