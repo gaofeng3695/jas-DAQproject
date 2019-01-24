@@ -1,6 +1,7 @@
 package cn.jasgroup.jasframework.acquisitiondata.privilege.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -40,7 +41,9 @@ public class DaqPrivilegeService extends BaseService{
 	 */
 	public List<Map<String,Object>>getProject(String pipeNetworkTypeCode){
 		String unitOid = ThreadLocalHolder.getCurrentUser().getUnitId();
-		return this.daqPrivilegeDao.getProjectList(unitOid,pipeNetworkTypeCode);
+		String[] pipeNetworkTypeCodes = pipeNetworkTypeCode.split(",");
+		List<String> pipeNetworkTypeCodeList = Arrays.asList(pipeNetworkTypeCodes);
+		return this.daqPrivilegeDao.getProjectList(unitOid,pipeNetworkTypeCodeList);
 	}
 
 
