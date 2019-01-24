@@ -15,6 +15,7 @@ import com.google.common.collect.ImmutableMap;
 
 import cn.jasgroup.jasframework.dataaccess.base.BaseJdbcDao;
 import cn.jasgroup.jasframework.dataaccess3.core.BaseJdbcTemplate;
+import cn.jasgroup.jasframework.dataaccess3.core.BaseNamedParameterJdbcTemplate;
 import cn.jasgroup.jasframework.engine.jdbc.dao.CommonDataJdbcDao;
 import cn.jasgroup.jasframework.utils.StringUtil;
 
@@ -23,6 +24,9 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 
 	@Resource
 	private BaseJdbcTemplate baseJdbcTemplate;
+	
+	@Resource
+	private BaseNamedParameterJdbcTemplate baseNamedParameterJdbcTemplate;
 	
 	@Autowired
 	 private CommonDataJdbcDao commonDataJdbcDao;
@@ -36,15 +40,19 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 	  * <p>创建日期:2018年7月3日 下午1:59:46。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public List<Map<String,Object>> getProjectList(String unitOid,String pipeNetworkTypeCode){
+	public List<Map<String,Object>> getProjectList(String unitOid,List<String> pipeNetworkTypeCodeList){
 		String sql = "with recursive pri_unit_temp(oid,parent_id) as ("
-				+ "select t.oid,t.parent_id from pri_unit t where t.oid=? and t.active=1 "
+				+ "select t.oid,t.parent_id from pri_unit t where t.oid=:unitOid and t.active=1 "
 				+ "union all "
 				+ "select t.oid,t.parent_id from pri_unit t inner join pri_unit_temp b on t.parent_id=b.oid and t.active=1 "
 				+ ")"
 				+ "select distinct p.oid as key,p.project_name as value,p.create_datetime from daq_implement_scope_ref s left join (select oid,project_name,pipe_network_type_code,create_datetime from daq_project where active=1) p on s.project_oid=p.oid where s.unit_oid in (select oid from pri_unit_temp) "
-				+ "and p.pipe_network_type_code=? order by p.create_datetime asc";
-		return this.queryForList(sql, new Object[]{unitOid,pipeNetworkTypeCode});
+				+ "and p.pipe_network_type_code in (:pipeNetworkTypeCode) order by p.create_datetime asc";
+		Map<String, Object> paramObject = new HashMap<>();
+		paramObject.put("unitOid", unitOid);
+		paramObject.put("pipeNetworkTypeCode", pipeNetworkTypeCodeList);
+		return this.baseNamedParameterJdbcTemplate.queryForList(sql, paramObject, null);
+//		return this.queryForList(sql, new Object[]{unitOid,pipeNetworkTypeCode});
 	}
 
 
