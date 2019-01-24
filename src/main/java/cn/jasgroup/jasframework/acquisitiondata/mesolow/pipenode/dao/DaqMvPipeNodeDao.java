@@ -37,7 +37,7 @@ public class DaqMvPipeNodeDao extends BaseJdbcDao {
         List<String> args = new ArrayList<>();
         bufferSql.append("select wc.project_oid,wc.pipe_node_code,wc.pipe_node_type,wc.pointx,wc.pointy,wc.pointz,wc.buried_depth " +
                 "from daq_mv_pipe_node wc " +
-                "where 1=1 ");
+                "where 1=1 and wc.active=1");
         if(StringUtils.isNotBlank(projectOid)){
             bufferSql.append(" and wc.project_oid = ? ");
             args.add(projectOid);

@@ -34,6 +34,11 @@ public class DaqMvPipeNodeQuery extends BaseJavaQuery {
      */
     private String pipeNodeCode;
 
+    /**
+     * 点类型,域值：pipe_node_type_domain
+     */
+    private String pipeNodeType;
+
     @Override
     public String getQuerySql() {
         StringBuffer bufferSql = new StringBuffer();
@@ -45,7 +50,7 @@ public class DaqMvPipeNodeQuery extends BaseJavaQuery {
                 "LEFT JOIN (SELECT code_id,code_name,active FROM sys_domain where domain_name = 'pipe_node_type_domain' and active=1 ) doma ON doma.code_id = wc.pipe_node_type " +
                 "LEFT JOIN (SELECT code_id,code_name,active FROM sys_domain where domain_name = 'electronic_label_type_domain' and active=1 ) doma1 ON doma1.code_id = wc.electronic_label_type " +
                 "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) pu on pu.oid = wc.supervision_unit  " +
-                "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) u on u.oid = wc.construct_unit");
+                "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) u on u.oid = wc.construct_unit where wc.active=1 ");
         bufferSql.append(conditionSql());
         return bufferSql.toString();
     }
@@ -61,7 +66,9 @@ public class DaqMvPipeNodeQuery extends BaseJavaQuery {
             if (StringUtils.isNotBlank(pipeNodeCode)) {
                 conditionSql.append(" and wc.pipe_node_code like :pipeNodeCode ");
             }
-
+            if (StringUtils.isNotBlank(pipeNodeType)) {
+                conditionSql.append(" and wc.pipe_node_type = :pipeNodeType ");
+            }
             conditionSql.append(this.dataAuthoritySql);
         }
         conditionSql.append(" order by wc.create_datetime desc");
@@ -85,5 +92,13 @@ public class DaqMvPipeNodeQuery extends BaseJavaQuery {
 
     public void setPipeNodeCode(String pipeNodeCode) {
         this.pipeNodeCode = pipeNodeCode;
+    }
+
+    public String getPipeNodeType() {
+        return pipeNodeType;
+    }
+
+    public void setPipeNodeType(String pipeNodeType) {
+        this.pipeNodeType = pipeNodeType;
     }
 }
