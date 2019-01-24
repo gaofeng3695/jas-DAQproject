@@ -436,4 +436,26 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 					+ "ORDER BY t.hierarchy;";
 		return commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOids", projectOids));
 	}
+	
+	/**
+	  * <p>功能描述：根据项目oid获取监理单位。</p>
+	  * <p> 雷凯。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月24日 下午2:47:33。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Map<String,Object>> getSupervisionUnitByProjectOid(String projectOid){
+		String sql = "select distinct t.oid as key,t.unit_name as value,t.create_datetime,i.tenders_oid "
+				+ "from pri_unit t "
+				+ "left join daq_implement_scope_ref i on t.oid = i.unit_oid "
+				+ "where t.hierarchy like 'Unit.0001.0004%' and t.active=1 ";
+		if(StringUtils.isNotBlank(projectOid)){
+			sql += " and i.project_oid='"+projectOid+"'";
+		}
+		sql += " order by t.create_datetime asc";
+		return this.queryForList(sql, new Object[]{});
+	}
 }

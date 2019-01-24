@@ -314,4 +314,17 @@ public class DaqPrivilegeService extends BaseService{
 	public List<Map<String, Object>> getConstructUnitList(List<String> projectOids) {
 		return daqPrivilegeDao.getConstructUnitList(projectOids);
 	}
+	
+	/***
+	  * <p>功能描述：根据项目oid获取监理单位。</p>
+	  * <p> 雷凯。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月24日 下午2:47:26。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String,Object>>getSupervisionUnitByProjectOid(String projectOid){
+		return this.daqPrivilegeDao.getSupervisionUnitByProjectOid(projectOid);
+	}
 }
