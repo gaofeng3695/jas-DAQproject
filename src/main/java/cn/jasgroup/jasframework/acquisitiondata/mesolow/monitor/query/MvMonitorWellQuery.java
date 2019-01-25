@@ -45,6 +45,7 @@ public class MvMonitorWellQuery extends BaseJavaQuery {
 					+ "mv.monitor_well_material,mv.investment_date,mv.construct_unit,mv.collection_person,mv.collection_date,mv.supervision_unit,"
 					+ "mv.supervision_engineer,mv.geo_state,mv.approve_status,mv.remarks,mv.create_user_id,mv.create_user_name,mv.create_datetime,"
 					+ "mv.modify_user_id,mv.modify_user_name,mv.modify_datetime,mv.active,mv.geom,pu.unit_name as supervision_unit_name,"
+					+ "case when mv.approve_status = -1 then '驳回' when mv.approve_status = 1 then '待审核' when mv.approve_status = 2 then '审核通过' else '未上报' end as approve_status_name,"
 					+ "u.unit_name as construct_unit_name,pro.project_name "
 					+ "FROM daq_mv_monitor_well mv LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = mv.project_oid "
 					+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) pu on pu.oid = mv.supervision_unit "
