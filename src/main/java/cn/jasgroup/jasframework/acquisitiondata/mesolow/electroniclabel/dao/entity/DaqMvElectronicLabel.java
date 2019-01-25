@@ -5,7 +5,10 @@ import cn.jasgroup.framework.spatial.support.enumeration.CalculateType;
 import cn.jasgroup.jasframework.base.annotation.*;
 import cn.jasgroup.jasframework.domain.utils.DomainUtil;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import java.util.Date;
 
@@ -222,6 +225,8 @@ public class DaqMvElectronicLabel extends CommonJdbcEntity {
 		super.setField("collectionPerson");
 	}
 
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+	@Temporal(TemporalType.DATE)
 	public Date getCollectionDate() {
 		return collectionDate;
 	}
