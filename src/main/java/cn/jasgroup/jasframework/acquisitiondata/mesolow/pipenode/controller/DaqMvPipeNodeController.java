@@ -19,7 +19,7 @@ import java.util.Map;
  * <p>创建日期：2019年01月24日 14:34。</p>
  */
 @RestController
-@RequestMapping("/daq/daqMvPipeNode")
+@RequestMapping("/jdbc/commonData/daqMvPipeNode")
 public class DaqMvPipeNodeController extends BaseController {
 
     @Autowired
