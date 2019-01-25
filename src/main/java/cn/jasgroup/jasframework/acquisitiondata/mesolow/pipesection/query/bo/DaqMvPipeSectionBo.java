@@ -1,5 +1,6 @@
 package cn.jasgroup.jasframework.acquisitiondata.mesolow.pipesection.query.bo;
 
+import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.Temporal;
@@ -13,7 +14,7 @@ import java.util.Date;
  * @Date: 2019/1/24 15:49
  * @since JDK 1.80
  */
-public class DaqMvPipeSectionBo {
+public class DaqMvPipeSectionBo extends CommonBaseBo {
     /**
      * oid
      */

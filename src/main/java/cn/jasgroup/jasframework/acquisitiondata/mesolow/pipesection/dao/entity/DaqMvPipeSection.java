@@ -9,7 +9,6 @@ import cn.jasgroup.framework.spatial.support.enumeration.CalculateType;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import java.util.Date;
 
 /**
  * @version V1.0
@@ -33,14 +32,14 @@ import java.util.Date;
         geometryColumnName = "geom",
         calculateType = CalculateType.DoubleAnchor
 )
-/*@UniqueConstraints(
+@UniqueConstraints(
     strategys ={
         @UniqueConstraintStrategy(
-            columnNames={"pipeSectionCode","deviceCode"},
+            columnNames={"projectOid","pipeSectionCode"},
             name="同一项目下管段编号不能重复"
         )
     }
-)*/
+)
 @JdbcEntity(name="daq_mv_pipe_section")
 public class DaqMvPipeSection extends CommonJdbcEntity {
     /**
