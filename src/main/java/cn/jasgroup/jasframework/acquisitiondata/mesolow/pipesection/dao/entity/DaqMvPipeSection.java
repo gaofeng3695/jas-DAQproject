@@ -32,7 +32,7 @@ import javax.persistence.TemporalType;
         endY = "endPointy",
         geometryColumnName = "geom",
         calculateType = CalculateType.DoubleAnchor,
-        anchorClass= DaqMvPipeSection.class
+        anchorClass=DaqMvPipeNode.class
 )
 @UniqueConstraints(
     strategys ={
