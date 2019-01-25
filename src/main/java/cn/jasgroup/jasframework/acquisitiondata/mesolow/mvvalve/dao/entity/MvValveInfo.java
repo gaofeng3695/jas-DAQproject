@@ -621,7 +621,7 @@ public class MvValveInfo extends CommonJdbcEntity {
 
 	@Transient
 	public String getWellCoverMaterialName() {
-		return DomainUtil.getValue("well_cover_material_domain", wellCoverMaterialName);
+		return DomainUtil.getValue("well_cover_material_domain", wellCoverMaterial);
 	}
 
 	public void setWellCoverMaterialName(String wellCoverMaterialName) {
