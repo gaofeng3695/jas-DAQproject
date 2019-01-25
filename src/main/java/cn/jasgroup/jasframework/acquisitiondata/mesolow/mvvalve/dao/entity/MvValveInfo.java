@@ -552,7 +552,7 @@ public class MvValveInfo extends CommonJdbcEntity {
 
 	@Transient
 	public String getValveTypeName() {
-		return DomainUtil.getValue("valve_type_domain", valveType);
+		return DomainUtil.getValue("mv_valve_type_domain", valveType);
 	}
 
 	public void setValveTypeName(String valveTypeName) {
