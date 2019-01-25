@@ -2,6 +2,7 @@ package cn.jasgroup.jasframework.acquisitiondata.mesolow.pipesection.dao.entity;
 import java.util.Date;
 
 import cn.jasgroup.framework.spatial.annotation.Line;
+import cn.jasgroup.jasframework.acquisitiondata.mesolow.pipenode.dao.entity.DaqMvPipeNode;
 import cn.jasgroup.jasframework.base.annotation.*;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -30,7 +31,8 @@ import javax.persistence.TemporalType;
         endX = "endPointx",
         endY = "endPointy",
         geometryColumnName = "geom",
-        calculateType = CalculateType.DoubleAnchor
+        calculateType = CalculateType.DoubleAnchor,
+        anchorClass= DaqMvPipeSection.class
 )
 @UniqueConstraints(
     strategys ={
