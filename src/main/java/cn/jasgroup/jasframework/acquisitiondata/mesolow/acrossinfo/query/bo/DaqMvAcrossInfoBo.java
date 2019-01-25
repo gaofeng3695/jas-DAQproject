@@ -137,9 +137,19 @@ public class DaqMvAcrossInfoBo extends CommonBaseBo {
     private String pipeSectionMaterial;
 
     /**
+     * 材质
+     */
+    private String pipeSectionMaterialName;
+
+    /**
      * 规格
      */
     private String pipeSectionSpec;
+
+    /**
+     * 规格
+     */
+    private String pipeSectionSpecName;
 
     /**
      * 外径
@@ -536,5 +546,21 @@ public class DaqMvAcrossInfoBo extends CommonBaseBo {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public String getPipeSectionMaterialName() {
+        return pipeSectionMaterialName;
+    }
+
+    public void setPipeSectionMaterialName(String pipeSectionMaterialName) {
+        this.pipeSectionMaterialName = pipeSectionMaterialName;
+    }
+
+    public String getPipeSectionSpecName() {
+        return pipeSectionSpecName;
+    }
+
+    public void setPipeSectionSpecName(String pipeSectionSpecName) {
+        this.pipeSectionSpecName = pipeSectionSpecName;
     }
 }

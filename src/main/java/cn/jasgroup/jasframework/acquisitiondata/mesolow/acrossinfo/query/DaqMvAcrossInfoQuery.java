@@ -50,7 +50,8 @@ public class DaqMvAcrossInfoQuery extends BaseJavaQuery {
                 "case when wc.burial_method=1 then '埋地管' when wc.burial_method=2 then '明管' end as burial_method_name, " +
                 "case when wc.pipe_section_category=1 then '市政管' when wc.pipe_section_category=2 then '庭院管' end as pipe_section_category_name, " +
                 "case when wc.design_life=1 then '30' when wc.design_life=2 then '50' end as design_life_name, " +
-                "case when wc.approve_status = -1 then '驳回' when wc.approve_status = 1 then '待审核' when wc.approve_status = 2 then '审核通过' else '未上报' end as approve_status_name " +
+                "case when wc.approve_status = -1 then '驳回' when wc.approve_status = 1 then '待审核' when wc.approve_status = 2 then '审核通过' else '未上报' end as approve_status_name," +
+                "doma2.code_name pipe_section_material_name,doma3.code_name pipe_section_spec_name " +
                 "from daq_mv_across_info wc " +
                 "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = wc.project_oid " +
                 "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) pu on pu.oid = wc.supervision_unit  " +
@@ -58,7 +59,10 @@ public class DaqMvAcrossInfoQuery extends BaseJavaQuery {
                 "LEFT JOIN (select oid,pipe_node_code from daq_mv_pipe_node where active=1) mpn on mpn.oid=wc.start_pipe_node_oid " +
                 "LEFT JOIN (select oid,pipe_node_code from daq_mv_pipe_node where active=1) mpn1 on mpn1.oid=wc.end_pipe_node_oid  " +
                 "LEFT JOIN (SELECT code_id,code_name,active FROM sys_domain where domain_name = 'across_method_domain' and active=1 ) doma ON doma.code_id = wc.across_method " +
-                "LEFT JOIN (SELECT code_id,code_name,active FROM sys_domain where domain_name = 'across_object_domain' and active=1 ) doma1 ON doma1.code_id = wc.across_object where wc.active=1  ");
+                "LEFT JOIN (SELECT code_id,code_name,active FROM sys_domain where domain_name = 'across_object_domain' and active=1 ) doma1 ON doma1.code_id = wc.across_object " +
+                "LEFT JOIN (SELECT code_id,code_name,active FROM sys_domain where domain_name = 'pipe_section_material_domain' and active=1 ) doma2 ON doma2.code_id = wc.pipe_section_material " +
+                "LEFT JOIN (SELECT code_id,code_name,active FROM sys_domain where domain_name = 'pipe_section_spec_domain' and active=1 ) doma3 ON doma3.code_id = wc.pipe_section_spec " +
+                "where wc.active=1  ");
         bufferSql.append(conditionSql());
         return bufferSql.toString();
     }
