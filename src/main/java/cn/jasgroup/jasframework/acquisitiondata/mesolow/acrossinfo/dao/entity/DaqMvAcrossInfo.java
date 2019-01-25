@@ -34,6 +34,7 @@ import javax.persistence.TemporalType;
         startY = "startPointy",
         endX = "endPointx",
         endY = "endPointy",
+        anchorClass=DaqMvAcrossInfo.class,
         geometryColumnName = "geom",
         calculateType = CalculateType.DoubleAnchor
 )

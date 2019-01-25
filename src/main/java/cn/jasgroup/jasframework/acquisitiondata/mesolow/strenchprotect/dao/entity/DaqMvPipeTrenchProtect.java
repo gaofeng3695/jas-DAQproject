@@ -37,6 +37,7 @@ import javax.persistence.Transient;
         startY = "startPointy",
         endX = "endPointx",
         endY = "endPointy",
+        anchorClass=DaqMvPipeTrenchProtect.class,
         geometryColumnName = "geom",
         calculateType = CalculateType.DoubleAnchor
 )
