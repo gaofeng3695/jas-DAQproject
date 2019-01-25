@@ -246,6 +246,16 @@ public class MvValveInfo extends CommonJdbcEntity {
 	 */
 	private String wellCoverMaterialName; 
 
+	/**
+	 * 采集单位 
+	 */
+	private String constructUnitName; 
+
+	/**
+	 * 监理单位 
+	 */
+	private String supervisionUnitName; 
+
 	public String getProjectOid() {
 		return projectOid; 
 	}
@@ -609,6 +619,24 @@ public class MvValveInfo extends CommonJdbcEntity {
 	}
 
 	public void setWellCoverMaterialName(String wellCoverMaterialName) {
+	}
+
+	@Transient
+	public String getConstructUnitName() {
+		return constructUnitName;
+	}
+
+	public void setConstructUnitName(String constructUnitName) {
+		this.constructUnitName = constructUnitName;
+	}
+
+	@Transient
+	public String getSupervisionUnitName() {
+		return supervisionUnitName;
+	}
+
+	public void setSupervisionUnitName(String supervisionUnitName) {
+		this.supervisionUnitName = supervisionUnitName;
 	}
 	
 }
