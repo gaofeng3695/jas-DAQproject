@@ -543,8 +543,13 @@ Vue.component('jas-search-for-list', {
 						})(field, config)
 					}
 					if (config.optionUrl) {
+						
 						(function (field, config) {
-							jasTools.ajax.post(jasTools.base.rootPath + "/" + config.optionUrl, {}, function (data) {
+							var obj={};
+							if (config.requestParams) {
+								obj = jasTools.base.extend(obj, config.requestParams);
+							}
+							jasTools.ajax.post(jasTools.base.rootPath + "/" + config.optionUrl, obj, function (data) {
 								config.options = data.rows;
 							});
 						})(field, config)
@@ -1479,7 +1484,7 @@ Vue.component('jas-form-items', {
 
 		},
 		visibleChange: function (isShowOptions, currentField) {
-			
+
 			if (!isShowOptions) return;
 			var fieldArr = [];
 			var fieldNameArr = [];
@@ -1489,9 +1494,9 @@ Vue.component('jas-form-items', {
 				fieldArr.push(item.field);
 				fieldNameArr.push(item.name);
 			});
-			
+
 			for (var field in fieldsConfig) {
-				var fieldIndex = fieldArr.indexOf(field);			
+				var fieldIndex = fieldArr.indexOf(field);
 				if (fieldIndex > -1 && fieldsConfig.hasOwnProperty(field)) {
 					if (fieldsConfig[field].childSelect && fieldsConfig[field].childSelect.indexOf(currentField) > -1) {
 						if (!this.form[field]) {
@@ -1526,12 +1531,12 @@ Vue.component('jas-form-items', {
 				if(!form[fatherField]){
 					form[childField] = '';
 					that.fieldsConfig[childField].options=[];
-				} 
+				}
 				if(that.fieldsConfig[childField].isInit){
 					if(options.length>0 && !that.form[childField]) that.form[childField] = options[0].key;
 					that.$refs[childField][0].$emit('change', true);
 				}
-				
+
 
 			};
 
@@ -1676,10 +1681,10 @@ Vue.component('jas-form-items-group', {
 		'				</template>',
 
 		'				<template v-if="fieldsConfig[item.field].type == \'input\'">',
-		'					<el-input @change="fieldChanged(item.field)" v-model.trim="form[item.field]" :placeholder="\'请输入\'+item.name" size="small" clearable></el-input>',
+		'					<el-input v-bind:disabled=fieldsConfig[item.field].disabled  @change="fieldChanged(item.field)" v-model.trim="form[item.field]" :placeholder="\'请输入\'+item.name" size="small" clearable></el-input>',
 		'				</template>',
 		'	    	<template v-if="fieldsConfig[item.field].type == \'number\'">',
-		'					<el-input-number @change="fieldChanged(item.field)" v-model="form[item.field]" :precision="fieldsConfig[item.field].precision" :step="1" :max="fieldsConfig[item.field].max || 999999" controls-position="right" clearable :placeholder="\'请输入\'+item.name" size="small"></el-input-number>',
+		'					<el-input-number v-bind:disabled=fieldsConfig[item.field].disabled  @change="fieldChanged(item.field)" v-model="form[item.field]" :precision="fieldsConfig[item.field].precision" :step="1" :max="fieldsConfig[item.field].max || 999999" controls-position="right" clearable :placeholder="\'请输入\'+item.name" size="small"></el-input-number>',
 		'	    	</template>',
 		'				<template v-if="fieldsConfig[item.field].type == \'date\'">',
 		'					<el-date-picker clearable value-format="yyyy-MM-dd" type="date" :picker-options="fieldsConfig[item.field].pickerOptions" :placeholder="\'请选择\'+item.name" @change="fieldChanged(item.field)" v-model="form[item.field]" size="small" style="width: 100%;"></el-date-picker>',
@@ -1690,10 +1695,6 @@ Vue.component('jas-form-items-group', {
 		'</el-row>',
 		'</div>',
 		'</div>',
-
-
-
-
 	].join(''),
 	methods: {
 		triggerFatherSelectsChange: function (fatherSelectList) {
@@ -1757,7 +1758,7 @@ Vue.component('jas-form-items-group', {
 							jasTools.ajax.post(jasTools.base.rootPath + "/" + config.optionUrl, obj, function (data) {
 								//下拉框是否进行初始化显示
 								config.options = data.rows;
-								if(config.isInit){
+								if(config.isInit && config.options.length>0){
 									that.form[field]=config.options[0].key;
 									that.$refs[field][0].$emit('change', false);
 								}
@@ -1817,10 +1818,10 @@ Vue.component('jas-form-items-group', {
 					that.fieldsConfig[childField].options=[];
 				}
 				if(that.fieldsConfig[childField].isInit){
-					if(options.length>0 && !that.form[childField]) that.form[childField] = options[0].key;	
+					if(options.length>0 && !that.form[childField]) that.form[childField] = options[0].key;
 					that.$refs[childField][0].$emit('change', true);
 				}
-				
+
 			};
 
 			var getAndSet = function (fatherField, fatherValue, childField, requestUrl) {
@@ -1847,11 +1848,25 @@ Vue.component('jas-form-items-group', {
 				var url = fieldConfig.childUrl[index] || fieldConfig.childUrl[0];
 				getAndSet(fatherField, form[fatherField], childField, url);
 			});
-			this.fieldChanged(fatherField)
+		  if (that.fieldsConfig[fatherField].type == 'date') {
+			   this.fieldChanged(fatherField);
+		   }  
+		  if(that.fieldsConfig[fatherField].subDefault){//subDefault仅限于 数据填充来源于  select  options
+			  var optionsObj={};//表示选中的值
+			  that.fieldsConfig[fatherField].options.forEach(function(item){
+				  if(item.key==that.form[fatherField]){
+					  optionsObj=item;
+				  }
+			  });
+			  for(var key in that.fieldsConfig[fatherField].subDefault){
+				  that.form[key]=optionsObj[that.fieldsConfig[fatherField].subDefault[key].value];
+			  }
+		  }
 		},
-		fieldChanged: function (field) {
+		fieldChanged: function (field) {//进行日期的配置  此处进行配置规则的渲染
 			var that = this;
 			this.$refs[field + 123][0].form.validateField(field);
+			//if() 进行判断是否有规则 需要规则字段 规则值
 			if (that.fieldsConfig[field].type == 'date') {
 				if (that.fieldsConfig[field].lessDateScope && that.fieldsConfig[field].lessDateScope.length > 0) {
 					that.fieldsConfig[field].lessDateScope.forEach(function (item) {
@@ -1885,6 +1900,7 @@ Vue.component('jas-form-items-group', {
 					});
 				}
 			}
+
 		},
 		requestDomainFromDomainTable: function (domainName, cb) {
 			var that = this;
