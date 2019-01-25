@@ -7,6 +7,11 @@ import cn.jasgroup.framework.spatial.support.enumeration.ScopeType;
 import cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.dao.entity.MedianStake;
 import cn.jasgroup.jasframework.base.annotation.*;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 /**
  * @version V1.0
  * @description 辅助阳极地床实体
@@ -481,6 +486,8 @@ public class DaqStationAuxiliaryAnodeBed extends CommonJdbcEntity {
         return constructDate;
     }
 
+    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+    @Temporal(TemporalType.DATE)
     public void setConstructDate(Date constructDate) {
         this.constructDate = constructDate;
         super.setField("constructDate");
@@ -522,6 +529,8 @@ public class DaqStationAuxiliaryAnodeBed extends CommonJdbcEntity {
         super.setField("collectionPerson");
     }
 
+    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+    @Temporal(TemporalType.DATE)
     public Date getCollectionDate() {
         return collectionDate;
     }
