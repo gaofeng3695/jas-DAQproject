@@ -53,6 +53,7 @@ public class MvValveInfoQuery extends BaseJavaQuery {
 					+ "mv.discharge_pipe,mv.valve_discharge_pipe_info,mv.construct_unit,mv.collection_person,mv.collection_date,mv.supervision_unit,"
 					+ "mv.supervision_engineer,mv.geo_state,mv.approve_status,mv.remarks,mv.create_user_id,mv.create_user_name,mv.create_datetime,"
 					+ "mv.modify_user_id,mv.modify_user_name,mv.modify_datetime,mv.active,mv.geom,pro.project_name,node.pipe_node_code,"
+					+ "pu.unit_name as supervision_unit_name,u.unit_name as construct_unit_name,"
 					+ "case when mv.approve_status = -1 then '驳回' when mv.approve_status = 1 then '待审核' when mv.approve_status = 2 then '审核通过' else '未上报' end as approve_status_name,"
 					+ "case when mv.valve_material = 1 then '钢管' when mv.valve_material = 2 then 'PE管' else '' end as valve_material_name,"
 					+ "case when mv.burial_method = 1 then '直埋' when mv.burial_method = 2 then '阀门井' else '' end as burial_method_name,"
@@ -62,6 +63,8 @@ public class MvValveInfoQuery extends BaseJavaQuery {
 					+ "FROM daq_mv_valve_info mv "
 					+ "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = mv.project_oid "
 					+ "LEFT JOIN (select oid,pipe_node_code from daq_mv_pipe_node where active=1) node on node.oid=mv.pipe_node_oid "
+					+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) pu on pu.oid = mv.supervision_unit "
+					+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) u on u.oid = mv.construct_unit "
 					+ "WHERE 1 = 1 AND mv.active = 1";
 	sql += conditionSql();
 	return sql;
