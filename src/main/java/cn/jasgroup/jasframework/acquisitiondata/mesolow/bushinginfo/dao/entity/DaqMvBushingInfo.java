@@ -1,4 +1,4 @@
-package cn.jasgroup.jasframework.acquisitiondata.mesolow.acrossinfo.dao.entity;
+package cn.jasgroup.jasframework.acquisitiondata.mesolow.bushinginfo.dao.entity;
 
 
 import java.util.Date;
@@ -13,21 +13,20 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * <p>类描述：穿越信息实体</p>。
+ * <p>类描述：套管信息entity</p>。
  * @author cuixianing 。
  * @version v1.0.0.1。
  * @since JDK1.8。
- * <p>创建日期：2019年01月24日 17:37。</p>
+ * <p>创建日期：2019年01月25日 13:51。</p>
  */
-
 @CommonSaveConfig(
-        scene = "/daqMvAcrossInfo/save"
+        scene = "/daqMvBushingInfo/save"
 )
 @CommonUpdateConfig(
-        scene = "/daqMvAcrossInfo/update"
+        scene = "/daqMvBushingInfo/update"
 )
 @CommonDeleteConfig(
-        scene = "/daqMvAcrossInfo/delete"
+        scene = "/daqMvBushingInfo/delete"
 )
 @Line(
         startX = "startPointx",
@@ -37,16 +36,8 @@ import javax.persistence.TemporalType;
         geometryColumnName = "geom",
         calculateType = CalculateType.DoubleAnchor
 )
-@UniqueConstraints(
-        strategys = {
-                @UniqueConstraintStrategy(
-                        columnNames = {"projectOid","pipeSectionCode"},
-                        name = "同一工程下管段编号不能重复"
-                )
-        }
-)
-@JdbcEntity(name="daq_mv_across_info")
-public class DaqMvAcrossInfo extends CommonJdbcEntity {
+@JdbcEntity(name="daq_mv_bushing_info")
+public class DaqMvBushingInfo extends CommonJdbcEntity {
 
     /**
      * 工程oid
@@ -54,14 +45,14 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
     private String projectOid;
 
     /**
-     * 管段编号
+     * 材质
      */
-    private String pipeSectionCode;
+    private String bushingMaterial;
 
     /**
-     * 起始节点oid
+     * 规格
      */
-    private String startPipeNodeOid;
+    private String bushingSpec;
 
     /**
      * 起始点x坐标
@@ -79,9 +70,9 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
     private Double startPointz;
 
     /**
-     * 终止节点oid
+     * 起始点埋深(m)
      */
-    private String endPipeNodeOid;
+    private Double startBuriedDepth;
 
     /**
      * 终止点x坐标
@@ -99,59 +90,14 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
     private Double endPointz;
 
     /**
-     * 管段长度(m)
+     * 终止点埋深(m)
      */
-    private Double pipeSectionLength;
+    private Double endBuriedDepth;
 
     /**
-     * 穿越方式，域值:across_method_domain
+     * 是否设置检漏装置{0:否;1:是}
      */
-    private String acrossMethod;
-
-    /**
-     * 穿越对象类型，域值：across_object_domain
-     */
-    private String acrossObject;
-
-    /**
-     * 埋设方式{1:埋地管;2:明管}
-     */
-    private Integer burialMethod;
-
-    /**
-     * 管段类别{1:市政管;2:庭院管}
-     */
-    private Integer pipeSectionCategory;
-
-    /**
-     * 材质
-     */
-    private String pipeSectionMaterial;
-
-    /**
-     * 规格
-     */
-    private String pipeSectionSpec;
-
-    /**
-     * 外径
-     */
-    private Double outerDiameter;
-
-    /**
-     * 壁厚
-     */
-    private Double wallThickness;
-
-    /**
-     * 管道设计年限{30/50}
-     */
-    private Integer designLife;
-
-    /**
-     * 陀螺仪测量单位 
-     */
-    private String measureUnit;
+    private Integer hasCheckLeakDevice;
 
     /**
      * 采集单位
@@ -197,22 +143,22 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
         super.setField("projectOid");
     }
 
-    public String getPipeSectionCode() {
-        return pipeSectionCode;
+    public String getBushingMaterial() {
+        return bushingMaterial;
     }
 
-    public void setPipeSectionCode(String pipeSectionCode) {
-        this.pipeSectionCode = pipeSectionCode;
-        super.setField("pipeSectionCode");
+    public void setBushingMaterial(String bushingMaterial) {
+        this.bushingMaterial = bushingMaterial;
+        super.setField("bushingMaterial");
     }
 
-    public String getStartPipeNodeOid() {
-        return startPipeNodeOid;
+    public String getBushingSpec() {
+        return bushingSpec;
     }
 
-    public void setStartPipeNodeOid(String startPipeNodeOid) {
-        this.startPipeNodeOid = startPipeNodeOid;
-        super.setField("startPipeNodeOid");
+    public void setBushingSpec(String bushingSpec) {
+        this.bushingSpec = bushingSpec;
+        super.setField("bushingSpec");
     }
 
     public Double getStartPointx() {
@@ -242,13 +188,13 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
         super.setField("startPointz");
     }
 
-    public String getEndPipeNodeOid() {
-        return endPipeNodeOid;
+    public Double getStartBuriedDepth() {
+        return startBuriedDepth;
     }
 
-    public void setEndPipeNodeOid(String endPipeNodeOid) {
-        this.endPipeNodeOid = endPipeNodeOid;
-        super.setField("endPipeNodeOid");
+    public void setStartBuriedDepth(Double startBuriedDepth) {
+        this.startBuriedDepth = startBuriedDepth;
+        super.setField("startBuriedDepth");
     }
 
     public Double getEndPointx() {
@@ -278,103 +224,22 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
         super.setField("endPointz");
     }
 
-    public Double getPipeSectionLength() {
-        return pipeSectionLength;
+    public Double getEndBuriedDepth() {
+        return endBuriedDepth;
     }
 
-    public void setPipeSectionLength(Double pipeSectionLength) {
-        this.pipeSectionLength = pipeSectionLength;
-        super.setField("pipeSectionLength");
+    public void setEndBuriedDepth(Double endBuriedDepth) {
+        this.endBuriedDepth = endBuriedDepth;
+        super.setField("endBuriedDepth");
     }
 
-    public String getAcrossMethod() {
-        return acrossMethod;
+    public Integer getHasCheckLeakDevice() {
+        return hasCheckLeakDevice;
     }
 
-    public void setAcrossMethod(String acrossMethod) {
-        this.acrossMethod = acrossMethod;
-        super.setField("acrossMethod");
-    }
-
-    public String getAcrossObject() {
-        return acrossObject;
-    }
-
-    public void setAcrossObject(String acrossObject) {
-        this.acrossObject = acrossObject;
-        super.setField("acrossObject");
-    }
-
-    public Integer getBurialMethod() {
-        return burialMethod;
-    }
-
-    public void setBurialMethod(Integer burialMethod) {
-        this.burialMethod = burialMethod;
-        super.setField("burialMethod");
-    }
-
-    public Integer getPipeSectionCategory() {
-        return pipeSectionCategory;
-    }
-
-    public void setPipeSectionCategory(Integer pipeSectionCategory) {
-        this.pipeSectionCategory = pipeSectionCategory;
-        super.setField("pipeSectionCategory");
-    }
-
-    public String getPipeSectionMaterial() {
-        return pipeSectionMaterial;
-    }
-
-    public void setPipeSectionMaterial(String pipeSectionMaterial) {
-        this.pipeSectionMaterial = pipeSectionMaterial;
-        super.setField("pipeSectionMaterial");
-    }
-
-    public String getPipeSectionSpec() {
-        return pipeSectionSpec;
-    }
-
-    public void setPipeSectionSpec(String pipeSectionSpec) {
-        this.pipeSectionSpec = pipeSectionSpec;
-        super.setField("pipeSectionSpec");
-    }
-
-    public Double getOuterDiameter() {
-        return outerDiameter;
-    }
-
-    public void setOuterDiameter(Double outerDiameter) {
-        this.outerDiameter = outerDiameter;
-        super.setField("outerDiameter");
-    }
-
-    public Double getWallThickness() {
-        return wallThickness;
-    }
-
-    public void setWallThickness(Double wallThickness) {
-        this.wallThickness = wallThickness;
-        super.setField("wallThickness");
-    }
-
-    public Integer getDesignLife() {
-        return designLife;
-    }
-
-    public void setDesignLife(Integer designLife) {
-        this.designLife = designLife;
-        super.setField("designLife");
-    }
-
-    public String getMeasureUnit() {
-        return measureUnit;
-    }
-
-    public void setMeasureUnit(String measureUnit) {
-        this.measureUnit = measureUnit;
-        super.setField("measureUnit");
+    public void setHasCheckLeakDevice(Integer hasCheckLeakDevice) {
+        this.hasCheckLeakDevice = hasCheckLeakDevice;
+        super.setField("hasCheckLeakDevice");
     }
 
     public String getConstructUnit() {

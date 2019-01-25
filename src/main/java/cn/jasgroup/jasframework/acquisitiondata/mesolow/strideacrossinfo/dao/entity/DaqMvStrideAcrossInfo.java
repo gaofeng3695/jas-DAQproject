@@ -1,5 +1,4 @@
-package cn.jasgroup.jasframework.acquisitiondata.mesolow.acrossinfo.dao.entity;
-
+package cn.jasgroup.jasframework.acquisitiondata.mesolow.strideacrossinfo.dao.entity;
 
 import java.util.Date;
 
@@ -13,21 +12,20 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * <p>类描述：穿越信息实体</p>。
+ * <p>类描述：跨越信息entity</p>。
  * @author cuixianing 。
  * @version v1.0.0.1。
  * @since JDK1.8。
- * <p>创建日期：2019年01月24日 17:37。</p>
+ * <p>创建日期：2019年01月25日 10:41。</p>
  */
-
 @CommonSaveConfig(
-        scene = "/daqMvAcrossInfo/save"
+        scene = "/daqMvStrideAcrossInfo/save"
 )
 @CommonUpdateConfig(
-        scene = "/daqMvAcrossInfo/update"
+        scene = "/daqMvStrideAcrossInfo/update"
 )
 @CommonDeleteConfig(
-        scene = "/daqMvAcrossInfo/delete"
+        scene = "/daqMvStrideAcrossInfo/delete"
 )
 @Line(
         startX = "startPointx",
@@ -45,8 +43,8 @@ import javax.persistence.TemporalType;
                 )
         }
 )
-@JdbcEntity(name="daq_mv_across_info")
-public class DaqMvAcrossInfo extends CommonJdbcEntity {
+@JdbcEntity(name="daq_mv_stride_across_info")
+public class DaqMvStrideAcrossInfo extends CommonJdbcEntity {
 
     /**
      * 工程oid
@@ -59,7 +57,7 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
     private String pipeSectionCode;
 
     /**
-     * 起始节点oid
+     * 起始节点编号
      */
     private String startPipeNodeOid;
 
@@ -79,7 +77,7 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
     private Double startPointz;
 
     /**
-     * 终止节点oid
+     * 终止节点编号
      */
     private String endPipeNodeOid;
 
@@ -147,11 +145,6 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
      * 管道设计年限{30/50}
      */
     private Integer designLife;
-
-    /**
-     * 陀螺仪测量单位 
-     */
-    private String measureUnit;
 
     /**
      * 采集单位
@@ -366,15 +359,6 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
     public void setDesignLife(Integer designLife) {
         this.designLife = designLife;
         super.setField("designLife");
-    }
-
-    public String getMeasureUnit() {
-        return measureUnit;
-    }
-
-    public void setMeasureUnit(String measureUnit) {
-        this.measureUnit = measureUnit;
-        super.setField("measureUnit");
     }
 
     public String getConstructUnit() {

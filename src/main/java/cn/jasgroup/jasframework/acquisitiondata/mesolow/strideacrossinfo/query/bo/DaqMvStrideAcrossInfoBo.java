@@ -1,52 +1,25 @@
-package cn.jasgroup.jasframework.acquisitiondata.mesolow.acrossinfo.dao.entity;
+package cn.jasgroup.jasframework.acquisitiondata.mesolow.strideacrossinfo.query.bo;
 
-
-import java.util.Date;
-
-import cn.jasgroup.framework.spatial.annotation.Line;
-import cn.jasgroup.framework.spatial.support.enumeration.CalculateType;
-import cn.jasgroup.jasframework.base.annotation.*;
-import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
+import cn.jasgroup.jasframework.base.data.CommonBaseBo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import java.util.Date;
 
 /**
- * <p>类描述：穿越信息实体</p>。
+ * <p>类描述：跨越信息bo</p>。
  * @author cuixianing 。
  * @version v1.0.0.1。
  * @since JDK1.8。
- * <p>创建日期：2019年01月24日 17:37。</p>
+ * <p>创建日期：2019年01月25日 10:48。</p>
  */
+public class DaqMvStrideAcrossInfoBo extends CommonBaseBo {
 
-@CommonSaveConfig(
-        scene = "/daqMvAcrossInfo/save"
-)
-@CommonUpdateConfig(
-        scene = "/daqMvAcrossInfo/update"
-)
-@CommonDeleteConfig(
-        scene = "/daqMvAcrossInfo/delete"
-)
-@Line(
-        startX = "startPointx",
-        startY = "startPointy",
-        endX = "endPointx",
-        endY = "endPointy",
-        geometryColumnName = "geom",
-        calculateType = CalculateType.DoubleAnchor
-)
-@UniqueConstraints(
-        strategys = {
-                @UniqueConstraintStrategy(
-                        columnNames = {"projectOid","pipeSectionCode"},
-                        name = "同一工程下管段编号不能重复"
-                )
-        }
-)
-@JdbcEntity(name="daq_mv_across_info")
-public class DaqMvAcrossInfo extends CommonJdbcEntity {
+    /**
+     * oid
+     */
+    private String oid;
 
     /**
      * 工程oid
@@ -54,14 +27,24 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
     private String projectOid;
 
     /**
+     * 工程oid
+     */
+    private String projectName;
+
+    /**
      * 管段编号
      */
     private String pipeSectionCode;
 
     /**
-     * 起始节点oid
+     * 起始节点编号
      */
     private String startPipeNodeOid;
+
+    /**
+     * 起始节点编号
+     */
+    private String startPipeNodeName;
 
     /**
      * 起始点x坐标
@@ -79,9 +62,14 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
     private Double startPointz;
 
     /**
-     * 终止节点oid
+     * 终止节点编号
      */
     private String endPipeNodeOid;
+
+    /**
+     * 终止节点编号
+     */
+    private String endPipeNodeName;
 
     /**
      * 终止点x坐标
@@ -109,9 +97,19 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
     private String acrossMethod;
 
     /**
+     * 穿越方式，域值:across_method_domain
+     */
+    private String acrossMethodName;
+
+    /**
      * 穿越对象类型，域值：across_object_domain
      */
     private String acrossObject;
+
+    /**
+     * 穿越对象类型，域值：across_object_domain
+     */
+    private String acrossObjectName;
 
     /**
      * 埋设方式{1:埋地管;2:明管}
@@ -119,9 +117,19 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
     private Integer burialMethod;
 
     /**
+     * 埋设方式{1:埋地管;2:明管}
+     */
+    private String burialMethodName;
+
+    /**
      * 管段类别{1:市政管;2:庭院管}
      */
     private Integer pipeSectionCategory;
+
+    /**
+     * 管段类别{1:市政管;2:庭院管}
+     */
+    private String pipeSectionCategoryName;
 
     /**
      * 材质
@@ -129,9 +137,19 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
     private String pipeSectionMaterial;
 
     /**
+     * 材质pipe_section_material_domain
+     */
+    private String pipeSectionMaterialName;
+
+    /**
      * 规格
      */
     private String pipeSectionSpec;
+
+    /**
+     * 规格pipe_section_spec_domain
+     */
+    private String pipeSectionSpecName;
 
     /**
      * 外径
@@ -149,14 +167,19 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
     private Integer designLife;
 
     /**
-     * 陀螺仪测量单位 
+     * 管道设计年限{30/50}
      */
-    private String measureUnit;
+    private String designLifeName;
 
     /**
      * 采集单位
      */
     private String constructUnit;
+
+    /**
+     * 采集单位
+     */
+    private String constructUnitName;
 
     /**
      * 采集人员
@@ -174,19 +197,37 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
     private String supervisionUnit;
 
     /**
+     * 监理单位
+     */
+    private String supervisionUnitName;
+
+    /**
      * 监理工程师
      */
     private String supervisionEngineer;
 
     /**
-     * 空间数据状态
+     * 审核状态
      */
-    private String geoState;
+    private Integer approveStatus;
+
+    /**
+     * 审核状态
+     */
+    private String approveStatusName;
 
     /**
      * 备注
      */
     private String remarks;
+
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
+    }
 
     public String getProjectOid() {
         return projectOid;
@@ -194,7 +235,14 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
 
     public void setProjectOid(String projectOid) {
         this.projectOid = projectOid;
-        super.setField("projectOid");
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 
     public String getPipeSectionCode() {
@@ -203,7 +251,6 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
 
     public void setPipeSectionCode(String pipeSectionCode) {
         this.pipeSectionCode = pipeSectionCode;
-        super.setField("pipeSectionCode");
     }
 
     public String getStartPipeNodeOid() {
@@ -212,7 +259,14 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
 
     public void setStartPipeNodeOid(String startPipeNodeOid) {
         this.startPipeNodeOid = startPipeNodeOid;
-        super.setField("startPipeNodeOid");
+    }
+
+    public String getStartPipeNodeName() {
+        return startPipeNodeName;
+    }
+
+    public void setStartPipeNodeName(String startPipeNodeName) {
+        this.startPipeNodeName = startPipeNodeName;
     }
 
     public Double getStartPointx() {
@@ -221,7 +275,6 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
 
     public void setStartPointx(Double startPointx) {
         this.startPointx = startPointx;
-        super.setField("startPointx");
     }
 
     public Double getStartPointy() {
@@ -230,7 +283,6 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
 
     public void setStartPointy(Double startPointy) {
         this.startPointy = startPointy;
-        super.setField("startPointy");
     }
 
     public Double getStartPointz() {
@@ -239,7 +291,6 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
 
     public void setStartPointz(Double startPointz) {
         this.startPointz = startPointz;
-        super.setField("startPointz");
     }
 
     public String getEndPipeNodeOid() {
@@ -248,7 +299,14 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
 
     public void setEndPipeNodeOid(String endPipeNodeOid) {
         this.endPipeNodeOid = endPipeNodeOid;
-        super.setField("endPipeNodeOid");
+    }
+
+    public String getEndPipeNodeName() {
+        return endPipeNodeName;
+    }
+
+    public void setEndPipeNodeName(String endPipeNodeName) {
+        this.endPipeNodeName = endPipeNodeName;
     }
 
     public Double getEndPointx() {
@@ -257,7 +315,6 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
 
     public void setEndPointx(Double endPointx) {
         this.endPointx = endPointx;
-        super.setField("endPointx");
     }
 
     public Double getEndPointy() {
@@ -266,7 +323,6 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
 
     public void setEndPointy(Double endPointy) {
         this.endPointy = endPointy;
-        super.setField("endPointy");
     }
 
     public Double getEndPointz() {
@@ -275,7 +331,6 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
 
     public void setEndPointz(Double endPointz) {
         this.endPointz = endPointz;
-        super.setField("endPointz");
     }
 
     public Double getPipeSectionLength() {
@@ -284,7 +339,6 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
 
     public void setPipeSectionLength(Double pipeSectionLength) {
         this.pipeSectionLength = pipeSectionLength;
-        super.setField("pipeSectionLength");
     }
 
     public String getAcrossMethod() {
@@ -293,7 +347,14 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
 
     public void setAcrossMethod(String acrossMethod) {
         this.acrossMethod = acrossMethod;
-        super.setField("acrossMethod");
+    }
+
+    public String getAcrossMethodName() {
+        return acrossMethodName;
+    }
+
+    public void setAcrossMethodName(String acrossMethodName) {
+        this.acrossMethodName = acrossMethodName;
     }
 
     public String getAcrossObject() {
@@ -302,7 +363,14 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
 
     public void setAcrossObject(String acrossObject) {
         this.acrossObject = acrossObject;
-        super.setField("acrossObject");
+    }
+
+    public String getAcrossObjectName() {
+        return acrossObjectName;
+    }
+
+    public void setAcrossObjectName(String acrossObjectName) {
+        this.acrossObjectName = acrossObjectName;
     }
 
     public Integer getBurialMethod() {
@@ -311,7 +379,14 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
 
     public void setBurialMethod(Integer burialMethod) {
         this.burialMethod = burialMethod;
-        super.setField("burialMethod");
+    }
+
+    public String getBurialMethodName() {
+        return burialMethodName;
+    }
+
+    public void setBurialMethodName(String burialMethodName) {
+        this.burialMethodName = burialMethodName;
     }
 
     public Integer getPipeSectionCategory() {
@@ -320,7 +395,14 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
 
     public void setPipeSectionCategory(Integer pipeSectionCategory) {
         this.pipeSectionCategory = pipeSectionCategory;
-        super.setField("pipeSectionCategory");
+    }
+
+    public String getPipeSectionCategoryName() {
+        return pipeSectionCategoryName;
+    }
+
+    public void setPipeSectionCategoryName(String pipeSectionCategoryName) {
+        this.pipeSectionCategoryName = pipeSectionCategoryName;
     }
 
     public String getPipeSectionMaterial() {
@@ -329,7 +411,14 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
 
     public void setPipeSectionMaterial(String pipeSectionMaterial) {
         this.pipeSectionMaterial = pipeSectionMaterial;
-        super.setField("pipeSectionMaterial");
+    }
+
+    public String getPipeSectionMaterialName() {
+        return pipeSectionMaterialName;
+    }
+
+    public void setPipeSectionMaterialName(String pipeSectionMaterialName) {
+        this.pipeSectionMaterialName = pipeSectionMaterialName;
     }
 
     public String getPipeSectionSpec() {
@@ -338,7 +427,14 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
 
     public void setPipeSectionSpec(String pipeSectionSpec) {
         this.pipeSectionSpec = pipeSectionSpec;
-        super.setField("pipeSectionSpec");
+    }
+
+    public String getPipeSectionSpecName() {
+        return pipeSectionSpecName;
+    }
+
+    public void setPipeSectionSpecName(String pipeSectionSpecName) {
+        this.pipeSectionSpecName = pipeSectionSpecName;
     }
 
     public Double getOuterDiameter() {
@@ -347,7 +443,6 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
 
     public void setOuterDiameter(Double outerDiameter) {
         this.outerDiameter = outerDiameter;
-        super.setField("outerDiameter");
     }
 
     public Double getWallThickness() {
@@ -356,7 +451,6 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
 
     public void setWallThickness(Double wallThickness) {
         this.wallThickness = wallThickness;
-        super.setField("wallThickness");
     }
 
     public Integer getDesignLife() {
@@ -365,16 +459,14 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
 
     public void setDesignLife(Integer designLife) {
         this.designLife = designLife;
-        super.setField("designLife");
     }
 
-    public String getMeasureUnit() {
-        return measureUnit;
+    public String getDesignLifeName() {
+        return designLifeName;
     }
 
-    public void setMeasureUnit(String measureUnit) {
-        this.measureUnit = measureUnit;
-        super.setField("measureUnit");
+    public void setDesignLifeName(String designLifeName) {
+        this.designLifeName = designLifeName;
     }
 
     public String getConstructUnit() {
@@ -383,7 +475,14 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
 
     public void setConstructUnit(String constructUnit) {
         this.constructUnit = constructUnit;
-        super.setField("constructUnit");
+    }
+
+    public String getConstructUnitName() {
+        return constructUnitName;
+    }
+
+    public void setConstructUnitName(String constructUnitName) {
+        this.constructUnitName = constructUnitName;
     }
 
     public String getCollectionPerson() {
@@ -392,7 +491,6 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
 
     public void setCollectionPerson(String collectionPerson) {
         this.collectionPerson = collectionPerson;
-        super.setField("collectionPerson");
     }
 
     @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
@@ -403,7 +501,6 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
 
     public void setCollectionDate(Date collectionDate) {
         this.collectionDate = collectionDate;
-        super.setField("collectionDate");
     }
 
     public String getSupervisionUnit() {
@@ -412,7 +509,14 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
 
     public void setSupervisionUnit(String supervisionUnit) {
         this.supervisionUnit = supervisionUnit;
-        super.setField("supervisionUnit");
+    }
+
+    public String getSupervisionUnitName() {
+        return supervisionUnitName;
+    }
+
+    public void setSupervisionUnitName(String supervisionUnitName) {
+        this.supervisionUnitName = supervisionUnitName;
     }
 
     public String getSupervisionEngineer() {
@@ -421,16 +525,22 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
 
     public void setSupervisionEngineer(String supervisionEngineer) {
         this.supervisionEngineer = supervisionEngineer;
-        super.setField("supervisionEngineer");
     }
 
-    public String getGeoState() {
-        return geoState;
+    public Integer getApproveStatus() {
+        return approveStatus;
     }
 
-    public void setGeoState(String geoState) {
-        this.geoState = geoState;
-        super.setField("geoState");
+    public void setApproveStatus(Integer approveStatus) {
+        this.approveStatus = approveStatus;
+    }
+
+    public String getApproveStatusName() {
+        return approveStatusName;
+    }
+
+    public void setApproveStatusName(String approveStatusName) {
+        this.approveStatusName = approveStatusName;
     }
 
     public String getRemarks() {
@@ -439,7 +549,5 @@ public class DaqMvAcrossInfo extends CommonJdbcEntity {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
-        super.setField("remarks");
     }
-
 }
