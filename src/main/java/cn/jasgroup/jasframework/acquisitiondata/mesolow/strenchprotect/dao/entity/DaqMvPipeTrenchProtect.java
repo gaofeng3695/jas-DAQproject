@@ -4,6 +4,7 @@ import java.util.Date;
 
 import cn.jasgroup.framework.spatial.annotation.Line;
 import cn.jasgroup.framework.spatial.support.enumeration.CalculateType;
+import cn.jasgroup.jasframework.acquisitiondata.mesolow.pipenode.dao.entity.DaqMvPipeNode;
 import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
@@ -37,7 +38,7 @@ import javax.persistence.Transient;
         startY = "startPointy",
         endX = "endPointx",
         endY = "endPointy",
-        anchorClass=DaqMvPipeTrenchProtect.class,
+        anchorClass=DaqMvPipeNode.class,
         geometryColumnName = "geom",
         calculateType = CalculateType.DoubleAnchor
 )

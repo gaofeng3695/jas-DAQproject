@@ -6,6 +6,7 @@ import java.util.Date;
 import cn.jasgroup.framework.spatial.annotation.Line;
 import cn.jasgroup.framework.spatial.support.enumeration.CalculateType;
 import cn.jasgroup.jasframework.acquisitiondata.mesolow.acrossinfo.dao.entity.DaqMvAcrossInfo;
+import cn.jasgroup.jasframework.acquisitiondata.mesolow.pipenode.dao.entity.DaqMvPipeNode;
 import cn.jasgroup.jasframework.base.annotation.*;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -34,7 +35,7 @@ import javax.persistence.TemporalType;
         startY = "startPointy",
         endX = "endPointx",
         endY = "endPointy",
-        anchorClass=DaqMvBushingInfo.class,
+        anchorClass=DaqMvPipeNode.class,
         geometryColumnName = "geom",
         calculateType = CalculateType.DoubleAnchor
 )
