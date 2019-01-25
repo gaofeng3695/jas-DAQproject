@@ -2,7 +2,11 @@ package cn.jasgroup.jasframework.acquisitiondata.mesolow.mvvalve.dao.entity;
 
 import java.util.Date;
 
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import cn.jasgroup.framework.spatial.annotation.Point;
 import cn.jasgroup.framework.spatial.support.enumeration.CalculateType;
@@ -184,7 +188,7 @@ public class MvValveInfo extends CommonJdbcEntity {
 	/**
 	 * 审核状态 
 	 */
-	private Integer approveStatus; 
+	private Integer approveStatus=0; 
 
 	/**
 	 * 备注 
@@ -472,6 +476,8 @@ public class MvValveInfo extends CommonJdbcEntity {
 		super.setField("collectionPerson");
 	}
 
+    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+    @Temporal(TemporalType.DATE)
 	public Date getCollectionDate() {
 		return collectionDate; 
 	}
