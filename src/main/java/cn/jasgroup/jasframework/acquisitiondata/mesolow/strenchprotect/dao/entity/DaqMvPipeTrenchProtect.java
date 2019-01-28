@@ -9,6 +9,7 @@ import cn.jasgroup.jasframework.base.annotation.CommonDeleteConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonSaveConfig;
 import cn.jasgroup.jasframework.base.annotation.CommonUpdateConfig;
 import cn.jasgroup.jasframework.base.annotation.JdbcEntity;
+import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -25,22 +26,19 @@ import javax.persistence.Transient;
  * <p>创建日期：2019年01月25日 14:59。</p>
  */
 @CommonSaveConfig(
-        scene = "/daqMvPipeTrenchProtect/save"
+        scene = "/daqMvPipeTrenchProtect/save",
+        afterAdvice = {
+                @Process(service = "openGisService", method = "updateGeom()")
+        }
 )
 @CommonUpdateConfig(
-        scene = "/daqMvPipeTrenchProtect/update"
+        scene = "/daqMvPipeTrenchProtect/update",
+        afterAdvice = {
+                @Process(service = "openGisService", method = "updateGeom()")
+        }
 )
 @CommonDeleteConfig(
         scene = "/daqMvPipeTrenchProtect/delete"
-)
-@Line(
-        startX = "startPointx",
-        startY = "startPointy",
-        endX = "endPointx",
-        endY = "endPointy",
-        anchorClass=DaqMvPipeNode.class,
-        geometryColumnName = "geom",
-        calculateType = CalculateType.DoubleAnchor
 )
 @JdbcEntity(name="daq_mv_pipe_trench_protect")
 public class DaqMvPipeTrenchProtect extends CommonJdbcEntity {

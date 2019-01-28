@@ -6,6 +6,7 @@ import cn.jasgroup.framework.spatial.annotation.Line;
 import cn.jasgroup.framework.spatial.support.enumeration.CalculateType;
 import cn.jasgroup.jasframework.acquisitiondata.mesolow.pipenode.dao.entity.DaqMvPipeNode;
 import cn.jasgroup.jasframework.base.annotation.*;
+import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -20,22 +21,19 @@ import javax.persistence.TemporalType;
  * <p>创建日期：2019年01月25日 10:41。</p>
  */
 @CommonSaveConfig(
-        scene = "/daqMvStrideAcrossInfo/save"
+        scene = "/daqMvStrideAcrossInfo/save",
+        afterAdvice = {
+                @Process(service = "openGisService", method = "updateGeom()")
+        }
 )
 @CommonUpdateConfig(
-        scene = "/daqMvStrideAcrossInfo/update"
+        scene = "/daqMvStrideAcrossInfo/update",
+        afterAdvice = {
+                @Process(service = "openGisService", method = "updateGeom()")
+        }
 )
 @CommonDeleteConfig(
         scene = "/daqMvStrideAcrossInfo/delete"
-)
-@Line(
-        startX = "startPointx",
-        startY = "startPointy",
-        endX = "endPointx",
-        endY = "endPointy",
-        anchorClass=DaqMvPipeNode.class,
-        geometryColumnName = "geom",
-        calculateType = CalculateType.DoubleAnchor
 )
 @UniqueConstraints(
         strategys = {
