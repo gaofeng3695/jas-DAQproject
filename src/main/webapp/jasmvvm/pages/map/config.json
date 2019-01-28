@@ -947,6 +947,181 @@
             "strategy": "all",
             "outFields": "oid"
           }]
+        },
+        {
+          "id": "layerSet009",
+          "label": "中低压数据采集",
+          "layerSet": [{
+            "id": "daq_mv_pipe_node",
+            "label": "节点信息",
+            "index": 20,
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "renderer": {
+              "style": "auxiliaryAnodeBed",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all",
+            "outFields": "oid"
+          }, {
+            "id": "daq_mv_pipe_section",
+            "label": "管段信息",
+            "index": 20,
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "renderer": {
+              "style": "corrosionDetectionSys",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all",
+            "outFields": "oid"
+          }, {
+            "id": "daq_mv_across_info",
+            "label": "穿越信息",
+            "index": 20,
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "renderer": {
+              "style": "cpPowerSupply",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all",
+            "outFields": "oid"
+          }, {
+            "id": "daq_mv_stride_across_info",
+            "label": "跨越信息",
+            "index": 20,
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "renderer": {
+              "style": "cpPowerSupply",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all",
+            "outFields": "oid"
+          }, {
+            "id": "daq_mv_pipe_trench_protect",
+            "label": "管沟信息",
+            "index": 20,
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "renderer": {
+              "style": "cpPowerSupply",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all",
+            "outFields": "oid"
+          }, {
+            "id": "daq_mv_bushing_info",
+            "label": "套管信息",
+            "index": 20,
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "renderer": {
+              "style": "cpPowerSupply",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all",
+            "outFields": "oid"
+          }, {
+            "id": "daq_mv_valve_info",
+            "label": "阀门信息",
+            "index": 20,
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "renderer": {
+              "style": "cpPowerSupply",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all",
+            "outFields": "oid"
+          }, {
+            "id": "daq_mv_mark_stake",
+            "label": "标志桩信息",
+            "index": 20,
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "renderer": {
+              "style": "cpPowerSupply",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all",
+            "outFields": "oid"
+          }, {
+            "id": "daq_mv_electronic_label",
+            "label": "电子标签信息",
+            "index": 20,
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "renderer": {
+              "style": "cpPowerSupply",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all",
+            "outFields": "oid"
+          }, {
+            "id": "daq_mv_monitor_well",
+            "label": "监测井信息",
+            "index": 20,
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "renderer": {
+              "style": "cpPowerSupply",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all",
+            "outFields": "oid"
+          }]
         }
       ]
     }]
