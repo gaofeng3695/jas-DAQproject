@@ -763,17 +763,17 @@ Vue.component('jas-table-for-list', {
 		'  </span>',
 		'</div>',
 		'<div class="is-grown">',
-		'	<el-table ref="mytable" @selection-change="handleSelectionChange" @row-dblclick="preview" @row-click="checkRow" v-loading="loading" height="100%" :data="tableData" border :header-cell-style="headStyle" style="width: 100%" stripe>',
+		'	<el-table ref="mytable" @selection-change="handleSelectionChange" @row-dblclick="preview" @row-click="checkRow" v-loading="loading" height="100%" :data="tableData" border :header-cell-style="headStyle" style="width: 100%" stripe @sort-change="sortChange">',
 		'    <el-table-column type="selection" width="55" align="center" fixed></el-table-column>',
 		'		<el-table-column label="序号" type="index" align="center" width="50" fixed>',
 		'</el-table-column>',
 		'<template  v-for="item,index in fields">',
-		'<el-table-column  v-if="isShowStatus(item)":key="item.oid" :fixed="index=== 0?true:false" :label="item.name" :prop="item.field" :formatter="item.formatter" min-width="130px" show-overflow-tooltip align="center">',
+		'<el-table-column  v-if="isShowStatus(item)":key="item.oid" :fixed="index=== 0?true:false" :label="item.name" :prop="item.field" :formatter="item.formatter" min-width="130px" show-overflow-tooltip align="center" sortable >',
 		'<template slot-scope="scope" >',
 		'<el-tag  :type="isShowType(scope)" size="medium">{{ scope.row.approveStatusName }}</el-tag>',
 		'</template>',
 		'</el-table-column>',
-		'<el-table-column v-else   :key="item.oid" :fixed="index=== 0?true:false" :label="item.name" :prop="item.field" :formatter="item.formatter" min-width="130px" show-overflow-tooltip align="center">',
+		'<el-table-column v-else   :key="item.oid" :fixed="index=== 0?true:false" :label="item.name" :prop="item.field" :formatter="item.formatter" min-width="165px" show-overflow-tooltip align="center" sortable >',
 
 		'</el-table-column>',
 		'</template>',
@@ -973,6 +973,28 @@ Vue.component('jas-table-for-list', {
 			var obj = jasTools.base.extend({}, {
 				pageNo: this.currentPage,
 				pageSize: this.pageSize,
+			}, this.form);
+			var url = jasTools.base.rootPath + this.searchPath;
+			jasTools.ajax.post(url, obj, function (data) {
+				setTimeout(function () {
+					that.loading = false;
+				}, 300);
+				that.tableData = data.rows;
+				that.total = data.total;
+			});
+		},
+		sortChange:function(column, prop, order){
+			var orderBy = null;
+			if(column.prop!=null){
+				orderBy = column.prop+" "+(column.order==='ascending'?'asc':'desc');
+				orderBy = orderBy.replace(/([A-Z])/g,"_$1").toLowerCase()
+			}
+	        var that = this;
+			that.loading = true;
+			var obj = jasTools.base.extend({}, {
+				pageNo: this.currentPage,
+				pageSize: this.pageSize,
+				orderBy:orderBy,
 			}, this.form);
 			var url = jasTools.base.rootPath + this.searchPath;
 			jasTools.ajax.post(url, obj, function (data) {
