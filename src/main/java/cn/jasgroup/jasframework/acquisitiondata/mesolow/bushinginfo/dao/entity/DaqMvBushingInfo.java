@@ -8,6 +8,7 @@ import cn.jasgroup.framework.spatial.support.enumeration.CalculateType;
 import cn.jasgroup.jasframework.acquisitiondata.mesolow.acrossinfo.dao.entity.DaqMvAcrossInfo;
 import cn.jasgroup.jasframework.acquisitiondata.mesolow.pipenode.dao.entity.DaqMvPipeNode;
 import cn.jasgroup.jasframework.base.annotation.*;
+import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -22,22 +23,19 @@ import javax.persistence.TemporalType;
  * <p>创建日期：2019年01月25日 13:51。</p>
  */
 @CommonSaveConfig(
-        scene = "/daqMvBushingInfo/save"
+        scene = "/daqMvBushingInfo/save",
+        afterAdvice = {
+                @Process(service = "openGisService", method = "updateGeom()")
+        }
 )
 @CommonUpdateConfig(
-        scene = "/daqMvBushingInfo/update"
+        scene = "/daqMvBushingInfo/update",
+        afterAdvice = {
+                @Process(service = "openGisService", method = "updateGeom()")
+        }
 )
 @CommonDeleteConfig(
         scene = "/daqMvBushingInfo/delete"
-)
-@Line(
-        startX = "startPointx",
-        startY = "startPointy",
-        endX = "endPointx",
-        endY = "endPointy",
-        anchorClass=DaqMvPipeNode.class,
-        geometryColumnName = "geom",
-        calculateType = CalculateType.DoubleAnchor
 )
 @JdbcEntity(name="daq_mv_bushing_info")
 public class DaqMvBushingInfo extends CommonJdbcEntity {
