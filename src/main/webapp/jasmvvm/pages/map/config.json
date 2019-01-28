@@ -977,7 +977,7 @@
             "flash": true,
             "visible": false,
             "renderer": {
-              "style": "corrosionDetectionSys",
+              "style": "crossExcavation",
               "labelStyle": "",
               "labelField": ""
             },
@@ -994,7 +994,7 @@
             "flash": true,
             "visible": false,
             "renderer": {
-              "style": "cpPowerSupply",
+              "style": "crossAcross",
               "labelStyle": "",
               "labelField": ""
             },
@@ -1011,7 +1011,7 @@
             "flash": true,
             "visible": false,
             "renderer": {
-              "style": "cpPowerSupply",
+              "style": "crossDrillingBlasting",
               "labelStyle": "",
               "labelField": ""
             },
@@ -1028,7 +1028,7 @@
             "flash": true,
             "visible": false,
             "renderer": {
-              "style": "cpPowerSupply",
+              "style": "crossShield",
               "labelStyle": "",
               "labelField": ""
             },
@@ -1045,7 +1045,7 @@
             "flash": true,
             "visible": false,
             "renderer": {
-              "style": "cpPowerSupply",
+              "style": "crossDrilling",
               "labelStyle": "",
               "labelField": ""
             },

@@ -1576,7 +1576,7 @@ var mvConfig = {
       pipeTrenchWidth: {
         type: 'number',
         name: '管沟宽度(m)',
-        isRequired: true,
+     //   isRequired: true,
         max: 999999,
         min: 0,
         precision: 3
@@ -1584,7 +1584,7 @@ var mvConfig = {
       pipeTrenchHeight: {
         type: 'number',
         name: '管沟高度(m)',
-        isRequired: true,
+//        isRequired: true,
         max: 99999,
         min: 0,
         precision: 4
@@ -2282,7 +2282,7 @@ var mvConfig = {
       dischargePipe: {
         type: 'number',
         name: '放散管径',
-        isRequired: true,
+        //isRequired: true,
         max: 999999,
         min: 0,
         precision: 3
@@ -2452,6 +2452,7 @@ var mvConfig = {
       markStakeMaterial: {
         type: "select",
         name: "标志桩材质",
+        isRequired: true,
         domainName: "mark_stake_material_domain"
       },
       markStakeMaterialName: {
@@ -2627,6 +2628,7 @@ var mvConfig = {
       },
       electronicLabelFeatures: {
         type: "select",
+        isRequired: true,
         name: "电子标签特征点类型",
         domainName:"electronic_label_features_domain"
       },
@@ -2651,8 +2653,8 @@ var mvConfig = {
       },
       pointz: {
         type: 'number',
-        name: '地面高程',
-        isRequired: true,
+        name: '管顶高程',
+//        isRequired: true,
         max: 999999,
         min: 0,
         precision: 3
@@ -2809,6 +2811,7 @@ var mvConfig = {
       monitorWellCode: {
         type: "input",
         name: "编号",
+        isRequired: true,
         rules: [{
           min: 0,
           max: "50",
@@ -2834,7 +2837,7 @@ var mvConfig = {
       pointz: {
         type: 'number',
         name: '管顶高程',
-        isRequired: true,
+//        isRequired: true,
         max: 999999,
         min: 0,
         precision: 3
@@ -2842,7 +2845,7 @@ var mvConfig = {
       investmentDate: {
         type: 'date',
         name: '投用日期',
-        isRequired: true,
+//        isRequired: true,
       },
       monitorWellMaterial: {
         type: "select",

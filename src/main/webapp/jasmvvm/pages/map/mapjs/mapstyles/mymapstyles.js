@@ -209,35 +209,35 @@ JasMap.require(function () {
 			radius: 5,
 		})
 	});
-	//开挖穿越
+	//开挖穿越   ---管段信息
 	mapStyleTemplates.crossExcavation = new ol.style.Style({
 		stroke: new ol.style.Stroke({
 			color: '#1100b7',
 			width: 5
 		})
 	});
-	//穿跨越
+	//穿跨越---穿越信息
 	mapStyleTemplates.crossAcross = new ol.style.Style({
 		stroke: new ol.style.Stroke({
 			color: '#fec880',
 			width: 5
 		})
 	});
-	//钻爆隧道穿越
+	//钻爆隧道穿越---跨越信息
 	mapStyleTemplates.crossDrillingBlasting = style = new ol.style.Style({
 		stroke: new ol.style.Stroke({
 			color: '#f9ff00',
 			width: 5
 		})
 	});
-	//盾构隧道穿越
+	//盾构隧道穿越---管沟信息
 	mapStyleTemplates.crossShield = new ol.style.Style({
 		stroke: new ol.style.Stroke({
 			color: '#ccf068',
 			width: 5
 		})
 	});
-	//定向钻穿越
+	//定向钻穿越---套管信息
 	mapStyleTemplates.crossDrilling = new ol.style.Style({
 		stroke: new ol.style.Stroke({
 			color: '#00e0fc',
