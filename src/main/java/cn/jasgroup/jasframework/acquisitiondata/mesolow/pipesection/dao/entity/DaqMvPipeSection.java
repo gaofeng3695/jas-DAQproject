@@ -4,6 +4,7 @@ import java.util.Date;
 import cn.jasgroup.framework.spatial.annotation.Line;
 import cn.jasgroup.jasframework.acquisitiondata.mesolow.pipenode.dao.entity.DaqMvPipeNode;
 import cn.jasgroup.jasframework.base.annotation.*;
+import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import cn.jasgroup.framework.spatial.support.enumeration.CalculateType;
@@ -19,21 +20,18 @@ import javax.persistence.TemporalType;
  * @since JDK 1.80
  */
 
-@CommonSaveConfig(scene = "/mvPipeSection/save")
-@CommonUpdateConfig(scene = "/mvPipeSection/update")
+@CommonSaveConfig(scene = "/mvPipeSection/save",
+        afterAdvice = {
+                @Process(service = "openGisService", method = "updateGeom()")
+        })
+@CommonUpdateConfig(scene = "/mvPipeSection/update",
+        afterAdvice = {
+                @Process(service = "openGisService", method = "updateGeom()")
+        })
 @CommonDeleteConfig(scene = "/mvPipeSection/delete")
 @CommonDeleteBatchConfig(scene = "/mvPipeSection/deleteBatch")
 @CommonGetConfig(scene = "/mvPipeSection/get")
-//前后坐标点
-@Line(
-        startX = "startPointx",
-        startY = "startPointy",
-        endX = "endPointx",
-        endY = "endPointy",
-        geometryColumnName = "geom",
-        calculateType = CalculateType.DoubleAnchor,
-        anchorClass=DaqMvPipeNode.class
-)
+
 @UniqueConstraints(
     strategys ={
         @UniqueConstraintStrategy(
