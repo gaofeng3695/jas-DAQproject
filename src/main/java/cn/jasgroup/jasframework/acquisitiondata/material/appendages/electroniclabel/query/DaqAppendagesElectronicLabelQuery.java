@@ -40,14 +40,14 @@ public class DaqAppendagesElectronicLabelQuery extends BaseJavaQuery {
 	@Override
 	public String getQuerySql() {
 		String sql =  "select t.*,"
-				+ " d1.code_name as featurePointTypeName,"
+				+ " d1.code_name as feature_point_type_name,"
 				+ "	p.project_name,"
 				+ "	l.pipeline_name,"
 				+ "	dt.tenders_name,"
-				+ "	v.name as pipeSegmentOrCrossName,"
+				+ "	v.name as pipe_segment_or_cross_name,"
 				+ "	ms.median_stake_code, "
-				+ "	u1.unit_name as constructUnitName,"
-				+ "	u2.unit_name as supervisionUnitName"				
+				+ "	u1.unit_name as construct_unit_name,"
+				+ "	u2.unit_name as supervision_unit_name"				
 				+ " from daq_appendages_electronic_label t "
 				+ " left join (select code_id,code_name from sys_domain) d1 on d1.code_id = t.feature_point_type"				
 				+ " left join (select oid,project_name from daq_project) p on p.oid=t.project_oid "
