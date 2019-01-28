@@ -1900,8 +1900,8 @@ var mvConfig = {
     ],
     tableFields: [
       'approveStatus',
-      'projectOid',
-      'pipeNodeOid',
+      'projectName',
+      'pipeNodeCode',
       'valveCode',
       'manufacturer',
       'valveSpec',
@@ -1922,10 +1922,10 @@ var mvConfig = {
       'wellCoverMaterialName',
       'dischargePipe',
       'valveDischargePipeInfo',
-      'constructUnit',
+      'constructUnitName',
       'collectionPerson',
       'collectionDate',
-      'supervisionUnit',
+      'supervisionUnitName',
       'supervisionEngineer',
       'remarks'
     ],
@@ -1971,7 +1971,7 @@ var mvConfig = {
       'approveStatus'
     ],
     detailFields1: [ //
-      'pipeNodeOid',
+      'pipeNodeCode',
       'valveCode',
       'manufacturer',
       'valveSpec',
@@ -2084,6 +2084,9 @@ var mvConfig = {
             value:"buried_depth"
           }
         },
+      },
+      pipeNodeCode:{
+    	  name: "节点名称"  
       },
       valveCode: {
         type: 'input',
@@ -2855,8 +2858,6 @@ var mvConfig = {
     formatFields: function (fields, fieldsConfig, templateCode) {
 
       return fields.map(function (item) {
-    		console.log(item);
-        	console.log(fieldsConfig[item].name)
         return {
           name: fieldsConfig[item].name,
           field: item,
