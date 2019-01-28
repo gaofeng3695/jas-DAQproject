@@ -197,7 +197,7 @@ var mvConfig = {
       },
       pointx: {
         type: 'number',
-        name: 'x坐标',
+        name: 'X坐标',
         max: 999999,
         min: 0,
         precision: 3,
@@ -205,7 +205,7 @@ var mvConfig = {
       },
       pointy: {
         type: 'number',
-        name: 'y坐标',
+        name: 'Y坐标',
         max: 999999,
         min: 0,
         precision: 3,
@@ -2175,7 +2175,7 @@ var mvConfig = {
       },
       pointx: {
         type: 'number',
-        name: '坐标X',
+        name: 'X坐标',
         isRequired: true,
         max: 999999,
         min: 0,
@@ -2184,7 +2184,7 @@ var mvConfig = {
       },
       pointy: {
         type: 'number',
-        name: '坐标Y',
+        name: 'Y坐标',
         isRequired: true,
         max: 999999,
         min: 0,
@@ -2459,7 +2459,7 @@ var mvConfig = {
       },
       pointx: {
         type: 'number',
-        name: '坐标X',
+        name: 'X坐标',
         isRequired: true,
         max: 999999,
         min: 0,
@@ -2467,7 +2467,7 @@ var mvConfig = {
       },
       pointy: {
         type: 'number',
-        name: '坐标Y',
+        name: 'Y坐标',
         isRequired: true,
         max: 999999,
         min: 0,
@@ -2635,7 +2635,7 @@ var mvConfig = {
       },
       pointx: {
         type: 'number',
-        name: '坐标X',
+        name: 'X坐标',
         isRequired: true,
         max: 999999,
         min: 0,
@@ -2643,7 +2643,7 @@ var mvConfig = {
       },
       pointy: {
         type: 'number',
-        name: '坐标Y',
+        name: 'Y坐标',
         isRequired: true,
         max: 999999,
         min: 0,
@@ -2817,7 +2817,7 @@ var mvConfig = {
       },
       pointx: {
         type: 'number',
-        name: '坐标X',
+        name: 'X坐标',
         isRequired: true,
         max: 999999,
         min: 0,
@@ -2825,7 +2825,7 @@ var mvConfig = {
       },
       pointy: {
         type: 'number',
-        name: '坐标Y',
+        name: 'Y坐标',
         isRequired: true,
         max: 999999,
         min: 0,
@@ -2854,7 +2854,7 @@ var mvConfig = {
       }
     }
   },
-  methods: {
+  methods: { 
     formatFields: function (fields, fieldsConfig, templateCode) {
 
       return fields.map(function (item) {
@@ -2877,4 +2877,4 @@ var mvConfig = {
   }
 };
 
-
+ 
