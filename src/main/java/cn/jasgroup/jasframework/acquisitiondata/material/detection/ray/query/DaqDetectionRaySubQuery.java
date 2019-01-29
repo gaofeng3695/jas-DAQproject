@@ -28,7 +28,7 @@ public class DaqDetectionRaySubQuery extends BaseJavaQuery{
 
 	@Override
 	public String getQuerySql() {
-		String sql = "select t.*,d.code_name as defectPropertiesName,"
+		String sql = "select t.*,d.code_name as defect_properties_name,"
 				+ " vdwi.weld_code "	
 				+ " from daq_detection_ray_sub t "
 				+ " left join sys_domain d on d.code_id = t.defect_properties"
