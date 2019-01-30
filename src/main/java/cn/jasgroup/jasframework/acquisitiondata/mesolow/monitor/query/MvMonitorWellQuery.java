@@ -1,5 +1,7 @@
 package cn.jasgroup.jasframework.acquisitiondata.mesolow.monitor.query;
 
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 
 import cn.jasgroup.jasframework.acquisitiondata.mesolow.monitor.dao.entity.MvMonitorWell;
@@ -38,6 +40,11 @@ public class MvMonitorWellQuery extends BaseJavaQuery {
 	 * 编号 
 	 */
 	private String monitorWellCode;
+
+	/**
+	 * oids
+	 */
+	private List<String> oids;
 	
 	@Override
 	public String getQuerySql() {
@@ -60,6 +67,9 @@ public class MvMonitorWellQuery extends BaseJavaQuery {
 		if (StringUtils.isNotBlank(oid)) {
 			conditionSql += " and mv.oid=:oid";
 		}else{
+			if (oids != null && oids.size() > 0) {
+				conditionSql += "mvel.oid in (:oids)";
+			}
 			if (StringUtils.isNotBlank(projectOid)) {
 				conditionSql += " and mv.project_oid = :projectOid";
 			}
@@ -97,6 +107,14 @@ public class MvMonitorWellQuery extends BaseJavaQuery {
 
 	public void setMonitorWellCode(String monitorWellCode) {
 		this.monitorWellCode = monitorWellCode;
+	}
+
+	public List<String> getOids() {
+		return oids;
+	}
+
+	public void setOids(List<String> oids) {
+		this.oids = oids;
 	}
 	
 }

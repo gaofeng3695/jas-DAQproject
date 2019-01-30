@@ -4,6 +4,9 @@ import cn.jasgroup.jasframework.acquisitiondata.mesolow.electroniclabel.dao.enti
 import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
+
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -34,6 +37,11 @@ public class DaqMvElectronicLabelQuery extends BaseJavaQuery {
 	 * 项目oid 
 	 */
 	private String projectOid; 
+	
+	/**
+	 * oids
+	 */
+	private List<String> oids;
 
 	@Override
 	public String getQuerySql() {
@@ -53,6 +61,9 @@ public class DaqMvElectronicLabelQuery extends BaseJavaQuery {
 		if (StringUtils.isNotBlank(oid)) {
 			conditionSql += " and mvel.oid=:oid";
 		}else{
+			if (oids != null && oids.size() > 0) {
+				conditionSql += "mvel.oid in (:oids)";
+			}
 			if (StringUtils.isNotBlank(projectOid)) {
 				conditionSql += " and mvel.project_oid = :projectOid";
 			}
@@ -82,5 +93,12 @@ public class DaqMvElectronicLabelQuery extends BaseJavaQuery {
 		this.projectOid = projectOid;
 	}
 
+	public List<String> getOids() {
+		return oids;
+	}
+
+	public void setOids(List<String> oids) {
+		this.oids = oids;
+	}
 
 }
