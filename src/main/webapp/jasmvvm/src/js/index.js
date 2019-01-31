@@ -11,6 +11,107 @@ var locationMap = {
 			title: "焊口信息",
 			src: './pages/row-management/weld-info/dialogs/detail.html?oid='
 
+		},
+		v_daq_mv_pipe_node:{
+			fields: {
+				project_name: "项目名称",
+				pipe_node_code: "节点编号",
+				pipe_node_type: "节点类型",
+				unit_name: "采集单位",
+				collection_date:"采集日期"
+			},
+			title: "节点信息",
+			src: './pages/row-mv/dialogs/detail.html?pageCode=mvPipeNode&oid='	
+		},
+		v_daq_mv_pipe_section:{
+			fields: {
+				project_name: "项目名称",
+				pipe_section_code: "管段编号",
+				unit_name: "采集单位",
+				collection_date:"采集日期"
+			},
+			title: "管段信息",
+			src: './pages/row-mv/dialogs/detail.html?pageCode=mvPipeSection&oid='	
+		},
+		v_daq_mv_across_info:{
+			fields: {
+				project_name: "项目名称",
+				pipe_section_code: "管段编号",
+				unit_name: "采集单位",
+				collection_date:"采集日期"
+			},
+			title: "穿越信息",
+			src: './pages/row-mv/dialogs/detail.html?pageCode=mvAcrossInfo&oid='		
+		},
+		v_daq_mv_stride_across_info:{
+			fields: {
+				project_name: "项目名称",
+				pipe_section_code: "管段编号",
+				unit_name: "采集单位",
+				collection_date:"采集日期"
+			},
+			title: "跨越信息",
+			src: './pages/row-mv/dialogs/detail.html?pageCode=mvStrideAcrossInfo&oid='		
+		},
+		v_daq_mv_pipe_trench_protect:{
+			fields: {
+				project_name: "项目名称",
+				pipe_trench_length: "管沟长度",
+				unit_name: "采集单位",
+				collection_date:"采集日期"
+			},
+			title: "管沟信息",
+			src: './pages/row-mv/dialogs/detail.html?pageCode=mvPipeTrenchProtect&oid='		
+		},
+		v_daq_mv_bushing_info:{
+			fields: {
+				project_name: "项目名称",
+				bushing_material: "材质",
+				unit_name: "采集单位",
+				collection_date:"采集日期"
+			},
+			title: "套管信息",
+			src: './pages/row-mv/dialogs/detail.html?pageCode=mvBushingInfo&oid='		
+		},
+		v_daq_mv_valve_info:{
+			fields: {
+				project_name: "项目名称",
+				valve_code: "阀门编号",
+				unit_name: "采集单位",
+				collection_date:"采集日期"
+			},
+			title: "阀门信息",
+			src: './pages/row-mv/dialogs/detail.html?pageCode=mvValveInfo&oid='		
+		},
+		v_daq_mv_mark_stake:{
+			fields: {
+				project_name: "项目名称",
+				mark_stake_code: "标志桩编号",
+				unit_name: "采集单位",
+				collection_date:"采集日期"
+			},
+			title: "标志桩信息",
+			src: './pages/row-mv/dialogs/detail.html?pageCode=mvMarkStake&oid='		
+		},
+		v_daq_mv_electronic_label:{
+			fields: {
+				project_name: "项目名称",
+				electronic_label_type: "电子标签类型",
+				unit_name: "采集单位",
+				collection_date:"采集日期"
+			},
+			title: "电子标签信息",
+			src: './pages/row-mv/dialogs/detail.html?pageCode=mvElectronicLabel&oid='		
+		},
+		v_daq_mv_monitor_well:{
+			fields: {
+				project_name: "项目名称",
+				monitor_well_code: "监测井编号",
+				unit_name: "采集单位",
+				collection_date:"采集日期"
+			},
+			title: "监测井信息",
+			src: './pages/row-mv/dialogs/detail.html?pageCode=mvMonitorWell&oid='		
 		}
 	};
 	var showInfo = function (e) {
@@ -375,7 +476,8 @@ window.app = new Vue({
 				},
 				onLayerAdded: function (e) {
 					var layerId = e.data.layerId;
-					if (layerId === "v_daq_construction_weld") { //焊口信息的时候
+					var layerArrs=["v_daq_construction_weld","v_daq_mv_pipe_node","v_daq_mv_pipe_section","v_daq_mv_across_info","v_daq_mv_stride_across_info","v_daq_mv_pipe_trench_protect","v_daq_mv_bushing_info","v_daq_mv_mark_stake","v_daq_mv_valve_info","v_daq_mv_electronic_label","v_daq_mv_monitor_well"];
+					if (layerArrs.indexOf(layerId)>-1) { //焊口信息的时候
 						//添加单个图层的点击事件
 						this.addLayerClickEventListener(layerId, showInfo);
 					}
