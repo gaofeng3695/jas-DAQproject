@@ -93,6 +93,11 @@ public class DaqStationDetectionUltrasonicBo extends CommonBaseBo {
      * 评定结果{0:不合格;1:合格}
      */
     private Integer evaluationResult;
+    
+    /**
+     * 评定结果
+     */
+    private String evaluationResultName;
 
     /**
      * 检测单位
@@ -127,6 +132,11 @@ public class DaqStationDetectionUltrasonicBo extends CommonBaseBo {
 
     /** 审核状态 */
     private Integer approveStatus;
+    
+    /**
+     * 审核状态
+     */
+    private String approveStatusName;
 
     /**
      * 备注
@@ -361,4 +371,21 @@ public class DaqStationDetectionUltrasonicBo extends CommonBaseBo {
     public void setStationDetectionUltrasonicSubList(List<DaqStationDetectionUltrasonicSubBo> stationDetectionUltrasonicSubList) {
         this.stationDetectionUltrasonicSubList = stationDetectionUltrasonicSubList;
     }
+
+	public String getApproveStatusName() {
+		return approveStatusName;
+	}
+
+	public void setApproveStatusName(String approveStatusName) {
+		this.approveStatusName = approveStatusName;
+	}
+
+	public String getEvaluationResultName() {
+		return evaluationResultName;
+	}
+
+	public void setEvaluationResultName(String evaluationResultName) {
+		this.evaluationResultName = evaluationResultName;
+	}
+    
 }
