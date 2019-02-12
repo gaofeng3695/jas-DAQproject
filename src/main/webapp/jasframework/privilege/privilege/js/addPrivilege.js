@@ -75,7 +75,7 @@ function reloadtree(shortUrl,parentEventid){
 		   	url: rootPath+"jasframework/privilege/privilege/checkPrivilegeCodeExist.do",
 	   		data: {"privilegeCode":privilegeCode,"appId":appId},
 		   	success: function(check){
-	     		if (check.error=='-1'){
+	     		if (check.status=='-1'){
 					top.showAlert(getLanguageValue("error"),check.msg,'error');
 					enableButtion("saveButton");
 				}else{
