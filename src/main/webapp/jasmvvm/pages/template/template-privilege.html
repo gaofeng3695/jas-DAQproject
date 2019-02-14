@@ -253,7 +253,7 @@
 				menuCode: "",
 				searchUi: [],
 				isShowSearch: false,
-
+privilegeCode:""
 			}
 		},
 		computed: {
@@ -291,6 +291,7 @@
 				this.privilege = ['bt_add', 'bt_update', 'bt_delete', 'bt_select', 'bt_export', 'bt_import'];
 				this.requestConfig(); //请求模板的配置文件
 			}
+			this.privilegeCode=param.privilegeCode||"";
 		},
 		mounted: function () {
 
@@ -327,6 +328,7 @@
 					approveStatus: 1, //status 2 通过 -1 驳回
 					className: this.className,
 					functionCode: this.menuCode,
+					privilegeCode:this.privilegeCode,
 				}, function (data) {
 					top.Vue.prototype.$message({
 						type: 'success',

@@ -543,9 +543,9 @@ Vue.component('jas-search-for-list', {
 						})(field, config)
 					}
 					if (config.optionUrl) {
-						
+
 						(function (field, config) {
-							var obj={};
+							var obj = {};
 							if (config.requestParams) {
 								obj = jasTools.base.extend(obj, config.requestParams);
 							}
@@ -707,7 +707,8 @@ Vue.component('jas-table-for-list', {
 		editUrl: {},
 		templateCode: {},
 		className: {},
-		importConfig: {}
+		importConfig: {},
+		ruleUrl: ""
 	},
 	data: function () {
 		return {
@@ -749,6 +750,7 @@ Vue.component('jas-table-for-list', {
 	template: [
 		'<div  class="jas-flex-box is-vertical is-grown">',
 		'<div style="padding: 15px 0;">',
+		'	<el-button size="small" plain type="primary" icon="fa fa-plus" v-if="isHasRule()"  @click="addRule">规则</el-button>',
 		'	<el-button size="small" plain type="primary" icon="fa fa-plus" v-if="isHasPrivilege(' + "'bt_add'" + ')"  @click="add">增加</el-button>',
 		'	<el-button size="small" plain type="primary" icon="fa fa-level-up" v-if="isApprove&&isHasPrivilege(' + "'bt_report'" + ')"  :disabled="reportRows.length==0" @click="upcall">上报</el-button>',
 		'	<el-button size="small" plain type="primary" icon="fa fa-check" v-if="isApprove&&isHasPrivilege(' + "'bt_approve'" + ')" :disabled="approveRows.length==0" @click="approve">审核</el-button>',
@@ -816,11 +818,29 @@ Vue.component('jas-table-for-list', {
 		this._privilegeCode = this.privilegeCode || param.privilegeCode;
 	},
 	mounted: function () {
-
 		this._requestPrivilege(this._privilegeCode);
 		this.search();
 	},
 	methods: {
+		isHasRule: function () {
+			if (this.ruleUrl){
+				return true;
+			}
+			return false;
+		},
+		addRule: function () {
+			var that = this;
+			if (!this.addUrl) return;
+			top.jasTools.dialog.show({
+				width: '60%',
+				height: '80%',
+				title: '规则制定',
+				src: this.ruleUrl,
+				cbForClose: function () {
+
+				}
+			});
+		},
 		toggleSearch: function () {
 			this.$parent.toggleSearch();
 			this.isClosed = this.$parent.isClosed;
@@ -844,6 +864,7 @@ Vue.component('jas-table-for-list', {
 				approveStatus: 1, //status 2 通过 -1 驳回
 				className: this._className,
 				functionCode: this.functionCode,
+				privilegeCode:this._privilegeCode,
 			}, function (data) {
 				top.Vue.prototype.$message({
 					type: 'success',
@@ -883,6 +904,7 @@ Vue.component('jas-table-for-list', {
 					approveType: 2,
 					className: this._className,
 					menuCode: this.functionCode || '',
+					privilegeCode:this._privilegeCode||'',
 				});
 				var url = jasTools.base.setParamsToUrl(src, {
 					oids: oids.join(',')
@@ -988,18 +1010,18 @@ Vue.component('jas-table-for-list', {
 				that.total = data.total;
 			});
 		},
-		sortChange:function(column, prop, order){
+		sortChange: function (column, prop, order) {
 			var orderBy = null;
-			if(column.prop!=null){
-				orderBy = column.prop+" "+(column.order==='ascending'?'asc':'desc');
-				orderBy = orderBy.replace(/([A-Z])/g,"_$1").toLowerCase()
+			if (column.prop != null) {
+				orderBy = column.prop + " " + (column.order === 'ascending' ? 'asc' : 'desc');
+				orderBy = orderBy.replace(/([A-Z])/g, "_$1").toLowerCase()
 			}
-	        var that = this;
+			var that = this;
 			that.loading = true;
 			var obj = jasTools.base.extend({}, {
 				pageNo: this.currentPage,
 				pageSize: this.pageSize,
-				orderBy:orderBy,
+				orderBy: orderBy,
 			}, this.form);
 			var url = jasTools.base.rootPath + this.searchPath;
 			jasTools.ajax.post(url, obj, function (data) {
@@ -1490,8 +1512,8 @@ Vue.component('jas-form-items', {
 						(function (field, config) {
 							jasTools.ajax.post(jasTools.base.rootPath + "/" + config.optionUrl, {}, function (data) {
 								config.options = data.rows;
-								if(config.isInit){
-									that.form[field]=config.options[0].key;
+								if (config.isInit) {
+									that.form[field] = config.options[0].key;
 									that.$refs[field][0].$emit('change', false);
 								}
 							});
@@ -1539,7 +1561,7 @@ Vue.component('jas-form-items', {
 			var fieldConfig = this.fieldsConfig[fatherField];
 			var form = this.form;
 			var setChildOptionsAndValue = function (childField, options) { // 入参下拉选项
-				if (that.form.weldOid != "" && childField == "weldOid" && !that.form.isNoAddOid ) {//that.form.isNoAddOid  如果不需要增加oid，则页面配置该属性 并且为 true
+				if (that.form.weldOid != "" && childField == "weldOid" && !that.form.isNoAddOid) { //that.form.isNoAddOid  如果不需要增加oid，则页面配置该属性 并且为 true
 					options.push({
 						key: that.form.weldOid,
 						value: that.form.weldCode
@@ -1550,12 +1572,12 @@ Vue.component('jas-form-items', {
 				}
 				var length = that.fieldsConfig[childField].options.length;
 				!isInit && (form[childField] = '');
-				if(!form[fatherField]){
+				if (!form[fatherField]) {
 					form[childField] = '';
-					that.fieldsConfig[childField].options=[];
+					that.fieldsConfig[childField].options = [];
 				}
-				if(that.fieldsConfig[childField].isInit){
-					if(options.length>0 && !that.form[childField]) that.form[childField] = options[0].key;
+				if (that.fieldsConfig[childField].isInit) {
+					if (options.length > 0 && !that.form[childField]) that.form[childField] = options[0].key;
 					that.$refs[childField][0].$emit('change', true);
 				}
 
@@ -1780,8 +1802,8 @@ Vue.component('jas-form-items-group', {
 							jasTools.ajax.post(jasTools.base.rootPath + "/" + config.optionUrl, obj, function (data) {
 								//下拉框是否进行初始化显示
 								config.options = data.rows;
-								if(config.isInit && config.options.length>0){
-									that.form[field]=config.options[0].key;
+								if (config.isInit && config.options.length > 0) {
+									that.form[field] = config.options[0].key;
 									that.$refs[field][0].$emit('change', false);
 								}
 							});
@@ -1835,12 +1857,12 @@ Vue.component('jas-form-items-group', {
 				// }else{
 				// 	form[childField] = '';
 				// }
-				if(!form[fatherField]) {
+				if (!form[fatherField]) {
 					form[childField] = '';
-					that.fieldsConfig[childField].options=[];
+					that.fieldsConfig[childField].options = [];
 				}
-				if(that.fieldsConfig[childField].isInit){
-					if(options.length>0 && !that.form[childField]) that.form[childField] = options[0].key;
+				if (that.fieldsConfig[childField].isInit) {
+					if (options.length > 0 && !that.form[childField]) that.form[childField] = options[0].key;
 					that.$refs[childField][0].$emit('change', true);
 				}
 
@@ -1870,22 +1892,22 @@ Vue.component('jas-form-items-group', {
 				var url = fieldConfig.childUrl[index] || fieldConfig.childUrl[0];
 				getAndSet(fatherField, form[fatherField], childField, url);
 			});
-		  if (that.fieldsConfig[fatherField].type == 'date') {
-			   this.fieldChanged(fatherField);
-		   }  
-		  if(that.fieldsConfig[fatherField].subDefault){//subDefault仅限于 数据填充来源于  select  options
-			  var optionsObj={};//表示选中的值
-			  that.fieldsConfig[fatherField].options.forEach(function(item){
-				  if(item.key==that.form[fatherField]){
-					  optionsObj=item;
-				  }
-			  });
-			  for(var key in that.fieldsConfig[fatherField].subDefault){
-				  that.form[key]=optionsObj[that.fieldsConfig[fatherField].subDefault[key].value];
-			  }
-		  }
+			if (that.fieldsConfig[fatherField].type == 'date') {
+				this.fieldChanged(fatherField);
+			}
+			if (that.fieldsConfig[fatherField].subDefault) { //subDefault仅限于 数据填充来源于  select  options
+				var optionsObj = {}; //表示选中的值
+				that.fieldsConfig[fatherField].options.forEach(function (item) {
+					if (item.key == that.form[fatherField]) {
+						optionsObj = item;
+					}
+				});
+				for (var key in that.fieldsConfig[fatherField].subDefault) {
+					that.form[key] = optionsObj[that.fieldsConfig[fatherField].subDefault[key].value];
+				}
+			}
 		},
-		fieldChanged: function (field) {//进行日期的配置  此处进行配置规则的渲染
+		fieldChanged: function (field) { //进行日期的配置  此处进行配置规则的渲染
 			var that = this;
 			this.$refs[field + 123][0].form.validateField(field);
 			//if() 进行判断是否有规则 需要规则字段 规则值
@@ -2006,15 +2028,15 @@ Vue.component('jas-sub-form-group', {
 	].join(''),
 	methods: {
 		resetFormGroup: function (index) {
-			var that=this;
+			var that = this;
 			that.formList[index].operationFlag = 2; // -1（删除），0（不变），1（新增），2（修改）
-			that.$set(that.formList,index,that.formList[index]);
+			that.$set(that.formList, index, that.formList[index]);
 		},
-		removeFormGroup: function ( index) {
-			var that=this;
+		removeFormGroup: function (index) {
+			var that = this;
 			if (that.formList[index].oid) {
 				that.formList[index].operationFlag = -1;
-				that.$set(that.formList,index,that.formList[index]);
+				that.$set(that.formList, index, that.formList[index]);
 			} else {
 				that.formList.splice(index, 1);
 			}
@@ -2102,6 +2124,7 @@ Vue.component('jas-approve-dialog', {
 				table: false
 			},
 			remarks: '',
+			_privilegeCode:""
 		}
 	},
 	template: [
@@ -2154,6 +2177,7 @@ Vue.component('jas-approve-dialog', {
 		this._type = param.approveType || this.type;
 		this._className = param.className || this.className;
 		this._functionCode = param.menuCode || this.functionCode;
+		this._privilegeCode= param.privilegeCode || this.privilegeCode;
 	},
 	mounted: function () {
 
@@ -2209,6 +2233,7 @@ Vue.component('jas-approve-dialog', {
 				approveStatus: status, //status 2 通过 -1 驳回
 				className: this._className,
 				functionCode: this._functionCode,
+				privilegeCode:this._privilegeCode,
 			}, function (data) {
 				top.Vue.prototype.$message({
 					type: 'success',
@@ -2402,10 +2427,10 @@ Vue.component('jas-project-select', {
 		'</el-option>',
 		'</el-select>'
 	].join(''),
-	watch:{
-		projectarray:function(){
-			var that=this;
-			if(that.projectarray&&that.projectArray.length==1){
+	watch: {
+		projectarray: function () {
+			var that = this;
+			if (that.projectarray && that.projectArray.length == 1) {
 				that.requestProject();
 			}
 
@@ -2413,28 +2438,29 @@ Vue.component('jas-project-select', {
 	},
 	mounted: function () {
 		this.projectOids = this.selprojectoids;
-		if(!this.projectarray){
-		  this.requestProject();
+		if (!this.projectarray) {
+			this.requestProject();
 		}
 	},
 	methods: {
 		requestProject: function () {
 			var that = this;
-				if (that.projectarray) {
-					if(that.projectarray.length>0){
-						that.projectarray.forEach(function (item) {
-							that.ids.push(item.key);
-							that.projectArray.push(item);
-						});
-						that.projectOids = that.ids;
-						that.oldOptions = that.projectOids;
-						var ids = that.projectOids.filter(function (item) {
-							return item != that.label
-						});
-						that.$emit("requestnet", ids);
-					}else{var ids=[""];
-						that.$emit("requestnet",ids );
-					}
+			if (that.projectarray) {
+				if (that.projectarray.length > 0) {
+					that.projectarray.forEach(function (item) {
+						that.ids.push(item.key);
+						that.projectArray.push(item);
+					});
+					that.projectOids = that.ids;
+					that.oldOptions = that.projectOids;
+					var ids = that.projectOids.filter(function (item) {
+						return item != that.label
+					});
+					that.$emit("requestnet", ids);
+				} else {
+					var ids = [""];
+					that.$emit("requestnet", ids);
+				}
 				return;
 			}
 			var url = jasTools.base.rootPath + that.url;
@@ -2448,8 +2474,8 @@ Vue.component('jas-project-select', {
 				var ids = that.projectOids.filter(function (item) {
 					return item != that.label
 				});
-				if(ids.length==0){
-					ids[0]='';
+				if (ids.length == 0) {
+					ids[0] = '';
 				}
 				that.$emit("requestnet", ids);
 			});
@@ -2586,42 +2612,42 @@ Vue.component('statistic-group', { //项目分组
 		'</div>',
 		' </el-row>'
 	].join(''),
-	watch:{
-		projectarray:function(){
-			var that=this;
-			if(that.projectarray&&that.projectArray.length==0){
+	watch: {
+		projectarray: function () {
+			var that = this;
+			if (that.projectarray && that.projectArray.length == 0) {
 				that.requestProject();
 			}
 		}
 	},
 	mounted: function () {
-		if(!this.projectarray){
-			  this.requestProject();
+		if (!this.projectarray) {
+			this.requestProject();
 		}
 	},
 	methods: {
 		requestProject: function () {
 			var that = this;
-			if(that.projectarray){
-				if(that.projectarray.length>0){
-					that.projectArray=that.projectarray;
+			if (that.projectarray) {
+				if (that.projectarray.length > 0) {
+					that.projectArray = that.projectarray;
 					that.projectOids = that.projectarray[0].key;
 					that.$emit("requestnet", that.projectOids, that.date);
 
-				}else{
+				} else {
 					that.$emit("requestnet", '', that.date);
 				}
-				  return;
+				return;
 			}
 			var url = jasTools.base.rootPath + "/daq/privilege/getProjectList.do";
 			jasTools.ajax.post(url, {}, function (data) {
 				data.rows.forEach(function (item) {
 					that.projectArray.push(item);
 				});
-				if(that.projectArray.length>0){
+				if (that.projectArray.length > 0) {
 					that.projectOids = that.projectArray[0].key;
-				}else{
-					that.projectOids ="";
+				} else {
+					that.projectOids = "";
 				}
 				that.$emit("requestnet", that.projectOids, that.date);
 			});

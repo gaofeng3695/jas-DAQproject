@@ -157,7 +157,10 @@ window.app = new Vue({
 			currentTap: 'statistics-01',
 			tabs: [], // 打开的标签页
 			items: [], //菜单数组
-			isMapInited: false //地图未初始化
+			aMenu:[],//初始化的菜单数组
+			isMapInited: false, //地图未初始化
+			isTigger:false,
+			menuNumber:[]//表示菜单后面的树
 		}
 	},
 	computed: {
@@ -179,6 +182,7 @@ window.app = new Vue({
 	},
 	created: function () {
 		// this.initJasMap();
+		this.tirggerTime();//是否触发定时器，间隔多长时间进行接口触发
 	},
 	mounted: function () {
 		// this.$refs.resizer.panelShowed = false;
@@ -188,6 +192,7 @@ window.app = new Vue({
 		this._setWindowResizeEventToCloseMenu();
 		this._requestLoginInfo();
 		this.requestFile();
+		
 	},
 	methods: {
 		_queryMenuData: function () {
@@ -204,14 +209,16 @@ window.app = new Vue({
 				},
 				success: function (data, xhr, param) {
 					if (typeof data === 'object' && data.length > 0) {
-						that.items = that._formatMenus(data);
+						that.aMenu=data;
+						that.items = that._formatMenus(data);//首次组装 是否需要去调用请求数据接口	
 						that.tabs = that._createTabsArr(that.menusOpened, that.items);
 					}
 
 				}
 			});
 		},
-		_formatMenus: function (aMenu) {
+		_formatMenus: function (aMenu) {//进行菜单的组装
+			var that=this;
 			var _aMenu = JSON.parse(JSON.stringify(aMenu));
 			var switcher = function (arr) {
 				if (typeof arr === "object") {
@@ -223,6 +230,9 @@ window.app = new Vue({
 							item.link = jasTools.base.rootPath + '/' + item.attributes.URL;
 						}
 						item.subs = item.children;
+						if(that.isTigger){
+						  item.value=that._ifExistCode(item.id);
+						}
 						if (item.subs) {
 							switcher(item.subs);
 						}
@@ -233,6 +243,17 @@ window.app = new Vue({
 			switcher(_aMenu);
 			return _aMenu;
 
+		},
+		_ifExistCode:function(id){
+			var that=this;
+			var number=0;
+			for(var i=0;i<that.menuNumber.length;i++){
+				if(id==that.menuNumber[i].id){
+					number= that.menuNumber[i].value;
+					break;
+				}
+			}
+			return number;	
 		},
 		selectMenu: function (index, indexPath) {
 			var that = this;
@@ -528,8 +549,37 @@ window.app = new Vue({
 				if (data.rows.length > 0) {
 					that.userImg = jasTools.base.rootPath + '/attachment/app/getImageBySize.do?oid=' + data.rows[0].oid + "&token=" + localStorage.getItem("token");
 				}
-
 			});
 		},
+		tirggerTime:function(){
+			var that=this;
+			var unitType=localStorage.getItem("unitType");
+			if(unitType=="2"||unitType=="4"){
+				that.isTigger=true;
+				that.requestNumber();	
+				setInterval(function(){
+					that.requestNumber(that.aMenu);	
+				},60000);//毫秒为单位 1000	
+			}
+		},
+		requestNumber:function(menu){
+			var that=this;
+			that.menuNumber=[{
+				  id:"7d2f81ae-ddb9-411b-ae8c-7eb39d7c8ba2",
+				  value:"10"
+				},{
+				  id:"P-daq-hq-001004",
+				  value:"2"
+				},{
+				  "id":"P-hq-weld-0000",
+				  "value":"1"
+				},{
+				  "id":"P-hq-weld-0001",
+				  "value":"9"
+				}];
+			if(menu){
+				that.items = that._formatMenus(menu);//首次组装 是否需要去调用请求数据接口		
+			}
+		}
 	},
 })
