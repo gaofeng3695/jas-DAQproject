@@ -253,7 +253,7 @@
 				menuCode: "",
 				searchUi: [],
 				isShowSearch: false,
-
+privilegeCode:""
 			}
 		},
 		computed: {
@@ -291,6 +291,7 @@
 				this.privilege = ['bt_add', 'bt_update', 'bt_delete', 'bt_select', 'bt_export', 'bt_import'];
 				this.requestConfig(); //请求模板的配置文件
 			}
+			this.privilegeCode=param.privilegeCode||"";
 		},
 		mounted: function () {
 
@@ -327,6 +328,7 @@
 					approveStatus: 1, //status 2 通过 -1 驳回
 					className: this.className,
 					functionCode: this.menuCode,
+					privilegeCode:this.privilegeCode,
 				}, function (data) {
 					top.Vue.prototype.$message({
 						type: 'success',
@@ -344,7 +346,7 @@
 					return;
 				} else if (oids.length === 1) {
 					var src = './pages/template/dialogs/viewTemplate.html?menuCode=' + that.menuCode;
-					src += '&approveType=2';
+					src += '&approveType=2&privilegeCode='+that.privilegeCode;
 					var url = jasTools.base.setParamsToUrl(src, this.approveRows[0]);
 					top.jasTools.dialog.show({
 						width: '60%',
@@ -360,7 +362,8 @@
 				} else {
 					var src = './pages/template/dialogs/approveTemplate.html?menuCode=' + that.menuCode;
 					var url = jasTools.base.setParamsToUrl(src, {
-						oids: oids.join(',')
+						oids: oids.join(','),
+						privilegeCode:that.privilegeCode,
 					});
 					top.jasTools.dialog.show({
 						width: '600px',

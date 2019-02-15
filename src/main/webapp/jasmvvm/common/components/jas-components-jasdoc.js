@@ -849,6 +849,7 @@ Vue.component('jas-table-for-list', {
 				approveStatus: 1, //status 2 通过 -1 驳回
 				className: this._className,
 				functionCode: this.functionCode,
+				privilegeCode:this._privilegeCode,
 			}, function (data) {
 				top.Vue.prototype.$message({
 					type: 'success',
@@ -2063,6 +2064,7 @@ Vue.component('jas-approve-dialog', {
 				approveStatus: status, //status 2 通过 -1 驳回
 				className: this._className,
 				functionCode: this._functionCode,
+				privilegeCode:this._privilegeCode,
 			}, function (data) {
 				top.Vue.prototype.$message({
 					type: 'success',
