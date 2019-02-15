@@ -886,6 +886,7 @@ Vue.component('jas-table-for-list', {
 					approveType: 2,
 					className: this._className,
 					menuCode: this.functionCode || '',
+					privilegeCode:this._privilegeCode||'',
 				});
 				var url = jasTools.base.setParamsToUrl(src, this.approveRows[0]);
 				top.jasTools.dialog.show({
@@ -900,11 +901,12 @@ Vue.component('jas-table-for-list', {
 					}
 				});
 			} else {
+				
 				var src = jasTools.base.setParamsToUrl('./pages/template/dialogs/approveTemplate.html', {
 					approveType: 2,
 					className: this._className,
 					menuCode: this.functionCode || '',
-					privilegeCode:this._privilegeCode||'',
+					privilegeCode:this._privilegeCode,
 				});
 				var url = jasTools.base.setParamsToUrl(src, {
 					oids: oids.join(',')
@@ -932,7 +934,6 @@ Vue.component('jas-table-for-list', {
 			this.$emit('locate', item)
 		},
 		isHasPrivilege: function (sName) {
-			//console.log(sName);
 			if (this._privilegeCode && this.privilege.indexOf(sName) === -1) {
 				return false;
 			}
