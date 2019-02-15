@@ -6041,3 +6041,28 @@ create table daq_tenders_polyline(
 comment on table daq_tenders_polyline is '标段线段表';
 comment on column daq_tenders_polyline.oid is 'oid';
 comment on column daq_tenders_polyline.tenders_name is '标段名称';
+
+/***
+ * 待审核数据与权限树关系表
+ */
+drop table if exists daq_approve_tip;
+create table daq_approve_tip(
+	oid varchar(36) not null primary key,
+	project_oid varchar(36),
+	business_oid varchar(36),
+	privilege_code varchar(50),
+	supervision_unit varchar(38),
+	create_user_id varchar(36),
+	create_user_name varchar(50),
+	create_datetime timestamp(6),
+	active int2 default 1 not null
+);
+comment on table daq_approve_tip is '监理单位审核提示中间表';
+comment on column daq_approve_tip.project_oid is '项目oid';
+comment on column daq_approve_tip.business_oid is '业务数据oid';
+comment on column daq_approve_tip.privilege_code is '权限编码';
+comment on column daq_approve_tip.supervision_unit is '监理单位';
+comment on column daq_approve_tip.create_user_id is '创建人oid';
+comment on column daq_approve_tip.create_user_name is '创建人名称';
+comment on column daq_approve_tip.create_datetime is '创建时间';
+comment on column daq_approve_tip.active is '有效标识';

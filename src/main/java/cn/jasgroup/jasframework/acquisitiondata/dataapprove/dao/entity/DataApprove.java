@@ -50,6 +50,8 @@ public class DataApprove extends CommonHibernateEntity {
 	 */
 	private String className;
 	
+	private String privilegeCode;
+	
 	@Column(name="business_oid")
 	public String getBusinessOid() {
 		return businessOid; 
@@ -97,5 +99,15 @@ public class DataApprove extends CommonHibernateEntity {
 	public void setClassName(String className) {
 		this.className = className;
 	}
+	
+	@Transient
+	public String getPrivilegeCode() {
+		return privilegeCode;
+	}
+
+	public void setPrivilegeCode(String privilegeCode) {
+		this.privilegeCode = privilegeCode;
+	}
+	
 	
 }

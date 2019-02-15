@@ -17,6 +17,7 @@ create or replace view v_daq_scope as
 	) tt left join area a on tt.province=a.oid order by tt.ordernum,tt.create_datetime;
 	
 	/**实施范围视图**/
+drop view v_daq_implement_scope;
 create or replace view v_daq_implement_scope as
 	select tt.oid,tt.parent_oid,tt.name,tt.type,tt.type_name,tt.project_oid,tt.tenders_oid,tt.province,a.name as province_name from (
 	select t.oid,null as parent_oid,t.project_name as name,-2 as type,'项目' as type_name,t.oid as project_oid,null as province,null as tenders_oid,t.create_datetime from daq_project t where t.active=1 and t.pipe_network_type_code='pipe_network_code_001'
@@ -34,6 +35,8 @@ create or replace view v_daq_implement_scope as
 	select t.oid,t.pipeline_oid as parent_oid,t.road_name as name,4 as type,'伴行道路' as type_name,t.project_oid,t.province,r.tenders_oid,t.create_datetime from daq_maintenance_road t join daq_tenders_scope_ref r on t.oid=r.scope_oid where t.active=1
 	union all
 	select t.oid,t.pipeline_oid as parent_oid,t.power_line_name as name,5 as type,'外供电线路' as type_name,t.project_oid,t.province,r.tenders_oid,t.create_datetime from daq_power_line t join daq_tenders_scope_ref r on t.oid=r.scope_oid where t.active=1
+	union all 
+	select t.oid,null as parent_oid,t.project_name as name,6 as type,'中低压项目' as type_name,t.oid as project_oid,null as province,null as tenders_oid,t.create_datetime from daq_project t where t.active=1 and t.pipe_network_type_code in('pipe_network_code_002','pipe_network_code_003')
 	) tt left join area a on tt.province=a.oid order by tt.type,tt.create_datetime;
 	
 create or replace view v_daq_pipe_segment_cross as 
@@ -94,3 +97,12 @@ create or replace view v_daq_construction_weld as
 	left join (select oid, unit_name, active from pri_unit where active=1) u on u.oid = t.construct_unit 
 	left join (select oid, work_unit_code, active from daq_work_unit where active=1) wu on wu.oid = t.work_unit_oid
 	where t.active=1;
+
+/**
+ * 待审核数据与权限菜单关系视图
+ */
+drop view if exists v_daq_approve_tip;
+create or replace view v_daq_approve_tip as 
+	select p.oid,p.parent_id,p.privilege_code,p.privilege_name,p.hierarchy,t.project_oid,t.supervision_unit from pri_func_privilege p 
+	inner join(select project_oid,supervision_unit,privilege_code from daq_approve_tip where active=1 ) t
+	on t.privilege_code=p.privilege_code where p.active=1
