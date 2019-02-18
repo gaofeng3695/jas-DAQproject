@@ -401,6 +401,13 @@ a:hover {
     font-family: arial!important
 }
 
+
+.el-menu-item span{
+	display: inline-block;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
  
 
 

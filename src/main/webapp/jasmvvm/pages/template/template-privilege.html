@@ -334,6 +334,7 @@ privilegeCode:""
 						type: 'success',
 						message: '上报成功'
 					});
+				//	top.app.requestNumber("","refresh");
 					that.refresh();
 				});
 			},
@@ -355,6 +356,7 @@ privilegeCode:""
 						src: url,
 						cbForClose: function (param) {
 							if (param == 'success') {
+								top.app.requestNumber("refresh");
 								that.refresh();
 							}
 						}
@@ -372,6 +374,7 @@ privilegeCode:""
 						src: url,
 						cbForClose: function (param) {
 							if (param == 'success') {
+								top.app.requestNumber("refresh");
 								that.refresh();
 							}
 						}

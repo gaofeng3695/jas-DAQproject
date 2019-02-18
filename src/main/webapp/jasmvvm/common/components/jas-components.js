@@ -870,6 +870,7 @@ Vue.component('jas-table-for-list', {
 					type: 'success',
 					message: '上报成功'
 				});
+				//top.app.requestNumber("","refresh");
 				that.refresh();
 			});
 		},
@@ -896,6 +897,7 @@ Vue.component('jas-table-for-list', {
 					src: url,
 					cbForClose: function (param) {
 						if (param == 'success') {
+							top.app.requestNumber("refresh");
 							that.refresh();
 						}
 					}
@@ -918,6 +920,7 @@ Vue.component('jas-table-for-list', {
 					src: url,
 					cbForClose: function (param) {
 						if (param == 'success') {
+							top.app.requestNumber("refresh");
 							that.refresh();
 						}
 					}
@@ -2241,6 +2244,7 @@ Vue.component('jas-approve-dialog', {
 					message: '审核成功'
 				});
 				top.jasTools.dialog.close('success');
+				top.app.requestNumber("refresh");
 			});
 		},
 		close: function () {

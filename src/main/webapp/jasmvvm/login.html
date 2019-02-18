@@ -150,14 +150,17 @@
 					}, function (data) {
 						localStorage.setItem("token", data.token);
 						var userBo = data.user;
-						console.log(JSON.stringify(userBo));
 						var unitName = userBo.unitName;
 						unitName = unitName.substr(unitName.lastIndexOf(">") + 1, unitName.length);
 						userBo.unitName = unitName;
 						localStorage.setItem("user", JSON.stringify(userBo));
 						localStorage.setItem("calculateType", 1); //1-显示桩和偏移量  2显示坐标
-						console.log(data.unitType);
-						localStorage.setItem("unitType",data.unitType);
+						var unitType=data.unitType;
+						if((unitType=='2'&&userBo.roleIds=='27decdd7-2748-4400-bc0f-c7f2538aa70d')||unitType=="4"){
+                             localStorage.setItem("isShowNumber",true);
+						}else{
+							localStorage.setItem("isShowNumber",false);
+						}
 						if (that.ruleForm.radio == '1') {
 							location.href = "./index.html";
 						} else {

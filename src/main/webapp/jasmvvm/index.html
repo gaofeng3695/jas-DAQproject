@@ -53,6 +53,12 @@
 						</li>
 						<li class="border"></li>
 						<li class="items fullscreen">
+							<a href="#" @click="_goMap" style="display:block;padding:0px 10px">
+								<i class="fa fa-map-marker"></i> 地图
+							</a>
+						</li>
+						<li class="border"></li>
+						<li class="items fullscreen">
 							<a href="#" @click="_goPage" style="display:block;padding:0px 10px">
 								<i class="fa fa-bar-chart"></i> 可视化
 							</a>
@@ -97,10 +103,12 @@
 									<el-submenu v-if="item.subs" :index="item.index">
 										<template slot="title">
 											<i :class="item.icon||'fa fa-folder' "></i>
-											<span slot="title" v-if="item.value">
-												<el-badge :value="item.value">{{ item.title }}</el-badge>
-											</span>
-											<span slot="title" v-else>
+											<el-badge v-if="item.value" :value="item.value">
+											   <span>
+											     {{ item.title }}
+											   </span>
+											</el-badge>
+											<span  v-else>
 												{{ item.title }}
 											</span>
 										</template>
@@ -109,12 +117,12 @@
 											<el-submenu v-if="subitem.subs" :index="subitem.index">
 												<template slot="title">
 													<i :class=" subitem.icon || 'fa fa-bars' "></i>
-													<span slot="title" v-if="subitem.value">
-														   <el-badge :value="subitem.value">{{ subitem.title }}</el-badge>
-														 </span>
-													<span slot="title" v-else>
+													<el-badge v-if="subitem.value" :value="subitem.value">
+														 <span>{{ subitem.title }}</span>
+													</el-badge>
+													<span  v-else>
 														  {{ subitem.title }}
-														 </span>
+													</span>
 												</template>
 
 												<!-- 第三层菜单开始 -->
@@ -122,26 +130,26 @@
 													<el-submenu v-if="thirditem.subs" :index="thirditem.index">
 														<template slot="title">
 															<i :class="thirditem.icon"></i>
-															<!--<span slot="title">{{ thirditem.title }}</span>-->
-															<span slot="title" v-if="thirditem.value">
-												<el-badge :value="thirditem.value">{{ thirditem.title }}</el-badge>
-											</span>
-															<span slot="title" v-else>
+												<el-badge v-if="thirditem.value" :value="thirditem.value">
+												   <span>
+												     {{ thirditem.title }}
+												   </span>
+												 </el-badge>								
+												<span  v-else>
 												{{ thirditem.title }}
-											</span>
+											   </span>
 														</template>
 														<!-- 第四层菜单开始 -->
 														<template v-for="fourthitem in thirditem.subs">
 															<el-submenu v-if="fourthitem.subs" :index="fourthitem.index">
 																<template slot="title">
 																	<i :class="fourthitem.icon"></i>
-																	<!--<span slot="title">{{ fourthitem.title }}</span>-->
-																	<span slot="title" v-if="fourthitem.value">
-												<el-badge :value="fourthitem.value">{{ fourthitem.title }}</el-badge>
-											</span>
-																	<span slot="title" v-else>
-												{{ fourthitem.title }}
-											</span>
+																		<el-badge v-if="fourthitem.value" :value="fourthitem.value">
+																		  <span>{{ fourthitem.title }}</span>
+																		</el-badge>
+																	    <span  v-else>
+																		   {{ fourthitem.title }}
+																	    </span>
 																</template>
 
 																<!-- 第五层菜单开始 -->
@@ -149,46 +157,45 @@
 																	<el-submenu v-if="fifthitem.subs" :index="fifthitem.index">
 																		<template slot="title">
 																			<i :class="fifthitem.icon"></i>
-																			<!--<span slot="title">{{ fifthitem.title }}</span>-->
-																			<span slot="title" v-if="fifthitem.value">
-												<el-badge :value="fifthitem.value">{{ fifthitem.title }}</el-badge>
-											</span>
-																			<span slot="title" v-else>
-												{{ fifthitem.title }}
-											</span>
+																				<el-badge v-if="fifthitem.value" :value="fifthitem.value">
+																				  <span>{{ fifthitem.title }}</span>
+																				</el-badge>
+																			
+																				<span  v-else>{{ fifthitem.title }}</span>
 																		</template>
 
 																	</el-submenu>
 																	<el-menu-item :index="fifthitem.index" v-else>
 																		<i :class="fifthitem.icon"></i>
-																		<span slot="title">{{ fifthitem.title }}</span>
+																		<el-badge v-if="fifthitem.value" :value="fifthitem.value">
+																				  <span>{{ fifthitem.title }}</span>
+																				</el-badge>
+																			
+																				<span  v-else>{{ fifthitem.title }}</span>
 																	</el-menu-item>
 																</template>
 																<!-- 第五层菜单结束 -->
 
 															</el-submenu>
 															<el-menu-item :index="fourthitem.index" v-else>
-																<i :class="fourthitem.icon"></i>
-																<!--<span slot="title">{{ fourthitem.title }}</span>-->
-																<span slot="title" v-if="fourthitem.value">
-												<el-badge :value="fourthitem.value">{{ fourthitem.title }}</el-badge>
-											</span>
-																<span slot="title" v-else>
-												{{ fourthitem.title }}
-											</span>
+																<i :class="fourthitem.icon"></i>	
+																<el-badge v-if="fourthitem.value" :value="fourthitem.value">
+																   <span>{{ fourthitem.title }}</span>
+																 </el-badge>
+																<span v-else>{{ fourthitem.title }}</span>
 															</el-menu-item>
 														</template>
 														<!-- 第四层菜单结束 -->
 													</el-submenu>
 													<el-menu-item :index="thirditem.index" v-else>
 														<i :class="thirditem.icon"></i>
-														<!--<span slot="title">{{ thirditem.title }}</span>-->
-														<span slot="title" v-if="thirditem.value">
-												<el-badge :value="thirditem.value">{{ thirditem.title }}</el-badge>
-											</span>
-														<span slot="title" v-else>
+														
+												<el-badge v-if="thirditem.value" :value="thirditem.value">
+												  <span>{{ thirditem.title }}</span>
+												</el-badge>
+											   <span  v-else>
 												{{ thirditem.title }}
-											</span>
+											  </span>
 													</el-menu-item>
 												</template>
 												<!-- 第三层菜单结束 -->
@@ -197,13 +204,12 @@
 											</el-submenu>
 											<el-menu-item :index="subitem.index" v-else>
 												<i :class="subitem.icon||'fa fa-bars' "></i>
-												<!--<span slot="title">{{ subitem.title }}</span>-->
-												<span slot="title" v-if="subitem.value">
-												<el-badge :value="subitem.value">{{ subitem.title }}</el-badge>
-											</span>
-												<span slot="title" v-else>
-												{{ subitem.title }}
-											</span>
+												<el-badge v-if="subitem.value" :value="subitem.value">
+												  <span>{{ subitem.title }}</span>
+												</el-badge>
+												<span v-else>
+												  {{ subitem.title }}
+											    </span>
 											</el-menu-item>
 										</template>
 										<!-- 第二层菜单结束 -->
@@ -211,13 +217,12 @@
 									</el-submenu>
 									<el-menu-item :index="item.index" v-else>
 										<i :class=" item.icon||'fa fa-folder' "></i>
-										<!--<span slot="title">{{ item.title }}</span>-->
-										<span slot="title" v-if="item.value">
-												<el-badge :value="item.value">{{ item.title }}</el-badge>
-											</span>
-										<span slot="title" v-else>
-												{{ item.title }}
-											</span>
+                                        <el-badge v-if="item.value":value="item.value">
+											<span>{{ item.title }}</span>
+										 </el-badge>
+										<span  v-else>
+											{{ item.title }}
+										</span>
 									</el-menu-item>
 								</template>
 								<!-- 第一层菜单结束 -->
