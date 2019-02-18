@@ -565,9 +565,7 @@ window.app = new Vue({
 				},
 				onLayerAdded: function (e) {
 					var layerId = e.data.layerId;
-					console.log(layerId);
 					var layerArrs = ["v_daq_construction_weld", "v_daq_mv_pipe_node", "v_daq_mv_pipe_section", "v_daq_mv_across_info", "v_daq_mv_stride_across_info", "v_daq_mv_pipe_trench_protect", "v_daq_mv_bushing_info", "v_daq_mv_mark_stake", "v_daq_mv_valve_info", "v_daq_mv_electronic_label", "v_daq_mv_monitor_well",'v_daq_cross_excavation','v_daq_cross_pipe_jacking','v_daq_cross_box_culvert','v_daq_cross_drilling','v_daq_cross_shield','v_daq_cross_drilling_blasting','v_daq_cross_across'];
-					console.log(layerArrs.indexOf(layerId));
 					if (layerArrs.indexOf(layerId) > -1) { //焊口信息的时候
 						//添加单个图层的点击事件
 						this.addLayerClickEventListener(layerId, showInfo);
@@ -623,8 +621,8 @@ window.app = new Vue({
 		},
 		tirggerTime: function () {
 			var that = this;
-			var unitType = localStorage.getItem("unitType");
-			if (unitType == "2" || unitType == "4") {
+			var isShowNumber = localStorage.getItem("isShowNumber");
+			if (isShowNumber=="true") {
 				that.isTigger = true;
 				that.requestNumber();
 				setInterval(function () {
@@ -643,7 +641,7 @@ window.app = new Vue({
 					that.items = that._formatMenus(that.aMenu);//首次组装 是否需要去调用请求数据接口
 				}
 			});
-		
+
 		},
 		_goMap:function(){//打开地图展示
 			var that=this;
@@ -652,7 +650,7 @@ window.app = new Vue({
 				if (!that.isMapInited) {
 					that.isMapInited = true;
 					that.initJasMap();
-				} 
+				}
 			}
 		}
 	},
