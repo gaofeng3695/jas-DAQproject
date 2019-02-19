@@ -43,9 +43,9 @@ public class DaqComitController {
 				return new SimpleResult<>(-1, "400", "businessOid not is null");
 			}
 			//数据对应的自定义表单的functionCode
-			String functionCode = param.get("functionCode").toString();
+			String functionCode = param.get("functionCode") != null ? param.get("functionCode").toString() : null;
 			//数据对应的后台类的className
-			String className = param.get("className").toString();
+			String className = param.get("className") != null ? param.get("className").toString() : null;
 			this.daqCommitService.changeBussinessCommitStatus(businessOids, functionCode, className);
 			result = new SimpleResult<>(1, "200", "ok");
 		} catch (Exception e) {
