@@ -151,6 +151,19 @@ public class CheckPipeColdBendingBo extends CommonBaseBo{
 	 * 备注
 	 */
 	private String remarks;
+	
+	/**
+	 * 提交状态
+	 */
+	private Integer commitStatus;
+
+	public Integer getCommitStatus() {
+		return commitStatus;
+	}
+
+	public void setCommitStatus(Integer commitStatus) {
+		this.commitStatus = commitStatus;
+	}
 
 	public String getOid() {
 		return oid;
