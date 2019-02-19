@@ -752,6 +752,7 @@ Vue.component('jas-table-for-list', {
 		'<div style="padding: 15px 0;">',
 		'	<el-button size="small" plain type="primary" icon="fa fa-plus" v-if="isHasRule()"  @click="addRule">规则</el-button>',
 		'	<el-button size="small" plain type="primary" icon="fa fa-plus" v-if="isHasPrivilege(' + "'bt_add'" + ')"  @click="add">增加</el-button>',
+		'	<el-button size="small" plain type="primary" icon="fa fa-level-up" v-if="isHasPrivilege(' + "'bt_submit'" + ')" :disabled="reportRows.length==0"  @click="upSubmit">提交</el-button>',
 		'	<el-button size="small" plain type="primary" icon="fa fa-level-up" v-if="isApprove&&isHasPrivilege(' + "'bt_report'" + ')"  :disabled="reportRows.length==0" @click="upcall">上报</el-button>',
 		'	<el-button size="small" plain type="primary" icon="fa fa-check" v-if="isApprove&&isHasPrivilege(' + "'bt_approve'" + ')" :disabled="approveRows.length==0" @click="approve">审核</el-button>',
 		'<jas-import-export-btns  @refreshtable="refresh" :is-import="isHasPrivilege(' + "'bt_import'" + ')" :is-export="isHasPrivilege(' + "'bt_export'" + ')" ',
@@ -849,6 +850,9 @@ Vue.component('jas-table-for-list', {
 			if (row.approveStatus > 0) {
 				return true;
 			}
+			if(row.commitStatus&&row.commitStatus=='1'){
+				return true;
+			}
 			return false;
 		},
 		upcall: function () {
@@ -873,6 +877,25 @@ Vue.component('jas-table-for-list', {
 				//top.app.requestNumber("","refresh");
 				that.refresh();
 			});
+		},
+		upSubmit:function(){
+			var that = this;
+			var oids = this.reportRows.map(function (item) {
+				return item.oid;
+			});
+			if (oids.length === 0) return;
+			var url = jasTools.base.rootPath + '/daq/daqcommit/changeCommitStatus.do';
+			jasTools.ajax.post(url, {
+				businessOid: oids,
+				className:this._className,
+				functionCode: this.functionCode,
+			}, function (data) {
+				top.Vue.prototype.$message({
+					type: 'success',
+					message: '提交成功'
+				});
+				that.refresh();
+			});	
 		},
 		approve: function () {
 			var that = this;
