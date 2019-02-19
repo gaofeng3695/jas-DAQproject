@@ -69,7 +69,6 @@ comment on column daq_construction_weld.is_anticorrosion_check is '是否补扣'
 comment on column daq_construction_weld.is_rework is '是否返修';
 
 
-
 alter table daq_material_pipe add is_check smallint not null default 0;
 comment on column daq_material_pipe.is_check is '是否检查';
 
@@ -89,3 +88,34 @@ alter table custom_fun_fields add column precision int2;
 comment on column custom_fun_fields.precision is 'xiao shu dian bao liu ji wei';
 
 alter table custom_fun_fields alter column child_field type varchar(100) ;
+
+
+/**********物资基本信息和检查信息添加提交状态字段start**********/
+alter table daq_material_pipe add column commit_status int2 default 0;
+comment on column daq_material_pipe.commit_status is '提交状态';
+alter table daq_material_hot_bends add column commit_status int2 default 0;
+comment on column daq_material_hot_bends.commit_status is '提交状态';
+alter table daq_material_tee add column commit_status int2 default 0;
+comment on column daq_material_tee.commit_status is '提交状态';
+alter table daq_material_insulated_joint add column commit_status int2 default 0;
+comment on column daq_material_insulated_joint.commit_status is '提交状态';
+alter table daq_material_closure add column commit_status int2 default 0;
+comment on column daq_material_closure.commit_status is '提交状态';
+alter table daq_material_reducer add column commit_status int2 default 0;
+comment on column daq_material_reducer.commit_status is '提交状态';
+alter table daq_material_flange add column commit_status int2 default 0;
+comment on column daq_material_flange.commit_status is '提交状态';
+
+alter table daq_check_coating_pipe add column commit_status int2 default 0;
+comment on column daq_check_coating_pipe.commit_status is '提交状态';
+alter table daq_check_hot_bends add column commit_status int2 default 0;
+comment on column daq_check_hot_bends.commit_status is '提交状态';
+alter table daq_check_pipe_cold_bending add column commit_status int2 default 0;
+comment on column daq_check_pipe_cold_bending.commit_status is '提交状态';
+alter table daq_check_tee add column commit_status int2 default 0;
+comment on column daq_check_tee.commit_status is '提交状态';
+alter table daq_check_insulated_joint add column commit_status int2 default 0;
+comment on column daq_check_insulated_joint.commit_status is '提交状态';
+alter table daq_check_reducer add column commit_status int2 default 0;
+comment on column daq_check_reducer.commit_status is '提交状态';
+/**********物资基本信息和检查信息添加提交状态字段end**********/
