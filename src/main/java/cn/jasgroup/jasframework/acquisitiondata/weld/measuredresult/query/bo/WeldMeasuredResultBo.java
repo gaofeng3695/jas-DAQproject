@@ -65,14 +65,39 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 	private String pipeSegmentOrCrossName;
 
 	/**
-	 * 焊口oid
+	 * 测量控制点类型 
 	 */
-	private String weldOid;
+	private String measureControlPointType; 
+
+	/**
+	 * 测量控制点类型 
+	 */
+	private String measureControlPointTypeName; 
+
+	/**
+	 * 测量控制点编号 
+	 */
+	private String measureControlPointCode; 
+	
+	/**
+	 * 焊口编号 
+	 */
+	private String weldOid; 
 
 	/**
 	 * 焊口编号
 	 */
 	private String weldCode;
+
+	/**
+	 * 弯管编号 
+	 */
+	private String bendingOid; 
+
+	/**
+	 * 弯管编号 
+	 */
+	private String bendingCode; 
 
 	/**
 	 * 桩号
@@ -123,16 +148,6 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 	 * 测量日期
 	 */
 	private Date surveyDate;
-	
-	/**
-	 * 施工机组代号
-	 */
-	private String workUnitOid;
-	
-	/**
-	 * 施工机组代号
-	 */
-	private String workUnitCode;
 
 	/**
 	 * 施工单位
@@ -256,6 +271,22 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 		this.pipeSegmentOrCrossName = pipeSegmentOrCrossName;
 	}
 
+	public String getMeasureControlPointType() {
+		return measureControlPointType;
+	}
+
+	public void setMeasureControlPointType(String measureControlPointType) {
+		this.measureControlPointType = measureControlPointType;
+	}
+
+	public String getMeasureControlPointTypeName() {
+		return measureControlPointTypeName;
+	}
+
+	public void setMeasureControlPointTypeName(String measureControlPointTypeName) {
+		this.measureControlPointTypeName = measureControlPointTypeName;
+	}
+
 	public String getWeldOid() {
 		return weldOid;
 	}
@@ -270,6 +301,30 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 
 	public void setWeldCode(String weldCode) {
 		this.weldCode = weldCode;
+	}
+
+	public String getMeasureControlPointCode() {
+		return measureControlPointCode;
+	}
+
+	public void setMeasureControlPointCode(String measureControlPointCode) {
+		this.measureControlPointCode = measureControlPointCode;
+	}
+
+	public String getBendingOid() {
+		return bendingOid;
+	}
+
+	public void setBendingOid(String bendingOid) {
+		this.bendingOid = bendingOid;
+	}
+
+	public String getBendingCode() {
+		return bendingCode;
+	}
+
+	public void setBendingCode(String bendingCode) {
+		this.bendingCode = bendingCode;
 	}
 
 	public String getMedianStakeOid() {
@@ -353,22 +408,6 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 
 	public void setSurveyDate(Date surveyDate) {
 		this.surveyDate = surveyDate;
-	}
-
-	public String getWorkUnitOid() {
-		return workUnitOid;
-	}
-
-	public void setWorkUnitOid(String workUnitOid) {
-		this.workUnitOid = workUnitOid;
-	}
-
-	public String getWorkUnitCode() {
-		return workUnitCode;
-	}
-
-	public void setWorkUnitCode(String workUnitCode) {
-		this.workUnitCode = workUnitCode;
 	}
 
 	public String getConstructUnit() {

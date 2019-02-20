@@ -50,35 +50,31 @@ public class WeldMeasuredResultQuery extends BaseJavaQuery{
 	private String pipeSegmentOrCrossOid; 
 
 	/**
-	 * 焊口编号 
+	 * 测量控制点类型 
 	 */
-	private String weldOid;
-	
-	/**
-	 * 审核状态
-	 */
-	private String approveStatus;
-	
-	/**
-	 * 施工单位
-	 */
-	private String constructUnit;
+	private String measureControlPointType; 
 
+	/**
+	 * 测量控制点编号 
+	 */
+	private String measureControlPointCode; 
+	
 	@Override
 	public String getQuerySql() {
-		String sql ="SELECT wmr.*,pro.project_name, pi.pipeline_name, te.tenders_name, vpsc.name as pipe_segment_or_cross_name, cw.weld_code, "
-					+ "ms.median_stake_code, u.unit_name as construct_unit_name, pu.unit_name as supervision_unit_name, wu.work_unit_code "
-					+ "FROM daq_weld_measured_result wmr "
-					+ "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = wmr.project_oid "
-					+ "LEFT JOIN (SELECT oid, pipeline_name, active FROM daq_pipeline where active=1) pi ON pi.oid = wmr.pipeline_oid "
-					+ "LEFT JOIN (SELECT oid, tenders_name, active FROM daq_tenders where active=1) te ON te.oid = wmr.tenders_oid "
-					+ "LEFT JOIN (select * from v_daq_pipe_segment_cross) vpsc on vpsc.oid = wmr.pipe_segment_or_cross_oid "
-					+ "LEFT JOIN (select oid, weld_code from v_daq_weld_info) cw ON cw.oid = wmr.weld_oid "
-					+ "LEFT JOIN (select oid, median_stake_code, active from daq_median_stake where active=1) ms ON ms.oid = wmr.median_stake_oid "
-					+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) pu on pu.oid = wmr.supervision_unit "
-					+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) u on u.oid = wmr.construct_unit "
-					+ "LEFT JOIN (select oid, work_unit_code, active from daq_work_unit where active=1) wu ON wu.oid = wmr.work_unit_oid "
-					+ "WHERE wmr.active = 1";
+		String sql ="SELECT wmr.*,pro.project_name, pi.pipeline_name, te.tenders_name, vpsc.name as pipe_segment_or_cross_name, cw.weld_code,ms.median_stake_code, "
+				+ "u.unit_name as construct_unit_name, pu.unit_name as supervision_unit_name, d.code_name as measure_control_point_type_name,bending.bending_code "
+				+ "FROM daq_weld_measured_result wmr "
+				+ "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = wmr.project_oid "
+				+ "LEFT JOIN (SELECT oid, pipeline_name, active FROM daq_pipeline where active=1) pi ON pi.oid = wmr.pipeline_oid "
+				+ "LEFT JOIN (SELECT oid, tenders_name, active FROM daq_tenders where active=1) te ON te.oid = wmr.tenders_oid "
+				+ "LEFT JOIN (select * from v_daq_pipe_segment_cross) vpsc on vpsc.oid = wmr.pipe_segment_or_cross_oid "
+				+ "LEFT JOIN (select oid, weld_code from v_daq_weld_info) cw ON cw.oid = wmr.weld_oid "
+				+ "LEFT JOIN (select oid, median_stake_code, active from daq_median_stake where active=1) ms ON ms.oid = wmr.median_stake_oid "
+				+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) pu on pu.oid = wmr.supervision_unit "
+				+ "LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) u on u.oid = wmr.construct_unit "
+				+ "LEFT JOIN (select code_id,code_name from sys_domain where active=1) d on d.code_id=wmr.measure_control_point_type "
+				+ "LEFT JOIN (select * from v_daq_material_bending) bending on bending.oid=wmr.bending_oid "
+				+ "WHERE wmr.active = 1";
 		sql += getConditionSql();
 		return sql;
 	}
@@ -100,14 +96,11 @@ public class WeldMeasuredResultQuery extends BaseJavaQuery{
 			if (StringUtils.isNotBlank(pipeSegmentOrCrossOid)) {
 				conditionSql += " and wmr.pipe_segment_or_cross_oid = :pipeSegmentOrCrossOid";
 			}
-			if (StringUtils.isNotBlank(weldOid)) {
-				conditionSql += " and wmr.weld_oid = :weldOid";
+			if (StringUtils.isNotBlank(measureControlPointType)) {
+				conditionSql += " and wmr.measure_control_point_type = :measureControlPointType";
 			}
-			if (StringUtils.isNotBlank(approveStatus)) {
-				conditionSql += " and wmr.approve_status in ("+ approveStatus +")";
-			}
-			if (StringUtils.isNotBlank(constructUnit)) {
-				conditionSql += " and construct_unit in (select uu.oid from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid=:constructUnit)";
+			if (StringUtils.isNotBlank(measureControlPointCode)) {
+				conditionSql += " and wmr.measure_control_point_code like :measureControlPointCode";
 			}
 			conditionSql += this.dataAuthoritySql;
 		}
@@ -155,28 +148,23 @@ public class WeldMeasuredResultQuery extends BaseJavaQuery{
 		this.pipeSegmentOrCrossOid = pipeSegmentOrCrossOid;
 	}
 
-	public String getWeldOid() {
-		return weldOid;
+	public String getMeasureControlPointType() {
+		return measureControlPointType;
 	}
 
-	public void setWeldOid(String weldOid) {
-		this.weldOid = weldOid;
+	public void setMeasureControlPointType(String measureControlPointType) {
+		this.measureControlPointType = measureControlPointType;
 	}
 
-	public String getApproveStatus() {
-		return approveStatus;
+	public String getMeasureControlPointCode() {
+		if (StringUtils.isNotBlank(measureControlPointCode)) {
+			return "%"+measureControlPointCode+"%";
+		}
+		return null;
 	}
 
-	public void setApproveStatus(String approveStatus) {
-		this.approveStatus = approveStatus;
+	public void setMeasureControlPointCode(String measureControlPointCode) {
+		this.measureControlPointCode = measureControlPointCode;
 	}
-
-	public String getConstructUnit() {
-		return constructUnit;
-	}
-
-	public void setConstructUnit(String constructUnit) {
-		this.constructUnit = constructUnit;
-	} 
 	
 }
