@@ -24,6 +24,9 @@ public class StationVentStackService extends CommonDataJdbcService {
 	@Autowired 
 	private StationVentStackDao stationVentStackDao;
 	
+	@Autowired
+	private CommonDataJdbcService commonDataJdbcService;
+	
 	/**
 	 * <p>功能描述：放空立管保存后更新对应物资的数据。</p>
 	  * <p> 葛建。</p>	
@@ -48,7 +51,8 @@ public class StationVentStackService extends CommonDataJdbcService {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public void updateMaterialBeforeUpdateEntity(StationVentStack stationVentStack){
-		String materialOid = stationVentStack.getManufactureNumber();
+		StationVentStack oldStationVentStack = (StationVentStack)commonDataJdbcService.get(StationVentStack.class, stationVentStack.getOid());
+		String materialOid = oldStationVentStack.getManufactureNumber();
 		if (StringUtils.isNotBlank(materialOid)) {
 			stationVentStackDao.updateMaterialData("", "", "", materialOid);
 		}
