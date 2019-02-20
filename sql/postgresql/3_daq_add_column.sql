@@ -119,3 +119,14 @@ comment on column daq_check_insulated_joint.commit_status is '提交状态';
 alter table daq_check_reducer add column commit_status int2 default 0;
 comment on column daq_check_reducer.commit_status is '提交状态';
 /**********物资基本信息和检查信息添加提交状态字段end**********/
+
+/*******焊口测量成果改为中线测量成果start***********/
+ALTER TABLE daq_weld_measured_result DROP COLUMN IF EXISTS work_unit_oid;
+
+alter table daq_weld_measured_result add column measure_control_point_type varchar(36) ;
+comment on column daq_weld_measured_result.measure_control_point_type is '测量控制点类型';
+alter table daq_weld_measured_result add column measure_control_point_code varchar(50) ;
+comment on column daq_weld_measured_result.measure_control_point_code is '测量控制点编号';
+alter table daq_weld_measured_result add column bending_oid varchar(36) ;
+comment on column daq_weld_measured_result.bending_oid is '弯管编号';
+/*******焊口测量成果改为中线测量成果end***********/
