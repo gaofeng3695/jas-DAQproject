@@ -133,4 +133,8 @@ public class WeldDao extends BaseJdbcDao{
 					+ "LEFT JOIN (select oid,median_stake_code from daq_median_stake where active=1) stake on total.median_stake_oid=stake.oid";
 		return this.queryForList(sql, new Object[]{pipeSegmentOrCrossOid, pipeSegmentOrCrossOid});
 	}
+	public void changeIsMeasuredField(String weldOid, int value) {
+		String sql = "update daq_construction_weld set is_measure=? where oid=?";
+		this.update(sql, new Object[]{value, weldOid});
+	}
 }

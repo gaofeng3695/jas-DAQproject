@@ -23,6 +23,10 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 /**
  * 
   *<p>类描述：焊口测量成果信息实体类。</p>
+  * {@link cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.service.WeldService #changeWeldMeasuredFieldAfterSave()}
+  * {@link cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.service.WeldService #changeWeldMeasuredFieldBeforeUpdate()}
+  * {@link cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.service.WeldService #changeWeldMeasuredFieldAfterUpdate()}
+  * {@link cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.service.WeldService #changeWeldMeasuredFieldAfterDelete()}
   * @author 葛建 。
   * @version v1.0.0.1。
   * @since JDK1.8。
@@ -31,18 +35,27 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 @CommonSaveConfig(
 	scene = "/weldMeasuredResult/save",
 	afterAdvice={
-		@Process(service = "pipeFittingService", method = "saveChanagePipeFittingUseState()")
+		@Process(service = "weldService", method = "changeWeldMeasuredFieldAfterSave()")
 	}
 )
 @CommonUpdateConfig(
-	scene = "/weldMeasuredResult/update"
+	scene = "/weldMeasuredResult/update",
+	beforeAdvice={
+		@Process(service = "weldService", method = "changeWeldMeasuredFieldBeforeUpdate()")
+	},
+	afterAdvice={
+		@Process(service = "weldService", method = "changeWeldMeasuredFieldAfterUpdate()")
+	}
 )
 @CommonDeleteConfig(
-	scene = "/weldMeasuredResult/delete"
+	scene = "/weldMeasuredResult/delete",
+	afterAdvice={
+		@Process(service = "weldService", method = "changeWeldMeasuredFieldAfterDelete()")
+	}
 )
 @CommonDeleteBatchConfig(
-		scene = "/weldMeasuredResult/deleteBatch"
-		)
+	scene = "/weldMeasuredResult/deleteBatch"
+)
 @Point(
 		x = "pointx",
 		y = "pointy",
