@@ -105,4 +105,9 @@ drop view if exists v_daq_approve_tip;
 create or replace view v_daq_approve_tip as 
 	select p.oid,p.parent_id,p.privilege_code,p.privilege_name,p.hierarchy,t.project_oid,t.supervision_unit from pri_func_privilege p 
 	inner join(select project_oid,supervision_unit,privilege_code from daq_approve_tip where active=1 ) t
-	on t.privilege_code=p.privilege_code where p.active=1
+	on t.privilege_code=p.privilege_code where p.active=1;
+	
+/***
+ * 删除焊口测量成果视图
+ */	
+DROP VIEW IF EXISTS v_daq_weld_measured_result;
