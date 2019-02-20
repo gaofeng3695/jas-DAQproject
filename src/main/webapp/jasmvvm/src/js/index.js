@@ -1,125 +1,210 @@
 Vue.component('loading-bar', LoadingBar);
-var gisMap = {
-	drawLineByStakes: function (features, jasMap) {
-		var that = this;
-		//var features = source.getFeatures();
-		var dataArray = []; //最终绘制数据
-		var pipelineArray = []; //按照每一个管线的数组
-		var lineidArray = []; //用于存储管线id
-		for (var i = 0; i < features.length; i++) {
-			var obj = {};
-			var feature = features[i].values_;
-			//var properties = feature.getProperties(); //属性信息
-			//var geom = feature.getGeometry(); // Point
-			var projectId = feature.project_oid; //先根据项目进行分组
-			var lineId = feature.pipeline_oid; //再根据管线id进行分组
-			obj.mileage = feature.mileage; //里程值
-			obj.lineId = lineId; //线路段
-			obj.projectId = projectId; //项目
-			obj.coor = feature.geometry.flatCoordinates; //
-			//			obj.mileage = source[i].mileage;
-			//			obj.projectId = source[i].project_oid;
-			//			obj.lineId = source[i].pipeline_oid;
-			//			obj.coor = source[i].coor;
-			pipelineArray.push(obj);
-		}
-		var map = {},
-			dataArray = [];
-		for (var i = 0; i < pipelineArray.length; i++) {
-			var ai = pipelineArray[i];
-			if (!map[ai.lineId]) {
-				dataArray.push({
-					lineId: ai.lineId,
-					data: [ai]
-				});
-				map[ai.lineId] = ai;
-			} else {
-				for (var j = 0; j < dataArray.length; j++) {
-					var dj = dataArray[j];
-					if (dj.lineId == ai.lineId) {
-						dj.data.push(ai);
-						break;
-					}
-				}
-			}
-		}
-		//各个线路段按照里程排序
-		for (i = 0; i < dataArray.length; i++) {
-			var pipeArr = dataArray[i].data;
-			dataArray[i].data = pipeArr.sort(that.compare("mileage"));
-		}
-		//此时的dataArray 已经按照管线分组，并且按照里程进行排序
-		jasMap.clearMapGraphics();
-		//生成线
-		for (i = 0; i < dataArray.length; i++) {
-			var stakes = dataArray[i].data;
-			var coors = [];
-			for (var j = 0; j < stakes.length; j++) {
-				var stake = stakes[j];
-				coors.push(stake.coor);
-			}
-			var color = that.randomColor(i);
-			console.log(color);
-			jasMap.addPolylineGraphic(coors, {
-				color: color,
-				width: 3
-			});
-		}
+
+var locationMap = {
+	v_daq_construction_weld: {
+		fields: {
+			weld_code: "焊口编号",
+			construct_unit_name: "施工单位",
+			to_char: "施工日期",
+			work_unit_code: "施工机组代号"
+		},
+		title: "焊口信息",
+		src: './pages/row-management/weld-info/dialogs/detail.html?oid='
 
 	},
-	randomColor: function (i) {
-		var that = this;
-		//, '',
-		var colorArr = ['#CC0000', '#00FF00', '#0066FF', '#CC33FF', '#CCFF00', '#FF66FF', '#FFFF00', '#00FFFF', '#00FFCC'];
-		if (i < colorArr.length) {
-			return colorArr[i];
-		} else {
-			return colorArr[that.random(0, 8)];
-		}
+	v_daq_mv_pipe_node: {
+		fields: {
+			project_name: "项目名称",
+			pipe_node_code: "节点编号",
+			pipe_node_type: "节点类型",
+			unit_name: "采集单位",
+			collection_date: "采集日期"
+		},
+		title: "节点信息",
+		src: './pages/row-mv/dialogs/detail.html?pageCode=mvPipeNode&oid='
 	},
-	random: function (min, max) {
-		var Range = max - min;
-		var Rand = Math.random();
-		var num = min + Math.round(Rand * Range); //四舍五入
-		// console.log(num);
-		return num;
+	v_daq_mv_pipe_section: {
+		fields: {
+			project_name: "项目名称",
+			pipe_section_code: "管段编号",
+			unit_name: "采集单位",
+			collection_date: "采集日期"
+		},
+		title: "管段信息",
+		src: './pages/row-mv/dialogs/detail.html?pageCode=mvPipeSection&oid='
 	},
-	compare: function (prop) {
-		return function (obj1, obj2) {
-			var val1 = obj1[prop];
-			var val2 = obj2[prop];
-			if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
-				val1 = Number(val1);
-				val2 = Number(val2);
-			}
-			if (val1 < val2) {
-				return -1;
-			} else if (val1 > val2) {
-				return 1;
-			} else {
-				return 0;
-			}
-		}
+	v_daq_mv_across_info: {
+		fields: {
+			project_name: "项目名称",
+			pipe_section_code: "管段编号",
+			unit_name: "采集单位",
+			collection_date: "采集日期"
+		},
+		title: "穿越信息",
+		src: './pages/row-mv/dialogs/detail.html?pageCode=mvAcrossInfo&oid='
 	},
-
-}
+	v_daq_mv_stride_across_info: {
+		fields: {
+			project_name: "项目名称",
+			pipe_section_code: "管段编号",
+			unit_name: "采集单位",
+			collection_date: "采集日期"
+		},
+		title: "跨越信息",
+		src: './pages/row-mv/dialogs/detail.html?pageCode=mvStrideAcrossInfo&oid='
+	},
+	v_daq_mv_pipe_trench_protect: {
+		fields: {
+			project_name: "项目名称",
+			pipe_trench_length: "管沟长度",
+			unit_name: "采集单位",
+			collection_date: "采集日期"
+		},
+		title: "管沟信息",
+		src: './pages/row-mv/dialogs/detail.html?pageCode=mvPipeTrenchProtect&oid='
+	},
+	v_daq_mv_bushing_info: {
+		fields: {
+			project_name: "项目名称",
+			bushing_material: "材质",
+			unit_name: "采集单位",
+			collection_date: "采集日期"
+		},
+		title: "套管信息",
+		src: './pages/row-mv/dialogs/detail.html?pageCode=mvBushingInfo&oid='
+	},
+	v_daq_mv_valve_info: {
+		fields: {
+			project_name: "项目名称",
+			valve_code: "阀门编号",
+			unit_name: "采集单位",
+			collection_date: "采集日期"
+		},
+		title: "阀门信息",
+		src: './pages/row-mv/dialogs/detail.html?pageCode=mvValveInfo&oid='
+	},
+	v_daq_mv_mark_stake: {
+		fields: {
+			project_name: "项目名称",
+			mark_stake_code: "标志桩编号",
+			unit_name: "采集单位",
+			collection_date: "采集日期"
+		},
+		title: "标志桩信息",
+		src: './pages/row-mv/dialogs/detail.html?pageCode=mvMarkStake&oid='
+	},
+	v_daq_mv_electronic_label: {
+		fields: {
+			project_name: "项目名称",
+			electronic_label_type: "电子标签类型",
+			unit_name: "采集单位",
+			collection_date: "采集日期"
+		},
+		title: "电子标签信息",
+		src: './pages/row-mv/dialogs/detail.html?pageCode=mvElectronicLabel&oid='
+	},
+	v_daq_mv_monitor_well: {
+		fields: {
+			project_name: "项目名称",
+			monitor_well_code: "监测井编号",
+			unit_name: "采集单位",
+			collection_date: "采集日期"
+		},
+		title: "监测井信息",
+		src: './pages/row-mv/dialogs/detail.html?pageCode=mvMonitorWell&oid='
+	},
+	v_daq_cross_excavation:{
+		fields: {
+			cross_name: "穿跨越名称",
+			unit_name: "施工单位",
+			supervision_unit_name: "监理单位",
+			completion_date:"完工日期"
+		},
+		title: "开挖穿越信息",
+		src: './pages/row-cross/cross-template/dialogs/detail.html?pageCode=crossExcavation&oid='
+	},
+	v_daq_cross_pipe_jacking:{
+		fields: {
+			cross_name: "穿跨越名称",
+			unit_name: "施工单位",
+			supervision_unit_name: "监理单位",
+			completion_date:"完工日期"
+		},
+		title: "顶管穿越信息",
+		src: './pages/row-cross/cross-template/dialogs/detail.html?pageCode=crossPipeJacking&oid='
+	},
+	v_daq_cross_box_culvert:{
+		fields: {
+			cross_name: "穿跨越名称",
+			unit_name: "施工单位",
+			supervision_unit_name: "监理单位",
+			completion_date:"完工日期"
+		},
+		title: "箱涵穿越信息",
+		src: './pages/row-cross/cross-template/dialogs/detail.html?pageCode=crossBoxCulvert&oid='
+	},
+	v_daq_cross_drilling: {
+		fields: {
+			cross_name: "穿跨越名称",
+			unit_name: "施工单位",
+			supervision_unit_name: "监理单位",
+			completion_date:"完工日期"
+		},
+		title: "定向钻穿越信息",
+		src: './pages/row-cross/cross-template/dialogs/detail.html?pageCode=crossDrilling&oid='
+	},
+	v_daq_cross_shield:  {
+		fields: {
+			cross_name: "穿跨越名称",
+			unit_name: "施工单位",
+			supervision_unit_name: "监理单位",
+			completion_date:"完工日期"
+		},
+		title: "盾构隧道穿越信息",
+		src: './pages/row-cross/cross-template/dialogs/detail.html?pageCode=crossShield&oid='
+	},
+	v_daq_cross_drilling_blasting: {
+		fields: {
+			cross_name: "穿跨越名称",
+			unit_name: "施工单位",
+			supervision_unit_name: "监理单位",
+			completion_date:"完工日期"
+		},
+		title: "钻爆隧道穿越信息",
+		src: './pages/row-cross/cross-template/dialogs/detail.html?pageCode=crossDrillingBlasting&oid='
+	},
+	v_daq_cross_across: {
+		fields: {
+			cross_name: "穿跨越名称",
+			unit_name: "施工单位",
+			supervision_unit_name: "监理单位",
+			completion_date:"完工日期"
+		},
+		title: "跨越信息",
+		src: './pages/row-cross/cross-template/dialogs/detail.html?pageCode=crossAcross&oid='
+	}
+};
 var showInfo = function (e) {
+	var layerId = e.layerId;
 	var coor = e.coordinate;
 	var obj = e.attributes;
-	var name = "<div class='map_item'><span style='color:#666'>焊口编号：</span>" + obj.weld_code + "</div>";
-	name += "<div  class='map_item'><span style='color:#666'>施工单位：</span>" + obj.construct_unit_name + "</div>";
-	name += "<div  class='map_item'><span style='color:#666'>施工日期：</span>" + obj.to_char + "</div>";
-	name += "<div  class='map_item'><span style='color:#666'>施工机组代号：</span>" + obj.work_unit_code + "</div>";
-	name += "<div class='map_more' onclick='showWeldInfo(`" + obj.oid+ "`)'>更多</div>"
-	app.jasMap.showInfoWindow(coor[0], coor[1], name, "焊口信息");
-}
+	var oid = obj.oid;
+	var title = locationMap[layerId].title;
+	var src = locationMap[layerId].src + oid;
+	var name = "";
+	for (var key in locationMap[layerId].fields) {
+		name += "<div  class='map_item'><span style='color:#666'> " + locationMap[layerId].fields[key] + "：</span>" + obj[key] + "</div>";
+	}
+	name += "<div class='map_more' onclick='showWeldInfo(`" + src + "`,`" + title + "`)'>更多</div>"
+	app.jasMap.showInfoWindow(coor[0], coor[1], name, title);
+};
 
-function showWeldInfo(oid) {
+function showWeldInfo (src, title) {
 	top.jasTools.dialog.show({
 		width: '60%',
 		height: '80%',
-		title: '焊口详情',
-		src: './pages/row-management/weld-info/dialogs/detail.html?oid='+oid,
+		title: title,
+		src: src,
 		cbForClose: function () {
 
 		}
@@ -142,7 +227,10 @@ window.app = new Vue({
 			currentTap: 'statistics-01',
 			tabs: [], // 打开的标签页
 			items: [], //菜单数组
-			isMapInited: false //地图未初始化
+			aMenu: [],//初始化的菜单数组
+			isMapInited: false, //地图未初始化
+			isTigger: false,
+			menuNumber: []//表示菜单后面的树
 		}
 	},
 	computed: {
@@ -164,6 +252,7 @@ window.app = new Vue({
 	},
 	created: function () {
 		// this.initJasMap();
+		this.tirggerTime();//是否触发定时器，间隔多长时间进行接口触发
 	},
 	mounted: function () {
 		// this.$refs.resizer.panelShowed = false;
@@ -189,14 +278,15 @@ window.app = new Vue({
 				},
 				success: function (data, xhr, param) {
 					if (typeof data === 'object' && data.length > 0) {
-						that.items = that._formatMenus(data);
+						that.aMenu = data;
+						that.items = that._formatMenus(data);//首次组装 是否需要去调用请求数据接口
 						that.tabs = that._createTabsArr(that.menusOpened, that.items);
 					}
-
 				}
 			});
 		},
-		_formatMenus: function (aMenu) {
+		_formatMenus: function (aMenu) {//进行菜单的组装
+			var that = this;
 			var _aMenu = JSON.parse(JSON.stringify(aMenu));
 			var switcher = function (arr) {
 				if (typeof arr === "object") {
@@ -208,6 +298,9 @@ window.app = new Vue({
 							item.link = jasTools.base.rootPath + '/' + item.attributes.URL;
 						}
 						item.subs = item.children;
+						if (that.isTigger) {
+							item.value = that._ifExistCode(item.id);
+						}
 						if (item.subs) {
 							switcher(item.subs);
 						}
@@ -218,6 +311,17 @@ window.app = new Vue({
 			switcher(_aMenu);
 			return _aMenu;
 
+		},
+		_ifExistCode: function (id) {
+			var that = this;
+			var number = 0;
+			for (var i = 0; i < that.menuNumber.length; i++) {
+				if (id == that.menuNumber[i].privilege_code) {
+					number = that.menuNumber[i].number;
+					break;
+				}
+			}
+			return number;
 		},
 		selectMenu: function (index, indexPath) {
 			var that = this;
@@ -303,7 +407,7 @@ window.app = new Vue({
 		_listenWindowClose: function () {
 			var that = this;
 			$(window).bind("beforeunload", function (e) {
-				var e = window.event || e;　　
+				var e = window.event || e;
 				console.log(e)
 				// e.returnValue = ("确定离开当前页面吗？");
 				//that._loginOut();
@@ -461,7 +565,8 @@ window.app = new Vue({
 				},
 				onLayerAdded: function (e) {
 					var layerId = e.data.layerId;
-					if (layerId === "v_daq_construction_weld") { //焊口信息的时候
+					var layerArrs = ["v_daq_construction_weld", "v_daq_mv_pipe_node", "v_daq_mv_pipe_section", "v_daq_mv_across_info", "v_daq_mv_stride_across_info", "v_daq_mv_pipe_trench_protect", "v_daq_mv_bushing_info", "v_daq_mv_mark_stake", "v_daq_mv_valve_info", "v_daq_mv_electronic_label", "v_daq_mv_monitor_well",'v_daq_cross_excavation','v_daq_cross_pipe_jacking','v_daq_cross_box_culvert','v_daq_cross_drilling','v_daq_cross_shield','v_daq_cross_drilling_blasting','v_daq_cross_across'];
+					if (layerArrs.indexOf(layerId) > -1) { //焊口信息的时候
 						//添加单个图层的点击事件
 						this.addLayerClickEventListener(layerId, showInfo);
 					}
@@ -476,33 +581,8 @@ window.app = new Vue({
 				layerId: 'daq_median_stake'
 			});
 			jasMap.queryFeatures(paramsArray, function (features) {
-				// console.info(features);
-				//   gisMap.drawLineByStakes(features, jasMap);
-			});
 
-			//jasMap.removeEventListener(this.layerListener);
-			//进行中线桩数据的读取
-			//			var url = jasTools.base.rootPath + "/jdbc/commonData/medianStake/getPage.do";
-			//			jasTools.ajax.post(url, {
-			//					pageNo: 1,
-			//					pageSize: 100000,
-			//				},
-			//				function (data) {
-			//					var source = [];
-			//					data.rows.forEach(function (item) {
-			//						//						var projectId=properties.project_oid;//先根据项目进行分组
-			//						//						var lineId = properties.pipeline_oid;//再根据管线id进行分组
-			//						//						obj.mileage = properties.mileage; //里程值
-			//						source.push({
-			//							project_oid: item.projectOid,
-			//							pipeline_oid: item.pipelineOid,
-			//							mileage: item.mileage,
-			//							coor: [item.pointx, item.pointy]
-			//						});
-			//					});
-			//
-			//					gisMap.drawLineByStakes(source, jasMap);
-			//				});
+			});
 		},
 		locate: function (id, tableCode) {
 			var that = this;
@@ -537,8 +617,41 @@ window.app = new Vue({
 				if (data.rows.length > 0) {
 					that.userImg = jasTools.base.rootPath + '/attachment/app/getImageBySize.do?oid=' + data.rows[0].oid + "&token=" + localStorage.getItem("token");
 				}
-
 			});
 		},
+		tirggerTime: function () {
+			var that = this;
+			var isShowNumber = localStorage.getItem("isShowNumber");
+			if (isShowNumber=="true") {
+				that.isTigger = true;
+				that.requestNumber();
+				setInterval(function () {
+					that.requestNumber("refresh");
+				},900000);//毫秒为单位 1000
+			}
+		},
+		requestNumber: function (isRefresh) {
+			var that = this;
+			//此处进行请求获取
+			that.menuNumber=[];
+			var url = jasTools.base.rootPath + '/daq/dataApprove/queryUnauditedInfo.do';
+			jasTools.ajax.post(url, {}, function (data) {
+				that.menuNumber= data.rows;
+				if (isRefresh) {
+					that.items = that._formatMenus(that.aMenu);//首次组装 是否需要去调用请求数据接口
+				}
+			});
+
+		},
+		_goMap:function(){//打开地图展示
+			var that=this;
+			if (!that.$refs.resizer.panelShowed) {
+				that.$refs.resizer.panelShowed = true;
+				if (!that.isMapInited) {
+					that.isMapInited = true;
+					that.initJasMap();
+				}
+			}
+		}
 	},
 })

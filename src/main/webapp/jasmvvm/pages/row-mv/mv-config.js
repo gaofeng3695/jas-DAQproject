@@ -198,17 +198,17 @@ var mvConfig = {
       pointx: {
         type: 'number',
         name: 'X坐标',
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3,
+        precision: 7,
         isRequired: true
       },
       pointy: {
         type: 'number',
         name: 'Y坐标',
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3,
+        precision: 7,
         isRequired: true
       },
       pointz: {
@@ -249,7 +249,7 @@ var mvConfig = {
         }],
         formatter: function (a, b, value, c) {
           if (value == 0) return "否";
-          return "是"
+          if (value == 1) return "是";
         }
       },
       electronicLabelType: {
@@ -262,7 +262,7 @@ var mvConfig = {
       }
     }
   },
-   mvPipeSection: { //管段信息表
+  mvPipeSection: { //管段信息表
     addUrl: "/jdbc/commonData/mvPipeSection/save.do",
     updateUrl: "/jdbc/commonData/mvPipeSection/update.do",
     deleteUrl: "/jdbc/commonData/mvPipeSection/delete.do",
@@ -537,7 +537,7 @@ var mvConfig = {
         }],
         formatter: function (a, b, c, d) {
           if (c == 1) return "30";
-          return "50"
+          if (c == 2) return "50"
         }
       },
       pipeOuterAnticorrosive: {
@@ -552,7 +552,7 @@ var mvConfig = {
         }],
         formatter: function (a, b, c, d) {
           if (c == 1) return '3PE';
-          return "环氧粉末"
+          if (c == 2) return "环氧粉末"
         }
       },
       outerAnticorrosiveGrade: {
@@ -567,7 +567,7 @@ var mvConfig = {
         }],
         formatter: function (a, b, c, d) {
           if (c == 1) return '普通级';
-          return "加强级"
+          if (c == 2) return "加强级"
         }
       },
       cathodicProtectionMethod: {
@@ -582,7 +582,7 @@ var mvConfig = {
         }],
         formatter: function (a, b, c, d) {
           if (c == 1) return '牺牲阳极';
-          return "外加电流"
+          if (c == 2) return "外加电流"
         }
       },
       burialMethod: {
@@ -598,7 +598,7 @@ var mvConfig = {
         }],
         formatter: function (a, b, c, d) {
           if (c == 1) return '埋地管';
-          return "明管"
+          if (c == 2) return "明管"
         }
       },
       pipeSectionCategory: {
@@ -614,23 +614,23 @@ var mvConfig = {
         }],
         formatter: function (a, b, c, d) {
           if (c == 1) return '市政管';
-          return "庭院管"
+          if (c == 2) return "庭院管"
         }
       },
       startPointx: {
         type: 'number',
         name: '起始点X坐标',
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3,
+        precision: 7,
         disabled: true
       },
       startPointy: {
         type: 'number',
         name: '起始点Y坐标',
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3,
+        precision: 7,
         disabled: true
       },
       startPointz: {
@@ -667,7 +667,7 @@ var mvConfig = {
       }
     }
   },
-   mvAcrossInfo: { //穿越信息表
+  mvAcrossInfo: { //穿越信息表
     addUrl: "/jdbc/commonData/daqMvAcrossInfo/save.do",
     updateUrl: "/jdbc/commonData/daqMvAcrossInfo/update.do",
     deleteUrl: "/jdbc/commonData/daqMvAcrossInfo/delete.do",
@@ -927,7 +927,7 @@ var mvConfig = {
         }],
         formatter: function (a, b, c, d) {
           if (c == 1) return '埋地管';
-          return "明管"
+          if (c == 2)  return "明管"
         }
       },
       pipeSectionCategory: {
@@ -942,7 +942,7 @@ var mvConfig = {
         }],
         formatter: function (a, b, c, d) {
           if (c == 1) return '市政管';
-          return "庭院管"
+          if (c == 2) return "庭院管"
         }
       },
       pipeSectionMaterial: {
@@ -989,7 +989,7 @@ var mvConfig = {
         }],
         formatter: function (a, b, c, d) {
           if (c == 1) return "30";
-          return "50"
+          if (c == 2) return "50"
         }
       },
       measureUnit: {
@@ -1004,17 +1004,17 @@ var mvConfig = {
       startPointx: {
         type: 'number',
         name: '起始点X坐标',
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3,
+        precision: 7,
         disabled: true
       },
       startPointy: {
         type: 'number',
         name: '起始点Y坐标',
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3,
+        precision: 7,
         disabled: true
       },
       startPointz: {
@@ -1028,17 +1028,17 @@ var mvConfig = {
       endPointx: {
         type: 'number',
         name: '终止点X坐标',
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3,
+        precision: 7,
         disabled: true
       },
       endPointy: {
         type: 'number',
         name: '终止点Y坐标',
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3,
+        precision: 7,
         disabled: true
       },
       endPointz: {
@@ -1132,32 +1132,32 @@ var mvConfig = {
       'approveStatus'
     ],
     detailFields1: [ //
-                     'startPipeNodeName',
-                     'endPipeNodeName',
-                     'pipeSectionLength',
-                     'acrossMethodName',
-                     'acrossObjectName',
-                     'burialMethod',
-                     'pipeSectionCategory',
-                     'pipeSectionMaterialName',
-                     'pipeSectionSpecName',
-                     'outerDiameter',
-                     'wallThickness',
-                     'designLife',
-                     'startPointx',
-                     'startPointy',
-                     'startPointz',
-                     'endPointx',
-                     'endPointy',
-                     'endPointz',
+      'startPipeNodeName',
+      'endPipeNodeName',
+      'pipeSectionLength',
+      'acrossMethodName',
+      'acrossObjectName',
+      'burialMethod',
+      'pipeSectionCategory',
+      'pipeSectionMaterialName',
+      'pipeSectionSpecName',
+      'outerDiameter',
+      'wallThickness',
+      'designLife',
+      'startPointx',
+      'startPointy',
+      'startPointz',
+      'endPointx',
+      'endPointy',
+      'endPointz',
     ],
     fieldsConfig: {
       projectOid: {
         type: 'select',
         name: '项目名称',
         optionUrl: '/daq/privilege/getProjectList.do',
-        childSelect: ['supervisionUnit','startPipeNodeOid','endPipeNodeOid'],
-        childUrl: ['/daq/privilege/getSupervisionUnitByProjectOid.do','/jdbc/commonData/daqMvPipeNode/getDaqMvPipeNodeList.do','/jdbc/commonData/daqMvPipeNode/getDaqMvPipeNodeList.do'],
+        childSelect: ['supervisionUnit', 'startPipeNodeOid', 'endPipeNodeOid'],
+        childUrl: ['/daq/privilege/getSupervisionUnitByProjectOid.do', '/jdbc/commonData/daqMvPipeNode/getDaqMvPipeNodeList.do', '/jdbc/commonData/daqMvPipeNode/getDaqMvPipeNodeList.do'],
         requestParams: {
           pipeNetworkTypeCode: "pipe_network_code_002,pipe_network_code_003"
         },
@@ -1250,11 +1250,11 @@ var mvConfig = {
           }
         },
       },
-      startPipeNodeName:{
-    	  name:"起始节点"
+      startPipeNodeName: {
+        name: "起始节点"
       },
-      endPipeNodeName:{
-    	 name:"终止节点"
+      endPipeNodeName: {
+        name: "终止节点"
       },
       endPipeNodeOid: {
         type: "select",
@@ -1285,8 +1285,8 @@ var mvConfig = {
         isRequired: true,
         domainName: "across_method_domain"
       },
-      acrossMethodName:{
-    	  name: "穿越方式"
+      acrossMethodName: {
+        name: "穿越方式"
       },
       acrossObject: {
         type: "select",
@@ -1294,8 +1294,8 @@ var mvConfig = {
         isRequired: true,
         domainName: "across_object_domain"
       },
-      acrossObjectName:{
-    	  name: "穿越对象类型"
+      acrossObjectName: {
+        name: "穿越对象类型"
       },
       burialMethod: {
         type: "select",
@@ -1309,7 +1309,7 @@ var mvConfig = {
         }],
         formatter: function (a, b, c, d) {
           if (c == 1) return '埋地管';
-          return "明管"
+          if (c == 2) return "明管"
         }
       },
       pipeSectionCategory: {
@@ -1324,7 +1324,7 @@ var mvConfig = {
         }],
         formatter: function (a, b, c, d) {
           if (c == 1) return '市政管';
-          return "庭院管"
+          if (c == 2) return "庭院管"
         }
       },
       pipeSectionMaterial: {
@@ -1371,23 +1371,23 @@ var mvConfig = {
         }],
         formatter: function (a, b, c, d) {
           if (c == 1) return "30";
-          return "50"
+          if (c == 2) return "50"
         }
       },
       startPointx: {
         type: 'number',
         name: '起始点X坐标',
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3,
+        precision: 7,
         disabled: true
       },
       startPointy: {
         type: 'number',
         name: '起始点Y坐标',
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3,
+        precision: 7,
         disabled: true
       },
       startPointz: {
@@ -1401,17 +1401,17 @@ var mvConfig = {
       endPointx: {
         type: 'number',
         name: '终止点X坐标',
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3,
+        precision: 7,
         disabled: true
       },
       endPointy: {
         type: 'number',
         name: '终止点Y坐标',
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3,
+        precision: 7,
         disabled: true
       },
       endPointz: {
@@ -1576,7 +1576,7 @@ var mvConfig = {
       pipeTrenchWidth: {
         type: 'number',
         name: '管沟宽度(m)',
-     //   isRequired: true,
+        //   isRequired: true,
         max: 999999,
         min: 0,
         precision: 3
@@ -1584,7 +1584,7 @@ var mvConfig = {
       pipeTrenchHeight: {
         type: 'number',
         name: '管沟高度(m)',
-//        isRequired: true,
+        //        isRequired: true,
         max: 99999,
         min: 0,
         precision: 4
@@ -1593,17 +1593,17 @@ var mvConfig = {
         type: 'number',
         name: '起始点X坐标',
         isRequired: true,
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3
+        precision: 7
       },
       startPointy: {
         type: 'number',
         name: '起始点Y坐标',
         isRequired: true,
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3
+        precision: 7
       },
       startPointz: {
         type: 'number',
@@ -1618,17 +1618,17 @@ var mvConfig = {
         type: 'number',
         name: '终止点X坐标',
         isRequired: true,
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3
+        precision: 7
       },
       endPointy: {
         type: 'number',
         name: '终止点Y坐标',
         isRequired: true,
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3
+        precision: 7
       },
       endPointz: {
         type: 'number',
@@ -1652,7 +1652,7 @@ var mvConfig = {
     tableFields: [
       'approveStatus',
       'projectName',
-      'bushingMaterial',
+      'bushingMaterialName',
       'bushingSpec',
       'startPointx',
       'startPointy',
@@ -1702,7 +1702,7 @@ var mvConfig = {
       'approveStatus'
     ],
     detailFields1: [ //
-      'bushingMaterial',
+      'bushingMaterialName',
       'bushingSpec',
       'startPointx',
       'startPointy',
@@ -1788,14 +1788,13 @@ var mvConfig = {
         name: "备注"
       },
       bushingMaterial: {
-        type: 'input',
+        type: 'select',
         name: '材质',
-        rules: [{
-          min: "0",
-          max: 50,
-          message: "不能超过50个字"
-        }],
+        domainName: "bushing_material_domain",
         isRequired: true
+      },
+      bushingMaterialName:{
+        name: '材质'
       },
       bushingSpec: {
         type: 'input',
@@ -1811,17 +1810,17 @@ var mvConfig = {
         type: 'number',
         name: '起始点X坐标',
         isRequired: true,
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3
+        precision: 7
       },
       startPointy: {
         type: 'number',
         name: '起始点Y坐标',
         isRequired: true,
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3
+        precision: 7
       },
       startPointz: {
         type: 'number',
@@ -1843,17 +1842,17 @@ var mvConfig = {
         type: 'number',
         name: '终止点X坐标',
         isRequired: true,
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3
+        precision: 7
       },
       endPointy: {
         type: 'number',
         name: '终止点Y坐标',
         isRequired: true,
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3
+        precision: 7
       },
       endPointz: {
         type: 'number',
@@ -1883,7 +1882,7 @@ var mvConfig = {
         }],
         formatter: function (a, b, c, d) {
           if (c == 0) return "否";
-          return "是";
+          if (c == 1) return "是";
         }
       }
     }
@@ -2074,19 +2073,19 @@ var mvConfig = {
           pointx: {
             value: "pointx",
           },
-         pointy: {
+          pointy: {
             value: "pointy",
           },
-        pointz: {
+          pointz: {
             value: "pointz",
           },
-          buriedDepth:{
-            value:"buried_depth"
+          buriedDepth: {
+            value: "buried_depth"
           }
         },
       },
-      pipeNodeCode:{
-    	  name: "节点名称"  
+      pipeNodeCode: {
+        name: "节点名称"
       },
       valveCode: {
         type: 'input',
@@ -2140,7 +2139,7 @@ var mvConfig = {
         }],
         formatter: function (a, b, c, d) {
           if (c == 1) return "刚";
-          return "PE";
+          if (c == 2) return "PE";
         }
       },
       burialMethod: {
@@ -2156,7 +2155,7 @@ var mvConfig = {
         }],
         formatter: function (a, b, c, d) {
           if (c == 1) return "直埋";
-          return "阀门井";
+          if (c == 2)  return "阀门井";
         }
       },
       nominalDiameter: {
@@ -2177,19 +2176,19 @@ var mvConfig = {
         type: 'number',
         name: 'X坐标',
         isRequired: true,
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3,
-        disabled:true
+        precision: 7,
+        disabled: true
       },
       pointy: {
         type: 'number',
         name: 'Y坐标',
         isRequired: true,
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3,
-        disabled:true
+        precision: 7,
+        disabled: true
       },
       pointz: {
         type: 'number',
@@ -2198,13 +2197,13 @@ var mvConfig = {
         max: 999999,
         min: 0,
         precision: 3,
-        disabled:true
+        disabled: true
       },
       buriedDepth: {
         type: 'number',
         name: '埋深',
         isRequired: true,
-        disabled:true,
+        disabled: true,
         max: 99999,
         min: 0,
         precision: 2
@@ -2221,7 +2220,7 @@ var mvConfig = {
         }],
         formatter: function (a, b, c, d) {
           if (c == 0) return "否";
-          return "是";
+          if (c == 1) return "是";
         }
       },
       electronicLabelType: {
@@ -2253,7 +2252,7 @@ var mvConfig = {
         }],
         formatter: function (a, b, c, d) {
           if (c == 0) return "否";
-          return "是";
+          if (c == 1) return "是";
         }
       },
       wellCoverType: {
@@ -2267,8 +2266,8 @@ var mvConfig = {
           value: "圆形"
         }],
         formatter: function (a, b, c, d) {
-          if (c == 0) return "矩形";
-          return "圆形";
+          if (c == 1) return "矩形";
+          if (c == 2) return "圆形";
         }
       },
       wellCoverMaterial: {
@@ -2298,7 +2297,7 @@ var mvConfig = {
       }
     }
   },
-   mvMarkStake: { //标志桩信息表
+  mvMarkStake: { //标志桩信息表
     addUrl: "/jdbc/commonData/mvMarkStake/save.do",
     updateUrl: "/jdbc/commonData/mvMarkStake/update.do",
     deleteUrl: "/jdbc/commonData/mvMarkStake/delete.do",
@@ -2462,17 +2461,17 @@ var mvConfig = {
         type: 'number',
         name: 'X坐标',
         isRequired: true,
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3
+        precision: 7
       },
       pointy: {
         type: 'number',
         name: 'Y坐标',
         isRequired: true,
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3
+        precision: 7
       },
       pointz: {
         type: 'number',
@@ -2630,31 +2629,31 @@ var mvConfig = {
         type: "select",
         isRequired: true,
         name: "电子标签特征点类型",
-        domainName:"electronic_label_features_domain"
+        domainName: "electronic_label_features_domain"
       },
-      electronicLabelFeaturesName:{
-    	  name: "电子标签特征点类型",
+      electronicLabelFeaturesName: {
+        name: "电子标签特征点类型",
       },
       pointx: {
         type: 'number',
         name: 'X坐标',
         isRequired: true,
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3
+        precision: 7
       },
       pointy: {
         type: 'number',
         name: 'Y坐标',
         isRequired: true,
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3
+        precision: 7
       },
       pointz: {
         type: 'number',
         name: '管顶高程',
-//        isRequired: true,
+        //        isRequired: true,
         max: 999999,
         min: 0,
         precision: 3
@@ -2822,22 +2821,22 @@ var mvConfig = {
         type: 'number',
         name: 'X坐标',
         isRequired: true,
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3
+        precision: 7
       },
       pointy: {
         type: 'number',
         name: 'Y坐标',
         isRequired: true,
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3
+        precision: 7
       },
       pointz: {
         type: 'number',
         name: '管顶高程',
-//        isRequired: true,
+        //        isRequired: true,
         max: 999999,
         min: 0,
         precision: 3
@@ -2845,7 +2844,7 @@ var mvConfig = {
       investmentDate: {
         type: 'date',
         name: '投用日期',
-//        isRequired: true,
+        //        isRequired: true,
       },
       monitorWellMaterial: {
         type: "select",
@@ -2857,7 +2856,7 @@ var mvConfig = {
       }
     }
   },
-  methods: { 
+  methods: {
     formatFields: function (fields, fieldsConfig, templateCode) {
 
       return fields.map(function (item) {
@@ -2880,4 +2879,3 @@ var mvConfig = {
   }
 };
 
- 

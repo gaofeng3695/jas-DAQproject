@@ -139,6 +139,8 @@
 					<el-button :size="item.size" v-if="privilege.join('').indexOf(item.id)>-1" :type="item.type" :plain="item.plain" :icon="item.icon"
 					  @click="item.functionName">{{item.title}}</el-button>
 				</template>
+				<el-button size="small" plain type="primary" icon="fa fa-level-up" v-if="privilege.join('').indexOf('bt_submit')>-1"
+				  :disabled="reportRows.length==0" @click="upSubmit">提交</el-button>
 				<el-button size="small" plain type="primary" icon="fa fa-level-up" v-if="isApprove&&privilege.join('').indexOf('bt_report')>-1"
 				  :disabled="reportRows.length==0" @click="upcall">上报</el-button>
 				<el-button size="small" plain type="primary" icon="fa fa-check" v-if="isApprove&&privilege.join('').indexOf('bt_approve')>-1"
@@ -253,7 +255,7 @@
 				menuCode: "",
 				searchUi: [],
 				isShowSearch: false,
-
+privilegeCode:""
 			}
 		},
 		computed: {
@@ -291,6 +293,7 @@
 				this.privilege = ['bt_add', 'bt_update', 'bt_delete', 'bt_select', 'bt_export', 'bt_import'];
 				this.requestConfig(); //请求模板的配置文件
 			}
+			this.privilegeCode=param.privilegeCode||"";
 		},
 		mounted: function () {
 
@@ -313,7 +316,29 @@
 				if (row.approve_status > 0 || row.approve_status == '审核通过' || row.approve_status == '待审核') {
 					return true;
 				}
+				if(row.commit_status&&row.commit_status=='1'){
+					return true;
+				}
 				return false;
+			},
+			upSubmit:function(){
+				var that = this;
+				var oids = this.reportRows.map(function (item) {
+					return item.oid;
+				});
+				if (oids.length === 0) return;
+				var url = jasTools.base.rootPath + '/daq/daqcommit/changeCommitStatus.do';
+				jasTools.ajax.post(url, {
+					businessOid: oids,
+					className: this.className,
+					functionCode: this.menuCode,
+				}, function (data) {
+					top.Vue.prototype.$message({
+						type: 'success',
+						message: '提交成功'
+					});
+					that.refresh();
+				});	
 			},
 			upcall: function () {
 				var that = this;
@@ -327,11 +352,13 @@
 					approveStatus: 1, //status 2 通过 -1 驳回
 					className: this.className,
 					functionCode: this.menuCode,
+					privilegeCode:this.privilegeCode,
 				}, function (data) {
 					top.Vue.prototype.$message({
 						type: 'success',
 						message: '上报成功'
 					});
+				//	top.app.requestNumber("","refresh");
 					that.refresh();
 				});
 			},
@@ -344,7 +371,7 @@
 					return;
 				} else if (oids.length === 1) {
 					var src = './pages/template/dialogs/viewTemplate.html?menuCode=' + that.menuCode;
-					src += '&approveType=2';
+					src += '&approveType=2&privilegeCode='+that.privilegeCode;
 					var url = jasTools.base.setParamsToUrl(src, this.approveRows[0]);
 					top.jasTools.dialog.show({
 						width: '60%',
@@ -353,6 +380,7 @@
 						src: url,
 						cbForClose: function (param) {
 							if (param == 'success') {
+								top.app.requestNumber("refresh");
 								that.refresh();
 							}
 						}
@@ -360,7 +388,8 @@
 				} else {
 					var src = './pages/template/dialogs/approveTemplate.html?menuCode=' + that.menuCode;
 					var url = jasTools.base.setParamsToUrl(src, {
-						oids: oids.join(',')
+						oids: oids.join(','),
+						privilegeCode:that.privilegeCode,
 					});
 					top.jasTools.dialog.show({
 						width: '600px',
@@ -369,6 +398,7 @@
 						src: url,
 						cbForClose: function (param) {
 							if (param == 'success') {
+								top.app.requestNumber("refresh");
 								that.refresh();
 							}
 						}

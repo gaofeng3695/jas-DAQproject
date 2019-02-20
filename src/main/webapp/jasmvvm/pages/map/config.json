@@ -2,8 +2,8 @@
   "description": "基于产品 JasOpenGIS 1.0",
   "style": "lightblue",
   "basePath": "",
-  "context":{
-    "tdt-key":"46631a6a7eeeefecf46ebc480483d9ca"
+  "context": {
+    "tdt-key": "46631a6a7eeeefecf46ebc480483d9ca"
   },
   "resources": [{
       "type": "css",
@@ -402,7 +402,7 @@
           "id": "layerSet004",
           "label": "穿跨越",
           "layerSet": [{
-            "id": "daq_cross_excavation",
+            "id": "v_daq_cross_excavation",
             "label": "开挖穿越",
             "index": 20,
             "style": "pipesegment",
@@ -411,15 +411,24 @@
               "labelStyle": "",
               "labelField": ""
             },
+           "listener": {
+              "onHover": {
+                "responseType": "tip",
+                "fieldNames": "cross_name",
+                "template": "穿跨越名称：${cross_name}",
+                "callback": ""
+              }
+            },
             "type": "Vector",
             "source": "Vector",
             "flash": true,
             "visible": false,
             "loader": "jas",
             "format": "GeoJSON",
-            "strategy": "all"
+            "strategy": "all",
+            "outFields":"oid,cross_name,unit_name,supervision_unit_name,completion_date"
           }, {
-            "id": "daq_cross_pipe_jacking",
+            "id": "v_daq_cross_pipe_jacking",
             "label": "顶管穿越",
             "index": 20,
             "style": "pipesegment",
@@ -428,15 +437,24 @@
               "labelStyle": "",
               "labelField": ""
             },
+             "listener": {
+              "onHover": {
+                "responseType": "tip",
+                "fieldNames": "cross_name",
+                "template": "穿跨越名称：${cross_name}",
+                "callback": ""
+              }
+            },
             "type": "Vector",
             "source": "Vector",
             "flash": true,
             "visible": false,
             "loader": "jas",
             "format": "GeoJSON",
-            "strategy": "all"
+            "strategy": "all",
+             "outFields":"oid,cross_name,unit_name,supervision_unit_name,completion_date"
           }, {
-            "id": "daq_cross_box_culvert",
+            "id": "v_daq_cross_box_culvert",
             "label": "箱涵穿越",
             "index": 20,
             "style": "pipesegment",
@@ -445,15 +463,24 @@
               "labelStyle": "",
               "labelField": ""
             },
+               "listener": {
+              "onHover": {
+                "responseType": "tip",
+                "fieldNames": "cross_name",
+                "template": "穿跨越名称：${cross_name}",
+                "callback": ""
+              }
+            },
             "type": "Vector",
             "source": "Vector",
             "flash": true,
             "visible": false,
             "loader": "jas",
             "format": "GeoJSON",
-            "strategy": "all"
+            "strategy": "all",
+             "outFields":"oid,cross_name,unit_name,supervision_unit_name,completion_date"
           }, {
-            "id": "daq_cross_drilling",
+            "id": "v_daq_cross_drilling",
             "label": "定向钻穿越",
             "index": 20,
             "style": "pipesegment",
@@ -462,15 +489,24 @@
               "labelStyle": "",
               "labelField": ""
             },
+               "listener": {
+              "onHover": {
+                "responseType": "tip",
+                "fieldNames": "cross_name",
+                "template": "穿跨越名称：${cross_name}",
+                "callback": ""
+              }
+            },
             "type": "Vector",
             "source": "Vector",
             "flash": true,
             "visible": false,
             "loader": "jas",
             "format": "GeoJSON",
-            "strategy": "all"
+            "strategy": "all",
+             "outFields":"oid,cross_name,unit_name,supervision_unit_name,completion_date"
           }, {
-            "id": "daq_cross_shield",
+            "id": "v_daq_cross_shield",
             "label": "盾构隧道穿越",
             "index": 20,
             "style": "pipesegment",
@@ -479,15 +515,24 @@
               "labelStyle": "",
               "labelField": ""
             },
+               "listener": {
+              "onHover": {
+                "responseType": "tip",
+                "fieldNames": "cross_name",
+                "template": "穿跨越名称：${cross_name}",
+                "callback": ""
+              }
+            },
             "type": "Vector",
             "source": "Vector",
             "flash": true,
             "visible": false,
             "loader": "jas",
             "format": "GeoJSON",
-            "strategy": "all"
+            "strategy": "all",
+             "outFields":"oid,cross_name,unit_name,supervision_unit_name,completion_date"
           }, {
-            "id": "daq_cross_drilling_blasting",
+            "id": "v_daq_cross_drilling_blasting",
             "label": "钻爆隧道穿越",
             "index": 20,
             "style": "pipesegment",
@@ -496,15 +541,24 @@
               "labelStyle": "",
               "labelField": ""
             },
+               "listener": {
+              "onHover": {
+                "responseType": "tip",
+                "fieldNames": "cross_name",
+                "template": "穿跨越名称：${cross_name}",
+                "callback": ""
+              }
+            },
             "type": "Vector",
             "source": "Vector",
             "flash": true,
             "visible": false,
             "loader": "jas",
             "format": "GeoJSON",
-            "strategy": "all"
+            "strategy": "all",
+             "outFields":"oid,cross_name,unit_name,supervision_unit_name,completion_date"
           }, {
-            "id": "daq_cross_across",
+            "id": "v_daq_cross_across",
             "label": "跨越",
             "index": 20,
             "style": "pipesegment",
@@ -513,13 +567,22 @@
               "labelStyle": "",
               "labelField": ""
             },
+               "listener": {
+              "onHover": {
+                "responseType": "tip",
+                "fieldNames": "cross_name",
+                "template": "穿跨越名称：${cross_name}",
+                "callback": ""
+              }
+            },
             "type": "Vector",
             "source": "Vector",
             "flash": true,
             "visible": false,
             "loader": "jas",
             "format": "GeoJSON",
-            "strategy": "all"
+            "strategy": "all",
+             "outFields":"oid,cross_name,unit_name,supervision_unit_name,completion_date"
           }]
         }, {
           "id": "layerSet005",
@@ -952,7 +1015,7 @@
           "id": "layerSet009",
           "label": "中低压数据采集",
           "layerSet": [{
-            "id": "daq_mv_pipe_node",
+            "id": "v_daq_mv_pipe_node",
             "label": "节点信息",
             "index": 20,
             "type": "Vector",
@@ -964,12 +1027,20 @@
               "labelStyle": "",
               "labelField": ""
             },
+            "listener": {
+              "onHover": {
+                "responseType": "tip",
+                "fieldNames": "pipe_node_code",
+                "template": "节点编号:${pipe_node_code}",
+                "callback": ""
+              }
+            },
             "loader": "jas",
             "format": "GeoJSON",
             "strategy": "all",
-            "outFields": "oid"
+            "outFields": "oid,project_name,pipe_node_code,pipe_node_type,unit_name,collection_date"
           }, {
-            "id": "daq_mv_pipe_section",
+            "id": "v_daq_mv_pipe_section",
             "label": "管段信息",
             "index": 20,
             "type": "Vector",
@@ -981,12 +1052,20 @@
               "labelStyle": "",
               "labelField": ""
             },
+            "listener": {
+              "onHover": {
+                "responseType": "tip",
+                "fieldNames": "pipe_section_code",
+                "template": "管段编号:${pipe_section_code}",
+                "callback": ""
+              }
+            },
             "loader": "jas",
             "format": "GeoJSON",
             "strategy": "all",
-            "outFields": "oid"
+            "outFields": "oid,project_name,pipe_section_code,unit_name,collection_date"
           }, {
-            "id": "daq_mv_across_info",
+            "id": "v_daq_mv_across_info",
             "label": "穿越信息",
             "index": 20,
             "type": "Vector",
@@ -998,12 +1077,20 @@
               "labelStyle": "",
               "labelField": ""
             },
+            "listener": {
+              "onHover": {
+                "responseType": "tip",
+                "fieldNames": "pipe_section_code",
+                "template": "管段编号:${pipe_section_code}",
+                "callback": ""
+              }
+            },
             "loader": "jas",
             "format": "GeoJSON",
             "strategy": "all",
-            "outFields": "oid"
+            "outFields": "oid,project_name,pipe_section_code,unit_name,collection_date"
           }, {
-            "id": "daq_mv_stride_across_info",
+            "id": "v_daq_mv_stride_across_info",
             "label": "跨越信息",
             "index": 20,
             "type": "Vector",
@@ -1015,12 +1102,20 @@
               "labelStyle": "",
               "labelField": ""
             },
+            "listener": {
+              "onHover": {
+                "responseType": "tip",
+                "fieldNames": "pipe_section_code",
+                "template": "管段编号:${pipe_section_code}",
+                "callback": ""
+              }
+            },
             "loader": "jas",
             "format": "GeoJSON",
             "strategy": "all",
-            "outFields": "oid"
+            "outFields": "oid,project_name,pipe_section_code,unit_name,collection_date"
           }, {
-            "id": "daq_mv_pipe_trench_protect",
+            "id": "v_daq_mv_pipe_trench_protect",
             "label": "管沟信息",
             "index": 20,
             "type": "Vector",
@@ -1035,9 +1130,9 @@
             "loader": "jas",
             "format": "GeoJSON",
             "strategy": "all",
-            "outFields": "oid"
+            "outFields": "oid,project_name,pipe_trench_length,unit_name,collection_date"
           }, {
-            "id": "daq_mv_bushing_info",
+            "id": "v_daq_mv_bushing_info",
             "label": "套管信息",
             "index": 20,
             "type": "Vector",
@@ -1049,12 +1144,13 @@
               "labelStyle": "",
               "labelField": ""
             },
+
             "loader": "jas",
             "format": "GeoJSON",
             "strategy": "all",
-            "outFields": "oid"
+            "outFields": "oid,project_name,bushing_material,unit_name,collection_date"
           }, {
-            "id": "daq_mv_valve_info",
+            "id": "v_daq_mv_valve_info",
             "label": "阀门信息",
             "index": 20,
             "type": "Vector",
@@ -1066,12 +1162,20 @@
               "labelStyle": "",
               "labelField": ""
             },
+            "listener": {
+              "onHover": {
+                "responseType": "tip",
+                "fieldNames": "valve_code",
+                "template": "阀门编号:${valve_code}",
+                "callback": ""
+              }
+            },
             "loader": "jas",
             "format": "GeoJSON",
             "strategy": "all",
-            "outFields": "oid"
+            "outFields": "oid,project_name,pipe_node_code,valve_code,unit_name,collection_date"
           }, {
-            "id": "daq_mv_mark_stake",
+            "id": "v_daq_mv_mark_stake",
             "label": "标志桩信息",
             "index": 20,
             "type": "Vector",
@@ -1083,12 +1187,20 @@
               "labelStyle": "",
               "labelField": ""
             },
+            "listener": {
+              "onHover": {
+                "responseType": "tip",
+                "fieldNames": "mark_stake_code",
+                "template": "编号:${mark_stake_code}",
+                "callback": ""
+              }
+            },
             "loader": "jas",
             "format": "GeoJSON",
             "strategy": "all",
-            "outFields": "oid"
+            "outFields": "oid,project_name,mark_stake_code,mark_stake_type,unit_name,collection_date"
           }, {
-            "id": "daq_mv_electronic_label",
+            "id": "v_daq_mv_electronic_label",
             "label": "电子标签信息",
             "index": 20,
             "type": "Vector",
@@ -1103,9 +1215,9 @@
             "loader": "jas",
             "format": "GeoJSON",
             "strategy": "all",
-            "outFields": "oid"
+            "outFields": "oid,project_name,electronic_label_type,unit_name,collection_date"
           }, {
-            "id": "daq_mv_monitor_well",
+            "id": "v_daq_mv_monitor_well",
             "label": "监测井信息",
             "index": 20,
             "type": "Vector",
@@ -1117,10 +1229,18 @@
               "labelStyle": "",
               "labelField": ""
             },
+            "listener": {
+              "onHover": {
+                "responseType": "tip",
+                "fieldNames": "monitor_well_code",
+                "template": "编号:${monitor_well_code}",
+                "callback": ""
+              }
+            },
             "loader": "jas",
             "format": "GeoJSON",
             "strategy": "all",
-            "outFields": "oid"
+            "outFields": "oid,project_name,monitor_well_code,unit_name,collection_date"
           }]
         }
       ]

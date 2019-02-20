@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="./../../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+  <link rel="stylesheet" href="./../../../../lib/font-awesome-4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="./../../../../lib/codemirror/codemirror.css">
+  <link rel="stylesheet" href="./../../../../src/css/main.css">
+  <link rel="stylesheet" href="./rule.css">
+
+</head>
+
+<body>
+  <div id="app" v-cloak>
+    <div class=" jas-flex-box is-vertical ">
+      <div class="is-grown">
+        <div class="sub-wrap jas-flex-box is-vertical ">
+          <div class="is-grown content-wrap" style="padding:10px">
+            <div class="content-wrap">
+              <div class="sort-wrap unsortbox jas-flex-box is-vertical">
+                <div class="box-title">
+                  <span>制定规则字段</span>
+                </div>
+                <draggable element="ul" class="list-group is-grown sort-box unsortList" v-model="unsortList" :options="{group:'article'}"
+                  @start="start" >
+                  <li class="list-group-item" v-for="element,index in unsortList">
+                    {{element.fieldNameCn}}
+                    <span>{{ index+1}}</span>
+                  </li>
+                </draggable>
+              </div>
+              <div class="allsortbox">
+                <div class="sort-wrap">
+                  <div class="box-title">
+                    <span>连接规则</span>
+                  </div>
+                  <div class="sort-box">
+                    <draggable class="list-group rule" element="ul" v-model="ruleLink" :options="{group:{name:'article',pull:'clone'},}" @start="start">
+                      <template v-for="element,index in ruleLink">
+                        <li class="list-group-item" v-if="element.fieldNameCn">
+                         {{element.fieldNameCn}}
+                          <span>{{ index+1}}</span>
+                        </li>
+                        <li class="list-group-item" v-else>
+                          <el-input size="mini"></el-input>
+                          <span>{{ index+1}}</span>
+                        </li>
+                      </template>
+                    </draggable>
+                  </div>
+                </div>
+                <div class="sort-wrap">
+                  <div class="box-title">
+                    <span>规则</span>
+                  </div>
+                  <div class="sort-box ">
+                    <draggable class="list-group rulelist" element="ul" v-model="rulelist" :options="{group:'article'}" @start="start"
+                      >
+                           <template v-for="element,index in rulelist">
+                        <li class="list-group-item" v-if="element.fieldNameCn">
+                      {{element.fieldNameCn}}
+                          <span>{{ index+1}}</span>
+                        </li>
+                        <li class="list-group-item" v-else>
+                          <el-input size="mini" v-model="form[index]"></el-input>
+                          <span>{{ index+1}}</span>
+                        </li>
+                      </template>
+                    </draggable>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="btn-wrap">
+            <el-button size="small" @click="cancel()">取消</el-button>
+            <el-button size="small" type="primary" @click="save">完成</el-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<!-- import Vue before Element -->
+<script src="./../../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../../lib/vue/vue.js"></script>
+<script src="./../../../../lib/element-ui/v2.4.1/index.min.js"></script>
+<script src="./../../../../lib/vue-draggable/index.min.js"></script>
+<script src="./../../../../common/js/jas-tools.js"></script>
+<script>
+  var vue = new Vue({
+    el: "#app",
+    data: function () {
+      return {
+        unsortList: [{
+            fieldNameCn: "施工单位",
+            fieldName: "custort_unit"
+          },
+          {
+            fieldNameCn: "项目名称",
+            fieldName: "custort_unit"
+          },
+          {
+            fieldNameCn: "标段名称",
+            fieldName: "custort_unit"
+          }
+        ],
+        rulelist: [],   
+        form: {
+
+        },
+        ruleLink: [{
+          fieldNameCn: "——",
+          fieldName:"——"
+        }, {
+          fieldNameCn: "...",
+          fieldName:"..."
+        }, {
+          fieldNameCn: "+",
+          fieldName:"+"
+        }, {
+          type: "input"
+        }]
+      }
+    },
+    mounted: function () {
+
+    },
+    methods: {
+		start:function(ev){
+			//console.log(ev);
+			//console.log(ev.from.className);
+			//console.log(ev.to.className)
+			//if(ev.form.className.index("rule")>-1&&ev.to.className.index("unsortList")){//此时不允许拖拽
+				
+			//}
+		},
+		save:function(){
+			console.log(this.rulelist);
+			console.log(this.form);
+			var that=this;
+			var rule="";
+			that.rulelist.forEach(function(item,index){
+				if(item.type&&item.type=="input"){
+					rule+=that.form[index];
+				}else{
+					rule+=item.fieldName
+				}
+			});
+			console.log(rule);
+		},
+		cancel: function (param) {
+			window.parent.jasTools.dialog.close(param);
+		},
+    }
+  });
+</script>
+
+</html>
