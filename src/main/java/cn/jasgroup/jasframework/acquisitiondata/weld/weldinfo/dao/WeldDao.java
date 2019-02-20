@@ -110,4 +110,27 @@ public class WeldDao extends BaseJdbcDao{
 		String sql = "select t.oid,t.evaluation_result,t.type,t.code from v_daq_weld_detection t where t.weld_oid=?";
 		return this.queryForList(sql, new Object[]{weldOid});
 	}
+	
+	/**
+	 * <p>功能描述：根据线路段查询审核状态为1和2的焊口列表(焊口表中未返修未割口且未测量的数据，返修表中未割口且未测量的数据)。</p>
+	  * <p> 葛建。</p>	
+	  * @param pipeSegmentOrCrossOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年2月20日 上午11:03:50。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getWeldByCondition(String pipeSegmentOrCrossOid) {
+		String sql = "select total.key,total.value,total.median_stake_oid,stake.median_stake_code,total.relative_mileage from "
+					+ "((select weld.oid as key, weld.weld_code as value, weld.median_stake_oid, weld.relative_mileage from daq_construction_weld weld "
+					+ "where weld.active=1 and weld.pipe_segment_or_cross_oid=? and weld.approve_status in (1,2) and weld.is_rework=0 and weld.is_cut=0 and weld.is_measure=0) "
+					+ "union all "
+					+ "(select rework.oid as key, rework.rework_weld_code  as value, weld.median_stake_oid, weld.relative_mileage from daq_weld_rework_weld rework "
+					+ "LEFT JOIN (select oid,median_stake_oid,relative_mileage from daq_construction_weld where active=1) weld on weld.oid=rework.weld_oid "
+					+ "where rework.active=1 and rework.pipe_segment_or_cross_oid=? and rework.approve_status in (1,2) and rework.is_cut=0 "
+					+ "and rework.oid not in (select weld_oid from daq_weld_measured_result where active=1and measure_control_point_type='measure_control_point_type_code_001'))"
+					+ ") total "
+					+ "LEFT JOIN (select oid,median_stake_code from daq_median_stake where active=1) stake on total.median_stake_oid=stake.oid";
+		return this.queryForList(sql, new Object[]{pipeSegmentOrCrossOid, pipeSegmentOrCrossOid});
+	}
 }
