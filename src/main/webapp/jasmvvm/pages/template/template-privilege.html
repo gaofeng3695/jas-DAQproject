@@ -175,7 +175,7 @@
 				<el-table-column type="selection" width="55" align="center" fixed></el-table-column>
 				<el-table-column type="index" label="序号" width="50" align="center" fixed></el-table-column>
 				<el-table-column v-for="item,index in tableColumn" :fixed="index===0?true:false" :prop="item.id" :label="item.name" :key="item.id"
-				  align="center" min-width="160px" show-overflow-tooltip sortable>
+				  align="center" min-width="160px" show-overflow-tooltip sortable="custom">
 				     <template slot-scope="scope" >
 				     <div  v-if="item.id=='approve_status_name'">
 				      <el-tag  v-if="scope.row.approve_status=='0'"  type="info" size="medium">{{ scope.row.approve_status_name }}</el-tag>
@@ -255,7 +255,9 @@
 				menuCode: "",
 				searchUi: [],
 				isShowSearch: false,
-privilegeCode:""
+				privilegeCode:"",
+				sortName: null,
+				sortOrder: null
 			}
 		},
 		computed: {
@@ -628,13 +630,19 @@ privilegeCode:""
 			requestTableList: function () {
 				var that = this;
 				that.loading = true;
+				var obj = jasTools.base.extend({}, {
+					pageNo: this.currentPage,
+					pageSize: this.pageSize,
+					sortOrder:this.sortOrder,
+					sortName:this.sortName,
+				}, that.searchform);
 				$.ajax({
 					type: "POST",
 					url: jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/getPage.do?token=" + localStorage.getItem(
 						"token"),
 					dataType: "json",
 					contentType: "application/json",
-					data: JSON.stringify(that.searchform),
+					data: JSON.stringify(obj),
 					async: true,
 					success: function (data) {
 						setTimeout(function () {
@@ -653,15 +661,14 @@ privilegeCode:""
 				});
 			},
 			sortChange:function(column, prop, order){
-				console.log(column);
-				console.log(column.prop);
-				console.log(column.order);
 				var sortName = null;
 				var sortOrder = null;
 				if(column.prop!=null){
 					sortName = column.prop;
 					sortOrder=column.order==='ascending'?'asc':'desc';
 				}
+				this.sortName = sortName;
+				this.sortOrder = sortOrder;
 		        var that = this;
 				that.loading = true;
 				var obj = jasTools.base.extend({}, {

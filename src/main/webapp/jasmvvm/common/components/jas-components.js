@@ -730,7 +730,8 @@ Vue.component('jas-table-for-list', {
 			oids: [],
 			rows: [],
 			isClosed: false,
-			_privilegeCode: ''
+			_privilegeCode: '',
+			orderBy:null
 		}
 	},
 	computed: {
@@ -776,12 +777,12 @@ Vue.component('jas-table-for-list', {
 		'		<el-table-column label="序号" type="index" align="center" width="50" fixed>',
 		'</el-table-column>',
 		'<template  v-for="item,index in fields">',
-		'<el-table-column  v-if="isShowStatus(item)":key="item.oid" :fixed="index=== 0?true:false" :label="item.name" :prop="item.field" :formatter="item.formatter" min-width="130px" show-overflow-tooltip align="center" sortable >',
+		'<el-table-column  v-if="isShowStatus(item)":key="item.oid" :fixed="index=== 0?true:false" :label="item.name" :prop="item.field" :formatter="item.formatter" min-width="130px" show-overflow-tooltip align="center" sortable="custom" >',
 		'<template slot-scope="scope" >',
 		'<el-tag  :type="isShowType(scope)" size="medium">{{ scope.row.approveStatusName }}</el-tag>',
 		'</template>',
 		'</el-table-column>',
-		'<el-table-column v-else   :key="item.oid" :fixed="index=== 0?true:false" :label="item.name" :prop="item.field" :formatter="item.formatter" min-width="165px" show-overflow-tooltip align="center" sortable >',
+		'<el-table-column v-else   :key="item.oid" :fixed="index=== 0?true:false" :label="item.name" :prop="item.field" :formatter="item.formatter" min-width="165px" show-overflow-tooltip align="center" sortable="custom" >',
 
 		'</el-table-column>',
 		'</template>',
@@ -1027,6 +1028,7 @@ Vue.component('jas-table-for-list', {
 			var obj = jasTools.base.extend({}, {
 				pageNo: this.currentPage,
 				pageSize: this.pageSize,
+				orderBy:this.orderBy
 			}, this.form);
 			var url = jasTools.base.rootPath + this.searchPath;
 			jasTools.ajax.post(url, obj, function (data) {
@@ -1043,6 +1045,7 @@ Vue.component('jas-table-for-list', {
 				orderBy = column.prop + " " + (column.order === 'ascending' ? 'asc' : 'desc');
 				orderBy = orderBy.replace(/([A-Z])/g, "_$1").toLowerCase()
 			}
+			this.orderBy = orderBy;
 			var that = this;
 			that.loading = true;
 			var obj = jasTools.base.extend({}, {
