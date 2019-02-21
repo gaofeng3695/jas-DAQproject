@@ -108,7 +108,7 @@ create or replace view v_daq_approve_tip as
 CREATE OR REPLACE VIEW v_daq_material_bending AS 
 select oid,hot_bends_code as bending_code from daq_material_hot_bends where active=1 and is_use=1
 union all
-select oid,pipe_cold_bending_code as bending_code from daq_material_pipe_cold_bending where active=1 and is_use=1
+select oid,pipe_cold_bending_code as bending_code from daq_material_pipe_cold_bending where active=1 and is_use=1;
 
 
 /**
@@ -118,3 +118,34 @@ CREATE OR REPLACE VIEW v_daq_weld_for_measure AS
 SELECT weld.oid, weld.weld_code, weld.pipe_segment_or_cross_oid FROM daq_construction_weld weld WHERE weld.active = 1 and weld.is_rework=0 and weld.is_cut=0 
 UNION ALL 
 SELECT rework.oid,rework.rework_weld_code AS weld_code,rework.pipe_segment_or_cross_oid FROM daq_weld_rework_weld rework WHERE rework.active=1 and rework.is_cut=0;
+
+/**
+ * 中线测量视图
+ */
+/*控制点类型为焊口*/
+CREATE OR REPLACE VIEW v_daq_weld_measure_result_weld AS 
+select wmr.oid, pro.project_name, d.code_name as measure_control_point_type_name,wmr.measure_control_point_code,wmr.pointx, wmr.pointy,
+	wmr.surfacee_levation, to_char(wmr.survey_date, 'yyyy-MM-dd'::text) AS survey_date, u.unit_name as construct_unit, wmr.geom 
+from daq_weld_measured_result wmr
+LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = wmr.project_oid 
+LEFT JOIN (select code_id,code_name from sys_domain where active=1) d on d.code_id=wmr.measure_control_point_type 
+LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) u on u.oid = wmr.construct_unit 
+where wmr.active=1 and wmr.measure_control_point_type='measure_control_point_type_code_001';
+/*控制点类型为弯管*/
+CREATE OR REPLACE VIEW v_daq_weld_measure_result_bending AS 
+select wmr.oid, pro.project_name, d.code_name as measure_control_point_type_name,wmr.measure_control_point_code,wmr.pointx, wmr.pointy,
+	wmr.surfacee_levation, to_char(wmr.survey_date, 'yyyy-MM-dd'::text) AS survey_date, u.unit_name as construct_unit, wmr.geom 
+from daq_weld_measured_result wmr
+LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = wmr.project_oid 
+LEFT JOIN (select code_id,code_name from sys_domain where active=1) d on d.code_id=wmr.measure_control_point_type 
+LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) u on u.oid = wmr.construct_unit 
+where wmr.active=1 and wmr.measure_control_point_type='measure_control_point_type_code_002';
+/*控制点类型为穿越点*/
+CREATE OR REPLACE VIEW v_daq_weld_measure_result_cross AS 
+select wmr.oid, pro.project_name, d.code_name as measure_control_point_type_name,wmr.measure_control_point_code,wmr.pointx, wmr.pointy,
+	wmr.surfacee_levation, to_char(wmr.survey_date, 'yyyy-MM-dd'::text) AS survey_date, u.unit_name as construct_unit, wmr.geom 
+from daq_weld_measured_result wmr
+LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = wmr.project_oid 
+LEFT JOIN (select code_id,code_name from sys_domain where active=1) d on d.code_id=wmr.measure_control_point_type 
+LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) u on u.oid = wmr.construct_unit 
+where wmr.active=1 and wmr.measure_control_point_type='measure_control_point_type_code_003';
