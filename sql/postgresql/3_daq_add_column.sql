@@ -132,3 +132,22 @@ comment on column daq_weld_measured_result.bending_oid is '弯管编号';
 
 ALTER TABLE daq_weld_measured_result RENAME COLUMN median_stake_oid TO median_stake_code;
 /*******焊口测量成果改为中线测量成果end***********/
+
+
+alter table daq_construction_weld add is_measure smallint default 0;
+comment on column daq_construction_weld.is_measure is '是否测量';
+
+alter table daq_construction_weld add is_backfill smallint default 0;
+comment on column daq_construction_weld.is_backfill is '是否回填';
+
+alter table daq_construction_weld add is_land_restoration smallint default 0;
+comment on column daq_construction_weld.is_land_restoration is '是否地貌恢复';
+
+alter table daq_construction_weld add has_cut_pipe smallint default 0;
+comment on column daq_construction_weld.has_cut_pipe is '是否存在切管';
+
+alter table daq_construction_weld add has_reducer smallint default 0;
+comment on column daq_construction_weld.has_reducer is '是否变径';
+
+alter table daq_construction_weld add has_bend_pipe smallint default 0;
+comment on column daq_construction_weld.has_bend_pipe is '是否有弯管'
