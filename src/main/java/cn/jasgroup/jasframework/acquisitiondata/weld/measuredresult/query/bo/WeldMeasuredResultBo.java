@@ -100,11 +100,6 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 	private String bendingCode; 
 
 	/**
-	 * 桩号
-	 */
-	private String medianStakeOid;
-
-	/**
 	 * 中线桩编号
 	 */
 	private String medianStakeCode;
@@ -325,14 +320,6 @@ public class WeldMeasuredResultBo extends CommonBaseBo {
 
 	public void setBendingCode(String bendingCode) {
 		this.bendingCode = bendingCode;
-	}
-
-	public String getMedianStakeOid() {
-		return medianStakeOid;
-	}
-
-	public void setMedianStakeOid(String medianStakeOid) {
-		this.medianStakeOid = medianStakeOid;
 	}
 
 	public String getMedianStakeCode() {
