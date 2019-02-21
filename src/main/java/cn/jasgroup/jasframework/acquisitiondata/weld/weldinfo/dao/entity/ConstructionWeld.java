@@ -4,6 +4,7 @@ import java.util.Date;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.service.WeldService;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import cn.jasgroup.framework.spatial.annotation.Point;
@@ -25,7 +26,8 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
  * {@link cn.jasgroup.jasframework.acquisitiondata.material.pipefitting.service.PipeFittingService #saveChanagePipeFittingUseState()}
  * {@link cn.jasgroup.jasframework.acquisitiondata.material.pipefitting.service.PipeFittingService #updateChanagePipeFittingUseState()}
  * {@link cn.jasgroup.jasframework.acquisitiondata.material.pipefitting.service.PipeFittingService #deleteChanagePipeFittingUseState()}
- * {@link cn.jasgroup.jasframework.acquisitiondata.material.pipefitting.service.PipeFittingService #updateChanageBeforeAdvice()}</p>
+ * {@link cn.jasgroup.jasframework.acquisitiondata.material.pipefitting.service.PipeFittingService #updateChanageBeforeAdvice()}
+ * {@link cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.service.WeldService #updateConstructionWeldFiled()}</p>
  * @author admin 。
  * @version v1.0.0.1。
  * @since JDK1.8.0_101。
@@ -33,6 +35,9 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
  */
 @CommonSaveConfig(
 		scene = "/constructionWeld/save",
+		beforeAdvice={
+			@Process(service = "weldService", method = "updateConstructionWeldFiled()")
+		},
 		afterAdvice={
 			@Process(service = "pipeFittingService", method = "saveChanagePipeFittingUseState()")
 		}
@@ -40,7 +45,8 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 @CommonUpdateConfig(
 	scene = "/constructionWeld/update",
 	beforeAdvice={
-			@Process(service = "pipeFittingService", method = "updateChanageBeforeAdvice()")
+			@Process(service = "pipeFittingService", method = "updateChanageBeforeAdvice()"),
+            @Process(service = "weldService", method = "updateConstructionWeldFiled()")
 		},
 	afterAdvice={
 			@Process(service = "pipeFittingService", method = "updateChanagePipeFittingUseState()")
@@ -233,10 +239,53 @@ public class ConstructionWeld extends CommonJdbcEntity {
 	/**
 	 * 备注 
 	 */
-	private String remarks; 
+	private String remarks;
 
-	
-	public String getProjectOid() {
+    // add by cuixianing 2019-2-20
+    /**
+     * 是否变径
+     */
+    private Integer hasReducer;
+
+    /**
+     * 是否有弯管
+     */
+    private Integer hasBendPipe;
+
+    /**
+     * 是否存在切管
+     */
+    private Integer hasCutPipe;
+
+    public Integer getHasCutPipe() {
+        return hasCutPipe;
+    }
+
+    public void setHasCutPipe(Integer hasCutPipe) {
+        this.hasCutPipe = hasCutPipe;
+        super.setField("hasCutPipe");
+    }
+
+    public Integer getHasReducer() {
+        return hasReducer;
+    }
+
+    public void setHasReducer(Integer hasReducer) {
+        this.hasReducer = hasReducer;
+        super.setField("hasReducer");
+    }
+
+    public Integer getHasBendPipe() {
+        return hasBendPipe;
+    }
+
+    public void setHasBendPipe(Integer hasBendPipe) {
+        this.hasBendPipe = hasBendPipe;
+        super.setField("hasBendPipe");
+    }
+
+
+    public String getProjectOid() {
 		return projectOid; 
 	}
 

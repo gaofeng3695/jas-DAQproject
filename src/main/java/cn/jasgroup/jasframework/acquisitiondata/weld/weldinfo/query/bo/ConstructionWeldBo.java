@@ -270,7 +270,13 @@ public class ConstructionWeldBo extends CommonBaseBo {
 	 * 备注
 	 */
 	private String remarks;
-	
+
+	// add by cuixianing 2019-2-20
+	/**
+	 *是否检测
+	 */
+	private Integer isDetection;
+
 	private String fOid;
 	private String fWeldCode;
 	private String fFrontPipeOid;
@@ -288,9 +294,16 @@ public class ConstructionWeldBo extends CommonBaseBo {
 	
 	private String fFrontPipeLength;
 	private String bBackPipeLength;
-	
-	
-	public String getOid() {
+
+    public Integer getIsDetection() {
+        return isDetection;
+    }
+
+    public void setIsDetection(Integer isDetection) {
+        this.isDetection = isDetection;
+    }
+
+    public String getOid() {
 		return oid;
 	}
 

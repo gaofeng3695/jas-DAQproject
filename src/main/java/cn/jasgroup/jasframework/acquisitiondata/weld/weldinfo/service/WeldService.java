@@ -7,6 +7,11 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
 
+import cn.jasgroup.jasframework.acquisitiondata.material.pipe.dao.entity.SteelPipe;
+import cn.jasgroup.jasframework.acquisitiondata.material.pipe.service.PipeService;
+import cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.dao.entity.ConstructionWeld;
+import cn.jasgroup.jasframework.base.data.BaseEntity;
+import cn.jasgroup.jasframework.engine.jdbc.service.CommonDataJdbcService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,9 +28,12 @@ public class WeldService extends CommonDataHibernateService{
 
 	@Resource
 	private WeldDao weldDao;
-	
+
 	@Autowired
-	private CommonDataJdbcService commonDataJdbcService;
+    private PipeService pipeService;
+
+	@Autowired
+    private CommonDataJdbcService commonDataJdbcService;
 	
 	/***
 	  * <p>功能描述：获取焊口列表（焊口+返修-割口）。</p>
@@ -97,7 +105,73 @@ public class WeldService extends CommonDataHibernateService{
 	public List<Map<String,Object>> getDetectionInfoByWeldOid(String weldOid){
 		return this.weldDao.getDetectionInfoByWeldOid(weldOid);
 	}
-	
+
+	/**
+	 * <p>功能描述: 根据前管件或者后管件类型是否有大小头，更新has_reducer字段信息。</p>
+	 * <p> cuixianing。</p>
+	 * @param constructionWeld
+	 * @since JDK1.8
+	 * <p>创建日期:2019/2/20 13:48</p>
+	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]</p>
+	 */
+	public void updateConstructionWeldFiled(ConstructionWeld constructionWeld){
+        String frontPipeType = constructionWeld.getFrontPipeType();
+        String backPipeType = constructionWeld.getBackPipeType();
+
+        constructionWeld.setHasReducer(0);
+        constructionWeld.setHasBendPipe(0);
+        constructionWeld.setHasCutPipe(0);
+        //是否变径：前管件或者后管件类型有大小头的
+        if("pipe_type_code_006".equals(frontPipeType) || "pipe_type_code_006".equals(backPipeType)){
+            constructionWeld.setHasReducer(1);
+        }
+        //是否有弯管：前管件或者后管件类型为“热煨弯管”和“冷弯管”
+        if("pipe_type_code_002".equals(frontPipeType) || "pipe_type_code_008".equals(frontPipeType) || "pipe_type_code_0021".equals(backPipeType) || "pipe_type_code_0081".equals(backPipeType)){
+            constructionWeld.setHasBendPipe(1);
+        }
+        //是否存在切管：前管件或者后管件类型为直管时，直管是否切管
+        if("pipe_type_code_001".equals(frontPipeType)){
+            String frontPipeOid = constructionWeld.getFrontPipeOid();
+            SteelPipe steelPipe = (SteelPipe)commonDataJdbcService.get(SteelPipe.class, frontPipeOid);
+            Integer isChild = steelPipe.getIsChild();
+            if(1 == isChild){
+                constructionWeld.setHasCutPipe(1);
+            }
+        }
+        if("pipe_type_code_0011".equals(backPipeType) && constructionWeld.getHasCutPipe() == 0){
+            String backPipeOid = constructionWeld.getBackPipeOid();
+            SteelPipe steelPipe = (SteelPipe)commonDataJdbcService.get(SteelPipe.class, backPipeOid);
+            Integer isChild = steelPipe.getIsChild();
+            if(1 == isChild){
+                constructionWeld.setHasCutPipe(1);
+            }
+        }
+    }
+
+    /**
+     * <p>功能描述: 根据回填的oid 查询出焊口的oid列表。</p>
+     * <p> cuixianing。</p>
+     * @param oid
+     * @since JDK1.8
+     * <p>创建日期:2019/2/20 15:44</p>
+     * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]</p>
+     */
+    public List<Map<String,String>> queryOids(String oid,String tableName){
+	    return weldDao.queryOids(oid,tableName);
+    }
+
+    /**
+     * <p>功能描述: 更新焊口信息表daq_construction_weld的is_backfill的字段状态。</p>
+     * <p> cuixianing。</p>
+     * @param oids
+     * @since JDK1.8
+     * <p>创建日期:2019/2/20 16:06</p>
+     * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]</p>
+     */
+    public Integer updateFieldState(List<Map<String,String>> oids,String filedName){
+        return weldDao.updateFieldState(oids,filedName);
+    }
+
 	/**
 	 * <p>功能描述：根据线路段查询审核状态为1和2的焊口列表(焊口表中未返修未割口且未测量的数据，返修表中未割口且未测量的数据)。</p>
 	  * <p> 葛建。</p>	

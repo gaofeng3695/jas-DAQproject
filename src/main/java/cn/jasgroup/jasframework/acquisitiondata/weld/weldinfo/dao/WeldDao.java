@@ -3,14 +3,20 @@ package cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.dao;
 import java.util.List;
 import java.util.Map;
 
+import cn.jasgroup.jasframework.dataaccess3.core.BaseNamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import cn.jasgroup.jasframework.acquisitiondata.weld.reworkweld.dao.entity.ReworkWeld;
 import cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.dao.entity.ConstructionWeld;
 import cn.jasgroup.jasframework.dataaccess.base.BaseJdbcDao;
 
+import javax.annotation.Resource;
+
 @Repository
 public class WeldDao extends BaseJdbcDao{
+
+    @Resource
+    BaseNamedParameterJdbcTemplate baseNamedParameterJdbcTemplate;
 	
 	/***
 	  * <p>功能描述：获取焊口列表（焊口+返修-割口）。</p>
@@ -110,7 +116,36 @@ public class WeldDao extends BaseJdbcDao{
 		String sql = "select t.oid,t.evaluation_result,t.type,t.code from v_daq_weld_detection t where t.weld_oid=?";
 		return this.queryForList(sql, new Object[]{weldOid});
 	}
-	
+
+	/**
+	 * <p>功能描述: 根据回填的oid 查询出焊口的oid列表。</p>
+	 * <p> cuixianing。</p>
+	 * @param oid
+	 * @since JDK1.8
+	 * <p>创建日期:2019/2/20 15:45</p>
+	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]</p>
+	 */
+    public List<Map<String,String>> queryOids(String oid,String tableName){
+        String sql = "select oid from daq_construction_weld w  " +
+                "inner join(select geom from "+tableName +" where oid= ? ) b on ST_Intersects( ST_Buffer(b.geom,0.0000001),w.geom) " +
+                "where w.active=1";
+        return this.queryForList(sql,new Object[]{oid});
+    }
+
+    /**
+     * <p>功能描述: 更新焊口信息表daq_construction_weld的is_backfill的字段状态。</p>
+     * <p> cuixianing。</p>
+     * @param oid
+     * @since JDK1.8
+     * <p>创建日期:2019/2/20 16:06</p>
+     * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]</p>
+     */
+    public Integer updateFieldState(List<Map<String,String>> oid,String updateField){
+        String sql = "update daq_construction_weld set "+updateField+" = 1 where oid in (:oid) ";
+        int[] len = baseNamedParameterJdbcTemplate.batchUpdate(sql, oid);
+        return len.length;
+    }
+
 	/**
 	 * <p>功能描述：根据线路段查询审核状态为1和2的焊口列表(焊口表中未返修未割口且未测量的数据，返修表中未割口且未测量的数据)。</p>
 	  * <p> 葛建。</p>	

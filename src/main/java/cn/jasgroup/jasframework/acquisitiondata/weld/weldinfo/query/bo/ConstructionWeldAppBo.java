@@ -108,10 +108,24 @@ public class ConstructionWeldAppBo extends BaseBo {
 	 * 监理单位名称
 	 */
 	private String supervisionUnitName;
+
+	// add by cuixianing 2019-2-20
+	/**
+	 *是否检测
+	 */
+	private Integer isDetection;
 	
 	private String userId = ThreadLocalHolder.getCurrentUserId();
-	
-	public String getProjectOid() {
+
+    public Integer getIsDetection() {
+        return isDetection;
+    }
+
+    public void setIsDetection(Integer isDetection) {
+        this.isDetection = isDetection;
+    }
+
+    public String getProjectOid() {
 		return projectOid;
 	}
 	public void setProjectOid(String projectOid) {
