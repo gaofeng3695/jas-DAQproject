@@ -72,8 +72,11 @@
 						name: '线路段/穿跨越'
 					},
 					{
-						field: 'weldOid',
-						name: "焊口编号"
+						field: 'measureControlPointType',
+						name: "测量控制点类型"
+					},{
+						field:"measureControlPointCode",
+						name:"测量控制点编号"
 					}
 				],
 				fieldsConfig: {
@@ -101,8 +104,12 @@
 						childSelect: ['weldOid'],
 						childUrl: ['/daq/weld/getWeldList.do'],
 					},
-					weldOid: {
+					measureControlPointType: {
 						type: 'select',
+						domainName:"measure_control_point_type_domain"
+					},
+					measureControlPointCode:{
+						type:"input"
 					}
 				},
 				tableFields: [{
@@ -128,8 +135,17 @@
 						name: "线路段/穿跨越名称",
 						field: "pipeSegmentOrCrossName"
 					}, {
+						name: '测量控制点类型',
+						field: 'measureControlPointTypeName'
+					}, {
 						name: '焊口编号',
 						field: 'weldCode'
+					}, {
+						name: '测量控制点编号',
+						field: 'measureControlPointCode'
+					}, {
+						name: '弯管编号',
+						field: 'bendingCode'
 					}, {
 						name: '桩号',
 						field: 'medianStakeCode'
@@ -154,9 +170,6 @@
 					}, {
 						name: '施工单位',
 						field: 'constructUnitName'
-					}, {
-						name: '施工机组代号',
-						field: 'workUnitCode'
 					},
 					{
 						name: '监理单位',
@@ -176,7 +189,10 @@
 					}, {
 						name: '采集日期',
 						field: 'collectionDate'
-					},
+					}, {
+						name: '备注',
+						field: 'remarks'
+					}
 				]
 			}
 		},

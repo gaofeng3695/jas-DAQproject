@@ -214,7 +214,7 @@ var mvConfig = {
       pointz: {
         type: 'number',
         name: '管顶高程(m)',
-        max: 99999,
+        max: 999,
         min: 0,
         precision: 2,
         isRequired: true
@@ -636,7 +636,7 @@ var mvConfig = {
       startPointz: {
         type: 'number',
         name: '起始点管顶高程(m)',
-        max: 99999,
+        max: 999,
         min: 0,
         precision: 2,
         disabled: true
@@ -644,23 +644,23 @@ var mvConfig = {
       endPointx: {
         type: 'number',
         name: '终止点X坐标',
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3,
+        precision: 7,
         disabled: true
       },
       endPointy: {
         type: 'number',
         name: '终止点Y坐标',
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3,
+        precision:7,
         disabled: true
       },
       endPointz: {
         type: 'number',
         name: '终止点管顶高程(m)',
-        max: 99999,
+        max: 999,
         min: 0,
         precision: 2,
         disabled: true

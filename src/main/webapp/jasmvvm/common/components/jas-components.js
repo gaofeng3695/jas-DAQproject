@@ -2317,6 +2317,8 @@ Vue.component('jas-remarks', {
 				var num = 200 - this.remark.trim().length;
 				this.remarksDesc = num;
 				this.$emit('changevalue', this.remark.trim());
+			}else{
+				this.$emit('changevalue', '');
 			}
 
 		}

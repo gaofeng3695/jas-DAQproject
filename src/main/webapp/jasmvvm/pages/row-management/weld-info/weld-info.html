@@ -191,6 +191,86 @@
 							if (cellvalue == '1') return '是';
 							return cellvalue;
 						}
+					},{
+						name: '是否返修',
+						field: 'isRework',
+						formatter: function (row, column, cellvalue, index) {
+							if (cellvalue == '0') return '否';
+							if (cellvalue == '1') return '是';
+							return cellvalue;
+						}
+					},{
+						name: '是否检测',
+						field: 'isDetection',
+						formatter: function (row, column, cellvalue, index) {
+							if (cellvalue < 0 ||cellvalue == 0) return '否';
+							if (cellvalue > 0) return '是';
+							return cellvalue;
+						}
+					},{
+						name: '是否补口',
+						field: 'isAnticorrosionCheck',
+						formatter: function (row, column, cellvalue, index) {
+							if (cellvalue == '0') return '否';
+							if (cellvalue == '1') return '是';
+							return cellvalue;
+						}
+					},{
+						name: '是否割口',
+						field: 'isCut',
+						formatter: function (row, column, cellvalue, index) {
+							if (cellvalue == '0') return '否';
+							if (cellvalue == '1') return '是';
+							return cellvalue;
+						}
+					},{
+						name: '是否测量',
+						field: 'isMeasure',
+						formatter: function (row, column, cellvalue, index) {
+							if (cellvalue == '0') return '否';
+							if (cellvalue == '1') return '是';
+							return cellvalue;
+						}
+					},{
+						name: '是否回填',
+						field: 'isBackfill',
+						formatter: function (row, column, cellvalue, index) {
+							if (cellvalue == '0') return '否';
+							if (cellvalue == '1') return '是';
+							return cellvalue;
+						}
+					},{
+						name: '是否地貌恢复',
+						field: 'isLandRestoration',
+						formatter: function (row, column, cellvalue, index) {
+							if (cellvalue == '0') return '否';
+							if (cellvalue == '1') return '是';
+							return cellvalue;
+						}
+					},{
+						name: '是否存在切管',
+						field: 'hasCutPipe',
+						formatter: function (row, column, cellvalue, index) {
+							if (cellvalue == '0') return '否';
+							if (cellvalue == '1') return '是';
+							return cellvalue;
+						}
+					},{
+						name: '是否变径',
+						field: 'hasReducer',
+						formatter: function (row, column, cellvalue, index) {
+							if (cellvalue == '0') return '否';
+							if (cellvalue == '1') return '是';
+							return cellvalue;
+						}
+					},{
+						name: '是否有弯管',
+						field: 'hasBendPipe',
+						formatter: function (row, column, cellvalue, index) {
+							if (cellvalue == '0') return '否';
+							if (cellvalue == '1') return '是';
+							return cellvalue;
+						}
 					}, {
 						name: '施工日期',
 						field: 'constructDate'

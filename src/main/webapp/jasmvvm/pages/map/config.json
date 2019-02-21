@@ -293,7 +293,7 @@
             "outFields": "rework_weld_code,project_oid"
           }, {
             "id": "daq_weld_measured_result",
-            "label": "焊口测量成果信息",
+            "label": "中线测量",
             "index": 20,
             "renderer": {
               "style": "weldmeasured",
