@@ -129,6 +129,8 @@ alter table daq_weld_measured_result add column measure_control_point_code varch
 comment on column daq_weld_measured_result.measure_control_point_code is '测量控制点编号';
 alter table daq_weld_measured_result add column bending_oid varchar(36) ;
 comment on column daq_weld_measured_result.bending_oid is '弯管编号';
+
+ALTER TABLE daq_weld_measured_result RENAME COLUMN median_stake_oid TO median_stake_code;
 /*******焊口测量成果改为中线测量成果end***********/
 
 

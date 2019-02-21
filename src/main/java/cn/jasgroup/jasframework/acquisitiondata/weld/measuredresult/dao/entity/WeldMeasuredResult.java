@@ -115,7 +115,7 @@ public class WeldMeasuredResult extends CommonJdbcEntity {
 	/**
 	 * 桩号 
 	 */
-	private String medianStakeOid; 
+	private String medianStakeCode; 
 
 	/**
 	 * 相对桩位置(m) 
@@ -260,10 +260,6 @@ public class WeldMeasuredResult extends CommonJdbcEntity {
 		super.setField("weldOid");
 	}
 
-	public String getMedianStakeOid() {
-		return medianStakeOid; 
-	}
-
 	public String getBendingOid() {
 		return bendingOid; 
 	}
@@ -273,9 +269,13 @@ public class WeldMeasuredResult extends CommonJdbcEntity {
 		super.setField("bendingOid");
 	}
 
-	public void setMedianStakeOid(String medianStakeOid) {
-		this.medianStakeOid = medianStakeOid; 
-		super.setField("medianStakeOid");
+	public String getMedianStakeCode() {
+		return medianStakeCode;
+	}
+
+	public void setMedianStakeCode(String medianStakeCode) {
+		this.medianStakeCode = medianStakeCode;
+		super.setField("medianStakeCode");
 	}
 
 	public Double getRelativeMileage() {
