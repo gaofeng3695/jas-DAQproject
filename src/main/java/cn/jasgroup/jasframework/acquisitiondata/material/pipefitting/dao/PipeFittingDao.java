@@ -150,4 +150,24 @@ public class PipeFittingDao{
 		}
 		this.baseJdbcTemplate.update(sql, null);
 	}
+	
+	/**
+	 * <p>功能描述：根据项目查询未使用且未进行中线测量的弯管列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年2月20日 下午3:21:03。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getBendingList(String projectOid) {
+		String sql = "select key,value from "
+					+ "(select oid as key,hot_bends_code as value from daq_material_hot_bends where active=1 and is_use=1 and project_oid=? "
+					+ "union all "
+					+ "select oid as key,pipe_cold_bending_code as value from daq_material_pipe_cold_bending where active=1 and is_use=1 and project_oid=?) bending "
+					+ "where bending.key not in (select bending_oid from daq_weld_measured_result "
+					+ "where active=1 and measure_control_point_type='measure_control_point_type_code_002')";
+		
+		return this.baseJdbcTemplate.queryForListHump(sql, new Object[]{projectOid,projectOid});
+	}
 }

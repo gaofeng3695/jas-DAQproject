@@ -105,4 +105,18 @@ drop view if exists v_daq_approve_tip;
 create or replace view v_daq_approve_tip as 
 	select p.oid,p.parent_id,p.privilege_code,p.privilege_name,p.hierarchy,t.project_oid,t.supervision_unit from pri_func_privilege p 
 	inner join(select project_oid,supervision_unit,privilege_code from daq_approve_tip where active=1 ) t
-	on t.privilege_code=p.privilege_code where p.active=1
+	on t.privilege_code=p.privilege_code where p.active=1;
+	
+/***
+ * 删除焊口测量成果视图
+ */	
+DROP VIEW IF EXISTS v_daq_weld_measured_result;
+
+
+/**
+ * 创建弯管物资视图
+ */
+CREATE OR REPLACE VIEW v_daq_material_bending AS 
+select oid,hot_bends_code as bending_code from daq_material_hot_bends where active=1 and is_use=1
+union all
+select oid,pipe_cold_bending_code as bending_code from daq_material_pipe_cold_bending where active=1 and is_use=1

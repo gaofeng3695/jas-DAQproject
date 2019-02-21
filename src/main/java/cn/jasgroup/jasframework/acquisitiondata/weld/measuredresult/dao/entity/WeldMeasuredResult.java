@@ -23,33 +23,45 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 /**
  * 
   *<p>类描述：焊口测量成果信息实体类。</p>
+  * {@link cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.service.WeldService #changeWeldMeasuredFieldAfterSave()}
+  * {@link cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.service.WeldService #changeWeldMeasuredFieldBeforeUpdate()}
+  * {@link cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.service.WeldService #changeWeldMeasuredFieldAfterUpdate()}
+  * {@link cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.service.WeldService #changeWeldMeasuredFieldAfterDelete()}
   * @author 葛建 。
   * @version v1.0.0.1。
   * @since JDK1.8。
   *<p>创建日期：2018年7月11日 下午3:28:20。</p>
  */
 @CommonSaveConfig(
-		scene = "/weldMeasuredResult/save"
+	scene = "/weldMeasuredResult/save",
+	afterAdvice={
+		@Process(service = "weldService", method = "changeWeldMeasuredFieldAfterSave()")
+	}
 )
 @CommonUpdateConfig(
-	scene = "/weldMeasuredResult/update"
+	scene = "/weldMeasuredResult/update",
+	beforeAdvice={
+		@Process(service = "weldService", method = "changeWeldMeasuredFieldBeforeUpdate()")
+	},
+	afterAdvice={
+		@Process(service = "weldService", method = "changeWeldMeasuredFieldAfterUpdate()")
+	}
 )
 @CommonDeleteConfig(
-	scene = "/weldMeasuredResult/delete"
+	scene = "/weldMeasuredResult/delete",
+	afterAdvice={
+		@Process(service = "weldService", method = "changeWeldMeasuredFieldAfterDelete()")
+	}
 )
 @CommonDeleteBatchConfig(
-		scene = "/weldMeasuredResult/deleteBatch"
-		)
+	scene = "/weldMeasuredResult/deleteBatch"
+)
 @Point(
-	x="pointx",
-	y="pointy" ,
-	scopeFieldName="pipelineOid",
-	scopeType=ScopeType.CURRENT,
-	geometryColumnName="geom",
-	calculateType=CalculateType.SingleAnchorAndDeviation,
-	anchorClass=MedianStake.class,
-	anchorOid="medianStakeOid",
-	deviation="relativeMileage"
+		x = "pointx",
+		y = "pointy",
+		z = "surfaceeLevation",
+		geometryColumnName = "geom",
+		calculateType = CalculateType.Coordinates
 )
 @UniqueConstraints(
 		strategys ={
@@ -81,9 +93,24 @@ public class WeldMeasuredResult extends CommonJdbcEntity {
 	private String pipeSegmentOrCrossOid; 
 
 	/**
+	 * 测量控制点类型 
+	 */
+	private String measureControlPointType; 
+
+	/**
+	 * 测量控制点编号 
+	 */
+	private String measureControlPointCode; 
+	
+	/**
 	 * 焊口编号 
 	 */
 	private String weldOid; 
+
+	/**
+	 * 弯管编号 
+	 */
+	private String bendingOid; 
 
 	/**
 	 * 桩号 
@@ -129,11 +156,6 @@ public class WeldMeasuredResult extends CommonJdbcEntity {
 	 * 测量日期 
 	 */
 	private Date surveyDate; 
-	
-	/**
-	 * 施工机组代号
-	 */
-	private String workUnitOid;
 	
 	/**
 	 * 施工单位 
@@ -211,6 +233,24 @@ public class WeldMeasuredResult extends CommonJdbcEntity {
 		super.setField("pipeSegmentOrCrossOid");
 	}
 
+	public String getMeasureControlPointType() {
+		return measureControlPointType; 
+	}
+
+	public void setMeasureControlPointType(String measureControlPointType) {
+		this.measureControlPointType = measureControlPointType; 
+		super.setField("measureControlPointType");
+	}
+
+	public String getMeasureControlPointCode() {
+		return measureControlPointCode; 
+	}
+
+	public void setMeasureControlPointCode(String measureControlPointCode) {
+		this.measureControlPointCode = measureControlPointCode; 
+		super.setField("measureControlPointCode");
+	}
+
 	public String getWeldOid() {
 		return weldOid; 
 	}
@@ -222,6 +262,15 @@ public class WeldMeasuredResult extends CommonJdbcEntity {
 
 	public String getMedianStakeOid() {
 		return medianStakeOid; 
+	}
+
+	public String getBendingOid() {
+		return bendingOid; 
+	}
+
+	public void setBendingOid(String bendingOid) {
+		this.bendingOid = bendingOid; 
+		super.setField("bendingOid");
 	}
 
 	public void setMedianStakeOid(String medianStakeOid) {
@@ -296,14 +345,6 @@ public class WeldMeasuredResult extends CommonJdbcEntity {
 	@Temporal(TemporalType.TIMESTAMP)
 	public Date getSurveyDate() {
 		return surveyDate; 
-	}
-
-	public String getWorkUnitOid() {
-		return workUnitOid;
-	}
-
-	public void setWorkUnitOid(String workUnitOid) {
-		this.workUnitOid = workUnitOid;
 	}
 
 	public void setSurveyDate(Date surveyDate) {

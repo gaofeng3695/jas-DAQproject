@@ -175,4 +175,37 @@ public class WeldController extends BaseController{
 		}
 		return result;
 	}
+	
+	/**
+	 * <p>功能描述： 中线测量成果获取焊口，根据线路段查询审核状态为1和2的焊口列表(焊口表中未返修未割口且未测量的数据，返修表中未割口且未测量的数据)。</p>
+	  * <p> 葛建。</p>	
+	  * @param request
+	  * @param param
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年2月20日 上午10:14:00。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="/getWeldByCondition",method = RequestMethod.POST)
+	@ResponseBody
+	public Object getWeldByCondition(HttpServletRequest request,@RequestBody Map<String,String> param){
+		ListResult<Map<String,Object>> result=null;
+		String pipeSegmentOrCrossOid=param.get("pipeSegmentOrCrossOid");
+		String token = request.getParameter("token");
+		try {
+			List<Map<String,Object>> rows = this.weldService.getWeldByCondition(pipeSegmentOrCrossOid);
+			if(rows.size()>0){
+				redisService.putValue(token+"_get_weld_list_local", rows);
+				redisService.expirse(token, 5, TimeUnit.HOURS);
+			}
+			result = new ListResult<>(1, "200", "ok", rows);
+		} catch (Exception e) {
+			result = new ListResult<>(-1, "400", "error");
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	
+	
 }
