@@ -212,7 +212,15 @@
 				this.$refs.table.search();
 			},
 			locate: function (row) {
-				var code = 'daq_weld_measured_result';
+				var code="";
+				if(row.measureControlPointType=="measure_control_point_type_code_001"){
+					code='v_daq_weld_measure_result_weld';//焊口
+				}
+				if(row.measureControlPointType=="measure_control_point_type_code_002"){
+					code='v_daq_weld_measure_result_bending';//转角点
+				}if(row.measureControlPointType=="measure_control_point_type_code_003"){
+					code='v_daq_weld_measure_result_cross';//穿越点
+				}
 				top.app.locate(row.oid, code);
 			},
 		},
