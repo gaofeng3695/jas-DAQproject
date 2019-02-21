@@ -83,11 +83,6 @@ create or replace view v_daq_weld_detection as
 	select t.oid,t.detection_report_num as code,case when t.evaluation_result=1 then '合格' else '不合格' end as evaluation_result,t.weld_oid, 6 as type from daq_detection_pa_ultrasonic t where t.active=1
 	union all 
 	select t.oid,to_char(t.buckle_date,'yyyy-MM-dd') as code,s.code_name,t.weld_oid,7 as type from daq_weld_anticorrosion_check t left join (select code_id,code_name from sys_domain where domain_name='buckle_anticorrosive_type_domain') s on s.code_id=t.buckle_anticorrosive_type;
-/**
- * 焊口测量成果视图
- */
-create or replace view v_daq_weld_measured_result as 
-	select m.*,t.weld_code from daq_weld_measured_result m left join (select oid,weld_code from daq_construction_weld) t on t.oid=m.weld_oid;
 
 /**
  * 中线桩视图
@@ -107,12 +102,6 @@ create or replace view v_daq_approve_tip as
 	inner join(select project_oid,supervision_unit,privilege_code from daq_approve_tip where active=1 ) t
 	on t.privilege_code=p.privilege_code where p.active=1;
 	
-/***
- * 删除焊口测量成果视图
- */	
-DROP VIEW IF EXISTS v_daq_weld_measured_result;
-
-
 /**
  * 创建弯管物资视图
  */
@@ -120,3 +109,12 @@ CREATE OR REPLACE VIEW v_daq_material_bending AS
 select oid,hot_bends_code as bending_code from daq_material_hot_bends where active=1 and is_use=1
 union all
 select oid,pipe_cold_bending_code as bending_code from daq_material_pipe_cold_bending where active=1 and is_use=1
+
+
+/**
+ * 创建用于中线测量的焊口视图
+ */
+CREATE OR REPLACE VIEW v_daq_weld_for_measure AS 
+SELECT weld.oid, weld.weld_code, weld.pipe_segment_or_cross_oid FROM daq_construction_weld weld WHERE weld.active = 1 and weld.is_rework=0 and weld.is_cut=0 
+UNION ALL 
+SELECT rework.oid,rework.rework_weld_code AS weld_code,rework.pipe_segment_or_cross_oid FROM daq_weld_rework_weld rework WHERE rework.active=1 and rework.is_cut=0;
