@@ -295,19 +295,58 @@
             "id": "daq_weld_measured_result",
             "label": "中线测量",
             "index": 20,
+            "layerSet": [{
+            "id": "v_daq_weld_measure_result_weld",
+            "label": "焊口中线测量",
+            "index": 201,
             "renderer": {
               "style": "weldmeasured",
               "labelStyle": "",
               "labelField": ""
             },
-            "style": "pipesegment",
             "type": "Vector",
             "source": "Vector",
             "flash": true,
             "visible": false,
             "loader": "jas",
             "format": "GeoJSON",
-            "strategy": "all"
+            "strategy": "all",
+            "outFields": ""
+          },{
+            "id": "v_daq_weld_measure_result_bending",
+            "label": "转角点中线测量",
+            "index": 202,
+            "renderer": {
+              "style": "weldmeasured01",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all",
+            "outFields": ""
+          },{
+            "id": "v_daq_weld_measure_result_cross",
+            "label": "穿越点中线测量",
+            "index": 203,
+            "renderer": {
+              "style": "weldmeasured02",
+              "labelStyle": "",
+              "labelField": ""
+            },
+            "type": "Vector",
+            "source": "Vector",
+            "flash": true,
+            "visible": false,
+            "loader": "jas",
+            "format": "GeoJSON",
+            "strategy": "all",
+            "outFields": ""
+          }]
           }]
         }, {
           "id": "layerSet003",

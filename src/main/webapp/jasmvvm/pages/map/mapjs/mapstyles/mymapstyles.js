@@ -291,11 +291,41 @@ JasMap.require(function () {
 			angle: Math.PI / 4
 		})
 	});
-	//管道焊接补口
+	//中线测量  焊口数据
 	mapStyleTemplates.weldmeasured = new ol.style.Style({
 		image: new ol.style.RegularShape({
 			fill: new ol.style.Fill({
 				color: '#82ff46'
+			}),
+			stroke: new ol.style.Stroke({
+				color: '#409EFF',
+				width: 1
+			}),
+			points: 4,
+			radius: 5,
+			angle: Math.PI / 4
+		})
+	});
+	//中线测量  转角点数据
+	mapStyleTemplates.weldmeasured01 = new ol.style.Style({
+		image: new ol.style.RegularShape({
+			fill: new ol.style.Fill({
+				color: '#f56c6c'
+			}),
+			stroke: new ol.style.Stroke({
+				color: '#409EFF',
+				width: 1
+			}),
+			points: 4,
+			radius: 5,
+			angle: Math.PI / 4
+		})
+	});
+	//中线测量  穿越点数据
+	mapStyleTemplates.weldmeasured02 = new ol.style.Style({
+		image: new ol.style.RegularShape({
+			fill: new ol.style.Fill({
+				color: '#9f6cf5'
 			}),
 			stroke: new ol.style.Stroke({
 				color: '#409EFF',
