@@ -193,7 +193,8 @@ var showInfo = function (e) {
 	var src = locationMap[layerId].src + oid;
 	var name = "";
 	for (var key in locationMap[layerId].fields) {
-		name += "<div  class='map_item'><span style='color:#666'> " + locationMap[layerId].fields[key] + "：</span>" + obj[key] + "</div>";
+		var value=obj[key]||"";
+		name += "<div  class='map_item mapSpan'><span style='color:#666'> " + locationMap[layerId].fields[key] + "：" + value + "</span></div>";
 	}
 	name += "<div class='map_more' onclick='showWeldInfo(`" + src + "`,`" + title + "`)'>更多</div>"
 	app.jasMap.showInfoWindow(coor[0], coor[1], name, title);
@@ -651,6 +652,8 @@ window.app = new Vue({
 					that.isMapInited = true;
 					that.initJasMap();
 				}
+			}else{
+				that.$refs.resizer.panelShowed = false;	
 			}
 		}
 	},
