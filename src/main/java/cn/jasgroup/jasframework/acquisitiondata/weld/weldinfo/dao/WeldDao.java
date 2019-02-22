@@ -162,12 +162,21 @@ public class WeldDao extends BaseJdbcDao{
 					+ "union all "
 					+ "(select rework.oid as key, rework.rework_weld_code  as value, weld.median_stake_oid, weld.relative_mileage from daq_weld_rework_weld rework "
 					+ "LEFT JOIN (select oid,median_stake_oid,relative_mileage from daq_construction_weld where active=1) weld on weld.oid=rework.weld_oid "
-					+ "where rework.active=1 and rework.pipe_segment_or_cross_oid=? and rework.approve_status in (1,2) and rework.is_cut=0 "
-					+ "and rework.oid not in (select weld_oid from daq_weld_measured_result where active=1and measure_control_point_type='measure_control_point_type_code_001'))"
+					+ "where rework.active=1 and rework.pipe_segment_or_cross_oid=? and rework.approve_status in (1,2) and rework.is_cut=0 and rework.is_measure=0)"
 					+ ") total "
 					+ "LEFT JOIN (select oid,median_stake_code from daq_median_stake where active=1) stake on total.median_stake_oid=stake.oid";
 		return this.queryForList(sql, new Object[]{pipeSegmentOrCrossOid, pipeSegmentOrCrossOid});
 	}
+	
+	/**
+	 * <p>功能描述：修改焊口或返修的is_measure字段。</p>
+	  * <p> 葛建。</p>	
+	  * @param weldOid
+	  * @param value
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年2月22日 上午10:36:21。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
 	public void changeIsMeasuredField(String weldOid, int value) {
 		String sql = "update daq_construction_weld set is_measure=? where oid=?";
 		this.update(sql, new Object[]{value, weldOid});

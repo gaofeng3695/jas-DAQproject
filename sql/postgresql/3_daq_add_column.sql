@@ -151,3 +151,14 @@ comment on column daq_construction_weld.has_reducer is '是否变径';
 
 alter table daq_construction_weld add has_bend_pipe smallint default 0;
 comment on column daq_construction_weld.has_bend_pipe is '是否有弯管'
+
+/************添加is_measure(是否测量)start*****************/
+alter table daq_weld_rework_weld add column is_measure int2 default 0 ;
+comment on column daq_weld_rework_weld.is_measure is '是否测量';
+
+alter table daq_material_hot_bends add column is_measure int2 default 0 ;
+comment on column daq_material_hot_bends.is_measure is '是否测量';
+
+alter table daq_material_pipe_cold_bending add column is_measure int2 default 0 ;
+comment on column daq_material_pipe_cold_bending.is_measure is '是否测量';
+/************添加is_measure(是否测量)end*****************/
