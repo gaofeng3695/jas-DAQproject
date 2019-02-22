@@ -114,6 +114,7 @@ public class PipeFittingDao{
 		}
 		this.baseJdbcTemplate.update(sql, null);
 	}
+	
 	public void updateBackPipeFitting(String tendersOid,String pipelineOid,String pipeOid,String pipeTypeCode,Integer isUse){
 		String sql= null;
 		if(null == isUse){
@@ -152,7 +153,7 @@ public class PipeFittingDao{
 	}
 	
 	/**
-	 * <p>功能描述：根据项目查询未使用且未进行中线测量的弯管列表。</p>
+	 * <p>功能描述：根据项目查询已使用且未进行中线测量的弯管列表。</p>
 	  * <p> 葛建。</p>	
 	  * @param projectOid
 	  * @return
@@ -161,13 +162,9 @@ public class PipeFittingDao{
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String, Object>> getBendingList(String projectOid) {
-		String sql = "select key,value from "
-					+ "(select oid as key,hot_bends_code as value from daq_material_hot_bends where active=1 and is_use=1 and project_oid=? "
+		String sql = "select oid as key,hot_bends_code as value from daq_material_hot_bends where active=1 and is_use=1 and is_measure=0 and project_oid=? "
 					+ "union all "
-					+ "select oid as key,pipe_cold_bending_code as value from daq_material_pipe_cold_bending where active=1 and is_use=1 and project_oid=?) bending "
-					+ "where bending.key not in (select bending_oid from daq_weld_measured_result "
-					+ "where active=1 and measure_control_point_type='measure_control_point_type_code_002')";
-		
+					+ "select oid as key,pipe_cold_bending_code as value from daq_material_pipe_cold_bending where active=1 and is_use=1 and is_measure=0 and project_oid=?";
 		return this.baseJdbcTemplate.queryForListHump(sql, new Object[]{projectOid,projectOid});
 	}
 }
