@@ -309,7 +309,9 @@
 							if (that.formData.weldOid != "") {
 								that.domain.welds.push({
 									key: that.formData.weldOid,
-									value: that.formData.weldCode
+									value: that.formData.weldCode,
+									median_stake_code:that.formData.medianStakeCode,
+						            relative_mileage:that.formData.relativeMileage
 								});
 							}
 							if (arr.length == 0) that.formData.weldOid = "";
