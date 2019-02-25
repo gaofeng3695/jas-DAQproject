@@ -1020,7 +1020,7 @@ var mvConfig = {
       startPointz: {
         type: 'number',
         name: '起始点管顶高程(m)',
-        max: 99999,
+        max: 999,
         min: 0,
         precision: 2,
         disabled: true
@@ -1044,7 +1044,7 @@ var mvConfig = {
       endPointz: {
         type: 'number',
         name: '终止点管顶高程(m)',
-        max: 99999,
+        max: 999,
         min: 0,
         precision: 2,
         disabled: true
@@ -1393,7 +1393,7 @@ var mvConfig = {
       startPointz: {
         type: 'number',
         name: '起始点管顶高程(m)',
-        max: 99999,
+        max: 999,
         min: 0,
         precision: 2,
         disabled: true
@@ -1417,7 +1417,7 @@ var mvConfig = {
       endPointz: {
         type: 'number',
         name: '终止点管顶高程(m)',
-        max: 99999,
+        max: 999,
         min: 0,
         precision: 2,
         disabled: true
@@ -1609,7 +1609,7 @@ var mvConfig = {
         type: 'number',
         name: '起始点管顶高程(m)',
         isRequired: true,
-        max: 99999,
+        max: 999,
         min: 0,
         precision: 2
       },
@@ -1634,7 +1634,7 @@ var mvConfig = {
         type: 'number',
         name: '终止点管顶高程(m)',
         isRequired: true,
-        max: 99999,
+        max: 999,
         min: 0,
         precision: 2
       },
@@ -1826,7 +1826,7 @@ var mvConfig = {
         type: 'number',
         name: '起始点管顶高程(m)',
         isRequired: true,
-        max: 99999,
+        max: 999,
         min: 0,
         precision: 2
       },
@@ -1858,7 +1858,7 @@ var mvConfig = {
         type: 'number',
         name: '终止点管顶高程(m)',
         isRequired: true,
-        max: 99999,
+        max: 999,
         min: 0,
         precision: 2
       },
@@ -2194,9 +2194,9 @@ var mvConfig = {
         type: 'number',
         name: '管顶高程(m)',
         isRequired: true,
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3,
+        precision: 2,
         disabled: true
       },
       buriedDepth: {
@@ -2477,9 +2477,9 @@ var mvConfig = {
         type: 'number',
         name: '地面高程',
         isRequired: true,
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3
+        precision: 2
       },
       burialDate: {
         type: 'date',
@@ -2654,9 +2654,9 @@ var mvConfig = {
         type: 'number',
         name: '管顶高程',
         //        isRequired: true,
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3
+        precision: 2
       },
       burialDepth: {
         type: 'number',
@@ -2837,9 +2837,9 @@ var mvConfig = {
         type: 'number',
         name: '管顶高程',
         //        isRequired: true,
-        max: 999999,
+        max: 999,
         min: 0,
-        precision: 3
+        precision: 2
       },
       investmentDate: {
         type: 'date',
