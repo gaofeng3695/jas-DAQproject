@@ -81,11 +81,11 @@ public class ConstructionWeldAppBo extends BaseBo {
 	 */
 	private Double mileage;
 	/**
-	 *	是否返修 
+	 *	是否补扣
 	 */
 	private int isAnticorrosionCheck;
 	/**
-	 * 是否补扣
+	 * 是否返修
 	 */
 	private int isRework;
 	
@@ -109,21 +109,17 @@ public class ConstructionWeldAppBo extends BaseBo {
 	 */
 	private String supervisionUnitName;
 
-	// add by cuixianing 2019-2-20
-	/**
-	 *是否检测
+	/***
+	 * 是否测量
 	 */
-	private Integer isDetection;
+	private Integer isMeasure;
+	/***
+	 * 审核状态
+	 */
+	private Integer approveStatus;
 	
 	private String userId = ThreadLocalHolder.getCurrentUserId();
 
-    public Integer getIsDetection() {
-        return isDetection;
-    }
-
-    public void setIsDetection(Integer isDetection) {
-        this.isDetection = isDetection;
-    }
 
     public String getProjectOid() {
 		return projectOid;
@@ -252,6 +248,23 @@ public class ConstructionWeldAppBo extends BaseBo {
 	}
 	public void setOid(String oid) {
 		this.oid = oid;
+	}
+
+	public Integer getIsMeasure() {
+		return isMeasure;
+	}
+
+	public void setIsMeasure(Integer isMeasure) {
+		this.isMeasure = isMeasure;
+	}
+
+	public Integer getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(Integer approveStatus) {
+		this.approveStatus = approveStatus;
 	} 
+	
 	
 }
