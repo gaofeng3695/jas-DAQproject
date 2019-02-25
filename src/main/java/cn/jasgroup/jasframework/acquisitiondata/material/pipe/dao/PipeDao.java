@@ -112,7 +112,7 @@ public class PipeDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getMaterialHotBendsList(List<String> projectOids){
-		String sql = "select oid as key,hot_bends_code as value,back_is_use,front_is_use,project_oid,is_check from daq_material_hot_bends where active=1";
+		String sql = "select oid as key,hot_bends_code as value,back_is_use,front_is_use,project_oid,is_check,is_measure from daq_material_hot_bends where active=1";
 		Map<String,Object> param = new HashMap<String,Object>();
 		if(projectOids!=null && projectOids.size()>0){
 			sql += " and project_oid in (:projectOids)";
@@ -265,7 +265,7 @@ public class PipeDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>>getPipeColdBendingList(List<String> projectOids){
-		String sql = "select t.oid as key,t.pipe_cold_bending_code as value,t.tenders_oid,t.front_is_use,back_is_use,t.approve_status,t.pipe_segment_or_cross_oid,is_check,project_oid "
+		String sql = "select t.oid as key,t.pipe_cold_bending_code as value,t.tenders_oid,t.front_is_use,back_is_use,t.approve_status,t.pipe_segment_or_cross_oid,is_check,project_oid,is_measure "
 				+ "from daq_material_pipe_cold_bending t "
 				+ "where t.active=1";
 		Map<String,Object> param = new HashMap<String,Object>();
