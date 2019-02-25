@@ -306,6 +306,12 @@
 						},
 						function (arr) {
 							that.domain.welds = arr;
+							if (that.formData.weldOid != "") {
+								that.domain.welds.push({
+									key: that.formData.weldOid,
+									value: that.formData.weldCode
+								});
+							}
 							if (arr.length == 0) that.formData.weldOid = "";
 						});
 				}
@@ -319,6 +325,12 @@
 						},
 						function (arr) {
 							that.domain.bendings = arr;
+							if (that.formData.bendingOid != "") {
+								that.domain.bendings.push({
+									key: that.formData.bendingOid,
+									value: that.formData.bendingCode
+								});
+							}
 							if (arr.length == 0) that.formData.bendingOid = "";
 						});
 				}
@@ -406,10 +418,8 @@
 			},
 			changeType: function (isEdit) {
 				var that = this;
-				console.log(isEdit);
 				if (that.formData.measureControlPointType == "measure_control_point_type_code_001") {
 					if(isEdit !="true") {
-						console.log("是否清空")
 						that.isClearFiled();	
 					}
 					that.isBendDisbled = true;
@@ -485,11 +495,6 @@
 					//	for (var key in that.formData) {
 					that.formData = data.rows[0];
 					that.changeType("true");//此时用于判断 编辑的初始化
-					that.domain.welds.push({
-						key:data.rows[0].weldOid,
-						value:data.rows[0].weldCode
-					});
-					//}
 				});
 			},
 		},
