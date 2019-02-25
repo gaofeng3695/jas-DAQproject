@@ -1014,7 +1014,7 @@ Vue.component('jas-table-for-list', {
 					approveType: 1
 				});
 			}
-			url = jasTools.base.setParamsToUrl(url, row);
+			url = jasTools.base.setParamsToUrl(url, {"oid":row.oid});
 			top.jasTools.dialog.show({
 				width: '60%',
 				height: '80%',
@@ -1064,7 +1064,7 @@ Vue.component('jas-table-for-list', {
 		},
 		edit: function (row) {
 			var that = this;
-			var url = jasTools.base.setParamsToUrl(this.addUrl, row)
+			var url = jasTools.base.setParamsToUrl(this.addUrl,  {"oid":row.oid})
 			top.jasTools.dialog.show({
 				width: '60%',
 				height: '80%',
