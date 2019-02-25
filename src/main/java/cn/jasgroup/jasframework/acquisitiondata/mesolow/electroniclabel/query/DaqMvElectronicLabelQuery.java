@@ -62,7 +62,7 @@ public class DaqMvElectronicLabelQuery extends BaseJavaQuery {
 			conditionSql += " and mvel.oid=:oid";
 		}else{
 			if (oids != null && oids.size() > 0) {
-				conditionSql += "mvel.oid in (:oids)";
+				conditionSql += " and mvel.oid in (:oids)";
 			}
 			if (StringUtils.isNotBlank(projectOid)) {
 				conditionSql += " and mvel.project_oid = :projectOid";
