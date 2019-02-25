@@ -4,7 +4,11 @@ import java.util.List;
 import java.util.Map;
 
 import cn.jasgroup.jasframework.dataaccess3.core.BaseNamedParameterJdbcTemplate;
+
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Repository;
+
+import com.google.common.collect.ImmutableMap;
 
 import cn.jasgroup.jasframework.acquisitiondata.weld.reworkweld.dao.entity.ReworkWeld;
 import cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.dao.entity.ConstructionWeld;
@@ -98,6 +102,15 @@ public class WeldDao extends BaseJdbcDao{
 		}
 	}
 	
+	/**
+	 * <p>功能描述：根据焊口/返修oid查对应编号。</p>
+	  * <p> 葛建。</p>	
+	  * @param weldOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2018年10月18日 上午10:52:20。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
 	public String getWeldCodeByOid(String weldOid) {
 		String sql = "select weld_code from daq_construction_weld where oid='"+weldOid+"'";
 		List weldList = this.queryForList(sql, null, ConstructionWeld.class);
@@ -177,8 +190,16 @@ public class WeldDao extends BaseJdbcDao{
 	  * <p>创建日期:2019年2月22日 上午10:36:21。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	public void changeIsMeasuredField(String weldOid, int value) {
-		String sql = "update daq_construction_weld set is_measure=? where oid=?";
-		this.update(sql, new Object[]{value, weldOid});
+	public void changeIsMeasuredField(String weldOid, String bendingOid, int value) {
+		if (StringUtils.isNotBlank(weldOid)) {
+			String sql = "update daq_construction_weld set is_measure=:value where oid=:oid;"
+						+ "update daq_weld_rework_weld set is_measure=:value where oid=:oid;";
+			this.baseNamedParameterJdbcTemplate.batchExecute(sql, ImmutableMap.of("value", value,"oid",weldOid));
+		}
+		if (StringUtils.isNotBlank(bendingOid)) {
+			String sql = "update daq_material_hot_bends set is_measure=:value where oid=:oid;"
+					+ "update daq_material_pipe_cold_bending set is_measure=:value where oid=:oid;";
+			this.baseNamedParameterJdbcTemplate.batchExecute(sql, ImmutableMap.of("value", value,"oid",bendingOid));
+		}
 	}
 }

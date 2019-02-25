@@ -23,10 +23,10 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 /**
  * 
   *<p>类描述：焊口测量成果信息实体类。</p>
-  * {@link cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.service.WeldService #changeWeldMeasuredFieldAfterSave()}
-  * {@link cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.service.WeldService #changeWeldMeasuredFieldBeforeUpdate()}
-  * {@link cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.service.WeldService #changeWeldMeasuredFieldAfterUpdate()}
-  * {@link cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.service.WeldService #changeWeldMeasuredFieldAfterDelete()}
+  * {@link cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.service.WeldService #changeMeasuredFieldAfterSave()}
+  * {@link cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.service.WeldService #changeMeasuredFieldBeforeUpdate()}
+  * {@link cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.service.WeldService #changeMeasuredFieldAfterUpdate()}
+  * {@link cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.service.WeldService #changeMeasuredFieldAfterDelete()}
   * @author 葛建 。
   * @version v1.0.0.1。
   * @since JDK1.8。
@@ -35,22 +35,22 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 @CommonSaveConfig(
 	scene = "/weldMeasuredResult/save",
 	afterAdvice={
-		@Process(service = "weldService", method = "changeWeldMeasuredFieldAfterSave()")
+		@Process(service = "weldService", method = "changeMeasuredFieldAfterSave()")
 	}
 )
 @CommonUpdateConfig(
 	scene = "/weldMeasuredResult/update",
 	beforeAdvice={
-		@Process(service = "weldService", method = "changeWeldMeasuredFieldBeforeUpdate()")
+		@Process(service = "weldService", method = "changeMeasuredFieldBeforeUpdate()")
 	},
 	afterAdvice={
-		@Process(service = "weldService", method = "changeWeldMeasuredFieldAfterUpdate()")
+		@Process(service = "weldService", method = "changeMeasuredFieldAfterUpdate()")
 	}
 )
 @CommonDeleteConfig(
 	scene = "/weldMeasuredResult/delete",
 	afterAdvice={
-		@Process(service = "weldService", method = "changeWeldMeasuredFieldAfterDelete()")
+		@Process(service = "weldService", method = "changeMeasuredFieldAfterDelete()")
 	}
 )
 @CommonDeleteBatchConfig(
@@ -65,9 +65,8 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 )
 @UniqueConstraints(
 		strategys ={
-			@UniqueConstraintStrategy(columnNames={"pipeSegmentOrCrossOid","weldOid"},name="同一线路段/穿跨越下焊口编号")
-		},
-		formatter = @Process(service = "weldService" , method = "formatting()")
+			@UniqueConstraintStrategy(columnNames={"pipeSegmentOrCrossOid","measureControlPointCode"},name="同一线路段/穿跨越下测量控制点编号不能重复")
+		}
 	)
 @JdbcEntity(name="daq_weld_measured_result")
 public class WeldMeasuredResult extends CommonJdbcEntity {
