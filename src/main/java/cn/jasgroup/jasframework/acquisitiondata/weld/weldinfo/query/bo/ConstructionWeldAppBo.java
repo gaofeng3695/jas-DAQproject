@@ -124,6 +124,10 @@ public class ConstructionWeldAppBo extends BaseBo {
 	 */
 	private Integer approveStatus;
 	
+	private String medianStakeOid;
+	
+	private String relativeMileage;
+	
 	private String userId = ThreadLocalHolder.getCurrentUserId();
 
 
@@ -276,6 +280,18 @@ public class ConstructionWeldAppBo extends BaseBo {
 
 	public void setApproveStatus(Integer approveStatus) {
 		this.approveStatus = approveStatus;
+	}
+	public String getMedianStakeOid() {
+		return medianStakeOid;
+	}
+	public void setMedianStakeOid(String medianStakeOid) {
+		this.medianStakeOid = medianStakeOid;
+	}
+	public String getRelativeMileage() {
+		return relativeMileage;
+	}
+	public void setRelativeMileage(String relativeMileage) {
+		this.relativeMileage = relativeMileage;
 	} 
 	
 	
