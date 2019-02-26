@@ -70,15 +70,20 @@ public class WeldMeasuredResultAppBo extends BaseBo {
 	 */
 	private String pipeSegmentOrCrossName;
 
+//	/**
+//	 * 焊口oid
+//	 */
+//	private String weldOid;
+//
+//	/**
+//	 * 焊口编号
+//	 */
+//	private String weldCode;
+	
 	/**
-	 * 焊口oid
+	 * 测量控制点编号 
 	 */
-	private String weldOid;
-
-	/**
-	 * 焊口编号
-	 */
-	private String weldCode;
+	private String measureControlPointCode; 
 
 	/** X坐标 */
 	private Double pointx;
@@ -167,22 +172,6 @@ public class WeldMeasuredResultAppBo extends BaseBo {
 		this.pipeSegmentOrCrossName = pipeSegmentOrCrossName;
 	}
 
-	public String getWeldOid() {
-		return weldOid;
-	}
-
-	public void setWeldOid(String weldOid) {
-		this.weldOid = weldOid;
-	}
-
-	public String getWeldCode() {
-		return weldCode;
-	}
-
-	public void setWeldCode(String weldCode) {
-		this.weldCode = weldCode;
-	}
-
 	public Double getPointx() {
 		return pointx;
 	}
@@ -222,5 +211,15 @@ public class WeldMeasuredResultAppBo extends BaseBo {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
+
+	public String getMeasureControlPointCode() {
+		return measureControlPointCode;
+	}
+
+	public void setMeasureControlPointCode(String measureControlPointCode) {
+		this.measureControlPointCode = measureControlPointCode;
+	}
+	
+	
 
 }
