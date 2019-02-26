@@ -113,6 +113,12 @@ public class ConstructionWeldAppBo extends BaseBo {
 	 * 是否测量
 	 */
 	private Integer isMeasure;
+	
+	/**
+	 * 是否割口
+	 */
+	private Integer isCut;
+	
 	/***
 	 * 审核状态
 	 */
@@ -258,6 +264,12 @@ public class ConstructionWeldAppBo extends BaseBo {
 		this.isMeasure = isMeasure;
 	}
 
+	public Integer getIsCut() {
+		return isCut;
+	}
+	public void setIsCut(Integer isCut) {
+		this.isCut = isCut;
+	}
 	public Integer getApproveStatus() {
 		return approveStatus;
 	}
