@@ -24,7 +24,7 @@ public class ConstructionWeldListQuery extends BaseJavaQuery {
 					+ "p.project_name,dt.tenders_name,dp.pipeline_name,vpsc.name as pipe_segment_or_cross_name,t.is_anticorrosion_check,t.is_rework,"
 					+ "u.unit_name as construct_unit_name, pu.unit_name as supervision_unit_name, wu.work_unit_code,t.construct_date,"
 //					+ "(t.is_measure+t.is_backfill+t.is_land_restoration+t.has_cut_pipe+t.has_reducer+t.has_bend_pipe) as is_detection,"
-					+ "t.approve_status,t.is_measure "
+					+ "t.approve_status,t.is_measure,t.is_cut "
 				+ "from daq_construction_weld t "
 				+ "left join (select project_name,oid from daq_project where active=1) p on p.oid=t.project_oid "
 				+ "left join (select oid,tenders_name from daq_tenders where active=1) dt on dt.oid=t.tenders_oid "
