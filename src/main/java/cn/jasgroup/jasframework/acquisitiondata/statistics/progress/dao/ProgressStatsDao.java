@@ -202,7 +202,7 @@ public class ProgressStatsDao {
 		String sql = "SELECT tt.*, P .project_name FROM "
 					+ "(SELECT 'measured_result' AS stats_type, project_oid, COALESCE (count(weld_oid), 0) AS stats_result "
 					+ "FROM daq_weld_measured_result "
-					+ "WHERE active = 1 AND approve_status = 2 AND project_oid IN (:projectOids) AND to_char(survey_date,'yyyy-MM-dd') <= :date "
+					+ "WHERE active = 1 AND measure_control_point_type='measure_control_point_type_code_001' and approve_status = 2 AND project_oid IN (:projectOids) AND to_char(survey_date,'yyyy-MM-dd') <= :date "
 					+ "GROUP BY project_oid"
 					+ ") tt LEFT JOIN (select oid,project_name,active from daq_project where active=1) p ON p.oid=tt.project_oid";
 		List queryForList = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOids", projectOids,"date",date), ProgressStatsQueryBo.class);
@@ -464,7 +464,7 @@ public class ProgressStatsDao {
 		String sql = "SELECT tt.*, P .tenders_name FROM "
 					+ "(SELECT 'measured_result' AS stats_type, tenders_oid, COALESCE (count(weld_oid), 0) AS stats_result "
 					+ "FROM daq_weld_measured_result "
-					+ "WHERE active = 1 AND approve_status = 2 AND project_oid = :projectOid AND to_char(survey_date,'yyyy-MM-dd') <= :date "
+					+ "WHERE active = 1 AND measure_control_point_type='measure_control_point_type_code_001' AND approve_status = 2 AND project_oid = :projectOid AND to_char(survey_date,'yyyy-MM-dd') <= :date "
 					+ "GROUP BY tenders_oid"
 					+ ") tt LEFT JOIN (select oid,tenders_name,active,create_datetime from daq_tenders where active=1) p ON p.oid=tt.tenders_oid  order by p.create_datetime";
 		List queryForList = this.commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid,"date",date), ProgressStatsQueryBo.class);
