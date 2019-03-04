@@ -24,7 +24,7 @@ import javax.persistence.Transient;
 @UniqueConstraints(
         strategys = {
                 @UniqueConstraintStrategy(
-                        columnNames = {"projectOid"},
+                        columnNames = {"active","projectOid"},
                         name = "项目名称不能重复"
                 )
         }
