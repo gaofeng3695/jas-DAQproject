@@ -51,7 +51,7 @@ public class DaqInjectService {
 			strategySql = " and create_user_id='"+ThreadLocalHolder.getCurrentUserId()+"'";
 		}
 		String sqlTemp = sql.substring(0,sql.lastIndexOf("@privilege_strategy_sql")).trim();
-		if(sqlTemp.endsWith("and")){
+		if(sqlTemp.endsWith("and") || sqlTemp.endsWith("where")){
 			strategySql = strategySql.replaceFirst(" and", "");
 		}
 		sql = sql.replaceAll("@privilege_strategy_sql", strategySql);
