@@ -2812,8 +2812,8 @@ var mvConfig = {
         name: "编号",
         isRequired: true,
         rules: [{
-          min: 0,
-          max: "50",
+          min: "0",
+          max: 50,
           message: "不能超过50个字"
         }]
       },
