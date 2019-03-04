@@ -14,7 +14,7 @@ public class VariateInjectUtils {
 		MapQuery paramArray = new MapQuery();
 		paramArray.setSql(sql);
 		try {
-			List<CommonProcess> CommonProcessList = ListQueryContainer.getQueryBeforeProcessList("F000024");
+			List<CommonProcess> CommonProcessList = ListQueryContainer.getQueryBeforeProcessList("");
 			for(CommonProcess commonProcess:CommonProcessList){
 				Object precessService = commonProcess.getServiceObject();
 				Method method = commonProcess.getMethodObject();
