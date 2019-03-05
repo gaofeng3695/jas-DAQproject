@@ -484,8 +484,9 @@
 					supervisionEngineer: null,
 					collectionPerson: null,
 					collectionDate: '',
-					//    "approveStatus": null,
-					//  "geoState": "正常",
+					sequenceNumberFirst:"",
+					sequenceNumberSecond:"",
+					airflowDirection:1,
 					remarks: ""
 				},
 				pickerOptionsStart: {
@@ -518,10 +519,9 @@
 					var that = this;
 					var weldCode = "";
 					for (var key in that.ruleObj) {
-						var value = that.getValueById(key, newValue[key]);
-						weldCode += value ? value + "-" : "";
-					}
-					if (weldCode) that.formData.weldCode = weldCode.substring(0, weldCode.length - 1);
+						  weldCode += that.getValueById(key, newValue[key]);
+						}
+					if (weldCode) that.formData.weldCode = weldCode.substring(1, weldCode.length);
 				},
 				immediate: true,
 				deep: true
@@ -985,7 +985,7 @@
 				jasTools.ajax.post(url, {
 					projectOid: that.formData.projectOid
 				}, function (data) {
-					
+
 					if (data.rows.length == 0) {
 						that.weldDisabled = false;
 						that.rules.weldCode = [{
@@ -1000,7 +1000,6 @@
 						data.rows[0].weldcodeRegular.split("-").forEach(function (item, index) {
 							if (item == "焊口顺序号") {
 								that.ruleObj.sequenceNumberFirst = index;
-								that.ruleObj.sequenceNumberSecond = index;
 							} else {
 								that.ruleObj[tableMap[item]] = index;
 							}
@@ -1019,9 +1018,20 @@
 					},
 					weldType: {
 						domainField: "weldTypes",
+						valueKey:{
+						 "weld_type_code_001":"M",
+					     "weld_type_code_002":"LT",
+					     "weld_type_code_003":"LS",
+					     "weld_type_code_004":"LJ"
+						}
 					},
 					weldMethod: {
-						domainField: "weldMethods"
+						domainField: "weldMethods",
+						valueKey:{
+							 "welding_method_temp_code_001":"S",
+						   "welding_method_temp_code_002":"B",
+						   "welding_method_temp_code_003":"Q"
+						}
 					},
 					constructUnit: {
 						domainField: "constructUnits",
@@ -1038,11 +1048,23 @@
 					},
 				};
 				if (!domainMap[key]) {
-					value = that.formData[key];
+					if(key=="sequenceNumberFirst"&&that.formData.sequenceNumberFirst){
+						var direction=that.formData.airflowDirection?"+":"-";
+						value=direction+""+that.formData.sequenceNumberFirst;
+						if(that.formData.sequenceNumberSecond!=""){
+							value+="+"+that.formData.sequenceNumberSecond
+						}	
+					}else{
+                         value = that.formData[key];
+					}
 				} else {
 					that.domain[domainMap[key].domainField].forEach(function (item) {
 						if (item.key == id) {
-							value =domainMap[key].code?item[domainMap[key].code]:item.value;
+							if(key=="weldType"||key=="weldMethod"){
+								value="-"+domainMap[key].valueKey[item.key];
+							}else{
+								value ="-"+domainMap[key].code?item[domainMap[key].code]:item.value;
+							}
 						}
 					});
 				}
@@ -1070,18 +1092,18 @@
 							required: true,
 							message: '焊口顺序号为必填项',
 						}]
-					},
-					airflowDirection: {
-						isRequired: "directionRequired",
-						rule: [{
-							required: true,
-							message: '气流方向为必填项',
-						}]
-					},
+					}
 				};
 				if (!map[key]) return;
 				this[map[key].isRequired] = true;
 				this.rules[key] = map[key].rule;
+				if(key=="sequenceNumberFirst"){
+					this.directionRequired=true;
+					this.rules.airflowDirection= [{
+						required: true,
+						message: '气流方向为必填项',
+					}];
+				}
 			}
 		},
 	});
