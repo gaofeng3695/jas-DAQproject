@@ -484,9 +484,9 @@
 					supervisionEngineer: null,
 					collectionPerson: null,
 					collectionDate: '',
-					sequenceNumberFirst:"",
-					sequenceNumberSecond:"",
-					airflowDirection:1,
+					sequenceNumberFirst: "",
+					sequenceNumberSecond: "",
+					airflowDirection: 1,
 					remarks: ""
 				},
 				pickerOptionsStart: {
@@ -506,10 +506,12 @@
 		},
 		watch: {
 			'formData.sequenceNumberFirst': {
-				handler: function () {
+				handler: function (oldValue,newValue) {
 					var that = this;
-					if (that.formData.sequenceNumberFirst!=null) {
-						that.formData.sequenceNumberFirst = (Array(3).join(0) + that.formData.sequenceNumberFirst).slice(-3);
+					if (that.formData.sequenceNumberFirst != null) {
+						var value= (Array(3).join(0) + that.formData.sequenceNumberFirst).slice(-3);
+						that.formData.sequenceNumberFirst =value;
+						newValue=value;
 					}
 				},
 				deep: true
@@ -519,8 +521,8 @@
 					var that = this;
 					var weldCode = "";
 					for (var key in that.ruleObj) {
-						  weldCode += that.getValueById(key, newValue[key]);
-						}
+						weldCode += that.getValueById(key, newValue[key]);
+					}
 					if (weldCode) that.formData.weldCode = weldCode.substring(1, weldCode.length);
 				},
 				immediate: true,
@@ -1018,19 +1020,19 @@
 					},
 					weldType: {
 						domainField: "weldTypes",
-						valueKey:{
-						 "weld_type_code_001":"M",
-					     "weld_type_code_002":"LT",
-					     "weld_type_code_003":"LS",
-					     "weld_type_code_004":"LJ"
+						valueKey: {
+							"weld_type_code_001": "M",
+							"weld_type_code_002": "LT",
+							"weld_type_code_003": "LS",
+							"weld_type_code_004": "LJ"
 						}
 					},
 					weldMethod: {
 						domainField: "weldMethods",
-						valueKey:{
-							 "welding_method_temp_code_001":"S",
-						   "welding_method_temp_code_002":"B",
-						   "welding_method_temp_code_003":"Q"
+						valueKey: {
+							"welding_method_temp_code_001": "S",
+							"welding_method_temp_code_002": "B",
+							"welding_method_temp_code_003": "Q"
 						}
 					},
 					constructUnit: {
@@ -1048,22 +1050,24 @@
 					},
 				};
 				if (!domainMap[key]) {
-					if(key=="sequenceNumberFirst"&&that.formData.sequenceNumberFirst){
-						var direction=that.formData.airflowDirection?"+":"-";
-						value=direction+""+that.formData.sequenceNumberFirst;
-						if(that.formData.sequenceNumberSecond!=""){
-							value+="+"+that.formData.sequenceNumberSecond
-						}	
-					}else{
-                         value = that.formData[key];
+					if (key == "sequenceNumberFirst" && that.formData.sequenceNumberFirst) {
+						var direction = that.formData.airflowDirection ? "+" : "-";
+						value = direction + "" + that.formData.sequenceNumberFirst;
+						if (that.formData.sequenceNumberSecond != "") {
+							value += "+" + that.formData.sequenceNumberSecond
+						}
+					} else {
+						value = that.formData[key];
 					}
 				} else {
 					that.domain[domainMap[key].domainField].forEach(function (item) {
-						if (item.key == id) {
-							if(key=="weldType"||key=="weldMethod"){
-								value="-"+domainMap[key].valueKey[item.key];
-							}else{
-								value ="-"+domainMap[key].code?item[domainMap[key].code]:item.value;
+						if (item.key == id&&that.formData[key]) {
+							if(key=="workUnitOid") console.log(item)
+							if (key == "weldType" || key == "weldMethod") {
+								value = "-" + domainMap[key].valueKey[item.key];
+							} else {
+								value = domainMap[key].code?item[domainMap[key].code]:item.value;
+								value="-"+value;
 							}
 						}
 					});
@@ -1091,15 +1095,18 @@
 						rule: [{
 							required: true,
 							message: '焊口顺序号为必填项',
+						},{
+							pattern:/^\d{3}$/,
+							message:"焊口顺序号必须为3位数字"
 						}]
 					}
 				};
 				if (!map[key]) return;
 				this[map[key].isRequired] = true;
 				this.rules[key] = map[key].rule;
-				if(key=="sequenceNumberFirst"){
-					this.directionRequired=true;
-					this.rules.airflowDirection= [{
+				if (key == "sequenceNumberFirst") {
+					this.directionRequired = true;
+					this.rules.airflowDirection = [{
 						required: true,
 						message: '气流方向为必填项',
 					}];
