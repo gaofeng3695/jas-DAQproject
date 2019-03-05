@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.jasgroup.jasframework.acquisitiondata.utils.VariateInjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -93,13 +94,14 @@ public class PipeDao {
 	public List<Map<String,Object>> getMaterialHotBendsList(String projectOid,String type){
 		String sql = null;
 		if(type.equals("0")){
-			sql = "select oid as key,hot_bends_code as value,back_is_use,front_is_use,project_oid from daq_material_hot_bends where active=1";
+			sql = "select oid as key,hot_bends_code as value,back_is_use,front_is_use,project_oid from daq_material_hot_bends where active=1 and  @privilege_strategy_sql";
 		}else{
-			sql = "select oid as key,hot_bends_code as value,back_is_use,front_is_use,project_oid from daq_material_hot_bends where active=1 and is_check=0";
+			sql = "select oid as key,hot_bends_code as value,back_is_use,front_is_use,project_oid from daq_material_hot_bends where active=1 and @privilege_strategy_sql and is_check=0";
 		}
 		if(StringUtils.isNotBlank(projectOid)){
 			sql += " and project_oid='"+projectOid+"'";
 		}
+		sql = VariateInjectUtils.invoke(sql);
 		return baseJdbcDao.queryForList(sql, null);
 	}
 	/**

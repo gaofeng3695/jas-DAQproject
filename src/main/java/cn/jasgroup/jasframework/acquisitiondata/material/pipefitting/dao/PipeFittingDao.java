@@ -3,6 +3,7 @@ package cn.jasgroup.jasframework.acquisitiondata.material.pipefitting.dao;
 import java.util.List;
 import java.util.Map;
 
+import cn.jasgroup.jasframework.acquisitiondata.utils.VariateInjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -162,9 +163,10 @@ public class PipeFittingDao{
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String, Object>> getBendingList(String projectOid) {
-		String sql = "select oid as key,hot_bends_code as value from daq_material_hot_bends where active=1 and is_use=1 and is_measure=0 and project_oid=? "
+		String sql = "select oid as key,hot_bends_code as value from daq_material_hot_bends where active=1 and @privilege_strategy_sql and is_use=1 and is_measure=0 and project_oid=? "
 					+ "union all "
-					+ "select oid as key,pipe_cold_bending_code as value from daq_material_pipe_cold_bending where active=1 and is_use=1 and is_measure=0 and project_oid=?";
+					+ "select oid as key,pipe_cold_bending_code as value from daq_material_pipe_cold_bending where active=1 and @privilege_strategy_sql and is_use=1 and is_measure=0 and project_oid=?";
+		sql = VariateInjectUtils.invoke(sql);
 		return this.baseJdbcTemplate.queryForListHump(sql, new Object[]{projectOid,projectOid});
 	}
 }

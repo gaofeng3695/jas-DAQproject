@@ -3,6 +3,7 @@ package cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.dao;
 import java.util.List;
 import java.util.Map;
 
+import cn.jasgroup.jasframework.acquisitiondata.utils.VariateInjectUtils;
 import cn.jasgroup.jasframework.dataaccess3.core.BaseNamedParameterJdbcTemplate;
 
 import org.apache.commons.lang.StringUtils;
@@ -32,9 +33,10 @@ public class WeldDao extends BaseJdbcDao{
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getWeldList(String pipeSegmentOrCrossOid){
-		String sql = "select oid as key,weld_code as value from daq_construction_weld t where t.is_rework=0 and t.approve_status=2 and t.pipe_segment_or_cross_oid=? and t.is_cut=0 "
+		String sql = "select oid as key,weld_code as value from (select *from daq_construction_weld where @privilege_strategy_sql) t where t.is_rework=0 and t.approve_status=2 and t.pipe_segment_or_cross_oid=? and t.is_cut=0 "
 				+ "union all "
-				+ "select oid as key,rework_weld_code as value from daq_weld_rework_weld where active=1 and approve_status=2 and pipe_segment_or_cross_oid=? and is_cut=0";
+				+ "select oid as key,rework_weld_code as value from daq_weld_rework_weld where active=1 and @privilege_strategy_sql and approve_status=2 and pipe_segment_or_cross_oid=? and is_cut=0";
+		sql = VariateInjectUtils.invoke(sql);
 		return this.queryForList(sql, new Object[]{pipeSegmentOrCrossOid,pipeSegmentOrCrossOid});
 	}
 	/***
@@ -47,7 +49,8 @@ public class WeldDao extends BaseJdbcDao{
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String,Object>> getOnlyWeldList(String pipeSegmentOrCrossOid){
-		String sql = "select oid as key,weld_code as value from daq_construction_weld t where t.is_rework=0 and t.approve_status=2 and t.pipe_segment_or_cross_oid=? and t.is_cut=0";
+		String sql = "select oid as key,weld_code as value from (select *from daq_construction_weld where @privilege_strategy_sql) t where t.is_rework=0 and t.approve_status=2 and t.pipe_segment_or_cross_oid=? and t.is_cut=0";
+		sql = VariateInjectUtils.invoke(sql);
 		return this.queryForList(sql, new Object[]{pipeSegmentOrCrossOid});
 	}
 	/***
@@ -170,14 +173,15 @@ public class WeldDao extends BaseJdbcDao{
 	 */
 	public List<Map<String, Object>> getWeldByCondition(String pipeSegmentOrCrossOid) {
 		String sql = "select total.key,total.value,total.median_stake_oid,stake.median_stake_code,total.relative_mileage from "
-					+ "((select weld.oid as key, weld.weld_code as value, weld.median_stake_oid, weld.relative_mileage from daq_construction_weld weld "
+					+ "((select weld.oid as key, weld.weld_code as value, weld.median_stake_oid, weld.relative_mileage from (select *from daq_construction_weld where @privilege_strategy_sql) weld "
 					+ "where weld.active=1 and weld.pipe_segment_or_cross_oid=? and weld.approve_status in (1,2) and weld.is_rework=0 and weld.is_cut=0 and weld.is_measure=0) "
 					+ "union all "
-					+ "(select rework.oid as key, rework.rework_weld_code  as value, weld.median_stake_oid, weld.relative_mileage from daq_weld_rework_weld rework "
-					+ "LEFT JOIN (select oid,median_stake_oid,relative_mileage from daq_construction_weld where active=1) weld on weld.oid=rework.weld_oid "
+					+ "(select rework.oid as key, rework.rework_weld_code  as value, weld.median_stake_oid, weld.relative_mileage from (select *from daq_weld_rework_weld where @privilege_strategy_sql) rework "
+					+ "LEFT JOIN (select oid,median_stake_oid,relative_mileage from daq_construction_weld where active=1 and @privilege_strategy_sql) weld on weld.oid=rework.weld_oid "
 					+ "where rework.active=1 and rework.pipe_segment_or_cross_oid=? and rework.approve_status in (1,2) and rework.is_cut=0 and rework.is_measure=0)"
 					+ ") total "
 					+ "LEFT JOIN (select oid,median_stake_code from daq_median_stake where active=1) stake on total.median_stake_oid=stake.oid";
+		sql = VariateInjectUtils.invoke(sql);
 		return this.queryForList(sql, new Object[]{pipeSegmentOrCrossOid, pipeSegmentOrCrossOid});
 	}
 	
