@@ -46,7 +46,7 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 				+ "union all "
 				+ "select t.oid,t.parent_id from pri_unit t inner join pri_unit_temp b on t.parent_id=b.oid and t.active=1 "
 				+ ")"
-				+ "select distinct p.oid as key,p.project_name as value,p.create_datetime from daq_implement_scope_ref s left join (select oid,project_name,pipe_network_type_code,create_datetime from daq_project where active=1) p on s.project_oid=p.oid where s.unit_oid in (select oid from pri_unit_temp) "
+				+ "select distinct p.oid as key,p.project_name as value,p.create_datetime,p.project_code from daq_implement_scope_ref s left join (select oid,project_name,pipe_network_type_code,create_datetime,project_code from daq_project where active=1) p on s.project_oid=p.oid where s.unit_oid in (select oid from pri_unit_temp) "
 				+ "and p.pipe_network_type_code in (:pipeNetworkTypeCode) order by p.create_datetime asc";
 		Map<String, Object> paramObject = new HashMap<>();
 		paramObject.put("unitOid", unitOid);

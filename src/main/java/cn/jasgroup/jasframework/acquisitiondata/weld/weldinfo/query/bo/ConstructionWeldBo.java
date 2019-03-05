@@ -370,6 +370,59 @@ public class ConstructionWeldBo extends CommonBaseBo {
 	 */
 	private Integer hasBendPipe;
 
+	// add by cuixianing 2019-3-5
+	/**
+	 * 气流方向
+	 */
+	private Integer airflowDirection;
+
+    /**
+     * 气流方向名称
+     */
+    private String airflowDirectionName;
+
+	/**
+	 * 焊口顺序号1
+	 */
+	private Double sequenceNumberFirst;
+
+	/**
+	 * 焊口顺序号2
+	 */
+	private Double sequenceNumberSecond;
+
+    public String getAirflowDirectionName() {
+        return airflowDirectionName;
+    }
+
+    public void setAirflowDirectionName(String airflowDirectionName) {
+        this.airflowDirectionName = airflowDirectionName;
+    }
+
+    public Integer getAirflowDirection() {
+        return airflowDirection;
+    }
+
+    public void setAirflowDirection(Integer airflowDirection) {
+        this.airflowDirection = airflowDirection;
+    }
+
+    public Double getSequenceNumberFirst() {
+        return sequenceNumberFirst;
+    }
+
+    public void setSequenceNumberFirst(Double sequenceNumberFirst) {
+        this.sequenceNumberFirst = sequenceNumberFirst;
+    }
+
+    public Double getSequenceNumberSecond() {
+        return sequenceNumberSecond;
+    }
+
+    public void setSequenceNumberSecond(Double sequenceNumberSecond) {
+        this.sequenceNumberSecond = sequenceNumberSecond;
+    }
+
     public Integer getIsCut() {
         return isCut;
     }

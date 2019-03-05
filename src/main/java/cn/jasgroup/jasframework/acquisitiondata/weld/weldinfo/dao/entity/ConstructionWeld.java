@@ -257,6 +257,50 @@ public class ConstructionWeld extends CommonJdbcEntity {
      */
     private Integer hasCutPipe;
 
+
+    // add by cuixianing 2019-3-5
+    /**
+     * 气流方向
+     */
+    private Integer airflowDirection;
+
+    /**
+     * 焊口顺序号1
+     */
+    private Double sequenceNumberFirst;
+
+    /**
+     * 焊口顺序号2
+     */
+    private Double sequenceNumberSecond;
+
+    public Integer getAirflowDirection() {
+        return airflowDirection;
+    }
+
+    public void setAirflowDirection(Integer airflowDirection) {
+        this.airflowDirection = airflowDirection;
+        super.setField("airflowDirection");
+    }
+
+    public Double getSequenceNumberFirst() {
+        return sequenceNumberFirst;
+    }
+
+    public void setSequenceNumberFirst(Double sequenceNumberFirst) {
+        this.sequenceNumberFirst = sequenceNumberFirst;
+        super.setField("sequenceNumberFirst");
+    }
+
+    public Double getSequenceNumberSecond() {
+        return sequenceNumberSecond;
+    }
+
+    public void setSequenceNumberSecond(Double sequenceNumberSecond) {
+        this.sequenceNumberSecond = sequenceNumberSecond;
+        super.setField("sequenceNumberSecond");
+    }
+
     public Integer getHasCutPipe() {
         return hasCutPipe;
     }
