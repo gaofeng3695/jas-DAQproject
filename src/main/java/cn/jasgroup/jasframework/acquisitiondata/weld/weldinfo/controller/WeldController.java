@@ -194,10 +194,10 @@ public class WeldController extends BaseController{
 		String token = request.getParameter("token");
 		try {
 			List<Map<String,Object>> rows = this.weldService.getWeldByCondition(pipeSegmentOrCrossOid);
-			if(rows.size()>0){
-				redisService.putValue(token+"_get_weld_list_local", rows);
-				redisService.expirse(token, 5, TimeUnit.HOURS);
-			}
+//			if(rows.size()>0){
+//				redisService.putValue(token+"_get_weld_list_local", rows);
+//				redisService.expirse(token, 5, TimeUnit.HOURS);
+//			}
 			result = new ListResult<>(1, "200", "ok", rows);
 		} catch (Exception e) {
 			result = new ListResult<>(-1, "400", "error");
