@@ -207,16 +207,22 @@
 					name: '相对桩位置',
 					field: 'relativeMileage'
 				}],
-				busArr: [{
-					name: '焊口编号',
-					field: 'weldCode'
-				}, {
+				busArr: [ {
 					name: '焊口类型',
 					field: 'weldTypeName'
 				}, {
 					name: '焊接方式',
 					field: 'weldMethodName'
+				},  {
+					name: '气流方向',
+					field: 'airflowDirection'
 				}, {
+					name: '焊接顺序号',
+					field: 'sequenceNumberFirst'
+				}, {
+					name: '焊口编号',
+					field: 'weldCode'
+				},{
 					name: '前管件类型',
 					field: 'frontPipeTypeName'
 				}, {
@@ -384,6 +390,8 @@
 					oid: that.oid
 				}, function (data) {
 					that.detail = data.rows[0];
+					that.detail.sequenceNumberFirst = (Array(3).join(0) + that.detail.sequenceNumberFirst).slice(-3);//顺序号第一个自动补0
+					that.detail.sequenceNumberFirst=""+that.detail.sequenceNumberFirst+"+"+that.detail.sequenceNumberSecond;
 					that.detail.isGoldeJoint = that.changeValue(data.rows[0].isGoldeJoint);
 					that.detail.isPipeHead = that.changeValue(data.rows[0].isPipeHead);
 					that.detail.isRework = that.changeValue(data.rows[0].isRework);
@@ -412,6 +420,11 @@
 					}
 					if (that.detail.approveStatus == 2) {
 						that.detail.approveStatus = '通过';
+					}
+					if(that.detail.airflowDirection==1){
+						that.detail.airflowDirection="+";	
+					}else{
+						that.detail.airflowDirection="-";
 					}
 					that.addPipeEvent();
 				});

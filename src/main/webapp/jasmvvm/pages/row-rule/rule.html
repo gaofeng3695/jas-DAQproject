@@ -27,8 +27,8 @@
 
 		<jas-list-wrapper slot="mainPanel">
 			<jas-search-for-list slot="search" :form="topSearch" :fields="fields" :fields-config="fieldsConfig" @search="searchList"></jas-search-for-list>
-			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" search-path="/jdbc/commonData/coldBendingPipe/getPage.do"
-			  :add-url="addUrl" :detail-url="detailUrl" delete-path="/daq/clodBendingPipe/delete.do" :class-name="className" :template-code="templateCode"></jas-table-for-list>
+			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" search-path="/jdbc/commonData/weldCodeRegular/getPage.do"
+			  :add-url="addUrl" :detail-url="detailUrl" delete-path="/jdbc/commonData/weldCodeRegular/delete.do" :class-name="className" :template-code="templateCode"></jas-table-for-list>
 		</jas-list-wrapper>
 
 	</div>
@@ -58,6 +58,7 @@
 						field: "projectOid",
 						name: '项目名称'
 					}
+					
 				],
 				fieldsConfig: {
 					projectOid: {
@@ -68,7 +69,10 @@
 				tableFields: [ {
 						name: '项目名称',
 						field: 'projectName'
-					},
+					},{
+						field:"weldcodeRegular",
+						name:"编码规则"
+					}
 				],
 				domain: {
 					project: [], //项目

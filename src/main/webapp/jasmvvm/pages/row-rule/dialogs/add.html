@@ -28,7 +28,7 @@ padding-top:10px;
 						<el-col :xs="23" :sm="12" :md="12" :lg="6" :xl="6">
 							<el-form-item label="项目名称" prop="name" >
 								<el-select v-model="projectOid" placeholder="请选择" size="small">
-									<el-option v-for="item in options" :key="item.key" :label="item.label" :value="item.value">
+									<el-option v-for="item in options" :key="item.key" :label="item.value" :value="item.key">
 
 									</el-option>
 								</el-select>
@@ -48,11 +48,18 @@ padding-top:10px;
 											<span>制定规则字段</span>
 										</div>
 										<draggable element="ul" class="list-group is-grown sort-box unsortList" v-model="unsortList" :options="{group:'article'}"
-										 @start="start">
-											<li class="list-group-item" v-for="element,index in unsortList">
+										>
+										 <template v-for="element,index in unsortList">
+										 	<li class="list-group-item" v-if="element.type">
+												<el-input size="mini"></el-input>
+												<span>{{ index+1}}</span>
+											</li>
+												<li class="list-group-item" v-else>
 												{{element.fieldNameCn}}
 												<span>{{ index+1}}</span>
 											</li>
+										 </template>
+										
 										</draggable>
 									</div>
 									<div class="allsortbox">
@@ -61,15 +68,15 @@ padding-top:10px;
 												<span>规则</span>
 											</div>
 											<div class="sort-box ">
-												<draggable class="list-group rulelist" element="ul" v-model="rulelist" :options="{group:'article'}" @start="start">
+												<draggable class="list-group rulelist" element="ul" v-model="rulelist" :options="{group:'article'}">
 													<template v-for="element,index in rulelist">
-														<li class="list-group-item" v-if="element.fieldNameCn">
-															{{element.fieldNameCn}}
-															<span>{{ index+1}}</span>
+														<li class="list-group-item" v-if="element.type">
+														    <el-input size="mini" v-model="form[index]"></el-input>
+														   	<span>{{ index+1}}</span>
 														</li>
 														<li class="list-group-item" v-else>
-															<el-input size="mini" v-model="form[index]"></el-input>
-															<span>{{ index+1}}</span>
+																{{element.fieldNameCn}}
+														   	<span>{{ index+1}}</span>
 														</li>
 													</template>
 												</draggable>
@@ -104,16 +111,43 @@ padding-top:10px;
 		data: function () {
 			return {
 				unsortList: [{
-					fieldNameCn: "施工单位",
-					fieldName: "custort_unit"
+					fieldNameCn: "项目编号",
+					fieldName: "projectCode",
+					code:"projectcode"
 				},
 				{
-					fieldNameCn: "项目名称",
-					fieldName: "project_name"
+					fieldNameCn: "施工单位编号",
+					fieldName: "constructUnitCode",
+					code:"unitcode"
 				},
 				{
-					fieldNameCn: "标段名称",
-					fieldName: "tenders_name"
+					fieldNameCn: "机组编号",
+					fieldName: "workUnitCode",
+					code:"workcode"
+				},
+				{
+					fieldNameCn: "焊接方式",
+					fieldName: "weldMethod",
+					code:"weldcode"
+				},
+				{
+					fieldNameCn: "桩号",
+					fieldName: "medianStakeOid",
+					code:"mediancode"
+				},
+				{
+					fieldNameCn: "焊口类型",
+					fieldName: "weldType",
+					code:"weldtype"
+				},
+				{
+					fieldNameCn: "气流方向",
+					fieldName: "direction",
+					code:"+"
+				},{
+					fieldNameCn: "焊口顺序号",
+					fieldName: "index",
+					code:"001"
 				}
 				],
 				rulelist: [],
@@ -121,11 +155,12 @@ padding-top:10px;
 
 				},
 				topSearch:{
-					
+
 				},
 				setRule: "",
 				projectOid: "",
-				options: []
+				options: [],
+				isEdit:false,
 			}
 		},
 		watch: {
@@ -133,16 +168,22 @@ padding-top:10px;
 				var that = this;
 				that.setRule = "";
 				that.rulelist.forEach(function (item, index) {
-					if (item.type && item.type == "input") {
-						that.setRule += that.form[index];
-					} else {
-						that.setRule += item.fieldName + "——"
+					if(index==that.rulelist.length-1){
+					  that.setRule += item.fieldNameCn ;
+					}else{
+					  that.setRule += item.fieldNameCn + "-";	
 					}
 				});
 			}
 		},
 		mounted: function () {
-			this.requestProject();
+			var that = this;
+			var param = window.jasTools.base.getParamsInUrl(location.href);
+			if(param.oid){
+			  that.isEdit=true;
+			  that.getDetailByoid(param.oid);
+			}
+			that.requestProject();
 		},
 		methods: {
 			requestProject: function () {
@@ -152,22 +193,61 @@ padding-top:10px;
                    that.options=data.rows;
 				});
 			},
-			start: function (ev) {
-
-			},
 			save: function () {
 				var that = this;
-				that.rulelist.forEach(function (item, index) {
-					if (item.type && item.type == "input") {
-						that.setRule += that.form[index];
-					} else {
-						that.setRule += item.fieldName
-					}
+				var rule="";
+				if(!that.projectOid){
+					top.Vue.prototype.$message('请选择项目名称');
+					return;
+				}
+				if(that.rulelist.length==0){
+					top.Vue.prototype.$message('请选择制定相应的编码规则');
+					return;
+				}
+				that.saveToServer();
+			},
+			saveToServer:function(rule){
+				var that=this;
+				var url=jasTools.base.rootPath + "/jdbc/commonData/weldCodeRegular/save.do";
+				if(that.isEdit){
+					url=jasTools.base.rootPath + "/jdbc/commonData/weldCodeRegular/update.do";	
+				}
+				jasTools.ajax.post(url, {
+					projectOid:that.projectOid,
+					weldcodeRegular:that.setRule
+				}, function (data) {
+					top.Vue.prototype.$message({
+						type: 'success',
+						message: !that.isEdit ? '保存成功' : '修改成功'
+					});
+					that.cancel(1);
 				});
 			},
 			cancel: function (param) {
 				window.parent.jasTools.dialog.close(param);
 			},
+			getDetailByoid:function(oid){
+				var that=this;
+				var url = jasTools.base.rootPath + "/jdbc/commonData/weldCodeRegular/getPage.do";
+				jasTools.ajax.post(url, {
+					oid: oid
+				}, function (data) {
+					that.projectOid=data.rows[0].projectOid;
+					data.rows[0].weldcodeRegular.split("-").forEach(function(item){
+						that.changeUnsortList(item);//针对未分组的进行删除，分组的进行增加
+					});
+				});
+			},
+			changeUnsortList:function(name){
+				var that=this;
+				for(var i=0;i<that.unsortList.length;i++){
+					if(that.unsortList[i].fieldNameCn==name){
+						that.rulelist.push(that.unsortList[i]);
+						that.unsortList.splice(i,1);
+						break;
+					}
+				}
+			}
 		}
 	});
 
