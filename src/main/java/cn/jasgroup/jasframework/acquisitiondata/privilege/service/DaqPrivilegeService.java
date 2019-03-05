@@ -294,9 +294,9 @@ public class DaqPrivilegeService extends BaseService{
 		String hierarchy = unitEntity.getHierarchy();
 		String sql=null;
 		if(hierarchy.startsWith(UnitHierarchyEnum.project_unit.getHierarchy())){
-			sql = "select t.oid as key,t.unit_name as value from pri_unit t where t.active=1";
+			sql = "select t.oid as key,t.unit_name as value,t.unit_code from pri_unit t where t.active=1";
 		}else{
-			sql = "select uu.oid as key,uu.unit_name as value from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid='"+unitOid+"' and uu.active=1";
+			sql = "select uu.oid as key,uu.unit_name as value,uu.unit_code from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid='"+unitOid+"' and uu.active=1";
 		}
 		return this.daqPrivilegeDao.getCurrentUnitId(sql);
 	}
