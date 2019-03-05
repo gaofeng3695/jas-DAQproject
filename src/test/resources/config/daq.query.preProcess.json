@@ -1,5 +1,9 @@
 [
 	{
+		"conditionExpression":"className == 'cn.jasgroup.jasframework.acquisitiondata.utils.TempMapQuery'",
+		"service": "daqInjectService",
+		"method":"selectPrivilegeStrategySql()"
+	},{
 		"conditionExpression":"className == 'cn.jasgroup.jasframework.base.data.MapQuery'",
 		"service": "daqInjectService",
 		"method":"privilegeStrategySql()"
