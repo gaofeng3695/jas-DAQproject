@@ -140,11 +140,12 @@ padding-top:10px;
 					fieldName: "weldType",
 					code:"weldtype"
 				},
+				//{
+					//fieldNameCn: "气流方向",
+					//fieldName: "direction",
+					//code:"+"
+				//},
 				{
-					fieldNameCn: "气流方向",
-					fieldName: "direction",
-					code:"+"
-				},{
 					fieldNameCn: "焊口顺序号",
 					fieldName: "index",
 					code:"001"
@@ -161,6 +162,7 @@ padding-top:10px;
 				projectOid: "",
 				options: [],
 				isEdit:false,
+				oid:"",
 			}
 		},
 		watch: {
@@ -208,14 +210,16 @@ padding-top:10px;
 			},
 			saveToServer:function(rule){
 				var that=this;
+				var obj={
+					projectOid:that.projectOid,
+					weldcodeRegular:that.setRule		
+				};
 				var url=jasTools.base.rootPath + "/jdbc/commonData/weldCodeRegular/save.do";
 				if(that.isEdit){
+					obj.oid=that.oid;
 					url=jasTools.base.rootPath + "/jdbc/commonData/weldCodeRegular/update.do";	
 				}
-				jasTools.ajax.post(url, {
-					projectOid:that.projectOid,
-					weldcodeRegular:that.setRule
-				}, function (data) {
+				jasTools.ajax.post(url, obj, function (data) {
 					top.Vue.prototype.$message({
 						type: 'success',
 						message: !that.isEdit ? '保存成功' : '修改成功'
@@ -233,6 +237,7 @@ padding-top:10px;
 					oid: oid
 				}, function (data) {
 					that.projectOid=data.rows[0].projectOid;
+					that.oid=data.rows[0].oid;
 					data.rows[0].weldcodeRegular.split("-").forEach(function(item){
 						that.changeUnsortList(item);//针对未分组的进行删除，分组的进行增加
 					});
