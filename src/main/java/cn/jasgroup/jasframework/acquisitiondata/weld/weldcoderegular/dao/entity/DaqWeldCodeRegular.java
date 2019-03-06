@@ -29,8 +29,8 @@ import javax.persistence.Transient;
                 )
         }
 )
-@JdbcEntity(name="daq_weldcode_regular")
-public class DaqWeldcodeRegular extends CommonJdbcEntity {
+@JdbcEntity(name="daq_weld_code_regular")
+public class DaqWeldCodeRegular extends CommonJdbcEntity {
 
     /**
      * 项目oid

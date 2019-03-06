@@ -13,8 +13,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import cn.jasgroup.jasframework.acquisitiondata.weld.weldcoderegular.dao.entity.DaqWeldcodeRegular;
-import cn.jasgroup.jasframework.acquisitiondata.weld.weldcoderegular.service.DaqWeldcodeRegularService;
+import cn.jasgroup.jasframework.acquisitiondata.weld.weldcoderegular.dao.entity.DaqWeldCodeRegular;
+import cn.jasgroup.jasframework.acquisitiondata.weld.weldcoderegular.service.DaqWeldCodeRegularService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -73,7 +73,7 @@ public class DaqPrivilegeController extends BaseController{
 	private LoginLogService loginLogService;
 
 	@Resource
-    private DaqWeldcodeRegularService daqWeldcodeRegularService;
+    private DaqWeldCodeRegularService DaqWeldCodeRegularService;
 	
 	/**
 	 * token过期的时间量（默认5）
@@ -504,9 +504,9 @@ public class DaqPrivilegeController extends BaseController{
 			}
 
 			// 查询焊口规则列表
-            List<DaqWeldcodeRegular> daqWeldcodeRegularList =
-                    daqWeldcodeRegularService.getDaqWeldcodeRegularList("");
-            result.put("daqWeldcodeRegularList",daqWeldcodeRegularList);
+            List<DaqWeldCodeRegular> DaqWeldCodeRegularList =
+                    DaqWeldCodeRegularService.getDaqWeldCodeRegularList("");
+            result.put("daqWeldcodeRegularList",DaqWeldCodeRegularList);
 
             String loginName = paramMap.get("loginNum").toString();
 			String base64Image = this.daqPrivilegeService.getFaceInfo(loginName);

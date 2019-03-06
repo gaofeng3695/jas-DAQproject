@@ -1,6 +1,7 @@
 package cn.jasgroup.jasframework.acquisitiondata.weld.weldcoderegular.query;
 
-import cn.jasgroup.jasframework.acquisitiondata.weld.weldcoderegular.dao.entity.DaqWeldcodeRegular;
+import cn.jasgroup.jasframework.acquisitiondata.weld.weldcoderegular.dao.entity.DaqWeldCodeRegular;
+import cn.jasgroup.jasframework.acquisitiondata.weld.weldcoderegular.dao.entity.DaqWeldCodeRegular;
 import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
@@ -15,9 +16,9 @@ import org.apache.commons.lang.StringUtils;
  */
 @QueryConfig(
         scene ="/weldCodeRegular/getPage",
-        resultClass= DaqWeldcodeRegular.class
+        resultClass= DaqWeldCodeRegular.class
 )
-public class DaqWeldcodeRegularQuery extends BaseJavaQuery {
+public class DaqWeldCodeRegularQuery extends BaseJavaQuery {
 
     /**
      * 项目oid
@@ -27,7 +28,7 @@ public class DaqWeldcodeRegularQuery extends BaseJavaQuery {
     @Override
     public String getQuerySql() {
         StringBuffer sql = new StringBuffer();
-        sql.append("select wc.*,pro.project_name from daq_weldcode_regular wc  " +
+        sql.append("select wc.*,pro.project_name from daq_weld_code_regular wc  " +
                 "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = wc.project_oid where wc.active=1 ");
         sql.append(conditionSql());
         return sql.toString();
