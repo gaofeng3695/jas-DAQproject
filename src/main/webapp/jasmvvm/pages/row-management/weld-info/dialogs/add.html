@@ -335,10 +335,10 @@
 					backPipeOids: [], //后管件
 					airflowDirections: [{
 						key: 1,
-						value: '+'
+						value: '正气流'
 					}, {
 						key: 0,
-						value: '-'
+						value: '逆气流'
 					}],
 					surfaceChecks: [{
 						key: 1,
@@ -973,21 +973,10 @@
 			},
 			requestRuleByProjectOid: function (edit) {//表示编辑的时候
 				var that = this;
-				var tableMap = {
-					"气流方向": "airflowDirection",
-					"焊口顺序号": "sequenceNumberFirst",
-					"项目编号": "projectOid",
-					"施工单位编号": "constructUnit",
-					"机组编号": "workUnitOid",
-					"焊接方式": "weldMethod",
-					"焊口类型": "weldType",
-					"桩号": "medianStakeOid"
-				};
 				var url = jasTools.base.rootPath + "/daq/weldcodeRegular/getWeldcodeRegularList.do";
 				jasTools.ajax.post(url, {
 					projectOid: that.formData.projectOid
 				}, function (data) {
-
 					if (data.rows.length == 0) {
 						that.weldDisabled = false;
 						that.rules.weldCode = [{
@@ -999,13 +988,13 @@
 							message: '不能超过50个字'
 						}];
 					} else {
-						data.rows[0].weldcodeRegular.split("-").forEach(function (item, index) {
-							if (item == "焊口顺序号") {
+						data.rows[0].weldCodeRegular.split("-").forEach(function (item, index) {
+							if (item == "sequenceNumberFirst") {
 								that.ruleObj.sequenceNumberFirst = index;
 							} else {
-								that.ruleObj[tableMap[item]] = index;
+								that.ruleObj[item] = index;
 							}
-							that.setRequiredByRule(tableMap[item]);//根据生成的规则 去设定页面相应字段
+							that.setRequiredByRule(item);//根据生成的规则 去设定页面相应字段
 						});
 					}
 				});
@@ -1062,7 +1051,6 @@
 				} else {
 					that.domain[domainMap[key].domainField].forEach(function (item) {
 						if (item.key == id&&that.formData[key]) {
-							if(key=="workUnitOid") console.log(item)
 							if (key == "weldType" || key == "weldMethod") {
 								value = "-" + domainMap[key].valueKey[item.key];
 							} else {
