@@ -6066,3 +6066,29 @@ comment on column daq_approve_tip.create_user_id is '创建人oid';
 comment on column daq_approve_tip.create_user_name is '创建人名称';
 comment on column daq_approve_tip.create_datetime is '创建时间';
 comment on column daq_approve_tip.active is '有效标识';
+
+/***
+ * 焊口编号规则
+ */
+CREATE TABLE "public"."daq_weldcode_regular" (
+"oid" varchar(36) COLLATE "default" NOT NULL,
+"project_oid" varchar(36) COLLATE "default" NOT NULL,
+"weldcode_regular" varchar(150) COLLATE "default",
+"remarks" varchar(200) COLLATE "default",
+"create_user_id" varchar(36) COLLATE "default",
+"create_user_name" varchar(50) COLLATE "default",
+"create_datetime" timestamp(6),
+"modify_user_id" varchar(36) COLLATE "default",
+"modify_user_name" varchar(50) COLLATE "default",
+"modify_datetime" timestamp(6),
+"active" int2 NOT NULL,
+CONSTRAINT "daq_weldcode_regular_pkey" PRIMARY KEY ("oid")
+)
+WITH (OIDS=FALSE);
+
+COMMENT ON TABLE "public"."daq_weldcode_regular" IS '焊口编号规则表';
+COMMENT ON COLUMN "public"."daq_weldcode_regular"."oid" IS '主键';
+COMMENT ON COLUMN "public"."daq_weldcode_regular"."project_oid" IS '项目oid';
+COMMENT ON COLUMN "public"."daq_weldcode_regular"."weldcode_regular" IS '焊口规则';
+COMMENT ON COLUMN "public"."daq_weldcode_regular"."remarks" IS '备注';
+CREATE INDEX "index_daq_weldcode_regular_project_oid_6" ON "public"."daq_weldcode_regular" USING btree ("project_oid");

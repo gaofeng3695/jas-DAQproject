@@ -15,10 +15,7 @@ import org.apache.commons.lang.StringUtils;
  */
 @QueryConfig(
         scene ="/weldCodeRegular/getPage",
-        resultClass= DaqWeldcodeRegular.class,
-        queryBeforeProcess = {
-                @Process(service = "daqInjectService" , method = "injectDataAuthoritySql(dataAuthoritySql)")
-        }
+        resultClass= DaqWeldcodeRegular.class
 )
 public class DaqWeldcodeRegularQuery extends BaseJavaQuery {
 
