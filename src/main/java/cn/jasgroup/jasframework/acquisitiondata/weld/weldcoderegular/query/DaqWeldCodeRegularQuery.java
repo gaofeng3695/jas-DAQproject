@@ -1,8 +1,6 @@
 package cn.jasgroup.jasframework.acquisitiondata.weld.weldcoderegular.query;
 
 import cn.jasgroup.jasframework.acquisitiondata.weld.weldcoderegular.dao.entity.DaqWeldCodeRegular;
-import cn.jasgroup.jasframework.acquisitiondata.weld.weldcoderegular.dao.entity.DaqWeldCodeRegular;
-import cn.jasgroup.jasframework.base.annotation.Process;
 import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 import org.apache.commons.lang.StringUtils;
@@ -42,7 +40,6 @@ public class DaqWeldCodeRegularQuery extends BaseJavaQuery {
             if (StringUtils.isNotBlank(projectOid)) {
                 conditionSql.append(" and wc.project_oid = :projectOid ");
             }
-            conditionSql.append(this.dataAuthoritySql);
         }
         conditionSql.append(" order by wc.create_datetime desc");
         return conditionSql.toString();

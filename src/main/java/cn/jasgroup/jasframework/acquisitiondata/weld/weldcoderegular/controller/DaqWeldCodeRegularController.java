@@ -38,10 +38,10 @@ public class DaqWeldCodeRegularController {
      */
     @RequestMapping("/getWeldcodeRegularList")
     public Object getWeldcodeRegularList(HttpServletRequest request, @RequestBody Map<String,String> param){
-        ListResult<DaqWeldCodeRegular> result = null;
+        ListResult<Map<String,Object>> result = null;
         try {
             String projectOid = param.get("projectOid");
-            List<DaqWeldCodeRegular> rows = this.DaqWeldCodeRegularService.getDaqWeldCodeRegularList(projectOid);
+            List<Map<String,Object>> rows = this.DaqWeldCodeRegularService.getDaqWeldCodeRegularList(projectOid);
             result = new ListResult<>(1, "200", "ok", rows);
         } catch (Exception e) {
             result = new ListResult<>(-1, "400", "error");
