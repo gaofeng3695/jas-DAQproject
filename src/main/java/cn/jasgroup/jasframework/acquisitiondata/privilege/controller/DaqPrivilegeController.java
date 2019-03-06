@@ -502,6 +502,7 @@ public class DaqPrivilegeController extends BaseController{
 			}else{
 				result.put("unitType", 0);
 			}
+			result.put("unitCode",unitEntity.getUnitCode());
 
 			// 查询焊口规则列表
             List<DaqWeldcodeRegular> daqWeldcodeRegularList =
