@@ -1,9 +1,8 @@
 package cn.jasgroup.jasframework.acquisitiondata.weld.weldcoderegular.controller;
 
 import cn.jasgroup.framework.data.result.ListResult;
-import cn.jasgroup.jasframework.acquisitiondata.weld.weldcoderegular.dao.entity.DaqWeldcodeRegular;
-import cn.jasgroup.jasframework.acquisitiondata.weld.weldcoderegular.service.DaqWeldcodeRegularService;
-import org.apache.commons.lang.StringUtils;
+import cn.jasgroup.jasframework.acquisitiondata.weld.weldcoderegular.dao.entity.DaqWeldCodeRegular;
+import cn.jasgroup.jasframework.acquisitiondata.weld.weldcoderegular.service.DaqWeldCodeRegularService;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,10 +22,10 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("daq/weldcodeRegular")
-public class DaqWeldcodeRegularController {
+public class DaqWeldCodeRegularController {
 
     @Resource
-    private DaqWeldcodeRegularService daqWeldcodeRegularService;
+    private DaqWeldCodeRegularService DaqWeldCodeRegularService;
 
 
     /**
@@ -39,10 +38,10 @@ public class DaqWeldcodeRegularController {
      */
     @RequestMapping("/getWeldcodeRegularList")
     public Object getWeldcodeRegularList(HttpServletRequest request, @RequestBody Map<String,String> param){
-        ListResult<DaqWeldcodeRegular> result = null;
+        ListResult<Map<String,Object>> result = null;
         try {
             String projectOid = param.get("projectOid");
-            List<DaqWeldcodeRegular> rows = this.daqWeldcodeRegularService.getDaqWeldcodeRegularList(projectOid);
+            List<Map<String,Object>> rows = this.DaqWeldCodeRegularService.getDaqWeldCodeRegularList(projectOid);
             result = new ListResult<>(1, "200", "ok", rows);
         } catch (Exception e) {
             result = new ListResult<>(-1, "400", "error");
