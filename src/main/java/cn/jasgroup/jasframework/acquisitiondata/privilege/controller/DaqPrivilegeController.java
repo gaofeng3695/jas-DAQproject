@@ -74,7 +74,7 @@ public class DaqPrivilegeController extends BaseController{
 	private LoginLogService loginLogService;
 
 	@Resource
-	private DaqWeldCodeRegularService daqWeldcodeRegularService;
+	private DaqWeldCodeRegularService daqWeldCodeRegularService;
 
 	/**
 	 * token过期的时间量（默认5）
@@ -506,9 +506,9 @@ public class DaqPrivilegeController extends BaseController{
 			result.put("unitCode",unitEntity.getUnitCode());
 
 			// 查询焊口规则列表
-			List<Map<String,Object>> daqWeldcodeRegularList =
-					daqWeldcodeRegularService.getDaqWeldCodeRegularList("");
-			result.put("daqWeldcodeRegularList",daqWeldcodeRegularList);
+			List<Map<String,Object>> daqWeldCodeRegularList =
+					daqWeldCodeRegularService.getDaqWeldCodeRegularList("");
+			result.put("daqWeldCodeRegularList",daqWeldCodeRegularList);
 
 			String loginName = paramMap.get("loginNum").toString();
 			String base64Image = this.daqPrivilegeService.getFaceInfo(loginName);
