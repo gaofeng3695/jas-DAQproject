@@ -21,7 +21,7 @@ import java.util.Map;
 public class DaqWeldCodeRegularService extends BaseService {
 
     @Resource
-    private DaqWeldCodeRegularDao DaqWeldCodeRegularDao;
+    private DaqWeldCodeRegularDao daqWeldCodeRegularDao;
 
     /**
      * <p>功能描述: 查询焊口规则列表。</p>
@@ -32,7 +32,7 @@ public class DaqWeldCodeRegularService extends BaseService {
      * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]</p>
      */
     public List<Map<String,Object>> getDaqWeldCodeRegularList(String projectOid){
-        List<Map<String,Object>> DaqWeldCodeRegularList = DaqWeldCodeRegularDao.getDaqWeldCodeRegularList(projectOid);
+        List<Map<String,Object>> DaqWeldCodeRegularList = daqWeldCodeRegularDao.getDaqWeldCodeRegularList(projectOid);
         return DaqWeldCodeRegularList;
     }
 }

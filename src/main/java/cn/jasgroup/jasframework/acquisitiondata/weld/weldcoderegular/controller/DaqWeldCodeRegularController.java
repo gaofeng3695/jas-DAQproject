@@ -25,7 +25,7 @@ import java.util.Map;
 public class DaqWeldCodeRegularController {
 
     @Resource
-    private DaqWeldCodeRegularService DaqWeldCodeRegularService;
+    private DaqWeldCodeRegularService daqWeldCodeRegularService;
 
 
     /**
@@ -41,7 +41,7 @@ public class DaqWeldCodeRegularController {
         ListResult<Map<String,Object>> result = null;
         try {
             String projectOid = param.get("projectOid");
-            List<Map<String,Object>> rows = this.DaqWeldCodeRegularService.getDaqWeldCodeRegularList(projectOid);
+            List<Map<String,Object>> rows = this.daqWeldCodeRegularService.getDaqWeldCodeRegularList(projectOid);
             result = new ListResult<>(1, "200", "ok", rows);
         } catch (Exception e) {
             result = new ListResult<>(-1, "400", "error");
