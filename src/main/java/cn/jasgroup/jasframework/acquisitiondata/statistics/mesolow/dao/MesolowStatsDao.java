@@ -80,13 +80,36 @@ public class MesolowStatsDao {
 	 */
 	public List<Map<String, Object>> getUnitAndMonthlyGrowth(String projectOid, String month) {
 		String sql = "select u.unit_name,COALESCE(sum(t.pipe_section_length),0) as sum_per_unit from (select pipe_section_length,construct_unit from daq_mv_pipe_section where active=1 and approve_status=2 and project_oid=:projectOid and to_char(collection_date, 'yyyy-MM')=:month "
-					+ "UNION ALL "
-					+ "select pipe_section_length,construct_unit from daq_mv_across_info where active=1 and approve_status=2 and project_oid=:projectOid and to_char(collection_date, 'yyyy-MM')=:month "
-					+ "union ALL "
-					+ "select pipe_section_length,construct_unit from daq_mv_stride_across_info where active=1 and approve_status=2 and project_oid=:projectOid and to_char(collection_date, 'yyyy-MM')=:month) t "
-					+ "LEFT JOIN (select oid,unit_name from pri_unit where active=1) u on u.oid=t.construct_unit  "
-					+ "GROUP BY u.unit_name";
+						+ "UNION ALL "
+						+ "select pipe_section_length,construct_unit from daq_mv_across_info where active=1 and approve_status=2 and project_oid=:projectOid and to_char(collection_date, 'yyyy-MM')=:month "
+						+ "union ALL "
+						+ "select pipe_section_length,construct_unit from daq_mv_stride_across_info where active=1 and approve_status=2 and project_oid=:projectOid and to_char(collection_date, 'yyyy-MM')=:month) t "
+						+ "LEFT JOIN (select oid,unit_name from pri_unit where active=1) u on u.oid=t.construct_unit  "
+						+ "GROUP BY u.unit_name";
 		List<Map<String, Object>> list = commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid, "month", month));
+		return list;
+	}
+
+	/**
+	 * <p>功能描述：根据项目和年份查询各施工单位的月新增。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @param year
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年3月7日 下午4:20:39。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getMonthAndUnitAndMonthlyGrowth(String projectOid, String year) {
+		String sql = "select to_char(t.collection_date,'MM') as month,u.unit_name,COALESCE(sum(t.pipe_section_length),0) as sum_per_month from  "
+						+ "(select pipe_section_length,construct_unit,collection_date from daq_mv_pipe_section where active=1 and approve_status=2 and project_oid=:projectOid and to_char(collection_date, 'yyyy')=:year "
+						+ "UNION ALL "
+						+ "select pipe_section_length,construct_unit,collection_date from daq_mv_across_info where active=1 and approve_status=2 and project_oid=:projectOid and to_char(collection_date, 'yyyy')=:year "
+						+ "union ALL "
+						+ "select pipe_section_length,construct_unit,collection_date from daq_mv_stride_across_info where active=1 and approve_status=2 and project_oid=:projectOid and to_char(collection_date, 'yyyy')=:year) t "
+						+ "LEFT JOIN (select oid,unit_name from pri_unit where active=1) u on u.oid=t.construct_unit   "
+						+ "GROUP BY u.unit_name,to_char(t.collection_date,'MM')";
+		List<Map<String, Object>> list = commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid, "year", year));
 		return list;
 	}
 

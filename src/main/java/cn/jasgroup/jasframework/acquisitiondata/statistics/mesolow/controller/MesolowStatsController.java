@@ -53,7 +53,7 @@ public class MesolowStatsController {
 			if (StringUtils.isBlank(year)) {
 				return new ListResult<>(-1,"400","请选择年份");
 			}
-			//根据项目、日期查询每个标段的检测口数和一次合格率
+			//根据项目和时间查询当月各施工单位月新增。
 			Map<String, Object> rows = mesolowStatsService.getMonthlyGrothAndTotal(projectOids, year);
 			result = new SimpleResult<>(1,"200","ok",rows);
 		}catch(Exception e){
@@ -86,11 +86,44 @@ public class MesolowStatsController {
 			}
 			Date date = DateTimeUtil.getDateFromDateString(month, "yyyy-MM");
 			month = DateTimeUtil.getFormatDate(date, "yyyy-MM");
-			//根据项目、日期查询每个标段的检测口数和一次合格率
+			//根据项目和时间查询当月各施工单位月新增。
 			Map<String, Object> rows = mesolowStatsService.getSingleMonthlyGroth(projectOid, month);
 			result = new SimpleResult<>(1,"200","ok",rows);
 		}catch(Exception e){
 			result = new SimpleResult<>(-1,"400","error");
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	/**
+	 * <p>功能描述：施工单位-月新增管道长度(全年)。</p>
+	  * <p> 葛建。</p>	
+	  * @param params
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年3月7日 上午10:31:18。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@PostMapping("getMonthlyGrowthAllYear")
+	@ResponseBody
+	public Object getMonthlyGrowthAllYear(@RequestBody Map<String, Object> params){
+		ListResult<Map<String, Object>> result= null;
+		try{
+			//项目
+			String projectOid = (String) params.get("projectOid");
+			//月份
+			String year = (String)params.get("date");
+			if (StringUtils.isBlank(year)) {
+				return new ListResult<>(-1,"400","请选择年月");
+			}
+			Date date = DateTimeUtil.getDateFromDateString(year, "yyyy");
+			year = DateTimeUtil.getFormatDate(date, "yyyy");
+			//施工单位-月新增管道长度(全年)。
+			List<Map<String, Object>> rows = mesolowStatsService.getMonthlyGrowthAllYear(projectOid, year);
+			result = new ListResult<>(1,"200","ok",rows);
+		}catch(Exception e){
+			result = new ListResult<>(-1,"400","error");
 			e.printStackTrace();
 		}
 		return result;

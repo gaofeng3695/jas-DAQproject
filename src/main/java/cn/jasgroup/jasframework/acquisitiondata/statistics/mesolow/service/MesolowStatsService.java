@@ -1,11 +1,13 @@
 package cn.jasgroup.jasframework.acquisitiondata.statistics.mesolow.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.elasticsearch.index.fielddata.SortingBinaryDocValues;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -148,5 +150,69 @@ public class MesolowStatsService {
 			result.put("monthlyGrowths", monthlyGrowthArray);
 		}
 		return result;
+	}
+
+	/**
+	 * <p>功能描述：施工单位-月新增管道长度(全年)。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @param year
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年3月7日 下午3:32:34。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getMonthlyGrowthAllYear(String projectOid, String year) {
+		// 结果集
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		// 用于定位索引
+		String[] monthArray = new String[]{"01","02","03","04","05","06","07","08","09","10","11","12"};	
+		// 根据项目查询所有的施工单位
+		List<Map<String, Object>> constructUnitList = qualityStatsDao.getConstructUnitByProjectOid(projectOid);
+		// 根据项目和年份查询各施工单位的月新增
+		List<Map<String, Object>> monthlyGrowthList = mesolowStatsDao.getMonthAndUnitAndMonthlyGrowth(projectOid, year);
+		if (constructUnitList.size() > 0) {
+			for (int i = 0; i < constructUnitList.size(); i++) {
+				Map<String, Object> result = new HashMap<>();
+				// 用于封装月新增数组返回值
+				Double[] monthlyGrowthArray = StatsUtils.getStaticDoubleArray(13, 0.0);
+				if (monthlyGrowthList.size() > 0) {
+					for (int j = 0; j < monthlyGrowthList.size(); j++) {
+						// 若部门名称相同，则通过月份字段获取对应的索引位置，将月新增数组更新
+						if ((constructUnitList.get(i).get("value").toString()).equals(monthlyGrowthList.get(j).get("unitName").toString())) {
+							int index = getIndex(monthArray, monthlyGrowthList.get(j).get("month").toString());
+							// 保留一位小数
+							BigDecimal bg = new BigDecimal(Double.parseDouble(monthlyGrowthList.get(j).get("sumPerMonth").toString()));
+							monthlyGrowthArray[index] = bg.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
+						}
+					}	
+				}
+				// 获取施工单位月新增总和
+				monthlyGrowthArray[monthlyGrowthArray.length-1] = getSum(monthlyGrowthArray);
+				
+				result.put(constructUnitList.get(i).get("value").toString(), monthlyGrowthArray);
+				resultList.add(result);
+			}
+		}
+		return resultList;
+	}
+
+	/**
+	 * <p>功能描述：求数组各元素的总和。</p>
+	  * <p> 葛建。</p>	
+	  * @param monthlyGrowthArray
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年3月7日 下午5:17:07。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	private double getSum(Double[] monthlyGrowthArray) {
+		double total = 0.0;
+		for (Double double1 : monthlyGrowthArray) {
+			total += double1;
+		}
+		BigDecimal bg = new BigDecimal(total);
+		total = bg.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
+		return total;
 	}
 }
