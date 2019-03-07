@@ -333,13 +333,13 @@
 					backpipeTypes: [], //管件类型
 					frontPipeOids: [], //前管件
 					backPipeOids: [], //后管件
-					airflowDirections: [{
-						key: 1,
-						value: '正气流'
-					}, {
-						key: 0,
-						value: '逆气流'
-					}],
+					airflowDirections:[{
+		                value: '顺输油/气',
+		                key: 1,
+		            },{
+		                value: '逆输油/气',
+		                key: 0,
+		            }],
 					surfaceChecks: [{
 						key: 1,
 						value: '合格'
@@ -1042,7 +1042,7 @@
 					if (key == "sequenceNumberFirst" && that.formData.sequenceNumberFirst) {
 						var direction = that.formData.airflowDirection ? "+" : "-";
 						value = direction + "" + that.formData.sequenceNumberFirst;
-						if (that.formData.sequenceNumberSecond != "") {
+						if (that.formData.sequenceNumberSecond||that.formData.sequenceNumberSecond==0) {
 							value += "+" + that.formData.sequenceNumberSecond
 						}
 					} else {

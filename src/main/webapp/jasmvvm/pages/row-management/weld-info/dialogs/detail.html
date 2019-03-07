@@ -391,7 +391,9 @@
 				}, function (data) {
 					that.detail = data.rows[0];
 					that.detail.sequenceNumberFirst = (Array(3).join(0) + that.detail.sequenceNumberFirst).slice(-3);//顺序号第一个自动补0
-					that.detail.sequenceNumberFirst=""+that.detail.sequenceNumberFirst+"+"+that.detail.sequenceNumberSecond;
+					if(that.detail.sequenceNumberSecond==0||that.detail.sequenceNumberSecond){
+						that.detail.sequenceNumberFirst=""+that.detail.sequenceNumberFirst+"+"+that.detail.sequenceNumberSecond;	
+					}
 					that.detail.isGoldeJoint = that.changeValue(data.rows[0].isGoldeJoint);
 					that.detail.isPipeHead = that.changeValue(data.rows[0].isPipeHead);
 					that.detail.isRework = that.changeValue(data.rows[0].isRework);
