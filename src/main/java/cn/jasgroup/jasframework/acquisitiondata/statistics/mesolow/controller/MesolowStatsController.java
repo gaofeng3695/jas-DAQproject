@@ -1,5 +1,6 @@
 package cn.jasgroup.jasframework.acquisitiondata.statistics.mesolow.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import cn.jasgroup.framework.data.result.ListResult;
 import cn.jasgroup.framework.data.result.SimpleResult;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.mesolow.service.MesolowStatsService;
+import cn.jasgroup.jasframework.utils.DateTimeUtil;
 
 /**
  * 
@@ -39,9 +41,9 @@ public class MesolowStatsController {
 	  * <p>创建日期:2019年3月6日 下午5:17:28。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	@PostMapping("getMonthLyGrothAndTotal")
+	@PostMapping("getMonthlyGrothAndTotal")
 	@ResponseBody
-	public Object getMonthLyGrothAndTotal(@RequestBody Map<String, Object> params){
+	public Object getMonthlyGrothAndTotal(@RequestBody Map<String, Object> params){
 		SimpleResult<Map<String, Object>> result= null;
 		try{
 			//项目
@@ -52,7 +54,40 @@ public class MesolowStatsController {
 				return new ListResult<>(-1,"400","请选择年份");
 			}
 			//根据项目、日期查询每个标段的检测口数和一次合格率
-			Map<String, Object> rows = mesolowStatsService.getMonthLyGrowthAndTotal(projectOids, year);
+			Map<String, Object> rows = mesolowStatsService.getMonthlyGrothAndTotal(projectOids, year);
+			result = new SimpleResult<>(1,"200","ok",rows);
+		}catch(Exception e){
+			result = new SimpleResult<>(-1,"400","error");
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	/**
+	 * <p>功能描述：施工单位-月新增管道长度(单月)。</p>
+	  * <p> 葛建。</p>	
+	  * @param params
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年3月7日 上午10:31:18。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@PostMapping("getSingleMonthlyGroth")
+	@ResponseBody
+	public Object getSingleMonthlyGroth(@RequestBody Map<String, Object> params){
+		SimpleResult<Map<String, Object>> result= null;
+		try{
+			//项目
+			String projectOid = (String) params.get("projectOid");
+			//月份
+			String month = (String)params.get("date");
+			if (StringUtils.isBlank(month)) {
+				return new ListResult<>(-1,"400","请选择年月");
+			}
+			Date date = DateTimeUtil.getDateFromDateString(month, "yyyy-MM");
+			month = DateTimeUtil.getFormatDate(date, "yyyy-MM");
+			//根据项目、日期查询每个标段的检测口数和一次合格率
+			Map<String, Object> rows = mesolowStatsService.getSingleMonthlyGroth(projectOid, month);
 			result = new SimpleResult<>(1,"200","ok",rows);
 		}catch(Exception e){
 			result = new SimpleResult<>(-1,"400","error");

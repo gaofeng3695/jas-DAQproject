@@ -68,4 +68,26 @@ public class MesolowStatsDao {
 		return list;
 	}
 
+	/**
+	 * <p>功能描述：查询各施工单位当月新增。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @param month
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年3月7日 下午2:27:05。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getUnitAndMonthlyGrowth(String projectOid, String month) {
+		String sql = "select u.unit_name,COALESCE(sum(t.pipe_section_length),0) as sum_per_unit from (select pipe_section_length,construct_unit from daq_mv_pipe_section where active=1 and approve_status=2 and project_oid=:projectOid and to_char(collection_date, 'yyyy-MM')=:month "
+					+ "UNION ALL "
+					+ "select pipe_section_length,construct_unit from daq_mv_across_info where active=1 and approve_status=2 and project_oid=:projectOid and to_char(collection_date, 'yyyy-MM')=:month "
+					+ "union ALL "
+					+ "select pipe_section_length,construct_unit from daq_mv_stride_across_info where active=1 and approve_status=2 and project_oid=:projectOid and to_char(collection_date, 'yyyy-MM')=:month) t "
+					+ "LEFT JOIN (select oid,unit_name from pri_unit where active=1) u on u.oid=t.construct_unit  "
+					+ "GROUP BY u.unit_name";
+		List<Map<String, Object>> list = commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid, "month", month));
+		return list;
+	}
+
 }
