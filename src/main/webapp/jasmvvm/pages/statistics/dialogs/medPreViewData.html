@@ -63,14 +63,14 @@
           lengthMonthViewData: {
             type: "lengthMonthViewData",
             titleArr: ["月份", "每月新增长度（米）", "累计新增长度（米）"],
-            url:jasTools.base.rootPath + "/daq/mesolow/getMonthLyGrothAndTotal.do",
+            url: jasTools.base.rootPath + "/daq/mesolow/getMonthlyGrothAndTotal.do",
             isChangeUnit: false,
           },
-          lengthUnitViewData:{
-        	  type: "lengthUnitViewData",
-              titleArr: ["施工单位|月份", "1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],
-              url:jasTools.base.rootPath + "/daq/mesolow/getMonthLyGrothAndTotal.do",//此时修改为 按照施工单位进行统计的
-              isChangeUnit: false,
+          lengthUnitViewData: {
+            type: "lengthUnitViewData",
+            titleArr: ["施工单位|月份", "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月", "合计"],
+            url: jasTools.base.rootPath + "/daq/mesolow/getMonthlyGrowthAllYear.do",//此时修改为 按照施工单位进行统计的
+            isChangeUnit: false,
           }
         },
         currentObj: {},
@@ -84,61 +84,60 @@
       that.currentObj = that.map[param.isShow];
       if (param.projectOids) {
         that.searchObj.projectOids = param.projectOids.split(",");
-      }else{
-    	  that.searchObj.projectOid = param.projectOid
+      } else {
+        that.searchObj.projectOid = param.projectOid
       }
       if (param.year) {
         that.searchObj.year = param.year;
+      }
+      if (param.date) {
+        that.searchObj.date = param.date;
       }
       that.requestNet();
     },
     methods: {
       requestNet: function () { //各工序分项目对比统计
         var that = this;
-         jasTools.ajax.post(that.currentObj.url, that.searchObj, function (data) {
-	        that.progressData = [];
-	        switch (that.currentObj.type) {
-	          case "lengthMonthViewData":
-	            {
-	        	  var result= data.data;
-	        	  var currentYear=new Date().getFullYear();
-	              if(currentYear==that.searchObj.year){
-	             	 //进行数组的截取
-	             	 var index=new Date().getMonth()+1;
-	             	 result.monthlyGowth=result.monthlyGowth.slice(0,index);
-	             	 result.monthlyTotal=result.monthlyTotal.slice(0,index);
-	              };
-	              result.monthlyGowth.forEach(function (item, index) {
-	                var obj = {
-	                  year: that.searchObj.year + "年" + (index+1)+"月",
-	                  lengthMonth: item,
-	                  totalLength: data.data.monthlyTotal[index]
-	                }
-	                that.progressData.push(obj);
-	              });
-	              break;
-	            }
-	          case "lengthUnitViewData":{
-	        	  //此时没有数据 进行的是数据模拟  数据返回格式如下
-	        	  var result={
-	        		"施工单位1":[10,20,70,30,78,90,45,78,100,67,14,67],
-	        		"施工单位2":[10,20,70,30,78,90,45,78,100,67,14,67],
-	        		"施工单位3":[10,20,70,30,78,90,45,78,100,67,14,67],
-	        	  };
-	        	  for(var key in result){
-	        		  var obj={
-	        		    unit:"",
-	        		  };
-	        		  obj.unit=key;
-	        		  result[key].forEach(function(item,index){
-	        			 obj["month"+index]=item;
-	        		  });
-	        		  that.progressData.push(obj);
-	        	  }
-	        	  break;
-	          }
-	        }
-         });
+        jasTools.ajax.post(that.currentObj.url, that.searchObj, function (data) {
+          that.progressData = [];
+          switch (that.currentObj.type) {
+            case "lengthMonthViewData":
+              {
+                var result = data.data;
+                var currentYear = new Date().getFullYear();
+                if (currentYear == that.searchObj.year) {
+                  //进行数组的截取
+                  var index = new Date().getMonth() + 1;
+                  result.monthlyGowth = result.monthlyGowth.slice(0, index);
+                  result.monthlyTotal = result.monthlyTotal.slice(0, index);
+                };
+                result.monthlyGowth.forEach(function (item, index) {
+                  var obj = {
+                    year: that.searchObj.year + "年" + (index + 1) + "月",
+                    lengthMonth: item,
+                    totalLength: data.data.monthlyTotal[index]
+                  }
+                  that.progressData.push(obj);
+                });
+                break;
+              }
+            case "lengthUnitViewData": {
+              //此时没有数据 进行的是数据模拟  数据返回格式如下
+              var result = data.rows;
+              result.forEach(function (item) {
+                var obj = {};
+                for (var key in item) {
+                  obj.unit = key;
+                  item[key].forEach(function(item,index){
+              	   obj["month"+index]=item;
+                   });
+                }
+               that.progressData.push(obj);
+              });
+              break;
+            }
+          }
+        });
       }
     },
   });

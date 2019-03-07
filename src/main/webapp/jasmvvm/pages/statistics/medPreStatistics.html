@@ -133,7 +133,7 @@
         var that = this;
         that.proByProject.projectOids = projectOids;
         that.proByProject.date = new Date(date).getFullYear();
-        var url = jasTools.base.rootPath + "/daq/mesolow/getMonthLyGrothAndTotal.do";
+        var url = jasTools.base.rootPath + "/daq/mesolow/getMonthlyGrothAndTotal.do";
         jasTools.ajax.post(url, {
           projectOids: that.proByProject.projectOids,
           year: that.proByProject.date + "",
@@ -235,18 +235,14 @@
         that.pipelengthByUnit.projectOid = projectOid;
         var month = (new Date(date).getMonth() + 1) > 9 ? (new Date(date).getMonth() + 1) : "0" + (new Date(date).getMonth() + 1)
         that.pipelengthByUnit.date = new Date(date).getFullYear() + "-" + month;
-        console.log(that.pipelengthByUnit)
-        // var url = jasTools.base.rootPath + "/daq/mesolow/getMonthLyGrothAndTotal.do";
-        // jasTools.ajax.post(url, {
-        //   projectOid: that.pipelengthByUnit.projectOid,
-        //   year: that.pipelengthByUnit.date,
-        // }, function (data) {
-        var data = {
-          unit: ["施工单位1", "施工单位2", "施工单位3", "施工单位4", "施工单位5", "施工单位6"],//表示施工单位数组
-          pipeLength: [20, 10, 60, 30, 70, 40]//表示长度
-        };
-        that.renderPipeLengthByUnit(data);//将获取到的数据 进行解析处理
-        // });
+         var url = jasTools.base.rootPath + "/daq/mesolow/getSingleMonthlyGroth.do";
+         jasTools.ajax.post(url, {
+           projectOid: that.pipelengthByUnit.projectOid,
+           date: that.pipelengthByUnit.date,
+         }, function (data) {
+         var result=data.data;
+        that.renderPipeLengthByUnit(result);//将获取到的数据 进行解析处理
+         });
       },
       renderPipeLengthByUnit: function (data) {
         var that = this;
@@ -304,7 +300,7 @@
           xAxis: [
             {
               type: 'category',
-              data: data.unit,
+              data: data.unitNames,
               axisTick: {
                 alignWithLabel: true
               }
@@ -320,7 +316,7 @@
               name: '长度',
               type: 'bar',
               barMaxWidth: "30%",
-              data: data.pipeLength
+              data: data.monthlyGrowths
             }
           ]
         };
