@@ -117,6 +117,12 @@ var mvConfig = {
         type: "date",
         isRequired: true,
         name: "采集日期",
+        isLessToday: true, //默认是小于今天的
+        pickerOptions: { //用于设置默认是小于今天的
+          disabledDate: function (time) {
+            return time.getTime() > new Date().getTime()
+          }
+        },
       },
       supervisionUnit: {
         type: 'select',
@@ -404,6 +410,12 @@ var mvConfig = {
         type: "date",
         isRequired: true,
         name: "采集日期",
+        isLessToday: true, //默认是小于今天的
+        pickerOptions: { //用于设置默认是小于今天的
+          disabledDate: function (time) {
+            return time.getTime() > new Date().getTime()
+          }
+        },
       },
       supervisionUnit: {
         type: 'select',
@@ -654,7 +666,7 @@ var mvConfig = {
         name: '终止点Y坐标',
         max: 999,
         min: 0,
-        precision:7,
+        precision: 7,
         disabled: true
       },
       endPointz: {
@@ -809,6 +821,12 @@ var mvConfig = {
         type: "date",
         isRequired: true,
         name: "采集日期",
+        isLessToday: true, //默认是小于今天的
+        pickerOptions: { //用于设置默认是小于今天的
+          disabledDate: function (time) {
+            return time.getTime() > new Date().getTime()
+          }
+        },
       },
       supervisionUnit: {
         type: 'select',
@@ -927,7 +945,7 @@ var mvConfig = {
         }],
         formatter: function (a, b, c, d) {
           if (c == 1) return '埋地管';
-          if (c == 2)  return "明管"
+          if (c == 2) return "明管"
         }
       },
       pipeSectionCategory: {
@@ -1191,6 +1209,12 @@ var mvConfig = {
         type: "date",
         isRequired: true,
         name: "采集日期",
+        isLessToday: true, //默认是小于今天的
+        pickerOptions: { //用于设置默认是小于今天的
+          disabledDate: function (time) {
+            return time.getTime() > new Date().getTime()
+          }
+        },
       },
       supervisionUnit: {
         type: 'select',
@@ -1532,6 +1556,12 @@ var mvConfig = {
         type: "date",
         isRequired: true,
         name: "采集日期",
+        isLessToday: true, //默认是小于今天的
+        pickerOptions: { //用于设置默认是小于今天的
+          disabledDate: function (time) {
+            return time.getTime() > new Date().getTime()
+          }
+        },
       },
       supervisionUnit: {
         type: 'select',
@@ -1754,6 +1784,12 @@ var mvConfig = {
         type: "date",
         isRequired: true,
         name: "采集日期",
+        isLessToday: true, //默认是小于今天的
+        pickerOptions: { //用于设置默认是小于今天的
+          disabledDate: function (time) {
+            return time.getTime() > new Date().getTime()
+          }
+        },
       },
       supervisionUnit: {
         type: 'select',
@@ -1793,7 +1829,7 @@ var mvConfig = {
         domainName: "bushing_material_domain",
         isRequired: true
       },
-      bushingMaterialName:{
+      bushingMaterialName: {
         name: '材质'
       },
       bushingSpec: {
@@ -2032,6 +2068,12 @@ var mvConfig = {
         type: "date",
         isRequired: true,
         name: "采集日期",
+        isLessToday: true, //默认是小于今天的
+        pickerOptions: { //用于设置默认是小于今天的
+          disabledDate: function (time) {
+            return time.getTime() > new Date().getTime()
+          }
+        },
       },
       supervisionUnit: {
         type: 'select',
@@ -2155,7 +2197,7 @@ var mvConfig = {
         }],
         formatter: function (a, b, c, d) {
           if (c == 1) return "直埋";
-          if (c == 2)  return "阀门井";
+          if (c == 2) return "阀门井";
         }
       },
       nominalDiameter: {
@@ -2396,6 +2438,12 @@ var mvConfig = {
         type: "date",
         isRequired: true,
         name: "采集日期",
+        isLessToday: true, //默认是小于今天的
+        pickerOptions: { //用于设置默认是小于今天的
+          disabledDate: function (time) {
+            return time.getTime() > new Date().getTime()
+          }
+        },
       },
       supervisionUnit: {
         type: 'select',
@@ -2583,6 +2631,12 @@ var mvConfig = {
         type: "date",
         isRequired: true,
         name: "采集日期",
+        isLessToday: true, //默认是小于今天的
+        pickerOptions: { //用于设置默认是小于今天的
+          disabledDate: function (time) {
+            return time.getTime() > new Date().getTime()
+          }
+        },
       },
       supervisionUnit: {
         type: 'select',
@@ -2765,6 +2819,12 @@ var mvConfig = {
         type: "date",
         isRequired: true,
         name: "采集日期",
+        isLessToday: true, //默认是小于今天的
+        pickerOptions: { //用于设置默认是小于今天的
+          disabledDate: function (time) {
+            return time.getTime() > new Date().getTime()
+          }
+        },
       },
       supervisionUnit: {
         type: 'select',

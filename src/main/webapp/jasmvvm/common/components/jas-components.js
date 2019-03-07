@@ -2440,6 +2440,12 @@ Vue.component('jas-project-select', {
 		},
 		url: {
 			type: String
+		},
+		requestparam:{
+			type:Object,
+			defalut:function(){
+				return {}
+			}	
 		}
 	},
 	data: function () {
@@ -2497,7 +2503,9 @@ Vue.component('jas-project-select', {
 				return;
 			}
 			var url = jasTools.base.rootPath + that.url;
-			jasTools.ajax.post(url, {}, function (data) {
+			var obj={};
+			obj = jasTools.base.extend(obj, that.requestparam);
+			jasTools.ajax.post(url,obj, function (data) {
 				data.rows.forEach(function (item) {
 					that.ids.push(item.key);
 					that.projectArray.push(item);
@@ -2569,6 +2577,12 @@ Vue.component('statistic-group-project', { //项目群的分组
 		},
 		projectarray: {
 			type: Array
+		},
+		requestparam:{
+			type:Object,
+			defalut:function(){
+				return {}
+			}
 		}
 	},
 	data: function () {
@@ -2584,7 +2598,7 @@ Vue.component('statistic-group-project', { //项目群的分组
 		'{{title}}',
 		'</div>',
 		'<div style="float:right;padding:5px 10px;">',
-		'<jas-project-select @requestnet="requesttable" label="项目群" url="/daq/privilege/getProjectList.do" :projectarray="projectarray" :selprojectoids="projectOids" ></jas-project-select>',
+		'<jas-project-select @requestnet="requesttable" :requestparam="requestparam" label="项目群" url="/daq/privilege/getProjectList.do" :projectarray="projectarray" :selprojectoids="projectOids" ></jas-project-select>',
 		'<slot name="unit"></slot>',
 		'<el-date-picker v-model="date" :picker-options="datetype.pickerOptions" :type="datetype.type" :value-format="datetype.format" :placeholder="datetype.placeholder" style="padding-left:10px" size="mini" @change="select">',
 		'</el-date-picker>',
@@ -2592,7 +2606,6 @@ Vue.component('statistic-group-project', { //项目群的分组
 		' </el-row>'
 	].join(''),
 	mounted: function () {
-
 	},
 	methods: {
 		requesttable: function (oids) {
@@ -2620,6 +2633,12 @@ Vue.component('statistic-group', { //项目分组
 		},
 		datetype: {
 			type: Object
+		},
+		requestparam:{
+			type:Object,
+			defalut:function(){
+				return {}
+			}
 		}
 	},
 	data: function () {
@@ -2673,7 +2692,9 @@ Vue.component('statistic-group', { //项目分组
 				return;
 			}
 			var url = jasTools.base.rootPath + "/daq/privilege/getProjectList.do";
-			jasTools.ajax.post(url, {}, function (data) {
+			var obj={};
+			obj = jasTools.base.extend(obj, that.requestparam);
+			jasTools.ajax.post(url, obj, function (data) {
 				data.rows.forEach(function (item) {
 					that.projectArray.push(item);
 				});
