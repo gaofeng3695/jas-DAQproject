@@ -101,14 +101,34 @@ public class MesolowStatsDao {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String, Object>> getMonthAndUnitAndMonthlyGrowth(String projectOid, String year) {
-		String sql = "select to_char(t.collection_date,'MM') as month,u.unit_name,COALESCE(sum(t.pipe_section_length),0) as sum_per_month from  "
-						+ "(select pipe_section_length,construct_unit,collection_date from daq_mv_pipe_section where active=1 and approve_status=2 and project_oid=:projectOid and to_char(collection_date, 'yyyy')=:year "
-						+ "UNION ALL "
-						+ "select pipe_section_length,construct_unit,collection_date from daq_mv_across_info where active=1 and approve_status=2 and project_oid=:projectOid and to_char(collection_date, 'yyyy')=:year "
-						+ "union ALL "
-						+ "select pipe_section_length,construct_unit,collection_date from daq_mv_stride_across_info where active=1 and approve_status=2 and project_oid=:projectOid and to_char(collection_date, 'yyyy')=:year) t "
-						+ "LEFT JOIN (select oid,unit_name from pri_unit where active=1) u on u.oid=t.construct_unit   "
-						+ "GROUP BY u.unit_name,to_char(t.collection_date,'MM')";
+		String sql = "select m.oid,m.unit_name,'['||m.data||','''||coalesce(round(y.year_num,2),0)||''']' as result_data from ( " +
+				"   select u.oid,u.unit_name,array_to_string (array_agg(''''||coalesce(round(v.num,2),0)||''''),',') as data from ( " +
+				"         select * from ( " +
+				"            select oid,unit_name,month,d.hierarchy from ( " +
+				"            select distinct t.oid ,t.unit_name,t.hierarchy from pri_unit t left JOIN daq_implement_scope_ref i on t.oid=i.unit_oid where t.active=1 and t.hierarchy like 'Unit.0001.0005%' and i.project_oid=:projectOid ORDER BY t.hierarchy) d  " +
+				"            left join ( select to_char(tt.day, 'yyyy-mm') as month from (select generate_series(to_date(:year||'-01','yyyy-MM'),to_date(:year||'-12','yyyy-MM'), '1 month') as day) as tt order by month ) pp on 1=1 " +
+				"         ) vv order by vv.hierarchy,vv.month " +
+				"      ) u  " +
+				"      left join ( " +
+				"         select construct_unit,sum(pipe_section_length) as num,to_char(d.collection_date,'yyyy-mm') as month from ( " +
+				"            select pipe_section_length,construct_unit,collection_date from daq_mv_pipe_section where active=1 and approve_status=2 and project_oid=:projectOid and to_char(collection_date, 'yyyy')=:year  " +
+				"            UNION ALL  " +
+				"            select pipe_section_length,construct_unit,collection_date from daq_mv_across_info where active=1 and approve_status=2 and project_oid=:projectOid and to_char(collection_date, 'yyyy')=:year  " +
+				"            union ALL  " +
+				"            select pipe_section_length,construct_unit,collection_date from daq_mv_stride_across_info where active=1 and approve_status=2 and project_oid=:projectOid and to_char(collection_date, 'yyyy')=:year " +
+				"         ) d group by d.construct_unit,to_char(d.collection_date,'yyyy-mm') " +
+				"      ) v on u.oid=construct_unit and v.month=u.month " +
+				"      group by oid,unit_name,u.hierarchy order by u.hierarchy " +
+				") m " +
+				"left join ( " +
+				"   select construct_unit,sum(pipe_section_length) as year_num from ( " +
+				"      select pipe_section_length,construct_unit,collection_date from daq_mv_pipe_section where active=1 and approve_status=2 and project_oid=:projectOid and to_char(collection_date, 'yyyy')=:year  " +
+				"      UNION ALL  " +
+				"      select pipe_section_length,construct_unit,collection_date from daq_mv_across_info where active=1 and approve_status=2 and project_oid=:projectOid and to_char(collection_date, 'yyyy')=:year  " +
+				"      union ALL  " +
+				"      select pipe_section_length,construct_unit,collection_date from daq_mv_stride_across_info where active=1 and approve_status=2 and project_oid=:projectOid and to_char(collection_date, 'yyyy')=:year " +
+				"   ) d group by d.construct_unit,to_char(d.collection_date,'yyyy') " +
+				") y on m.oid=y.construct_unit ";
 		List<Map<String, Object>> list = commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOid", projectOid, "year", year));
 		return list;
 	}
