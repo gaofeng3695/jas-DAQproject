@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.elasticsearch.index.fielddata.SortingBinaryDocValues;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,26 +65,30 @@ public class MesolowStatsService {
 		if (monthlyGrowthList.size() > 0) {
 			for (Map<String, Object> map : monthlyGrowthList) {
 				int index = getIndex(monthArray, (String)map.get("month"));
-				monthlyGrowthArray[index] = Double.parseDouble(map.get("sumPerMonth").toString());
-				// 保留一位小数
-				BigDecimal bgl = new BigDecimal(monthlyGrowthArray[index]);
-				monthlyGrowthArray[index] = bgl.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
+				if (index != -1) {
+					monthlyGrowthArray[index] = Double.parseDouble(map.get("sumPerMonth").toString());
+					// 保留一位小数
+					BigDecimal bgl = new BigDecimal(monthlyGrowthArray[index]);
+					monthlyGrowthArray[index] = bgl.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
+				}
 			}
 		}
 		// 获取当前年月
 		String currentMonth = DateTimeUtil.getFormatDate(DateTimeUtil.getSysDate(), "yyyy-MM");
 		int index = getIndex(monthArray, currentMonth);
-		for (int i = 0; i < monthlyGrowthArray.length; i++) {
-			// 每月月增量 + 截止当前年一月的累计长度 = 当前月累计量
-			total += monthlyGrowthArray[i];
-			monthlyTotalArray[i] = total;
-			// 如果当前月超过系统当前月，则总计量置0
-			if (i > index) {
-				monthlyTotalArray[i] = 0.0;
+		if (index != -1) {
+			for (int i = 0; i < monthlyGrowthArray.length; i++) {
+				// 每月月增量 + 截止当前年一月的累计长度 = 当前月累计量
+				total += monthlyGrowthArray[i];
+				monthlyTotalArray[i] = total;
+				// 如果当前月超过系统当前月，则总计量置0
+				if (i > index) {
+					monthlyTotalArray[i] = 0.0;
+				}
+				// 保留一位小数
+				BigDecimal bg = new BigDecimal(monthlyTotalArray[i]);
+				monthlyTotalArray[i] = bg.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
 			}
-			// 保留一位小数
-			BigDecimal bg = new BigDecimal(monthlyTotalArray[i]);
-			monthlyTotalArray[i] = bg.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
 		}
 		result.put("monthlyGowth", monthlyGrowthArray);
 		result.put("monthlyTotal", monthlyTotalArray);
@@ -141,9 +144,11 @@ public class MesolowStatsService {
 			if (unitAndMonthlyGrowthList.size() > 0) {
 				for (int i = 0; i < unitAndMonthlyGrowthList.size(); i++) {
 					int index = getIndex(unitNameArray, unitAndMonthlyGrowthList.get(i).get("unitName").toString());
-					// 保留一位小数
-					BigDecimal bg = new BigDecimal(Double.parseDouble(unitAndMonthlyGrowthList.get(i).get("sumPerUnit").toString()));
-					monthlyGrowthArray[i] = bg.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
+					if (index != -1) {
+						// 保留一位小数
+						BigDecimal bg = new BigDecimal(Double.parseDouble(unitAndMonthlyGrowthList.get(i).get("sumPerUnit").toString()));
+						monthlyGrowthArray[i] = bg.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
+					}
 				}
 			}
 			result.put("unitNames", unitNameArray);
@@ -181,9 +186,11 @@ public class MesolowStatsService {
 						// 若部门名称相同，则通过月份字段获取对应的索引位置，将月新增数组更新
 						if ((constructUnitList.get(i).get("value").toString()).equals(monthlyGrowthList.get(j).get("unitName").toString())) {
 							int index = getIndex(monthArray, monthlyGrowthList.get(j).get("month").toString());
-							// 保留一位小数
-							BigDecimal bg = new BigDecimal(Double.parseDouble(monthlyGrowthList.get(j).get("sumPerMonth").toString()));
-							monthlyGrowthArray[index] = bg.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
+							if (index != -1) {
+								// 保留一位小数
+								BigDecimal bg = new BigDecimal(Double.parseDouble(monthlyGrowthList.get(j).get("sumPerMonth").toString()));
+								monthlyGrowthArray[index] = bg.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
+							}
 						}
 					}	
 				}
