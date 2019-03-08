@@ -15,6 +15,7 @@ import cn.jasgroup.jasframework.acquisitiondata.statistics.mesolow.dao.MesolowSt
 import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.StatsUtils;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.quality.dao.QualityStatsDao;
 import cn.jasgroup.jasframework.utils.DateTimeUtil;
+import net.sf.json.JSONArray;
 
 /**
  * 
@@ -168,38 +169,17 @@ public class MesolowStatsService {
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	public List<Map<String, Object>> getMonthlyGrowthAllYear(String projectOid, String year) {
-		// 结果集
 		List<Map<String, Object>> resultList = new ArrayList<>();
-		// 用于定位索引
-		String[] monthArray = new String[]{"01","02","03","04","05","06","07","08","09","10","11","12"};	
-		// 根据项目查询所有的施工单位
-		List<Map<String, Object>> constructUnitList = qualityStatsDao.getConstructUnitByProjectOid(projectOid);
-		// 根据项目和年份查询各施工单位的月新增
 		List<Map<String, Object>> monthlyGrowthList = mesolowStatsDao.getMonthAndUnitAndMonthlyGrowth(projectOid, year);
-		if (constructUnitList.size() > 0) {
-			for (int i = 0; i < constructUnitList.size(); i++) {
-				Map<String, Object> result = new HashMap<>();
-				// 用于封装月新增数组返回值
-				Double[] monthlyGrowthArray = StatsUtils.getStaticDoubleArray(13, 0.0);
-				if (monthlyGrowthList.size() > 0) {
-					for (int j = 0; j < monthlyGrowthList.size(); j++) {
-						// 若部门名称相同，则通过月份字段获取对应的索引位置，将月新增数组更新
-						if ((constructUnitList.get(i).get("value").toString()).equals(monthlyGrowthList.get(j).get("unitName").toString())) {
-							int index = getIndex(monthArray, monthlyGrowthList.get(j).get("month").toString());
-							if (index != -1) {
-								// 保留一位小数
-								BigDecimal bg = new BigDecimal(Double.parseDouble(monthlyGrowthList.get(j).get("sumPerMonth").toString()));
-								monthlyGrowthArray[index] = bg.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
-							}
-						}
-					}	
-				}
-				// 获取施工单位月新增总和
-				monthlyGrowthArray[monthlyGrowthArray.length-1] = getSum(monthlyGrowthArray);
-				
-				result.put(constructUnitList.get(i).get("value").toString(), monthlyGrowthArray);
-				resultList.add(result);
+		for(Map<String,Object> map:monthlyGrowthList){
+			Map<String,Object> obj = new HashMap<String, Object>();
+			Object unitName = map.get("unitName");
+			Object resultData = map.get("resultData");
+			if(unitName!=null && resultData!=null){
+				JSONArray array = JSONArray.fromObject(resultData.toString());
+				obj.put(unitName.toString(), array);
 			}
+			resultList.add(obj);
 		}
 		return resultList;
 	}
