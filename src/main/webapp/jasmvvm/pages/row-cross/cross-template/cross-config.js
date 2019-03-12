@@ -774,8 +774,8 @@ var crossConfig = {
     startRelativeMileage: {
       type: 'number',
       name: '相对起始桩位置(m)',
-      max: 99999999,
-      precision: 0,
+      max: 9999999.99,
+      precision: 2,
       isRequired: true
     },
     endMedianStakeOid: {
@@ -788,8 +788,8 @@ var crossConfig = {
     },
     endRelativeMileage: {
       type: 'number',
-      max: 99999999,
-      precision: 0,
+      max: 9999999.99,
+      precision: 2,
       name: '相对结束桩位置(m)',
       isRequired: true
     },
@@ -862,8 +862,8 @@ var crossConfig = {
     startPointx: {
       type: 'number',
       name: '起始点X坐标',
-      max: 999999,
-      precision: 3,
+      max: 999.9999999,
+      precision: 7,
       nameConfig: {
         crossDrilling: '入土点X坐标'
       }
@@ -871,8 +871,8 @@ var crossConfig = {
     startPointy: {
       type: 'number',
       name: '起始点Y坐标',
-      max: 999999,
-      precision: 3,
+      max: 999.9999999,
+      precision: 7,
       nameConfig: {
         crossDrilling: '入土点Y坐标'
       }
@@ -880,8 +880,8 @@ var crossConfig = {
     startPointz: {
       type: 'number',
       name: '起始点高程(m)',
-      max: 999999,
-      precision: 3,
+      max: 999.99,
+      precision: 2,
       nameConfig: {
         crossDrilling: '入土点高程(m)'
       }
@@ -889,8 +889,8 @@ var crossConfig = {
     endPointx: {
       type: 'number',
       name: '结束点X坐标',
-      max: 999999,
-      precision: 3,
+      max: 999.9999999,
+      precision: 7,
       nameConfig: {
         crossDrilling: '出土点X坐标'
       }
@@ -898,8 +898,8 @@ var crossConfig = {
     endPointy: {
       type: 'number',
       name: '结束点Y坐标',
-      max: 999999,
-      precision: 3,
+      max: 999.9999999,
+      precision: 7,
       nameConfig: {
         crossDrilling: '出土点Y坐标'
       }
@@ -907,8 +907,8 @@ var crossConfig = {
     endPointz: {
       type: 'number',
       name: '结束点高程(m)',
-      max: 999999,
-      precision: 3,
+      max: 999.99,
+      precision: 2,
       nameConfig: {
         crossDrilling: '出土点高程(m)'
       }
@@ -916,13 +916,13 @@ var crossConfig = {
     enterAngle: {
       type: 'number',
       name: '入土角',
-      max: 999999,
+      max: 999999.999999,
       precision: 6
     },
     exitAngle: {
       type: 'number',
       name: '出土角',
-      max: 999999,
+      max: 999999.999999,
       precision: 6
     },
     crossingDepartment: {
@@ -937,14 +937,14 @@ var crossConfig = {
     crossLength: {
       type: 'number',
       name: '穿越长度(m)',
-      max: 9999999,
+      max: 9999999.99,
       precision: 2,
       isRequired: true
     },
     crossMaxLength: {
       type: 'number',
       name: '穿越最大深度(m)',
-      max: 99999999,
+      max: 99999999.99,
       precision: 2
     },
     steadyTubeMeasures: {
