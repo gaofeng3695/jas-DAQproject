@@ -197,7 +197,8 @@ public class WeldDao extends BaseJdbcDao{
 	public void changeIsMeasuredField(String weldOid, String bendingOid, int value) {
 		if (StringUtils.isNotBlank(weldOid)) {
 			String sql = "update daq_construction_weld set is_measure=:value where oid=:oid;"
-						+ "update daq_weld_rework_weld set is_measure=:value where oid=:oid;";
+						+ "update daq_weld_rework_weld set is_measure=:value where oid=:oid;"
+						+ "update daq_construction_weld set is_measure=:value where oid in (select weld_oid from daq_weld_rework_weld where oid=:oid)";
 			this.baseNamedParameterJdbcTemplate.batchExecute(sql, ImmutableMap.of("value", value,"oid",weldOid));
 		}
 		if (StringUtils.isNotBlank(bendingOid)) {

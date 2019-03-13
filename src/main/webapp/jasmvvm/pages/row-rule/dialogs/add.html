@@ -59,7 +59,7 @@ padding-top:10px;
 												<span>{{ index+1}}</span>
 											</li>
 										 </template>
-										
+
 										</draggable>
 									</div>
 									<div class="allsortbox">
@@ -112,43 +112,31 @@ padding-top:10px;
 			return {
 				unsortList: [{
 					fieldNameCn: "项目编号",
-					fieldName: "projectCode",
-					code:"projectcode"
+					fieldName: "projectOid"
 				},
 				{
 					fieldNameCn: "施工单位编号",
-					fieldName: "constructUnitCode",
-					code:"unitcode"
+					fieldName: "constructUnit"
 				},
 				{
 					fieldNameCn: "机组编号",
-					fieldName: "workUnitCode",
-					code:"workcode"
+					fieldName: "workUnitOid"
 				},
 				{
 					fieldNameCn: "焊接方式",
-					fieldName: "weldMethod",
-					code:"weldcode"
+					fieldName: "weldMethod"
 				},
 				{
 					fieldNameCn: "桩号",
-					fieldName: "medianStakeOid",
-					code:"mediancode"
+					fieldName: "medianStakeOid"
 				},
 				{
 					fieldNameCn: "焊口类型",
-					fieldName: "weldType",
-					code:"weldtype"
+					fieldName: "weldType"
 				},
-				//{
-					//fieldNameCn: "气流方向",
-					//fieldName: "direction",
-					//code:"+"
-				//},
 				{
 					fieldNameCn: "焊口顺序号",
-					fieldName: "index",
-					code:"001"
+					fieldName: "sequenceNumberFirst"
 				}
 				],
 				rulelist: [],
@@ -158,7 +146,8 @@ padding-top:10px;
 				topSearch:{
 
 				},
-				setRule: "",
+				setRule: "",//设置规则名字
+				setRuleCode:"",//规则code
 				projectOid: "",
 				options: [],
 				isEdit:false,
@@ -169,11 +158,14 @@ padding-top:10px;
 			rulelist: function () {
 				var that = this;
 				that.setRule = "";
+				that.setRuleCode="";
 				that.rulelist.forEach(function (item, index) {
 					if(index==that.rulelist.length-1){
 					  that.setRule += item.fieldNameCn ;
+						that.setRuleCode+=item.fieldName;
 					}else{
-					  that.setRule += item.fieldNameCn + "-";	
+					  that.setRule += item.fieldNameCn + "-";
+						that.setRuleCode+=item.fieldName+"-";
 					}
 				});
 			}
@@ -212,12 +204,13 @@ padding-top:10px;
 				var that=this;
 				var obj={
 					projectOid:that.projectOid,
-					weldcodeRegular:that.setRule		
+					weldCodeRegularName:that.setRule,
+					weldCodeRegular:that.setRuleCode  
 				};
 				var url=jasTools.base.rootPath + "/jdbc/commonData/weldCodeRegular/save.do";
 				if(that.isEdit){
 					obj.oid=that.oid;
-					url=jasTools.base.rootPath + "/jdbc/commonData/weldCodeRegular/update.do";	
+					url=jasTools.base.rootPath + "/jdbc/commonData/weldCodeRegular/update.do";
 				}
 				jasTools.ajax.post(url, obj, function (data) {
 					top.Vue.prototype.$message({
@@ -238,7 +231,7 @@ padding-top:10px;
 				}, function (data) {
 					that.projectOid=data.rows[0].projectOid;
 					that.oid=data.rows[0].oid;
-					data.rows[0].weldcodeRegular.split("-").forEach(function(item){
+					data.rows[0].weldCodeRegular.split("-").forEach(function(item){
 						that.changeUnsortList(item);//针对未分组的进行删除，分组的进行增加
 					});
 				});
@@ -246,7 +239,7 @@ padding-top:10px;
 			changeUnsortList:function(name){
 				var that=this;
 				for(var i=0;i<that.unsortList.length;i++){
-					if(that.unsortList[i].fieldNameCn==name){
+					if(that.unsortList[i].fieldName==name){
 						that.rulelist.push(that.unsortList[i]);
 						that.unsortList.splice(i,1);
 						break;

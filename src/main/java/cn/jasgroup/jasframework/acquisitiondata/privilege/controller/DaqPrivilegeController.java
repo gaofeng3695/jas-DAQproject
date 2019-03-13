@@ -13,8 +13,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import cn.jasgroup.jasframework.acquisitiondata.weld.weldcoderegular.dao.entity.DaqWeldcodeRegular;
-import cn.jasgroup.jasframework.acquisitiondata.weld.weldcoderegular.service.DaqWeldcodeRegularService;
+import cn.jasgroup.jasframework.acquisitiondata.weld.weldcoderegular.dao.entity.DaqWeldCodeRegular;
+import cn.jasgroup.jasframework.acquisitiondata.weld.weldcoderegular.dao.entity.DaqWeldCodeRegular;
+import cn.jasgroup.jasframework.acquisitiondata.weld.weldcoderegular.service.DaqWeldCodeRegularService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,47 +51,47 @@ import cn.jasgroup.jasframework.utils.StringUtil;
 @RestController
 @RequestMapping(value="daq/privilege")
 public class DaqPrivilegeController extends BaseController{
-	
+
 	@Resource(name="daqPrivilegeService")
 	private DaqPrivilegeService daqPrivilegeService;
 
 	@Autowired
 	private UnitService unitService;
-	
+
 	@Autowired
 	private LoginController loginController;
-	
+
 	@Resource(name="i18nService")
 	private I18nService m_I18nService;
-	
+
 	@Autowired
 	private RoleService roleService;
-	
+
 	@Autowired
 	private RedisService redisService;
-	
+
 	@Resource(name="loginLogService")
 	private LoginLogService loginLogService;
 
 	@Resource
-    private DaqWeldcodeRegularService daqWeldcodeRegularService;
-	
+	private DaqWeldCodeRegularService daqWeldCodeRegularService;
+
 	/**
 	 * token过期的时间量（默认5）
 	 */
 	private Long expireTime = 5L;
-	
+
 	/**
 	 * token过期的时间单位（默认小时）  token过期的默认时间是5小时
 	 */
 	private TimeUnit expireTimeUnit = TimeUnit.HOURS;
-	
+
 	@PostConstruct
 	public void init(){
 		String expireTimeStr = ReadConfigUtil.getPlatformConfig("redis.token.expireTime");
-		
+
 		String expireTimeUnitStr = ReadConfigUtil.getPlatformConfig("redis.token.expireTimeUnit");
-		
+
 		if(StringUtils.isNotBlank(expireTimeStr)){
 			expireTime = Long.parseLong(expireTimeStr);
 		}
@@ -98,20 +99,20 @@ public class DaqPrivilegeController extends BaseController{
 			expireTimeUnit =  TimeUnit.valueOf(expireTimeUnitStr);
 		}
 	}
-	
+
 	@RequestMapping("getUnitByCurrentUser")
 	public Object login(HttpServletRequest request){
 		AuthUser user = ThreadLocalHolder.getCurrentUser();
 		return unitService.getUnitBoByOid(user.getUnitId());
 	}
-	
+
 	/***
-	  * <p>功能描述：获取当前用户所在部门下的项目列表。</p>
-	  * <p> 雷凯。</p>	
-	  * @return
-	  * @since JDK1.8。`
-	  * <p>创建日期:2018年7月3日 上午11:40:16。</p>
-	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 * <p>功能描述：获取当前用户所在部门下的项目列表。</p>
+	 * <p> 雷凯。</p>
+	 * @return
+	 * @since JDK1.8。`
+	 * <p>创建日期:2018年7月3日 上午11:40:16。</p>
+	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	@RequestMapping(value="getProjectList")
 	public Object getProjectList(HttpServletRequest request,@RequestBody Map<String,String> param){
@@ -124,18 +125,18 @@ public class DaqPrivilegeController extends BaseController{
 			List<Map<String,Object>> rows = this.daqPrivilegeService.getProject(pipeNetworkTypeCode);
 			result = new ListResult<>(1, "200", "ok", rows);
 		} catch (Exception e) {
-			result = new ListResult<>(-1, "400", "error");			
+			result = new ListResult<>(-1, "400", "error");
 			e.printStackTrace();
 		}
 		return result;
 	}
 	/***
-	  * <p>功能描述：获取当前用户所在部门下的标段列表。</p>
-	  * <p> 雷凯。</p>	
-	  * @return
-	  * @since JDK1.8。
-	  * <p>创建日期:2018年7月3日 上午11:38:18。</p>
-	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 * <p>功能描述：获取当前用户所在部门下的标段列表。</p>
+	 * <p> 雷凯。</p>
+	 * @return
+	 * @since JDK1.8。
+	 * <p>创建日期:2018年7月3日 上午11:38:18。</p>
+	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	@RequestMapping(value="getTendersList",method = RequestMethod.POST)
 	@ResponseBody
@@ -153,11 +154,11 @@ public class DaqPrivilegeController extends BaseController{
 	}
 	/***
 	 * <p>功能描述：根据标段oid获取当前用户所在部门及下级部门的管线列表。</p>
-	  * <p> 雷凯。</p>	
-	  * @return
-	  * @since JDK1.8。
-	  * <p>创建日期:2018年7月3日 上午11:24:25。</p>
-	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 * <p> 雷凯。</p>
+	 * @return
+	 * @since JDK1.8。
+	 * <p>创建日期:2018年7月3日 上午11:24:25。</p>
+	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	@RequestMapping(value="/getPipelineListByTendersOid",method = RequestMethod.POST)
 	@ResponseBody
@@ -173,16 +174,16 @@ public class DaqPrivilegeController extends BaseController{
 		}
 		return result;
 	}
-	
+
 	/**
 	 * <p>功能描述：根据管线oid获取当前用户所在部门及下级部门的站场/阀室列表。</p>
-	  * <p> 葛建。</p>	
-	  * @param request
-	  * @param param
-	  * @return
-	  * @since JDK1.8。
-	  * <p>创建日期:2018年9月17日 上午11:23:06。</p>
-	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 * <p> 葛建。</p>
+	 * @param request
+	 * @param param
+	 * @return
+	 * @since JDK1.8。
+	 * <p>创建日期:2018年9月17日 上午11:23:06。</p>
+	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	@RequestMapping(value="/getPipeStationListByPipelineOid",method = RequestMethod.POST)
 	@ResponseBody
@@ -199,14 +200,14 @@ public class DaqPrivilegeController extends BaseController{
 		return result;
 	}
 	/***
-	  * <p>功能描述：根据管线oid获取当前用户所在部门及一下部门所有的线路段和穿跨越列表。</p>
-	  * <p> 雷凯。</p>	
-	  * @param request
-	  * @param param
-	  * @return
-	  * @since JDK1.8。
-	  * <p>创建日期:2018年7月3日 下午3:03:24。</p>
-	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 * <p>功能描述：根据管线oid获取当前用户所在部门及一下部门所有的线路段和穿跨越列表。</p>
+	 * <p> 雷凯。</p>
+	 * @param request
+	 * @param param
+	 * @return
+	 * @since JDK1.8。
+	 * <p>创建日期:2018年7月3日 下午3:03:24。</p>
+	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	@RequestMapping(value="/getPipeSegmentOrCrossList",method = RequestMethod.POST)
 	@ResponseBody
@@ -224,7 +225,7 @@ public class DaqPrivilegeController extends BaseController{
 	}
 	/***
 	 * <p>功能描述：根据标段获取监理单位列表。</p>
-	 * <p> 雷凯。</p>	
+	 * <p> 雷凯。</p>
 	 * @return
 	 * @since JDK1.8。
 	 * <p>创建日期:2018年7月3日 上午11:24:25。</p>
@@ -245,14 +246,14 @@ public class DaqPrivilegeController extends BaseController{
 		return result;
 	}
 	/***
-	  * <p>功能描述：根据标段获取施工单位列表。</p>
-	  * <p> 雷凯。</p>	
-	  * @param request
-	  * @param param
-	  * @return
-	  * @since JDK1.8。
-	  * <p>创建日期:2018年7月9日 上午11:12:08。</p>
-	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 * <p>功能描述：根据标段获取施工单位列表。</p>
+	 * <p> 雷凯。</p>
+	 * @param request
+	 * @param param
+	 * @return
+	 * @since JDK1.8。
+	 * <p>创建日期:2018年7月9日 上午11:12:08。</p>
+	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	@RequestMapping(value="/getConstructionUnitByTendersOid",method = RequestMethod.POST)
 	@ResponseBody
@@ -269,14 +270,14 @@ public class DaqPrivilegeController extends BaseController{
 		return result;
 	}
 	/***
-	  * <p>功能描述：根据线路段oid或者穿跨越oid获取中线桩列表。</p>
-	  * <p> 雷凯。</p>	
-	  * @param request
-	  * @param param
-	  * @return
-	  * @since JDK1.8。
-	  * <p>创建日期:2018年7月10日 下午2:23:38。</p>
-	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 * <p>功能描述：根据线路段oid或者穿跨越oid获取中线桩列表。</p>
+	 * <p> 雷凯。</p>
+	 * @param request
+	 * @param param
+	 * @return
+	 * @since JDK1.8。
+	 * <p>创建日期:2018年7月10日 下午2:23:38。</p>
+	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	@RequestMapping(value="/getMedianStakeList",method = RequestMethod.POST)
 	@ResponseBody
@@ -306,13 +307,13 @@ public class DaqPrivilegeController extends BaseController{
 		return result;
 	}
 	/***
-	  * <p>功能描述：获取当前用户所在部门。</p>
-	  * <p> 雷凯。</p>	
-	  * @param request
-	  * @return
-	  * @since JDK1.8。
-	  * <p>创建日期:2018年7月10日 下午1:54:28。</p>
-	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 * <p>功能描述：获取当前用户所在部门。</p>
+	 * <p> 雷凯。</p>
+	 * @param request
+	 * @return
+	 * @since JDK1.8。
+	 * <p>创建日期:2018年7月10日 下午1:54:28。</p>
+	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	@RequestMapping(value="/getCurrentUnitId",method = RequestMethod.POST)
 	@ResponseBody
@@ -338,14 +339,14 @@ public class DaqPrivilegeController extends BaseController{
 		return result;
 	}
 	/***
-	  * <p>功能描述：根据管线oid和穿越类型获取当前用户所在部门及下级部门下的穿越列表。</p>
-	  * <p> 雷凯。</p>	
-	  * @param request
-	  * @param param
-	  * @return
-	  * @since JDK1.8。
-	  * <p>创建日期:2018年7月10日 下午6:18:12。</p>
-	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 * <p>功能描述：根据管线oid和穿越类型获取当前用户所在部门及下级部门下的穿越列表。</p>
+	 * <p> 雷凯。</p>
+	 * @param request
+	 * @param param
+	 * @return
+	 * @since JDK1.8。
+	 * <p>创建日期:2018年7月10日 下午6:18:12。</p>
+	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	@RequestMapping(value="/getCrossList",method = RequestMethod.POST)
 	@ResponseBody
@@ -364,7 +365,7 @@ public class DaqPrivilegeController extends BaseController{
 	}
 	/***
 	 * <p>功能描述：根据管线oid获取当前用户所在部门及下级部门下的线路段列表。</p>
-	 * <p> 雷凯。</p>	
+	 * <p> 雷凯。</p>
 	 * @param request
 	 * @param param
 	 * @return
@@ -387,13 +388,13 @@ public class DaqPrivilegeController extends BaseController{
 		return result;
 	}
 	/**
-	  * <p>功能描述：根据监理单位获取对应标段下的施工单位和检测单位。</p>
-	  * <p> 雷凯。</p>	
-	  * @param request
-	  * @return
-	  * @since JDK1.8。
-	  * <p>创建日期:2018年8月30日 下午4:38:59。</p>
-	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 * <p>功能描述：根据监理单位获取对应标段下的施工单位和检测单位。</p>
+	 * <p> 雷凯。</p>
+	 * @param request
+	 * @return
+	 * @since JDK1.8。
+	 * <p>创建日期:2018年8月30日 下午4:38:59。</p>
+	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	@RequestMapping(value="/getConstructAndDetectionUnitList",method = RequestMethod.POST)
 	@ResponseBody
@@ -409,15 +410,15 @@ public class DaqPrivilegeController extends BaseController{
 		}
 		return result;
 	}
-	
+
 	/***
-	  * <p>功能描述：获取离线数据。</p>
-	  * <p> 雷凯。</p>	
-	  * @param request
-	  * @return
-	  * @since JDK1.8。
-	  * <p>创建日期:2018年8月30日 上午10:59:36。</p>
-	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 * <p>功能描述：获取离线数据。</p>
+	 * <p> 雷凯。</p>
+	 * @param request
+	 * @return
+	 * @since JDK1.8。
+	 * <p>创建日期:2018年8月30日 上午10:59:36。</p>
+	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	@RequestMapping(value="/getOfflineData",method = RequestMethod.POST)
 	@ResponseBody
@@ -445,13 +446,13 @@ public class DaqPrivilegeController extends BaseController{
 		return result;
 	}
 	/***
-	  * <p>功能描述：获取施工单位所有用户。</p>
-	  * <p> 雷凯。</p>	
-	  * @param request
-	  * @return
-	  * @since JDK1.8。
-	  * <p>创建日期:2018年9月11日 上午9:45:19。</p>
-	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 * <p>功能描述：获取施工单位所有用户。</p>
+	 * <p> 雷凯。</p>
+	 * @param request
+	 * @return
+	 * @since JDK1.8。
+	 * <p>创建日期:2018年9月11日 上午9:45:19。</p>
+	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	@RequestMapping(value="/getConstructUnitAllUser",method = RequestMethod.POST)
 	@ResponseBody
@@ -467,12 +468,12 @@ public class DaqPrivilegeController extends BaseController{
 		return result;
 	}
 	/***
-	  * <p>功能描述：APP端登录。</p>
-	  * <p> 雷凯。</p>	
-	  * @return
-	  * @since JDK1.8。
-	  * <p>创建日期:2018年10月11日 下午3:38:53。</p>
-	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 * <p>功能描述：APP端登录。</p>
+	 * <p> 雷凯。</p>
+	 * @return
+	 * @since JDK1.8。
+	 * <p>创建日期:2018年10月11日 下午3:38:53。</p>
+	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value="/appLogin",method = RequestMethod.POST)
@@ -502,13 +503,14 @@ public class DaqPrivilegeController extends BaseController{
 			}else{
 				result.put("unitType", 0);
 			}
+			result.put("unitCode",unitEntity.getUnitCode());
 
 			// 查询焊口规则列表
-            List<DaqWeldcodeRegular> daqWeldcodeRegularList =
-                    daqWeldcodeRegularService.getDaqWeldcodeRegularList("");
-            result.put("daqWeldcodeRegularList",daqWeldcodeRegularList);
+			List<Map<String,Object>> daqWeldCodeRegularList =
+					daqWeldCodeRegularService.getDaqWeldCodeRegularList("");
+			result.put("daqWeldCodeRegularList",daqWeldCodeRegularList);
 
-            String loginName = paramMap.get("loginNum").toString();
+			String loginName = paramMap.get("loginNum").toString();
 			String base64Image = this.daqPrivilegeService.getFaceInfo(loginName);
 			if(StringUtils.isNotBlank(base64Image)){
 				result.put("isFaceInfo", 1);
@@ -521,14 +523,14 @@ public class DaqPrivilegeController extends BaseController{
 		}
 	}
 	/***
-	  * <p>功能描述：添加人脸信息。</p>
-	  * <p> 雷凯。</p>	
-	  * @param request
-	  * @param paramMap
-	  * @return
-	  * @since JDK1.8。
-	  * <p>创建日期:2018年10月29日 上午11:28:02。</p>
-	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 * <p>功能描述：添加人脸信息。</p>
+	 * <p> 雷凯。</p>
+	 * @param request
+	 * @param paramMap
+	 * @return
+	 * @since JDK1.8。
+	 * <p>创建日期:2018年10月29日 上午11:28:02。</p>
+	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	@RequestMapping(value="/addFaceInfo",method = RequestMethod.POST)
 	@ResponseBody
@@ -550,14 +552,14 @@ public class DaqPrivilegeController extends BaseController{
 		return result;
 	}
 	/**
-	  * <p>功能描述：获取人脸BASE64图片。</p>
-	  * <p> 雷凯。</p>	
-	  * @param request
-	  * @param paramMap
-	  * @return
-	  * @since JDK1.8。
-	  * <p>创建日期:2018年10月29日 上午11:30:51。</p>
-	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 * <p>功能描述：获取人脸BASE64图片。</p>
+	 * <p> 雷凯。</p>
+	 * @param request
+	 * @param paramMap
+	 * @return
+	 * @since JDK1.8。
+	 * <p>创建日期:2018年10月29日 上午11:30:51。</p>
+	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value="/getFaceInfo",method = RequestMethod.POST)
@@ -568,7 +570,7 @@ public class DaqPrivilegeController extends BaseController{
 			String base64Image = this.daqPrivilegeService.getFaceInfo(loginName);
 			paramMap.put("base64Image", base64Image);
 			Object resultData = this.faceLogin(request, paramMap);
-			
+
 			try {
 				Map<String, Object> result = (Map<String, Object>)resultData;
 				result.put("base64Image", base64Image);
@@ -589,7 +591,7 @@ public class DaqPrivilegeController extends BaseController{
 		try {
 			String loginName = paramMap.get("loginNum");
 			String base64Image = paramMap.get("base64Image");
-			
+
 			String i18n = (String) paramMap.get("i18n");// 获取登录语言
 			if(!StringUtil.hasText(i18n)){
 				i18n = "zh_CN";
@@ -598,7 +600,7 @@ public class DaqPrivilegeController extends BaseController{
 			if(userMap==null){
 				return new BaseResult(-1, "PU03012", m_I18nService.getI18NByModuleid(Constants.I18N_USER_PROPERTIES, "user.usernamenotexist", i18n));
 			}
-			
+
 			if(!userMap.containsKey("base64Image") || userMap.get("base64Image")==null){
 				return new BaseResult(-1,"PU06000","用户未设置人脸识别");
 			}
@@ -612,7 +614,7 @@ public class DaqPrivilegeController extends BaseController{
 			attributes.put("superadmin", false);  //是否超级管理员
 			//1.设置用户角色
 			List<RoleBo> userRoleList = roleService.queryPriRole(userMap.get("oid").toString());
-			Map<String,Object> userRoleMap = new HashMap<String,Object>(); 
+			Map<String,Object> userRoleMap = new HashMap<String,Object>();
 			userRoleMap.put("roleIds", "");
 			userRoleMap.put("roleNames", "");
 			for(RoleBo role : userRoleList){
@@ -636,28 +638,28 @@ public class DaqPrivilegeController extends BaseController{
 			authUser.setLoginName(loginName);
 			authUser.setUname(userMap.get("userName").toString());
 			authUser.setUnitId(userMap.get("unitId").toString());
-			
+
 			//2.设置用户部门
 			List<String> userUnitList = getUserDeptInfo(userMap.get("unitId").toString());
 			String userUnitInfo = "";
-	        if (userUnitList.size()>0) {
-	        	for (int i = userUnitList.size()-1; i >0; i--) {
-	    			userUnitInfo += userUnitList.get(i) + "-->"; 
-	    		}
-	        	authUser.setUnitName(userUnitList.get(0));
+			if (userUnitList.size()>0) {
+				for (int i = userUnitList.size()-1; i >0; i--) {
+					userUnitInfo += userUnitList.get(i) + "-->";
+				}
+				authUser.setUnitName(userUnitList.get(0));
 			}
-	        userUnitInfo += userUnitList.get(0);
-	        userMap.put("unitName", userUnitInfo);
-	        authUser.setUnitNameFullpath(userUnitInfo); 
-	        
-	      //3.设置用户其他信息
+			userUnitInfo += userUnitList.get(0);
+			userMap.put("unitName", userUnitInfo);
+			authUser.setUnitNameFullpath(userUnitInfo);
+
+			//3.设置用户其他信息
 			String token = UUID.randomUUID().toString();
 			attributes.put("token", token);
 			attributes.put("password", userMap.get("password").toString());
 			attributes.put(Constants.LOGIN_I18N, i18n);  //国际化语言
 			attributes.put(Constants.LOGIN_ROLES, userRoleMap); //角色
 			authUser.setAttributes(attributes);
-			
+
 			//4.将用户信息存储到redis中
 			redisService.putValue(token, authUser);
 			redisService.expirse(token, expireTime, expireTimeUnit);
@@ -667,7 +669,7 @@ public class DaqPrivilegeController extends BaseController{
 			threadRedisParamMap.put("IP", request.getServerName());
 			redisService.putValue(token+"_threadRedisParamMap", threadRedisParamMap);
 			redisService.expirse(token+"_threadRedisParamMap", expireTime, expireTimeUnit);
-			
+
 			//7.构造返回结果
 			userMap.put("password", null);
 			userMap.remove("base64Image");
@@ -694,9 +696,9 @@ public class DaqPrivilegeController extends BaseController{
 				log.error("Logging Login Log Error: token--"+token+e.getMessage());
 			}
 			//7.记录操作日志
-			LogTemplateFactory.getOptLogger().log(userMap.get("oid").toString(), "用户", "pri_user", "登录系统", authUser.getUid(), authUser.getUname(), loginName, "", 
+			LogTemplateFactory.getOptLogger().log(userMap.get("oid").toString(), "用户", "pri_user", "登录系统", authUser.getUid(), authUser.getUname(), loginName, "",
 					new String[]{(String)attributes.get("login_appid"),(String)attributes.get("login_appname")});
-			
+
 			PriUnit unitEntity = (PriUnit)unitService.get(PriUnit.class,userMap.get("unitId").toString());
 			if(unitEntity==null){
 				result.put("unitType", -1);
@@ -716,33 +718,33 @@ public class DaqPrivilegeController extends BaseController{
 			}else{
 				result.put("unitType", 0);
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return result;
 	}
-	
+
 	private List<String> getUserDeptInfo(String unitId) {
-		   List<String> unitList = new ArrayList<String>();
-		   UnitBo unitBo = unitService.queryById(unitId);
-		   unitList.add(unitBo.getUnitName());
-		   String parentId = unitBo.getParentId();
-		   if (parentId!=null) {
-			   unitList.addAll(getUserDeptInfo(parentId));
-		   }
-		   return unitList;
+		List<String> unitList = new ArrayList<String>();
+		UnitBo unitBo = unitService.queryById(unitId);
+		unitList.add(unitBo.getUnitName());
+		String parentId = unitBo.getParentId();
+		if (parentId!=null) {
+			unitList.addAll(getUserDeptInfo(parentId));
 		}
-	
+		return unitList;
+	}
+
 	/**
 	 * <p>功能描述：根据项目oids查询所有施工单位。</p>
-	  * <p> 葛建。</p>	
-	  * @param request
-	  * @param param
-	  * @return
-	  * @since JDK1.8。
-	  * <p>创建日期:2018年12月18日 上午9:46:37。</p>
-	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 * <p> 葛建。</p>
+	 * @param request
+	 * @param param
+	 * @return
+	 * @since JDK1.8。
+	 * <p>创建日期:2018年12月18日 上午9:46:37。</p>
+	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	@RequestMapping(value="getConstructUnitList",method = RequestMethod.POST)
 	@ResponseBody
@@ -759,16 +761,16 @@ public class DaqPrivilegeController extends BaseController{
 		}
 		return result;
 	}
-	
+
 	/**
-	  * <p>功能描述：根据项目oid获取监理单位。</p>
-	  * <p> 雷凯。</p>	
-	  * @param request
-	  * @param param
-	  * @return
-	  * @since JDK1.8。
-	  * <p>创建日期:2019年1月24日 下午2:46:54。</p>
-	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 * <p>功能描述：根据项目oid获取监理单位。</p>
+	 * <p> 雷凯。</p>
+	 * @param request
+	 * @param param
+	 * @return
+	 * @since JDK1.8。
+	 * <p>创建日期:2019年1月24日 下午2:46:54。</p>
+	 * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
 	@RequestMapping(value="/getSupervisionUnitByProjectOid",method = RequestMethod.POST)
 	@ResponseBody

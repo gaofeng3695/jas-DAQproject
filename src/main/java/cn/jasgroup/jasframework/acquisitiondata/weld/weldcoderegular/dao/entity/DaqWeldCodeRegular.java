@@ -29,8 +29,8 @@ import javax.persistence.Transient;
                 )
         }
 )
-@JdbcEntity(name="daq_weldcode_regular")
-public class DaqWeldcodeRegular extends CommonJdbcEntity {
+@JdbcEntity(name="daq_weld_code_regular")
+public class DaqWeldCodeRegular extends CommonJdbcEntity {
 
     /**
      * 项目oid
@@ -45,12 +45,12 @@ public class DaqWeldcodeRegular extends CommonJdbcEntity {
     /**
      * 焊口规则
      */
-    private String weldcodeRegular;
+    private String weldCodeRegular;
 
     /**
-     * 备注
+     * 焊口规则名称
      */
-    private String remarks;
+    private String weldCodeRegularName;
 
     @Transient
     public String getProjectName() {
@@ -70,22 +70,22 @@ public class DaqWeldcodeRegular extends CommonJdbcEntity {
         super.setField("projectOid");
     }
 
-    public String getWeldcodeRegular() {
-        return weldcodeRegular;
+    public String getWeldCodeRegular() {
+        return weldCodeRegular;
     }
 
-    public void setWeldcodeRegular(String weldcodeRegular) {
-        this.weldcodeRegular = weldcodeRegular;
-        super.setField("weldcodeRegular");
+    public void setWeldCodeRegular(String weldCodeRegular) {
+        this.weldCodeRegular = weldCodeRegular;
+        super.setField("weldCodeRegular");
     }
 
-    public String getRemarks() {
-        return remarks;
+    public String getWeldCodeRegularName() {
+        return weldCodeRegularName;
     }
 
-    public void setRemarks(String remarks) {
-        this.remarks = remarks;
-        super.setField("remarks");
+    public void setWeldCodeRegularName(String weldCodeRegularName) {
+        this.weldCodeRegularName = weldCodeRegularName;
+        super.setField("weldCodeRegularName");
     }
 
 }

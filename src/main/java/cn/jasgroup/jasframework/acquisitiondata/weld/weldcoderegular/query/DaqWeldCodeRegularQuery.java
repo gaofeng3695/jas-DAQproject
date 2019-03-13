@@ -1,7 +1,6 @@
 package cn.jasgroup.jasframework.acquisitiondata.weld.weldcoderegular.query;
 
-import cn.jasgroup.jasframework.acquisitiondata.weld.weldcoderegular.dao.entity.DaqWeldcodeRegular;
-import cn.jasgroup.jasframework.base.annotation.Process;
+import cn.jasgroup.jasframework.acquisitiondata.weld.weldcoderegular.dao.entity.DaqWeldCodeRegular;
 import cn.jasgroup.jasframework.base.annotation.QueryConfig;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 import org.apache.commons.lang.StringUtils;
@@ -15,12 +14,9 @@ import org.apache.commons.lang.StringUtils;
  */
 @QueryConfig(
         scene ="/weldCodeRegular/getPage",
-        resultClass= DaqWeldcodeRegular.class,
-        queryBeforeProcess = {
-                @Process(service = "daqInjectService" , method = "injectDataAuthoritySql(dataAuthoritySql)")
-        }
+        resultClass= DaqWeldCodeRegular.class
 )
-public class DaqWeldcodeRegularQuery extends BaseJavaQuery {
+public class DaqWeldCodeRegularQuery extends BaseJavaQuery {
 
     /**
      * 项目oid
@@ -30,7 +26,7 @@ public class DaqWeldcodeRegularQuery extends BaseJavaQuery {
     @Override
     public String getQuerySql() {
         StringBuffer sql = new StringBuffer();
-        sql.append("select wc.*,pro.project_name from daq_weldcode_regular wc  " +
+        sql.append("select wc.*,pro.project_name from daq_weld_code_regular wc  " +
                 "LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro ON pro.oid = wc.project_oid where wc.active=1 ");
         sql.append(conditionSql());
         return sql.toString();
@@ -44,7 +40,6 @@ public class DaqWeldcodeRegularQuery extends BaseJavaQuery {
             if (StringUtils.isNotBlank(projectOid)) {
                 conditionSql.append(" and wc.project_oid = :projectOid ");
             }
-            conditionSql.append(this.dataAuthoritySql);
         }
         conditionSql.append(" order by wc.create_datetime desc");
         return conditionSql.toString();
