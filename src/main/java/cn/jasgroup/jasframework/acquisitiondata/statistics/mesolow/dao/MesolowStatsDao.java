@@ -1,5 +1,6 @@
 package cn.jasgroup.jasframework.acquisitiondata.statistics.mesolow.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +43,10 @@ public class MesolowStatsDao {
 						+"union ALL "
 						+"select to_char(collection_date,'yyyy-MM') as month,COALESCE(sum(pipe_section_length),0) as sum_per_month from daq_mv_stride_across_info ps where active=1 and approve_status=2 and project_oid in (:projectOids) and to_char(collection_date,'yyyy')=:year GROUP BY to_char(collection_date,'yyyy-MM')) t "
 						+"GROUP BY t.month ";
-		List<Map<String, Object>> list = commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOids", projectOids, "year", year));
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		if(projectOids!=null && projectOids.size()>0){
+			list = commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOids", projectOids, "year", year));
+		}
 		return list;
 	}
 
@@ -64,7 +68,10 @@ public class MesolowStatsDao {
 						+"union ALL "
 						+"select pipe_section_length from daq_mv_stride_across_info where active=1 and approve_status=2 and project_oid in (:projectOids) and to_char(collection_date, 'yyyy')<:year "
 						+") t";
-		List<Map<String, Object>> list = commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOids", projectOids, "year", year));
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		if(projectOids!=null && projectOids.size()>0){
+			list = commonDataJdbcDao.queryForList(sql, ImmutableMap.of("projectOids", projectOids, "year", year));
+		}
 		return list;
 	}
 
