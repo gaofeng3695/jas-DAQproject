@@ -236,7 +236,8 @@
 					title: '修改功能',
 					src: './pages/form-operation/dialogs/add.html?functionId=' + row.oid,
 					cbForClose: function () {
-						that.refresh();
+// 						that.refresh();
+						that._requestTable(); 	
 					}
 				});
 			},
