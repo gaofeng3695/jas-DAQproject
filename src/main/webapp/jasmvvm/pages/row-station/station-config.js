@@ -202,7 +202,7 @@ var stationConfig = {
         type: "number",
         name: "相对起始桩位置(m)",
         isRequired: true,
-        max: 999999,
+        max: 9999999.99,
         precision: 2
       },
       endMedianStakeOid: {
@@ -217,7 +217,7 @@ var stationConfig = {
         type: "number",
         name: "相对结束桩位置(m)",
         isRequired: true,
-        max: 999999,
+        max: 9999999.99,
         precision: 2
       },
       pressureTestLength: {
@@ -257,7 +257,7 @@ var stationConfig = {
       designPressure: {
         type: "number",
         name: "设计压力(Mpa)",
-        max: 999999,
+        max: 999999.9,
         precision: 1
       },
       pressureTestDate: {
@@ -500,7 +500,7 @@ var stationConfig = {
         type: "number",
         name: "相对起始桩位置(m)",
         isRequired: true,
-        max: 999999,
+        max: 9999999.99,
         precision: 2
       },
       endMedianStakeOid: {
@@ -515,14 +515,14 @@ var stationConfig = {
         type: "number",
         name: "相对结束桩位置(m)",
         isRequired: true,
-        max: 999999,
+        max: 9999999.99,
         precision: 2
       },
       pipeLength: {
         type: "number",
-        name: "管道长度(m)",
-        max: 999999,
-        precision: 0
+        name: "管道长度(km)",
+        max: 99999.999,
+        precision: 3
       },
       pipeSpecification: {
         type: "input",
@@ -536,13 +536,13 @@ var stationConfig = {
       maximumHeightDifference: {
         type: "number",
         name: "管段最大高差(m)",
-        max: 99999,
+        max: 99999.999,
         precision: 3
       },
       maxHeightDistance: {
         type: "number",
         name: "管段最高点距清管器发送端距离(km)",
-        max: 99999,
+        max: 99999.999,
         precision: 3
       },
       sweepingMedium: {
@@ -577,7 +577,7 @@ var stationConfig = {
       runningTime: {
         type: "number",
         name: "运行时间(h)",
-        max: 99999,
+        max: 99999.9,
         precision: 1
       },
       processDescription: {
@@ -809,7 +809,7 @@ var stationConfig = {
       relativeMileage: {
         type: "number",
         name: "相对里程(m)",
-        max: 999999,
+        max: 9999999.99,
         precision: 2
       },
       medianStakeCode: {
@@ -818,20 +818,20 @@ var stationConfig = {
       pointx: {
         type: "number",
         name: "x坐标",
-        max: 9999,
-        precision: 5
+        max: 999.999999999,
+        precision: 9
       },
       pointy: {
         type: "number",
         name: "y坐标",
-        max: 9999,
-        precision: 5
+        max: 999.999999999,
+        precision: 9
       },
       pointz: {
         type: "number",
         name: "高程",
-        max: 999,
-        precision: 3
+        max: 9999.99,
+        precision: 2
       },
       weldOid: {
         type: "select",
@@ -1112,26 +1112,26 @@ var stationConfig = {
       relativeMileage: {
         type: "number",
         name: "相对里程(m)",
-        max: 999999,
+        max: 9999999.99,
         precision: 2
       },
       pointx: {
         type: "number",
         name: "x坐标",
-        max: 9999,
-        precision: 5
+        max: 999.999999999,
+        precision: 9
       },
       pointy: {
         type: "number",
         name: "y坐标",
-        max: 9999,
-        precision: 5
+        max: 999.999999999,
+        precision: 9
       },
       pointz: {
         type: "number",
         name: "高程",
-        max: 999,
-        precision: 3
+        max: 9999.99,
+        precision: 2
       },
       deviceCode: {
         type: "input",
@@ -1195,7 +1195,7 @@ var stationConfig = {
         name: "压力等级(Mpa)",
         type: "number",
         precision: 2,
-        max: 999999
+        max: 999999.99
       },
       executingAgency: {
         type: "input",
@@ -1407,20 +1407,20 @@ var stationConfig = {
       pointx: {
         type: "number",
         name: "x坐标",
-        max: 9999,
-        precision: 5
+        max: 999.999999999,
+        precision: 9
       },
       pointy: {
         type: "number",
         name: "y坐标",
-        max: 9999,
-        precision: 5
+        max: 999.999999999,
+        precision: 9
       },
       pointz: {
         type: "number",
         name: "高程",
-        max: 999,
-        precision: 3
+        max: 9999.99,
+        precision: 2
       },
       deviceCode: {
         type: "input",
@@ -1445,7 +1445,7 @@ var stationConfig = {
       pipeDiameter: {
         type: "number",
         name: "甩头管径(mm)",
-        max: 666666,
+        max: 999999.99,
         precision: 2
       },
       interfaceMaterial: {
@@ -1475,7 +1475,7 @@ var stationConfig = {
         name: "甩头壁厚(mm)",
         type: "number",
         precision: 1,
-        max: 999999
+        max: 999999.9
       },
       sealingType: {
         type: "input",
@@ -1698,20 +1698,20 @@ var stationConfig = {
       pointx: {
         type: "number",
         name: "x坐标",
-        max: 9999,
-        precision: 5
+        max: 999.999999999,
+        precision: 9
       },
       pointy: {
         type: "number",
         name: "y坐标",
-        max: 9999,
-        precision: 5
+        max: 999.999999999,
+        precision: 9
       },
       pointz: {
         type: "number",
         name: "高程",
-        max: 999,
-        precision: 3
+        max: 9999.99,
+        precision: 2
       },
       deviceCode: {
         type: "input",
@@ -2004,14 +2004,14 @@ var stationConfig = {
       pointx: {
         type: "number",
         name: "x坐标",
-        max: 9999,
-        precision: 5
+        max:999.999999999,
+        precision: 9
       },
       pointy: {
         type: "number",
         name: "y坐标",
-        max: 9999,
-        precision: 5
+        max: 999.999999999,
+        precision: 9
       },
       position: {
         type: "select",
@@ -2056,7 +2056,7 @@ var stationConfig = {
       distance: {
         type: "number",
         name: "距离(m)",
-        max: 9999999,
+        max: 9999999.99,
         precision: 2
       }
     }
@@ -2326,26 +2326,26 @@ var stationConfig = {
         type: "number",
         name: "相对桩位置(m)",
         isRequired: true,
-        max: 999999,
+        max: 9999999.99,
         precision: 2
       },
       pointx: {
         type: "number",
         name: "x坐标",
-        max: 9999,
-        precision: 5
+        max: 999.999999999,
+        precision: 9
       },
       pointy: {
         type: "number",
         name: "y坐标",
-        max: 9999,
-        precision: 5
+        max: 999.999999999,
+        precision: 9
       },
       pointz: {
         type: "number",
         name: "高程",
-        max: 999,
-        precision: 3
+        max: 9999.99,
+        precision: 2
       },
       deviceCode: {
         type: "input",
@@ -2369,7 +2369,7 @@ var stationConfig = {
       buryingDepth: {
         type: "number",
         name: "埋深(m)",
-        max: 9999,
+        max: 9999.99,
         precision: 2
       },
       isTemporary: {
@@ -2418,19 +2418,19 @@ var stationConfig = {
       grossWeight: {
         type: "number",
         name: "总重(kg)",
-        max: 9999999,
+        max: 9999999.99,
         precision: 2
       },
       cableLength: {
         type: "number",
         name: "电缆长度(m)",
-        max: 999999,
+        max: 999999.99,
         precision: 2
       },
       protectLength: {
         type: "number",
         name: "保护长度(m)",
-        max: 999999,
+        max: 999999.99,
         precision: 2
       },
       anodeMaterial: {
@@ -2453,7 +2453,7 @@ var stationConfig = {
       anodeResistance: {
         type: "number",
         name: "阳极电阻(Ω)",
-        max: 9999,
+        max: 9999.99,
         precision: 2
       },
       hasWaterFloodingSys: {
@@ -2736,7 +2736,7 @@ var stationConfig = {
         type: "number",
         name: "相对起始桩里程(m)",
         isRequired: true,
-        max: 999999,
+        max: 9999999.99,
         precision: 2
       },
       endMedianStakeOid: {
@@ -2748,7 +2748,7 @@ var stationConfig = {
         type: "number",
         name: "相对结束桩里程(m)",
         isRequired: true,
-        max: 999999,
+        max: 9999999.99,
         precision: 2
       },
       deviceCode: {
@@ -3057,20 +3057,20 @@ var stationConfig = {
       pointx: {
         type: "number",
         name: "x坐标",
-        max: 9999,
-        precision: 5
+        max: 999.999999999,
+        precision: 9
       },
       pointy: {
         type: "number",
         name: "y坐标",
-        max: 9999,
-        precision: 5
+        max: 999.999999999,
+        precision: 9
       },
       pointz: {
         type: "number",
         name: "高程",
-        max: 999,
-        precision: 3
+        max: 9999.99,
+        precision: 2
       },
       deviceCode: {
         type: "input",
@@ -3116,25 +3116,25 @@ var stationConfig = {
       ratedCurrent: {
         type: "number",
         name: "额定电流(A)",
-        max: 99999,
+        max: 99999.99,
         precision: 2
       },
       ratedVoltage: {
         type: "number",
         name: "额定电压(V)",
-        max: 99999,
+        max: 99999.99,
         precision: 2
       },
       outputCurrent: {
         type: "number",
         name: "输出电流(A)",
-        max: 99999,
+        max: 99999.99,
         precision: 2
       },
       outputVoltage: {
         type: "number",
         name: "输出电压(V)",
-        max: 99999,
+        max: 99999.99,
         precision: 2
       },
       bedNum: {
@@ -3185,13 +3185,13 @@ var stationConfig = {
       givenVoltage: {
         type: "number",
         name: "给定(预置)电位(V)",
-        max: 99999,
+        max: 99999.99,
         precision: 2
       },
       referenceVoltage: {
         type: "number",
         name: "参比电位(V)",
-        max: 99999,
+        max: 99999.99,
         precision: 2
       },
     }

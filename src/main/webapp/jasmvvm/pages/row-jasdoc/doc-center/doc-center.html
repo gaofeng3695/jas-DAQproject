@@ -321,6 +321,7 @@
 						return !data.isParent;
 					}
 				},
+				folderType : '1',
 
 			}
 		},
@@ -755,7 +756,7 @@
 					width: '600px',
 					height: '600px',
 					title: '创建文件夹',
-					src: baseSrc + '?parentid=' + this.currentNodeId,
+					src: baseSrc + '?parentid=' + this.currentNodeId +'&folderType='+this.folderType,
 					cbForClose: function () {
 						that.requestList();
 						that._refreshCurrentNode();
@@ -929,12 +930,15 @@
 						})
 					});
 				}
+				if(node.data){
+					this.folderType = node.data.folderType;
+				}
 				if (node.level > 0 && !node.isLeaf) {
 					var url = jasTools.base.rootPath + "/jasdoc/folder/doccenter/getChildren.do";
 					jasTools.ajax.postForm(url, {
 						folderId: node.key,
 						isPrivilege: this.isPrivilege,
-						folderType: 1
+						folderType: node.data.folderType
 					}, function (data) {
 						// console.log(data)
 						resolve(data);

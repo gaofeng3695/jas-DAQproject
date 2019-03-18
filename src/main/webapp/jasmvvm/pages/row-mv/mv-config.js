@@ -2324,7 +2324,7 @@ var mvConfig = {
         type: 'number',
         name: '放散管径',
         //isRequired: true,
-        max: 999999,
+        max: 999999.999,
         min: 0,
         precision: 3
       },
