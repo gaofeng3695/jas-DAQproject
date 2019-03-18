@@ -204,23 +204,23 @@ var mvConfig = {
       pointx: {
         type: 'number',
         name: 'X坐标',
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
-        precision: 7,
+        precision: 9,
         isRequired: true
       },
       pointy: {
         type: 'number',
         name: 'Y坐标',
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
-        precision: 7,
+        precision: 9,
         isRequired: true
       },
       pointz: {
         type: 'number',
         name: '管顶高程(m)',
-        max: 999.99,
+        max: 9999.99,
         min: 0,
         precision: 2,
         isRequired: true
@@ -632,23 +632,23 @@ var mvConfig = {
       startPointx: {
         type: 'number',
         name: '起始点X坐标',
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
-        precision: 7,
+        precision: 9,
         disabled: true
       },
       startPointy: {
         type: 'number',
         name: '起始点Y坐标',
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
-        precision: 7,
+        precision: 9,
         disabled: true
       },
       startPointz: {
         type: 'number',
         name: '起始点管顶高程(m)',
-        max: 999.99,
+        max: 9999.99,
         min: 0,
         precision: 2,
         disabled: true
@@ -656,7 +656,7 @@ var mvConfig = {
       endPointx: {
         type: 'number',
         name: '终止点X坐标',
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
         precision: 7,
         disabled: true
@@ -664,15 +664,15 @@ var mvConfig = {
       endPointy: {
         type: 'number',
         name: '终止点Y坐标',
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
-        precision: 7,
+        precision: 9,
         disabled: true
       },
       endPointz: {
         type: 'number',
         name: '终止点管顶高程(m)',
-        max: 999.99,
+        max: 9999.99,
         min: 0,
         precision: 2,
         disabled: true
@@ -1022,23 +1022,23 @@ var mvConfig = {
       startPointx: {
         type: 'number',
         name: '起始点X坐标',
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
-        precision: 7,
+        precision: 9,
         disabled: true
       },
       startPointy: {
         type: 'number',
         name: '起始点Y坐标',
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
-        precision: 7,
+        precision: 9,
         disabled: true
       },
       startPointz: {
         type: 'number',
         name: '起始点管顶高程(m)',
-        max: 999.99,
+        max: 9999.99,
         min: 0,
         precision: 2,
         disabled: true
@@ -1046,23 +1046,23 @@ var mvConfig = {
       endPointx: {
         type: 'number',
         name: '终止点X坐标',
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
-        precision: 7,
+        precision: 9,
         disabled: true
       },
       endPointy: {
         type: 'number',
         name: '终止点Y坐标',
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
-        precision: 7,
+        precision: 9,
         disabled: true
       },
       endPointz: {
         type: 'number',
         name: '终止点管顶高程(m)',
-        max: 999.99,
+        max: 9999.99,
         min: 0,
         precision: 2,
         disabled: true
@@ -1401,23 +1401,23 @@ var mvConfig = {
       startPointx: {
         type: 'number',
         name: '起始点X坐标',
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
-        precision: 7,
+        precision: 9,
         disabled: true
       },
       startPointy: {
         type: 'number',
         name: '起始点Y坐标',
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
-        precision: 7,
+        precision: 9,
         disabled: true
       },
       startPointz: {
         type: 'number',
         name: '起始点管顶高程(m)',
-        max: 999.99,
+        max: 9999.99,
         min: 0,
         precision: 2,
         disabled: true
@@ -1425,23 +1425,23 @@ var mvConfig = {
       endPointx: {
         type: 'number',
         name: '终止点X坐标',
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
-        precision: 7,
+        precision: 9,
         disabled: true
       },
       endPointy: {
         type: 'number',
         name: '终止点Y坐标',
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
-        precision: 7,
+        precision: 9,
         disabled: true
       },
       endPointz: {
         type: 'number',
         name: '终止点管顶高程(m)',
-        max: 999.99,
+        max: 9999.99,
         min: 0,
         precision: 2,
         disabled: true
@@ -1623,23 +1623,23 @@ var mvConfig = {
         type: 'number',
         name: '起始点X坐标',
         isRequired: true,
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
-        precision: 7
+        precision: 9
       },
       startPointy: {
         type: 'number',
         name: '起始点Y坐标',
         isRequired: true,
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
-        precision: 7
+        precision: 9
       },
       startPointz: {
         type: 'number',
         name: '起始点管顶高程(m)',
         isRequired: true,
-        max: 999.99,
+        max: 9999.99,
         min: 0,
         precision: 2
       },
@@ -1648,23 +1648,23 @@ var mvConfig = {
         type: 'number',
         name: '终止点X坐标',
         isRequired: true,
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
-        precision: 7
+        precision: 9
       },
       endPointy: {
         type: 'number',
         name: '终止点Y坐标',
         isRequired: true,
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
-        precision: 7
+        precision: 9
       },
       endPointz: {
         type: 'number',
         name: '终止点管顶高程(m)',
         isRequired: true,
-        max: 999.99,
+        max: 9999.99,
         min: 0,
         precision: 2
       },
@@ -1846,23 +1846,23 @@ var mvConfig = {
         type: 'number',
         name: '起始点X坐标',
         isRequired: true,
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
-        precision: 7
+        precision: 9
       },
       startPointy: {
         type: 'number',
         name: '起始点Y坐标',
         isRequired: true,
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
-        precision: 7
+        precision: 9
       },
       startPointz: {
         type: 'number',
         name: '起始点管顶高程(m)',
         isRequired: true,
-        max: 999.99,
+        max: 9999.99,
         min: 0,
         precision: 2
       },
@@ -1878,23 +1878,23 @@ var mvConfig = {
         type: 'number',
         name: '终止点X坐标',
         isRequired: true,
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
-        precision: 7
+        precision: 9
       },
       endPointy: {
         type: 'number',
         name: '终止点Y坐标',
         isRequired: true,
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
-        precision: 7
+        precision: 9
       },
       endPointz: {
         type: 'number',
         name: '终止点管顶高程(m)',
         isRequired: true,
-        max: 999.99,
+        max: 9999.99,
         min: 0,
         precision: 2
       },
@@ -2218,25 +2218,25 @@ var mvConfig = {
         type: 'number',
         name: 'X坐标',
         isRequired: true,
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
-        precision: 7,
+        precision: 9,
         disabled: true
       },
       pointy: {
         type: 'number',
         name: 'Y坐标',
         isRequired: true,
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
-        precision: 7,
+        precision: 9,
         disabled: true
       },
       pointz: {
         type: 'number',
         name: '管顶高程(m)',
         isRequired: true,
-        max: 999.99,
+        max: 9999.99,
         min: 0,
         precision: 2,
         disabled: true
@@ -2509,23 +2509,23 @@ var mvConfig = {
         type: 'number',
         name: 'X坐标',
         isRequired: true,
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
-        precision: 7
+        precision: 9
       },
       pointy: {
         type: 'number',
         name: 'Y坐标',
         isRequired: true,
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
-        precision: 7
+        precision: 9
       },
       pointz: {
         type: 'number',
         name: '地面高程',
         isRequired: true,
-        max: 999.99,
+        max: 9999.99,
         min: 0,
         precision: 2
       },
@@ -2692,23 +2692,23 @@ var mvConfig = {
         type: 'number',
         name: 'X坐标',
         isRequired: true,
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
-        precision: 7
+        precision: 9
       },
       pointy: {
         type: 'number',
         name: 'Y坐标',
         isRequired: true,
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
-        precision: 7
+        precision: 9
       },
       pointz: {
         type: 'number',
         name: '管顶高程',
         //        isRequired: true,
-        max: 999.99,
+        max: 9999.99,
         min: 0,
         precision: 2
       },
@@ -2881,23 +2881,23 @@ var mvConfig = {
         type: 'number',
         name: 'X坐标',
         isRequired: true,
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
-        precision: 7
+        precision: 9
       },
       pointy: {
         type: 'number',
         name: 'Y坐标',
         isRequired: true,
-        max: 999.9999999,
+        max: 999.999999999,
         min: 0,
-        precision: 7
+        precision: 9
       },
       pointz: {
         type: 'number',
         name: '管顶高程',
         //        isRequired: true,
-        max: 999.99,
+        max: 9999.99,
         min: 0,
         precision: 2
       },
