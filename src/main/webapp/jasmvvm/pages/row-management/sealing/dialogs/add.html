@@ -94,7 +94,7 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="管道外壁直径(mm)">
-								<el-input-number :precision="3" :step="1" :max="1000" controls-position="right" v-model="formData.outsideDiameter" clearable
+								<el-input-number :precision="3" :step="1" :max="999999.999" controls-position="right" v-model="formData.outsideDiameter" clearable
 								  placeholder="请输入管道外壁直径(mm)" size="small"></el-input-number>
 
 
@@ -102,7 +102,7 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="管道壁厚(mm)">
-								<el-input-number :precision="3" :step="1" :max="1000" controls-position="right" v-model="formData.wallThickness" clearable
+								<el-input-number :precision="3" :step="1" :max="999999.999" controls-position="right" v-model="formData.wallThickness" clearable
 								  placeholder="请输入管道壁厚(mm)" size="small"></el-input-number>
 
 

@@ -82,7 +82,7 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="公称直径(mm)">
-								<el-input-number :precision="3" :step="1" :max="100000" controls-position="right" v-model="formData.diameter" clearable placeholder="请输入公称直径(mm)"
+								<el-input-number :precision="3" :step="1" :max="999999.999" controls-position="right" v-model="formData.diameter" clearable placeholder="请输入公称直径(mm)"
 								  size="small"></el-input-number>
 
 								<!-- 	<el-input v-model="formData.diameter" clearable placeholder="请输入公称直径(mm)" size="small"></el-input> -->
@@ -90,7 +90,7 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="公称压力(mpa)">
-								<el-input-number :precision="3" :step="1" :max="100000" controls-position="right" v-model="formData.pressure" clearable placeholder="请输入公称压力(mpa)"
+								<el-input-number :precision="3" :step="1" :max="999999.999" controls-position="right" v-model="formData.pressure" clearable placeholder="请输入公称压力(mpa)"
 								  size="small"></el-input-number>
 
 							</el-form-item>
