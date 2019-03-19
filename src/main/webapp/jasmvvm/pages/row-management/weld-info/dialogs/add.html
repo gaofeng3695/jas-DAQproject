@@ -888,9 +888,13 @@
 				that.formData.coverOid = coverOidStr.substr(0, coverOidStr.length - 1)
 				that.formData.renderOid = renderOidStr.substr(0, renderOidStr.length - 1)
 				that.formData.padderOid = padderOidStr.substr(0, padderOidStr.length - 1)
-				this.but_disabled = true;
+				that.but_disabled = true;
 				jasTools.ajax.post(url, that.formData, function (data) {
 					that.$refs.upload.uploadFile(data.data || that.oid);
+				},function(data){
+					if(data.status==-1){
+						that.but_disabled = false;
+					}
 				});
 
 			},

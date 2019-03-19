@@ -43,7 +43,7 @@
 			</el-form>
 			<div slot="footer">
 				<el-button size="small" @click="cancel()">取 消</el-button>
-				<el-button size="small" type="primary" @click="submit('formData')">确 定</el-button>
+				<el-button size="small" :disabled="but_disabled" type="primary" @click="submit('formData')">确 定</el-button>
 			</div>
 		</jas-dialog-wrapper>
 
@@ -60,6 +60,7 @@
 		data: function () {
 			var that = this;
 			return {
+				but_disabled:false,
 				fields: [ //
 					{
 						field: "projectOid",
@@ -338,8 +339,13 @@
 					url = jasTools.base.rootPath + "/jdbc/commonData/detectionMagneticPowder/update.do";
 				}
 
+				that.but_disabled = true;
 				jasTools.ajax.post(url, that.form, function (data) {
 					that.$refs.upload.uploadFile(data.data || that.oid);
+				},function(data){
+					if(data.status==-1){
+						that.but_disabled = false;
+					}
 				});
 
 			},

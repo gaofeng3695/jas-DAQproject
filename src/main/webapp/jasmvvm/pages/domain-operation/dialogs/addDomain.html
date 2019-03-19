@@ -77,7 +77,7 @@
 		</div>
 		<div slot="footer" class="dialog-footer" style="text-align: center">
 			<el-button size="small" @click="cancel()">取 消</el-button>
-			<el-button size="small" type="primary" @click="submit('tableFormData')">确 定</el-button>
+			<el-button size="small" :disabled="but_disabled" type="primary" @click="submit('tableFormData')">确 定</el-button>
 		</div>
 	</div>
 </body>
@@ -93,6 +93,7 @@
 		el: "#app",
 		data: function () {
 			return {
+				but_disabled:false,
 				rules: {
 					domainName: [{
 						required: true,
@@ -155,6 +156,7 @@
 			save: function () {
 				var that = this;
 				var msg = "";
+				that.but_disabled = true;
 				if (JSON.stringify(that.isEdit) == '{}') {
 					msg = "增加成功";
 					url = jasTools.base.rootPath + "/hibernate/commonData/domain/save.do?token=" + localStorage.getItem(
@@ -179,6 +181,7 @@
 							});
 							that.cancel();
 						} else {
+							that.but_disabled = false;
 							window.top.Vue.prototype.$message({
 								message: '服务异常，请稍候尝试',
 								type: 'error'
