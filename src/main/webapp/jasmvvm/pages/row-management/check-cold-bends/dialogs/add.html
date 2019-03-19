@@ -82,7 +82,7 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="弯管长度(m)">
-								<el-input-number :precision="3" :step="1" :max="999999" controls-position="right" v-model="formData.pipeLength" clearable
+								<el-input-number :precision="3" :step="1" :max="999999.999" controls-position="right" v-model="formData.pipeLength" clearable
 								  placeholder="弯管长度(m)" size="small"></el-input-number>
 								<!--<el-input v-model="formData.pipeLength" clearable placeholder="请输入弯道长度(m)" size="small"></el-input>-->
 							</el-form-item>
@@ -96,13 +96,13 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="管径(mm)">
-								<el-input-number :precision="3" :step="1" :max="999999" controls-position="right" v-model="formData.pipeDiameter" clearable
+								<el-input-number :precision="3" :step="1" :max="999999.999" controls-position="right" v-model="formData.pipeDiameter" clearable
 								  placeholder="请输入管径(mm)" size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="壁厚(mm)">
-								<el-input-number :precision="3" :step="1" :max="999999" controls-position="right" v-model="formData.wallThickness" clearable
+								<el-input-number :precision="3" :step="1" :max="999999.999" controls-position="right" v-model="formData.wallThickness" clearable
 								  placeholder="请输入壁厚(mm)" size="small"></el-input-number>
 
 							</el-form-item>

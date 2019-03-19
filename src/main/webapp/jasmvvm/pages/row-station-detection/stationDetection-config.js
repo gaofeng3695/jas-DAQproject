@@ -447,26 +447,26 @@ var stationConfig = {
     defectSize: {
       type: "number",
       name: '缺陷尺寸',
-      max: 999999,
+      max: 999999.999,
       precision: 3
     },
     defectLength: {
       type: "number",
       name: '缺陷长度',
-      max: 999999,
+      max: 999999.999,
       precision: 3
     },
     defectDepth: {
       type: "number",
       name: '缺陷深度',
-      max: 999999,
+      max: 999999.999,
       precision: 3
     },
     detectionLength: {
       type: "number",
       isRequired: true,
       name: '检测长度',
-      max: 999999,
+      max: 999999.999,
       precision: 3
     },
     remarks: {

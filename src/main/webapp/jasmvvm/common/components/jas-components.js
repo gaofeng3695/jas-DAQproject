@@ -1326,6 +1326,9 @@ Vue.component('jas-import-export-btns', {
 		exportTemplateCode: { // horizontal
 			type: String,
 		},
+		exportScannerTemplateCode: {
+			type: String,
+		},
 		functionCode: {
 			type: String,
 		},
@@ -1343,6 +1346,10 @@ Vue.component('jas-import-export-btns', {
 			type: Boolean,
 			default: true,
 		},
+		isScanner: {
+			type: Boolean,
+			default: false,
+		},
 		importConfig: {}
 	},
 	data: function () {
@@ -1351,13 +1358,22 @@ Vue.component('jas-import-export-btns', {
 	template: [
 		'<span style="margin-left: 10px;" v-show="templateCode">',
 		'<el-button size="small" v-if="isImport" type="primary" plain="plain" icon="fa fa-mail-forward" @click="bt_import">导入</el-button>',
-		'<el-button size="small" :disabled="oids.length==0" v-if="isExport" type="primary" plain="plain" icon="fa fa-mail-reply" @click="bt_export">导出已选</el-button>',
-		'<el-button size="small" v-if="isExport" type="primary" plain="plain" icon="fa fa-mail-reply-all" @click="bt_export_all">导出全部</el-button>',
-		'<el-button size="small" v-if="isImport" type="primary" plain="plain" icon="fa fa-download" @click="bt_download">下载模板</el-button>',
+		/*'<el-button size="small" :disabled="oids.length==0" v-if="isExport" type="primary" plain="plain" icon="fa fa-mail-reply" @click="bt_export">导出已选</el-button>',
+		'<el-button size="small" v-if="isExport" type="primary" plain="plain" icon="fa fa-mail-reply-all" @click="bt_export_all">导出全部</el-button>',*/
+			'<el-dropdown placement="bottom">',
+			  	'<el-button size="small" plain type="primary" icon="fa fa-mail-reply-all">导出<i class="el-icon-arrow-down el-icon--right"></i></el-button>',
+				  	'<el-dropdown-menu slot="dropdown" >',
+				    '<el-dropdown-item v-if="isExport"><el-button size="small" v-if="isExport" type="primary" plain="plain" icon="fa fa-mail-reply-all" @click="bt_export_all">导&#8197;出&#8197;全&#8197;部</el-button></el-dropdown-item>',
+				    '<el-dropdown-item v-if="isExport"><el-button size="small" :disabled="oids.length==0" v-if="isExport" type="primary" plain="plain" icon="fa fa-mail-reply" @click="bt_export">导&#8197;出&#8197;已&#8197;选</el-button></el-dropdown-item>',
+				    '<el-dropdown-item v-if="isScanner"><el-button size="small" plain type="primary" icon="fa fa-qrcode" @click="bt_export_scanner">导出二维码</el-button></el-dropdown-item>',
+			    '</el-dropdown-menu>',
+			'</el-dropdown>',
+			'<el-button size="small" v-if="isImport" type="primary" plain="plain" icon="fa fa-download" @click="bt_download">下载模板</el-button>',
 		'</span>',
 	].join(''),
 	methods: {
 		bt_import: function () { // 导入
+			console.log(this.isExport);
 			var that = this;
 			var src = './pages/template/dialogs/upload.html?templateCode=' + this.templateCode;
 			if (that.importConfig && that.importConfig.importUrl) {
@@ -1424,6 +1440,26 @@ Vue.component('jas-import-export-btns', {
 				excelTemplateCode: this.templateCode
 			});
 		},
+		bt_export_scanner:function(){
+			var that = this;
+			var url = jasTools.base.rootPath + '/importExcelController/exportExcel.do';
+			if (that.importConfig && that.importConfig.exportUrl) {
+				url = jasTools.base.rootPath + that.importConfig.exportUrl;
+			}
+			var keywords;
+			if(this.oids.length==0){
+				keywords=this.form;
+			}else{
+				keywords = { oids: this.oids};
+			}
+			jasTools.ajax.post(url, {
+				templateCode: this.exportScannerTemplateCode,
+				functionCode: this.functionCode, // 自定义表单功能编码
+				keywords: keywords
+			}, function (data) {
+				that._downloadExportFile(data.data);
+			});
+		}
 
 	},
 	mounted: function () {

@@ -79,6 +79,7 @@
 					foldername: '',
 					description: '',
 				},
+				folderType:'1',
 			}
 		},
 		created: function () {
@@ -91,6 +92,9 @@
 			if (param.parentid) {
 				this.parentid = param.parentid;
 			};
+			if(param.folderType){
+				this.folderType = param.folderType
+			}
 		},
 		methods: {
 			cancel: function (param) {
@@ -131,7 +135,7 @@
 					parentid: this.parentid,
 					foldername: this.form.foldername,
 					description: this.form.description,
-					foldertype: 1
+					foldertype: this.folderType
 
 				}, function (data) {
 					top.Vue.prototype.$message({
