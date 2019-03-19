@@ -40,7 +40,7 @@
 			</el-form>
 			<div slot="footer">
 				<el-button size="small" @click="cancel()">取 消</el-button>
-				<el-button size="small" :disabled="but_disabled" type="primary" @click="submit('formData')">确 定</el-button>
+				<el-button size="small" type="primary" @click="submit('formData')">确 定</el-button>
 			</div>
 		</jas-dialog-wrapper>
 
@@ -59,10 +59,6 @@
 			return {
 				but_disabled:false,
 				subFields: [{
-						field: "relativeMileage",
-						name: "里程"
-					}, //
-					{
 						field: "measuredAngle",
 						name: '实测转角(°)'
 					}, {
@@ -112,7 +108,10 @@
 				locationFields: [{
 					name: "桩号",
 					field: "medianStakeOid"
-				}],
+				},{
+                    field: "relativeMileage",
+                    name: "里程"
+                }],
 				sonFormDefault: {
 					relativeMileage: '',
 					measuredAngle: '', // 实测转角(°)
