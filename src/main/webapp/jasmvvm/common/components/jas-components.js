@@ -154,6 +154,7 @@ Vue.component('jas-file-upload', {
 			}
 		},
 		uploadFile: function (oid) {
+			console.log(this.projectOid);
 			var that = this;
 			that._deleteFilesToServer(function () {
 				that.uploadurl = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") +
@@ -200,6 +201,23 @@ Vue.component('jas-file-upload', {
 		uploaodNumberlimit: function () {
 			top.Vue.prototype.$message("最多上传" + this.limit + "个附件")
 		},
+		saveProjectAndFileRef:function(){//附件目录下，文件上传成功后保存文件与项目的关系
+			if(!this.projectOid){
+				return;
+			}
+			var that = this;
+			var url = jasTools.base.rootPath + "/daq/privilege/saveProjectAndFileRef.do";
+			jasTools.ajax.postForm(url, {
+				projectOid: this.projectOid,
+				docFileOidList:this.fileOidList
+			}, function (data) {
+				top.Vue.prototype.$message({
+					type: 'success',
+					message: data.message
+				});
+				that.cancel(1);
+			});
+		}
 	}
 
 });

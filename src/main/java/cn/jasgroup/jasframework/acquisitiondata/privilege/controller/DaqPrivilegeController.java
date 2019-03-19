@@ -786,4 +786,29 @@ public class DaqPrivilegeController extends BaseController{
 		}
 		return result;
 	}
+	/***
+	  * <p>功能描述：保存附件与项目的关联关系。</p>
+	  * <p> 雷凯。</p>	
+	  * @param request
+	  * @param param
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年3月18日 下午4:15:25。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="/saveProjectAndFileRef",method = RequestMethod.POST)
+	@ResponseBody
+	public Object saveProjectAndFileRef(HttpServletRequest request,@RequestBody Map<String,Object> param){
+		SimpleResult<String> result = null;
+		try {
+			String projectOid = param.get("projectOid").toString();
+			List<String> docFileOidList = (List<String>)param.get("docFileOidList");
+			this.daqPrivilegeService.saveProjectAndFileRef(projectOid, docFileOidList);
+			result = new SimpleResult<>(1, "200", "ok");
+		} catch (Exception e) {
+			result = new SimpleResult<>(-1, "400", e.getMessage());
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

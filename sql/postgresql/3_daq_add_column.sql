@@ -180,3 +180,5 @@ comment on column daq_construction_weld.sequence_number_second is '焊口顺序�
 
 alter table daq_construction_weld alter COLUMN weld_code TYPE varchar(150);
 /**********************焊口信息表添加字段end****************************/
+alter table sys_attachment add column pdf_save_path  varchar(500);
+comment on column sys_attachment.pdf_save_path is 'pdf文件保存路径';
