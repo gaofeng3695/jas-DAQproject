@@ -292,7 +292,7 @@
 			</div>
 			<div slot="footer" class="dialog-footer" style="text-align: center">
 				<el-button size="small" @click="cancel()">取 消</el-button>
-				<el-button size="small" type="primary" @click="submit('formData')">确 定
+				<el-button size="small" :disabled="but_disabled" type="primary" @click="submit('formData')">确 定
 				</el-button>
 			</div>
 		</jas-dialog-wrapper>
@@ -310,6 +310,7 @@
 		data: function () {
 			var that = this;
 			return {
+				but_disabled:false,
 				pipeTypeStr: 'pipe_type_code_0011,pipe_type_code_0021,pipe_type_code_0031,pipe_type_code_0081',
 				weldDisabled: true,//焊口编号是否置灰
 				typeRequired: false,
@@ -887,6 +888,7 @@
 				that.formData.coverOid = coverOidStr.substr(0, coverOidStr.length - 1)
 				that.formData.renderOid = renderOidStr.substr(0, renderOidStr.length - 1)
 				that.formData.padderOid = padderOidStr.substr(0, padderOidStr.length - 1)
+				this.but_disabled = true;
 				jasTools.ajax.post(url, that.formData, function (data) {
 					that.$refs.upload.uploadFile(data.data || that.oid);
 				});
