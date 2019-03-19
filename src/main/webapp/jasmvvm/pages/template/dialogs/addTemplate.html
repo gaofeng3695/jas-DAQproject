@@ -143,7 +143,7 @@
 			</el-form>
 			<div slot="footer">
 				<el-button size="small" @click="cancel()">取 消</el-button>
-				<el-button size="small" type="primary" @click="submit('formData')">确 定</el-button>
+				<el-button size="small" type="primary" :disabled="but_disabled" @click="submit('formData')">确 定</el-button>
 			</div>
 		</jas-dialog-wrapper>
 	</div>
@@ -158,6 +158,7 @@
 		el: "#app",
 		data: function () {
 			return {
+				but_disabled : false,				
 				isLoading: true,
 				rules: [],
 				formData: {
@@ -643,6 +644,7 @@
 						obj[key]=that.formData[key]
 					}
 				}
+				this.but_disabled = true;
 				jasTools.ajax.post(url, obj, function () {
 					if (that.ifAttachment) {
 					 that.$refs.upload.uploadFile(that.formData[that.pkArray[0]]); //触发上传附件
