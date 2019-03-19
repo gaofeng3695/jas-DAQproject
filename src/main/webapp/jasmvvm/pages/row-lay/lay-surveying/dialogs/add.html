@@ -57,8 +57,8 @@
 		data: function () {
 			var that = this;
 			return {
-				subFields: [
-					{
+				but_disabled:false,
+				subFields: [{
 						field: "measuredAngle",
 						name: '实测转角(°)'
 					}, {
@@ -294,9 +294,14 @@
 					url = jasTools.base.rootPath + "/jdbc/commonData/laySurveying/update.do";
 				}
 
+				that.but_disabled = true;
 				jasTools.ajax.post(url, that.form, function (data) {
 					that.$refs.upload.uploadFile(data.data || that.oid);
 
+				},function(data){
+					if(data.status==-1){
+						that.but_disabled = false;
+					}
 				});
 			},
 			uploadSuccess: function () {
