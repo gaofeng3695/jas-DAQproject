@@ -57,10 +57,7 @@
 		data: function () {
 			var that = this;
 			return {
-				subFields: [{
-						field: "relativeMileage",
-						name: "里程"
-					}, //
+				subFields: [
 					{
 						field: "measuredAngle",
 						name: '实测转角(°)'
@@ -111,7 +108,10 @@
 				locationFields: [{
 					name: "桩号",
 					field: "medianStakeOid"
-				}],
+				},{
+                    field: "relativeMileage",
+                    name: "里程"
+                }],
 				sonFormDefault: {
 					relativeMileage: '',
 					measuredAngle: '', // 实测转角(°)
