@@ -155,7 +155,7 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="相对桩位置" prop="relativeMileage" required>
-								<el-input-number :precision="3" :step="1" :max="999999" controls-position="right" v-model="formData.relativeMileage" clearable
+								<el-input-number :precision="3" :step="1" :max="999999.999" controls-position="right" v-model="formData.relativeMileage" clearable
 								 placeholder="请输入相对桩位置" size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
@@ -888,9 +888,13 @@
 				that.formData.coverOid = coverOidStr.substr(0, coverOidStr.length - 1)
 				that.formData.renderOid = renderOidStr.substr(0, renderOidStr.length - 1)
 				that.formData.padderOid = padderOidStr.substr(0, padderOidStr.length - 1)
-				this.but_disabled = true;
+				that.but_disabled = true;
 				jasTools.ajax.post(url, that.formData, function (data) {
 					that.$refs.upload.uploadFile(data.data || that.oid);
+				},function(data){
+					if(data.status==-1){
+						that.but_disabled = false;
+					}
 				});
 
 			},

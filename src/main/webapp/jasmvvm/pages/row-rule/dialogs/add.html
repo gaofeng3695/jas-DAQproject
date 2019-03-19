@@ -90,7 +90,7 @@ padding-top:10px;
 							</div>
 							<div class="btn-wrap">
 								<el-button size="small" @click="cancel()">取消</el-button>
-								<el-button size="small" type="primary" @click="save">完成</el-button>
+								<el-button size="small" :disabled="but_disabled" type="primary" @click="save">完成</el-button>
 							</div>
 						</div>
 					</div>
@@ -110,6 +110,7 @@ padding-top:10px;
 		el: "#app",
 		data: function () {
 			return {
+				but_disabled:false,
 				unsortList: [{
 					fieldNameCn: "项目编号",
 					fieldName: "projectOid"
@@ -212,12 +213,17 @@ padding-top:10px;
 					obj.oid=that.oid;
 					url=jasTools.base.rootPath + "/jdbc/commonData/weldCodeRegular/update.do";
 				}
+				that.but_disabled = true;
 				jasTools.ajax.post(url, obj, function (data) {
 					top.Vue.prototype.$message({
 						type: 'success',
 						message: !that.isEdit ? '保存成功' : '修改成功'
 					});
 					that.cancel(1);
+				},function(data){
+					if(data.status==-1){
+						that.but_disabled = false;
+					}
 				});
 			},
 			cancel: function (param) {

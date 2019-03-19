@@ -180,5 +180,195 @@ comment on column daq_construction_weld.sequence_number_second is '焊口顺序�
 
 alter table daq_construction_weld alter COLUMN weld_code TYPE varchar(150);
 /**********************焊口信息表添加字段end****************************/
+
+ALTER TABLE daq_station_pipe_pressure_test alter COLUMN start_relative_mileage type NUMERIC(9,2);
+ALTER TABLE daq_station_pipe_pressure_test alter COLUMN end_relative_mileage type NUMERIC(9,2);
+
+ALTER TABLE daq_station_pipe_sweeping alter COLUMN start_relative_mileage type NUMERIC(9,2);
+ALTER TABLE daq_station_pipe_sweeping alter COLUMN end_relative_mileage type NUMERIC(9,2);
+
+ALTER TABLE daq_station_entrance_and_exit alter COLUMN relative_mileage type NUMERIC(9,2);
+
+ALTER TABLE daq_station_entrance_and_exit alter COLUMN pointx type NUMERIC(12,9);
+ALTER TABLE daq_station_entrance_and_exit alter COLUMN pointy type NUMERIC(12,9);
+ALTER TABLE daq_station_entrance_and_exit alter COLUMN pointz type NUMERIC(6,2);
+
+ALTER TABLE daq_station_condensing_tube alter COLUMN pointx type NUMERIC(12,9);
+ALTER TABLE daq_station_condensing_tube alter COLUMN pointy type NUMERIC(12,9);
+ALTER TABLE daq_station_condensing_tube alter COLUMN pointz type NUMERIC(6,2);
+ALTER TABLE daq_station_condensing_tube alter COLUMN relative_mileage type NUMERIC(9,2);
+
+-- 工艺，站场腐蚀与防护，动、静设备
+ALTER TABLE daq_station_reserved_interface alter COLUMN pointx type NUMERIC(12,9);
+ALTER TABLE daq_station_reserved_interface alter COLUMN pointy type NUMERIC(12,9);
+ALTER TABLE daq_station_reserved_interface alter COLUMN pointz type NUMERIC(6,2);
+
+ALTER TABLE daq_station_closure alter COLUMN pointx type NUMERIC(12,9);
+ALTER TABLE daq_station_closure alter COLUMN pointy type NUMERIC(12,9);
+ALTER TABLE daq_station_closure alter COLUMN pointz type NUMERIC(6,2);
+
+ALTER TABLE daq_station_vent_stack alter COLUMN pointx type NUMERIC(12,9);
+ALTER TABLE daq_station_vent_stack alter COLUMN pointy type NUMERIC(12,9);
+
+ALTER TABLE daq_station_auxiliary_anode_bed alter COLUMN pointx type NUMERIC(12,9);
+ALTER TABLE daq_station_auxiliary_anode_bed alter COLUMN pointy type NUMERIC(12,9);
+ALTER TABLE daq_station_auxiliary_anode_bed alter COLUMN pointz type NUMERIC(6,2);
+ALTER TABLE daq_station_auxiliary_anode_bed alter COLUMN relative_mileage type NUMERIC(9,2);
+
+ALTER TABLE daq_station_ic_detection_sys alter COLUMN start_relative_mileage type NUMERIC(9,2);
+ALTER TABLE daq_station_ic_detection_sys alter COLUMN end_relative_mileage type NUMERIC(9,2);
+
+ALTER TABLE daq_station_cp_power_supply alter COLUMN pointx type NUMERIC(12,9);
+ALTER TABLE daq_station_cp_power_supply alter COLUMN pointy type NUMERIC(12,9);
+ALTER TABLE daq_station_cp_power_supply alter COLUMN pointz type NUMERIC(6,2);
+
+-- 中低压
+ALTER TABLE daq_mv_pipe_node alter COLUMN pointx type NUMERIC(12,9);
+ALTER TABLE daq_mv_pipe_node alter COLUMN pointy type NUMERIC(12,9);
+ALTER TABLE daq_mv_pipe_node alter COLUMN pointz type NUMERIC(6,2);
+
+ALTER TABLE daq_mv_pipe_section alter COLUMN start_pointx type NUMERIC(12,9);
+ALTER TABLE daq_mv_pipe_section alter COLUMN start_pointy type NUMERIC(12,9);
+ALTER TABLE daq_mv_pipe_section alter COLUMN start_pointz type NUMERIC(6,2);
+ALTER TABLE daq_mv_pipe_section alter COLUMN end_pointx type NUMERIC(12,9);
+ALTER TABLE daq_mv_pipe_section alter COLUMN end_pointy type NUMERIC(12,9);
+ALTER TABLE daq_mv_pipe_section alter COLUMN end_pointz type NUMERIC(6,2);
+
+ALTER TABLE daq_mv_across_info alter COLUMN start_pointx type NUMERIC(12,9);
+ALTER TABLE daq_mv_across_info alter COLUMN start_pointy type NUMERIC(12,9);
+ALTER TABLE daq_mv_across_info alter COLUMN start_pointz type NUMERIC(6,2);
+ALTER TABLE daq_mv_across_info alter COLUMN end_pointx type NUMERIC(12,9);
+ALTER TABLE daq_mv_across_info alter COLUMN end_pointy type NUMERIC(12,9);
+ALTER TABLE daq_mv_across_info alter COLUMN end_pointz type NUMERIC(6,2);
+
+ALTER TABLE daq_mv_stride_across_info alter COLUMN start_pointx type NUMERIC(12,9);
+ALTER TABLE daq_mv_stride_across_info alter COLUMN start_pointy type NUMERIC(12,9);
+ALTER TABLE daq_mv_stride_across_info alter COLUMN start_pointz type NUMERIC(6,2);
+ALTER TABLE daq_mv_stride_across_info alter COLUMN end_pointx type NUMERIC(12,9);
+ALTER TABLE daq_mv_stride_across_info alter COLUMN end_pointy type NUMERIC(12,9);
+ALTER TABLE daq_mv_stride_across_info alter COLUMN end_pointz type NUMERIC(6,2);
+
+ALTER TABLE daq_mv_pipe_trench_protect alter COLUMN start_pointx type NUMERIC(12,9);
+ALTER TABLE daq_mv_pipe_trench_protect alter COLUMN start_pointy type NUMERIC(12,9);
+ALTER TABLE daq_mv_pipe_trench_protect alter COLUMN start_pointz type NUMERIC(6,2);
+ALTER TABLE daq_mv_pipe_trench_protect alter COLUMN end_pointx type NUMERIC(12,9);
+ALTER TABLE daq_mv_pipe_trench_protect alter COLUMN end_pointy type NUMERIC(12,9);
+ALTER TABLE daq_mv_pipe_trench_protect alter COLUMN end_pointz type NUMERIC(6,2);
+
+ALTER TABLE daq_mv_bushing_info alter COLUMN start_pointx type NUMERIC(12,9);
+ALTER TABLE daq_mv_bushing_info alter COLUMN start_pointy type NUMERIC(12,9);
+ALTER TABLE daq_mv_bushing_info alter COLUMN start_pointz type NUMERIC(6,2);
+ALTER TABLE daq_mv_bushing_info alter COLUMN end_pointx type NUMERIC(12,9);
+ALTER TABLE daq_mv_bushing_info alter COLUMN end_pointy type NUMERIC(12,9);
+ALTER TABLE daq_mv_bushing_info alter COLUMN end_pointz type NUMERIC(6,2);
+
+ALTER TABLE daq_mv_valve_info alter COLUMN pointx type NUMERIC(12,9);
+ALTER TABLE daq_mv_valve_info alter COLUMN pointy type NUMERIC(12,9);
+ALTER TABLE daq_mv_valve_info alter COLUMN pointz type NUMERIC(6,2);
+
+ALTER TABLE daq_mv_mark_stake alter COLUMN pointx type NUMERIC(12,9);
+ALTER TABLE daq_mv_mark_stake alter COLUMN pointy type NUMERIC(12,9);
+ALTER TABLE daq_mv_mark_stake alter COLUMN pointz type NUMERIC(6,2);
+
+ALTER TABLE daq_mv_electronic_label alter COLUMN pointx type NUMERIC(12,9);
+ALTER TABLE daq_mv_electronic_label alter COLUMN pointy type NUMERIC(12,9);
+ALTER TABLE daq_mv_electronic_label alter COLUMN pointz type NUMERIC(6,2);
+
+ALTER TABLE daq_mv_monitor_well alter COLUMN pointx type NUMERIC(12,9);
+ALTER TABLE daq_mv_monitor_well alter COLUMN pointy type NUMERIC(12,9);
+ALTER TABLE daq_mv_monitor_well alter COLUMN pointz type NUMERIC(6,2);
+
+
+-----------高压xyz字段类型修改----------------------------------------------------
+ALTER TABLE daq_cross_pipe_jacking alter COLUMN start_pointx type NUMERIC(12,9);
+ALTER TABLE daq_cross_pipe_jacking alter COLUMN start_pointy type NUMERIC(12,9);
+ALTER TABLE daq_cross_pipe_jacking alter COLUMN start_pointz type NUMERIC(6,2);
+ALTER TABLE daq_cross_pipe_jacking alter COLUMN end_pointx type NUMERIC(12,9);
+ALTER TABLE daq_cross_pipe_jacking alter COLUMN end_pointy type NUMERIC(12,9);
+ALTER TABLE daq_cross_pipe_jacking alter COLUMN end_pointz type NUMERIC(6,2);
+
+ALTER TABLE daq_cross_box_culvert alter COLUMN start_pointx type NUMERIC(12,9);
+ALTER TABLE daq_cross_box_culvert alter COLUMN start_pointy type NUMERIC(12,9);
+ALTER TABLE daq_cross_box_culvert alter COLUMN start_pointz type NUMERIC(6,2);
+ALTER TABLE daq_cross_box_culvert alter COLUMN end_pointx type NUMERIC(12,9);
+ALTER TABLE daq_cross_box_culvert alter COLUMN end_pointy type NUMERIC(12,9);
+ALTER TABLE daq_cross_box_culvert alter COLUMN end_pointz type NUMERIC(6,2);
+
+ALTER TABLE daq_cross_drilling alter COLUMN start_pointx type NUMERIC(12,9);
+ALTER TABLE daq_cross_drilling alter COLUMN start_pointy type NUMERIC(12,9);
+ALTER TABLE daq_cross_drilling alter COLUMN start_pointz type NUMERIC(6,2);
+ALTER TABLE daq_cross_drilling alter COLUMN end_pointx type NUMERIC(12,9);
+ALTER TABLE daq_cross_drilling alter COLUMN end_pointy type NUMERIC(12,9);
+ALTER TABLE daq_cross_drilling alter COLUMN end_pointz type NUMERIC(6,2);
+
+ALTER TABLE daq_cross_shield alter COLUMN start_pointx type NUMERIC(12,9);
+ALTER TABLE daq_cross_shield alter COLUMN start_pointy type NUMERIC(12,9);
+ALTER TABLE daq_cross_shield alter COLUMN start_pointz type NUMERIC(6,2);
+ALTER TABLE daq_cross_shield alter COLUMN end_pointx type NUMERIC(12,9);
+ALTER TABLE daq_cross_shield alter COLUMN end_pointy type NUMERIC(12,9);
+ALTER TABLE daq_cross_shield alter COLUMN end_pointz type NUMERIC(6,2);
+
+ALTER TABLE daq_cross_drilling_blasting alter COLUMN start_pointx type NUMERIC(12,9);
+ALTER TABLE daq_cross_drilling_blasting alter COLUMN start_pointy type NUMERIC(12,9);
+ALTER TABLE daq_cross_drilling_blasting alter COLUMN start_pointz type NUMERIC(6,2);
+ALTER TABLE daq_cross_drilling_blasting alter COLUMN end_pointx type NUMERIC(12,9);
+ALTER TABLE daq_cross_drilling_blasting alter COLUMN end_pointy type NUMERIC(12,9);
+ALTER TABLE daq_cross_drilling_blasting alter COLUMN end_pointz type NUMERIC(6,2);
+
+ALTER TABLE daq_cross_across alter COLUMN start_pointx type NUMERIC(12,9);
+ALTER TABLE daq_cross_across alter COLUMN start_pointy type NUMERIC(12,9);
+ALTER TABLE daq_cross_across alter COLUMN start_pointz type NUMERIC(6,2);
+ALTER TABLE daq_cross_across alter COLUMN end_pointx type NUMERIC(12,9);
+ALTER TABLE daq_cross_across alter COLUMN end_pointy type NUMERIC(12,9);
+ALTER TABLE daq_cross_across alter COLUMN end_pointz type NUMERIC(6,2);
+
+ALTER TABLE daq_cathodic_isolating_piece alter COLUMN pointx type NUMERIC(12,9);
+ALTER TABLE daq_cathodic_isolating_piece alter COLUMN pointy type NUMERIC(12,9);
+ALTER TABLE daq_cathodic_isolating_piece alter COLUMN pointz type NUMERIC(6,2);
+
+ALTER TABLE daq_cathodic_sacrifice_anode alter COLUMN pointx type NUMERIC(12,9);
+ALTER TABLE daq_cathodic_sacrifice_anode alter COLUMN pointy type NUMERIC(12,9);
+ALTER TABLE daq_cathodic_sacrifice_anode alter COLUMN pointz type NUMERIC(6,2);
+
+ALTER TABLE daq_cathodic_insulated_joint alter COLUMN pointx type NUMERIC(12,9);
+ALTER TABLE daq_cathodic_insulated_joint alter COLUMN pointy type NUMERIC(12,9);
+ALTER TABLE daq_cathodic_insulated_joint alter COLUMN pointz type NUMERIC(6,2);
+
+ALTER TABLE daq_cathodic_test_stake alter COLUMN pointx type NUMERIC(12,9);
+ALTER TABLE daq_cathodic_test_stake alter COLUMN pointy type NUMERIC(12,9);
+ALTER TABLE daq_cathodic_test_stake alter COLUMN pointz type NUMERIC(6,2);
+
+ALTER TABLE daq_cathodic_polarity_drainage alter COLUMN pointx type NUMERIC(12,9);
+ALTER TABLE daq_cathodic_polarity_drainage alter COLUMN pointy type NUMERIC(12,9);
+
+ALTER TABLE daq_cathodic_anode_bed alter COLUMN pointx type NUMERIC(12,9);
+ALTER TABLE daq_cathodic_anode_bed alter COLUMN pointy type NUMERIC(12,9);
+ALTER TABLE daq_cathodic_anode_bed alter COLUMN pointz type NUMERIC(6,2);
+
+ALTER TABLE daq_appendages_mark_stake alter COLUMN pointx type NUMERIC(12,9);
+ALTER TABLE daq_appendages_mark_stake alter COLUMN pointy type NUMERIC(12,9);
+
+ALTER TABLE daq_appendages_electronic_label alter COLUMN pointx type NUMERIC(12,9);
+ALTER TABLE daq_appendages_electronic_label alter COLUMN pointy type NUMERIC(12,9);
+ALTER TABLE daq_appendages_electronic_label alter COLUMN pointz type NUMERIC(6,2);
+
+ALTER TABLE daq_appendages_hand_hole alter COLUMN pointx type NUMERIC(12,9);
+ALTER TABLE daq_appendages_hand_hole alter COLUMN pointy type NUMERIC(12,9);
+ALTER TABLE daq_appendages_hand_hole alter COLUMN pointz type NUMERIC(6,2);
+
+ALTER TABLE daq_appendages_obstacle alter COLUMN pointx type NUMERIC(12,9);
+ALTER TABLE daq_appendages_obstacle alter COLUMN pointy type NUMERIC(12,9);
+ALTER TABLE daq_appendages_obstacle alter COLUMN pointz type NUMERIC(6,2);
+
+ALTER TABLE daq_appendages_hydraulic_protection alter COLUMN start_pointx type NUMERIC(12,9);
+ALTER TABLE daq_appendages_hydraulic_protection alter COLUMN start_pointy type NUMERIC(12,9);
+ALTER TABLE daq_appendages_hydraulic_protection alter COLUMN end_pointx type NUMERIC(12,9);
+ALTER TABLE daq_appendages_hydraulic_protection alter COLUMN end_pointy type NUMERIC(12,9);
+
+ALTER TABLE daq_appendages_casing_pipe alter COLUMN start_pointx type NUMERIC(12,9);
+ALTER TABLE daq_appendages_casing_pipe alter COLUMN start_pointy type NUMERIC(12,9);
+ALTER TABLE daq_appendages_casing_pipe alter COLUMN end_pointx type NUMERIC(12,9);
+ALTER TABLE daq_appendages_casing_pipe alter COLUMN end_pointy type NUMERIC(12,9);
+/******/
 alter table sys_attachment add column pdf_save_path  varchar(500);
 comment on column sys_attachment.pdf_save_path is 'pdf文件保存路径';

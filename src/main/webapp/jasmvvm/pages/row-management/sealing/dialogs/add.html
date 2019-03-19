@@ -94,7 +94,7 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="管道外壁直径(mm)">
-								<el-input-number :precision="3" :step="1" :max="1000" controls-position="right" v-model="formData.outsideDiameter" clearable
+								<el-input-number :precision="3" :step="1" :max="999999.999" controls-position="right" v-model="formData.outsideDiameter" clearable
 								  placeholder="请输入管道外壁直径(mm)" size="small"></el-input-number>
 
 
@@ -102,7 +102,7 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="管道壁厚(mm)">
-								<el-input-number :precision="3" :step="1" :max="1000" controls-position="right" v-model="formData.wallThickness" clearable
+								<el-input-number :precision="3" :step="1" :max="999999.999" controls-position="right" v-model="formData.wallThickness" clearable
 								  placeholder="请输入管道壁厚(mm)" size="small"></el-input-number>
 
 
@@ -166,7 +166,7 @@
 		</div>
 		<div slot="footer" class="dialog-footer" style="text-align: center">
 			<el-button size="small" @click="cancel()">取 消</el-button>
-			<el-button size="small" type="primary" @click="submit('formData')">确 定
+			<el-button size="small" :disabled="but_disabled" type="primary" @click="submit('formData')">确 定
 			</el-button>
 		</div>
 	</div>
@@ -183,6 +183,7 @@
 		data: function () {
 			var that = this;
 			return {
+				but_disabled:false,
 				domain: {
 					closureTypes: [{
 						key: '0',
@@ -406,8 +407,13 @@
 					url = jasTools.base.rootPath +
 						"/jdbc/commonData/closure/update.do";
 				}
+				that.but_disabled = true;
 				jasTools.ajax.post(url, that.formData, function (data) {
 					that.$refs.upload.uploadFile(data.data || that.oid);
+				},function(data){
+					if(data.status==-1){
+						that.but_disabled = false;
+					}
 				});
 
 			},

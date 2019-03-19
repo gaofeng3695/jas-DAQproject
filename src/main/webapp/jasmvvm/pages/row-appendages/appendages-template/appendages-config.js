@@ -809,15 +809,15 @@ var crossConfig = {
     relativeMileage: {
       name: '相对桩位置(m)',
       type: 'number',
-      max: 999999,
+      max: 999999.999,
       precision: 3,
       isRequired: true
     }, //: -0.5,
     pointx: {
       name: 'X坐标',
       type: 'number',
-      max: 9999999,
-      precision: 3,
+      max: 999.999999999,
+      precision: 9,
       nameConfig: {
         appendagesMarkStake: 'X坐标'
       }
@@ -825,8 +825,8 @@ var crossConfig = {
     pointy: {
       name: 'Y坐标',
       type: 'number',
-      max: 99999999,
-      precision: 3,
+      max: 999.999999999,
+      precision: 9,
       nameConfig: {
         appendagesMarkStake: 'Y坐标'
       }
@@ -857,7 +857,7 @@ var crossConfig = {
     burialDepth: {
       name: '埋深(m)',
       type: 'number',
-      max: 99999,
+      max: 99999.99,
       precision: 2
     },
     //2222222
@@ -884,8 +884,8 @@ var crossConfig = {
     pointz: {
       name: '高程(m)',
       type: 'number',
-      max: 9999,
-      precision: 3,
+      max: 9999.99,
+      precision: 2,
       nameConfig: {
         appendagesHandHole: '地表高程(m)'
       }
@@ -968,7 +968,7 @@ var crossConfig = {
     "stayLong": {
       name: '光缆盘留长度(m)',
       type: 'number',
-      max: 99999,
+      max: 99999.99,
       precision: 2,
     },
     "isElectronicMark": {
@@ -1070,7 +1070,7 @@ var crossConfig = {
     "minDistance": {
       name: '最小间距(m)',
       type: 'number',
-      max: 9999,
+      max: 9999.999,
       precision: 3,
     }, //: 1,
     "isThroughPipeline": {
@@ -1122,26 +1122,26 @@ var crossConfig = {
     "startPointx": {
       name: '起点X坐标',
       type: 'number',
-      max: 9999999,
-      precision: 3,
+      max: 999.999999999,
+      precision: 9,
     }, //: 115.005,
     "startPointy": {
       name: '起点Y坐标',
       type: 'number',
-      max: 99999999,
-      precision: 3,
+      max: 999.999999999,
+      precision: 9,
     }, //: 38.153,
     "endPointx": {
       name: '终点X坐标',
       type: 'number',
-      max: 9999999,
-      precision: 3,
+      max: 999.999999999,
+      precision: 9,
     }, //: 115.005,
     "endPointy": {
       name: '终点Y坐标',
       type: 'number',
-      max: 99999999,
-      precision: 3,
+      max: 999.999999999,
+      precision: 9,
     }, //: 38.152,
     "structureSize": {
       name: '结构尺寸',
@@ -1155,7 +1155,7 @@ var crossConfig = {
     "engineerQuatity": {
       name: '工程量(m³)',
       type: 'number',
-      max: 99999,
+      max: 99999.999,
       precision: 3,
     }, //: 12.15,
     "hydraulicProtectionMaterial": {
@@ -1211,8 +1211,8 @@ var crossConfig = {
     "startRelativeMileage": {
       name: '相对起始桩位置(m)',
       type: 'number',
-      max: 999999,
-      precision: 0,
+      max: 999999.999,
+      precision: 3,
       isRequired: true
     }, //: 1,
     "endMedianStakeOid": {
@@ -1226,8 +1226,8 @@ var crossConfig = {
     "endRelativeMileage": {
       name: '相对结束桩位置(m)',
       type: 'number',
-      max: 999999,
-      precision: 0,
+      max: 999999.999,
+      precision: 3,
       isRequired: true
     }, //: 1, //: -1,
 
@@ -1242,7 +1242,7 @@ var crossConfig = {
     "casingPipeLength": {
       name: '套管长度(m)',
       type: 'number',
-      max: 99999999,
+      max: 9999999.99,
       precision: 2,
     }, //: 12.15,
     "casingPipeSpecifications": {

@@ -645,11 +645,15 @@
 					}
 				}
 				this.but_disabled = true;
-				jasTools.ajax.post(url, obj, function () {
+				jasTools.ajax.post(url, obj, function (data) {
 					if (that.ifAttachment) {
-					 that.$refs.upload.uploadFile(that.formData[that.pkArray[0]]); //触发上传附件
+					 	that.$refs.upload.uploadFile(that.formData[that.pkArray[0]]); //触发上传附件
 					} else {
-					that.uploadSuccess();
+						that.uploadSuccess();
+					}
+				},function(data){
+					if(data.status==-1){
+						that.but_disabled = false;
 					}
 				});
 			},

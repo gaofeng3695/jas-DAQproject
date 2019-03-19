@@ -76,39 +76,39 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="相对桩位置">
-								<el-input-number :precision="3" :step="1" :max="999999" controls-position="right" v-model="formData.relativeMileage" clearable
+								<el-input-number :precision="3" :step="1" :max="999999.999" controls-position="right" v-model="formData.relativeMileage" clearable
 								 placeholder="请输入相对桩位置" size="small" disabled></el-input-number>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="坐标X" required prop="pointx">
-								<el-input-number :precision="3" :step="1" :max="9999999" controls-position="right" v-model="formData.pointx" clearable placeholder="请输入坐标X"
+								<el-input-number :precision="9" :step="1" :max="999.999999999" controls-position="right" v-model="formData.pointx" clearable placeholder="请输入坐标X"
 								 size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="坐标Y" required prop="pointy">
-								<el-input-number :precision="3" :step="1" :max="99999999" controls-position="right" v-model="formData.pointy" clearable placeholder="请输入坐标Y"
+								<el-input-number :precision="9" :step="1" :max="999.999999999" controls-position="right" v-model="formData.pointy" clearable placeholder="请输入坐标Y"
 								 size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="地表高程(m)" required prop="surfaceeLevation">
-								<el-input-number :precision="2" :step="1" :max="9999999" controls-position="right" v-model="formData.surfaceeLevation" clearable
+								<el-input-number :precision="2" :step="1" :max="9999.99" controls-position="right" v-model="formData.surfaceeLevation" clearable
 								 placeholder="请输入地表高程(m)" size="small"></el-input-number>
 							</el-form-item>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="管顶高程(m)" required prop="pipeTopElevation">
-								<el-input-number :precision="2" :step="1" :max="9999999" controls-position="right" v-model="formData.pipeTopElevation" clearable
+								<el-input-number :precision="2" :step="1" :max="9999999.99" controls-position="right" v-model="formData.pipeTopElevation" clearable
 								 placeholder="请输入管顶高程(m)" size="small"></el-input-number>
 							</el-form-item>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="埋深(m)">
-								<el-input-number :precision="2" :step="1" :max="9999999" controls-position="right" v-model="formData.buriedDepth" clearable
+								<el-input-number :precision="2" :step="1" :max="99999.99" controls-position="right" v-model="formData.buriedDepth" clearable
 								 placeholder="请输入埋深(m)" size="small"></el-input-number>
 							</el-form-item>
 							</el-form-item>
@@ -126,7 +126,7 @@
 			</div>
 			<div slot="footer" class="dialog-footer" style="text-align: center">
 				<el-button size="small" @click="cancel()">取 消</el-button>
-				<el-button size="small" type="primary" @click="submit('formData')">确 定
+				<el-button size="small" :disabled="but_disabled" type="primary" @click="submit('formData')">确 定
 				</el-button>
 			</div>
 		</jas-dialog-wrapper>
@@ -144,6 +144,7 @@
 		data: function () {
 			var that = this;
 			return {
+				but_disabled:false,
 				domain: {
 					welds: [],
 					bendings: [],//弯管编号
@@ -407,8 +408,13 @@
 					url = jasTools.base.rootPath +
 						"/jdbc/commonData/weldMeasuredResult/update.do";
 				}
+				that.but_disabled = true;
 				jasTools.ajax.post(url, that.formData, function (data) {
 					that.$refs.upload.uploadFile(data.data || that.oid);
+				},function(data){
+					if(data.status==-1){
+						that.but_disabled = false;
+					}
 				});
 			},
 			uploadSuccess: function () {

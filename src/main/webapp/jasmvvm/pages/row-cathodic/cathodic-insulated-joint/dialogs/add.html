@@ -62,7 +62,7 @@
 			</div>
 			<div slot="footer" class="dialog-footer" style="text-align: center">
 				<el-button size="small" @click="cancel()">取 消</el-button>
-				<el-button size="small" type="primary" @click="submit('formData')">确 定
+				<el-button size="small" :disabled="but_disabled" type="primary" @click="submit('formData')">确 定
 				</el-button>
 			</div>
 		</jas-dialog-wrapper>
@@ -80,6 +80,7 @@
 		data: function () {
 			var that = this;
 			return {
+				but_disabled:false,
 				formData: {
 					projectOid: "",
 					tendersOid: "",
@@ -257,29 +258,29 @@
 					relativeMileage: {
 						type: 'number',
 						name: '相对桩位置(m)',
-						max: 99999999,
-						precision: 0,
+						max: 9999999.99,
+						precision: 2,
 						isRequired: true
 					},
 					pointx: {
 						type: 'number',
 						name: 'X坐标',
-						max: 999999,
-						precision: 3,
+						max: 999.999999999,
+						precision: 9,
 						// isRequired: true
 					},
 					pointy: {
 						type: 'number',
 						name: 'Y坐标',
-						max: 999999,
-						precision: 3,
+						max: 999.999999999,
+						precision: 9,
 						// isRequired: true
 					},
 					pointz: {
 						type: 'number',
 						name: '高程(m)',
-						max: 999999,
-						precision: 3,
+						max: 9999.99,
+						precision: 2,
 						// isRequired: true
 					}
 				},
@@ -327,8 +328,13 @@
 					url = jasTools.base.rootPath +
 						"/jdbc/commonData/cathodicInsulatedJoint/update.do";
 				}
+				that.but_disabled = true;
 				jasTools.ajax.post(url, that.formData, function (data) {
 					that.$refs.upload.uploadFile(data.data || that.oid);
+				},function(data){
+					if(data.status==-1){
+						that.but_disabled = false;
+					}
 				});
 
 			},
