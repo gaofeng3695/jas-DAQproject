@@ -369,3 +369,6 @@ ALTER TABLE daq_appendages_casing_pipe alter COLUMN start_pointx type NUMERIC(12
 ALTER TABLE daq_appendages_casing_pipe alter COLUMN start_pointy type NUMERIC(12,9);
 ALTER TABLE daq_appendages_casing_pipe alter COLUMN end_pointx type NUMERIC(12,9);
 ALTER TABLE daq_appendages_casing_pipe alter COLUMN end_pointy type NUMERIC(12,9);
+/******/
+alter table sys_attachment add column pdf_save_path  varchar(500);
+comment on column sys_attachment.pdf_save_path is 'pdf文件保存路径';

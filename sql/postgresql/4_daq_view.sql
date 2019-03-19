@@ -149,3 +149,11 @@ LEFT JOIN (SELECT oid, project_name, active FROM daq_project where active=1) pro
 LEFT JOIN (select code_id,code_name from sys_domain where active=1) d on d.code_id=wmr.measure_control_point_type 
 LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) u on u.oid = wmr.construct_unit 
 where wmr.active=1 and wmr.measure_control_point_type='measure_control_point_type_code_003';
+
+/**
+ * 
+ */
+create or replace view v_daq_project_jasdoc_ref as 
+	select j.id ||','|| project_oid as id,j.parentid||','||project_oid as parentid,j.foldername,j.foldertype,j.folderlocation,j.createtime,j.createuser,j.sort,j.hierarchy,j.deleteflag,j.isdefaultfavorite,j.deleteuser,j.updateuser,j.updatetime,j.ext_field1,j.ext_field2,j.ext_field3,j.ext_field4,j.ext_field5,j.description,j.createusername,j.updateusername,project_oid,project_name from (select oid as project_oid,project_name from daq_project where active=1) p left join(select * from jasdoc_folder where deleteflag='0' and foldertype=2 and parentid<>'0') j on 1=1
+	union all 
+	select j.id ||','|| project_oid as id,j.id as parentid,p.project_name as foldername,j.foldertype,j.folderlocation,j.createtime,j.createuser,j.sort,j.hierarchy,j.deleteflag,j.isdefaultfavorite,j.deleteuser,j.updateuser,j.updatetime,j.ext_field1,j.ext_field2,j.ext_field3,j.ext_field4,j.ext_field5,j.description,j.createusername,j.updateusername,p.project_oid,p.project_name from (select oid as project_oid,project_name from daq_project where active=1) p left join (select * from jasdoc_folder where deleteflag='0' and foldertype=2 and parentid='0') j on 1=1

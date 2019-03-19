@@ -327,4 +327,17 @@ public class DaqPrivilegeService extends BaseService{
 	public List<Map<String,Object>>getSupervisionUnitByProjectOid(String projectOid){
 		return this.daqPrivilegeDao.getSupervisionUnitByProjectOid(projectOid);
 	}
+	
+	/**
+	  * <p>功能描述：保存附件与项目的关联关系。</p>
+	  * <p> 雷凯。</p>	
+	  * @param projectOid
+	  * @param docFileOid
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年3月18日 下午5:08:29。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public void saveProjectAndFileRef(String projectOid,List<String> docFileOidList){
+		daqPrivilegeDao.saveProjectAndFileRef(projectOid,docFileOidList);
+	}
 }
