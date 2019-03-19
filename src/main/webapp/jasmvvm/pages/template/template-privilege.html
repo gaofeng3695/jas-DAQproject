@@ -269,7 +269,8 @@
 				isShowSearch: false,
 				privilegeCode:"",
 				sortName: null,
-				sortOrder: null
+				sortOrder: null,
+				primaryKey:"oid",
 			}
 		},
 		computed: {
@@ -502,6 +503,13 @@
 						});
 						that.loading = false;
 						return;
+					}else{
+						for(var obj in data.data.functionFieldsBoList){
+							if(obj.ifPrimaryKey){
+								that.primaryKey = obj.fieldName;
+								break;
+							}
+						}
 					}
 
 					that.getSearchFieldAndList(data.data);
@@ -773,9 +781,10 @@
 				if (this.isApprove) {
 					src += '&approveType=1';
 				}
-				for (var key in row) {
+				/* for (var key in row) {
 					src += "&" + key + '=' + row[key];
-				}
+				} */
+				src += '&'+ this.primaryKey + '=' + row[this.primaryKey];
 				top.jasTools.dialog.show({
 					title: '查看',
 					width: that.config.view.width,
