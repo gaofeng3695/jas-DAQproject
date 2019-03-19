@@ -101,7 +101,7 @@
 			</el-form>
 			<div slot="footer" >
 				<el-button size="small" @click="cancel()">取 消</el-button>
-				<el-button size="small" type="primary" @click="submit('tableFormData')">确 定</el-button>
+				<el-button size="small" :disabled="but_disabled" type="primary" @click="submit('tableFormData')">确 定</el-button>
 			</div>
 		</jas-dialog-wrapper>
 
@@ -120,6 +120,7 @@
 		data: function () {
 			var that = this;
 			return {
+				but_disabled:false,
 				treeProps: {
 					value: 'id',
 					label: 'text',
@@ -218,6 +219,7 @@
 					msg = "修改成功";
 					url = jasTools.base.rootPath + "/jasframework/privilege/unit/updateUnit.do";
 				}
+				that.but_disabled = true;
 				if (!that.tableFormData.parentId) {
 					that.tableFormData.parentId = 'f4b587f5-4f84-4e51-9ae7-529a7f16b2f6';
 				}
@@ -227,6 +229,10 @@
 						message: msg
 					});
 					that.cancel(1);
+				},function(data){
+					if(data.status==-1){
+						that.but_disabled = false;
+					}
 				});
 			},
 			checkNameOrCodeExist: function (cb) {
