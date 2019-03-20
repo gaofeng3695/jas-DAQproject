@@ -1,0 +1,4 @@
+-- 文档中线数据初始化
+insert into jasdoc_folder values ('190c533a-2753-4588-99f2-28a8f897721f', '0', 'attachment', '2', '/attachment', '2018-04-11 16:57:06', '1df621c3346c4a8bac91d1238afc8400', '1', '80001153', '0', null, null, '1df621c3346c4a8bac91d1238afc8400', '2018-04-11 16:57:06', null, null, null, null, null, '关联文档存放目录', null, null);
+insert into jasdoc_folder values ('ca60e123-d25e-4e93-8274-7be9912048ec', '0', '文档中心', '1', '/文档中心', '2012-11-30 00:00:00', '1df621c3346c4a8bac91d1238afc8400', '1', '80001151', '0', '0', null, '1df621c3346c4a8bac91d1238afc8400', null, null, null, null, null, null, null, null, null);
+insert into jasdoc_classify_folder values ('6b55a993-5c9d-4f2b-9729-c9814e08a8ca', '0', '文档分类', '/文档分类', '2015-06-14 14:45:21', '1df621c3346c4a8bac91d1238afc8400', '1', '80001152', '0', null, '1df621c3346c4a8bac91d1238afc8400', '2015-06-14 14:45:21', null, null, null, null, null, null);
