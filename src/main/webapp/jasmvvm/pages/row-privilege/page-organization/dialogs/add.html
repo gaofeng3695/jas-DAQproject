@@ -203,9 +203,9 @@
 				var that = this;
 				this.$refs[formName].validate(function (valid) {
 					if (valid) {
-						that.checkNameOrCodeExist(function () {
+// 						that.checkNameOrCodeExist(function () {
 							that.save();
-						});
+// 						});
 					}
 				});
 			},
@@ -214,10 +214,10 @@
 				var msg = "";
 				if (!this.isEdit) {
 					msg = "增加成功";
-					url = jasTools.base.rootPath + "/jasframework/privilege/unit/saveUnit.do";
+					url = jasTools.base.rootPath + "/jdbc/commonData/unit/save.do";
 				} else {
 					msg = "修改成功";
-					url = jasTools.base.rootPath + "/jasframework/privilege/unit/updateUnit.do";
+					url = jasTools.base.rootPath + "/jdbc/commonData/unit/update.do";
 				}
 				that.but_disabled = true;
 				if (!that.tableFormData.parentId) {
@@ -242,7 +242,7 @@
 				}
 				var url = jasTools.base.rootPath + '/jasframework/privilege/unit/checkUnitExist.do';
 				jasTools.ajax.post(url, that.tableFormData, function (data) {
-					cb && cb();
+					cb && cb(data);
 				});
 			},
 			cancel: function (param) {
