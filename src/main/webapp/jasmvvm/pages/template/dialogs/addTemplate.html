@@ -199,6 +199,7 @@
 				this.menuCode = param.menuCode;
 			}
 			delete param.menuCode;
+			delete param.privilegeCode;
 			this.formDetail = param;
 			this.isAddPage = JSON.stringify(this.formDetail) == '{}'; // 根据URL中传入的数据判断该页面是否处于编辑页面
 			this.requestConfig();
@@ -603,9 +604,11 @@
 				var url = jasTools.base.rootPath + "/map/commonData/" + that.menuCode + "/get.do";
 				//该接口需要入参主键，因为主键不确定，所以全部传入表单对象
 				jasTools.ajax.post(url, this.formDetail, function (data) {
-					for (var key in that.formData) {
-						if (data.data[key] || data.data[key] == 0) {
-							that.formData[key] = data.data[key];
+					if(data && data.data){
+						for (var key in that.formData) {
+							if (data.data[key] || data.data[key] == 0) {
+								that.formData[key] = data.data[key];
+							}
 						}
 					}
 					that.getEditField(fieldsGrouped);
@@ -647,7 +650,7 @@
 				this.but_disabled = true;
 				jasTools.ajax.post(url, obj, function (data) {
 					if (that.ifAttachment) {
-					 	that.$refs.upload.uploadFile(that.formData[that.pkArray[0]]); //触发上传附件
+					 	that.$refs.upload.uploadFile(that.formData[that.pkArray[0]],that.formData["project_oid"]); //触发上传附件
 					} else {
 						that.uploadSuccess();
 					}

@@ -89,11 +89,16 @@
 				this.oid = param.oid;
 				this.getDetailByObjectId(param.oid);
 			};
-			if (param.parentid) {
-				this.parentid = param.parentid;
-			};
 			if(param.folderType){
 				this.folderType = param.folderType
+			}
+			if (param.parentid) {
+				if(this.folderType==2){
+					this.parentid = param.parentid.split(",")[0];
+					
+				}else{
+					this.parentid = param.parentid;
+				}
 			}
 		},
 		methods: {
