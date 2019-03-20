@@ -746,7 +746,7 @@
 					title: '增加',
 					width: that.config.form.width,
 					height: that.config.form.height,
-					src: './pages/template/dialogs/addTemplate.html?menuCode=' + that.menuCode,
+					src: './pages/template/dialogs/addTemplate.html?menuCode=' + that.menuCode+"&privilegeCode="+this.privilegeCode,
 					cbForClose: function () {
 						that.refresh();
 					}
@@ -838,10 +838,11 @@
 			},
 			editRow: function (row) {
 				var that = this;
-				var src = './pages/template/dialogs/addTemplate.html?menuCode=' + that.menuCode;
-				for (var key in row) {
+				var src = './pages/template/dialogs/addTemplate.html?menuCode=' + that.menuCode+"&privilegeCode="+this.privilegeCode;
+				/* for (var key in row) {
 					src += "&" + key + '=' + row[key];
-				}
+				} */
+				src += '&'+ this.primaryKey + '=' + row[this.primaryKey];
 				top.jasTools.dialog.show({
 					title: '修改',
 					src: src,
