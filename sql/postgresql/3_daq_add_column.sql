@@ -150,7 +150,7 @@ alter table daq_construction_weld add has_reducer smallint default 0;
 comment on column daq_construction_weld.has_reducer is '是否变径';
 
 alter table daq_construction_weld add has_bend_pipe smallint default 0;
-comment on column daq_construction_weld.has_bend_pipe is '是否有弯管'
+comment on column daq_construction_weld.has_bend_pipe is '是否有弯管';
 
 /************添加is_measure(是否测量)start*****************/
 alter table daq_weld_rework_weld add column is_measure int2 default 0 ;
@@ -186,8 +186,6 @@ ALTER TABLE daq_station_pipe_pressure_test alter COLUMN end_relative_mileage typ
 
 ALTER TABLE daq_station_pipe_sweeping alter COLUMN start_relative_mileage type NUMERIC(9,2);
 ALTER TABLE daq_station_pipe_sweeping alter COLUMN end_relative_mileage type NUMERIC(9,2);
-
-ALTER TABLE daq_station_entrance_and_exit alter COLUMN relative_mileage type NUMERIC(9,2);
 
 ALTER TABLE daq_station_entrance_and_exit alter COLUMN pointx type NUMERIC(12,9);
 ALTER TABLE daq_station_entrance_and_exit alter COLUMN pointy type NUMERIC(12,9);
