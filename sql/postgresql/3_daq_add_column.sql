@@ -163,11 +163,6 @@ alter table daq_material_pipe_cold_bending add column is_measure int2 default 0 
 comment on column daq_material_pipe_cold_bending.is_measure is '是否测量';
 /************添加is_measure(是否测量)end*****************/
 
-/*****************修改中线测量的坐标精度start*************************/
-alter table daq_weld_measured_result alter COLUMN pointx TYPE numeric(10,7);
-alter table daq_weld_measured_result alter COLUMN pointy TYPE numeric(11,7);
-/*****************修改中线测量的坐标精度end*************************/
-
 /**********************焊口信息表添加字段start****************************/
 alter table daq_construction_weld add column airflow_direction int2 default 0 ;
 comment on column daq_construction_weld.airflow_direction is '气流方向';
