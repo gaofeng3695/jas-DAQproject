@@ -493,7 +493,7 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 		if(isShiftDelFile){
 			sql = "delete from daq_project_jasdoc_ref where file_oid in(:fileOidList)";
 		}else{
-			sql = "update daq_project_jasdoc_ref where active=0 where file_oid in(:fileOidList)";
+			sql = "update daq_project_jasdoc_ref set active=0 where file_oid in(:fileOidList)";
 		}
 		Map<String,Object> paramMap = new HashMap<String,Object>();
 		paramMap.put("fileOidList", fileOidList);
