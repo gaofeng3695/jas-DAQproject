@@ -97,14 +97,14 @@ Vue.component('jas-file-upload', {
 				return []
 			},
 			type: Array
-		}
+		},
+		projectOid:{}
 	},
 	data: function () {
 		return {
 			fileList: [],
 			uploadurl: '',
 			_privilegeCode:"",
-			projectOid:"",
 			fileOidList:[],
 			folderId:"",
 		}
