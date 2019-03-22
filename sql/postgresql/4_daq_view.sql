@@ -150,6 +150,81 @@ LEFT JOIN (select code_id,code_name from sys_domain where active=1) d on d.code_
 LEFT JOIN (select oid, unit_name, active from pri_unit where active=1) u on u.oid = wmr.construct_unit 
 where wmr.active=1 and wmr.measure_control_point_type='measure_control_point_type_code_003';
 
+-- 节点信息
+CREATE OR REPLACE VIEW v_daq_mv_pipe_node AS 
+ SELECT mv.oid,pro.project_name,mv.pipe_node_code,d.code_name as pipe_node_type,pri.unit_name,to_char(mv.collection_date, 'yyyy-MM-dd'::text) AS collection_date,mv.geom  from daq_mv_pipe_node mv 
+LEFT JOIN (select oid,project_name from daq_project where active=1) pro on pro.oid=mv.project_oid
+LEFT JOIN (select code_id,code_name from sys_domain where active=1) d on d.code_id=mv.pipe_node_type 
+LEFT JOIN (select oid,unit_name from pri_unit where active=1) pri on pri.oid=mv.construct_unit 
+WHERE mv.active = 1;
+-- 管段信息
+CREATE OR REPLACE VIEW v_daq_mv_pipe_section AS 
+ SELECT mv.oid,pro.project_name,mv.pipe_section_code,pri.unit_name,to_char(mv.collection_date, 'yyyy-MM-dd'::text) AS collection_date,mv.geom  from daq_mv_pipe_section mv 
+LEFT JOIN (select oid,project_name from daq_project where active=1) pro on pro.oid=mv.project_oid
+LEFT JOIN (select oid,unit_name from pri_unit where active=1) pri on pri.oid=mv.construct_unit 
+WHERE mv.active = 1;
+-- 穿越信息
+CREATE OR REPLACE VIEW v_daq_mv_across_info AS 
+ SELECT mv.oid,pro.project_name,mv.pipe_section_code,case when mv.pipe_section_category=1 then '市政管' when mv.pipe_section_category=2 then '庭院管' else '' end as pipe_section_category,pri.unit_name,to_char(mv.collection_date, 'yyyy-MM-dd'::text) AS collection_date,mv.geom 
+from daq_mv_across_info mv 
+LEFT JOIN (select oid,project_name from daq_project where active=1) pro on pro.oid=mv.project_oid 
+LEFT JOIN (select oid,unit_name from pri_unit where active=1) pri on pri.oid=mv.construct_unit 
+WHERE mv.active = 1;
+--跨越信息
+CREATE OR REPLACE VIEW v_daq_mv_stride_across_info AS 
+ SELECT mv.oid,pro.project_name,mv.pipe_section_code,case when mv.pipe_section_category=1 then '市政管' when mv.pipe_section_category=2 then '庭院管' else '' end as pipe_section_category,pri.unit_name,to_char(mv.collection_date, 'yyyy-MM-dd'::text) AS collection_date,mv.geom 
+from daq_mv_stride_across_info mv 
+LEFT JOIN (select oid,project_name from daq_project where active=1) pro on pro.oid=mv.project_oid 
+LEFT JOIN (select oid,unit_name from pri_unit where active=1) pri on pri.oid=mv.construct_unit 
+WHERE mv.active = 1;
+-- 管沟信息
+CREATE OR REPLACE VIEW v_daq_mv_pipe_trench_protect AS 
+ SELECT mv.oid,pro.project_name,mv.pipe_trench_length,pri.unit_name,to_char(mv.collection_date, 'yyyy-MM-dd'::text) AS collection_date,mv.geom 
+from daq_mv_pipe_trench_protect mv 
+LEFT JOIN (select oid,project_name from daq_project where active=1) pro on pro.oid=mv.project_oid 
+LEFT JOIN (select oid,unit_name from pri_unit where active=1) pri on pri.oid=mv.construct_unit 
+WHERE mv.active = 1;
+-- 套管信息
+CREATE OR REPLACE VIEW v_daq_mv_bushing_info AS 
+ SELECT mv.oid,pro.project_name,d.code_name as bushing_material,mv.bushing_spec,pri.unit_name,to_char(mv.collection_date, 'yyyy-MM-dd'::text) AS collection_date,mv.geom 
+from daq_mv_bushing_info mv 
+LEFT JOIN (select oid,project_name from daq_project where active=1) pro on pro.oid=mv.project_oid 
+LEFT JOIN (select code_id,code_name from sys_domain where active=1) d on d.code_id=mv.bushing_material 
+LEFT JOIN (select oid,unit_name from pri_unit where active=1) pri on pri.oid=mv.construct_unit 
+WHERE mv.active = 1;
+-- 阀门信息
+CREATE OR REPLACE VIEW v_daq_mv_valve_info AS 
+ SELECT mv.oid,pro.project_name,node.pipe_node_code,mv.valve_code,pri.unit_name,to_char(mv.collection_date, 'yyyy-MM-dd'::text) AS collection_date,mv.geom 
+from daq_mv_valve_info mv 
+LEFT JOIN (select oid,project_name from daq_project where active=1) pro on pro.oid=mv.project_oid  
+LEFT JOIN (select oid,unit_name from pri_unit where active=1) pri on pri.oid=mv.construct_unit 
+LEFT JOIN (select oid,pipe_node_code from daq_mv_pipe_node where active=1) node on node.oid=mv.pipe_node_oid 
+WHERE mv.active = 1;
+-- 标志桩信息
+CREATE OR REPLACE VIEW v_daq_mv_mark_stake AS 
+ SELECT mv.oid,pro.project_name,mv.mark_stake_code,d.code_name as mark_stake_type,dm.code_name as mark_stake_material,pri.unit_name,to_char(mv.collection_date, 'yyyy-MM-dd'::text) AS collection_date,mv.geom 
+from daq_mv_mark_stake mv 
+LEFT JOIN (select oid,project_name from daq_project where active=1) pro on pro.oid=mv.project_oid
+LEFT JOIN (select code_id,code_name from sys_domain where active=1) d on d.code_id=mv.mark_stake_type 
+LEFT JOIN (select code_id,code_name from sys_domain where active=1) dm on dm.code_id=mv.mark_stake_material   
+LEFT JOIN (select oid,unit_name from pri_unit where active=1) pri on pri.oid=mv.construct_unit 
+WHERE mv.active = 1;
+-- 电子标签类型
+CREATE OR REPLACE VIEW v_daq_mv_electronic_label AS 
+ SELECT mv.oid,pro.project_name,d.code_name as electronic_label_type,pri.unit_name,to_char(mv.collection_date, 'yyyy-MM-dd'::text) AS collection_date,mv.geom 
+from daq_mv_electronic_label mv 
+LEFT JOIN (select oid,project_name from daq_project where active=1) pro on pro.oid=mv.project_oid
+LEFT JOIN (select code_id,code_name from sys_domain where active=1) d on d.code_id=mv.electronic_label_type  
+LEFT JOIN (select oid,unit_name from pri_unit where active=1) pri on pri.oid=mv.construct_unit 
+WHERE mv.active = 1;
+-- 监测井信息
+CREATE OR REPLACE VIEW v_daq_mv_monitor_well AS 
+ SELECT mv.oid,pro.project_name,mv.monitor_well_code,pri.unit_name,to_char(mv.collection_date, 'yyyy-MM-dd'::text) AS collection_date,mv.geom 
+from daq_mv_monitor_well mv 
+LEFT JOIN (select oid,project_name from daq_project where active=1) pro on pro.oid=mv.project_oid
+LEFT JOIN (select oid,unit_name from pri_unit where active=1) pri on pri.oid=mv.construct_unit 
+WHERE mv.active = 1;
+
 /**
  * 文档视图
  */
