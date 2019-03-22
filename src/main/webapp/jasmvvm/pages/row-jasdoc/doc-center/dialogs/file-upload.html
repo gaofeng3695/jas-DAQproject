@@ -31,12 +31,12 @@
 			<div style="text-align: center">
 
 				<el-upload ref="uploader" :on-exceed="limitNum" :on-success="successUpload" :on-error="errorUpload" class="upload-demo" drag
-				  :action="uploadUrl" :limit="1" :multiple="false" :auto-upload="false">
+				  :action="uploadUrl" :limit="5" :multiple="true" :auto-upload="false">
 					<i class="el-icon-upload"></i>
 					<div class="el-upload__text">将文件拖到此处，或
 						<em>点击上传</em>
 					</div>
-					<div class="el-upload__tip" slot="tip">只能上传一个文件，且不超过1G</div>
+					<div class="el-upload__tip" slot="tip">只能上传5个文件，且不超过1G</div>
 				</el-upload>
 			</div>
 			<div slot="footer">
@@ -63,6 +63,7 @@
 			return {
 				treeList: [],
 				treeValue: [],
+				fileOidList : [],
 				uploadUrl: jasTools.base.rootPath + '/jasdoc/folder/doccenter/uploadDoc.do'
 			}
 		},
@@ -70,7 +71,12 @@
 			var that = this;
 			var param = window.jasTools.base.getParamsInUrl(location.href);
 			if (param.oid) {
-				this.oid = param.oid;
+				if(param.oid.split(",")==1){
+					this.oid = param.oid;
+				}else{
+					this.oid = param.oid.split(",")[0];
+					this.projectOid = param.oid.split(",")[1];
+				}
 				this.getDocClassifyTree();
 			};
 		},
@@ -86,7 +92,16 @@
 					folderId: this.oid
 				});
 				this.$nextTick(function () {
-					that.$refs.uploader.submit();
+					var afileToSubmit = that.$refs.uploader.uploadFiles.filter(function (item) {
+						return !item.oid
+					});
+					that.lengthOfFileToSubmit = afileToSubmit.length;
+					that.indexOfFileToSubmit = 0;
+					if (afileToSubmit.length > 0) {
+						that.$refs.uploader.submit();
+					} else {
+						that.successUpload();
+					}
 				});
 			},
 			getDocClassifyTree: function (oid) {
@@ -107,15 +122,22 @@
 			limitNum: function () {
 				top.Vue.prototype.$message({
 					type: 'info',
-					message: '最多上传一个文件'
+					message: '最多上传五个文件'
 				});
 			},
-			successUpload: function () {
-				top.Vue.prototype.$message({
-					type: 'success',
-					message: '上传成功'
-				});
-				this.cancel(1);
+			successUpload: function (response, file, fileList) {
+				this.fileOidList.push(response.data);
+				var that = this;
+				that.indexOfFileToSubmit++;
+				if (that.indexOfFileToSubmit >= that.lengthOfFileToSubmit) {
+					//this.$emit('success', response, file, fileList);
+					top.Vue.prototype.$message({
+						type: 'success',
+						message: '上传成功'
+					});
+					this.cancel(1);
+					that.saveProjectAndFileRef();
+				}
 			},
 			errorUpload: function (err, file, fileList) {
 				top.Vue.prototype.$message({
@@ -124,6 +146,23 @@
 				});
 				// this.cancel(1);
 			},
+			saveProjectAndFileRef:function(){//附件目录下，文件上传成功后保存文件与项目的关系
+				if(!this.projectOid){
+					return;
+				}
+				var that = this;
+				var url = jasTools.base.rootPath + "/daq/privilege/saveProjectAndFileRef.do";
+				jasTools.ajax.postForm(url, {
+					projectOid: this.projectOid,
+					docFileOidList:this.fileOidList
+				}, function (data) {
+					top.Vue.prototype.$message({
+						type: 'success',
+						message: data.message
+					});
+					that.cancel(1);
+				});
+			}
 		},
 	});
 </script>

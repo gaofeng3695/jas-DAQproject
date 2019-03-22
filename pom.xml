@@ -150,7 +150,8 @@
 		<dependency>
 			<groupId>cn.jasgroup.jasframework</groupId>
 			<artifactId>jasframework-document</artifactId>
-			<version>3.0.1-SNAPSHOT</version>
+			<version>3.0.1-daq-SNAPSHOT</version>
+			<!-- <version>3.0.1-SNAPSHOT</version> -->
 			<exclusions>
 				<exclusion>
 					<groupId>org.elasticsearch.client</groupId>

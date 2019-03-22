@@ -65,7 +65,7 @@
 				<jas-base-module-title name="文件夹列表" style="margin-bottom: 10px;"></jas-base-module-title>
 
 				<el-tree class="is-grown" ref="orgtree" :load="requestNode" lazy node-key="id" :props="defaultProps" :default-expanded-keys="[currentNodeId]"
-				  highlight-current @node-click="clicknode" icon-class="fa fa-file" :expand-on-click-node="false">
+				  highlight-current @node-click="clicknode" @node-expand="nodeExpand" icon-class="fa fa-file" :expand-on-click-node="false">
 					<span class="custom-tree-node" slot-scope="{ node, data }">
 						<i class="fa fa-folder" style="color:#f5cd09;" aria-hidden="true"></i>
 						<span>{{ node.label }}</span>
@@ -216,6 +216,8 @@
 										<el-table-column label="大小(kb)" prop="filesizeStr" min-width="130px" show-overflow-tooltip align="center">
 										</el-table-column>
 										<el-table-column label="文档位置" prop="docactualLocation" min-width="130px" show-overflow-tooltip align="center">
+										</el-table-column>
+										<el-table-column label="单位" prop="ext_field5" min-width="130px" show-overflow-tooltip align="center">
 										</el-table-column>
 										<el-table-column label="我的权限" prop="hierarchyRole" :formatter="formatPrivilege" min-width="130px" show-overflow-tooltip align="center">
 										</el-table-column>
@@ -446,7 +448,7 @@
 					pageSize: this.pageSize,
 					page: this.currentPage,
 					rows: this.pageSize,
-					folderType: 1,
+					folderType: this.folderType,
 				}, function (data) {
 					// console.log(data)
 					that.loading.list = false;
@@ -469,7 +471,7 @@
 					// filepath: undefined
 					folderId: this.currentNodeId,
 					isPrivilege: this.isPrivilege,
-					folderType: 1,
+					folderType: this.folderType,
 					pageNo: this.currentPage,
 					pageSize: this.pageSize,
 					page: this.currentPage,
@@ -491,7 +493,7 @@
 					pageSize: this.pageSize,
 					page: this.currentPage,
 					rows: this.pageSize,
-					folderType: 1,
+					folderType: this.folderType,
 				}, function (data) {
 					that.loading.list = false;
 					that.total = data.total;
@@ -720,7 +722,7 @@
 				jasTools.ajax.postForm(url, {
 					folderId: this.currentNodeId,
 					isPrivilege: this.isPrivilege,
-					folderType: 1
+					folderType: this.folderType
 				}, function (data) {
 					// console.log(data)
 					that.$refs.orgtree.updateKeyChildren(that.currentNodeId, data);
@@ -938,7 +940,7 @@
 					jasTools.ajax.postForm(url, {
 						folderId: node.key,
 						isPrivilege: this.isPrivilege,
-						folderType: node.data.folderType
+						folderType: this.folderType
 					}, function (data) {
 						// console.log(data)
 						resolve(data);
@@ -948,6 +950,11 @@
 			},
 			clicknode: function (node, b, c) {
 				this.currentNodeId = node.id;
+				this.folderType = node.folderType;
+			},
+			nodeExpand: function (node, b, c) {
+				this.currentNodeId = node.id;
+				this.folderType = node.folderType;
 			},
 		},
 	});

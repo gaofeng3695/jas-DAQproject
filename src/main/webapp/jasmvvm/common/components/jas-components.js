@@ -97,12 +97,16 @@ Vue.component('jas-file-upload', {
 				return []
 			},
 			type: Array
-		}
+		},
+		projectOid:{}
 	},
 	data: function () {
 		return {
 			fileList: [],
 			uploadurl: '',
+			_privilegeCode:"",
+			fileOidList:[],
+			folderId:"",
 		}
 	},
 	computed: {
@@ -118,6 +122,10 @@ Vue.component('jas-file-upload', {
 		'	<span style="padding-left: 10px;" class="el-upload__tip" slot="tip">{{"最多上传"+ limit +"个附件"}}</span>',
 		'</el-upload>',
 	].join(''),
+	created: function () {
+		var param = window.jasTools.base.getParamsInUrl(location.href);
+		this._privilegeCode = param.privilegeCode;
+	},
 	methods: {
 		requestFile: function (bizId) {
 			var that = this;
@@ -140,8 +148,13 @@ Vue.component('jas-file-upload', {
 		fileUploaded: function (response, file, fileList) {
 			var that = this;
 			that.indexOfFileToSubmit++;
+			if(response && response.rows){
+				for(var obj in response.rows){
+					this.fileOidList.push(response.rows[obj]);
+				}
+			}
 			if (that.indexOfFileToSubmit >= that.lengthOfFileToSubmit) {
-				this.$emit('success', response, file, fileList)
+				that.saveProjectAndFileRef(response, file, fileList);
 			}
 		},
 		removeFile: function (file, fileList) {
@@ -153,22 +166,40 @@ Vue.component('jas-file-upload', {
 				}
 			}
 		},
-		uploadFile: function (oid) {
+		uploadFile: function (oid, projectOid) {
 			var that = this;
-			that._deleteFilesToServer(function () {
-				that.uploadurl = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") +
-					"&businessId=" + oid + "&businessType=file";
-				that.$nextTick(function () {
-					var afileToSubmit = that.$refs.upload.uploadFiles.filter(function (item) {
-						return !item.oid
-					});
-					that.lengthOfFileToSubmit = afileToSubmit.length;
-					that.indexOfFileToSubmit = 0;
-					if (afileToSubmit.length > 0) {
-						that.$refs.upload.submit();
-					} else {
-						that.fileUploaded();
+			if(projectOid){
+				this.projectOid = projectOid;
+			}
+			$.getJSON(jasTools.base.rootPath+'/jasmvvm/pages/row-privilege/attachment _and_model_relation.json',function(data){
+				if(data && data.data){
+					var dataList = data.data;
+					for(var i in dataList){
+						var item = dataList[i];
+						if(item.key==that._privilegeCode){
+							that.folderId = item.value;
+							break;
+						}
 					}
+					if(!that.folderId){
+						that.folderId = data.otherAttachment;
+					}
+				}
+				that._deleteFilesToServer(function () {
+					that.uploadurl = jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token") +
+						"&businessId=" + oid + "&businessType=file&folderId="+that.folderId;
+					that.$nextTick(function () {
+						var afileToSubmit = that.$refs.upload.uploadFiles.filter(function (item) {
+							return !item.oid
+						});
+						that.lengthOfFileToSubmit = afileToSubmit.length;
+						that.indexOfFileToSubmit = 0;
+						if (afileToSubmit.length > 0) {
+							that.$refs.upload.submit();
+						} else {
+							that.fileUploaded();
+						}
+					});
 				});
 			});
 		},
@@ -181,7 +212,11 @@ Vue.component('jas-file-upload', {
 			jasTools.ajax.get(jasTools.base.rootPath + "/attachment/delete.do", {
 				oids: that.filesToBeDelete.join(',')
 			}, function (data) {
-				cb && cb();
+				jasTools.ajax.get(jasTools.base.rootPath + "/daq/privilege/deleteProjectAndFileRef.do", {
+					oids: that.filesToBeDelete.join(',')
+				}, function (resultData) {
+					cb && cb();
+				});
 			});
 		},
 		changeFiles: function (file, fileList) {
@@ -200,6 +235,24 @@ Vue.component('jas-file-upload', {
 		uploaodNumberlimit: function () {
 			top.Vue.prototype.$message("最多上传" + this.limit + "个附件")
 		},
+		saveProjectAndFileRef:function(response, file, fileList){//附件目录下，文件上传成功后保存文件与项目的关系
+			if(!this.projectOid){
+				this.$emit('success', response, file, fileList);
+				return;
+			}
+			if(this.fileOidList.length==0){
+				this.$emit('success', response, file, fileList);
+				return;
+			}
+			var that = this;
+			var url = jasTools.base.rootPath + "/daq/privilege/saveProjectAndFileRef.do";
+			jasTools.ajax.post(url, {
+				projectOid: this.projectOid,
+				docFileOidList:this.fileOidList
+			}, function (data) {
+				that.$emit('success', response, file, fileList);
+			});
+		}
 	}
 
 });
@@ -992,11 +1045,12 @@ Vue.component('jas-table-for-list', {
 		add: function () {
 			var that = this;
 			if (!this.addUrl) return;
+			var url = jasTools.base.setParamsToUrl(this.addUrl,  {"privilegeCode":this._privilegeCode})
 			top.jasTools.dialog.show({
 				width: '60%',
 				height: '80%',
 				title: '增加',
-				src: this.addUrl,
+				src: url,
 				cbForClose: function () {
 					that.refresh()
 				}
@@ -1064,7 +1118,7 @@ Vue.component('jas-table-for-list', {
 		},
 		edit: function (row) {
 			var that = this;
-			var url = jasTools.base.setParamsToUrl(this.addUrl,  {"oid":row.oid})
+			var url = jasTools.base.setParamsToUrl(this.addUrl,  {"oid":row.oid,"privilegeCode":this._privilegeCode})
 			top.jasTools.dialog.show({
 				width: '60%',
 				height: '80%',

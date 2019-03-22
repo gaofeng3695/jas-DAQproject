@@ -17,6 +17,7 @@ import cn.jasgroup.jasframework.dataaccess.base.BaseJdbcDao;
 import cn.jasgroup.jasframework.dataaccess3.core.BaseJdbcTemplate;
 import cn.jasgroup.jasframework.dataaccess3.core.BaseNamedParameterJdbcTemplate;
 import cn.jasgroup.jasframework.engine.jdbc.dao.CommonDataJdbcDao;
+import cn.jasgroup.jasframework.support.ThreadLocalHolder;
 import cn.jasgroup.jasframework.utils.StringUtil;
 
 @Repository
@@ -457,5 +458,45 @@ public class DaqPrivilegeDao extends BaseJdbcDao{
 		}
 		sql += " order by t.create_datetime asc";
 		return this.queryForList(sql, new Object[]{});
+	}
+	/***
+	 * <p>功能描述：保存附件与项目的关联关系。</p>
+	  * <p> 雷凯。</p>	
+	  * @param projectOid
+	  * @param docFileOid
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年3月18日 下午5:07:43。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public void saveProjectAndFileRef(String projectOid,List<String> docFileOidList){
+		String unitName = ThreadLocalHolder.getCurrentUser().getUnitName();
+		String unitOid = ThreadLocalHolder.getCurrentUnitId();
+		String sql="";
+		for(String docFileOid:docFileOidList){
+			String oid = UUID.randomUUID().toString();
+			sql += "insert into daq_project_jasdoc_ref(oid,project_oid,file_oid,unit_oid,unit_name) values('"+oid+"','"+projectOid+"','"+docFileOid+"','"+unitOid+"','"+unitName+"');";
+		}
+		this.baseJdbcTemplate.batchExecute(sql);
+	}
+	
+	/***
+	 * <p>功能描述：删除附件与项目的关联关系。</p>
+	  * <p> 雷凯。</p>	
+	  * @param fileOidList
+	  * @param isShiftDelFile
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年3月19日 下午6:02:24。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public void deleteAttachementById(List<String> fileOidList,boolean isShiftDelFile){
+		String sql = null;
+		if(isShiftDelFile){
+			sql = "delete from daq_project_jasdoc_ref where file_oid in(:fileOidList)";
+		}else{
+			sql = "update daq_project_jasdoc_ref set active=0 where file_oid in(:fileOidList)";
+		}
+		Map<String,Object> paramMap = new HashMap<String,Object>();
+		paramMap.put("fileOidList", fileOidList);
+		this.baseNamedParameterJdbcTemplate.batchExecute(sql, paramMap);
 	}
 }

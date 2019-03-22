@@ -205,7 +205,7 @@
 				</el-row> -->
 					<jas-base-group-title name="附件信息"></jas-base-group-title>
 
-					<jas-file-upload ref="upload" @success="uploadSuccess"></jas-file-upload>
+					<jas-file-upload :project-oid="formData.projectOid" ref="upload" @success="uploadSuccess"></jas-file-upload>
 				</el-form>
 
 
@@ -215,7 +215,7 @@
 			</div>
 			<div slot="footer" class="dialog-footer" style="text-align: center">
 				<el-button size="small" @click="cancel()">取 消</el-button>
-				<el-button size="small" type="primary" @click="submit('formData')">确 定
+				<el-button size="small" :disabled="but_disabled" type="primary" @click="submit('formData')">确 定
 				</el-button>
 			</div>
 		</jas-dialog-wrapper>
@@ -233,6 +233,7 @@
 		data: function () {
 			var that = this;
 			return {
+				but_disabled:false,
 				domain: {
 					project: [],
 					pipeline: [],
@@ -578,9 +579,14 @@
 						"/daq/clodBendingPipe/update.do";
 				}
 
+				that.but_disabled = true;
 				jasTools.ajax.post(url, that.formData, function (data) {
 					that.$refs.upload.uploadFile(data.data || that.oid);
 
+				},function(data){
+					if(data.status==-1){
+						that.but_disabled = false;
+					}
 				});
 
 			},

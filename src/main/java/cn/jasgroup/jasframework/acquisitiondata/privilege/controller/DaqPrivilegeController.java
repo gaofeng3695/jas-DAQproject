@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -782,6 +783,56 @@ public class DaqPrivilegeController extends BaseController{
 			result = new ListResult<>(1, "200", "ok", rows);
 		} catch (Exception e) {
 			result = new ListResult<>(-1, "400", "error");
+			e.printStackTrace();
+		}
+		return result;
+	}
+	/***
+	  * <p>功能描述：保存附件与项目的关联关系。</p>
+	  * <p> 雷凯。</p>	
+	  * @param request
+	  * @param param
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年3月18日 下午4:15:25。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="/saveProjectAndFileRef",method = RequestMethod.POST)
+	@ResponseBody
+	public Object saveProjectAndFileRef(HttpServletRequest request,@RequestBody Map<String,Object> param){
+		SimpleResult<String> result = null;
+		try {
+			String projectOid = param.get("projectOid").toString();
+			List<String> docFileOidList = (List<String>)param.get("docFileOidList");
+			this.daqPrivilegeService.saveProjectAndFileRef(projectOid, docFileOidList);
+			result = new SimpleResult<>(1, "200", "ok");
+		} catch (Exception e) {
+			result = new SimpleResult<>(-1, "400", e.getMessage());
+			e.printStackTrace();
+		}
+		return result;
+	}
+	/**
+	 * <p>功能描述：删除附件与项目的关联关系。</p>
+	  * <p> 雷凯。</p>	
+	  * @param oids
+	  * @param isShiftDelFile
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年3月19日 下午6:02:42。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value = "/deleteProjectAndFileRef")
+	@ResponseBody
+	public Object deleteProjectAndFileRef(@RequestParam("oids") String oids,
+			@RequestParam(value = "isShiftDelFile", defaultValue = "false") String isShiftDelFile){
+		SimpleResult<String> result = null;
+		try {
+			boolean isShiftDeleteAttachementFile = Boolean.valueOf(isShiftDelFile);
+			daqPrivilegeService.deleteAttachementById(oids, isShiftDeleteAttachementFile);
+			result = new SimpleResult<>(1, "200", "ok");
+		} catch (Exception e) {
+			result = new SimpleResult<>(-1, "400", e.getMessage());
 			e.printStackTrace();
 		}
 		return result;

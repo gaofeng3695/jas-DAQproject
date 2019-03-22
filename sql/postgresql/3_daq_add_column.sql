@@ -150,7 +150,7 @@ alter table daq_construction_weld add has_reducer smallint default 0;
 comment on column daq_construction_weld.has_reducer is '是否变径';
 
 alter table daq_construction_weld add has_bend_pipe smallint default 0;
-comment on column daq_construction_weld.has_bend_pipe is '是否有弯管'
+comment on column daq_construction_weld.has_bend_pipe is '是否有弯管';
 
 /************添加is_measure(是否测量)start*****************/
 alter table daq_weld_rework_weld add column is_measure int2 default 0 ;
@@ -162,11 +162,6 @@ comment on column daq_material_hot_bends.is_measure is '是否测量';
 alter table daq_material_pipe_cold_bending add column is_measure int2 default 0 ;
 comment on column daq_material_pipe_cold_bending.is_measure is '是否测量';
 /************添加is_measure(是否测量)end*****************/
-
-/*****************修改中线测量的坐标精度start*************************/
-alter table daq_weld_measured_result alter COLUMN pointx TYPE numeric(10,7);
-alter table daq_weld_measured_result alter COLUMN pointy TYPE numeric(11,7);
-/*****************修改中线测量的坐标精度end*************************/
 
 /**********************焊口信息表添加字段start****************************/
 alter table daq_construction_weld add column airflow_direction int2 default 0 ;
@@ -186,8 +181,6 @@ ALTER TABLE daq_station_pipe_pressure_test alter COLUMN end_relative_mileage typ
 
 ALTER TABLE daq_station_pipe_sweeping alter COLUMN start_relative_mileage type NUMERIC(9,2);
 ALTER TABLE daq_station_pipe_sweeping alter COLUMN end_relative_mileage type NUMERIC(9,2);
-
-ALTER TABLE daq_station_entrance_and_exit alter COLUMN relative_mileage type NUMERIC(9,2);
 
 ALTER TABLE daq_station_entrance_and_exit alter COLUMN pointx type NUMERIC(12,9);
 ALTER TABLE daq_station_entrance_and_exit alter COLUMN pointy type NUMERIC(12,9);
@@ -369,3 +362,6 @@ ALTER TABLE daq_appendages_casing_pipe alter COLUMN start_pointx type NUMERIC(12
 ALTER TABLE daq_appendages_casing_pipe alter COLUMN start_pointy type NUMERIC(12,9);
 ALTER TABLE daq_appendages_casing_pipe alter COLUMN end_pointx type NUMERIC(12,9);
 ALTER TABLE daq_appendages_casing_pipe alter COLUMN end_pointy type NUMERIC(12,9);
+/******/
+alter table sys_attachment add column pdf_save_path  varchar(500);
+comment on column sys_attachment.pdf_save_path is 'pdf文件保存路径';
