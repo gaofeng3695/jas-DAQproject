@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>自定义表单配置</title>
+	<!-- <link rel="stylesheet" href="./libelement-ui/element-#0E2B4A/src/index.css"> -->
+	<link rel="stylesheet" href="./../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../lib/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="./../../src/css/main.css">
+	<style>
+		.el-form-item {
+			margin-bottom: 0px;
+		}
+
+		.jasmap {
+			overflow: hidden;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="app" v-cloak>
+
+
+		<jas-list-wrapper slot="mainPanel">
+			<jas-search-for-list slot="search" :form="topSearch" :fields="fields" :fields-config="fieldsConfig" @search="searchList"></jas-search-for-list>
+			<jas-table-for-list ref="table" slot="list" :privilege-code="privilegeCode" :fields="tableFields" :form="topSearch" search-path="/jdbc/commonData/weldCodeRegular/getPage.do"
+			  :add-url="addUrl" :detail-url="detailUrl" delete-path="/jdbc/commonData/weldCodeRegular/delete.do" :class-name="className" :template-code="templateCode"></jas-table-for-list>
+		</jas-list-wrapper>
+
+	</div>
+</body>
+
+<script src="./../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../lib/vue/vue.js"></script>
+<script src="./../../lib/vue-multipane/vue-multipane.js"></script>
+<script src="./../../lib/element-ui/v2.4.1/index.min.js"></script>
+<script src="./../../common/components/jas-components.js"></script>
+<script src="./../../common/js/jas-tools.js"></script>
+<script>
+	var vm = new Vue({
+		el: '#app',
+		data: function () {
+			return {
+				className: '',
+				templateCode: '',
+				addUrl: './pages/row-rule/dialogs/add.html',
+				detailUrl: './pages/row-rule/dialogs/detail.html',
+				privilegeCode: '',
+				topSearch: {
+					projectOid: '',
+				},
+				fields: [ //
+					{
+						field: "projectOid",
+						name: '项目名称'
+					}
+					
+				],
+				fieldsConfig: {
+					projectOid: {
+						type: 'select',
+						optionUrl: '/daq/privilege/getProjectList.do',
+					}
+				},
+				tableFields: [ {
+						name: '项目名称',
+						field: 'projectName'
+					},{
+						field:"weldCodeRegularName",
+						name:"编码规则"
+					}
+				],
+				domain: {
+					project: [], //项目
+				}
+			}
+		},
+
+		mounted: function () {
+			var that = this;
+			var param = window.jasTools.base
+				.getParamsInUrl(location.href);
+			this.privilegeCode = param.privilegeCode;
+			this.templateCode = param.templateCode; //|| "stake-2";
+			this.className = param.className; // || 'cn.jasgroup.jasframework.acquisitiondata.scope.medianstake.query.MedianStakeQueryPage';
+		},
+		methods: {
+			searchList: function () {
+				this.$refs.table.search();
+			},
+
+		},
+	});
+</script>
+
+</html>

@@ -22,7 +22,6 @@
 			font-size: 12px;
 			color: #999;
 			word-break: break-all;
-
 		}
 
 		.pipeTip.link {
@@ -120,7 +119,7 @@
 						<div class="pipeTip  link">{{detail.bweldCode}}</div>
 					</div>
 					<div v-if="detail.bweldCode" @click="openPipeDialog(detail.bbackPipeOid, detail.bbackPipeType, '后后管件',detail.bbackPipeCode)"
-					  class="pipe">
+					 class="pipe">
 						<div class="pipeTip">后后管件</div>
 						<div class="pipecode">{{(detail.bbackPipeLength || 0) + ' m'}}</div>
 						<div class="pipeTip  link">{{detail.bbackPipeCode}}</div>
@@ -208,50 +207,87 @@
 					name: '相对桩位置',
 					field: 'relativeMileage'
 				}],
-				busArr: [{
-						name: '焊口编号',
-						field: 'weldCode'
-					}, {
-						name: '焊口类型',
-						field: 'weldTypeName'
-					}, {
-						name: '焊接方式',
-						field: 'weldMethodName'
-					}, {
-						name: '前管件类型',
-						field: 'frontPipeTypeName'
-					}, {
-						name: '前管件编号',
-						field: 'frontPipeCode'
-					}, {
-						name: '后管件类型',
-						field: 'backPipeTypeName'
-					}, {
-						name: '后管件编号',
-						field: 'backPipeCode'
-					},
-					{
-						name: '焊条批号',
-						field: 'weldRodBatchNum'
-					}, {
-						name: '焊丝批号',
-						field: 'weldWireBatchNum'
-					}, {
-						name: '焊接工艺规格',
-						field: 'weldProduceCode'
-					}, {
-						name: '外观质量检查',
-						field: 'surfaceCheck',
-					},
-					{
-						name: '是否金口',
-						field: 'isGoldeJoint',
-					}, {
-						name: '是否连头口',
-						field: 'isPipeHead',
-					}, {
-
-					}
+				busArr: [ {
+					name: '焊口类型',
+					field: 'weldTypeName'
+				}, {
+					name: '焊接方式',
+					field: 'weldMethodName'
+				},  {
+					name: '气流方向',
+					field: 'airflowDirection'
+				}, {
+					name: '焊接顺序号',
+					field: 'sequenceNumberFirst'
+				}, {
+					name: '焊口编号',
+					field: 'weldCode'
+				},{
+					name: '前管件类型',
+					field: 'frontPipeTypeName'
+				}, {
+					name: '前管件编号',
+					field: 'frontPipeCode'
+				}, {
+					name: '后管件类型',
+					field: 'backPipeTypeName'
+				}, {
+					name: '后管件编号',
+					field: 'backPipeCode'
+				},
+				{
+					name: '焊条批号',
+					field: 'weldRodBatchNum'
+				}, {
+					name: '焊丝批号',
+					field: 'weldWireBatchNum'
+				}, {
+					name: '焊接工艺规格',
+					field: 'weldProduceCode'
+				}, {
+					name: '外观质量检查',
+					field: 'surfaceCheck',
+				},
+				{
+					name: '是否金口',
+					field: 'isGoldeJoint',
+				}, {
+					name: '是否连头口',
+					field: 'isPipeHead',
+				}, {
+					name: '是否返修',
+					field: 'isRework',
+				}, , {
+					name: '是否返修',
+					field: 'isRework',
+				}, {
+					name: '是否检测',
+					field: 'isDetection',
+				}, {
+					name: '是否补口',
+					field: 'isAnticorrosionCheck',
+				}, {
+					name: '是否割口',
+					field: 'isCut',
+				}, {
+					name: '是否测量',
+					field: 'isMeasure',
+				}, {
+					name: '是否回填',
+					field: 'isBackfill',
+				},{
+					name: '是否地貌恢复',
+					field: 'isLandRestoration',
+				}, {
+					name: '是否存在切管',
+					field: 'hasCutPipe',
+				}, {
+					name: '是否变径',
+					field: 'hasReducer',
+				}, {
+					name: '是否有弯管',
+					field: 'hasBendPipe',
+				}
 				],
 				testbusArr: [{
 					name: "射线检测报告编号",
@@ -259,7 +295,7 @@
 					isLink: true,
 					link: "pages/row-detection/detection-ray/dialogs/detail.html",
 					detailOid: "rayOid",
-					detailTitle:"射线检测详情"
+					detailTitle: "射线检测详情"
 				}, {
 					name: "检测结果",
 					field: "rayResult"
@@ -269,7 +305,7 @@
 					isLink: true,
 					link: "pages/row-detection/detection-ultrasonic/dialogs/detail.html",
 					detailOid: "ultrasonicOid",
-					detailTitle:"超声波检测详情"
+					detailTitle: "超声波检测详情"
 				}, {
 					name: "检测结果",
 					field: "ultrasonicResult"
@@ -279,7 +315,7 @@
 					isLink: true,
 					link: "pages/row-detection/detection-infiltration/dialogs/detail.html",
 					detailOid: "osmosisOid",
-					detailTitle:"渗透检测详情"
+					detailTitle: "渗透检测详情"
 				}, {
 					name: "检测结果",
 					field: "osmosisResult"
@@ -289,7 +325,7 @@
 					isLink: true,
 					link: "pages/row-detection/detection-magnetic-powder/dialogs/detail.html",
 					detailOid: "magneticOid",
-					detailTitle:"磁粉检测详情"
+					detailTitle: "磁粉检测详情"
 				}, {
 					name: "检测结果",
 					field: "magneticResult"
@@ -299,7 +335,7 @@
 					isLink: true,
 					link: "pages/row-detection/detection-fa-ultrasonic/dialogs/detail.html",
 					detailOid: "selfMotionOid",
-					detailTitle:"全自动超声波检测详情"
+					detailTitle: "全自动超声波检测详情"
 				}, {
 					name: "检测结果",
 					field: "selfMotionResult"
@@ -309,7 +345,7 @@
 					isLink: true,
 					link: "pages/row-detection/detection-pa-ultrasonic/dialogs/detail.html",
 					detailOid: "faciesOid",
-					detailTitle:"相控超声波检测详情"
+					detailTitle: "相控超声波检测详情"
 				}, {
 					name: "检测结果",
 					field: "faciesResult"
@@ -354,17 +390,22 @@
 					oid: that.oid
 				}, function (data) {
 					that.detail = data.rows[0];
-					if (data.rows[0].isGoldeJoint == 1) {
-						that.detail.isGoldeJoint = '是';
-
-					} else if (data.rows[0].isGoldeJoint == 0) {
-						that.detail.isGoldeJoint = '否';
+					that.detail.sequenceNumberFirst = (Array(3).join(0) + that.detail.sequenceNumberFirst).slice(-3);//顺序号第一个自动补0
+					if(that.detail.sequenceNumberSecond==0||that.detail.sequenceNumberSecond){
+						that.detail.sequenceNumberFirst=""+that.detail.sequenceNumberFirst+"+"+that.detail.sequenceNumberSecond;	
 					}
-					if (data.rows[0].isPipeHead == 1) {
-						that.detail.isPipeHead = '是';
-					} else if (data.rows[0].isPipeHead == 0) {
-						that.detail.isPipeHead = '否';
-					}
+					that.detail.isGoldeJoint = that.changeValue(data.rows[0].isGoldeJoint);
+					that.detail.isPipeHead = that.changeValue(data.rows[0].isPipeHead);
+					that.detail.isRework = that.changeValue(data.rows[0].isRework);
+					that.detail.isDetection = that.changeValue(data.rows[0].isDetection);
+					that.detail.isAnticorrosionCheck = that.changeValue(data.rows[0].isAnticorrosionCheck);
+					that.detail.isCut = that.changeValue(data.rows[0].isCut);
+					that.detail.isMeasure = that.changeValue(data.rows[0].isMeasure);
+					that.detail.isBackfill = that.changeValue(data.rows[0].isBackfill);
+					that.detail.isLandRestoration = that.changeValue(data.rows[0].isLandRestoration);
+					that.detail.hasCutPipe = that.changeValue(data.rows[0].hasCutPipe);
+					that.detail.hasReducer = that.changeValue(data.rows[0].hasReducer);
+					that.detail.hasBendPipe = that.changeValue(data.rows[0].hasBendPipe);
 					if (data.rows[0].surfaceCheck == 1) {
 						that.detail.surfaceCheck = '合格';
 					} else if (data.rows[0].surfaceCheck == 0) {
@@ -382,8 +423,18 @@
 					if (that.detail.approveStatus == 2) {
 						that.detail.approveStatus = '通过';
 					}
+					if(that.detail.airflowDirection==1){
+						that.detail.airflowDirection="顺输油/气";	
+					}else{
+						that.detail.airflowDirection="逆输油/气";
+					}
 					that.addPipeEvent();
 				});
+			},
+			changeValue: function (value) {
+				if (value == 0 || value < 0) return '否';
+				if (value == 1 || value > 0) return "是";
+				return value;
 			},
 			getDetailByWeldOid: function () {
 				var that = this;
@@ -491,6 +542,7 @@
 			}
 		},
 	});
+
 </script>
 
 </html>

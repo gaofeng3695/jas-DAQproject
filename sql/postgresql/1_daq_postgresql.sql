@@ -284,9 +284,9 @@ CREATE TABLE daq_median_stake (
 	mileage NUMERIC (10, 3),
 	mark_stone_type VARCHAR (38),
 	mark_stone_location VARCHAR (150),
-	pointx NUMERIC (17, 9),
-	pointy NUMERIC (17, 9),
-	pointz NUMERIC (7, 3),
+	pointx NUMERIC (12, 9),
+	pointy NUMERIC (12, 9),
+	pointz NUMERIC (6, 2),
 	geo_state VARCHAR (10),
 	remarks VARCHAR (200),
 	create_user_id VARCHAR (36),
@@ -1880,11 +1880,11 @@ CREATE TABLE daq_weld_measured_result (
 	weld_oid VARCHAR (36),
 	median_stake_oid VARCHAR (36),
 	relative_mileage NUMERIC (9, 3),
-	pointx NUMERIC (10, 3),
-	pointy NUMERIC (11, 3),
-	surfacee_levation NUMERIC (9, 2),
+	pointx NUMERIC (12, 9),
+	pointy NUMERIC (12, 9),
+	surfacee_levation NUMERIC (6, 2),
 	pipe_top_elevation NUMERIC (9, 2),
-	buried_depth NUMERIC (9, 2),
+	buried_depth NUMERIC (7, 2),
 	survey_crew VARCHAR (20),
 	survey_date TIMESTAMP (6),
 	work_unit_oid VARCHAR (36),
@@ -2823,15 +2823,15 @@ CREATE TABLE daq_cross_excavation (
 	cross_length NUMERIC (9, 2),
 	cross_max_length NUMERIC (10, 2),
 	start_median_stake_oid VARCHAR (36),
-	start_relative_mileage NUMERIC (8, 0),
+	start_relative_mileage NUMERIC (9,2),
 	end_median_stake_oid VARCHAR (36),
-	end_relative_mileage NUMERIC (8, 0),
-	start_pointx NUMERIC (9, 3),
-	start_pointy NUMERIC (9, 3),
-	start_pointz NUMERIC (9, 3),
-	end_pointx NUMERIC (9, 3),
-	end_pointy NUMERIC (9, 3),
-	end_pointz NUMERIC (9, 3),
+	end_relative_mileage NUMERIC  (9,2),
+	start_pointx numeric(12,9),
+  start_pointy numeric(12,9),
+  start_pointz numeric(6,2),
+  end_pointx numeric(12,9),
+  end_pointy numeric(12,9),
+  end_pointz numeric(6,2),
 	steady_tube_measures VARCHAR (200),
 	commencement_date TIMESTAMP (6),
 	completion_date TIMESTAMP (6),
@@ -2901,15 +2901,15 @@ CREATE TABLE daq_cross_pipe_jacking (
 	cross_length NUMERIC (9, 2),
 	cross_max_length NUMERIC (10, 2),
 	start_median_stake_oid VARCHAR (36),
-	start_relative_mileage NUMERIC (8, 0),
+	start_relative_mileage NUMERIC (9, 2),
 	end_median_stake_oid VARCHAR (36),
-	end_relative_mileage NUMERIC (8, 0),
-	start_pointx NUMERIC (9, 3),
-	start_pointy NUMERIC (9, 3),
-	start_pointz NUMERIC (9, 3),
-	end_pointx NUMERIC (9, 3),
-	end_pointy NUMERIC (9, 3),
-	end_pointz NUMERIC (9, 3),
+	end_relative_mileage NUMERIC (9, 2),
+	start_pointx numeric(10,7),
+  start_pointy numeric(10,7),
+  start_pointz numeric(5,2),
+  end_pointx numeric(10,7),
+  end_pointy numeric(10,7),
+  end_pointz numeric(5,2),
 	commencement_date TIMESTAMP (6),
 	completion_date TIMESTAMP (6),
 	construct_unit VARCHAR (36),
@@ -2977,15 +2977,15 @@ CREATE TABLE daq_cross_box_culvert (
 	cross_length NUMERIC (9, 2),
 	cross_max_length NUMERIC (10, 2),
 	start_median_stake_oid VARCHAR (36),
-	start_relative_mileage NUMERIC (8, 0),
+	start_relative_mileage NUMERIC (9, 2),
 	end_median_stake_oid VARCHAR (36),
-	end_relative_mileage NUMERIC (8, 0),
-	start_pointx NUMERIC (9, 3),
-	start_pointy NUMERIC (9, 3),
-	start_pointz NUMERIC (9, 3),
-	end_pointx NUMERIC (9, 3),
-	end_pointy NUMERIC (9, 3),
-	end_pointz NUMERIC (9, 3),
+	end_relative_mileage NUMERIC (9, 2),
+	start_pointx numeric(10,7),
+  start_pointy numeric(10,7),
+  start_pointz numeric(5,2),
+  end_pointx numeric(10,7),
+  end_pointy numeric(10,7),
+  end_pointz numeric(5,2),
 	commencement_date TIMESTAMP (6),
 	completion_date TIMESTAMP (6),
 	construct_unit VARCHAR (36),
@@ -3052,15 +3052,15 @@ CREATE TABLE daq_cross_drilling (
 	cross_length NUMERIC (9, 2),
 	cross_max_length NUMERIC (10, 2),
 	start_median_stake_oid VARCHAR (36),
-	start_relative_mileage NUMERIC (8, 0),
+	start_relative_mileage NUMERIC (9, 2),
 	end_median_stake_oid VARCHAR (36),
-	end_relative_mileage NUMERIC (8, 0),
-	start_pointx NUMERIC (9, 3),
-	start_pointy NUMERIC (9, 3),
-	start_pointz NUMERIC (9, 3),
-	end_pointx NUMERIC (9, 3),
-	end_pointy NUMERIC (9, 3),
-	end_pointz NUMERIC (9, 3),
+	end_relative_mileage NUMERIC (9, 2),
+	start_pointx numeric(10,7),
+  start_pointy numeric(10,7),
+  start_pointz numeric(5,2),
+  end_pointx numeric(10,7),
+  end_pointy numeric(10,7),
+  end_pointz numeric(5,2),
 	exit_angle NUMERIC (12, 6),
 	enter_angle NUMERIC (12, 6),
 	commencement_date TIMESTAMP (6),
@@ -3132,15 +3132,15 @@ CREATE TABLE daq_cross_shield (
 	cross_length NUMERIC (9, 2),
 	cross_max_length NUMERIC (10, 2),
 	start_median_stake_oid VARCHAR (36),
-	start_relative_mileage NUMERIC (8, 0),
+	start_relative_mileage NUMERIC (9, 2),
 	end_median_stake_oid VARCHAR (36),
-	end_relative_mileage NUMERIC (8, 0),
-	start_pointx NUMERIC (9, 3),
-	start_pointy NUMERIC (9, 3),
-	start_pointz NUMERIC (9, 3),
-	end_pointx NUMERIC (9, 3),
-	end_pointy NUMERIC (9, 3),
-	end_pointz NUMERIC (9, 3),
+	end_relative_mileage NUMERIC (9, 2),
+	start_pointx numeric(10,7),
+  start_pointy numeric(10,7),
+  start_pointz numeric(5,2),
+  end_pointx numeric(10,7),
+  end_pointy numeric(10,7),
+  end_pointz numeric(5,2),
 	commencement_date TIMESTAMP (6),
 	completion_date TIMESTAMP (6),
 	construct_unit VARCHAR (36),
@@ -3208,15 +3208,15 @@ CREATE TABLE daq_cross_drilling_blasting (
 	cross_length NUMERIC (9, 2),
 	cross_max_length NUMERIC (10, 2),
 	start_median_stake_oid VARCHAR (36),
-	start_relative_mileage NUMERIC (8, 0),
+	start_relative_mileage NUMERIC (9, 2),
 	end_median_stake_oid VARCHAR (36),
-	end_relative_mileage NUMERIC (8, 0),
-	start_pointx NUMERIC (9, 3),
-	start_pointy NUMERIC (9, 3),
-	start_pointz NUMERIC (9, 3),
-	end_pointx NUMERIC (9, 3),
-	end_pointy NUMERIC (9, 3),
-	end_pointz NUMERIC (9, 3),
+	end_relative_mileage NUMERIC (9, 2),
+	start_pointx numeric(10,7),
+  start_pointy numeric(10,7),
+  start_pointz numeric(5,2),
+  end_pointx numeric(10,7),
+  end_pointy numeric(10,7),
+  end_pointz numeric(5,2),
 	steady_tube_measures VARCHAR(200),
 	cofferdam_grade VARCHAR(50),
 	lining_type VARCHAR(50),
@@ -3291,15 +3291,15 @@ CREATE TABLE daq_cross_across (
 	cross_length NUMERIC (9, 2),
 	cross_max_length NUMERIC (10, 2),
 	start_median_stake_oid VARCHAR (36),
-	start_relative_mileage NUMERIC (8, 0),
+	start_relative_mileage NUMERIC (9, 2),
 	end_median_stake_oid VARCHAR (36),
-	end_relative_mileage NUMERIC (8, 0),
-	start_pointx NUMERIC (9, 3),
-	start_pointy NUMERIC (9, 3),
-	start_pointz NUMERIC (9, 3),
-	end_pointx NUMERIC (9, 3),
-	end_pointy NUMERIC (9, 3),
-	end_pointz NUMERIC (9, 3),
+	end_relative_mileage NUMERIC (9, 2),
+	start_pointx numeric(10,7),
+  start_pointy numeric(10,7),
+  start_pointz numeric(5,2),
+  end_pointx numeric(10,7),
+  end_pointy numeric(10,7),
+  end_pointz numeric(5,2),
 	commencement_date TIMESTAMP (6),
 	completion_date TIMESTAMP (6),
 	construct_unit VARCHAR (36),
@@ -3368,10 +3368,10 @@ CREATE TABLE daq_cathodic_isolating_piece (
 	isolating_piece_code VARCHAR (50),
 	isolating_piece_name VARCHAR (50),
 	median_stake_oid VARCHAR (36),
-	relative_mileage NUMERIC (8, 0),
-	pointx NUMERIC (9, 3),
-	pointy NUMERIC (9, 3),
-	pointz NUMERIC (9, 3),
+	relative_mileage NUMERIC (9, 2),
+	pointx NUMERIC (10, 7),
+	pointy NUMERIC (10, 7),
+	pointz NUMERIC (5, 2),
 	start_pipe_fitting_num VARCHAR (50),
 	start_pipe_fitting_type VARCHAR (50),
 	end_pipe_fitting_num VARCHAR (50),
@@ -3449,7 +3449,7 @@ CREATE TABLE daq_cathodic_cable_protection (
 	sacrifice_anode_oid VARCHAR (50),
 	cable_layout_code VARCHAR (50),
 	median_stake_oid VARCHAR (36),
-	relative_mileage NUMERIC (8, 0),
+	relative_mileage NUMERIC (9, 2),
 	construct_unit VARCHAR (36),
 	construct_date TIMESTAMP (6),
 	supervision_unit VARCHAR (38),
@@ -3516,10 +3516,10 @@ CREATE TABLE daq_cathodic_sacrifice_anode (
 	anode_code VARCHAR (50),
 	protect_object VARCHAR (40),
 	median_stake_oid VARCHAR (36),
-	relative_mileage NUMERIC (8, 0),
-	pointx NUMERIC (9, 3),
-	pointy NUMERIC (9, 3),
-	pointz NUMERIC (9, 3),
+	relative_mileage NUMERIC (9, 2),
+	pointx NUMERIC (10, 7),
+	pointy NUMERIC (10, 7),
+	pointz NUMERIC (5, 2),
 	is_temporary SMALLINT,
 	design_life NUMERIC (2, 0),
 	anode_material VARCHAR (50),
@@ -3614,10 +3614,10 @@ CREATE TABLE daq_cathodic_insulated_joint (
 	equipment_code VARCHAR (50),
 	equipment_name VARCHAR (50),
 	median_stake_oid VARCHAR (36),
-	relative_mileage NUMERIC (8, 0),
-	pointx NUMERIC (9, 3),
-	pointy NUMERIC (9, 3),
-	pointz NUMERIC (9, 3),
+	relative_mileage NUMERIC (9, 2),
+	pointx NUMERIC (10, 7),
+	pointy NUMERIC (10, 7),
+	pointz NUMERIC (5, 2),
 	construct_unit VARCHAR (36),
 	construct_date TIMESTAMP (6),
 	supervision_unit VARCHAR (38),
@@ -3675,7 +3675,7 @@ CREATE TABLE daq_cathodic_solid_decoupler (
 	equipment_code VARCHAR (50),
 	equipment_name VARCHAR (50),
 	median_stake_oid VARCHAR (36),
-	relative_mileage NUMERIC (8, 0),
+	relative_mileage NUMERIC (9, 2),
 	construct_unit VARCHAR (36),
 	construct_date TIMESTAMP (6),
 	supervision_unit VARCHAR (38),
@@ -3731,10 +3731,10 @@ CREATE TABLE daq_cathodic_test_stake (
 	pipe_segment_oid VARCHAR (36),
 	test_stake_code VARCHAR (50),
 	median_stake_oid VARCHAR (36),
-	relative_mileage NUMERIC (8, 0),
-	pointx NUMERIC (9, 3),
-	pointy NUMERIC (9, 3),
-	pointz NUMERIC (9, 3),
+	relative_mileage NUMERIC (9, 2),
+	pointx NUMERIC (10, 7),
+	pointy NUMERIC (10, 7),
+	pointz NUMERIC (5, 2),
 	stake_structure VARCHAR (50),
 	install_location_description VARCHAR (200),
 	burial_date TIMESTAMP (6),
@@ -3805,9 +3805,9 @@ CREATE TABLE daq_cathodic_polarity_drainage (
 	equipment_name VARCHAR (50),
 	factory_num VARCHAR (60),
 	median_stake_oid VARCHAR (36),
-	relative_mileage NUMERIC (8, 0),
-	pointx NUMERIC (9, 3),
-	pointy NUMERIC (9, 3),
+	relative_mileage NUMERIC (9, 2),
+	pointx NUMERIC (10, 7),
+	pointy NUMERIC (10, 7),
 	protection_scope VARCHAR (50),
 	manufacturer VARCHAR (60),
 	discharge_flow NUMERIC (6, 0),
@@ -3902,12 +3902,12 @@ CREATE TABLE daq_cathodic_anode_bed (
 	pipe_segment_oid VARCHAR (36),
 	ground_bed VARCHAR (50),
 	median_stake_oid VARCHAR (36),
-	relative_mileage NUMERIC (8, 0),
-	pointx NUMERIC (9, 3),
-	pointy NUMERIC (9, 3),
-	pointz NUMERIC (9, 3),
+	relative_mileage NUMERIC (9, 2),
+	pointx NUMERIC (10, 7),
+	pointy NUMERIC (10, 7),
+	pointz NUMERIC (5, 2),
 	install_location_description VARCHAR (200),
-	buried_depth NUMERIC (8, 2),
+	buried_depth NUMERIC (7, 2),
 	is_temporary SMALLINT,
 	design_life SMALLINT,
 	backfill_material VARCHAR (50),
@@ -4178,8 +4178,8 @@ CREATE TABLE daq_appendages_mark_stake (
 	mark_stake_code VARCHAR (50),
 	median_stake_oid VARCHAR (36),
 	relative_mileage NUMERIC (9, 3),
-	pointx NUMERIC (10, 3),
-	pointy NUMERIC (11, 3),
+	pointx NUMERIC (10, 7),
+	pointy NUMERIC (10, 7),
 	stake_structure VARCHAR (50),
 	burial_date TIMESTAMP (6),
 	stake_function VARCHAR (450),
@@ -4242,9 +4242,9 @@ CREATE TABLE daq_appendages_electronic_label (
 	electronic_label_code VARCHAR (50),
 	product_num VARCHAR (60),
 	median_stake_oid VARCHAR (36),
-	pointx NUMERIC (10, 3),
-	pointy NUMERIC (11, 3),
-	pointz NUMERIC (7, 3),
+	pointx NUMERIC (10, 7),
+	pointy NUMERIC (10, 7),
+	pointz NUMERIC (5, 2),
 	burial_depth NUMERIC (7, 2),
 	feature_point_type VARCHAR (50),
 	burial_date TIMESTAMP (6),
@@ -4308,9 +4308,9 @@ CREATE TABLE daq_appendages_hand_hole (
 	hand_hole_type VARCHAR (50),
 	median_stake_oid VARCHAR (36),
 	relative_mileage NUMERIC (9, 3),
-	pointx NUMERIC (10, 3),
-	pointy NUMERIC (11, 3),
-	pointz NUMERIC (8, 3),
+	pointx NUMERIC (10, 7),
+	pointy NUMERIC (10, 7),
+	pointz NUMERIC (5, 2),
 	hand_hole_specifications VARCHAR (50),
 	base_install_situation VARCHAR (60),
 	circle_install_situation VARCHAR (60),
@@ -4383,9 +4383,9 @@ CREATE TABLE daq_appendages_obstacle (
 	obstacle_type VARCHAR (50),
 	median_stake_oid VARCHAR (36),
 	relative_mileage NUMERIC (9, 3),
-	pointx NUMERIC (10, 3),
-	pointy NUMERIC (11, 3),
-	pointz NUMERIC (8, 3),
+	pointx NUMERIC (10, 7),
+	pointy NUMERIC (10, 7),
+	pointz NUMERIC (5, 2),
 	subordinate_unit VARCHAR (50),
 	address VARCHAR (75),
 	contacts VARCHAR (20),
@@ -4456,10 +4456,10 @@ CREATE TABLE daq_appendages_hydraulic_protection (
 	hydraulic_protection_name VARCHAR (45),
 	median_stake_oid VARCHAR (36),
 	relative_mileage NUMERIC (9, 3),
-	start_pointx NUMERIC (10, 3),
-	start_pointy NUMERIC (11, 3),
-	end_pointx NUMERIC (10, 3),
-	end_pointy NUMERIC (11, 3),
+	start_pointx NUMERIC (10, 7),
+	start_pointy NUMERIC (10, 7),
+	end_pointx NUMERIC (10, 7),
+	end_pointy NUMERIC (10, 7),
 	structure_size VARCHAR (45),
 	engineer_quatity NUMERIC (8, 3),
 	hydraulic_protection_material VARCHAR (50),
@@ -4589,10 +4589,10 @@ CREATE TABLE daq_appendages_casing_pipe (
 	start_relative_mileage NUMERIC (9, 3),
 	end_median_stake_oid VARCHAR (36),
 	end_relative_mileage NUMERIC (9, 3),
-	start_pointx NUMERIC (10, 3),
-	start_pointy NUMERIC (11, 3),
-	end_pointx NUMERIC (10, 3),
-	end_pointy NUMERIC (11, 3),
+	start_pointx NUMERIC (10, 7),
+	start_pointy NUMERIC (10, 7),
+	end_pointx NUMERIC (10, 7),
+	end_pointy NUMERIC (10, 7),
 	casing_pipe_type VARCHAR (50),
 	casing_pipe_length NUMERIC (9, 2),
 	casing_pipe_specifications VARCHAR (40),
@@ -4952,8 +4952,8 @@ create table custom_fun_fields(
 	group_index smallint  ,
 	row_index smallint  ,
 	updateable varchar(10)  ,
-	min int4  ,
-	max int4  ,
+	min NUMERIC (17, 7) ,
+	max NUMERIC (17, 7)  ,
 	placeholder varchar(50)  ,
 	child_field varchar(50)  ,
 	request_path varchar(500)  ,
@@ -6041,3 +6041,13536 @@ create table daq_tenders_polyline(
 comment on table daq_tenders_polyline is '标段线段表';
 comment on column daq_tenders_polyline.oid is 'oid';
 comment on column daq_tenders_polyline.tenders_name is '标段名称';
+
+/***
+ * 待审核数据与权限树关系表
+ */
+drop table if exists daq_approve_tip;
+create table daq_approve_tip(
+	oid varchar(36) not null primary key,
+	project_oid varchar(36),
+	business_oid varchar(36),
+	privilege_code varchar(50),
+	supervision_unit varchar(38),
+	create_user_id varchar(36),
+	create_user_name varchar(50),
+	create_datetime timestamp(6),
+	active int2 default 1 not null
+);
+comment on table daq_approve_tip is '监理单位审核提示中间表';
+comment on column daq_approve_tip.project_oid is '项目oid';
+comment on column daq_approve_tip.business_oid is '业务数据oid';
+comment on column daq_approve_tip.privilege_code is '权限编码';
+comment on column daq_approve_tip.supervision_unit is '监理单位';
+comment on column daq_approve_tip.create_user_id is '创建人oid';
+comment on column daq_approve_tip.create_user_name is '创建人名称';
+comment on column daq_approve_tip.create_datetime is '创建时间';
+comment on column daq_approve_tip.active is '有效标识';
+
+/***
+ * 焊口编号规则
+ */
+CREATE TABLE "public"."daq_weld_code_regular" (
+"oid" varchar(36) COLLATE "default" NOT NULL,
+"project_oid" varchar(36) COLLATE "default" NOT NULL,
+"weld_code_regular" varchar(150) COLLATE "default",
+"weld_code_regular_name" varchar(200) COLLATE "default",
+"create_user_id" varchar(36) COLLATE "default",
+"create_user_name" varchar(50) COLLATE "default",
+"create_datetime" timestamp(6),
+"modify_user_id" varchar(36) COLLATE "default",
+"modify_user_name" varchar(50) COLLATE "default",
+"modify_datetime" timestamp(6),
+"active" int2 NOT NULL,
+CONSTRAINT "daq_weld_code_regular_pkey" PRIMARY KEY ("oid")
+)WITH (OIDS=FALSE);
+COMMENT ON TABLE "public"."daq_weld_code_regular" IS '焊口编号规则表';
+COMMENT ON COLUMN "public"."daq_weld_code_regular"."oid" IS '主键';
+COMMENT ON COLUMN "public"."daq_weld_code_regular"."project_oid" IS '项目oid';
+COMMENT ON COLUMN "public"."daq_weld_code_regular"."weld_code_regular" IS '焊口规则';
+COMMENT ON COLUMN "public"."daq_weld_code_regular"."weld_code_regular_name" IS '焊口规则名称';
+CREATE INDEX "index_daq_weld_code_regular_project_oid_6" ON "public"."daq_weld_code_regular" USING btree ("project_oid");
+
+
+/***
+ * 附件与项目关联关系表
+ */
+create table daq_project_jasdoc_ref(
+	oid varchar(36) not null primary key,
+	project_oid varchar(36),
+	project_name varchar(100),
+	file_oid varchar(36),
+	unit_oid varchar(36),
+	unit_name varchar(100),
+	active smallint not null default 1
+);
+comment on table daq_project_jasdoc_ref is '项目与文件关联关系表';
+comment on column daq_project_jasdoc_ref.project_oid is '项目oid';
+comment on column daq_project_jasdoc_ref.project_name is '项目名称';
+comment on column daq_project_jasdoc_ref.file_oid is '文件oid';
+comment on column daq_project_jasdoc_ref.unit_oid is '部门oid';
+comment on column daq_project_jasdoc_ref.unit_name is '部门名称';
+comment on column daq_project_jasdoc_ref.active is '有效字段';
+
+
+
+/**
+ * 站场基本信息-动设备start
+ */
+CREATE TABLE daq_s_material_compressor (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	compressor_model SMALLINT,
+	max_design_temperature NUMERIC (4, 1),
+	min_design_temperature NUMERIC (4, 2),
+	classification_code VARCHAR (35),
+	material_code varchar (50),
+	specification_model VARCHAR (50),
+	lubricating_oil_type VARCHAR (30),
+	lubricating_oil_manufac VARCHAR (50),
+	lubricating_oil_volume NUMERIC (5, 1),
+	lubricating_oil_material VARCHAR (50),
+	lubricating_pump_flowrate NUMERIC (5, 1),
+	lubricating_filter_precision NUMERIC (3, 1),
+	dry_gas_seal_system_model VARCHAR (50),
+	dry_gas_seal_system_manufac VARCHAR (60),
+	seal_type VARCHAR (36),
+	seal_gas_type VARCHAR (50),
+	seal_gas_filter_precision NUMERIC (3, 1),
+	impeller_material VARCHAR (36),
+	bearing_material VARCHAR (50),
+	inlet_f_sealing_surface_type VARCHAR (50),
+	inlet_f_standard VARCHAR (50),
+	inlet_f_nominal_diameter NUMERIC (6, 1),
+	inlet_f_pressure_rating VARCHAR (50),
+	outlet_f_sealing_surface_type VARCHAR (50),
+	outlet_flange_standard_ VARCHAR (50),
+	outlet_f_nominal_diameter NUMERIC (6, 1),
+	outlet_f_pressure_rating VARCHAR (50),
+	compressor_weight NUMERIC (9, 2),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (6),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_compressor is '压缩机';
+comment on column daq_s_material_compressor.oid is '主键';
+comment on column daq_s_material_compressor.project_oid is '项目oid';
+comment on column daq_s_material_compressor.tenders_oid is '标段oid';
+comment on column daq_s_material_compressor.pipeline_oid is '管线oid';
+comment on column daq_s_material_compressor.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_compressor.device_code is '设备编号';
+comment on column daq_s_material_compressor.device_name is '名称';
+comment on column daq_s_material_compressor.compressor_model is '结构形式{1:离心式;2:往复式}';
+comment on column daq_s_material_compressor.max_design_temperature is '最高设计温度(℃)';
+comment on column daq_s_material_compressor.min_design_temperature is '最低设计温度(℃)';
+comment on column daq_s_material_compressor.classification_code is '分类编码';
+comment on column daq_s_material_compressor.material_code is '物料码';
+comment on column daq_s_material_compressor.specification_model is '规格型号';
+comment on column daq_s_material_compressor.lubricating_oil_type is '润滑油类型';
+comment on column daq_s_material_compressor.lubricating_oil_manufac is '润滑油厂家';
+comment on column daq_s_material_compressor.lubricating_oil_volume is '润滑油箱体积(m3)';
+comment on column daq_s_material_compressor.lubricating_oil_material is '润滑油箱材料';
+comment on column daq_s_material_compressor.lubricating_pump_flowrate is '润滑油泵排量(m3/h)';
+comment on column daq_s_material_compressor.lubricating_filter_precision is '润滑油过滤器精度(µm)';
+comment on column daq_s_material_compressor.dry_gas_seal_system_model  is '干气密封系统型号';
+comment on column daq_s_material_compressor.dry_gas_seal_system_manufac is '干气密封系统厂家';
+comment on column daq_s_material_compressor.seal_type is '密封型式';
+comment on column daq_s_material_compressor.seal_gas_type is '密封气类别';
+comment on column daq_s_material_compressor.seal_gas_filter_precision is '密封气过滤器精度(µm)';
+comment on column daq_s_material_compressor.impeller_material is '叶轮材料';
+comment on column daq_s_material_compressor.bearing_material is '轴材料';
+comment on column daq_s_material_compressor.inlet_f_sealing_surface_type is '入口法兰密封面型式';
+comment on column daq_s_material_compressor.inlet_f_standard is '入口法兰标准';
+comment on column daq_s_material_compressor.inlet_f_nominal_diameter is '入口法兰公称直径(mm)';
+comment on column daq_s_material_compressor.inlet_f_pressure_rating is '入口法兰压力等级，域值flange_pressure_rating_domain';
+comment on column daq_s_material_compressor.outlet_f_sealing_surface_type is '出口法兰密封面型式';
+comment on column daq_s_material_compressor.outlet_flange_standard_ is '出口法兰标准';
+comment on column daq_s_material_compressor.outlet_f_nominal_diameter is '出口法兰公称直径(mm)';
+comment on column daq_s_material_compressor.outlet_f_pressure_rating is '出口法兰压力等级,域值flange_pressure_rating_domain';
+comment on column daq_s_material_compressor.compressor_weight is '压缩机重量(kg)';
+comment on column daq_s_material_compressor.manufacture_number is '出厂编号';
+comment on column daq_s_material_compressor.manufacturer is '生产厂家';
+comment on column daq_s_material_compressor.manufacture_date is '出厂时间';
+comment on column daq_s_material_compressor.guarantee_period is '质保期(月)';
+comment on column daq_s_material_compressor.contract_number is '合同号';
+comment on column daq_s_material_compressor.remarks is '备注';
+comment on column daq_s_material_compressor.create_user_id is '创建人id';
+comment on column daq_s_material_compressor.create_user_name is '创建人名称';
+comment on column daq_s_material_compressor.create_datetime is '创建时间';
+comment on column daq_s_material_compressor.modify_user_id is '修改人id';
+comment on column daq_s_material_compressor.modify_user_name is '修改人名称';
+comment on column daq_s_material_compressor.modify_datetime is '修改时间';
+comment on column daq_s_material_compressor.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_COMPRESSOR_OID_4 ON daq_s_material_compressor ( oid );
+create index INDEX_DAQ_S_MATERIAL_COMPRESSOR_DEVICE_CODE_9 ON daq_s_material_compressor ( device_code );
+create index INDEX_DAQ_S_MATERIAL_COMPRESSOR_DEVICE_NAME_10 ON daq_s_material_compressor ( device_name );
+
+CREATE TABLE daq_s_material_compressor_motor (
+	oid varchar(36) not null primary key,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	motor_liberation NUMERIC (3, 1),
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	motor_rated_current NUMERIC (4, 0),
+	motor_rated_torque NUMERIC (5, 0),
+	motor_start_current NUMERIC (4, 0),
+	motor_insulation_class_stator SMALLINT,
+	motor_temperature_rise SMALLINT,
+	winding_temp_detector VARCHAR (30),
+	bearing_temp_detector VARCHAR(30),
+	space_heater_power NUMERIC (4, 0),
+	lightning_arrester VARCHAR (30),
+	differential_protection_ct VARCHAR (30),
+	motor_weight NUMERIC (9, 1),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_compressor_motor is '压缩机电机';
+comment on column daq_s_material_compressor_motor.oid is '主键';
+comment on column daq_s_material_compressor_motor.project_oid is '项目oid';
+comment on column daq_s_material_compressor_motor.tenders_oid is '标段oid';
+comment on column daq_s_material_compressor_motor.pipeline_oid is '管线oid';
+comment on column daq_s_material_compressor_motor.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_compressor_motor.device_code is '设备编号';
+comment on column daq_s_material_compressor_motor.device_name is '名称';
+comment on column daq_s_material_compressor_motor.motor_liberation is '电机振动值(mm/s)';
+comment on column daq_s_material_compressor_motor.classification_code is '分类编码';
+comment on column daq_s_material_compressor_motor.material_code is '物料码';
+comment on column daq_s_material_compressor_motor.specification_model is '规格型号';
+comment on column daq_s_material_compressor_motor.motor_rated_current is '电机额定电流(A)';
+comment on column daq_s_material_compressor_motor.motor_rated_torque is '电机额定转矩(Nm)';
+comment on column daq_s_material_compressor_motor.motor_start_current is '启动电流(A)';
+comment on column daq_s_material_compressor_motor.motor_insulation_class_stator is '绝缘等级{1:B;2:F;3:H}';
+comment on column daq_s_material_compressor_motor.motor_temperature_rise is '电机温升{1:B;2:F;3:H}';
+comment on column daq_s_material_compressor_motor.winding_temp_detector is '绕组温度检测RTD';
+comment on column daq_s_material_compressor_motor.bearing_temp_detector is '轴温度检测RTD';
+comment on column daq_s_material_compressor_motor.space_heater_power is '抗冷凝加热器(W)';
+comment on column daq_s_material_compressor_motor.lightning_arrester is '避雷器';
+comment on column daq_s_material_compressor_motor.differential_protection_ct is '差动保护CT属性';
+comment on column daq_s_material_compressor_motor.motor_weight is '电机重量(kg)';
+comment on column daq_s_material_compressor_motor.manufacture_number is '出厂编号';
+comment on column daq_s_material_compressor_motor.manufacturer is '生产厂家';
+comment on column daq_s_material_compressor_motor.manufacture_date is '出厂时间';
+comment on column daq_s_material_compressor_motor.guarantee_period is '质保期(月)';
+comment on column daq_s_material_compressor_motor.contract_number is '合同号';
+comment on column daq_s_material_compressor_motor.remarks is '备注';
+comment on column daq_s_material_compressor_motor.create_user_id is '创建人id';
+comment on column daq_s_material_compressor_motor.create_user_name is '创建人名称';
+comment on column daq_s_material_compressor_motor.create_datetime is '创建时间';
+comment on column daq_s_material_compressor_motor.modify_user_id is '修改人id';
+comment on column daq_s_material_compressor_motor.modify_user_name is '修改人名称';
+comment on column daq_s_material_compressor_motor.modify_datetime is '修改时间';
+comment on column daq_s_material_compressor_motor.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_COMPRESSOR_MOTOR_OID_4 ON daq_s_material_compressor_motor ( oid );
+create index INDEX_DAQ_S_MATERIAL_COMPRESSOR_MOTOR_DEVICE_CODE_9 ON daq_s_material_compressor_motor ( device_code );
+create index INDEX_DAQ_S_MATERIAL_COMPRESSOR_MOTOR_DEVICE_NAME_10 ON daq_s_material_compressor_motor ( device_name );
+
+CREATE TABLE daq_s_material_compressor_gas_engine (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	drive_type SMALLINT,
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	rated_efficiency NUMERIC (3, 0),
+	fuel_system_material VARCHAR (30),
+	lubricating_oil_type VARCHAR (30),
+	lubricating_oil_manufacturers VARCHAR (50),
+	power_turbine_series NUMERIC (3, 0),
+	power_turbine_manufacturers VARCHAR (50),
+	power_turbine_sequence_number VARCHAR (50),
+	gas_generator VARCHAR (30),
+	air_inlet_filter_precision NUMERIC (3, 1),
+	air_inlet_filter_factory VARCHAR (50),
+	compressor_lubricating SMALLINT,
+	compressor_cooling SMALLINT,
+	gas_engine_weight NUMERIC (9, 2),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_compressor_gas_engine is '压缩机燃气机';
+comment on column daq_s_material_compressor_gas_engine.oid is '主键';
+comment on column daq_s_material_compressor_gas_engine.project_oid is '项目oid';
+comment on column daq_s_material_compressor_gas_engine.tenders_oid is '标段oid';
+comment on column daq_s_material_compressor_gas_engine.pipeline_oid is '管线oid';
+comment on column daq_s_material_compressor_gas_engine.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_compressor_gas_engine.device_code is '设备编号';
+comment on column daq_s_material_compressor_gas_engine.device_name is '名称';
+comment on column daq_s_material_compressor_gas_engine.drive_type is '驱动机类型{1:燃气轮机;2:燃气发动机}';
+comment on column daq_s_material_compressor_gas_engine.classification_code is '分类编码';
+comment on column daq_s_material_compressor_gas_engine.material_code is '物料码';
+comment on column daq_s_material_compressor_gas_engine.specification_model is '规格型号';
+comment on column daq_s_material_compressor_gas_engine.tag_number is '所处压缩机的预定位号';
+comment on column daq_s_material_compressor_gas_engine.rated_efficiency is '额定效率(%)';
+comment on column daq_s_material_compressor_gas_engine.fuel_system_material is '燃料气系统材质';
+comment on column daq_s_material_compressor_gas_engine.lubricating_oil_type is '润滑油类型';
+comment on column daq_s_material_compressor_gas_engine.lubricating_oil_manufacturers is '润滑油厂家';
+comment on column daq_s_material_compressor_gas_engine.power_turbine_series is '动力涡轮级数';
+comment on column daq_s_material_compressor_gas_engine.power_turbine_manufacturers is '动力涡轮生产厂家';
+comment on column daq_s_material_compressor_gas_engine.power_turbine_sequence_number is '动力涡轮序列号';
+comment on column daq_s_material_compressor_gas_engine.gas_generator is '燃气发生器';
+comment on column daq_s_material_compressor_gas_engine.air_inlet_filter_precision is '进气过滤器精度(µm)';
+comment on column daq_s_material_compressor_gas_engine.air_inlet_filter_factory is '进气过滤器厂家';
+comment on column daq_s_material_compressor_gas_engine.compressor_lubricating is '压缩机润滑方式{1:合并润滑;2:独立润滑}';
+comment on column daq_s_material_compressor_gas_engine.compressor_cooling is '压缩机冷却方式{1:水冷;2:空冷}';
+comment on column daq_s_material_compressor_gas_engine.gas_engine_weight is '燃气机重量(kg)';
+comment on column daq_s_material_compressor_gas_engine.manufacture_number is '出厂编号';
+comment on column daq_s_material_compressor_gas_engine.manufacturer is '生产厂家';
+comment on column daq_s_material_compressor_gas_engine.manufacture_date is '出厂时间';
+comment on column daq_s_material_compressor_gas_engine.guarantee_period is '质保期(月)';
+comment on column daq_s_material_compressor_gas_engine.contract_number is '合同号';
+comment on column daq_s_material_compressor_gas_engine.remarks is '备注';
+comment on column daq_s_material_compressor_gas_engine.create_user_id is '创建人id';
+comment on column daq_s_material_compressor_gas_engine.create_user_name is '创建人名称';
+comment on column daq_s_material_compressor_gas_engine.create_datetime is '创建时间';
+comment on column daq_s_material_compressor_gas_engine.modify_user_id is '修改人id';
+comment on column daq_s_material_compressor_gas_engine.modify_user_name is '修改人名称';
+comment on column daq_s_material_compressor_gas_engine.modify_datetime is '修改时间';
+comment on column daq_s_material_compressor_gas_engine.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_COMPRESSOR_GAS_ENGINE_OID_4 ON daq_s_material_compressor_gas_engine ( oid );
+create index INDEX_DAQ_S_MATERIAL_COMPRESSOR_GAS_ENGINE_DEVICE_CODE_9 ON daq_s_material_compressor_gas_engine ( device_code );
+create index INDEX_DAQ_S_MATERIAL_COMPRESSOR_GAS_ENGINE_DEVICE_NAME_10 ON daq_s_material_compressor_gas_engine ( device_name );
+
+CREATE TABLE daq_s_material_air_cooler (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	air_cooler_type SMALLINT,
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	motor_ip_code VARCHAR (40),
+	motor_explosion_proof_level VARCHAR (40),
+	maximum_working_pressure NUMERIC (5, 2),
+	minimum_working_pressure NUMERIC (5, 2),
+	air_cooler_weight NUMERIC (9, 2),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_air_cooler is '空气冷却器';
+comment on column daq_s_material_air_cooler.oid is '主键';
+comment on column daq_s_material_air_cooler.project_oid is '项目oid';
+comment on column daq_s_material_air_cooler.tenders_oid is '标段oid';
+comment on column daq_s_material_air_cooler.pipeline_oid is '管线oid';
+comment on column daq_s_material_air_cooler.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_air_cooler.device_code is '设备编号';
+comment on column daq_s_material_air_cooler.device_name is '名称';
+comment on column daq_s_material_air_cooler.air_cooler_type is '空冷器类型{1:鼓风式;2:引风式}';
+comment on column daq_s_material_air_cooler.classification_code is '分类编码';
+comment on column daq_s_material_air_cooler.material_code is '物料码';
+comment on column daq_s_material_air_cooler.specification_model is '规格型号';
+comment on column daq_s_material_air_cooler.motor_ip_code is '电机防护等级,域值：motor_ip_code_domai';
+comment on column daq_s_material_air_cooler.motor_explosion_proof_level is '电动机防爆等级，域值：motor_explosion_proof_level_domain';
+comment on column daq_s_material_air_cooler.maximum_working_pressure is '最大工作压力(MPa)';
+comment on column daq_s_material_air_cooler.minimum_working_pressure is '最小工作压力(MPa)';
+comment on column daq_s_material_air_cooler.air_cooler_weight is '空气冷却器重量(kg)';
+comment on column daq_s_material_air_cooler.manufacture_number is '出厂编号';
+comment on column daq_s_material_air_cooler.manufacturer is '生产厂家';
+comment on column daq_s_material_air_cooler.manufacture_date is '出厂时间';
+comment on column daq_s_material_air_cooler.guarantee_period is '质保期(月)';
+comment on column daq_s_material_air_cooler.contract_number is '合同号';
+comment on column daq_s_material_air_cooler.remarks is '备注';
+comment on column daq_s_material_air_cooler.create_user_id is '创建人id';
+comment on column daq_s_material_air_cooler.create_user_name is '创建人名称';
+comment on column daq_s_material_air_cooler.create_datetime is '创建时间';
+comment on column daq_s_material_air_cooler.modify_user_id is '修改人id';
+comment on column daq_s_material_air_cooler.modify_user_name is '修改人名称';
+comment on column daq_s_material_air_cooler.modify_datetime is '修改时间';
+comment on column daq_s_material_air_cooler.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_AIR_COOLER_OID_4 ON daq_s_material_air_cooler ( oid );
+create index INDEX_DAQ_S_MATERIAL_AIR_COOLER_DEVICE_CODE_9 ON daq_s_material_air_cooler ( device_code );
+create index INDEX_DAQ_S_MATERIAL_AIR_COOLER_DEVICE_NAME_10 ON daq_s_material_air_cooler ( device_name );
+
+CREATE TABLE daq_s_material_instrument_compressor (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	compressor_type SMALLINT,
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	design_pressure NUMERIC (6, 2),
+	max_design_temperature NUMERIC (3, 0),
+	min_design_temperature NUMERIC (3, 0),
+	electromotor_rated_power_factor VARCHAR (40),
+	air_compressor_weight NUMERIC (9, 2),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+
+comment on table daq_s_material_instrument_compressor is '仪表风压缩机橇';
+comment on column daq_s_material_instrument_compressor.oid is '主键';
+comment on column daq_s_material_instrument_compressor.project_oid is '项目oid';
+comment on column daq_s_material_instrument_compressor.tenders_oid is '标段oid';
+comment on column daq_s_material_instrument_compressor.pipeline_oid is '管线oid';
+comment on column daq_s_material_instrument_compressor.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_instrument_compressor.device_code is '设备编号';
+comment on column daq_s_material_instrument_compressor.device_name is '名称';
+comment on column daq_s_material_instrument_compressor.compressor_type is '压缩机类型{1:离心式;2:容积式}';
+comment on column daq_s_material_instrument_compressor.classification_code is '分类编码';
+comment on column daq_s_material_instrument_compressor.material_code is '物料码';
+comment on column daq_s_material_instrument_compressor.specification_model is '规格型号';
+comment on column daq_s_material_instrument_compressor.tag_number is '预定位号';
+comment on column daq_s_material_instrument_compressor.design_pressure is '设计压力(MPa)';
+comment on column daq_s_material_instrument_compressor.max_design_temperature is '最高设计温度(℃)';
+comment on column daq_s_material_instrument_compressor.min_design_temperature is '最低设计温度(℃)';
+comment on column daq_s_material_instrument_compressor.electromotor_rated_power_factor is '电机额定功率因数,域值：electromotor_rated_power_factor_domain';
+comment on column daq_s_material_instrument_compressor.air_compressor_weight is '空气压缩机重量(kg)';
+comment on column daq_s_material_instrument_compressor.manufacture_number is '出厂编号';
+comment on column daq_s_material_instrument_compressor.manufacturer is '生产厂家';
+comment on column daq_s_material_instrument_compressor.manufacture_date is '出厂时间';
+comment on column daq_s_material_instrument_compressor.guarantee_period is '质保期(月)';
+comment on column daq_s_material_instrument_compressor.contract_number is '合同号';
+comment on column daq_s_material_instrument_compressor.remarks is '备注';
+comment on column daq_s_material_instrument_compressor.create_user_id is '创建人id';
+comment on column daq_s_material_instrument_compressor.create_user_name is '创建人名称';
+comment on column daq_s_material_instrument_compressor.create_datetime is '创建时间';
+comment on column daq_s_material_instrument_compressor.modify_user_id is '修改人id';
+comment on column daq_s_material_instrument_compressor.modify_user_name is '修改人名称';
+comment on column daq_s_material_instrument_compressor.modify_datetime is '修改时间';
+comment on column daq_s_material_instrument_compressor.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_INSTRUMENT_COMPRESSOR_OID_4 ON daq_s_material_instrument_compressor ( oid );
+create index INDEX_DAQ_S_MATERIAL_INSTRUMENT_COMPRESSOR_DEVICE_CODE_9 ON daq_s_material_instrument_compressor ( device_code );
+create index INDEX_DAQ_S_MATERIAL_INSTRUMENT_COMPRESSOR_DEVICE_NAME_10 ON daq_s_material_instrument_compressor ( device_name );
+
+
+CREATE TABLE daq_s_material_electric_heater (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	heat_exchanger_model SMALLINT,
+	heating_type SMALLINT,
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	electric_heater_weight NUMERIC (9, 2),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_electric_heater is '电加热器';
+comment on column daq_s_material_electric_heater.oid is '主键';
+comment on column daq_s_material_electric_heater.project_oid is '项目oid';
+comment on column daq_s_material_electric_heater.tenders_oid is '标段oid';
+comment on column daq_s_material_electric_heater.pipeline_oid is '管线oid';
+comment on column daq_s_material_electric_heater.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_electric_heater.device_code is '设备编号';
+comment on column daq_s_material_electric_heater.device_name is '名称';
+comment on column daq_s_material_electric_heater.heat_exchanger_model is '电加热器类型{1:卧式;2:立式}';
+comment on column daq_s_material_electric_heater.heating_type is '加热方式{1:直接;2:间接}';
+comment on column daq_s_material_electric_heater.classification_code is '分类编码';
+comment on column daq_s_material_electric_heater.material_code is '物料码';
+comment on column daq_s_material_electric_heater.specification_model is '规格型号';
+comment on column daq_s_material_electric_heater.electric_heater_weight is '电加热器重量(kg)';
+comment on column daq_s_material_electric_heater.manufacture_number is '出厂编号';
+comment on column daq_s_material_electric_heater.manufacturer is '生产厂家';
+comment on column daq_s_material_electric_heater.manufacture_date is '出厂时间';
+comment on column daq_s_material_electric_heater.guarantee_period is '质保期(月)';
+comment on column daq_s_material_electric_heater.contract_number is '合同号';
+comment on column daq_s_material_electric_heater.remarks is '备注';
+comment on column daq_s_material_electric_heater.create_user_id is '创建人id';
+comment on column daq_s_material_electric_heater.create_user_name is '创建人名称';
+comment on column daq_s_material_electric_heater.create_datetime is '创建时间';
+comment on column daq_s_material_electric_heater.modify_user_id is '修改人id';
+comment on column daq_s_material_electric_heater.modify_user_name is '修改人名称';
+comment on column daq_s_material_electric_heater.modify_datetime is '修改时间';
+comment on column daq_s_material_electric_heater.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_ELECTRIC_HEATER_OID_4 ON daq_s_material_electric_heater ( oid );
+create index INDEX_DAQ_S_MATERIAL_ELECTRIC_HEATER_DEVICE_CODE_9 ON daq_s_material_electric_heater ( device_code );
+create index INDEX_DAQ_S_MATERIAL_ELECTRIC_HEATER_DEVICE_NAME_10 ON daq_s_material_electric_heater ( device_name );
+
+CREATE TABLE daq_s_material_air_eliminater (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_air_eliminater is '消气器';
+comment on column daq_s_material_air_eliminater.oid is '主键';
+comment on column daq_s_material_air_eliminater.project_oid is '项目oid';
+comment on column daq_s_material_air_eliminater.tenders_oid is '标段oid';
+comment on column daq_s_material_air_eliminater.pipeline_oid is '管线oid';
+comment on column daq_s_material_air_eliminater.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_air_eliminater.device_code is '设备编号';
+comment on column daq_s_material_air_eliminater.device_name is '名称';
+comment on column daq_s_material_air_eliminater.classification_code is '分类编码';
+comment on column daq_s_material_air_eliminater.material_code is '物料码';
+comment on column daq_s_material_air_eliminater.specification_model is '规格型号';
+comment on column daq_s_material_air_eliminater.manufacture_number is '出厂编号';
+comment on column daq_s_material_air_eliminater.manufacturer is '生产厂家';
+comment on column daq_s_material_air_eliminater.manufacture_date is '出厂时间';
+comment on column daq_s_material_air_eliminater.guarantee_period is '质保期(月)';
+comment on column daq_s_material_air_eliminater.contract_number is '合同号';
+comment on column daq_s_material_air_eliminater.remarks is '备注';
+comment on column daq_s_material_air_eliminater.create_user_id is '创建人id';
+comment on column daq_s_material_air_eliminater.create_user_name is '创建人名称';
+comment on column daq_s_material_air_eliminater.create_datetime is '创建时间';
+comment on column daq_s_material_air_eliminater.modify_user_id is '修改人id';
+comment on column daq_s_material_air_eliminater.modify_user_name is '修改人名称';
+comment on column daq_s_material_air_eliminater.modify_datetime is '修改时间';
+comment on column daq_s_material_air_eliminater.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_AIR_ELIMINATER_OID_4 ON daq_s_material_air_eliminater ( oid );
+create index INDEX_DAQ_S_MATERIAL_AIR_ELIMINATER_DEVICE_CODE_9 ON daq_s_material_air_eliminater ( device_code );
+create index INDEX_DAQ_S_MATERIAL_AIR_ELIMINATER_DEVICE_NAME_10 ON daq_s_material_air_eliminater ( device_name );
+/**
+ * 站场基本信息-动设备end
+ */
+
+
+/**
+ * 站场基本信息-静设备start
+ */
+CREATE TABLE daq_s_material_flare (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	flare_type SMALLINT,
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	design_life NUMERIC (3, 0),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_flare is '放空火炬';
+comment on column daq_s_material_flare.oid is '主键';
+comment on column daq_s_material_flare.project_oid is '项目oid';
+comment on column daq_s_material_flare.tenders_oid is '标段oid';
+comment on column daq_s_material_flare.pipeline_oid is '管线oid';
+comment on column daq_s_material_flare.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_flare.device_code is '设备编号';
+comment on column daq_s_material_flare.device_name is '名称';
+comment on column daq_s_material_flare.flare_type is '结构形式{1:拉绳式;2:自立式}';
+comment on column daq_s_material_flare.classification_code is '分类编码';
+comment on column daq_s_material_flare.material_code is '物料码';
+comment on column daq_s_material_flare.specification_model is '规格型号';
+comment on column daq_s_material_flare.design_life is '设计使用年限';
+comment on column daq_s_material_flare.manufacture_number is '出厂编号';
+comment on column daq_s_material_flare.manufacturer is '生产厂家';
+comment on column daq_s_material_flare.manufacture_date is '出厂时间';
+comment on column daq_s_material_flare.guarantee_period is '质保期(月)';
+comment on column daq_s_material_flare.contract_number is '合同号';
+comment on column daq_s_material_flare.remarks is '备注';
+comment on column daq_s_material_flare.create_user_id is '创建人id';
+comment on column daq_s_material_flare.create_user_name is '创建人名称';
+comment on column daq_s_material_flare.create_datetime is '创建时间';
+comment on column daq_s_material_flare.modify_user_id is '修改人id';
+comment on column daq_s_material_flare.modify_user_name is '修改人名称';
+comment on column daq_s_material_flare.modify_datetime is '修改时间';
+comment on column daq_s_material_flare.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_FLARE_OID_4 ON daq_s_material_flare ( oid );
+create index INDEX_DAQ_S_MATERIAL_FLARE_DEVICE_CODE_9 ON daq_s_material_flare ( device_code );
+create index INDEX_DAQ_S_MATERIAL_FLARE_DEVICE_NAME_10 ON daq_s_material_flare ( device_name );
+
+CREATE TABLE daq_s_material_pig_receiver_launcher (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	device_type SMALLINT,
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	qoc_manufacturer_number VARCHAR (50),
+	qoc_is_imports SMALLINT,
+	qoc_provenance VARCHAR (50),
+	qoc_manufacturer VARCHAR (50),
+	qoc_manufacture_date TIMESTAMP (6),
+	qoc_guarantee_period NUMERIC (3, 0),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_pig_receiver_launcher is '清管器收发球装置';
+comment on column daq_s_material_pig_receiver_launcher.oid is '主键';
+comment on column daq_s_material_pig_receiver_launcher.project_oid is '项目oid';
+comment on column daq_s_material_pig_receiver_launcher.tenders_oid is '标段oid';
+comment on column daq_s_material_pig_receiver_launcher.pipeline_oid is '管线oid';
+comment on column daq_s_material_pig_receiver_launcher.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_pig_receiver_launcher.device_code is '设备编号';
+comment on column daq_s_material_pig_receiver_launcher.device_name is '名称';
+comment on column daq_s_material_pig_receiver_launcher.device_type is '类型{1:发球筒;2:收球筒;3:转球筒}';
+comment on column daq_s_material_pig_receiver_launcher.classification_code is '分类编码';
+comment on column daq_s_material_pig_receiver_launcher.material_code is '物料码';
+comment on column daq_s_material_pig_receiver_launcher.specification_model is '规格型号';
+comment on column daq_s_material_pig_receiver_launcher.qoc_manufacturer_number is '快开盲板出厂编号';
+comment on column daq_s_material_pig_receiver_launcher.qoc_is_imports is '快开盲板是否进口{0:否;1:是}';
+comment on column daq_s_material_pig_receiver_launcher.qoc_provenance is '快开盲板产地';
+comment on column daq_s_material_pig_receiver_launcher.qoc_manufacturer is '快开盲板生产厂家';
+comment on column daq_s_material_pig_receiver_launcher.qoc_manufacture_date is '快开盲板出厂时间';
+comment on column daq_s_material_pig_receiver_launcher.qoc_guarantee_period is '快开盲板质保期';
+comment on column daq_s_material_pig_receiver_launcher.manufacture_number is '出厂编号';
+comment on column daq_s_material_pig_receiver_launcher.manufacturer is '生产厂家';
+comment on column daq_s_material_pig_receiver_launcher.manufacture_date is '出厂时间';
+comment on column daq_s_material_pig_receiver_launcher.guarantee_period is '质保期(月)';
+comment on column daq_s_material_pig_receiver_launcher.contract_number is '合同号';
+comment on column daq_s_material_pig_receiver_launcher.remarks is '备注';
+comment on column daq_s_material_pig_receiver_launcher.create_user_id is '创建人id';
+comment on column daq_s_material_pig_receiver_launcher.create_user_name is '创建人名称';
+comment on column daq_s_material_pig_receiver_launcher.create_datetime is '创建时间';
+comment on column daq_s_material_pig_receiver_launcher.modify_user_id is '修改人id';
+comment on column daq_s_material_pig_receiver_launcher.modify_user_name is '修改人名称';
+comment on column daq_s_material_pig_receiver_launcher.modify_datetime is '修改时间';
+comment on column daq_s_material_pig_receiver_launcher.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_PIG_RECEIVER_LAUNCHER_OID_4 ON daq_s_material_pig_receiver_launcher ( oid );
+create index INDEX_DAQ_S_MATERIAL_PIG_RECEIVER_LAUNCHER_DEVICE_CODE_9 ON daq_s_material_pig_receiver_launcher ( device_code );
+create index INDEX_DAQ_S_MATERIAL_PIG_RECEIVER_LAUNCHER_DEVICE_NAME_10 ON daq_s_material_pig_receiver_launcher ( device_name );
+
+CREATE TABLE daq_s_material_filter (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	structure_type VARCHAR (35),
+	full_volume NUMERIC (5, 2),
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	qoc_manufacture_number VARCHAR (50),
+	qoc_imports_or_exports SMALLINT,
+	qoc_provenance VARCHAR (50),
+	qoc_manufacturer VARCHAR (50),
+	qoc_manufacture_date TIMESTAMP (6),
+	qoc_guarantee_period NUMERIC (3, 0),
+	is_anticorrosion SMALLINT,
+	anticorrosion_way VARCHAR (100),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_filter is '过滤器';
+comment on column daq_s_material_filter.oid is '主键';
+comment on column daq_s_material_filter.project_oid is '项目oid';
+comment on column daq_s_material_filter.tenders_oid is '标段oid';
+comment on column daq_s_material_filter.pipeline_oid is '管线oid';
+comment on column daq_s_material_filter.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_filter.device_code is '设备编号';
+comment on column daq_s_material_filter.device_name is '名称';
+comment on column daq_s_material_filter.structure_type is '结构型式';
+comment on column daq_s_material_filter.full_volume is '全容积(m3)';
+comment on column daq_s_material_filter.classification_code is '分类编码';
+comment on column daq_s_material_filter.material_code is '物料码';
+comment on column daq_s_material_filter.specification_model is '规格型号';
+comment on column daq_s_material_filter.qoc_manufacture_number is '快开盲板出厂编号';
+comment on column daq_s_material_filter.qoc_imports_or_exports is '快开盲板是否进口{0:否;1:是}';
+comment on column daq_s_material_filter.qoc_provenance is '快开盲板产地';
+comment on column daq_s_material_filter.qoc_manufacturer is '快开盲板生产厂家';
+comment on column daq_s_material_filter.qoc_manufacture_date is '快开盲板出厂时间';
+comment on column daq_s_material_filter.qoc_guarantee_period is '快开盲板质保期';
+comment on column daq_s_material_filter.is_anticorrosion is '厂家是否防腐';
+comment on column daq_s_material_filter.anticorrosion_way is '防腐方式';
+comment on column daq_s_material_filter.manufacture_number is '出厂编号';
+comment on column daq_s_material_filter.manufacturer is '生产厂家';
+comment on column daq_s_material_filter.manufacture_date is '出厂时间';
+comment on column daq_s_material_filter.guarantee_period is '质保期(月)';
+comment on column daq_s_material_filter.contract_number is '合同号';
+comment on column daq_s_material_filter.remarks is '备注';
+comment on column daq_s_material_filter.create_user_id is '创建人id';
+comment on column daq_s_material_filter.create_user_name is '创建人名称';
+comment on column daq_s_material_filter.create_datetime is '创建时间';
+comment on column daq_s_material_filter.modify_user_id is '修改人id';
+comment on column daq_s_material_filter.modify_user_name is '修改人名称';
+comment on column daq_s_material_filter.modify_datetime is '修改时间';
+comment on column daq_s_material_filter.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_FILTER_OID_4 ON daq_s_material_filter ( oid );
+create index INDEX_DAQ_S_MATERIAL_FILTER_DEVICE_CODE_9 ON daq_s_material_filter ( device_code );
+create index INDEX_DAQ_S_MATERIAL_FILTER_DEVICE_NAME_10 ON daq_s_material_filter ( device_name );
+
+CREATE TABLE daq_s_material_vent_stack (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_vent_stack is '放空立管';
+comment on column daq_s_material_vent_stack.oid is '主键';
+comment on column daq_s_material_vent_stack.project_oid is '项目oid';
+comment on column daq_s_material_vent_stack.tenders_oid is '标段oid';
+comment on column daq_s_material_vent_stack.pipeline_oid is '管线oid';
+comment on column daq_s_material_vent_stack.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_vent_stack.device_code is '设备编号';
+comment on column daq_s_material_vent_stack.device_name is '名称';
+comment on column daq_s_material_vent_stack.classification_code is '分类编码';
+comment on column daq_s_material_vent_stack.material_code is '物料码';
+comment on column daq_s_material_vent_stack.specification_model is '规格型号';
+comment on column daq_s_material_vent_stack.manufacture_number is '出厂编号';
+comment on column daq_s_material_vent_stack.manufacturer is '生产厂家';
+comment on column daq_s_material_vent_stack.manufacture_date is '出厂时间';
+comment on column daq_s_material_vent_stack.guarantee_period is '质保期(月)';
+comment on column daq_s_material_vent_stack.contract_number is '合同号';
+comment on column daq_s_material_vent_stack.remarks is '备注';
+comment on column daq_s_material_vent_stack.create_user_id is '创建人id';
+comment on column daq_s_material_vent_stack.create_user_name is '创建人名称';
+comment on column daq_s_material_vent_stack.create_datetime is '创建时间';
+comment on column daq_s_material_vent_stack.modify_user_id is '修改人id';
+comment on column daq_s_material_vent_stack.modify_user_name is '修改人名称';
+comment on column daq_s_material_vent_stack.modify_datetime is '修改时间';
+comment on column daq_s_material_vent_stack.active is '有效标志';
+create index INDEX_daq_s_material_vent_stack_OID_4 ON daq_s_material_vent_stack ( oid );
+create index INDEX_daq_s_material_vent_stack_DEVICE_CODE_9 ON daq_s_material_vent_stack ( device_code );
+create index INDEX_daq_s_material_vent_stack_DEVICE_NAME_10 ON daq_s_material_vent_stack ( device_name );
+
+CREATE TABLE daq_s_material_heater (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	heater_type VARCHAR (35),
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	design_life NUMERIC (3, 0),
+	heater_material VARCHAR (50),
+	manufacturer_of_control_cabinet VARCHAR (100),
+	anti_explosion SMALLINT,
+	control_cabinet_size VARCHAR (30),
+	control_cabinet_type VARCHAR (50),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_heater is '加热炉';
+comment on column daq_s_material_heater.oid is '主键';
+comment on column daq_s_material_heater.project_oid is '项目oid';
+comment on column daq_s_material_heater.tenders_oid is '标段oid';
+comment on column daq_s_material_heater.pipeline_oid is '管线oid';
+comment on column daq_s_material_heater.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_heater.device_code is '设备编号';
+comment on column daq_s_material_heater.device_name is '名称';
+comment on column daq_s_material_heater.heater_type is '炉型,域值：heater_type_domain';
+comment on column daq_s_material_heater.classification_code is '分类编码';
+comment on column daq_s_material_heater.material_code is '物料码';
+comment on column daq_s_material_heater.specification_model is '规格型号';
+comment on column daq_s_material_heater.design_life is '设计使用年限';
+comment on column daq_s_material_heater.heater_material is '炉壁材质';
+comment on column daq_s_material_heater.manufacturer_of_control_cabinet is '控制柜生产厂家';
+comment on column daq_s_material_heater.anti_explosion is '控制柜是否防爆{0:否;1:是}';
+comment on column daq_s_material_heater.control_cabinet_size is '控制柜尺寸';
+comment on column daq_s_material_heater.control_cabinet_type is '控制柜型号';
+comment on column daq_s_material_heater.manufacture_number is '出厂编号';
+comment on column daq_s_material_heater.manufacturer is '生产厂家';
+comment on column daq_s_material_heater.manufacture_date is '出厂时间';
+comment on column daq_s_material_heater.guarantee_period is '质保期(月)';
+comment on column daq_s_material_heater.contract_number is '合同号';
+comment on column daq_s_material_heater.remarks is '备注';
+comment on column daq_s_material_heater.create_user_id is '创建人id';
+comment on column daq_s_material_heater.create_user_name is '创建人名称';
+comment on column daq_s_material_heater.create_datetime is '创建时间';
+comment on column daq_s_material_heater.modify_user_id is '修改人id';
+comment on column daq_s_material_heater.modify_user_name is '修改人名称';
+comment on column daq_s_material_heater.modify_datetime is '修改时间';
+comment on column daq_s_material_heater.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_HEATER_OID_4 ON daq_s_material_heater ( oid );
+create index INDEX_DAQ_S_MATERIAL_HEATER_DEVICE_CODE_9 ON daq_s_material_heater ( device_code );
+create index INDEX_DAQ_S_MATERIAL_HEATER_DEVICE_NAME_10 ON daq_s_material_heater ( device_name );
+
+CREATE TABLE daq_s_material_exchanger (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	main_structure_type VARCHAR (45),
+	vessel__category SMALLINT,
+	shell_design_pressure NUMERIC (3, 0),
+	tube_test_pressure NUMERIC (3, 0),
+	total_length NUMERIC (5, 0),
+	tube_thickness NUMERIC (4, 1),
+	shell_thickness NUMERIC (4, 1),
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_exchanger is '管壳式热交换器';
+comment on column daq_s_material_exchanger.oid is '主键';
+comment on column daq_s_material_exchanger.project_oid is '项目oid';
+comment on column daq_s_material_exchanger.tenders_oid is '标段oid';
+comment on column daq_s_material_exchanger.pipeline_oid is '管线oid';
+comment on column daq_s_material_exchanger.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_exchanger.device_code is '设备编号';
+comment on column daq_s_material_exchanger.device_name is '名称';
+comment on column daq_s_material_exchanger.main_structure_type is '主体结构型式,域值：main_structure_typer_domain';
+comment on column daq_s_material_exchanger.vessel__category is '容器类别{1:I;2:II:3:III}';
+comment on column daq_s_material_exchanger.shell_design_pressure is '壳程设计压力(MPa)';
+comment on column daq_s_material_exchanger.tube_test_pressure is '管程试验压力(MPa)';
+comment on column daq_s_material_exchanger.total_length is '总长度(mm)';
+comment on column daq_s_material_exchanger.tube_thickness is '管程筒体壁厚(mm)';
+comment on column daq_s_material_exchanger.shell_thickness is '壳程筒体壁厚(mm)';
+comment on column daq_s_material_exchanger.classification_code is '分类编码';
+comment on column daq_s_material_exchanger.material_code is '物料码';
+comment on column daq_s_material_exchanger.specification_model is '规格型号';
+comment on column daq_s_material_exchanger.manufacture_number is '出厂编号';
+comment on column daq_s_material_exchanger.manufacturer is '生产厂家';
+comment on column daq_s_material_exchanger.manufacture_date is '出厂时间';
+comment on column daq_s_material_exchanger.guarantee_period is '质保期(月)';
+comment on column daq_s_material_exchanger.contract_number is '合同号';
+comment on column daq_s_material_exchanger.remarks is '备注';
+comment on column daq_s_material_exchanger.create_user_id is '创建人id';
+comment on column daq_s_material_exchanger.create_user_name is '创建人名称';
+comment on column daq_s_material_exchanger.create_datetime is '创建时间';
+comment on column daq_s_material_exchanger.modify_user_id is '修改人id';
+comment on column daq_s_material_exchanger.modify_user_name is '修改人名称';
+comment on column daq_s_material_exchanger.modify_datetime is '修改时间';
+comment on column daq_s_material_exchanger.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_EXCHANGER_OID_4 ON daq_s_material_exchanger ( oid );
+create index INDEX_DAQ_S_MATERIAL_EXCHANGER_DEVICE_CODE_9 ON daq_s_material_exchanger ( device_code );
+create index INDEX_DAQ_S_MATERIAL_EXCHANGER_DEVICE_NAME_10 ON daq_s_material_exchanger ( device_name );
+/**
+ * 站场基本信息-静设备end
+ */
+
+
+
+/**
+ * 站场基本信息-仪表start
+ */
+CREATE TABLE daq_s_material_scada_system (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	scada_type VARCHAR (30),
+	scada_software VARCHAR (30),
+	scada_version VARCHAR (20),
+	specification_model VARCHAR (50),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_scada_system is 'SCADA系统';
+comment on column daq_s_material_scada_system.oid is '主键';
+comment on column daq_s_material_scada_system.project_oid is '项目oid';
+comment on column daq_s_material_scada_system.tenders_oid is '标段oid';
+comment on column daq_s_material_scada_system.pipeline_oid is '管线oid';
+comment on column daq_s_material_scada_system.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_scada_system.device_code is 'SCADA编号';
+comment on column daq_s_material_scada_system.device_name is '名称';
+comment on column daq_s_material_scada_system.scada_type is '系统级别，域值：scada_type_domain';
+comment on column daq_s_material_scada_system.scada_software is 'SCADA软件，域值：scada_software_domain';
+comment on column daq_s_material_scada_system.scada_version is '版本号';
+comment on column daq_s_material_scada_system.specification_model is '规格型号';
+comment on column daq_s_material_scada_system.manufacture_number is '出厂编号';
+comment on column daq_s_material_scada_system.manufacturer is '生产厂家';
+comment on column daq_s_material_scada_system.manufacture_date is '出厂时间';
+comment on column daq_s_material_scada_system.guarantee_period is '质保期(月)';
+comment on column daq_s_material_scada_system.contract_number is '合同号';
+comment on column daq_s_material_scada_system.remarks is '备注';
+comment on column daq_s_material_scada_system.create_user_id is '创建人id';
+comment on column daq_s_material_scada_system.create_user_name is '创建人名称';
+comment on column daq_s_material_scada_system.create_datetime is '创建时间';
+comment on column daq_s_material_scada_system.modify_user_id is '修改人id';
+comment on column daq_s_material_scada_system.modify_user_name is '修改人名称';
+comment on column daq_s_material_scada_system.modify_datetime is '修改时间';
+comment on column daq_s_material_scada_system.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_SCADA_SYSTEM_OID_4 ON daq_s_material_scada_system ( oid );
+create index INDEX_DAQ_S_MATERIAL_SCADA_SYSTEM_DEVICE_CODE_9 ON daq_s_material_scada_system ( device_code );
+create index INDEX_DAQ_S_MATERIAL_SCADA_SYSTEM_DEVICE_NAME_10 ON daq_s_material_scada_system ( device_name );
+
+CREATE TABLE daq_s_material_scs_system (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	safty_instrument_system SMALLINT,
+	safty_instrument_system_sil_grade VARCHAR (50),
+	fire_gas_system SMALLINT,
+	ups_backup_time NUMERIC (3, 1),
+	scs_software VARCHAR (30),
+	scs_version VARCHAR (20),
+	plc_series VARCHAR (30),
+	plc_cpu_model VARCHAR (30),
+	io_net_type VARCHAR (30),
+	display_configuration VARCHAR (50),
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_scs_system is '站控系统';
+comment on column daq_s_material_scs_system.oid is '主键';
+comment on column daq_s_material_scs_system.project_oid is '项目oid';
+comment on column daq_s_material_scs_system.tenders_oid is '标段oid';
+comment on column daq_s_material_scs_system.pipeline_oid is '管线oid';
+comment on column daq_s_material_scs_system.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_scs_system.device_code is '设备编号';
+comment on column daq_s_material_scs_system.device_name is '名称';
+comment on column daq_s_material_scs_system.safty_instrument_system is '安全仪表系统(SIS){0:无;1:有}';
+comment on column daq_s_material_scs_system.safty_instrument_system_sil_grade is '安全仪表系统SIL等级,域值：safty_instrument_system_sil_grade_domain';
+comment on column daq_s_material_scs_system.fire_gas_system is '火气报警系统(F&GS){0:无;1:有}';
+comment on column daq_s_material_scs_system.ups_backup_time is 'UPS电源后备时间(小时)';
+comment on column daq_s_material_scs_system.scs_software is 'SCS软件,域值：scs_software_domain';
+comment on column daq_s_material_scs_system.scs_version is '版本';
+comment on column daq_s_material_scs_system.plc_series is 'PLC系列';
+comment on column daq_s_material_scs_system.plc_cpu_model is 'PLC处理器型号';
+comment on column daq_s_material_scs_system.io_net_type is 'IO 网络类型';
+comment on column daq_s_material_scs_system.display_configuration is '工作站显示屏配置,域值：display_configuration_domain';
+comment on column daq_s_material_scs_system.classification_code is '分类编码';
+comment on column daq_s_material_scs_system.material_code is '物料码';
+comment on column daq_s_material_scs_system.specification_model is '规格型号';
+comment on column daq_s_material_scs_system.tag_number is '预定位号';
+comment on column daq_s_material_scs_system.manufacture_number is '出厂编号';
+comment on column daq_s_material_scs_system.manufacturer is '生产厂家';
+comment on column daq_s_material_scs_system.manufacture_date is '出厂时间';
+comment on column daq_s_material_scs_system.guarantee_period is '质保期(月)';
+comment on column daq_s_material_scs_system.contract_number is '合同号';
+comment on column daq_s_material_scs_system.remarks is '备注';
+comment on column daq_s_material_scs_system.create_user_id is '创建人id';
+comment on column daq_s_material_scs_system.create_user_name is '创建人名称';
+comment on column daq_s_material_scs_system.create_datetime is '创建时间';
+comment on column daq_s_material_scs_system.modify_user_id is '修改人id';
+comment on column daq_s_material_scs_system.modify_user_name is '修改人名称';
+comment on column daq_s_material_scs_system.modify_datetime is '修改时间';
+comment on column daq_s_material_scs_system.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_SCS_SYSTEM_OID_4 ON daq_s_material_scs_system ( oid );
+create index INDEX_DAQ_S_MATERIAL_SCS_SYSTEM_DEVICE_CODE_9 ON daq_s_material_scs_system ( device_code );
+create index INDEX_DAQ_S_MATERIAL_SCS_SYSTEM_DEVICE_NAME_10 ON daq_s_material_scs_system ( device_name );
+
+
+CREATE TABLE daq_s_material_metering_system (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	flow_computer_cpu_frequency NUMERIC (4, 0),
+	flow_computer_memmory NUMERIC (3, 0),
+	desin_pressure VARCHAR (35),
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_metering_system is '计量系统';
+comment on column daq_s_material_metering_system.oid is '主键';
+comment on column daq_s_material_metering_system.project_oid is '项目oid';
+comment on column daq_s_material_metering_system.tenders_oid is '标段oid';
+comment on column daq_s_material_metering_system.pipeline_oid is '管线oid';
+comment on column daq_s_material_metering_system.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_metering_system.device_code is '设备编号';
+comment on column daq_s_material_metering_system.device_name is '名称';
+comment on column daq_s_material_metering_system.flow_computer_cpu_frequency is '流量计算机CPU主频(MHZ)';
+comment on column daq_s_material_metering_system.flow_computer_memmory is '流量计算机内存(GB)';
+comment on column daq_s_material_metering_system.desin_pressure is '设计压力，域值：desin_pressure_domain';
+comment on column daq_s_material_metering_system.classification_code is '分类编码';
+comment on column daq_s_material_metering_system.material_code is '物料码';
+comment on column daq_s_material_metering_system.specification_model is '规格型号';
+comment on column daq_s_material_metering_system.tag_number is '预定位号';
+comment on column daq_s_material_metering_system.manufacture_number is '出厂编号';
+comment on column daq_s_material_metering_system.manufacturer is '生产厂家';
+comment on column daq_s_material_metering_system.manufacture_date is '出厂时间';
+comment on column daq_s_material_metering_system.guarantee_period is '质保期(月)';
+comment on column daq_s_material_metering_system.contract_number is '合同号';
+comment on column daq_s_material_metering_system.remarks is '备注';
+comment on column daq_s_material_metering_system.create_user_id is '创建人id';
+comment on column daq_s_material_metering_system.create_user_name is '创建人名称';
+comment on column daq_s_material_metering_system.create_datetime is '创建时间';
+comment on column daq_s_material_metering_system.modify_user_id is '修改人id';
+comment on column daq_s_material_metering_system.modify_user_name is '修改人名称';
+comment on column daq_s_material_metering_system.modify_datetime is '修改时间';
+comment on column daq_s_material_metering_system.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_METERING_SYSTEM_OID_4 ON daq_s_material_metering_system ( oid );
+create index INDEX_DAQ_S_MATERIAL_METERING_SYSTEM_DEVICE_CODE_9 ON daq_s_material_metering_system ( device_code );
+create index INDEX_DAQ_S_MATERIAL_METERING_SYSTEM_DEVICE_NAME_10 ON daq_s_material_metering_system ( device_name );
+
+
+CREATE TABLE daq_s_material_pressure_control_system (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	pressure_rating VARCHAR (35),
+	ssv_size VARCHAR (50),
+	pcv_size VARCHAR (50),
+	pv_size VARCHAR (50),
+	desin_pressure VARCHAR (35),
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_pressure_control_system is '调压系统';
+comment on column daq_s_material_pressure_control_system.oid is '主键';
+comment on column daq_s_material_pressure_control_system.project_oid is '项目oid';
+comment on column daq_s_material_pressure_control_system.tenders_oid is '标段oid';
+comment on column daq_s_material_pressure_control_system.pipeline_oid is '管线oid';
+comment on column daq_s_material_pressure_control_system.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_pressure_control_system.device_code is '设备编号';
+comment on column daq_s_material_pressure_control_system.device_name is '名称';
+comment on column daq_s_material_pressure_control_system.pressure_rating is '压力等级,域值：desin_pressure_domain';
+comment on column daq_s_material_pressure_control_system.ssv_size is '安全切断阀口径,域值：valve_caliberre_domain';
+comment on column daq_s_material_pressure_control_system.pcv_size is 'PCV 调节阀口径,域值：valve_caliberre_domain';
+comment on column daq_s_material_pressure_control_system.pv_size is 'PV调压阀口径,域值：valve_caliberre_domain';
+comment on column daq_s_material_pressure_control_system.desin_pressure is '设计压力，域值：desin_pressure_domain';
+comment on column daq_s_material_pressure_control_system.classification_code is '分类编码';
+comment on column daq_s_material_pressure_control_system.material_code is '物料码';
+comment on column daq_s_material_pressure_control_system.specification_model is '规格型号';
+comment on column daq_s_material_pressure_control_system.tag_number is '预定位号';
+comment on column daq_s_material_pressure_control_system.manufacture_number is '出厂编号';
+comment on column daq_s_material_pressure_control_system.manufacturer is '生产厂家';
+comment on column daq_s_material_pressure_control_system.manufacture_date is '出厂时间';
+comment on column daq_s_material_pressure_control_system.guarantee_period is '质保期(月)';
+comment on column daq_s_material_pressure_control_system.contract_number is '合同号';
+comment on column daq_s_material_pressure_control_system.remarks is '备注';
+comment on column daq_s_material_pressure_control_system.create_user_id is '创建人id';
+comment on column daq_s_material_pressure_control_system.create_user_name is '创建人名称';
+comment on column daq_s_material_pressure_control_system.create_datetime is '创建时间';
+comment on column daq_s_material_pressure_control_system.modify_user_id is '修改人id';
+comment on column daq_s_material_pressure_control_system.modify_user_name is '修改人名称';
+comment on column daq_s_material_pressure_control_system.modify_datetime is '修改时间';
+comment on column daq_s_material_pressure_control_system.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_PRESSURE_CONTROL_SYSTEM_OID_4 ON daq_s_material_pressure_control_system ( oid );
+create index INDEX_DAQ_S_MATERIAL_PRESSURE_CONTROL_SYSTEM_DEVICE_CODE_9 ON daq_s_material_pressure_control_system ( device_code );
+create index INDEX_DAQ_S_MATERIAL_PRESSURE_CONTROL_SYSTEM_DEVICE_NAME_10 ON daq_s_material_pressure_control_system ( device_name );
+
+CREATE TABLE daq_s_material_analysis_system (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	pressure_rating VARCHAR (35),
+	desin_pressure VARCHAR (35),
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_analysis_system is '分析系统';
+comment on column daq_s_material_analysis_system.oid is '主键';
+comment on column daq_s_material_analysis_system.project_oid is '项目oid';
+comment on column daq_s_material_analysis_system.tenders_oid is '标段oid';
+comment on column daq_s_material_analysis_system.pipeline_oid is '管线oid';
+comment on column daq_s_material_analysis_system.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_analysis_system.device_code is '设备编号';
+comment on column daq_s_material_analysis_system.device_name is '名称';
+comment on column daq_s_material_analysis_system.pressure_rating is '压力等级,域值：desin_pressure_domain';
+comment on column daq_s_material_analysis_system.desin_pressure is '设计压力，域值：desin_pressure_domain';
+comment on column daq_s_material_analysis_system.classification_code is '分类编码';
+comment on column daq_s_material_analysis_system.material_code is '物料码';
+comment on column daq_s_material_analysis_system.specification_model is '规格型号';
+comment on column daq_s_material_analysis_system.tag_number is '预定位号';
+comment on column daq_s_material_analysis_system.manufacture_number is '出厂编号';
+comment on column daq_s_material_analysis_system.manufacturer is '生产厂家';
+comment on column daq_s_material_analysis_system.manufacture_date is '出厂时间';
+comment on column daq_s_material_analysis_system.guarantee_period is '质保期(月)';
+comment on column daq_s_material_analysis_system.contract_number is '合同号';
+comment on column daq_s_material_analysis_system.remarks is '备注';
+comment on column daq_s_material_analysis_system.create_user_id is '创建人id';
+comment on column daq_s_material_analysis_system.create_user_name is '创建人名称';
+comment on column daq_s_material_analysis_system.create_datetime is '创建时间';
+comment on column daq_s_material_analysis_system.modify_user_id is '修改人id';
+comment on column daq_s_material_analysis_system.modify_user_name is '修改人名称';
+comment on column daq_s_material_analysis_system.modify_datetime is '修改时间';
+comment on column daq_s_material_analysis_system.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_ANALYSIS_SYSTEM_OID_4 ON daq_s_material_analysis_system ( oid );
+create index INDEX_DAQ_S_MATERIAL_ANALYSIS_SYSTEM_DEVICE_CODE_9 ON daq_s_material_analysis_system ( device_code );
+create index INDEX_DAQ_S_MATERIAL_ANALYSIS_SYSTEM_DEVICE_NAME_10 ON daq_s_material_analysis_system ( device_name );
+
+CREATE TABLE daq_s_material_prover_system (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	pressure_rating VARCHAR (35),
+	repeablity_of_prover NUMERIC (4, 2),
+	range_ratio NUMERIC (4, 2),
+	desin_pressure VARCHAR (35),
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_prover_system is '标定系统';
+comment on column daq_s_material_prover_system.oid is '主键';
+comment on column daq_s_material_prover_system.project_oid is '项目oid';
+comment on column daq_s_material_prover_system.tenders_oid is '标段oid';
+comment on column daq_s_material_prover_system.pipeline_oid is '管线oid';
+comment on column daq_s_material_prover_system.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_prover_system.device_code is '设备编号';
+comment on column daq_s_material_prover_system.device_name is '名称';
+comment on column daq_s_material_prover_system.pressure_rating is '压力等级,域值：desin_pressure_domain';
+comment on column daq_s_material_prover_system.repeablity_of_prover is '体积管重复性(%)';
+comment on column daq_s_material_prover_system.range_ratio is '体积管量程比';
+comment on column daq_s_material_prover_system.desin_pressure is '设计压力，域值：desin_pressure_domain';
+comment on column daq_s_material_prover_system.classification_code is '分类编码';
+comment on column daq_s_material_prover_system.material_code is '物料码';
+comment on column daq_s_material_prover_system.specification_model is '规格型号';
+comment on column daq_s_material_prover_system.tag_number is '预定位号';
+comment on column daq_s_material_prover_system.manufacture_number is '出厂编号';
+comment on column daq_s_material_prover_system.manufacturer is '生产厂家';
+comment on column daq_s_material_prover_system.manufacture_date is '出厂时间';
+comment on column daq_s_material_prover_system.guarantee_period is '质保期(月)';
+comment on column daq_s_material_prover_system.contract_number is '合同号';
+comment on column daq_s_material_prover_system.remarks is '备注';
+comment on column daq_s_material_prover_system.create_user_id is '创建人id';
+comment on column daq_s_material_prover_system.create_user_name is '创建人名称';
+comment on column daq_s_material_prover_system.create_datetime is '创建时间';
+comment on column daq_s_material_prover_system.modify_user_id is '修改人id';
+comment on column daq_s_material_prover_system.modify_user_name is '修改人名称';
+comment on column daq_s_material_prover_system.modify_datetime is '修改时间';
+comment on column daq_s_material_prover_system.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_PROVER_SYSTEM_OID_4 ON daq_s_material_prover_system ( oid );
+create index INDEX_DAQ_S_MATERIAL_PROVER_SYSTEM_DEVICE_CODE_9 ON daq_s_material_prover_system ( device_code );
+create index INDEX_DAQ_S_MATERIAL_PROVER_SYSTEM_DEVICE_NAME_10 ON daq_s_material_prover_system ( device_name );
+
+CREATE TABLE daq_s_material_sgs_system (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	pressure_rating VARCHAR (35),
+	desin_pressure VARCHAR (35),
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_sgs_system is '自用气系统';
+comment on column daq_s_material_sgs_system.oid is '主键';
+comment on column daq_s_material_sgs_system.project_oid is '项目oid';
+comment on column daq_s_material_sgs_system.tenders_oid is '标段oid';
+comment on column daq_s_material_sgs_system.pipeline_oid is '管线oid';
+comment on column daq_s_material_sgs_system.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_sgs_system.device_code is '设备编号';
+comment on column daq_s_material_sgs_system.device_name is '名称';
+comment on column daq_s_material_sgs_system.pressure_rating is '压力等级,域值：desin_pressure_domain';
+comment on column daq_s_material_sgs_system.desin_pressure is '设计压力，域值：desin_pressure_domain';
+comment on column daq_s_material_sgs_system.classification_code is '分类编码';
+comment on column daq_s_material_sgs_system.material_code is '物料码';
+comment on column daq_s_material_sgs_system.specification_model is '规格型号';
+comment on column daq_s_material_sgs_system.tag_number is '预定位号';
+comment on column daq_s_material_sgs_system.manufacture_number is '出厂编号';
+comment on column daq_s_material_sgs_system.manufacturer is '生产厂家';
+comment on column daq_s_material_sgs_system.manufacture_date is '出厂时间';
+comment on column daq_s_material_sgs_system.guarantee_period is '质保期(月)';
+comment on column daq_s_material_sgs_system.contract_number is '合同号';
+comment on column daq_s_material_sgs_system.remarks is '备注';
+comment on column daq_s_material_sgs_system.create_user_id is '创建人id';
+comment on column daq_s_material_sgs_system.create_user_name is '创建人名称';
+comment on column daq_s_material_sgs_system.create_datetime is '创建时间';
+comment on column daq_s_material_sgs_system.modify_user_id is '修改人id';
+comment on column daq_s_material_sgs_system.modify_user_name is '修改人名称';
+comment on column daq_s_material_sgs_system.modify_datetime is '修改时间';
+comment on column daq_s_material_sgs_system.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_SGS_SYSTEM_OID_4 ON daq_s_material_sgs_system ( oid );
+create index INDEX_DAQ_S_MATERIAL_SGS_SYSTEM_DEVICE_CODE_9 ON daq_s_material_sgs_system ( device_code );
+create index INDEX_DAQ_S_MATERIAL_SGS_SYSTEM_DEVICE_NAME_10 ON daq_s_material_sgs_system ( device_name );
+
+CREATE TABLE daq_s_material_pressure_transmitter (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	equipment_type VARCHAR (35),
+	desin_pressure VARCHAR (35),
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+
+comment on table daq_s_material_pressure_transmitter is '压力变送器';
+comment on column daq_s_material_pressure_transmitter.oid is '主键';
+comment on column daq_s_material_pressure_transmitter.project_oid is '项目oid';
+comment on column daq_s_material_pressure_transmitter.tenders_oid is '标段oid';
+comment on column daq_s_material_pressure_transmitter.pipeline_oid is '管线oid';
+comment on column daq_s_material_pressure_transmitter.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_pressure_transmitter.device_code is '设备编号';
+comment on column daq_s_material_pressure_transmitter.device_name is '名称';
+comment on column daq_s_material_pressure_transmitter.equipment_type is '设备类型';
+comment on column daq_s_material_pressure_transmitter.desin_pressure is '设计压力，域值：desin_pressure_domain';
+comment on column daq_s_material_pressure_transmitter.classification_code is '分类编码';
+comment on column daq_s_material_pressure_transmitter.material_code is '物料码';
+comment on column daq_s_material_pressure_transmitter.specification_model is '规格型号';
+comment on column daq_s_material_pressure_transmitter.tag_number is '预定位号';
+comment on column daq_s_material_pressure_transmitter.manufacture_number is '出厂编号';
+comment on column daq_s_material_pressure_transmitter.manufacturer is '生产厂家';
+comment on column daq_s_material_pressure_transmitter.manufacture_date is '出厂时间';
+comment on column daq_s_material_pressure_transmitter.guarantee_period is '质保期(月)';
+comment on column daq_s_material_pressure_transmitter.contract_number is '合同号';
+comment on column daq_s_material_pressure_transmitter.remarks is '备注';
+comment on column daq_s_material_pressure_transmitter.create_user_id is '创建人id';
+comment on column daq_s_material_pressure_transmitter.create_user_name is '创建人名称';
+comment on column daq_s_material_pressure_transmitter.create_datetime is '创建时间';
+comment on column daq_s_material_pressure_transmitter.modify_user_id is '修改人id';
+comment on column daq_s_material_pressure_transmitter.modify_user_name is '修改人名称';
+comment on column daq_s_material_pressure_transmitter.modify_datetime is '修改时间';
+comment on column daq_s_material_pressure_transmitter.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_PRESSURE_TRANSMITTER_OID_4 ON daq_s_material_pressure_transmitter ( oid );
+create index INDEX_DAQ_S_MATERIAL_PRESSURE_TRANSMITTER_DEVICE_CODE_9 ON daq_s_material_pressure_transmitter ( device_code );
+create index INDEX_DAQ_S_MATERIAL_PRESSURE_TRANSMITTER_DEVICE_NAME_10 ON daq_s_material_pressure_transmitter ( device_name );
+
+
+CREATE TABLE daq_s_material_pressure_gauge (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	equipment_type VARCHAR (35),
+	desin_pressure VARCHAR (35),
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_pressure_gauge is '压力表';
+comment on column daq_s_material_pressure_gauge.oid is '主键';
+comment on column daq_s_material_pressure_gauge.project_oid is '项目oid';
+comment on column daq_s_material_pressure_gauge.tenders_oid is '标段oid';
+comment on column daq_s_material_pressure_gauge.pipeline_oid is '管线oid';
+comment on column daq_s_material_pressure_gauge.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_pressure_gauge.device_code is '设备编号';
+comment on column daq_s_material_pressure_gauge.device_name is '名称';
+comment on column daq_s_material_pressure_gauge.equipment_type is '设备类型';
+comment on column daq_s_material_pressure_gauge.desin_pressure is '设计压力，域值：desin_pressure_domain';
+comment on column daq_s_material_pressure_gauge.classification_code is '分类编码';
+comment on column daq_s_material_pressure_gauge.material_code is '物料码';
+comment on column daq_s_material_pressure_gauge.specification_model is '规格型号';
+comment on column daq_s_material_pressure_gauge.tag_number is '预定位号';
+comment on column daq_s_material_pressure_gauge.manufacture_number is '出厂编号';
+comment on column daq_s_material_pressure_gauge.manufacturer is '生产厂家';
+comment on column daq_s_material_pressure_gauge.manufacture_date is '出厂时间';
+comment on column daq_s_material_pressure_gauge.guarantee_period is '质保期(月)';
+comment on column daq_s_material_pressure_gauge.contract_number is '合同号';
+comment on column daq_s_material_pressure_gauge.remarks is '备注';
+comment on column daq_s_material_pressure_gauge.create_user_id is '创建人id';
+comment on column daq_s_material_pressure_gauge.create_user_name is '创建人名称';
+comment on column daq_s_material_pressure_gauge.create_datetime is '创建时间';
+comment on column daq_s_material_pressure_gauge.modify_user_id is '修改人id';
+comment on column daq_s_material_pressure_gauge.modify_user_name is '修改人名称';
+comment on column daq_s_material_pressure_gauge.modify_datetime is '修改时间';
+comment on column daq_s_material_pressure_gauge.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_PRESSURE_GAUGE_OID_4 ON daq_s_material_pressure_gauge ( oid );
+create index INDEX_DAQ_S_MATERIAL_PRESSURE_GAUGE_DEVICE_CODE_9 ON daq_s_material_pressure_gauge ( device_code );
+create index INDEX_DAQ_S_MATERIAL_PRESSURE_GAUGE_DEVICE_NAME_10 ON daq_s_material_pressure_gauge ( device_name );
+
+CREATE TABLE daq_s_material_pressure_difference_transmitter (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	equipment_type VARCHAR (35),
+	desin_pressure VARCHAR (35),
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_pressure_difference_transmitter is '差压变送器';
+comment on column daq_s_material_pressure_difference_transmitter.oid is '主键';
+comment on column daq_s_material_pressure_difference_transmitter.project_oid is '项目oid';
+comment on column daq_s_material_pressure_difference_transmitter.tenders_oid is '标段oid';
+comment on column daq_s_material_pressure_difference_transmitter.pipeline_oid is '管线oid';
+comment on column daq_s_material_pressure_difference_transmitter.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_pressure_difference_transmitter.device_code is '设备编号';
+comment on column daq_s_material_pressure_difference_transmitter.device_name is '名称';
+comment on column daq_s_material_pressure_difference_transmitter.equipment_type is '设备类型';
+comment on column daq_s_material_pressure_difference_transmitter.desin_pressure is '设计压力，域值：desin_pressure_domain';
+comment on column daq_s_material_pressure_difference_transmitter.classification_code is '分类编码';
+comment on column daq_s_material_pressure_difference_transmitter.material_code is '物料码';
+comment on column daq_s_material_pressure_difference_transmitter.specification_model is '规格型号';
+comment on column daq_s_material_pressure_difference_transmitter.tag_number is '预定位号';
+comment on column daq_s_material_pressure_difference_transmitter.manufacture_number is '出厂编号';
+comment on column daq_s_material_pressure_difference_transmitter.manufacturer is '生产厂家';
+comment on column daq_s_material_pressure_difference_transmitter.manufacture_date is '出厂时间';
+comment on column daq_s_material_pressure_difference_transmitter.guarantee_period is '质保期(月)';
+comment on column daq_s_material_pressure_difference_transmitter.contract_number is '合同号';
+comment on column daq_s_material_pressure_difference_transmitter.remarks is '备注';
+comment on column daq_s_material_pressure_difference_transmitter.create_user_id is '创建人id';
+comment on column daq_s_material_pressure_difference_transmitter.create_user_name is '创建人名称';
+comment on column daq_s_material_pressure_difference_transmitter.create_datetime is '创建时间';
+comment on column daq_s_material_pressure_difference_transmitter.modify_user_id is '修改人id';
+comment on column daq_s_material_pressure_difference_transmitter.modify_user_name is '修改人名称';
+comment on column daq_s_material_pressure_difference_transmitter.modify_datetime is '修改时间';
+comment on column daq_s_material_pressure_difference_transmitter.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_PRESSURE_DIFFERENCE_TRANSMITTER_OID_4 ON daq_s_material_pressure_difference_transmitter ( oid );
+create index INDEX_DAQ_S_MATERIAL_PRESSURE_DIFFERENCE_TRANSMITTER_DEVICE_CODE_9 ON daq_s_material_pressure_difference_transmitter ( device_code );
+create index INDEX_DAQ_S_MATERIAL_PRESSURE_DIFFERENCE_TRANSMITTER_DEVICE_NAME_10 ON daq_s_material_pressure_difference_transmitter ( device_name );
+
+CREATE TABLE daq_s_material_pressure_difference_gauge (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	equipment_type VARCHAR (35),
+	desin_pressure VARCHAR (35),
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+
+comment on table daq_s_material_pressure_difference_gauge is '差压表';
+comment on column daq_s_material_pressure_difference_gauge.oid is '主键';
+comment on column daq_s_material_pressure_difference_gauge.project_oid is '项目oid';
+comment on column daq_s_material_pressure_difference_gauge.tenders_oid is '标段oid';
+comment on column daq_s_material_pressure_difference_gauge.pipeline_oid is '管线oid';
+comment on column daq_s_material_pressure_difference_gauge.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_pressure_difference_gauge.device_code is '设备编号';
+comment on column daq_s_material_pressure_difference_gauge.device_name is '名称';
+comment on column daq_s_material_pressure_difference_gauge.equipment_type is '设备类型';
+comment on column daq_s_material_pressure_difference_gauge.desin_pressure is '设计压力，域值：desin_pressure_domain';
+comment on column daq_s_material_pressure_difference_gauge.classification_code is '分类编码';
+comment on column daq_s_material_pressure_difference_gauge.material_code is '物料码';
+comment on column daq_s_material_pressure_difference_gauge.specification_model is '规格型号';
+comment on column daq_s_material_pressure_difference_gauge.tag_number is '预定位号';
+comment on column daq_s_material_pressure_difference_gauge.manufacture_number is '出厂编号';
+comment on column daq_s_material_pressure_difference_gauge.manufacturer is '生产厂家';
+comment on column daq_s_material_pressure_difference_gauge.manufacture_date is '出厂时间';
+comment on column daq_s_material_pressure_difference_gauge.guarantee_period is '质保期(月)';
+comment on column daq_s_material_pressure_difference_gauge.contract_number is '合同号';
+comment on column daq_s_material_pressure_difference_gauge.remarks is '备注';
+comment on column daq_s_material_pressure_difference_gauge.create_user_id is '创建人id';
+comment on column daq_s_material_pressure_difference_gauge.create_user_name is '创建人名称';
+comment on column daq_s_material_pressure_difference_gauge.create_datetime is '创建时间';
+comment on column daq_s_material_pressure_difference_gauge.modify_user_id is '修改人id';
+comment on column daq_s_material_pressure_difference_gauge.modify_user_name is '修改人名称';
+comment on column daq_s_material_pressure_difference_gauge.modify_datetime is '修改时间';
+comment on column daq_s_material_pressure_difference_gauge.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_PRESSURE_DIFFERENCE_GAUGE_OID_4 ON daq_s_material_pressure_difference_gauge ( oid );
+create index INDEX_DAQ_S_MATERIAL_PRESSURE_DIFFERENCE_GAUGE_DEVICE_CODE_9 ON daq_s_material_pressure_difference_gauge ( device_code );
+create index INDEX_DAQ_S_MATERIAL_PRESSURE_DIFFERENCE_GAUGE_DEVICE_NAME_10 ON daq_s_material_pressure_difference_gauge ( device_name );
+
+CREATE TABLE daq_s_material_temperature_transmitter (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	equipment_type VARCHAR (35),
+	desin_pressure VARCHAR (35),
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_temperature_transmitter is '温度变送器';
+comment on column daq_s_material_temperature_transmitter.oid is '主键';
+comment on column daq_s_material_temperature_transmitter.project_oid is '项目oid';
+comment on column daq_s_material_temperature_transmitter.tenders_oid is '标段oid';
+comment on column daq_s_material_temperature_transmitter.pipeline_oid is '管线oid';
+comment on column daq_s_material_temperature_transmitter.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_temperature_transmitter.device_code is '设备编号';
+comment on column daq_s_material_temperature_transmitter.device_name is '名称';
+comment on column daq_s_material_temperature_transmitter.equipment_type is '设备类型';
+comment on column daq_s_material_temperature_transmitter.desin_pressure is '设计压力，域值：desin_pressure_domain';
+comment on column daq_s_material_temperature_transmitter.classification_code is '分类编码';
+comment on column daq_s_material_temperature_transmitter.material_code is '物料码';
+comment on column daq_s_material_temperature_transmitter.specification_model is '规格型号';
+comment on column daq_s_material_temperature_transmitter.tag_number is '预定位号';
+comment on column daq_s_material_temperature_transmitter.manufacture_number is '出厂编号';
+comment on column daq_s_material_temperature_transmitter.manufacturer is '生产厂家';
+comment on column daq_s_material_temperature_transmitter.manufacture_date is '出厂时间';
+comment on column daq_s_material_temperature_transmitter.guarantee_period is '质保期(月)';
+comment on column daq_s_material_temperature_transmitter.contract_number is '合同号';
+comment on column daq_s_material_temperature_transmitter.remarks is '备注';
+comment on column daq_s_material_temperature_transmitter.create_user_id is '创建人id';
+comment on column daq_s_material_temperature_transmitter.create_user_name is '创建人名称';
+comment on column daq_s_material_temperature_transmitter.create_datetime is '创建时间';
+comment on column daq_s_material_temperature_transmitter.modify_user_id is '修改人id';
+comment on column daq_s_material_temperature_transmitter.modify_user_name is '修改人名称';
+comment on column daq_s_material_temperature_transmitter.modify_datetime is '修改时间';
+comment on column daq_s_material_temperature_transmitter.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_TEMPERATURE_TRANSMITTER_OID_4 ON daq_s_material_temperature_transmitter ( oid );
+create index INDEX_DAQ_S_MATERIAL_TEMPERATURE_TRANSMITTER_DEVICE_CODE_9 ON daq_s_material_temperature_transmitter ( device_code );
+create index INDEX_DAQ_S_MATERIAL_TEMPERATURE_TRANSMITTER_DEVICE_NAME_10 ON daq_s_material_temperature_transmitter ( device_name );
+
+CREATE TABLE daq_s_material_bimetallic_thermometer (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	equipment_type VARCHAR (35),
+	desin_pressure VARCHAR (35),
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_bimetallic_thermometer is '双金属温度计';
+comment on column daq_s_material_bimetallic_thermometer.oid is '主键';
+comment on column daq_s_material_bimetallic_thermometer.project_oid is '项目oid';
+comment on column daq_s_material_bimetallic_thermometer.tenders_oid is '标段oid';
+comment on column daq_s_material_bimetallic_thermometer.pipeline_oid is '管线oid';
+comment on column daq_s_material_bimetallic_thermometer.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_bimetallic_thermometer.device_code is '设备编号';
+comment on column daq_s_material_bimetallic_thermometer.device_name is '名称';
+comment on column daq_s_material_bimetallic_thermometer.equipment_type is '设备类型';
+comment on column daq_s_material_bimetallic_thermometer.desin_pressure is '设计压力，域值：desin_pressure_domain';
+comment on column daq_s_material_bimetallic_thermometer.classification_code is '分类编码';
+comment on column daq_s_material_bimetallic_thermometer.material_code is '物料码';
+comment on column daq_s_material_bimetallic_thermometer.specification_model is '规格型号';
+comment on column daq_s_material_bimetallic_thermometer.tag_number is '预定位号';
+comment on column daq_s_material_bimetallic_thermometer.manufacture_number is '出厂编号';
+comment on column daq_s_material_bimetallic_thermometer.manufacturer is '生产厂家';
+comment on column daq_s_material_bimetallic_thermometer.manufacture_date is '出厂时间';
+comment on column daq_s_material_bimetallic_thermometer.guarantee_period is '质保期(月)';
+comment on column daq_s_material_bimetallic_thermometer.contract_number is '合同号';
+comment on column daq_s_material_bimetallic_thermometer.remarks is '备注';
+comment on column daq_s_material_bimetallic_thermometer.create_user_id is '创建人id';
+comment on column daq_s_material_bimetallic_thermometer.create_user_name is '创建人名称';
+comment on column daq_s_material_bimetallic_thermometer.create_datetime is '创建时间';
+comment on column daq_s_material_bimetallic_thermometer.modify_user_id is '修改人id';
+comment on column daq_s_material_bimetallic_thermometer.modify_user_name is '修改人名称';
+comment on column daq_s_material_bimetallic_thermometer.modify_datetime is '修改时间';
+comment on column daq_s_material_bimetallic_thermometer.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_BIMETALLIC_THERMOMETER_OID_4 ON daq_s_material_bimetallic_thermometer ( oid );
+create index INDEX_DAQ_S_MATERIAL_BIMETALLIC_THERMOMETER_DEVICE_CODE_9 ON daq_s_material_bimetallic_thermometer ( device_code );
+create index INDEX_DAQ_S_MATERIAL_BIMETALLIC_THERMOMETER_DEVICE_NAME_10 ON daq_s_material_bimetallic_thermometer ( device_name );
+
+CREATE TABLE daq_s_material_temperature_element (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	equipment_type VARCHAR (35),
+	desin_pressure VARCHAR (35),
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_temperature_element is '铂电阻';
+comment on column daq_s_material_temperature_element.oid is '主键';
+comment on column daq_s_material_temperature_element.project_oid is '项目oid';
+comment on column daq_s_material_temperature_element.tenders_oid is '标段oid';
+comment on column daq_s_material_temperature_element.pipeline_oid is '管线oid';
+comment on column daq_s_material_temperature_element.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_temperature_element.device_code is '设备编号';
+comment on column daq_s_material_temperature_element.device_name is '名称';
+comment on column daq_s_material_temperature_element.equipment_type is '设备类型';
+comment on column daq_s_material_temperature_element.desin_pressure is '设计压力，域值：desin_pressure_domain';
+comment on column daq_s_material_temperature_element.classification_code is '分类编码';
+comment on column daq_s_material_temperature_element.material_code is '物料码';
+comment on column daq_s_material_temperature_element.specification_model is '规格型号';
+comment on column daq_s_material_temperature_element.tag_number is '预定位号';
+comment on column daq_s_material_temperature_element.manufacture_number is '出厂编号';
+comment on column daq_s_material_temperature_element.manufacturer is '生产厂家';
+comment on column daq_s_material_temperature_element.manufacture_date is '出厂时间';
+comment on column daq_s_material_temperature_element.guarantee_period is '质保期(月)';
+comment on column daq_s_material_temperature_element.contract_number is '合同号';
+comment on column daq_s_material_temperature_element.remarks is '备注';
+comment on column daq_s_material_temperature_element.create_user_id is '创建人id';
+comment on column daq_s_material_temperature_element.create_user_name is '创建人名称';
+comment on column daq_s_material_temperature_element.create_datetime is '创建时间';
+comment on column daq_s_material_temperature_element.modify_user_id is '修改人id';
+comment on column daq_s_material_temperature_element.modify_user_name is '修改人名称';
+comment on column daq_s_material_temperature_element.modify_datetime is '修改时间';
+comment on column daq_s_material_temperature_element.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_TEMPERATURE_ELEMENT_OID_4 ON daq_s_material_temperature_element ( oid );
+create index INDEX_DAQ_S_MATERIAL_TEMPERATURE_ELEMENT_DEVICE_CODE_9 ON daq_s_material_temperature_element ( device_code );
+create index INDEX_DAQ_S_MATERIAL_TEMPERATURE_ELEMENT_DEVICE_NAME_10 ON daq_s_material_temperature_element ( device_name );
+
+CREATE TABLE daq_s_material_age_temperature_transmitter (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	equipment_type VARCHAR (35),
+	desin_pressure VARCHAR (35),
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_age_temperature_transmitter is '平均温度计';
+comment on column daq_s_material_age_temperature_transmitter.oid is '主键';
+comment on column daq_s_material_age_temperature_transmitter.project_oid is '项目oid';
+comment on column daq_s_material_age_temperature_transmitter.tenders_oid is '标段oid';
+comment on column daq_s_material_age_temperature_transmitter.pipeline_oid is '管线oid';
+comment on column daq_s_material_age_temperature_transmitter.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_age_temperature_transmitter.device_code is '设备编号';
+comment on column daq_s_material_age_temperature_transmitter.device_name is '名称';
+comment on column daq_s_material_age_temperature_transmitter.equipment_type is '设备类型';
+comment on column daq_s_material_age_temperature_transmitter.desin_pressure is '设计压力，域值：desin_pressure_domain';
+comment on column daq_s_material_age_temperature_transmitter.classification_code is '分类编码';
+comment on column daq_s_material_age_temperature_transmitter.material_code is '物料码';
+comment on column daq_s_material_age_temperature_transmitter.specification_model is '规格型号';
+comment on column daq_s_material_age_temperature_transmitter.tag_number is '预定位号';
+comment on column daq_s_material_age_temperature_transmitter.manufacture_number is '出厂编号';
+comment on column daq_s_material_age_temperature_transmitter.manufacturer is '生产厂家';
+comment on column daq_s_material_age_temperature_transmitter.manufacture_date is '出厂时间';
+comment on column daq_s_material_age_temperature_transmitter.guarantee_period is '质保期(月)';
+comment on column daq_s_material_age_temperature_transmitter.contract_number is '合同号';
+comment on column daq_s_material_age_temperature_transmitter.remarks is '备注';
+comment on column daq_s_material_age_temperature_transmitter.create_user_id is '创建人id';
+comment on column daq_s_material_age_temperature_transmitter.create_user_name is '创建人名称';
+comment on column daq_s_material_age_temperature_transmitter.create_datetime is '创建时间';
+comment on column daq_s_material_age_temperature_transmitter.modify_user_id is '修改人id';
+comment on column daq_s_material_age_temperature_transmitter.modify_user_name is '修改人名称';
+comment on column daq_s_material_age_temperature_transmitter.modify_datetime is '修改时间';
+comment on column daq_s_material_age_temperature_transmitter.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_AGE_TEMPERATURE_TRANSMITTER_OID_4 ON daq_s_material_age_temperature_transmitter ( oid );
+create index INDEX_DAQ_S_MATERIAL_AGE_TEMPERATURE_TRANSMITTER_DEVICE_CODE_9 ON daq_s_material_age_temperature_transmitter ( device_code );
+create index INDEX_DAQ_S_MATERIAL_AGE_TEMPERATURE_TRANSMITTER_DEVICE_NAME_10 ON daq_s_material_age_temperature_transmitter ( device_name );
+
+CREATE TABLE daq_s_material_lit_level_transmitter (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	tag_number VARCHAR (25),
+	desin_pressure VARCHAR (35),
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_lit_level_transmitter is '液位变送器';
+comment on column daq_s_material_lit_level_transmitter.oid is '主键';
+comment on column daq_s_material_lit_level_transmitter.project_oid is '项目oid';
+comment on column daq_s_material_lit_level_transmitter.tenders_oid is '标段oid';
+comment on column daq_s_material_lit_level_transmitter.pipeline_oid is '管线oid';
+comment on column daq_s_material_lit_level_transmitter.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_lit_level_transmitter.device_code is '设备编号';
+comment on column daq_s_material_lit_level_transmitter.device_name is '名称';
+comment on column daq_s_material_lit_level_transmitter.tag_number is '预定位号';
+comment on column daq_s_material_lit_level_transmitter.desin_pressure is '设计压力，域值：desin_pressure_domain';
+comment on column daq_s_material_lit_level_transmitter.classification_code is '分类编码';
+comment on column daq_s_material_lit_level_transmitter.material_code is '物料码';
+comment on column daq_s_material_lit_level_transmitter.specification_model is '规格型号';
+comment on column daq_s_material_lit_level_transmitter.manufacture_number is '出厂编号';
+comment on column daq_s_material_lit_level_transmitter.manufacturer is '生产厂家';
+comment on column daq_s_material_lit_level_transmitter.manufacture_date is '出厂时间';
+comment on column daq_s_material_lit_level_transmitter.guarantee_period is '质保期(月)';
+comment on column daq_s_material_lit_level_transmitter.contract_number is '合同号';
+comment on column daq_s_material_lit_level_transmitter.remarks is '备注';
+comment on column daq_s_material_lit_level_transmitter.create_user_id is '创建人id';
+comment on column daq_s_material_lit_level_transmitter.create_user_name is '创建人名称';
+comment on column daq_s_material_lit_level_transmitter.create_datetime is '创建时间';
+comment on column daq_s_material_lit_level_transmitter.modify_user_id is '修改人id';
+comment on column daq_s_material_lit_level_transmitter.modify_user_name is '修改人名称';
+comment on column daq_s_material_lit_level_transmitter.modify_datetime is '修改时间';
+comment on column daq_s_material_lit_level_transmitter.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_LIT_LEVEL_TRANSMITTER_OID_4 ON daq_s_material_lit_level_transmitter ( oid );
+create index INDEX_DAQ_S_MATERIAL_LIT_LEVEL_TRANSMITTER_DEVICE_CODE_9 ON daq_s_material_lit_level_transmitter ( device_code );
+create index INDEX_DAQ_S_MATERIAL_LIT_LEVEL_TRANSMITTER_DEVICE_NAME_10 ON daq_s_material_lit_level_transmitter ( device_name );
+
+CREATE TABLE daq_s_material_level_gauge (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	tag_number VARCHAR (25),
+	desin_pressure VARCHAR (35),
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_level_gauge is '液位计';
+comment on column daq_s_material_level_gauge.oid is '主键';
+comment on column daq_s_material_level_gauge.project_oid is '项目oid';
+comment on column daq_s_material_level_gauge.tenders_oid is '标段oid';
+comment on column daq_s_material_level_gauge.pipeline_oid is '管线oid';
+comment on column daq_s_material_level_gauge.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_level_gauge.device_code is '设备编号';
+comment on column daq_s_material_level_gauge.device_name is '名称';
+comment on column daq_s_material_level_gauge.tag_number is '预定位号';
+comment on column daq_s_material_level_gauge.desin_pressure is '设计压力，域值：desin_pressure_domain';
+comment on column daq_s_material_level_gauge.classification_code is '分类编码';
+comment on column daq_s_material_level_gauge.material_code is '物料码';
+comment on column daq_s_material_level_gauge.specification_model is '规格型号';
+comment on column daq_s_material_level_gauge.manufacture_number is '出厂编号';
+comment on column daq_s_material_level_gauge.manufacturer is '生产厂家';
+comment on column daq_s_material_level_gauge.manufacture_date is '出厂时间';
+comment on column daq_s_material_level_gauge.guarantee_period is '质保期(月)';
+comment on column daq_s_material_level_gauge.contract_number is '合同号';
+comment on column daq_s_material_level_gauge.remarks is '备注';
+comment on column daq_s_material_level_gauge.create_user_id is '创建人id';
+comment on column daq_s_material_level_gauge.create_user_name is '创建人名称';
+comment on column daq_s_material_level_gauge.create_datetime is '创建时间';
+comment on column daq_s_material_level_gauge.modify_user_id is '修改人id';
+comment on column daq_s_material_level_gauge.modify_user_name is '修改人名称';
+comment on column daq_s_material_level_gauge.modify_datetime is '修改时间';
+comment on column daq_s_material_level_gauge.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_LEVEL_GAUGE_OID_4 ON daq_s_material_level_gauge ( oid );
+create index INDEX_DAQ_S_MATERIAL_LEVEL_GAUGE_DEVICE_CODE_9 ON daq_s_material_level_gauge ( device_code );
+create index INDEX_DAQ_S_MATERIAL_LEVEL_GAUGE_DEVICE_NAME_10 ON daq_s_material_level_gauge ( device_name );
+
+CREATE TABLE daq_s_material_ys_pig_detector (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	pressure_rating VARCHAR (35),
+	set_point NUMERIC (4, 1),
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_ys_pig_detector is '清管球通过指示器';
+comment on column daq_s_material_ys_pig_detector.oid is '主键';
+comment on column daq_s_material_ys_pig_detector.project_oid is '项目oid';
+comment on column daq_s_material_ys_pig_detector.tenders_oid is '标段oid';
+comment on column daq_s_material_ys_pig_detector.pipeline_oid is '管线oid';
+comment on column daq_s_material_ys_pig_detector.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_ys_pig_detector.device_code is '设备编号';
+comment on column daq_s_material_ys_pig_detector.device_name is '名称';
+comment on column daq_s_material_ys_pig_detector.pressure_rating is '压力等级，域值：desin_pressure_domain';
+comment on column daq_s_material_ys_pig_detector.set_point is '设定值(℃)';
+comment on column daq_s_material_ys_pig_detector.classification_code is '分类编码';
+comment on column daq_s_material_ys_pig_detector.material_code is '物料码';
+comment on column daq_s_material_ys_pig_detector.specification_model is '规格型号';
+comment on column daq_s_material_ys_pig_detector.tag_number is '预定位号';
+comment on column daq_s_material_ys_pig_detector.manufacture_number is '出厂编号';
+comment on column daq_s_material_ys_pig_detector.manufacturer is '生产厂家';
+comment on column daq_s_material_ys_pig_detector.manufacture_date is '出厂时间';
+comment on column daq_s_material_ys_pig_detector.guarantee_period is '质保期(月)';
+comment on column daq_s_material_ys_pig_detector.contract_number is '合同号';
+comment on column daq_s_material_ys_pig_detector.remarks is '备注';
+comment on column daq_s_material_ys_pig_detector.create_user_id is '创建人id';
+comment on column daq_s_material_ys_pig_detector.create_user_name is '创建人名称';
+comment on column daq_s_material_ys_pig_detector.create_datetime is '创建时间';
+comment on column daq_s_material_ys_pig_detector.modify_user_id is '修改人id';
+comment on column daq_s_material_ys_pig_detector.modify_user_name is '修改人名称';
+comment on column daq_s_material_ys_pig_detector.modify_datetime is '修改时间';
+comment on column daq_s_material_ys_pig_detector.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_YS_PIG_DETECTOR_OID_4 ON daq_s_material_ys_pig_detector ( oid );
+create index INDEX_DAQ_S_MATERIAL_YS_PIG_DETECTOR_DEVICE_CODE_9 ON daq_s_material_ys_pig_detector ( device_code );
+create index INDEX_DAQ_S_MATERIAL_YS_PIG_DETECTOR_DEVICE_NAME_10 ON daq_s_material_ys_pig_detector ( device_name );
+
+CREATE TABLE daq_s_material_analysis_transmitter (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	desin_pressure VARCHAR (35),
+	analysis_transmitter_type VARCHAR (35),
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	installation_location VARCHAR (50),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_analysis_transmitter is '分析设备';
+comment on column daq_s_material_analysis_transmitter.oid is '主键';
+comment on column daq_s_material_analysis_transmitter.project_oid is '项目oid';
+comment on column daq_s_material_analysis_transmitter.tenders_oid is '标段oid';
+comment on column daq_s_material_analysis_transmitter.pipeline_oid is '管线oid';
+comment on column daq_s_material_analysis_transmitter.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_analysis_transmitter.device_code is '设备编号';
+comment on column daq_s_material_analysis_transmitter.device_name is '名称';
+comment on column daq_s_material_analysis_transmitter.desin_pressure is '设计压力，域值：desin_pressure_domain';
+comment on column daq_s_material_analysis_transmitter.analysis_transmitter_type is '类型，域值：analysis_transmitter_type_domain';
+comment on column daq_s_material_analysis_transmitter.classification_code is '分类编码';
+comment on column daq_s_material_analysis_transmitter.material_code is '物料码';
+comment on column daq_s_material_analysis_transmitter.specification_model is '规格型号';
+comment on column daq_s_material_analysis_transmitter.installation_location is '安装位置';
+comment on column daq_s_material_analysis_transmitter.tag_number is '预定位号';
+comment on column daq_s_material_analysis_transmitter.manufacture_number is '出厂编号';
+comment on column daq_s_material_analysis_transmitter.manufacturer is '生产厂家';
+comment on column daq_s_material_analysis_transmitter.manufacture_date is '出厂时间';
+comment on column daq_s_material_analysis_transmitter.guarantee_period is '质保期(月)';
+comment on column daq_s_material_analysis_transmitter.contract_number is '合同号';
+comment on column daq_s_material_analysis_transmitter.remarks is '备注';
+comment on column daq_s_material_analysis_transmitter.create_user_id is '创建人id';
+comment on column daq_s_material_analysis_transmitter.create_user_name is '创建人名称';
+comment on column daq_s_material_analysis_transmitter.create_datetime is '创建时间';
+comment on column daq_s_material_analysis_transmitter.modify_user_id is '修改人id';
+comment on column daq_s_material_analysis_transmitter.modify_user_name is '修改人名称';
+comment on column daq_s_material_analysis_transmitter.modify_datetime is '修改时间';
+comment on column daq_s_material_analysis_transmitter.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_ANALYSIS_TRANSMITTER_OID_4 ON daq_s_material_analysis_transmitter ( oid );
+create index INDEX_DAQ_S_MATERIAL_ANALYSIS_TRANSMITTER_DEVICE_CODE_9 ON daq_s_material_analysis_transmitter ( device_code );
+create index INDEX_DAQ_S_MATERIAL_ANALYSIS_TRANSMITTER_DEVICE_NAME_10 ON daq_s_material_analysis_transmitter ( device_name );
+
+
+CREATE TABLE daq_s_material_control_valve (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	pressure_rating VARCHAR (35),
+	rated_cv NUMERIC (4, 1),
+	valve_function VARCHAR (50),
+	characteristic_of_valve VARCHAR (30),
+	valve_axial_size NUMERIC (5, 2),
+	valve_weight NUMERIC (6, 1),
+	torque NUMERIC (6, 1),
+	valve_body_seal_type_ VARCHAR (30),
+	valve_body_hard_seal_material VARCHAR (30),
+	valve_body_soft_seal_material VARCHAR (30),
+	valve_handle_diameter NUMERIC (7, 2),
+	valve_handle_seal_type VARCHAR (30),
+	valve_handle_seal_material VARCHAR (30),
+	flange_standard VARCHAR (30),
+	flange_sealing_surface_type VARCHAR (30),
+	actuator_model VARCHAR (40),
+	actuator_batch SMALLINT,
+	actuator_quantity NUMERIC (5, 0),
+	actuator_manufacture_number VARCHAR (50),
+	actuator_imports_or_exports SMALLINT,
+	actuator_provenance VARCHAR (60),
+	actuator_design_life NUMERIC (3, 0),
+	actuator_manufacturer VARCHAR (60),
+	actuator_manufacture_date TIMESTAMP (6),
+	actuator_tag_number VARCHAR (60),
+	actuator_minimum_operation_time NUMERIC (2, 0),
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_control_valve is '调节阀';
+comment on column daq_s_material_control_valve.oid is '主键';
+comment on column daq_s_material_control_valve.project_oid is '项目oid';
+comment on column daq_s_material_control_valve.tenders_oid is '标段oid';
+comment on column daq_s_material_control_valve.pipeline_oid is '管线oid';
+comment on column daq_s_material_control_valve.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_control_valve.device_code is '设备编号';
+comment on column daq_s_material_control_valve.device_name is '名称';
+comment on column daq_s_material_control_valve.pressure_rating is '压力等级，域值：desin_pressure_domain';
+comment on column daq_s_material_control_valve.rated_cv is '额定Cv';
+comment on column daq_s_material_control_valve.valve_function is '功能';
+comment on column daq_s_material_control_valve.characteristic_of_valve is '阀门特性';
+comment on column daq_s_material_control_valve.valve_axial_size is '阀门轴向尺寸(m)';
+comment on column daq_s_material_control_valve.valve_weight is '阀门重量(kg)';
+comment on column daq_s_material_control_valve.torque is '扭矩(kg)';
+comment on column daq_s_material_control_valve.valve_body_seal_type_ is '阀体密封形式';
+comment on column daq_s_material_control_valve.valve_body_hard_seal_material is '阀体硬密封材质';
+comment on column daq_s_material_control_valve.valve_body_soft_seal_material is '阀体软密封材质';
+comment on column daq_s_material_control_valve.valve_handle_diameter is '阀杆直径(mm)';
+comment on column daq_s_material_control_valve.valve_handle_seal_type is '阀杆密封形式';
+comment on column daq_s_material_control_valve.valve_handle_seal_material is '阀杆密封材质';
+comment on column daq_s_material_control_valve.flange_standard is '法兰标准';
+comment on column daq_s_material_control_valve.flange_sealing_surface_type is '法兰密封面型式';
+comment on column daq_s_material_control_valve.actuator_model is '执行机构规格型号';
+comment on column daq_s_material_control_valve.actuator_batch is '执行机构批次';
+comment on column daq_s_material_control_valve.actuator_quantity is '执行机构数量';
+comment on column daq_s_material_control_valve.actuator_manufacture_number is '执行机构出厂编号';
+comment on column daq_s_material_control_valve.actuator_imports_or_exports is '执行机构是否进口{0:无;1:有}';
+comment on column daq_s_material_control_valve.actuator_provenance is '执行机构产地';
+comment on column daq_s_material_control_valve.actuator_design_life is '执行机构设计寿命(年)';
+comment on column daq_s_material_control_valve.actuator_manufacturer is '执行机构生产厂家';
+comment on column daq_s_material_control_valve.actuator_manufacture_date is '执行机构出厂时间';
+comment on column daq_s_material_control_valve.actuator_tag_number is '执行机构所处阀门的预定位号';
+comment on column daq_s_material_control_valve.actuator_minimum_operation_time is '执行机构响应时间(秒)';
+comment on column daq_s_material_control_valve.classification_code is '分类编码';
+comment on column daq_s_material_control_valve.material_code is '物料码';
+comment on column daq_s_material_control_valve.specification_model is '规格型号';
+comment on column daq_s_material_control_valve.tag_number is '预定位号';
+comment on column daq_s_material_control_valve.manufacture_number is '出厂编号';
+comment on column daq_s_material_control_valve.manufacturer is '生产厂家';
+comment on column daq_s_material_control_valve.manufacture_date is '出厂时间';
+comment on column daq_s_material_control_valve.guarantee_period is '质保期(月)';
+comment on column daq_s_material_control_valve.contract_number is '合同号';
+comment on column daq_s_material_control_valve.remarks is '备注';
+comment on column daq_s_material_control_valve.create_user_id is '创建人id';
+comment on column daq_s_material_control_valve.create_user_name is '创建人名称';
+comment on column daq_s_material_control_valve.create_datetime is '创建时间';
+comment on column daq_s_material_control_valve.modify_user_id is '修改人id';
+comment on column daq_s_material_control_valve.modify_user_name is '修改人名称';
+comment on column daq_s_material_control_valve.modify_datetime is '修改时间';
+comment on column daq_s_material_control_valve.active is '有效标志';
+create index INDEX_daq_s_material_control_valve_OID_4 ON daq_s_material_control_valve ( oid );
+create index INDEX_daq_s_material_control_valve_DEVICE_CODE_9 ON daq_s_material_control_valve ( device_code );
+create index INDEX_daq_s_material_control_valve_DEVICE_NAME_10 ON daq_s_material_control_valve ( device_name );
+/**
+ * 站场基本信息-仪表end
+ */
+
+
+/**
+ * 站场基本信息-供配电start
+ */
+CREATE TABLE daq_s_material_oil_immersed_type_transformer (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_oil_immersed_type_transformer is '油浸电力变压器';
+comment on column daq_s_material_oil_immersed_type_transformer.oid is '主键';
+comment on column daq_s_material_oil_immersed_type_transformer.project_oid is '项目oid';
+comment on column daq_s_material_oil_immersed_type_transformer.tenders_oid is '标段oid';
+comment on column daq_s_material_oil_immersed_type_transformer.pipeline_oid is '管线oid';
+comment on column daq_s_material_oil_immersed_type_transformer.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_oil_immersed_type_transformer.device_code is '设备编号';
+comment on column daq_s_material_oil_immersed_type_transformer.device_name is '名称';
+comment on column daq_s_material_oil_immersed_type_transformer.material_code is '物料码';
+comment on column daq_s_material_oil_immersed_type_transformer.specification_model is '规格型号';
+comment on column daq_s_material_oil_immersed_type_transformer.tag_number is '预定位号';
+comment on column daq_s_material_oil_immersed_type_transformer.manufacture_number is '出厂编号';
+comment on column daq_s_material_oil_immersed_type_transformer.manufacturer is '生产厂家';
+comment on column daq_s_material_oil_immersed_type_transformer.manufacture_date is '出厂时间';
+comment on column daq_s_material_oil_immersed_type_transformer.guarantee_period is '质保期(月)';
+comment on column daq_s_material_oil_immersed_type_transformer.contract_number is '合同号';
+comment on column daq_s_material_oil_immersed_type_transformer.remarks is '备注';
+comment on column daq_s_material_oil_immersed_type_transformer.create_user_id is '创建人id';
+comment on column daq_s_material_oil_immersed_type_transformer.create_user_name is '创建人名称';
+comment on column daq_s_material_oil_immersed_type_transformer.create_datetime is '创建时间';
+comment on column daq_s_material_oil_immersed_type_transformer.modify_user_id is '修改人id';
+comment on column daq_s_material_oil_immersed_type_transformer.modify_user_name is '修改人名称';
+comment on column daq_s_material_oil_immersed_type_transformer.modify_datetime is '修改时间';
+comment on column daq_s_material_oil_immersed_type_transformer.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_OIL_IMMERSED_TYPE_TRANSFORMER_OID_4 ON daq_s_material_oil_immersed_type_transformer ( oid );
+create index INDEX_DAQ_S_MATERIAL_OIL_IMMERSED_TYPE_TRANSFORMER_DEVICE_CODE_9 ON daq_s_material_oil_immersed_type_transformer ( device_code );
+create index INDEX_DAQ_S_MATERIAL_OIL_IMMERSED_TYPE_TRANSFORMER_DEVICE_NAME_10 ON daq_s_material_oil_immersed_type_transformer ( device_name );
+
+CREATE TABLE daq_s_material_dry_type_transformer (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_dry_type_transformer is '干式电力变压器';
+comment on column daq_s_material_dry_type_transformer.oid is '主键';
+comment on column daq_s_material_dry_type_transformer.project_oid is '项目oid';
+comment on column daq_s_material_dry_type_transformer.tenders_oid is '标段oid';
+comment on column daq_s_material_dry_type_transformer.pipeline_oid is '管线oid';
+comment on column daq_s_material_dry_type_transformer.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_dry_type_transformer.device_code is '设备编号';
+comment on column daq_s_material_dry_type_transformer.device_name is '名称';
+comment on column daq_s_material_dry_type_transformer.material_code is '物料码';
+comment on column daq_s_material_dry_type_transformer.specification_model is '规格型号';
+comment on column daq_s_material_dry_type_transformer.tag_number is '预定位号';
+comment on column daq_s_material_dry_type_transformer.manufacture_number is '出厂编号';
+comment on column daq_s_material_dry_type_transformer.manufacturer is '生产厂家';
+comment on column daq_s_material_dry_type_transformer.manufacture_date is '出厂时间';
+comment on column daq_s_material_dry_type_transformer.guarantee_period is '质保期(月)';
+comment on column daq_s_material_dry_type_transformer.contract_number is '合同号';
+comment on column daq_s_material_dry_type_transformer.remarks is '备注';
+comment on column daq_s_material_dry_type_transformer.create_user_id is '创建人id';
+comment on column daq_s_material_dry_type_transformer.create_user_name is '创建人名称';
+comment on column daq_s_material_dry_type_transformer.create_datetime is '创建时间';
+comment on column daq_s_material_dry_type_transformer.modify_user_id is '修改人id';
+comment on column daq_s_material_dry_type_transformer.modify_user_name is '修改人名称';
+comment on column daq_s_material_dry_type_transformer.modify_datetime is '修改时间';
+comment on column daq_s_material_dry_type_transformer.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_DRY_TYPE_TRANSFORMER_OID_4 ON daq_s_material_dry_type_transformer ( oid );
+create index INDEX_DAQ_S_MATERIAL_DRY_TYPE_TRANSFORMER_DEVICE_CODE_9 ON daq_s_material_dry_type_transformer ( device_code );
+create index INDEX_DAQ_S_MATERIAL_DRY_TYPE_TRANSFORMER_DEVICE_NAME_10 ON daq_s_material_dry_type_transformer ( device_name );
+
+CREATE TABLE daq_s_material_medium_voltage_switchgear (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	voltage_switchgear_name VARCHAR (50),
+	voltage_switchgear_type VARCHAR (40),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_medium_voltage_switchgear is '中压开关柜';
+comment on column daq_s_material_medium_voltage_switchgear.oid is '主键';
+comment on column daq_s_material_medium_voltage_switchgear.project_oid is '项目oid';
+comment on column daq_s_material_medium_voltage_switchgear.tenders_oid is '标段oid';
+comment on column daq_s_material_medium_voltage_switchgear.pipeline_oid is '管线oid';
+comment on column daq_s_material_medium_voltage_switchgear.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_medium_voltage_switchgear.device_code is '设备编号';
+comment on column daq_s_material_medium_voltage_switchgear.voltage_switchgear_name is '名称,域值:medium_voltage_switchgear_name_domain';
+comment on column daq_s_material_medium_voltage_switchgear.voltage_switchgear_type is '类型,域值：medium_voltage_switchgear_type_domain';
+comment on column daq_s_material_medium_voltage_switchgear.material_code is '物料码';
+comment on column daq_s_material_medium_voltage_switchgear.specification_model is '规格型号';
+comment on column daq_s_material_medium_voltage_switchgear.tag_number is '预定位号';
+comment on column daq_s_material_medium_voltage_switchgear.manufacture_number is '出厂编号';
+comment on column daq_s_material_medium_voltage_switchgear.manufacturer is '生产厂家';
+comment on column daq_s_material_medium_voltage_switchgear.manufacture_date is '出厂时间';
+comment on column daq_s_material_medium_voltage_switchgear.guarantee_period is '质保期(月)';
+comment on column daq_s_material_medium_voltage_switchgear.contract_number is '合同号';
+comment on column daq_s_material_medium_voltage_switchgear.remarks is '备注';
+comment on column daq_s_material_medium_voltage_switchgear.create_user_id is '创建人id';
+comment on column daq_s_material_medium_voltage_switchgear.create_user_name is '创建人名称';
+comment on column daq_s_material_medium_voltage_switchgear.create_datetime is '创建时间';
+comment on column daq_s_material_medium_voltage_switchgear.modify_user_id is '修改人id';
+comment on column daq_s_material_medium_voltage_switchgear.modify_user_name is '修改人名称';
+comment on column daq_s_material_medium_voltage_switchgear.modify_datetime is '修改时间';
+comment on column daq_s_material_medium_voltage_switchgear.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_MEDIUM_VOLTAGE_SWITCHGEAR_OID_4 ON daq_s_material_medium_voltage_switchgear ( oid );
+create index INDEX_DAQ_S_MATERIAL_MEDIUM_VOLTAGE_SWITCHGEAR_DEVICE_CODE_9 ON daq_s_material_medium_voltage_switchgear ( device_code );
+create index INDEX_DAQ_S_MATERIAL_MEDIUM_VOLTAGE_SWITCHGEAR_VOLTAGE_SWITCHGEAR_NAME_10 ON daq_s_material_medium_voltage_switchgear ( voltage_switchgear_name );
+
+CREATE TABLE daq_s_material_low_voltage_switchgear (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	voltage_switchgear_name VARCHAR (50),
+	voltage_switchgear_type VARCHAR (36),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_low_voltage_switchgear is '低压开关柜';
+comment on column daq_s_material_low_voltage_switchgear.oid is '主键';
+comment on column daq_s_material_low_voltage_switchgear.project_oid is '项目oid';
+comment on column daq_s_material_low_voltage_switchgear.tenders_oid is '标段oid';
+comment on column daq_s_material_low_voltage_switchgear.pipeline_oid is '管线oid';
+comment on column daq_s_material_low_voltage_switchgear.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_low_voltage_switchgear.device_code is '设备编号';
+comment on column daq_s_material_low_voltage_switchgear.voltage_switchgear_name is '名称，域值：low_voltage_switchgear_name_domain';
+comment on column daq_s_material_low_voltage_switchgear.voltage_switchgear_type is '类型,域值：low_voltage_switchgear_type_domain';
+comment on column daq_s_material_low_voltage_switchgear.material_code is '物料码';
+comment on column daq_s_material_low_voltage_switchgear.specification_model is '规格型号';
+comment on column daq_s_material_low_voltage_switchgear.tag_number is '预定位号';
+comment on column daq_s_material_low_voltage_switchgear.manufacture_number is '出厂编号';
+comment on column daq_s_material_low_voltage_switchgear.manufacturer is '生产厂家';
+comment on column daq_s_material_low_voltage_switchgear.manufacture_date is '出厂时间';
+comment on column daq_s_material_low_voltage_switchgear.guarantee_period is '质保期(月)';
+comment on column daq_s_material_low_voltage_switchgear.contract_number is '合同号';
+comment on column daq_s_material_low_voltage_switchgear.remarks is '备注';
+comment on column daq_s_material_low_voltage_switchgear.create_user_id is '创建人id';
+comment on column daq_s_material_low_voltage_switchgear.create_user_name is '创建人名称';
+comment on column daq_s_material_low_voltage_switchgear.create_datetime is '创建时间';
+comment on column daq_s_material_low_voltage_switchgear.modify_user_id is '修改人id';
+comment on column daq_s_material_low_voltage_switchgear.modify_user_name is '修改人名称';
+comment on column daq_s_material_low_voltage_switchgear.modify_datetime is '修改时间';
+comment on column daq_s_material_low_voltage_switchgear.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_LOW_VOLTAGE_SWITCHGEAR_OID_4 ON daq_s_material_low_voltage_switchgear ( oid );
+create index INDEX_DAQ_S_MATERIAL_LOW_VOLTAGE_SWITCHGEAR_DEVICE_CODE_9 ON daq_s_material_low_voltage_switchgear ( device_code );
+create index INDEX_DAQ_S_MATERIAL_LOW_VOLTAGE_SWITCHGEAR_VOLTAGE_SWITCHGEAR_NAME_10 ON daq_s_material_low_voltage_switchgear ( voltage_switchgear_name );
+
+CREATE TABLE daq_s_material_uninterruptible_power_supply (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	uninterruptible_power_type VARCHAR (40),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_uninterruptible_power_supply is '不间断电源';
+comment on column daq_s_material_uninterruptible_power_supply.oid is '主键';
+comment on column daq_s_material_uninterruptible_power_supply.project_oid is '项目oid';
+comment on column daq_s_material_uninterruptible_power_supply.tenders_oid is '标段oid';
+comment on column daq_s_material_uninterruptible_power_supply.pipeline_oid is '管线oid';
+comment on column daq_s_material_uninterruptible_power_supply.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_uninterruptible_power_supply.device_code is '设备编号';
+comment on column daq_s_material_uninterruptible_power_supply.device_name is '名称';
+comment on column daq_s_material_uninterruptible_power_supply.uninterruptible_power_type is '类型，域值：uninterruptible_power_type_domain';
+comment on column daq_s_material_uninterruptible_power_supply.material_code is '物料码';
+comment on column daq_s_material_uninterruptible_power_supply.specification_model is '规格型号';
+comment on column daq_s_material_uninterruptible_power_supply.tag_number is '预定位号';
+comment on column daq_s_material_uninterruptible_power_supply.manufacture_number is '出厂编号';
+comment on column daq_s_material_uninterruptible_power_supply.manufacturer is '生产厂家';
+comment on column daq_s_material_uninterruptible_power_supply.manufacture_date is '出厂时间';
+comment on column daq_s_material_uninterruptible_power_supply.guarantee_period is '质保期(月)';
+comment on column daq_s_material_uninterruptible_power_supply.contract_number is '合同号';
+comment on column daq_s_material_uninterruptible_power_supply.remarks is '备注';
+comment on column daq_s_material_uninterruptible_power_supply.create_user_id is '创建人id';
+comment on column daq_s_material_uninterruptible_power_supply.create_user_name is '创建人名称';
+comment on column daq_s_material_uninterruptible_power_supply.create_datetime is '创建时间';
+comment on column daq_s_material_uninterruptible_power_supply.modify_user_id is '修改人id';
+comment on column daq_s_material_uninterruptible_power_supply.modify_user_name is '修改人名称';
+comment on column daq_s_material_uninterruptible_power_supply.modify_datetime is '修改时间';
+comment on column daq_s_material_uninterruptible_power_supply.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_UNINTERRUPTIBLE_POWER_SUPPLY_OID_4 ON daq_s_material_uninterruptible_power_supply ( oid );
+create index INDEX_DAQ_S_MATERIAL_UNINTERRUPTIBLE_POWER_SUPPLY_DEVICE_CODE_9 ON daq_s_material_uninterruptible_power_supply ( device_code );
+create index INDEX_DAQ_S_MATERIAL_UNINTERRUPTIBLE_POWER_SUPPLY_DEVICE_NAME_10 ON daq_s_material_uninterruptible_power_supply ( device_name );
+
+CREATE TABLE daq_s_material_hf_power_supply (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+
+comment on table daq_s_material_hf_power_supply is '高频开关电源设备';
+comment on column daq_s_material_hf_power_supply.oid is '主键';
+comment on column daq_s_material_hf_power_supply.project_oid is '项目oid';
+comment on column daq_s_material_hf_power_supply.tenders_oid is '标段oid';
+comment on column daq_s_material_hf_power_supply.pipeline_oid is '管线oid';
+comment on column daq_s_material_hf_power_supply.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_hf_power_supply.device_code is '设备编号';
+comment on column daq_s_material_hf_power_supply.device_name is '名称';
+comment on column daq_s_material_hf_power_supply.classification_code is '分类编码';
+comment on column daq_s_material_hf_power_supply.material_code is '物料码';
+comment on column daq_s_material_hf_power_supply.specification_model is '规格型号';
+comment on column daq_s_material_hf_power_supply.tag_number is '预定位号';
+comment on column daq_s_material_hf_power_supply.manufacture_number is '出厂编号';
+comment on column daq_s_material_hf_power_supply.manufacturer is '生产厂家';
+comment on column daq_s_material_hf_power_supply.manufacture_date is '出厂时间';
+comment on column daq_s_material_hf_power_supply.guarantee_period is '质保期(月)';
+comment on column daq_s_material_hf_power_supply.contract_number is '合同号';
+comment on column daq_s_material_hf_power_supply.remarks is '备注';
+comment on column daq_s_material_hf_power_supply.create_user_id is '创建人id';
+comment on column daq_s_material_hf_power_supply.create_user_name is '创建人名称';
+comment on column daq_s_material_hf_power_supply.create_datetime is '创建时间';
+comment on column daq_s_material_hf_power_supply.modify_user_id is '修改人id';
+comment on column daq_s_material_hf_power_supply.modify_user_name is '修改人名称';
+comment on column daq_s_material_hf_power_supply.modify_datetime is '修改时间';
+comment on column daq_s_material_hf_power_supply.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_HF_POWER_SUPPLY_OID_4 ON daq_s_material_hf_power_supply ( oid );
+create index INDEX_DAQ_S_MATERIAL_HF_POWER_SUPPLY_DEVICE_CODE_9 ON daq_s_material_hf_power_supply ( device_code );
+create index INDEX_DAQ_S_MATERIAL_HF_POWER_SUPPLY_DEVICE_NAME_10 ON daq_s_material_hf_power_supply ( device_name );
+
+CREATE TABLE daq_s_material_dc_power_supply (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	dc_power_supply_type SMALLINT,
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_dc_power_supply is '直流电源系统';
+comment on column daq_s_material_dc_power_supply.oid is '主键';
+comment on column daq_s_material_dc_power_supply.project_oid is '项目oid';
+comment on column daq_s_material_dc_power_supply.tenders_oid is '标段oid';
+comment on column daq_s_material_dc_power_supply.pipeline_oid is '管线oid';
+comment on column daq_s_material_dc_power_supply.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_dc_power_supply.device_code is '设备编号';
+comment on column daq_s_material_dc_power_supply.device_name is '名称';
+comment on column daq_s_material_dc_power_supply.dc_power_supply_type is '类型{1:相控整流;2:高频开关}';
+comment on column daq_s_material_dc_power_supply.material_code is '物料码';
+comment on column daq_s_material_dc_power_supply.specification_model is '规格型号';
+comment on column daq_s_material_dc_power_supply.tag_number is '预定位号';
+comment on column daq_s_material_dc_power_supply.manufacture_number is '出厂编号';
+comment on column daq_s_material_dc_power_supply.manufacturer is '生产厂家';
+comment on column daq_s_material_dc_power_supply.manufacture_date is '出厂时间';
+comment on column daq_s_material_dc_power_supply.guarantee_period is '质保期(月)';
+comment on column daq_s_material_dc_power_supply.contract_number is '合同号';
+comment on column daq_s_material_dc_power_supply.remarks is '备注';
+comment on column daq_s_material_dc_power_supply.create_user_id is '创建人id';
+comment on column daq_s_material_dc_power_supply.create_user_name is '创建人名称';
+comment on column daq_s_material_dc_power_supply.create_datetime is '创建时间';
+comment on column daq_s_material_dc_power_supply.modify_user_id is '修改人id';
+comment on column daq_s_material_dc_power_supply.modify_user_name is '修改人名称';
+comment on column daq_s_material_dc_power_supply.modify_datetime is '修改时间';
+comment on column daq_s_material_dc_power_supply.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_DC_POWER_SUPPLY_OID_4 ON daq_s_material_dc_power_supply ( oid );
+create index INDEX_DAQ_S_MATERIAL_DC_POWER_SUPPLY_DEVICE_CODE_9 ON daq_s_material_dc_power_supply ( device_code );
+create index INDEX_DAQ_S_MATERIAL_DC_POWER_SUPPLY_DEVICE_NAME_10 ON daq_s_material_dc_power_supply ( device_name );
+
+CREATE TABLE daq_s_material_emergency_power_supply (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+
+comment on table daq_s_material_emergency_power_supply is 'EPS电源';
+comment on column daq_s_material_emergency_power_supply.oid is '主键';
+comment on column daq_s_material_emergency_power_supply.project_oid is '项目oid';
+comment on column daq_s_material_emergency_power_supply.tenders_oid is '标段oid';
+comment on column daq_s_material_emergency_power_supply.pipeline_oid is '管线oid';
+comment on column daq_s_material_emergency_power_supply.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_emergency_power_supply.device_code is '设备编号';
+comment on column daq_s_material_emergency_power_supply.device_name is '名称';
+comment on column daq_s_material_emergency_power_supply.material_code is '物料码';
+comment on column daq_s_material_emergency_power_supply.specification_model is '规格型号';
+comment on column daq_s_material_emergency_power_supply.tag_number is '预定位号';
+comment on column daq_s_material_emergency_power_supply.manufacture_number is '出厂编号';
+comment on column daq_s_material_emergency_power_supply.manufacturer is '生产厂家';
+comment on column daq_s_material_emergency_power_supply.manufacture_date is '出厂时间';
+comment on column daq_s_material_emergency_power_supply.guarantee_period is '质保期(月)';
+comment on column daq_s_material_emergency_power_supply.contract_number is '合同号';
+comment on column daq_s_material_emergency_power_supply.remarks is '备注';
+comment on column daq_s_material_emergency_power_supply.create_user_id is '创建人id';
+comment on column daq_s_material_emergency_power_supply.create_user_name is '创建人名称';
+comment on column daq_s_material_emergency_power_supply.create_datetime is '创建时间';
+comment on column daq_s_material_emergency_power_supply.modify_user_id is '修改人id';
+comment on column daq_s_material_emergency_power_supply.modify_user_name is '修改人名称';
+comment on column daq_s_material_emergency_power_supply.modify_datetime is '修改时间';
+comment on column daq_s_material_emergency_power_supply.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_EMERGENCY_POWER_SUPPLY_OID_4 ON daq_s_material_emergency_power_supply ( oid );
+create index INDEX_DAQ_S_MATERIAL_EMERGENCY_POWER_SUPPLY_DEVICE_CODE_9 ON daq_s_material_emergency_power_supply ( device_code );
+create index INDEX_DAQ_S_MATERIAL_EMERGENCY_POWER_SUPPLY_DEVICE_NAME_10 ON daq_s_material_emergency_power_supply ( device_name );
+
+CREATE TABLE daq_s_material_small_power_generator (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	small_power_generator_type SMALLINT,
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_small_power_generator is '小型发电设备';
+comment on column daq_s_material_small_power_generator.oid is '主键';
+comment on column daq_s_material_small_power_generator.project_oid is '项目oid';
+comment on column daq_s_material_small_power_generator.tenders_oid is '标段oid';
+comment on column daq_s_material_small_power_generator.pipeline_oid is '管线oid';
+comment on column daq_s_material_small_power_generator.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_small_power_generator.device_code is '设备编号';
+comment on column daq_s_material_small_power_generator.device_name is '名称';
+comment on column daq_s_material_small_power_generator.small_power_generator_type is '类型{1:TEG;2:CCVT}';
+comment on column daq_s_material_small_power_generator.material_code is '物料码';
+comment on column daq_s_material_small_power_generator.specification_model is '规格型号';
+comment on column daq_s_material_small_power_generator.tag_number is '预定位号';
+comment on column daq_s_material_small_power_generator.manufacture_number is '出厂编号';
+comment on column daq_s_material_small_power_generator.manufacturer is '生产厂家';
+comment on column daq_s_material_small_power_generator.manufacture_date is '出厂时间';
+comment on column daq_s_material_small_power_generator.guarantee_period is '质保期(月)';
+comment on column daq_s_material_small_power_generator.contract_number is '合同号';
+comment on column daq_s_material_small_power_generator.remarks is '备注';
+comment on column daq_s_material_small_power_generator.create_user_id is '创建人id';
+comment on column daq_s_material_small_power_generator.create_user_name is '创建人名称';
+comment on column daq_s_material_small_power_generator.create_datetime is '创建时间';
+comment on column daq_s_material_small_power_generator.modify_user_id is '修改人id';
+comment on column daq_s_material_small_power_generator.modify_user_name is '修改人名称';
+comment on column daq_s_material_small_power_generator.modify_datetime is '修改时间';
+comment on column daq_s_material_small_power_generator.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_SMALL_POWER_GENERATOR_OID_4 ON daq_s_material_small_power_generator ( oid );
+create index INDEX_DAQ_S_MATERIAL_SMALL_POWER_GENERATOR_DEVICE_CODE_9 ON daq_s_material_small_power_generator ( device_code );
+create index INDEX_DAQ_S_MATERIAL_SMALL_POWER_GENERATOR_DEVICE_NAME_10 ON daq_s_material_small_power_generator ( device_name );
+
+CREATE TABLE daq_s_material_solar_power_system (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_solar_power_system is '太阳能电源系统';
+comment on column daq_s_material_solar_power_system.oid is '主键';
+comment on column daq_s_material_solar_power_system.project_oid is '项目oid';
+comment on column daq_s_material_solar_power_system.tenders_oid is '标段oid';
+comment on column daq_s_material_solar_power_system.pipeline_oid is '管线oid';
+comment on column daq_s_material_solar_power_system.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_solar_power_system.device_code is '设备编号';
+comment on column daq_s_material_solar_power_system.device_name is '名称';
+comment on column daq_s_material_solar_power_system.material_code is '物料码';
+comment on column daq_s_material_solar_power_system.specification_model is '规格型号';
+comment on column daq_s_material_solar_power_system.tag_number is '预定位号';
+comment on column daq_s_material_solar_power_system.manufacture_number is '出厂编号';
+comment on column daq_s_material_solar_power_system.manufacturer is '生产厂家';
+comment on column daq_s_material_solar_power_system.manufacture_date is '出厂时间';
+comment on column daq_s_material_solar_power_system.guarantee_period is '质保期(月)';
+comment on column daq_s_material_solar_power_system.contract_number is '合同号';
+comment on column daq_s_material_solar_power_system.remarks is '备注';
+comment on column daq_s_material_solar_power_system.create_user_id is '创建人id';
+comment on column daq_s_material_solar_power_system.create_user_name is '创建人名称';
+comment on column daq_s_material_solar_power_system.create_datetime is '创建时间';
+comment on column daq_s_material_solar_power_system.modify_user_id is '修改人id';
+comment on column daq_s_material_solar_power_system.modify_user_name is '修改人名称';
+comment on column daq_s_material_solar_power_system.modify_datetime is '修改时间';
+comment on column daq_s_material_solar_power_system.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_SOLAR_POWER_SYSTEM_OID_4 ON daq_s_material_solar_power_system ( oid );
+create index INDEX_DAQ_S_MATERIAL_SOLAR_POWER_SYSTEM_DEVICE_CODE_9 ON daq_s_material_solar_power_system ( device_code );
+create index INDEX_DAQ_S_MATERIAL_SOLAR_POWER_SYSTEM_DEVICE_NAME_10 ON daq_s_material_solar_power_system ( device_name );
+
+CREATE TABLE daq_s_material_generator_set (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	generator_set_type VARCHAR (30),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+
+comment on table daq_s_material_generator_set is '发电机组';
+comment on column daq_s_material_generator_set.oid is '主键';
+comment on column daq_s_material_generator_set.project_oid is '项目oid';
+comment on column daq_s_material_generator_set.tenders_oid is '标段oid';
+comment on column daq_s_material_generator_set.pipeline_oid is '管线oid';
+comment on column daq_s_material_generator_set.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_generator_set.device_code is '设备编号';
+comment on column daq_s_material_generator_set.device_name is '名称';
+comment on column daq_s_material_generator_set.generator_set_type is '类型';
+comment on column daq_s_material_generator_set.material_code is '物料码';
+comment on column daq_s_material_generator_set.specification_model is '规格型号';
+comment on column daq_s_material_generator_set.tag_number is '预定位号';
+comment on column daq_s_material_generator_set.manufacture_number is '出厂编号';
+comment on column daq_s_material_generator_set.manufacturer is '生产厂家';
+comment on column daq_s_material_generator_set.manufacture_date is '出厂时间';
+comment on column daq_s_material_generator_set.guarantee_period is '质保期(月)';
+comment on column daq_s_material_generator_set.contract_number is '合同号';
+comment on column daq_s_material_generator_set.remarks is '备注';
+comment on column daq_s_material_generator_set.create_user_id is '创建人id';
+comment on column daq_s_material_generator_set.create_user_name is '创建人名称';
+comment on column daq_s_material_generator_set.create_datetime is '创建时间';
+comment on column daq_s_material_generator_set.modify_user_id is '修改人id';
+comment on column daq_s_material_generator_set.modify_user_name is '修改人名称';
+comment on column daq_s_material_generator_set.modify_datetime is '修改时间';
+comment on column daq_s_material_generator_set.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_GENERATOR_SET_OID_4 ON daq_s_material_generator_set ( oid );
+create index INDEX_DAQ_S_MATERIAL_GENERATOR_SET_DEVICE_CODE_9 ON daq_s_material_generator_set ( device_code );
+create index INDEX_DAQ_S_MATERIAL_GENERATOR_SET_DEVICE_NAME_10 ON daq_s_material_generator_set ( device_name );
+/**
+ * 站场基本信息-供配电end
+ */
+
+
+/**
+ * 站场基本信息-阴保start
+ */
+CREATE TABLE daq_s_material_solid_state_dc_decoupler (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	material_code VARCHAR (50),
+	classification_code VARCHAR (50),
+	highness_of_post NUMERIC (5, 1),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_solid_state_dc_decoupler is '固态去耦合器';
+comment on column daq_s_material_solid_state_dc_decoupler.oid is '主键';
+comment on column daq_s_material_solid_state_dc_decoupler.project_oid is '项目oid';
+comment on column daq_s_material_solid_state_dc_decoupler.tenders_oid is '标段oid';
+comment on column daq_s_material_solid_state_dc_decoupler.pipeline_oid is '管线oid';
+comment on column daq_s_material_solid_state_dc_decoupler.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_solid_state_dc_decoupler.device_code is '设备编号';
+comment on column daq_s_material_solid_state_dc_decoupler.device_name is '名称';
+comment on column daq_s_material_solid_state_dc_decoupler.material_code is '物料码';
+comment on column daq_s_material_solid_state_dc_decoupler.classification_code is '分类编码';
+comment on column daq_s_material_solid_state_dc_decoupler.highness_of_post is '桩体高度(mm)';
+comment on column daq_s_material_solid_state_dc_decoupler.tag_number is '预定位号';
+comment on column daq_s_material_solid_state_dc_decoupler.manufacture_number is '出厂编号';
+comment on column daq_s_material_solid_state_dc_decoupler.manufacturer is '生产厂家';
+comment on column daq_s_material_solid_state_dc_decoupler.manufacture_date is '出厂时间';
+comment on column daq_s_material_solid_state_dc_decoupler.guarantee_period is '质保期(月)';
+comment on column daq_s_material_solid_state_dc_decoupler.contract_number is '合同号';
+comment on column daq_s_material_solid_state_dc_decoupler.remarks is '备注';
+comment on column daq_s_material_solid_state_dc_decoupler.create_user_id is '创建人id';
+comment on column daq_s_material_solid_state_dc_decoupler.create_user_name is '创建人名称';
+comment on column daq_s_material_solid_state_dc_decoupler.create_datetime is '创建时间';
+comment on column daq_s_material_solid_state_dc_decoupler.modify_user_id is '修改人id';
+comment on column daq_s_material_solid_state_dc_decoupler.modify_user_name is '修改人名称';
+comment on column daq_s_material_solid_state_dc_decoupler.modify_datetime is '修改时间';
+comment on column daq_s_material_solid_state_dc_decoupler.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_SOLID_STATE_DC_DECOUPLER_OID_4 ON daq_s_material_solid_state_dc_decoupler ( oid );
+create index INDEX_DAQ_S_MATERIAL_SOLID_STATE_DC_DECOUPLER_DEVICE_CODE_9 ON daq_s_material_solid_state_dc_decoupler ( device_code );
+create index INDEX_DAQ_S_MATERIAL_SOLID_STATE_DC_DECOUPLER_DEVICE_NAME_10 ON daq_s_material_solid_state_dc_decoupler ( device_name );
+
+CREATE TABLE daq_s_material_constant_potential_rectifier (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	material_code VARCHAR (50),
+	classification_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	syn_interrupt_function SMALLINT,
+	manufacture_number VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+
+comment on table daq_s_material_constant_potential_rectifier is '恒电位仪';
+comment on column daq_s_material_constant_potential_rectifier.oid is '主键';
+comment on column daq_s_material_constant_potential_rectifier.project_oid is '项目oid';
+comment on column daq_s_material_constant_potential_rectifier.tenders_oid is '标段oid';
+comment on column daq_s_material_constant_potential_rectifier.pipeline_oid is '管线oid';
+comment on column daq_s_material_constant_potential_rectifier.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_constant_potential_rectifier.device_code is '设备编号';
+comment on column daq_s_material_constant_potential_rectifier.device_name is '名称';
+comment on column daq_s_material_constant_potential_rectifier.material_code is '物料码';
+comment on column daq_s_material_constant_potential_rectifier.classification_code is '分类编码';
+comment on column daq_s_material_constant_potential_rectifier.specification_model is '规格型号';
+comment on column daq_s_material_constant_potential_rectifier.tag_number is '预定位号';
+comment on column daq_s_material_constant_potential_rectifier.syn_interrupt_function is '同步通断功能{0:无;1:有}';
+comment on column daq_s_material_constant_potential_rectifier.manufacture_number is '出厂编号';
+comment on column daq_s_material_constant_potential_rectifier.manufacture_date is '出厂时间';
+comment on column daq_s_material_constant_potential_rectifier.guarantee_period is '质保期(月)';
+comment on column daq_s_material_constant_potential_rectifier.contract_number is '合同号';
+comment on column daq_s_material_constant_potential_rectifier.remarks is '备注';
+comment on column daq_s_material_constant_potential_rectifier.create_user_id is '创建人id';
+comment on column daq_s_material_constant_potential_rectifier.create_user_name is '创建人名称';
+comment on column daq_s_material_constant_potential_rectifier.create_datetime is '创建时间';
+comment on column daq_s_material_constant_potential_rectifier.modify_user_id is '修改人id';
+comment on column daq_s_material_constant_potential_rectifier.modify_user_name is '修改人名称';
+comment on column daq_s_material_constant_potential_rectifier.modify_datetime is '修改时间';
+comment on column daq_s_material_constant_potential_rectifier.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_CONSTANT_POTENTIAL_RECTIFIER_OID_4 ON daq_s_material_constant_potential_rectifier ( oid );
+create index INDEX_DAQ_S_MATERIAL_CONSTANT_POTENTIAL_RECTIFIER_DEVICE_CODE_9 ON daq_s_material_constant_potential_rectifier ( device_code );
+create index INDEX_DAQ_S_MATERIAL_CONSTANT_POTENTIAL_RECTIFIER_DEVICE_NAME_10 ON daq_s_material_constant_potential_rectifier ( device_name );
+
+CREATE TABLE daq_s_material_internal_corrosion_supervisory (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	material_code VARCHAR (50),
+	classification_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+
+comment on table daq_s_material_internal_corrosion_supervisory is '阴极保护内腐蚀检测';
+comment on column daq_s_material_internal_corrosion_supervisory.oid is '主键';
+comment on column daq_s_material_internal_corrosion_supervisory.project_oid is '项目oid';
+comment on column daq_s_material_internal_corrosion_supervisory.tenders_oid is '标段oid';
+comment on column daq_s_material_internal_corrosion_supervisory.pipeline_oid is '管线oid';
+comment on column daq_s_material_internal_corrosion_supervisory.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_internal_corrosion_supervisory.device_code is '设备编号';
+comment on column daq_s_material_internal_corrosion_supervisory.device_name is '名称';
+comment on column daq_s_material_internal_corrosion_supervisory.material_code is '物料码';
+comment on column daq_s_material_internal_corrosion_supervisory.classification_code is '分类编码';
+comment on column daq_s_material_internal_corrosion_supervisory.specification_model is '规格型号';
+comment on column daq_s_material_internal_corrosion_supervisory.tag_number is '预定位号';
+comment on column daq_s_material_internal_corrosion_supervisory.manufacture_number is '出厂编号';
+comment on column daq_s_material_internal_corrosion_supervisory.manufacturer is '生产厂家';
+comment on column daq_s_material_internal_corrosion_supervisory.manufacture_date is '出厂时间';
+comment on column daq_s_material_internal_corrosion_supervisory.guarantee_period is '质保期(月)';
+comment on column daq_s_material_internal_corrosion_supervisory.contract_number is '合同号';
+comment on column daq_s_material_internal_corrosion_supervisory.remarks is '备注';
+comment on column daq_s_material_internal_corrosion_supervisory.create_user_id is '创建人id';
+comment on column daq_s_material_internal_corrosion_supervisory.create_user_name is '创建人名称';
+comment on column daq_s_material_internal_corrosion_supervisory.create_datetime is '创建时间';
+comment on column daq_s_material_internal_corrosion_supervisory.modify_user_id is '修改人id';
+comment on column daq_s_material_internal_corrosion_supervisory.modify_user_name is '修改人名称';
+comment on column daq_s_material_internal_corrosion_supervisory.modify_datetime is '修改时间';
+comment on column daq_s_material_internal_corrosion_supervisory.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_INTERNAL_CORROSION_SUPERVISORY_OID_4 ON daq_s_material_internal_corrosion_supervisory ( oid );
+create index INDEX_DAQ_S_MATERIAL_INTERNAL_CORROSION_SUPERVISORY_DEVICE_CODE_9 ON daq_s_material_internal_corrosion_supervisory ( device_code );
+create index INDEX_DAQ_S_MATERIAL_INTERNAL_CORROSION_SUPERVISORY_DEVICE_NAME_10 ON daq_s_material_internal_corrosion_supervisory ( device_name );
+/**
+ * 站场基本信息-阴保end
+ */
+
+
+/**
+ * 站场基本信息-通信start
+ */
+CREATE TABLE daq_s_material_sdh_fiber_transmission (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	material_code VARCHAR (50),
+	classification_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	nms_mode VARCHAR (25),
+	clock_system_mode SMALLINT,
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_sdh_fiber_transmission is 'SDH光纤通信设备';
+comment on column daq_s_material_sdh_fiber_transmission.oid is '主键';
+comment on column daq_s_material_sdh_fiber_transmission.project_oid is '项目oid';
+comment on column daq_s_material_sdh_fiber_transmission.tenders_oid is '标段oid';
+comment on column daq_s_material_sdh_fiber_transmission.pipeline_oid is '管线oid';
+comment on column daq_s_material_sdh_fiber_transmission.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_sdh_fiber_transmission.device_code is '设备编号';
+comment on column daq_s_material_sdh_fiber_transmission.device_name is '名称';
+comment on column daq_s_material_sdh_fiber_transmission.material_code is '物料码';
+comment on column daq_s_material_sdh_fiber_transmission.classification_code is '分类编码';
+comment on column daq_s_material_sdh_fiber_transmission.specification_model is '规格型号';
+comment on column daq_s_material_sdh_fiber_transmission.tag_number is '预定位号';
+comment on column daq_s_material_sdh_fiber_transmission.nms_mode is '网管系统类型,域值：nms_mode_domain';
+comment on column daq_s_material_sdh_fiber_transmission.clock_system_mode is '时钟系统类型{1:新建;2:纳入已有网管}';
+comment on column daq_s_material_sdh_fiber_transmission.manufacture_number is '出厂编号';
+comment on column daq_s_material_sdh_fiber_transmission.manufacturer is '生产厂家';
+comment on column daq_s_material_sdh_fiber_transmission.manufacture_date is '出厂时间';
+comment on column daq_s_material_sdh_fiber_transmission.guarantee_period is '质保期(月)';
+comment on column daq_s_material_sdh_fiber_transmission.contract_number is '合同号';
+comment on column daq_s_material_sdh_fiber_transmission.remarks is '备注';
+comment on column daq_s_material_sdh_fiber_transmission.create_user_id is '创建人id';
+comment on column daq_s_material_sdh_fiber_transmission.create_user_name is '创建人名称';
+comment on column daq_s_material_sdh_fiber_transmission.create_datetime is '创建时间';
+comment on column daq_s_material_sdh_fiber_transmission.modify_user_id is '修改人id';
+comment on column daq_s_material_sdh_fiber_transmission.modify_user_name is '修改人名称';
+comment on column daq_s_material_sdh_fiber_transmission.modify_datetime is '修改时间';
+comment on column daq_s_material_sdh_fiber_transmission.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_SDH_FIBER_TRANSMISSION_OID_4 ON daq_s_material_sdh_fiber_transmission ( oid );
+create index INDEX_DAQ_S_MATERIAL_SDH_FIBER_TRANSMISSION_DEVICE_CODE_9 ON daq_s_material_sdh_fiber_transmission ( device_code );
+create index INDEX_DAQ_S_MATERIAL_SDH_FIBER_TRANSMISSION_DEVICE_NAME_10 ON daq_s_material_sdh_fiber_transmission ( device_name );
+
+CREATE TABLE daq_s_material_otn_fiber_transmission (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	otn_capability VARCHAR (25),
+	nms_mode VARCHAR (25),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_otn_fiber_transmission is 'OTN光纤通信设备';
+comment on column daq_s_material_otn_fiber_transmission.oid is '主键';
+comment on column daq_s_material_otn_fiber_transmission.project_oid is '项目oid';
+comment on column daq_s_material_otn_fiber_transmission.tenders_oid is '标段oid';
+comment on column daq_s_material_otn_fiber_transmission.pipeline_oid is '管线oid';
+comment on column daq_s_material_otn_fiber_transmission.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_otn_fiber_transmission.device_code is '设备编号';
+comment on column daq_s_material_otn_fiber_transmission.device_name is '名称';
+comment on column daq_s_material_otn_fiber_transmission.classification_code is '分类编码';
+comment on column daq_s_material_otn_fiber_transmission.material_code is '物料码';
+comment on column daq_s_material_otn_fiber_transmission.specification_model is '规格型号';
+comment on column daq_s_material_otn_fiber_transmission.tag_number is '预定位号';
+comment on column daq_s_material_otn_fiber_transmission.otn_capability is '设备容量,域值:otn_capability_domain';
+comment on column daq_s_material_otn_fiber_transmission.nms_mode is '网管系统类型,域值：nms_mode_domain';
+comment on column daq_s_material_otn_fiber_transmission.manufacture_number is '出厂编号';
+comment on column daq_s_material_otn_fiber_transmission.manufacturer is '生产厂家';
+comment on column daq_s_material_otn_fiber_transmission.manufacture_date is '出厂时间';
+comment on column daq_s_material_otn_fiber_transmission.guarantee_period is '质保期(月)';
+comment on column daq_s_material_otn_fiber_transmission.contract_number is '合同号';
+comment on column daq_s_material_otn_fiber_transmission.remarks is '备注';
+comment on column daq_s_material_otn_fiber_transmission.create_user_id is '创建人id';
+comment on column daq_s_material_otn_fiber_transmission.create_user_name is '创建人名称';
+comment on column daq_s_material_otn_fiber_transmission.create_datetime is '创建时间';
+comment on column daq_s_material_otn_fiber_transmission.modify_user_id is '修改人id';
+comment on column daq_s_material_otn_fiber_transmission.modify_user_name is '修改人名称';
+comment on column daq_s_material_otn_fiber_transmission.modify_datetime is '修改时间';
+comment on column daq_s_material_otn_fiber_transmission.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_OTN_FIBER_TRANSMISSION_OID_4 ON daq_s_material_otn_fiber_transmission ( oid );
+create index INDEX_DAQ_S_MATERIAL_OTN_FIBER_TRANSMISSION_DEVICE_CODE_9 ON daq_s_material_otn_fiber_transmission ( device_code );
+create index INDEX_DAQ_S_MATERIAL_OTN_FIBER_TRANSMISSION_DEVICE_NAME_10 ON daq_s_material_otn_fiber_transmission ( device_name );
+
+CREATE TABLE daq_s_material_video_conference (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	vct_mode SMALLINT,
+	material_code VARCHAR (50),
+	classification_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	mcu_capability SMALLINT,
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_video_conference is '会议电视设备';
+comment on column daq_s_material_video_conference.oid is '主键';
+comment on column daq_s_material_video_conference.project_oid is '项目oid';
+comment on column daq_s_material_video_conference.tenders_oid is '标段oid';
+comment on column daq_s_material_video_conference.pipeline_oid is '管线oid';
+comment on column daq_s_material_video_conference.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_video_conference.device_code is '设备编号';
+comment on column daq_s_material_video_conference.device_name is '名称';
+comment on column daq_s_material_video_conference.vct_mode is '会议终端类型{1:一体;2:分体}';
+comment on column daq_s_material_video_conference.material_code is '物料码';
+comment on column daq_s_material_video_conference.classification_code is '分类编码';
+comment on column daq_s_material_video_conference.specification_model is '规格型号';
+comment on column daq_s_material_video_conference.tag_number is '预定位号';
+comment on column daq_s_material_video_conference.mcu_capability is 'MCU系统容量{1:新建;2:扩容}';
+comment on column daq_s_material_video_conference.manufacture_number is '出厂编号';
+comment on column daq_s_material_video_conference.manufacturer is '生产厂家';
+comment on column daq_s_material_video_conference.manufacture_date is '出厂时间';
+comment on column daq_s_material_video_conference.guarantee_period is '质保期(月)';
+comment on column daq_s_material_video_conference.contract_number is '合同号';
+comment on column daq_s_material_video_conference.remarks is '备注';
+comment on column daq_s_material_video_conference.create_user_id is '创建人id';
+comment on column daq_s_material_video_conference.create_user_name is '创建人名称';
+comment on column daq_s_material_video_conference.create_datetime is '创建时间';
+comment on column daq_s_material_video_conference.modify_user_id is '修改人id';
+comment on column daq_s_material_video_conference.modify_user_name is '修改人名称';
+comment on column daq_s_material_video_conference.modify_datetime is '修改时间';
+comment on column daq_s_material_video_conference.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_VIDEO_CONFERENCE_OID_4 ON daq_s_material_video_conference ( oid );
+create index INDEX_DAQ_S_MATERIAL_VIDEO_CONFERENCE_DEVICE_CODE_9 ON daq_s_material_video_conference ( device_code );
+create index INDEX_DAQ_S_MATERIAL_VIDEO_CONFERENCE_DEVICE_NAME_10 ON daq_s_material_video_conference ( device_name );
+
+CREATE TABLE daq_s_material_telephone_exchange (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	device_type SMALLINT,
+	classification_code VARCHAR (50),
+	material_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	tag_number VARCHAR (25),
+	pbx_sysmode SMALLINT,
+	pbx_function_mode SMALLINT,
+	core_pbx SMALLINT,
+	ip_telephone_quantity NUMERIC (3, 0),
+	telephone_quantity NUMERIC (4, 0),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_telephone_exchange is '话音交换设';
+comment on column daq_s_material_telephone_exchange.oid is '主键';
+comment on column daq_s_material_telephone_exchange.project_oid is '项目oid';
+comment on column daq_s_material_telephone_exchange.tenders_oid is '标段oid';
+comment on column daq_s_material_telephone_exchange.pipeline_oid is '管线oid';
+comment on column daq_s_material_telephone_exchange.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_telephone_exchange.device_code is '设备编号';
+comment on column daq_s_material_telephone_exchange.device_name is '名称';
+comment on column daq_s_material_telephone_exchange.device_type is '设备类型{1:IAD;2:接入网关;3:IAD&接入网关}';
+comment on column daq_s_material_telephone_exchange.classification_code is '分类编码';
+comment on column daq_s_material_telephone_exchange.material_code is '物料码';
+comment on column daq_s_material_telephone_exchange.specification_model is '规格型号';
+comment on column daq_s_material_telephone_exchange.tag_number is '预定位号';
+comment on column daq_s_material_telephone_exchange.pbx_sysmode is '系统类型{1:软交换;2:程控交换}';
+comment on column daq_s_material_telephone_exchange.pbx_function_mode is '功能类型{1:调度;2:行政3:行调一体}';
+comment on column daq_s_material_telephone_exchange.core_pbx is '中心服务器{1:新建;2:扩容}';
+comment on column daq_s_material_telephone_exchange.ip_telephone_quantity is 'IP电话总数量';
+comment on column daq_s_material_telephone_exchange.telephone_quantity is '模拟电话数量';
+comment on column daq_s_material_telephone_exchange.manufacture_number is '出厂编号';
+comment on column daq_s_material_telephone_exchange.manufacturer is '生产厂家';
+comment on column daq_s_material_telephone_exchange.manufacture_date is '出厂时间';
+comment on column daq_s_material_telephone_exchange.guarantee_period is '质保期(月)';
+comment on column daq_s_material_telephone_exchange.contract_number is '合同号';
+comment on column daq_s_material_telephone_exchange.remarks is '备注';
+comment on column daq_s_material_telephone_exchange.create_user_id is '创建人id';
+comment on column daq_s_material_telephone_exchange.create_user_name is '创建人名称';
+comment on column daq_s_material_telephone_exchange.create_datetime is '创建时间';
+comment on column daq_s_material_telephone_exchange.modify_user_id is '修改人id';
+comment on column daq_s_material_telephone_exchange.modify_user_name is '修改人名称';
+comment on column daq_s_material_telephone_exchange.modify_datetime is '修改时间';
+comment on column daq_s_material_telephone_exchange.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_TELEPHONE_EXCHANGE_OID_4 ON daq_s_material_telephone_exchange ( oid );
+create index INDEX_DAQ_S_MATERIAL_TELEPHONE_EXCHANGE_DEVICE_CODE_9 ON daq_s_material_telephone_exchange ( device_code );
+create index INDEX_DAQ_S_MATERIAL_TELEPHONE_EXCHANGE_DEVICE_NAME_10 ON daq_s_material_telephone_exchange ( device_name );
+
+CREATE TABLE daq_s_material_cctv_system (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	cctv_sys_mode SMALLINT,
+	cctv_sys_capability NUMERIC (3, 0),
+	material_code VARCHAR (50),
+	classification_code VARCHAR (50),
+	specification_model VARCHAR (50),
+	manufacture_number VARCHAR (50),
+	manufacturer VARCHAR (50),
+	manufacture_date TIMESTAMP (6),
+	guarantee_period NUMERIC (3, 0),
+	contract_number VARCHAR (50),
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_s_material_cctv_system is '工业电视监控系统';
+comment on column daq_s_material_cctv_system.oid is '主键';
+comment on column daq_s_material_cctv_system.project_oid is '项目oid';
+comment on column daq_s_material_cctv_system.tenders_oid is '标段oid';
+comment on column daq_s_material_cctv_system.pipeline_oid is '管线oid';
+comment on column daq_s_material_cctv_system.pipe_station_oid is '站场/阀室编号';
+comment on column daq_s_material_cctv_system.cctv_sys_mode is '系统类型{1:NVS;2:DVR}';
+comment on column daq_s_material_cctv_system.cctv_sys_capability is '系统规模(站)';
+comment on column daq_s_material_cctv_system.material_code is '物料码';
+comment on column daq_s_material_cctv_system.classification_code is '分类编码';
+comment on column daq_s_material_cctv_system.specification_model is '规格型号';
+comment on column daq_s_material_cctv_system.manufacture_number is '出厂编号';
+comment on column daq_s_material_cctv_system.manufacturer is '生产厂家';
+comment on column daq_s_material_cctv_system.manufacture_date is '出厂时间';
+comment on column daq_s_material_cctv_system.guarantee_period is '质保期(月)';
+comment on column daq_s_material_cctv_system.contract_number is '合同号';
+comment on column daq_s_material_cctv_system.remarks is '备注';
+comment on column daq_s_material_cctv_system.create_user_id is '创建人id';
+comment on column daq_s_material_cctv_system.create_user_name is '创建人名称';
+comment on column daq_s_material_cctv_system.create_datetime is '创建时间';
+comment on column daq_s_material_cctv_system.modify_user_id is '修改人id';
+comment on column daq_s_material_cctv_system.modify_user_name is '修改人名称';
+comment on column daq_s_material_cctv_system.modify_datetime is '修改时间';
+comment on column daq_s_material_cctv_system.active is '有效标志';
+create index INDEX_DAQ_S_MATERIAL_CCTV_SYSTEM_OID_4 ON daq_s_material_cctv_system ( oid );
+create index INDEX_DAQ_S_MATERIAL_CCTV_SYSTEM_MATERIAL_CODE_11 ON daq_s_material_cctv_system ( material_code );
+/**
+ * 站场基本信息-通信end
+ */
+
+
+/**
+ * 站场设备安装-工艺start
+ */
+create table daq_station_gas_lever (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	construct_datetime timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_gas_lever is '自用气撬表';
+comment on column daq_station_gas_lever.oid is '主键';
+comment on column daq_station_gas_lever.project_oid is '项目oid';
+comment on column daq_station_gas_lever.tenders_oid is '标段oid';
+comment on column daq_station_gas_lever.pipeline_oid is '管线oid';
+comment on column daq_station_gas_lever.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_gas_lever.device_code is '设备编号';
+comment on column daq_station_gas_lever.device_name is '设备名称';
+comment on column daq_station_gas_lever.manufacture_number is '出厂编号';
+comment on column daq_station_gas_lever.construct_datetime is '施工日期';
+comment on column daq_station_gas_lever.construct_unit is '施工单位';
+comment on column daq_station_gas_lever.supervision_unit is '监理单位';
+comment on column daq_station_gas_lever.supervision_engineer is '监理工程师';
+comment on column daq_station_gas_lever.collection_person is '采集人员';
+comment on column daq_station_gas_lever.collection_date is '采集日期';
+comment on column daq_station_gas_lever.approve_status is '审核状态';
+comment on column daq_station_gas_lever.remarks is '备注';
+comment on column daq_station_gas_lever.create_user_id is '创建人id';
+comment on column daq_station_gas_lever.create_user_name is '创建人名称';
+comment on column daq_station_gas_lever.create_datetime is '创建时间';
+comment on column daq_station_gas_lever.modify_user_id is '修改人id';
+comment on column daq_station_gas_lever.modify_user_name is '修改人名称';
+comment on column daq_station_gas_lever.modify_datetime is '修改时间';
+comment on column daq_station_gas_lever.active is '有效标志';
+create index index_daq_station_gas_lever_oid_4 on daq_station_gas_lever ( oid );
+create index index_daq_station_gas_lever_device_code_9 on daq_station_gas_lever ( device_code );
+create index index_daq_station_gas_lever_device_name_10 on daq_station_gas_lever ( device_name );
+
+create table daq_station_process_pipeline (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	start_location varchar (45),
+	end_location varchar (45),
+	above_ground_length numeric (6, 2),
+	underground_length numeric (6, 2),
+	pipe_segment_materialid varchar (35),
+	above_ground_anticorrosive varchar (60),
+	underground_anticorrosive varchar (60),
+	anticorrosive_coating varchar (35),
+	anticorrosive_structure varchar (35),
+	insulating_tube smallint,
+	insulating_type varchar (36),
+	insulating_insulating varchar (100),
+	check_datetime timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_process_pipeline is '工艺管线';
+comment on column daq_station_process_pipeline.oid is '主键';
+comment on column daq_station_process_pipeline.project_oid is '项目oid';
+comment on column daq_station_process_pipeline.tenders_oid is '标段oid';
+comment on column daq_station_process_pipeline.pipeline_oid is '管线oid';
+comment on column daq_station_process_pipeline.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_process_pipeline.device_code is '设备编号';
+comment on column daq_station_process_pipeline.device_name is '设备名称';
+comment on column daq_station_process_pipeline.start_location is '起始位置';
+comment on column daq_station_process_pipeline.end_location is '终点位置';
+comment on column daq_station_process_pipeline.above_ground_length is '埋地长度（m）';
+comment on column daq_station_process_pipeline.underground_length is '地上长度（m）';
+comment on column daq_station_process_pipeline.pipe_segment_materialid is '管段材质,域值：pipe_segment_materialid_domain';
+comment on column daq_station_process_pipeline.above_ground_anticorrosive is '埋地管道防腐描述';
+comment on column daq_station_process_pipeline.underground_anticorrosive is '地上管道防腐描述';
+comment on column daq_station_process_pipeline.anticorrosive_coating is '防腐涂层';
+comment on column daq_station_process_pipeline.anticorrosive_structure is '防腐结构';
+comment on column daq_station_process_pipeline.insulating_tube is '保温管/裸管{1:保温管,2:裸管}';
+comment on column daq_station_process_pipeline.insulating_type is '保温形式,域值：insulating_type_domain';
+comment on column daq_station_process_pipeline.insulating_insulating is '管道保温描述';
+comment on column daq_station_process_pipeline.check_datetime is '检测时间';
+comment on column daq_station_process_pipeline.construct_unit is '施工单位';
+comment on column daq_station_process_pipeline.supervision_unit is '监理单位';
+comment on column daq_station_process_pipeline.supervision_engineer is '监理工程师';
+comment on column daq_station_process_pipeline.collection_person is '采集人员';
+comment on column daq_station_process_pipeline.collection_date is '采集日期';
+comment on column daq_station_process_pipeline.approve_status is '审核状态';
+comment on column daq_station_process_pipeline.remarks is '备注';
+comment on column daq_station_process_pipeline.create_user_id is '创建人id';
+comment on column daq_station_process_pipeline.create_user_name is '创建人名称';
+comment on column daq_station_process_pipeline.create_datetime is '创建时间';
+comment on column daq_station_process_pipeline.modify_user_id is '修改人id';
+comment on column daq_station_process_pipeline.modify_user_name is '修改人名称';
+comment on column daq_station_process_pipeline.modify_datetime is '修改时间';
+comment on column daq_station_process_pipeline.active is '有效标志';
+
+create index index_daq_station_process_pipeline_oid_4 on daq_station_process_pipeline ( oid );
+create index index_daq_station_process_pipeline_device_code_9 on daq_station_process_pipeline ( device_code );
+create index index_daq_station_process_pipeline_device_name_10 on daq_station_process_pipeline ( device_name );
+
+create table daq_station_process_weld (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	line_position_num varchar (50),
+	weld_code varchar (50),
+	weld_type varchar (50),
+	weld_method varchar (50),
+	front_pipe_type varchar (30),
+	front_pipe_code varchar (30),
+	back_pipe_type varchar (30),
+	back_pipe_code varchar (30),
+	weld_rod_batch_num varchar (60),
+	weld_wire_batch_num varchar (60),
+	weld_produce varchar (36),
+	work_unit_oid varchar (36),
+	weld_worker_oid varchar (50),
+	construct_datetime timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_process_weld is '工艺管道焊口';
+comment on column daq_station_process_weld.oid is '主键';
+comment on column daq_station_process_weld.project_oid is '项目oid';
+comment on column daq_station_process_weld.tenders_oid is '标段oid';
+comment on column daq_station_process_weld.pipeline_oid is '管线oid';
+comment on column daq_station_process_weld.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_process_weld.line_position_num is '线位号';
+comment on column daq_station_process_weld.weld_code is '焊口编号';
+comment on column daq_station_process_weld.weld_type is '焊口类型，域值：weld_type_domain';
+comment on column daq_station_process_weld.weld_method is '焊接类型，域值：weld_method_domain';
+comment on column daq_station_process_weld.front_pipe_type is '前端连接类型,域值：process_pipe_type_domain';
+comment on column daq_station_process_weld.front_pipe_code is '前钢管/管件/设备编号';
+comment on column daq_station_process_weld.back_pipe_type is '后端连接类型,域值：process_pipe_type_domain';
+comment on column daq_station_process_weld.back_pipe_code is '后钢管/管件/设备编号';
+comment on column daq_station_process_weld.weld_rod_batch_num is '焊条批号';
+comment on column daq_station_process_weld.weld_wire_batch_num is '焊丝批号';
+comment on column daq_station_process_weld.weld_produce is '焊接工艺规程';
+comment on column daq_station_process_weld.work_unit_oid is '施工机组代号';
+comment on column daq_station_process_weld.weld_worker_oid is '焊工编号';
+comment on column daq_station_process_weld.construct_datetime is '施工日期';
+comment on column daq_station_process_weld.construct_unit is '施工单位';
+comment on column daq_station_process_weld.supervision_unit is '监理单位';
+comment on column daq_station_process_weld.supervision_engineer is '监理工程师';
+comment on column daq_station_process_weld.collection_person is '采集人员';
+comment on column daq_station_process_weld.collection_date is '采集日期';
+comment on column daq_station_process_weld.approve_status is '审核状态';
+comment on column daq_station_process_weld.remarks is '备注';
+comment on column daq_station_process_weld.create_user_id is '创建人id';
+comment on column daq_station_process_weld.create_user_name is '创建人名称';
+comment on column daq_station_process_weld.create_datetime is '创建时间';
+comment on column daq_station_process_weld.modify_user_id is '修改人id';
+comment on column daq_station_process_weld.modify_user_name is '修改人名称';
+comment on column daq_station_process_weld.modify_datetime is '修改时间';
+comment on column daq_station_process_weld.active is '有效标志';
+create index index_daq_station_process_weld_oid_4 on daq_station_process_weld ( oid );
+create index index_daq_station_process_weld_line_position_num_9 on daq_station_process_weld ( line_position_num );
+create index index_daq_station_process_weld_weld_code_10 on daq_station_process_weld ( weld_code );
+
+
+create table daq_station_process_weld_rework (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	weld_oid varchar (36),
+	rework_weld_code varchar (53),
+	rework_reason varchar (100),
+	weld_rod_batch_num varchar (60),
+	weld_wire_batch_num varchar (60),
+	weld_produce varchar (36),
+	work_unit_oid varchar (36),
+	weld_worker_oid varchar (50),
+	rework_datetime timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_process_weld_rework is '工艺焊口返修';
+comment on column daq_station_process_weld_rework.oid is '主键';
+comment on column daq_station_process_weld_rework.project_oid is '项目oid';
+comment on column daq_station_process_weld_rework.tenders_oid is '标段oid';
+comment on column daq_station_process_weld_rework.pipeline_oid is '管线oid';
+comment on column daq_station_process_weld_rework.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_process_weld_rework.weld_oid is '返修口编号';
+comment on column daq_station_process_weld_rework.rework_weld_code is '新焊口编号';
+comment on column daq_station_process_weld_rework.rework_reason is '返修事由';
+comment on column daq_station_process_weld_rework.weld_rod_batch_num is '焊条批号';
+comment on column daq_station_process_weld_rework.weld_wire_batch_num is '焊丝批号';
+comment on column daq_station_process_weld_rework.weld_produce is '焊接工艺规程';
+comment on column daq_station_process_weld_rework.work_unit_oid is '施工机组代号';
+comment on column daq_station_process_weld_rework.weld_worker_oid is '焊工编号';
+comment on column daq_station_process_weld_rework.rework_datetime is '返修日期';
+comment on column daq_station_process_weld_rework.construct_unit is '施工单位';
+comment on column daq_station_process_weld_rework.supervision_unit is '监理单位';
+comment on column daq_station_process_weld_rework.supervision_engineer is '监理工程师';
+comment on column daq_station_process_weld_rework.collection_person is '采集人员';
+comment on column daq_station_process_weld_rework.collection_date is '采集日期';
+comment on column daq_station_process_weld_rework.approve_status is '审核状态';
+comment on column daq_station_process_weld_rework.remarks is '备注';
+comment on column daq_station_process_weld_rework.create_user_id is '创建人id';
+comment on column daq_station_process_weld_rework.create_user_name is '创建人名称';
+comment on column daq_station_process_weld_rework.create_datetime is '创建时间';
+comment on column daq_station_process_weld_rework.modify_user_id is '修改人id';
+comment on column daq_station_process_weld_rework.modify_user_name is '修改人名称';
+comment on column daq_station_process_weld_rework.modify_datetime is '修改时间';
+comment on column daq_station_process_weld_rework.active is '有效标志';
+create index index_daq_station_process_weld_rework_oid_4 on daq_station_process_weld_rework ( oid );
+create index index_daq_station_process_weld_rework_weld_oid_9 on daq_station_process_weld_rework ( weld_oid );
+create index index_daq_station_process_weld_rework_rework_weld_code_10 on daq_station_process_weld_rework ( rework_weld_code );
+
+create table daq_station_process_weld_cut (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	weld_oid varchar (36),
+	front_weld_oid varchar (36),
+	back_weld_oid varchar (36),
+	weld_cut_date timestamp (6),
+	weld_cut_reason varchar (100),
+	work_unit_oid varchar (36),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_process_weld_cut is '工艺管道割口';
+comment on column daq_station_process_weld_cut.oid is '主键';
+comment on column daq_station_process_weld_cut.project_oid is '项目oid';
+comment on column daq_station_process_weld_cut.tenders_oid is '标段oid';
+comment on column daq_station_process_weld_cut.pipeline_oid is '管线oid';
+comment on column daq_station_process_weld_cut.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_process_weld_cut.weld_oid is '割口编号';
+comment on column daq_station_process_weld_cut.front_weld_oid is '新焊口编号1';
+comment on column daq_station_process_weld_cut.back_weld_oid is '新焊口编号2';
+comment on column daq_station_process_weld_cut.weld_cut_date is '割口日期';
+comment on column daq_station_process_weld_cut.weld_cut_reason is '割口事由';
+comment on column daq_station_process_weld_cut.work_unit_oid is '施工机组代号';
+comment on column daq_station_process_weld_cut.construct_unit is '施工单位';
+comment on column daq_station_process_weld_cut.supervision_unit is '监理单位';
+comment on column daq_station_process_weld_cut.supervision_engineer is '监理工程师';
+comment on column daq_station_process_weld_cut.collection_person is '采集人员';
+comment on column daq_station_process_weld_cut.collection_date is '采集日期';
+comment on column daq_station_process_weld_cut.approve_status is '审核状态';
+comment on column daq_station_process_weld_cut.remarks is '备注';
+comment on column daq_station_process_weld_cut.create_user_id is '创建人id';
+comment on column daq_station_process_weld_cut.create_user_name is '创建人名称';
+comment on column daq_station_process_weld_cut.create_datetime is '创建时间';
+comment on column daq_station_process_weld_cut.modify_user_id is '修改人id';
+comment on column daq_station_process_weld_cut.modify_user_name is '修改人名称';
+comment on column daq_station_process_weld_cut.modify_datetime is '修改时间';
+comment on column daq_station_process_weld_cut.active is '有效标志';
+create index index_daq_station_process_weld_cut_oid_4 on daq_station_process_weld_cut ( oid );
+create index index_daq_station_process_weld_cut_weld_oid_9 on daq_station_process_weld_cut ( weld_oid );
+create index index_daq_station_process_weld_cut_front_weld_oid_10 on daq_station_process_weld_cut ( front_weld_oid );
+
+
+create table daq_station_process_weld_anticorrosion (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	weld_oid varchar (36),
+	buckle_date timestamp (6),
+	buckle_anticorrosive_type varchar (50),
+	buckle_anticorrosive_grade varchar (50),
+	buckle_material_batch_num varchar (60),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_process_weld_anticorrosion is '工艺管道防腐补口';
+comment on column daq_station_process_weld_anticorrosion.oid is '主键';
+comment on column daq_station_process_weld_anticorrosion.project_oid is '项目oid';
+comment on column daq_station_process_weld_anticorrosion.tenders_oid is '标段oid';
+comment on column daq_station_process_weld_anticorrosion.pipeline_oid is '管线oid';
+comment on column daq_station_process_weld_anticorrosion.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_process_weld_anticorrosion.weld_oid is '焊口编号';
+comment on column daq_station_process_weld_anticorrosion.buckle_date is '补口日期';
+comment on column daq_station_process_weld_anticorrosion.buckle_anticorrosive_type is '补口防腐类型，域值：buckle_anticorrosive_type_domain';
+comment on column daq_station_process_weld_anticorrosion.buckle_anticorrosive_grade is '防腐等级,域值：anticorrosive_grade_domain';
+comment on column daq_station_process_weld_anticorrosion.buckle_material_batch_num is '补口材料批号';
+comment on column daq_station_process_weld_anticorrosion.construct_unit is '施工单位';
+comment on column daq_station_process_weld_anticorrosion.supervision_unit is '监理单位';
+comment on column daq_station_process_weld_anticorrosion.supervision_engineer is '监理工程师';
+comment on column daq_station_process_weld_anticorrosion.collection_person is '采集人员';
+comment on column daq_station_process_weld_anticorrosion.collection_date is '采集日期';
+comment on column daq_station_process_weld_anticorrosion.approve_status is '审核状态';
+comment on column daq_station_process_weld_anticorrosion.remarks is '备注';
+comment on column daq_station_process_weld_anticorrosion.create_user_id is '创建人id';
+comment on column daq_station_process_weld_anticorrosion.create_user_name is '创建人名称';
+comment on column daq_station_process_weld_anticorrosion.create_datetime is '创建时间';
+comment on column daq_station_process_weld_anticorrosion.modify_user_id is '修改人id';
+comment on column daq_station_process_weld_anticorrosion.modify_user_name is '修改人名称';
+comment on column daq_station_process_weld_anticorrosion.modify_datetime is '修改时间';
+comment on column daq_station_process_weld_anticorrosion.active is '有效标志';
+create index index_daq_station_process_weld_anticorrosion_oid_4 on daq_station_process_weld_anticorrosion ( oid );
+create index index_daq_station_process_weld_anticorrosion_weld_oid_9 on daq_station_process_weld_anticorrosion ( weld_oid );
+create index index_daq_station_process_weld_anticorrosion_buckle_date_10 on daq_station_process_weld_anticorrosion ( buckle_date );
+
+create table daq_station_elbow_pipe (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	elbow_pipe_code varchar (50),
+	front_pipe_type varchar (30),
+	front_pipe_code varchar (30),
+	back_pipe_type varchar (30),
+	back_pipe_code varchar (30),
+	construct_datetime timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_elbow_pipe is '弯头弯管';
+comment on column daq_station_elbow_pipe.oid is '主键';
+comment on column daq_station_elbow_pipe.project_oid is '项目oid';
+comment on column daq_station_elbow_pipe.tenders_oid is '标段oid';
+comment on column daq_station_elbow_pipe.pipeline_oid is '管线oid';
+comment on column daq_station_elbow_pipe.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_elbow_pipe.elbow_pipe_code is '弯管编号';
+comment on column daq_station_elbow_pipe.front_pipe_type is '前端连接类型,域值：process_pipe_type_domain';
+comment on column daq_station_elbow_pipe.front_pipe_code is '前钢管/管件/设备编号';
+comment on column daq_station_elbow_pipe.back_pipe_type is '后端连接类型,域值：process_pipe_type_domain';
+comment on column daq_station_elbow_pipe.back_pipe_code is '后钢管/管件/设备编号';
+comment on column daq_station_elbow_pipe.construct_datetime is '施工日期';
+comment on column daq_station_elbow_pipe.construct_unit is '施工单位';
+comment on column daq_station_elbow_pipe.supervision_unit is '监理单位';
+comment on column daq_station_elbow_pipe.supervision_engineer is '监理工程师';
+comment on column daq_station_elbow_pipe.collection_person is '采集人员';
+comment on column daq_station_elbow_pipe.collection_date is '采集日期';
+comment on column daq_station_elbow_pipe.approve_status is '审核状态';
+comment on column daq_station_elbow_pipe.remarks is '备注';
+comment on column daq_station_elbow_pipe.create_user_id is '创建人id';
+comment on column daq_station_elbow_pipe.create_user_name is '创建人名称';
+comment on column daq_station_elbow_pipe.create_datetime is '创建时间';
+comment on column daq_station_elbow_pipe.modify_user_id is '修改人id';
+comment on column daq_station_elbow_pipe.modify_user_name is '修改人名称';
+comment on column daq_station_elbow_pipe.modify_datetime is '修改时间';
+comment on column daq_station_elbow_pipe.active is '有效标志';
+create index index_daq_station_elbow_pipe_oid_4 on daq_station_elbow_pipe ( oid );
+create index index_daq_station_elbow_pipe_elbow_pipe_code_9 on daq_station_elbow_pipe ( elbow_pipe_code );
+create index index_daq_station_elbow_pipe_front_pipe_type_10 on daq_station_elbow_pipe ( front_pipe_type );
+
+create table daq_station_tee (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	tee_code varchar (50),
+	tee_type varchar (30),
+	tee_szie varchar (40),
+	entrance_pipe_code varchar (30),
+	entrance_connect_method varchar (30),
+	feeder_line_pipe_code varchar (30),
+	feeder_line_method varchar (30),
+	exit_pipe_code varchar (30),
+	exit_connect_method varchar (30),
+	has_grille smallint,
+	grille_type smallint,
+	grille_length numeric (4, 0),
+	construct_datetime timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_tee is '三通(站场)';
+comment on column daq_station_tee.oid is '主键';
+comment on column daq_station_tee.project_oid is '项目oid';
+comment on column daq_station_tee.tenders_oid is '标段oid';
+comment on column daq_station_tee.pipeline_oid is '管线oid';
+comment on column daq_station_tee.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_tee.tee_code is '三通编号';
+comment on column daq_station_tee.tee_type is '三通类型';
+comment on column daq_station_tee.tee_szie is '三同尺寸';
+comment on column daq_station_tee.entrance_pipe_code is '入口连接钢管/管件/设备编号';
+comment on column daq_station_tee.entrance_connect_method is '入口连接方式，域值：connect_method_domain';
+comment on column daq_station_tee.feeder_line_pipe_code is '支线连接钢管/管件/设备编号';
+comment on column daq_station_tee.feeder_line_method is '支线连接方式，域值：connect_method_domain';
+comment on column daq_station_tee.exit_pipe_code is '入口连接钢管/管件/设备编号';
+comment on column daq_station_tee.exit_connect_method is '入口连接方式，域值：connect_method_domain';
+comment on column daq_station_tee.has_grille is '是否有格栅{0:否;1:是}';
+comment on column daq_station_tee.grille_type is '格栅类型{1:花孔;2:挡条}';
+comment on column daq_station_tee.grille_length is '格栅段长度（mm）';
+comment on column daq_station_tee.construct_datetime is '施工日期';
+comment on column daq_station_tee.construct_unit is '施工单位';
+comment on column daq_station_tee.supervision_unit is '监理单位';
+comment on column daq_station_tee.supervision_engineer is '监理工程师';
+comment on column daq_station_tee.collection_person is '采集人员';
+comment on column daq_station_tee.collection_date is '采集日期';
+comment on column daq_station_tee.approve_status is '审核状态';
+comment on column daq_station_tee.remarks is '备注';
+comment on column daq_station_tee.create_user_id is '创建人id';
+comment on column daq_station_tee.create_user_name is '创建人名称';
+comment on column daq_station_tee.create_datetime is '创建时间';
+comment on column daq_station_tee.modify_user_id is '修改人id';
+comment on column daq_station_tee.modify_user_name is '修改人名称';
+comment on column daq_station_tee.modify_datetime is '修改时间';
+comment on column daq_station_tee.active is '有效标志';
+create index index_daq_station_tee_oid_4 on daq_station_tee ( oid );
+create index index_daq_station_tee_tee_code_9 on daq_station_tee ( tee_code );
+create index index_daq_station_tee_tee_type_10 on daq_station_tee ( tee_type );
+
+
+create table daq_station_reduction_coupling (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	reduction_coupling_code varchar (50),
+	bigend_connect_code varchar (30),
+	bigend_connect_method varchar (30),
+	small_connect_code varchar (30),
+	small_connect_method varchar (30),
+	construct_datetime timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_reduction_coupling is '异径接头';
+comment on column daq_station_reduction_coupling.oid is '主键';
+comment on column daq_station_reduction_coupling.project_oid is '项目oid';
+comment on column daq_station_reduction_coupling.tenders_oid is '标段oid';
+comment on column daq_station_reduction_coupling.pipeline_oid is '管线oid';
+comment on column daq_station_reduction_coupling.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_reduction_coupling.reduction_coupling_code is '异径接头编号';
+comment on column daq_station_reduction_coupling.bigend_connect_code is '大端连接钢管/管件/设备编号';
+comment on column daq_station_reduction_coupling.bigend_connect_method is '大端连接方式,域值：connect_method_domain';
+comment on column daq_station_reduction_coupling.small_connect_code is '小端连接钢管/管件/设备编号';
+comment on column daq_station_reduction_coupling.small_connect_method is '小端连接方式,域值：connect_method_domain';
+comment on column daq_station_reduction_coupling.construct_datetime is '施工日期';
+comment on column daq_station_reduction_coupling.construct_unit is '施工单位';
+comment on column daq_station_reduction_coupling.supervision_unit is '监理单位';
+comment on column daq_station_reduction_coupling.supervision_engineer is '监理工程师';
+comment on column daq_station_reduction_coupling.collection_person is '采集人员';
+comment on column daq_station_reduction_coupling.collection_date is '采集日期';
+comment on column daq_station_reduction_coupling.approve_status is '审核状态';
+comment on column daq_station_reduction_coupling.remarks is '备注';
+comment on column daq_station_reduction_coupling.create_user_id is '创建人id';
+comment on column daq_station_reduction_coupling.create_user_name is '创建人名称';
+comment on column daq_station_reduction_coupling.create_datetime is '创建时间';
+comment on column daq_station_reduction_coupling.modify_user_id is '修改人id';
+comment on column daq_station_reduction_coupling.modify_user_name is '修改人名称';
+comment on column daq_station_reduction_coupling.modify_datetime is '修改时间';
+comment on column daq_station_reduction_coupling.active is '有效标志';
+create index index_daq_station_reduction_coupling_oid_4 on daq_station_reduction_coupling ( oid );
+create index index_daq_station_reduction_coupling_reduction_coupling_code_9 on daq_station_reduction_coupling ( reduction_coupling_code );
+create index index_daq_station_reduction_coupling_bigend_connect_code_10 on daq_station_reduction_coupling ( bigend_connect_code );
+
+create table daq_station_pipe_cap (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	pipe_cap_code varchar (50),
+	connect_pipe_code varchar (30),
+	connect_method varchar (30),
+	construct_datetime timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_pipe_cap is '管帽';
+comment on column daq_station_pipe_cap.oid is '主键';
+comment on column daq_station_pipe_cap.project_oid is '项目oid';
+comment on column daq_station_pipe_cap.tenders_oid is '标段oid';
+comment on column daq_station_pipe_cap.pipeline_oid is '管线oid';
+comment on column daq_station_pipe_cap.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_pipe_cap.pipe_cap_code is '管帽编号';
+comment on column daq_station_pipe_cap.connect_pipe_code is '连接钢管/管件/设备编号';
+comment on column daq_station_pipe_cap.connect_method is '连接方式,域值：connect_method_domain';
+comment on column daq_station_pipe_cap.construct_datetime is '施工日期';
+comment on column daq_station_pipe_cap.construct_unit is '施工单位';
+comment on column daq_station_pipe_cap.supervision_unit is '监理单位';
+comment on column daq_station_pipe_cap.supervision_engineer is '监理工程师';
+comment on column daq_station_pipe_cap.collection_person is '采集人员';
+comment on column daq_station_pipe_cap.collection_date is '采集日期';
+comment on column daq_station_pipe_cap.approve_status is '审核状态';
+comment on column daq_station_pipe_cap.remarks is '备注';
+comment on column daq_station_pipe_cap.create_user_id is '创建人id';
+comment on column daq_station_pipe_cap.create_user_name is '创建人名称';
+comment on column daq_station_pipe_cap.create_datetime is '创建时间';
+comment on column daq_station_pipe_cap.modify_user_id is '修改人id';
+comment on column daq_station_pipe_cap.modify_user_name is '修改人名称';
+comment on column daq_station_pipe_cap.modify_datetime is '修改时间';
+comment on column daq_station_pipe_cap.active is '有效标志';
+create index index_daq_station_pipe_cap_oid_4 on daq_station_pipe_cap ( oid );
+create index index_daq_station_pipe_cap_pipe_cap_code_9 on daq_station_pipe_cap ( pipe_cap_code );
+create index index_daq_station_pipe_cap_connect_pipe_code_10 on daq_station_pipe_cap ( connect_pipe_code );
+
+create table daq_station_flange (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	flange_code varchar (50),
+	front_connect_code varchar (30),
+	front_connect_method varchar (30),
+	back_connect_code varchar (30),
+	back_connect_method varchar (30),
+	construct_datetime timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_flange is '法兰(站场)';
+comment on column daq_station_flange.oid is '主键';
+comment on column daq_station_flange.project_oid is '项目oid';
+comment on column daq_station_flange.tenders_oid is '标段oid';
+comment on column daq_station_flange.pipeline_oid is '管线oid';
+comment on column daq_station_flange.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_flange.flange_code is '法兰编号';
+comment on column daq_station_flange.front_connect_code is '前钢管/管件/设备编号';
+comment on column daq_station_flange.front_connect_method is '前端连接类型,域值：process_pipe_type_domain';
+comment on column daq_station_flange.back_connect_code is '后钢管/管件/设备编号';
+comment on column daq_station_flange.back_connect_method is '后端连接类型,域值：process_pipe_type_domain';
+comment on column daq_station_flange.construct_datetime is '施工日期';
+comment on column daq_station_flange.construct_unit is '施工单位';
+comment on column daq_station_flange.supervision_unit is '监理单位';
+comment on column daq_station_flange.supervision_engineer is '监理工程师';
+comment on column daq_station_flange.collection_person is '采集人员';
+comment on column daq_station_flange.collection_date is '采集日期';
+comment on column daq_station_flange.approve_status is '审核状态';
+comment on column daq_station_flange.remarks is '备注';
+comment on column daq_station_flange.create_user_id is '创建人id';
+comment on column daq_station_flange.create_user_name is '创建人名称';
+comment on column daq_station_flange.create_datetime is '创建时间';
+comment on column daq_station_flange.modify_user_id is '修改人id';
+comment on column daq_station_flange.modify_user_name is '修改人名称';
+comment on column daq_station_flange.modify_datetime is '修改时间';
+comment on column daq_station_flange.active is '有效标志';
+create index index_daq_station_flange_oid_4 on daq_station_flange ( oid );
+create index index_daq_station_flange_flange_code_9 on daq_station_flange ( flange_code );
+create index index_daq_station_flange_front_connect_code_10 on daq_station_flange ( front_connect_code );
+
+create table daq_station_pigging_tee (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	pigging_tee_code varchar (50),
+	pigging_tee_name varchar (50),
+	manufacture_number varchar (70),
+	construct_datetime timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_pigging_tee is '清管三通';
+comment on column daq_station_pigging_tee.oid is '主键';
+comment on column daq_station_pigging_tee.project_oid is '项目oid';
+comment on column daq_station_pigging_tee.tenders_oid is '标段oid';
+comment on column daq_station_pigging_tee.pipeline_oid is '管线oid';
+comment on column daq_station_pigging_tee.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_pigging_tee.pigging_tee_code is '特殊件编号';
+comment on column daq_station_pigging_tee.pigging_tee_name is '名称';
+comment on column daq_station_pigging_tee.manufacture_number is '出厂编号';
+comment on column daq_station_pigging_tee.construct_datetime is '施工日期';
+comment on column daq_station_pigging_tee.construct_unit is '施工单位';
+comment on column daq_station_pigging_tee.supervision_unit is '监理单位';
+comment on column daq_station_pigging_tee.supervision_engineer is '监理工程师';
+comment on column daq_station_pigging_tee.collection_person is '采集人员';
+comment on column daq_station_pigging_tee.collection_date is '采集日期';
+comment on column daq_station_pigging_tee.approve_status is '审核状态';
+comment on column daq_station_pigging_tee.remarks is '备注';
+comment on column daq_station_pigging_tee.create_user_id is '创建人id';
+comment on column daq_station_pigging_tee.create_user_name is '创建人名称';
+comment on column daq_station_pigging_tee.create_datetime is '创建时间';
+comment on column daq_station_pigging_tee.modify_user_id is '修改人id';
+comment on column daq_station_pigging_tee.modify_user_name is '修改人名称';
+comment on column daq_station_pigging_tee.modify_datetime is '修改时间';
+comment on column daq_station_pigging_tee.active is '有效标志';
+create index index_daq_station_pigging_tee_oid_4 on daq_station_pigging_tee ( oid );
+create index index_daq_station_pigging_tee_pigging_tee_code_9 on daq_station_pigging_tee ( pigging_tee_code );
+create index index_daq_station_pigging_tee_pigging_tee_name_10 on daq_station_pigging_tee ( pigging_tee_name );
+
+create table daq_station_flame_arrester (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	flame_arrester_code varchar (50),
+	flame_arrester_name varchar (50),
+	manufacture_number varchar (70),
+	construct_datetime timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_flame_arrester is '阻火器';
+comment on column daq_station_flame_arrester.oid is '主键';
+comment on column daq_station_flame_arrester.project_oid is '项目oid';
+comment on column daq_station_flame_arrester.tenders_oid is '标段oid';
+comment on column daq_station_flame_arrester.pipeline_oid is '管线oid';
+comment on column daq_station_flame_arrester.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_flame_arrester.flame_arrester_code is '特殊件编号';
+comment on column daq_station_flame_arrester.flame_arrester_name is '名称';
+comment on column daq_station_flame_arrester.manufacture_number is '出厂编号';
+comment on column daq_station_flame_arrester.construct_datetime is '施工日期';
+comment on column daq_station_flame_arrester.construct_unit is '施工单位';
+comment on column daq_station_flame_arrester.supervision_unit is '监理单位';
+comment on column daq_station_flame_arrester.supervision_engineer is '监理工程师';
+comment on column daq_station_flame_arrester.collection_person is '采集人员';
+comment on column daq_station_flame_arrester.collection_date is '采集日期';
+comment on column daq_station_flame_arrester.approve_status is '审核状态';
+comment on column daq_station_flame_arrester.remarks is '备注';
+comment on column daq_station_flame_arrester.create_user_id is '创建人id';
+comment on column daq_station_flame_arrester.create_user_name is '创建人名称';
+comment on column daq_station_flame_arrester.create_datetime is '创建时间';
+comment on column daq_station_flame_arrester.modify_user_id is '修改人id';
+comment on column daq_station_flame_arrester.modify_user_name is '修改人名称';
+comment on column daq_station_flame_arrester.modify_datetime is '修改时间';
+comment on column daq_station_flame_arrester.active is '有效标志';
+create index index_daq_station_flame_arrester_oid_4 on daq_station_flame_arrester ( oid );
+create index index_daq_station_flame_arrester_flame_arrester_code_9 on daq_station_flame_arrester ( flame_arrester_code );
+create index index_daq_station_flame_arrester_flame_arrester_name_10 on daq_station_flame_arrester ( flame_arrester_name );
+
+create table daq_station_safety_valve (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	safety_valve_code varchar (50),
+	safety_valve_name varchar (50),
+	manufacture_number varchar (70),
+	construct_datetime timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_safety_valve is '安全阀psv';
+comment on column daq_station_safety_valve.oid is '主键';
+comment on column daq_station_safety_valve.project_oid is '项目oid';
+comment on column daq_station_safety_valve.tenders_oid is '标段oid';
+comment on column daq_station_safety_valve.pipeline_oid is '管线oid';
+comment on column daq_station_safety_valve.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_safety_valve.safety_valve_code is '编号';
+comment on column daq_station_safety_valve.safety_valve_name is '名称';
+comment on column daq_station_safety_valve.manufacture_number is '出厂编号';
+comment on column daq_station_safety_valve.construct_datetime is '施工日期';
+comment on column daq_station_safety_valve.construct_unit is '施工单位';
+comment on column daq_station_safety_valve.supervision_unit is '监理单位';
+comment on column daq_station_safety_valve.supervision_engineer is '监理工程师';
+comment on column daq_station_safety_valve.collection_person is '采集人员';
+comment on column daq_station_safety_valve.collection_date is '采集日期';
+comment on column daq_station_safety_valve.approve_status is '审核状态';
+comment on column daq_station_safety_valve.remarks is '备注';
+comment on column daq_station_safety_valve.create_user_id is '创建人id';
+comment on column daq_station_safety_valve.create_user_name is '创建人名称';
+comment on column daq_station_safety_valve.create_datetime is '创建时间';
+comment on column daq_station_safety_valve.modify_user_id is '修改人id';
+comment on column daq_station_safety_valve.modify_user_name is '修改人名称';
+comment on column daq_station_safety_valve.modify_datetime is '修改时间';
+comment on column daq_station_safety_valve.active is '有效标志';
+create index index_daq_station_safety_valve_oid_4 on daq_station_safety_valve ( oid );
+create index index_daq_station_safety_valve_safety_valve_code_9 on daq_station_safety_valve ( safety_valve_code );
+create index index_daq_station_safety_valve_safety_valve_name_10 on daq_station_safety_valve ( safety_valve_name );
+
+create table daq_station_pipeline_filter (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	pipeline_filter_code varchar (50),
+	pipeline_filter_name varchar (50),
+	manufacture_number varchar (70),
+	construct_datetime timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_pipeline_filter is '管道过滤器';
+comment on column daq_station_pipeline_filter.oid is '主键';
+comment on column daq_station_pipeline_filter.project_oid is '项目oid';
+comment on column daq_station_pipeline_filter.tenders_oid is '标段oid';
+comment on column daq_station_pipeline_filter.pipeline_oid is '管线oid';
+comment on column daq_station_pipeline_filter.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_pipeline_filter.pipeline_filter_code is '特殊件编号';
+comment on column daq_station_pipeline_filter.pipeline_filter_name is '名称';
+comment on column daq_station_pipeline_filter.manufacture_number is '出厂编号';
+comment on column daq_station_pipeline_filter.construct_datetime is '施工日期';
+comment on column daq_station_pipeline_filter.construct_unit is '施工单位';
+comment on column daq_station_pipeline_filter.supervision_unit is '监理单位';
+comment on column daq_station_pipeline_filter.supervision_engineer is '监理工程师';
+comment on column daq_station_pipeline_filter.collection_person is '采集人员';
+comment on column daq_station_pipeline_filter.collection_date is '采集日期';
+comment on column daq_station_pipeline_filter.approve_status is '审核状态';
+comment on column daq_station_pipeline_filter.remarks is '备注';
+comment on column daq_station_pipeline_filter.create_user_id is '创建人id';
+comment on column daq_station_pipeline_filter.create_user_name is '创建人名称';
+comment on column daq_station_pipeline_filter.create_datetime is '创建时间';
+comment on column daq_station_pipeline_filter.modify_user_id is '修改人id';
+comment on column daq_station_pipeline_filter.modify_user_name is '修改人名称';
+comment on column daq_station_pipeline_filter.modify_datetime is '修改时间';
+comment on column daq_station_pipeline_filter.active is '有效标志';
+create index index_daq_station_pipeline_filter_oid_4 on daq_station_pipeline_filter ( oid );
+create index index_daq_station_pipeline_filter_pipeline_filter_code_9 on daq_station_pipeline_filter ( pipeline_filter_code );
+create index index_daq_station_pipeline_filter_pipeline_filter_name_10 on daq_station_pipeline_filter ( pipeline_filter_name );
+
+create table daq_station_limiter_pore_plate (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	limiter_pore_plate_code varchar (50),
+	limiter_pore_plate_name varchar (50),
+	manufacture_number varchar (70),
+	construct_datetime timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_limiter_pore_plate is '限流孔板';
+comment on column daq_station_limiter_pore_plate.oid is '主键';
+comment on column daq_station_limiter_pore_plate.project_oid is '项目oid';
+comment on column daq_station_limiter_pore_plate.tenders_oid is '标段oid';
+comment on column daq_station_limiter_pore_plate.pipeline_oid is '管线oid';
+comment on column daq_station_limiter_pore_plate.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_limiter_pore_plate.limiter_pore_plate_code is '编号';
+comment on column daq_station_limiter_pore_plate.limiter_pore_plate_name is '名称';
+comment on column daq_station_limiter_pore_plate.manufacture_number is '出厂编号';
+comment on column daq_station_limiter_pore_plate.construct_datetime is '施工日期';
+comment on column daq_station_limiter_pore_plate.construct_unit is '施工单位';
+comment on column daq_station_limiter_pore_plate.supervision_unit is '监理单位';
+comment on column daq_station_limiter_pore_plate.supervision_engineer is '监理工程师';
+comment on column daq_station_limiter_pore_plate.collection_person is '采集人员';
+comment on column daq_station_limiter_pore_plate.collection_date is '采集日期';
+comment on column daq_station_limiter_pore_plate.approve_status is '审核状态';
+comment on column daq_station_limiter_pore_plate.remarks is '备注';
+comment on column daq_station_limiter_pore_plate.create_user_id is '创建人id';
+comment on column daq_station_limiter_pore_plate.create_user_name is '创建人名称';
+comment on column daq_station_limiter_pore_plate.create_datetime is '创建时间';
+comment on column daq_station_limiter_pore_plate.modify_user_id is '修改人id';
+comment on column daq_station_limiter_pore_plate.modify_user_name is '修改人名称';
+comment on column daq_station_limiter_pore_plate.modify_datetime is '修改时间';
+comment on column daq_station_limiter_pore_plate.active is '有效标志';
+create index index_daq_station_limiter_pore_plate_oid_4 on daq_station_limiter_pore_plate ( oid );
+create index index_daq_station_limiter_pore_plate_limiter_pore_plate_code_9 on daq_station_limiter_pore_plate ( limiter_pore_plate_code );
+create index index_daq_station_limiter_pore_plate_limiter_pore_plate_name_10 on daq_station_limiter_pore_plate ( limiter_pore_plate_name );
+
+create table daq_station_insulators (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	insulators_code varchar (50),
+	insulators_name varchar (50),
+	manufacture_number varchar (70),
+	front_connect_code varchar (30),
+	front_connect_method varchar (30),
+	back_connect_code varchar (30),
+	back_connect_method varchar (30),
+	construct_datetime timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_insulators is '绝缘件(站场)';
+comment on column daq_station_insulators.oid is '主键';
+comment on column daq_station_insulators.project_oid is '项目oid';
+comment on column daq_station_insulators.tenders_oid is '标段oid';
+comment on column daq_station_insulators.pipeline_oid is '管线oid';
+comment on column daq_station_insulators.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_insulators.insulators_code is '编号';
+comment on column daq_station_insulators.insulators_name is '名称';
+comment on column daq_station_insulators.manufacture_number is '出厂编号';
+comment on column daq_station_insulators.front_connect_code is '前钢管/管件/设备编号';
+comment on column daq_station_insulators.front_connect_method is '前端连接方式,域值：connect_method_domain';
+comment on column daq_station_insulators.back_connect_code is '后钢管/管件/设备编号';
+comment on column daq_station_insulators.back_connect_method is '后端连接方式,域值：connect_method_domain';
+comment on column daq_station_insulators.construct_datetime is '施工日期';
+comment on column daq_station_insulators.construct_unit is '施工单位';
+comment on column daq_station_insulators.supervision_unit is '监理单位';
+comment on column daq_station_insulators.supervision_engineer is '监理工程师';
+comment on column daq_station_insulators.collection_person is '采集人员';
+comment on column daq_station_insulators.collection_date is '采集日期';
+comment on column daq_station_insulators.approve_status is '审核状态';
+comment on column daq_station_insulators.remarks is '备注';
+comment on column daq_station_insulators.create_user_id is '创建人id';
+comment on column daq_station_insulators.create_user_name is '创建人名称';
+comment on column daq_station_insulators.create_datetime is '创建时间';
+comment on column daq_station_insulators.modify_user_id is '修改人id';
+comment on column daq_station_insulators.modify_user_name is '修改人名称';
+comment on column daq_station_insulators.modify_datetime is '修改时间';
+comment on column daq_station_insulators.active is '有效标志';
+create index index_daq_station_insulators_oid_4 on daq_station_insulators ( oid );
+create index index_daq_station_insulators_insulators_code_9 on daq_station_insulators ( insulators_code );
+create index index_daq_station_insulators_insulators_name_10 on daq_station_insulators ( insulators_name );
+
+create table daq_station_open_hole (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	open_hole_code varchar (50),
+	weld_oid varchar (50),
+	min_distance numeric (7, 2),
+	main_pipe_external_diameter numeric (7, 2),
+	main_pipe_external_wall_thickness numeric (7, 2),
+	open_hole_tools varchar (60),
+	open_hole_size numeric (7, 2),
+	press_grade varchar (20),
+	open_hole_reason smallint,
+	has_pipe_cap smallint,
+	is_boss smallint,
+	boss_material varchar (30),
+	weld_produce varchar (36),
+	construct_datetime timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_open_hole is '开孔';
+comment on column daq_station_open_hole.oid is '主键';
+comment on column daq_station_open_hole.project_oid is '项目oid';
+comment on column daq_station_open_hole.tenders_oid is '标段oid';
+comment on column daq_station_open_hole.pipeline_oid is '管线oid';
+comment on column daq_station_open_hole.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_open_hole.open_hole_code is '开孔编号';
+comment on column daq_station_open_hole.weld_oid is '焊口编号';
+comment on column daq_station_open_hole.min_distance is '距焊缝最小距离(m)';
+comment on column daq_station_open_hole.main_pipe_external_diameter is '主管道外径(mm)';
+comment on column daq_station_open_hole.main_pipe_external_wall_thickness is '主管道壁厚(mm)';
+comment on column daq_station_open_hole.open_hole_tools is '开孔工具';
+comment on column daq_station_open_hole.open_hole_size is '开孔尺寸(mm)';
+comment on column daq_station_open_hole.press_grade is '耐压等级(mpa)';
+comment on column daq_station_open_hole.open_hole_reason is '开孔原因{1:压力表安装;2:温度表安装;3:其他}';
+comment on column daq_station_open_hole.has_pipe_cap is '是否有管帽{0:无;1:有}';
+comment on column daq_station_open_hole.is_boss is '是否有凸台{0:无;1:有}';
+comment on column daq_station_open_hole.boss_material is '凸台材质';
+comment on column daq_station_open_hole.weld_produce is '焊接工艺规程';
+comment on column daq_station_open_hole.construct_datetime is '施工日期';
+comment on column daq_station_open_hole.construct_unit is '施工单位';
+comment on column daq_station_open_hole.supervision_unit is '监理单位';
+comment on column daq_station_open_hole.supervision_engineer is '监理工程师';
+comment on column daq_station_open_hole.collection_person is '采集人员';
+comment on column daq_station_open_hole.collection_date is '采集日期';
+comment on column daq_station_open_hole.approve_status is '审核状态';
+comment on column daq_station_open_hole.remarks is '备注';
+comment on column daq_station_open_hole.create_user_id is '创建人id';
+comment on column daq_station_open_hole.create_user_name is '创建人名称';
+comment on column daq_station_open_hole.create_datetime is '创建时间';
+comment on column daq_station_open_hole.modify_user_id is '修改人id';
+comment on column daq_station_open_hole.modify_user_name is '修改人名称';
+comment on column daq_station_open_hole.modify_datetime is '修改时间';
+comment on column daq_station_open_hole.active is '有效标志';
+create index index_daq_station_open_hole_oid_4 on daq_station_open_hole ( oid );
+create index index_daq_station_open_hole_open_hole_code_9 on daq_station_open_hole ( open_hole_code );
+create index index_daq_station_open_hole_weld_oid_10 on daq_station_open_hole ( weld_oid );
+/**
+ * 站场设备安装-工艺end
+ */
+
+
+/**
+ * 站场设备安装-动设备start
+ */
+drop table if exists daq_station_air_coolers;
+create table daq_station_air_coolers (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	air_coolers_type varchar (36),
+	running_record_time timestamp (8),
+	ambient_temperature numeric (5, 2),
+	inlet_pressure numeric (9, 3),
+	inlet_temperature numeric (5, 2),
+	outlet_pressure numeric (9, 3),
+	outlet_temperature numeric (5, 2),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_air_coolers is '空气冷却器';
+comment on column daq_station_air_coolers.oid is '主键';
+comment on column daq_station_air_coolers.project_oid is '项目oid';
+comment on column daq_station_air_coolers.tenders_oid is '标段oid';
+comment on column daq_station_air_coolers.pipeline_oid is '管线oid';
+comment on column daq_station_air_coolers.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_air_coolers.device_code is '设备编号';
+comment on column daq_station_air_coolers.device_name is '名称';
+comment on column daq_station_air_coolers.manufacture_number is '出厂编号';
+comment on column daq_station_air_coolers.air_coolers_type is '空冷器类型';
+comment on column daq_station_air_coolers.running_record_time is '运行记录时间';
+comment on column daq_station_air_coolers.ambient_temperature is '环境温度';
+comment on column daq_station_air_coolers.inlet_pressure is '入口压力';
+comment on column daq_station_air_coolers.inlet_temperature is '入口温度';
+comment on column daq_station_air_coolers.outlet_pressure is '出口压力';
+comment on column daq_station_air_coolers.outlet_temperature is '出口温度';
+comment on column daq_station_air_coolers.construct_unit is '施工单位';
+comment on column daq_station_air_coolers.supervision_unit is '监理单位';
+comment on column daq_station_air_coolers.supervision_engineer is '监理工程师';
+comment on column daq_station_air_coolers.collection_person is '采集人员';
+comment on column daq_station_air_coolers.collection_date is '采集日期';
+comment on column daq_station_air_coolers.remarks is '备注';
+comment on column daq_station_air_coolers.create_user_id is '创建人id';
+comment on column daq_station_air_coolers.create_user_name is '创建人名称';
+comment on column daq_station_air_coolers.create_datetime is '创建时间';
+comment on column daq_station_air_coolers.modify_user_id is '修改人id';
+comment on column daq_station_air_coolers.modify_user_name is '修改人名称';
+comment on column daq_station_air_coolers.modify_datetime is '修改时间';
+comment on column daq_station_air_coolers.active is '有效标志';
+create index index_daq_station_air_coolers_oid_4 on daq_station_air_coolers ( oid );
+create index index_daq_station_air_coolers_device_code_9 on daq_station_air_coolers ( device_code );
+create index index_daq_station_air_coolers_device_name_10 on daq_station_air_coolers ( device_name );
+
+create table daq_station_compressor_gas_engine (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_compressor_gas_engine is '压缩机燃气机';
+comment on column daq_station_compressor_gas_engine.oid is '主键';
+comment on column daq_station_compressor_gas_engine.project_oid is '项目oid';
+comment on column daq_station_compressor_gas_engine.tenders_oid is '标段oid';
+comment on column daq_station_compressor_gas_engine.pipeline_oid is '管线oid';
+comment on column daq_station_compressor_gas_engine.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_compressor_gas_engine.device_code is '设备编号';
+comment on column daq_station_compressor_gas_engine.device_name is '名称';
+comment on column daq_station_compressor_gas_engine.manufacture_number is '出厂编号';
+comment on column daq_station_compressor_gas_engine.construct_date is '施工日期';
+comment on column daq_station_compressor_gas_engine.construct_unit is '施工单位';
+comment on column daq_station_compressor_gas_engine.supervision_unit is '监理单位';
+comment on column daq_station_compressor_gas_engine.supervision_engineer is '监理工程师';
+comment on column daq_station_compressor_gas_engine.collection_person is '采集人员';
+comment on column daq_station_compressor_gas_engine.collection_date is '采集日期';
+comment on column daq_station_compressor_gas_engine.remarks is '备注';
+comment on column daq_station_compressor_gas_engine.create_user_id is '创建人id';
+comment on column daq_station_compressor_gas_engine.create_user_name is '创建人名称';
+comment on column daq_station_compressor_gas_engine.create_datetime is '创建时间';
+comment on column daq_station_compressor_gas_engine.modify_user_id is '修改人id';
+comment on column daq_station_compressor_gas_engine.modify_user_name is '修改人名称';
+comment on column daq_station_compressor_gas_engine.modify_datetime is '修改时间';
+comment on column daq_station_compressor_gas_engine.active is '有效标志';
+create index index_daq_station_compressor_gas_engine_oid_4 on daq_station_compressor_gas_engine ( oid );
+create index index_daq_station_compressor_gas_engine_device_code_9 on daq_station_compressor_gas_engine ( device_code );
+create index index_daq_station_compressor_gas_engine_device_name_10 on daq_station_compressor_gas_engine ( device_name );
+
+create table daq_station_instrument_compressor (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	running_record_time timestamp (8),
+	ambient_temperature numeric (5, 2),
+	air_point numeric (6, 2),
+	alarm_temperature numeric (6, 2),
+	alarm_shutdown_temperature numeric (6, 2),
+	alarm_shutdown_pressure numeric (6, 2),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_instrument_compressor is '仪表风压缩机橇';
+comment on column daq_station_instrument_compressor.oid is '主键';
+comment on column daq_station_instrument_compressor.project_oid is '项目oid';
+comment on column daq_station_instrument_compressor.tenders_oid is '标段oid';
+comment on column daq_station_instrument_compressor.pipeline_oid is '管线oid';
+comment on column daq_station_instrument_compressor.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_instrument_compressor.device_code is '设备编号';
+comment on column daq_station_instrument_compressor.device_name is '名称';
+comment on column daq_station_instrument_compressor.manufacture_number is '出厂编号';
+comment on column daq_station_instrument_compressor.running_record_time is '运行记录时间';
+comment on column daq_station_instrument_compressor.ambient_temperature is '环境温度';
+comment on column daq_station_instrument_compressor.air_point is '空气露点(ºc)';
+comment on column daq_station_instrument_compressor.alarm_temperature is '自动报警温度(ºc)';
+comment on column daq_station_instrument_compressor.alarm_shutdown_temperature is '自动保护停机温度(ºc)';
+comment on column daq_station_instrument_compressor.alarm_shutdown_pressure is '自动保护停机压力(mpa)';
+comment on column daq_station_instrument_compressor.construct_date is '施工日期';
+comment on column daq_station_instrument_compressor.construct_unit is '施工单位';
+comment on column daq_station_instrument_compressor.supervision_unit is '监理单位';
+comment on column daq_station_instrument_compressor.supervision_engineer is '监理工程师';
+comment on column daq_station_instrument_compressor.collection_person is '采集人员';
+comment on column daq_station_instrument_compressor.collection_date is '采集日期';
+comment on column daq_station_instrument_compressor.remarks is '备注';
+comment on column daq_station_instrument_compressor.create_user_id is '创建人id';
+comment on column daq_station_instrument_compressor.create_user_name is '创建人名称';
+comment on column daq_station_instrument_compressor.create_datetime is '创建时间';
+comment on column daq_station_instrument_compressor.modify_user_id is '修改人id';
+comment on column daq_station_instrument_compressor.modify_user_name is '修改人名称';
+comment on column daq_station_instrument_compressor.modify_datetime is '修改时间';
+comment on column daq_station_instrument_compressor.active is '有效标志';
+create index index_daq_station_instrument_compressor_oid_4 on daq_station_instrument_compressor ( oid );
+create index index_daq_station_instrument_compressor_device_code_9 on daq_station_instrument_compressor ( device_code );
+create index index_daq_station_instrument_compressor_device_name_10 on daq_station_instrument_compressor ( device_name );
+
+create table daq_station_electric_heater (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	running_record_time timestamp (8),
+	ambient_temperature numeric (5, 2),
+	device_voltage numeric (8, 3),
+	electric_current numeric (8, 3),
+	inlet_pressure numeric (9, 3),
+	inlet_temperature numeric (5, 2),
+	outlet_pressure numeric (9, 3),
+	outlet_temperature numeric (5, 2),
+	construct_date timestamp(6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_electric_heater is '电加热器';
+comment on column daq_station_electric_heater.oid is '主键';
+comment on column daq_station_electric_heater.project_oid is '项目oid';
+comment on column daq_station_electric_heater.tenders_oid is '标段oid';
+comment on column daq_station_electric_heater.pipeline_oid is '管线oid';
+comment on column daq_station_electric_heater.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_electric_heater.device_code is '设备编号';
+comment on column daq_station_electric_heater.device_name is '名称';
+comment on column daq_station_electric_heater.manufacture_number is '出厂编号';
+comment on column daq_station_electric_heater.running_record_time is '运行记录时间';
+comment on column daq_station_electric_heater.ambient_temperature is '环境温度';
+comment on column daq_station_electric_heater.device_voltage is '电压(v)';
+comment on column daq_station_electric_heater.electric_current is '电流(a)';
+comment on column daq_station_electric_heater.inlet_pressure is '入口压力';
+comment on column daq_station_electric_heater.inlet_temperature is '入口温度';
+comment on column daq_station_electric_heater.outlet_pressure is '出口压力';
+comment on column daq_station_electric_heater.outlet_temperature is '出口温度';
+comment on column daq_station_electric_heater.construct_date is '施工日期';
+comment on column daq_station_electric_heater.construct_unit is '施工单位';
+comment on column daq_station_electric_heater.supervision_unit is '监理单位';
+comment on column daq_station_electric_heater.supervision_engineer is '监理工程师';
+comment on column daq_station_electric_heater.collection_person is '采集人员';
+comment on column daq_station_electric_heater.collection_date is '采集日期';
+comment on column daq_station_electric_heater.remarks is '备注';
+comment on column daq_station_electric_heater.create_user_id is '创建人id';
+comment on column daq_station_electric_heater.create_user_name is '创建人名称';
+comment on column daq_station_electric_heater.create_datetime is '创建时间';
+comment on column daq_station_electric_heater.modify_user_id is '修改人id';
+comment on column daq_station_electric_heater.modify_user_name is '修改人名称';
+comment on column daq_station_electric_heater.modify_datetime is '修改时间';
+comment on column daq_station_electric_heater.active is '有效标志';
+create index index_daq_station_electric_heater_oid_4 on daq_station_electric_heater ( oid );
+create index index_daq_station_electric_heater_device_code_9 on daq_station_electric_heater ( device_code );
+create index index_daq_station_electric_heater_device_name_10 on daq_station_electric_heater ( device_name );
+
+create table daq_station_air_eliminater (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	pressure_test_datetime timestamp (6),
+	test_pressure numeric (9, 3),
+	test_describe varchar (200),
+	test_conclusion varchar (20),
+	construct_date timestamp(6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_air_eliminater is '消气器';
+comment on column daq_station_air_eliminater.oid is '主键';
+comment on column daq_station_air_eliminater.project_oid is '项目oid';
+comment on column daq_station_air_eliminater.tenders_oid is '标段oid';
+comment on column daq_station_air_eliminater.pipeline_oid is '管线oid';
+comment on column daq_station_air_eliminater.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_air_eliminater.device_code is '设备编号';
+comment on column daq_station_air_eliminater.device_name is '名称';
+comment on column daq_station_air_eliminater.manufacture_number is '出厂编号';
+comment on column daq_station_air_eliminater.pressure_test_datetime is '试压日期';
+comment on column daq_station_air_eliminater.test_pressure is '试验压力(mpa)';
+comment on column daq_station_air_eliminater.test_describe is '试验过程描述';
+comment on column daq_station_air_eliminater.test_conclusion is '结论';
+comment on column daq_station_air_eliminater.construct_date is '施工日期';
+comment on column daq_station_air_eliminater.construct_unit is '施工单位';
+comment on column daq_station_air_eliminater.supervision_unit is '监理单位';
+comment on column daq_station_air_eliminater.supervision_engineer is '监理工程师';
+comment on column daq_station_air_eliminater.collection_person is '采集人员';
+comment on column daq_station_air_eliminater.collection_date is '采集日期';
+comment on column daq_station_air_eliminater.remarks is '备注';
+comment on column daq_station_air_eliminater.create_user_id is '创建人id';
+comment on column daq_station_air_eliminater.create_user_name is '创建人名称';
+comment on column daq_station_air_eliminater.create_datetime is '创建时间';
+comment on column daq_station_air_eliminater.modify_user_id is '修改人id';
+comment on column daq_station_air_eliminater.modify_user_name is '修改人名称';
+comment on column daq_station_air_eliminater.modify_datetime is '修改时间';
+comment on column daq_station_air_eliminater.active is '有效标志';
+create index index_daq_station_air_eliminater_oid_4 on daq_station_air_eliminater ( oid );
+create index index_daq_station_air_eliminater_device_code_9 on daq_station_air_eliminater ( device_code );
+create index index_daq_station_air_eliminater_device_name_10 on daq_station_air_eliminater ( device_name );
+/**
+ * 站场设备安装-动设备end
+ */
+
+
+/**
+ * 站场设备安装-静设备start
+ */
+create table daq_station_pig_receiver_launcher (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	device_type smallint,
+	manufacture_number varchar (70),
+	main_shell_length numeric (8, 3),
+	to_blind_plate_distance numeric (8, 3),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_pig_receiver_launcher is '清管器收发球装置';
+comment on column daq_station_pig_receiver_launcher.oid is '主键';
+comment on column daq_station_pig_receiver_launcher.project_oid is '项目oid';
+comment on column daq_station_pig_receiver_launcher.tenders_oid is '标段oid';
+comment on column daq_station_pig_receiver_launcher.pipeline_oid is '管线oid';
+comment on column daq_station_pig_receiver_launcher.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_pig_receiver_launcher.device_code is '设备编号';
+comment on column daq_station_pig_receiver_launcher.device_name is '名称';
+comment on column daq_station_pig_receiver_launcher.device_type is ' 类型{1:发球筒;2:手球筒;3:转球筒}';
+comment on column daq_station_pig_receiver_launcher.manufacture_number is '出厂编号';
+comment on column daq_station_pig_receiver_launcher.main_shell_length is '主筒长度(m)';
+comment on column daq_station_pig_receiver_launcher.to_blind_plate_distance is '喷射器/制动器至盲板的距离(m)';
+comment on column daq_station_pig_receiver_launcher.construct_date is '施工日期';
+comment on column daq_station_pig_receiver_launcher.construct_unit is '施工单位';
+comment on column daq_station_pig_receiver_launcher.supervision_unit is '监理单位';
+comment on column daq_station_pig_receiver_launcher.supervision_engineer is '监理工程师';
+comment on column daq_station_pig_receiver_launcher.collection_person is '采集人员';
+comment on column daq_station_pig_receiver_launcher.collection_date is '采集日期';
+comment on column daq_station_pig_receiver_launcher.approve_status is '审核状态';
+comment on column daq_station_pig_receiver_launcher.remarks is '备注';
+comment on column daq_station_pig_receiver_launcher.create_user_id is '创建人id';
+comment on column daq_station_pig_receiver_launcher.create_user_name is '创建人名称';
+comment on column daq_station_pig_receiver_launcher.create_datetime is '创建时间';
+comment on column daq_station_pig_receiver_launcher.modify_user_id is '修改人id';
+comment on column daq_station_pig_receiver_launcher.modify_user_name is '修改人名称';
+comment on column daq_station_pig_receiver_launcher.modify_datetime is '修改时间';
+comment on column daq_station_pig_receiver_launcher.active is '有效标志';
+create index index_daq_station_pig_receiver_launcher_oid_4 on daq_station_pig_receiver_launcher ( oid );
+create index index_daq_station_pig_receiver_launcher_device_code_9 on daq_station_pig_receiver_launcher ( device_code );
+create index index_daq_station_pig_receiver_launcher_device_name_10 on daq_station_pig_receiver_launcher ( device_name );
+
+create table daq_station_flare (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_flare is '放空火炬';
+comment on column daq_station_flare.oid is '主键';
+comment on column daq_station_flare.project_oid is '项目oid';
+comment on column daq_station_flare.tenders_oid is '标段oid';
+comment on column daq_station_flare.pipeline_oid is '管线oid';
+comment on column daq_station_flare.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_flare.device_code is '设备编号';
+comment on column daq_station_flare.device_name is '名称';
+comment on column daq_station_flare.manufacture_number is '出厂编号';
+comment on column daq_station_flare.construct_date is '施工日期';
+comment on column daq_station_flare.construct_unit is '施工单位';
+comment on column daq_station_flare.supervision_unit is '监理单位';
+comment on column daq_station_flare.supervision_engineer is '监理工程师';
+comment on column daq_station_flare.collection_person is '采集人员';
+comment on column daq_station_flare.collection_date is '采集日期';
+comment on column daq_station_flare.approve_status is '审核状态';
+comment on column daq_station_flare.remarks is '备注';
+comment on column daq_station_flare.create_user_id is '创建人id';
+comment on column daq_station_flare.create_user_name is '创建人名称';
+comment on column daq_station_flare.create_datetime is '创建时间';
+comment on column daq_station_flare.modify_user_id is '修改人id';
+comment on column daq_station_flare.modify_user_name is '修改人名称';
+comment on column daq_station_flare.modify_datetime is '修改时间';
+comment on column daq_station_flare.active is '有效标志';
+create index index_daq_station_flare_oid_4 on daq_station_flare ( oid );
+create index index_daq_station_flare_device_code_9 on daq_station_flare ( device_code );
+create index index_daq_station_flare_device_name_10 on daq_station_flare ( device_name );
+
+create table daq_station_buried_tank (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_buried_tank is '埋地罐';
+comment on column daq_station_buried_tank.oid is '主键';
+comment on column daq_station_buried_tank.project_oid is '项目oid';
+comment on column daq_station_buried_tank.tenders_oid is '标段oid';
+comment on column daq_station_buried_tank.pipeline_oid is '管线oid';
+comment on column daq_station_buried_tank.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_buried_tank.device_code is '设备编号';
+comment on column daq_station_buried_tank.device_name is '名称';
+comment on column daq_station_buried_tank.manufacture_number is '出厂编号';
+comment on column daq_station_buried_tank.construct_date is '施工日期';
+comment on column daq_station_buried_tank.construct_unit is '施工单位';
+comment on column daq_station_buried_tank.supervision_unit is '监理单位';
+comment on column daq_station_buried_tank.supervision_engineer is '监理工程师';
+comment on column daq_station_buried_tank.collection_person is '采集人员';
+comment on column daq_station_buried_tank.collection_date is '采集日期';
+comment on column daq_station_buried_tank.approve_status is '审核状态';
+comment on column daq_station_buried_tank.remarks is '备注';
+comment on column daq_station_buried_tank.create_user_id is '创建人id';
+comment on column daq_station_buried_tank.create_user_name is '创建人名称';
+comment on column daq_station_buried_tank.create_datetime is '创建时间';
+comment on column daq_station_buried_tank.modify_user_id is '修改人id';
+comment on column daq_station_buried_tank.modify_user_name is '修改人名称';
+comment on column daq_station_buried_tank.modify_datetime is '修改时间';
+comment on column daq_station_buried_tank.active is '有效标志';
+create index index_daq_station_buried_tank_oid_4 on daq_station_buried_tank ( oid );
+create index index_daq_station_buried_tank_device_code_9 on daq_station_buried_tank ( device_code );
+create index index_daq_station_buried_tank_device_name_10 on daq_station_buried_tank ( device_name );
+
+create table daq_station_filter (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	pressure_test_date timestamp (6),
+	pressure_test numeric (9, 3),
+	pressure_process_des varchar (100),
+	test_result smallint,
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_filter is '过滤器';
+comment on column daq_station_filter.oid is '主键';
+comment on column daq_station_filter.project_oid is '项目oid';
+comment on column daq_station_filter.tenders_oid is '标段oid';
+comment on column daq_station_filter.pipeline_oid is '管线oid';
+comment on column daq_station_filter.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_filter.device_code is '设备编号';
+comment on column daq_station_filter.device_name is '名称';
+comment on column daq_station_filter.manufacture_number is '出厂编号';
+comment on column daq_station_filter.pressure_test_date is '试压日期';
+comment on column daq_station_filter.pressure_test is '试验压力(mpa)';
+comment on column daq_station_filter.pressure_process_des is '试验过程描述';
+comment on column daq_station_filter.test_result is '结论{0:不合格;1:合格}';
+comment on column daq_station_filter.construct_date is '施工日期';
+comment on column daq_station_filter.construct_unit is '施工单位';
+comment on column daq_station_filter.supervision_unit is '监理单位';
+comment on column daq_station_filter.supervision_engineer is '监理工程师';
+comment on column daq_station_filter.collection_person is '采集人员';
+comment on column daq_station_filter.collection_date is '采集日期';
+comment on column daq_station_filter.approve_status is '审核状态';
+comment on column daq_station_filter.remarks is '备注';
+comment on column daq_station_filter.create_user_id is '创建人id';
+comment on column daq_station_filter.create_user_name is '创建人名称';
+comment on column daq_station_filter.create_datetime is '创建时间';
+comment on column daq_station_filter.modify_user_id is '修改人id';
+comment on column daq_station_filter.modify_user_name is '修改人名称';
+comment on column daq_station_filter.modify_datetime is '修改时间';
+comment on column daq_station_filter.active is '有效标志';
+create index index_daq_station_filter_oid_4 on daq_station_filter ( oid );
+create index index_daq_station_filter_device_code_9 on daq_station_filter ( device_code );
+create index index_daq_station_filter_device_name_10 on daq_station_filter ( device_name );
+
+create table daq_station_tube_heat_exchanger (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	running_record_datetime timestamp (6),
+	ambient_temperature numeric (5, 2),
+	entrance_pressure numeric (8, 3),
+	entrance_temperature numeric (5, 2),
+	exit_pressure numeric (8, 3),
+	exit_temperature numeric (5, 2),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_tube_heat_exchanger is '管壳式热交换器';
+comment on column daq_station_tube_heat_exchanger.oid is '主键';
+comment on column daq_station_tube_heat_exchanger.project_oid is '项目oid';
+comment on column daq_station_tube_heat_exchanger.tenders_oid is '标段oid';
+comment on column daq_station_tube_heat_exchanger.pipeline_oid is '管线oid';
+comment on column daq_station_tube_heat_exchanger.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_tube_heat_exchanger.device_code is '设备编号';
+comment on column daq_station_tube_heat_exchanger.device_name is '名称';
+comment on column daq_station_tube_heat_exchanger.manufacture_number is '出厂编号';
+comment on column daq_station_tube_heat_exchanger.running_record_datetime is '运行记录时间';
+comment on column daq_station_tube_heat_exchanger.ambient_temperature is '环境温度(℃)';
+comment on column daq_station_tube_heat_exchanger.entrance_pressure is '入口压力(mpa)';
+comment on column daq_station_tube_heat_exchanger.entrance_temperature is '入口温度(℃)';
+comment on column daq_station_tube_heat_exchanger.exit_pressure is '出口压力(mpa)';
+comment on column daq_station_tube_heat_exchanger.exit_temperature is '出口温度(℃)';
+comment on column daq_station_tube_heat_exchanger.construct_date is '施工日期';
+comment on column daq_station_tube_heat_exchanger.construct_unit is '施工单位';
+comment on column daq_station_tube_heat_exchanger.supervision_unit is '监理单位';
+comment on column daq_station_tube_heat_exchanger.supervision_engineer is '监理工程师';
+comment on column daq_station_tube_heat_exchanger.collection_person is '采集人员';
+comment on column daq_station_tube_heat_exchanger.collection_date is '采集日期';
+comment on column daq_station_tube_heat_exchanger.approve_status is '审核状态';
+comment on column daq_station_tube_heat_exchanger.remarks is '备注';
+comment on column daq_station_tube_heat_exchanger.create_user_id is '创建人id';
+comment on column daq_station_tube_heat_exchanger.create_user_name is '创建人名称';
+comment on column daq_station_tube_heat_exchanger.create_datetime is '创建时间';
+comment on column daq_station_tube_heat_exchanger.modify_user_id is '修改人id';
+comment on column daq_station_tube_heat_exchanger.modify_user_name is '修改人名称';
+comment on column daq_station_tube_heat_exchanger.modify_datetime is '修改时间';
+comment on column daq_station_tube_heat_exchanger.active is '有效标志';
+create index index_daq_station_tube_heat_exchanger_oid_4 on daq_station_tube_heat_exchanger ( oid );
+create index index_daq_station_tube_heat_exchanger_device_code_9 on daq_station_tube_heat_exchanger ( device_code );
+create index index_daq_station_tube_heat_exchanger_device_name_10 on daq_station_tube_heat_exchanger ( device_name );
+
+create table daq_station_pressure_container (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	device_model smallint,
+	install_location_des varchar (100),
+	safe_valve_check_pressure numeric (8, 3),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_pressure_container is '压力容器';
+comment on column daq_station_pressure_container.oid is '主键';
+comment on column daq_station_pressure_container.project_oid is '项目oid';
+comment on column daq_station_pressure_container.tenders_oid is '标段oid';
+comment on column daq_station_pressure_container.pipeline_oid is '管线oid';
+comment on column daq_station_pressure_container.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_pressure_container.device_code is '设备编号';
+comment on column daq_station_pressure_container.device_name is '名称';
+comment on column daq_station_pressure_container.manufacture_number is '出厂编号';
+comment on column daq_station_pressure_container.device_model is '结构型式{1:卧式;2:立式}';
+comment on column daq_station_pressure_container.install_location_des is '安装位置描述';
+comment on column daq_station_pressure_container.safe_valve_check_pressure is '安全阀校验压力(mpa)';
+comment on column daq_station_pressure_container.construct_date is '施工日期';
+comment on column daq_station_pressure_container.construct_unit is '施工单位';
+comment on column daq_station_pressure_container.supervision_unit is '监理单位';
+comment on column daq_station_pressure_container.supervision_engineer is '监理工程师';
+comment on column daq_station_pressure_container.collection_person is '采集人员';
+comment on column daq_station_pressure_container.collection_date is '采集日期';
+comment on column daq_station_pressure_container.approve_status is '审核状态';
+comment on column daq_station_pressure_container.remarks is '备注';
+comment on column daq_station_pressure_container.create_user_id is '创建人id';
+comment on column daq_station_pressure_container.create_user_name is '创建人名称';
+comment on column daq_station_pressure_container.create_datetime is '创建时间';
+comment on column daq_station_pressure_container.modify_user_id is '修改人id';
+comment on column daq_station_pressure_container.modify_user_name is '修改人名称';
+comment on column daq_station_pressure_container.modify_datetime is '修改时间';
+comment on column daq_station_pressure_container.active is '有效标志';
+create index index_daq_station_pressure_container_oid_4 on daq_station_pressure_container ( oid );
+create index index_daq_station_pressure_container_device_code_9 on daq_station_pressure_container ( device_code );
+create index index_daq_station_pressure_container_device_name_10 on daq_station_pressure_container ( device_name );
+
+create table daq_station_heater (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	special_device_certification_num varchar (60),
+	rate_of_flow numeric (8, 3),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_heater is '加热炉';
+comment on column daq_station_heater.oid is '主键';
+comment on column daq_station_heater.project_oid is '项目oid';
+comment on column daq_station_heater.tenders_oid is '标段oid';
+comment on column daq_station_heater.pipeline_oid is '管线oid';
+comment on column daq_station_heater.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_heater.device_code is '设备编号';
+comment on column daq_station_heater.device_name is '名称';
+comment on column daq_station_heater.manufacture_number is '出厂编号';
+comment on column daq_station_heater.special_device_certification_num is '特种设备发证编号';
+comment on column daq_station_heater.rate_of_flow is '流量(m³/h)';
+comment on column daq_station_heater.construct_date is '施工日期';
+comment on column daq_station_heater.construct_unit is '施工单位';
+comment on column daq_station_heater.supervision_unit is '监理单位';
+comment on column daq_station_heater.supervision_engineer is '监理工程师';
+comment on column daq_station_heater.collection_person is '采集人员';
+comment on column daq_station_heater.collection_date is '采集日期';
+comment on column daq_station_heater.approve_status is '审核状态';
+comment on column daq_station_heater.remarks is '备注';
+comment on column daq_station_heater.create_user_id is '创建人id';
+comment on column daq_station_heater.create_user_name is '创建人名称';
+comment on column daq_station_heater.create_datetime is '创建时间';
+comment on column daq_station_heater.modify_user_id is '修改人id';
+comment on column daq_station_heater.modify_user_name is '修改人名称';
+comment on column daq_station_heater.modify_datetime is '修改时间';
+comment on column daq_station_heater.active is '有效标志';
+create index index_daq_station_heater_oid_4 on daq_station_heater ( oid );
+create index index_daq_station_heater_device_code_9 on daq_station_heater ( device_code );
+create index index_daq_station_heater_device_name_10 on daq_station_heater ( device_name );
+
+create table daq_station_crane (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location_des varchar (100),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_crane is '起重机';
+comment on column daq_station_crane.oid is '主键';
+comment on column daq_station_crane.project_oid is '项目oid';
+comment on column daq_station_crane.tenders_oid is '标段oid';
+comment on column daq_station_crane.pipeline_oid is '管线oid';
+comment on column daq_station_crane.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_crane.device_code is '设备编号';
+comment on column daq_station_crane.device_name is '名称';
+comment on column daq_station_crane.manufacture_number is '出厂编号';
+comment on column daq_station_crane.install_location_des is '安装位置描述';
+comment on column daq_station_crane.construct_date is '施工日期';
+comment on column daq_station_crane.construct_unit is '施工单位';
+comment on column daq_station_crane.supervision_unit is '监理单位';
+comment on column daq_station_crane.supervision_engineer is '监理工程师';
+comment on column daq_station_crane.collection_person is '采集人员';
+comment on column daq_station_crane.collection_date is '采集日期';
+comment on column daq_station_crane.approve_status is '审核状态';
+comment on column daq_station_crane.remarks is '备注';
+comment on column daq_station_crane.create_user_id is '创建人id';
+comment on column daq_station_crane.create_user_name is '创建人名称';
+comment on column daq_station_crane.create_datetime is '创建时间';
+comment on column daq_station_crane.modify_user_id is '修改人id';
+comment on column daq_station_crane.modify_user_name is '修改人名称';
+comment on column daq_station_crane.modify_datetime is '修改时间';
+comment on column daq_station_crane.active is '有效标志';
+create index index_daq_station_crane_oid_4 on daq_station_crane ( oid );
+create index index_daq_station_crane_device_code_9 on daq_station_crane ( device_code );
+create index index_daq_station_crane_device_name_10 on daq_station_crane ( device_name );
+/**
+ * 站场设备安装-静设备end
+ */
+
+
+/**
+ * 站场设备安装-静设备储罐start
+ */
+create table daq_station_vertical_storage_tank (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	picture_num varchar (30),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_vertical_storage_tank is '立式储罐';
+comment on column daq_station_vertical_storage_tank.oid is '主键';
+comment on column daq_station_vertical_storage_tank.project_oid is '项目oid';
+comment on column daq_station_vertical_storage_tank.tenders_oid is '标段oid';
+comment on column daq_station_vertical_storage_tank.pipeline_oid is '管线oid';
+comment on column daq_station_vertical_storage_tank.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_vertical_storage_tank.device_code is '设备编号';
+comment on column daq_station_vertical_storage_tank.device_name is '名称';
+comment on column daq_station_vertical_storage_tank.manufacture_number is '出厂编号';
+comment on column daq_station_vertical_storage_tank.picture_num is '照片编号';
+comment on column daq_station_vertical_storage_tank.construct_unit is '施工单位';
+comment on column daq_station_vertical_storage_tank.supervision_unit is '监理单位';
+comment on column daq_station_vertical_storage_tank.supervision_engineer is '监理工程师';
+comment on column daq_station_vertical_storage_tank.collection_person is '采集人员';
+comment on column daq_station_vertical_storage_tank.collection_date is '采集日期';
+comment on column daq_station_vertical_storage_tank.approve_status is '审核状态';
+comment on column daq_station_vertical_storage_tank.remarks is '备注';
+comment on column daq_station_vertical_storage_tank.create_user_id is '创建人id';
+comment on column daq_station_vertical_storage_tank.create_user_name is '创建人名称';
+comment on column daq_station_vertical_storage_tank.create_datetime is '创建时间';
+comment on column daq_station_vertical_storage_tank.modify_user_id is '修改人id';
+comment on column daq_station_vertical_storage_tank.modify_user_name is '修改人名称';
+comment on column daq_station_vertical_storage_tank.modify_datetime is '修改时间';
+comment on column daq_station_vertical_storage_tank.active is '有效标志';
+create index index_daq_station_vertical_storage_tank_oid_4 on daq_station_vertical_storage_tank ( oid );
+create index index_daq_station_vertical_storage_tank_device_code_9 on daq_station_vertical_storage_tank ( device_code );
+create index index_daq_station_vertical_storage_tank_device_name_10 on daq_station_vertical_storage_tank ( device_name );
+
+create table daq_station_storage_tank (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	picture_num varchar (30),
+	storage_tank_format varchar (40),
+	actual_height numeric (7, 2),
+	safe_level numeric (7, 2),
+	min_safe_level numeric (7, 2),
+	max_safe_level numeric (7, 2),
+	footwall_thickness numeric (7, 2),
+	wall_thickness numeric (7, 2),
+	cathodic_protection_install_info varchar (100),
+	cathodic_protection_check_info varchar (100),
+	makespan_datetime timestamp (6),
+	completion_datetime timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_storage_tank is '储罐';
+comment on column daq_station_storage_tank.oid is '主键';
+comment on column daq_station_storage_tank.project_oid is '项目oid';
+comment on column daq_station_storage_tank.tenders_oid is '标段oid';
+comment on column daq_station_storage_tank.pipeline_oid is '管线oid';
+comment on column daq_station_storage_tank.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_storage_tank.device_code is '设备编号';
+comment on column daq_station_storage_tank.device_name is '名称';
+comment on column daq_station_storage_tank.manufacture_number is '出厂编号';
+comment on column daq_station_storage_tank.picture_num is '照片编号';
+comment on column daq_station_storage_tank.storage_tank_format is '罐体形式,域值：storage_tank_format_domain';
+comment on column daq_station_storage_tank.actual_height is '实际高度(m)';
+comment on column daq_station_storage_tank.safe_level is '安全液位(m)';
+comment on column daq_station_storage_tank.min_safe_level is '极限高液位(m)';
+comment on column daq_station_storage_tank.max_safe_level is '极限低液位(m)';
+comment on column daq_station_storage_tank.footwall_thickness is '罐底板厚度(mm)';
+comment on column daq_station_storage_tank.wall_thickness is '罐壁板厚度(mm)';
+comment on column daq_station_storage_tank.cathodic_protection_install_info is '阴极保护系统安装记录';
+comment on column daq_station_storage_tank.cathodic_protection_check_info is '阴极保护系统检查记录';
+comment on column daq_station_storage_tank.makespan_datetime is '完工时间';
+comment on column daq_station_storage_tank.completion_datetime is '竣工日期';
+comment on column daq_station_storage_tank.construct_unit is '施工单位';
+comment on column daq_station_storage_tank.supervision_unit is '监理单位';
+comment on column daq_station_storage_tank.supervision_engineer is '监理工程师';
+comment on column daq_station_storage_tank.collection_person is '采集人员';
+comment on column daq_station_storage_tank.collection_date is '采集日期';
+comment on column daq_station_storage_tank.approve_status is '审核状态';
+comment on column daq_station_storage_tank.remarks is '备注';
+comment on column daq_station_storage_tank.create_user_id is '创建人id';
+comment on column daq_station_storage_tank.create_user_name is '创建人名称';
+comment on column daq_station_storage_tank.create_datetime is '创建时间';
+comment on column daq_station_storage_tank.modify_user_id is '修改人id';
+comment on column daq_station_storage_tank.modify_user_name is '修改人名称';
+comment on column daq_station_storage_tank.modify_datetime is '修改时间';
+comment on column daq_station_storage_tank.active is '有效标志';
+create index index_daq_station_storage_tank_oid_4 on daq_station_storage_tank ( oid );
+create index index_daq_station_storage_tank_device_code_9 on daq_station_storage_tank ( device_code );
+create index index_daq_station_storage_tank_device_name_10 on daq_station_storage_tank ( device_name );
+
+create table daq_station_storage_tank_sedimentation_test (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	storage_tank_oid varchar (36),
+	test_water_temperature numeric (6, 2),
+	test_water_height numeric (6, 2),
+	test_pressure_date timestamp (6),
+	test_pressure_function varchar (45),
+	test_report_num varchar (60),
+	test_conclusion varchar (20),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_storage_tank_sedimentation_test is '储罐沉降试验';
+comment on column daq_station_storage_tank_sedimentation_test.oid is '主键';
+comment on column daq_station_storage_tank_sedimentation_test.project_oid is '项目oid';
+comment on column daq_station_storage_tank_sedimentation_test.tenders_oid is '标段oid';
+comment on column daq_station_storage_tank_sedimentation_test.pipeline_oid is '管线oid';
+comment on column daq_station_storage_tank_sedimentation_test.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_storage_tank_sedimentation_test.storage_tank_oid is '储罐编号';
+comment on column daq_station_storage_tank_sedimentation_test.test_water_temperature is '试水温度(ºc)';
+comment on column daq_station_storage_tank_sedimentation_test.test_water_height is '试水高度(mm)';
+comment on column daq_station_storage_tank_sedimentation_test.test_pressure_date is '试压日期';
+comment on column daq_station_storage_tank_sedimentation_test.test_pressure_function is '试压方法';
+comment on column daq_station_storage_tank_sedimentation_test.test_report_num is '试验报告编号';
+comment on column daq_station_storage_tank_sedimentation_test.test_conclusion is '结论';
+comment on column daq_station_storage_tank_sedimentation_test.construct_unit is '施工单位';
+comment on column daq_station_storage_tank_sedimentation_test.supervision_unit is '监理单位';
+comment on column daq_station_storage_tank_sedimentation_test.supervision_engineer is '监理工程师';
+comment on column daq_station_storage_tank_sedimentation_test.collection_person is '采集人员';
+comment on column daq_station_storage_tank_sedimentation_test.collection_date is '采集日期';
+comment on column daq_station_storage_tank_sedimentation_test.approve_status is '审核状态';
+comment on column daq_station_storage_tank_sedimentation_test.remarks is '备注';
+comment on column daq_station_storage_tank_sedimentation_test.create_user_id is '创建人id';
+comment on column daq_station_storage_tank_sedimentation_test.create_user_name is '创建人名称';
+comment on column daq_station_storage_tank_sedimentation_test.create_datetime is '创建时间';
+comment on column daq_station_storage_tank_sedimentation_test.modify_user_id is '修改人id';
+comment on column daq_station_storage_tank_sedimentation_test.modify_user_name is '修改人名称';
+comment on column daq_station_storage_tank_sedimentation_test.modify_datetime is '修改时间';
+comment on column daq_station_storage_tank_sedimentation_test.active is '有效标志';
+create index index_daq_station_storage_tank_sedimentation_test_oid_4 on daq_station_storage_tank_sedimentation_test ( oid );
+create index index_daq_station_storage_tank_sedimentation_test_storage_tank_oid_9 on daq_station_storage_tank_sedimentation_test ( storage_tank_oid );
+create index index_daq_station_storage_tank_sedimentation_test_test_water_temperature_10 on daq_station_storage_tank_sedimentation_test ( test_water_temperature );
+
+create table daq_station_storage_tank_steel_plate (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	storage_tank_oid varchar (36),
+	typesetting_num varchar (60),
+	steel_plate_num varchar (60),
+	steel_plate_specifications varchar (50),
+	manufacturer varchar (60),
+	be_on_the_scene_datetime timestamp (6),
+	construct_unit varchar (36),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_storage_tank_steel_plate is '储罐沉降试验';
+comment on column daq_station_storage_tank_steel_plate.oid is '主键';
+comment on column daq_station_storage_tank_steel_plate.project_oid is '项目oid';
+comment on column daq_station_storage_tank_steel_plate.tenders_oid is '标段oid';
+comment on column daq_station_storage_tank_steel_plate.pipeline_oid is '管线oid';
+comment on column daq_station_storage_tank_steel_plate.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_storage_tank_steel_plate.storage_tank_oid is '储罐编号';
+comment on column daq_station_storage_tank_steel_plate.typesetting_num is '排版图编号';
+comment on column daq_station_storage_tank_steel_plate.steel_plate_num is '储罐钢板编号';
+comment on column daq_station_storage_tank_steel_plate.steel_plate_specifications is '钢板规格型号';
+comment on column daq_station_storage_tank_steel_plate.manufacturer is '生产厂家';
+comment on column daq_station_storage_tank_steel_plate.be_on_the_scene_datetime is '到场日期';
+comment on column daq_station_storage_tank_steel_plate.construct_unit is '施工单位';
+comment on column daq_station_storage_tank_steel_plate.approve_status is '审核状态';
+comment on column daq_station_storage_tank_steel_plate.remarks is '备注';
+comment on column daq_station_storage_tank_steel_plate.create_user_id is '创建人id';
+comment on column daq_station_storage_tank_steel_plate.create_user_name is '创建人名称';
+comment on column daq_station_storage_tank_steel_plate.create_datetime is '创建时间';
+comment on column daq_station_storage_tank_steel_plate.modify_user_id is '修改人id';
+comment on column daq_station_storage_tank_steel_plate.modify_user_name is '修改人名称';
+comment on column daq_station_storage_tank_steel_plate.modify_datetime is '修改时间';
+comment on column daq_station_storage_tank_steel_plate.active is '有效标志';
+create index index_daq_station_storage_tank_steel_plate_oid_4 on daq_station_storage_tank_steel_plate ( oid );
+create index index_daq_station_storage_tank_steel_plate_storage_tank_oid_9 on daq_station_storage_tank_steel_plate ( storage_tank_oid );
+create index index_daq_station_storage_tank_steel_plate_typesetting_num_10 on daq_station_storage_tank_steel_plate ( typesetting_num );
+
+create table daq_station_storage_tank_weld (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	storage_tank_oid varchar (36),
+	typesetting_num varchar (60),
+	weld_code varchar (50),
+	wled_location varchar (60),
+	weld_method varchar (50),
+	weather_condition varchar (40),
+	weld_rod_batch_num varchar (60),
+	weld_wire_batch_num varchar (60),
+	weld_produce varchar (36),
+	work_unit_oid varchar (36),
+	weld_worker_oid varchar (50),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_storage_tank_weld is '储罐焊缝';
+comment on column daq_station_storage_tank_weld.oid is '主键';
+comment on column daq_station_storage_tank_weld.project_oid is '项目oid';
+comment on column daq_station_storage_tank_weld.tenders_oid is '标段oid';
+comment on column daq_station_storage_tank_weld.pipeline_oid is '管线oid';
+comment on column daq_station_storage_tank_weld.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_storage_tank_weld.storage_tank_oid is '储罐编号';
+comment on column daq_station_storage_tank_weld.typesetting_num is '排版图编号';
+comment on column daq_station_storage_tank_weld.weld_code is '焊缝编号';
+comment on column daq_station_storage_tank_weld.wled_location is '焊缝位置';
+comment on column daq_station_storage_tank_weld.weld_method is '焊接类型，域值：weld_method_domain';
+comment on column daq_station_storage_tank_weld.weather_condition is '天气情况';
+comment on column daq_station_storage_tank_weld.weld_rod_batch_num is '焊条批号';
+comment on column daq_station_storage_tank_weld.weld_wire_batch_num is '焊丝批号';
+comment on column daq_station_storage_tank_weld.weld_produce is '焊接工艺规程';
+comment on column daq_station_storage_tank_weld.work_unit_oid is '施工机组代号';
+comment on column daq_station_storage_tank_weld.weld_worker_oid is '焊工编号';
+comment on column daq_station_storage_tank_weld.construct_date is '施工日期';
+comment on column daq_station_storage_tank_weld.construct_unit is '施工单位';
+comment on column daq_station_storage_tank_weld.supervision_unit is '监理单位';
+comment on column daq_station_storage_tank_weld.supervision_engineer is '监理工程师';
+comment on column daq_station_storage_tank_weld.collection_person is '采集人员';
+comment on column daq_station_storage_tank_weld.collection_date is '采集日期';
+comment on column daq_station_storage_tank_weld.approve_status is '审核状态';
+comment on column daq_station_storage_tank_weld.remarks is '备注';
+comment on column daq_station_storage_tank_weld.create_user_id is '创建人id';
+comment on column daq_station_storage_tank_weld.create_user_name is '创建人名称';
+comment on column daq_station_storage_tank_weld.create_datetime is '创建时间';
+comment on column daq_station_storage_tank_weld.modify_user_id is '修改人id';
+comment on column daq_station_storage_tank_weld.modify_user_name is '修改人名称';
+comment on column daq_station_storage_tank_weld.modify_datetime is '修改时间';
+comment on column daq_station_storage_tank_weld.active is '有效标志';
+create index index_daq_station_storage_tank_weld_oid_4 on daq_station_storage_tank_weld ( oid );
+create index index_daq_station_storage_tank_weld_storage_tank_oid_9 on daq_station_storage_tank_weld ( storage_tank_oid );
+create index index_daq_station_storage_tank_weld_typesetting_num_10 on daq_station_storage_tank_weld ( typesetting_num );
+
+create table daq_station_storage_tank_weld_rework (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	weld_code varchar (50),
+	rework_weld_code varchar (50),
+	rework_weld_reason varchar (100),
+	rework_weld_size varchar (60),
+	rework_weld_datetime timestamp (6),
+	weld_worker_oid varchar (50),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_storage_tank_weld_rework is '返修口';
+comment on column daq_station_storage_tank_weld_rework.oid is '主键';
+comment on column daq_station_storage_tank_weld_rework.project_oid is '项目oid';
+comment on column daq_station_storage_tank_weld_rework.tenders_oid is '标段oid';
+comment on column daq_station_storage_tank_weld_rework.pipeline_oid is '管线oid';
+comment on column daq_station_storage_tank_weld_rework.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_storage_tank_weld_rework.weld_code is '返修口编号';
+comment on column daq_station_storage_tank_weld_rework.rework_weld_code is '新焊缝编号';
+comment on column daq_station_storage_tank_weld_rework.rework_weld_reason is '返修事由';
+comment on column daq_station_storage_tank_weld_rework.rework_weld_size is '返修尺寸（长x宽x高）（m）';
+comment on column daq_station_storage_tank_weld_rework.rework_weld_datetime is '返修日期';
+comment on column daq_station_storage_tank_weld_rework.weld_worker_oid is '焊工编号';
+comment on column daq_station_storage_tank_weld_rework.construct_unit is '施工单位';
+comment on column daq_station_storage_tank_weld_rework.supervision_unit is '监理单位';
+comment on column daq_station_storage_tank_weld_rework.supervision_engineer is '监理工程师';
+comment on column daq_station_storage_tank_weld_rework.collection_person is '采集人员';
+comment on column daq_station_storage_tank_weld_rework.collection_date is '采集日期';
+comment on column daq_station_storage_tank_weld_rework.approve_status is '审核状态';
+comment on column daq_station_storage_tank_weld_rework.remarks is '备注';
+comment on column daq_station_storage_tank_weld_rework.create_user_id is '创建人id';
+comment on column daq_station_storage_tank_weld_rework.create_user_name is '创建人名称';
+comment on column daq_station_storage_tank_weld_rework.create_datetime is '创建时间';
+comment on column daq_station_storage_tank_weld_rework.modify_user_id is '修改人id';
+comment on column daq_station_storage_tank_weld_rework.modify_user_name is '修改人名称';
+comment on column daq_station_storage_tank_weld_rework.modify_datetime is '修改时间';
+comment on column daq_station_storage_tank_weld_rework.active is '有效标志';
+create index index_daq_station_storage_tank_weld_rework_oid_4 on daq_station_storage_tank_weld_rework ( oid );
+create index index_daq_station_storage_tank_weld_rework_weld_code_9 on daq_station_storage_tank_weld_rework ( weld_code );
+create index index_daq_station_storage_tank_weld_rework_rework_weld_code_10 on daq_station_storage_tank_weld_rework ( rework_weld_code );
+
+create table daq_station_storage_tank_detection_ray (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	storage_tank_oid varchar (36),
+	detection_report_num varchar (60),
+	detection_object varchar (60),
+	detection_position varchar (60),
+	negative_num varchar (30),
+	evaluation_grade varchar (50),
+	detection_deta timestamp (6),
+	detection_unit varchar (50),
+	detection_person varchar (25),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_storage_tank_detection_ray is '储罐射线检测';
+comment on column daq_station_storage_tank_detection_ray.oid is '主键';
+comment on column daq_station_storage_tank_detection_ray.project_oid is '项目oid';
+comment on column daq_station_storage_tank_detection_ray.tenders_oid is '标段oid';
+comment on column daq_station_storage_tank_detection_ray.pipeline_oid is '管线oid';
+comment on column daq_station_storage_tank_detection_ray.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_storage_tank_detection_ray.storage_tank_oid is '储罐编号';
+comment on column daq_station_storage_tank_detection_ray.detection_report_num is '检测报告编号';
+comment on column daq_station_storage_tank_detection_ray.detection_object is '检测对象';
+comment on column daq_station_storage_tank_detection_ray.detection_position is '检测部位';
+comment on column daq_station_storage_tank_detection_ray.negative_num is '检测部位编号(底片)';
+comment on column daq_station_storage_tank_detection_ray.evaluation_grade is '评定等级，域值：evaluation_grade_domain';
+comment on column daq_station_storage_tank_detection_ray.detection_deta is '检测日期';
+comment on column daq_station_storage_tank_detection_ray.detection_unit is '检测单位';
+comment on column daq_station_storage_tank_detection_ray.detection_person is '检测人员';
+comment on column daq_station_storage_tank_detection_ray.supervision_unit is '监理单位';
+comment on column daq_station_storage_tank_detection_ray.supervision_engineer is '监理工程师';
+comment on column daq_station_storage_tank_detection_ray.collection_date is '采集日期';
+comment on column daq_station_storage_tank_detection_ray.approve_status is '审核状态';
+comment on column daq_station_storage_tank_detection_ray.remarks is '备注';
+comment on column daq_station_storage_tank_detection_ray.create_user_id is '创建人id';
+comment on column daq_station_storage_tank_detection_ray.create_user_name is '创建人名称';
+comment on column daq_station_storage_tank_detection_ray.create_datetime is '创建时间';
+comment on column daq_station_storage_tank_detection_ray.modify_user_id is '修改人id';
+comment on column daq_station_storage_tank_detection_ray.modify_user_name is '修改人名称';
+comment on column daq_station_storage_tank_detection_ray.modify_datetime is '修改时间';
+comment on column daq_station_storage_tank_detection_ray.active is '有效标志';
+create index index_daq_station_storage_tank_detection_ray_oid_4 on daq_station_storage_tank_detection_ray ( oid );
+create index index_daq_station_storage_tank_detection_ray_storage_tank_oid_9 on daq_station_storage_tank_detection_ray ( storage_tank_oid );
+create index index_daq_station_storage_tank_detection_ray_detection_report_num_10 on daq_station_storage_tank_detection_ray ( detection_report_num );
+
+create table daq_station_storage_detection_ultrasonic (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	storage_tank_oid varchar (36),
+	detection_report_num varchar (60),
+	detection_object varchar (60),
+	detection_position varchar (60),
+	negative_num varchar (30),
+	evaluation_result smallint,
+	nature_estimation varchar (30),
+	detection_deta timestamp (6),
+	detection_unit varchar (50),
+	detection_person varchar (25),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_storage_detection_ultrasonic is '储罐超声波测';
+comment on column daq_station_storage_detection_ultrasonic.oid is '主键';
+comment on column daq_station_storage_detection_ultrasonic.project_oid is '项目oid';
+comment on column daq_station_storage_detection_ultrasonic.tenders_oid is '标段oid';
+comment on column daq_station_storage_detection_ultrasonic.pipeline_oid is '管线oid';
+comment on column daq_station_storage_detection_ultrasonic.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_storage_detection_ultrasonic.storage_tank_oid is '储罐编号';
+comment on column daq_station_storage_detection_ultrasonic.detection_report_num is '检测报告编号';
+comment on column daq_station_storage_detection_ultrasonic.detection_object is '检测对象';
+comment on column daq_station_storage_detection_ultrasonic.detection_position is '检测部位';
+comment on column daq_station_storage_detection_ultrasonic.negative_num is '检测部位编号(底片)';
+comment on column daq_station_storage_detection_ultrasonic.evaluation_result is '评定结果{0:不合格;1:合格}';
+comment on column daq_station_storage_detection_ultrasonic.nature_estimation is '判估性质';
+comment on column daq_station_storage_detection_ultrasonic.detection_deta is '检测日期';
+comment on column daq_station_storage_detection_ultrasonic.detection_unit is '检测单位';
+comment on column daq_station_storage_detection_ultrasonic.detection_person is '检测人员';
+comment on column daq_station_storage_detection_ultrasonic.supervision_unit is '监理单位';
+comment on column daq_station_storage_detection_ultrasonic.supervision_engineer is '监理工程师';
+comment on column daq_station_storage_detection_ultrasonic.collection_date is '采集日期';
+comment on column daq_station_storage_detection_ultrasonic.approve_status is '审核状态';
+comment on column daq_station_storage_detection_ultrasonic.remarks is '备注';
+comment on column daq_station_storage_detection_ultrasonic.create_user_id is '创建人id';
+comment on column daq_station_storage_detection_ultrasonic.create_user_name is '创建人名称';
+comment on column daq_station_storage_detection_ultrasonic.create_datetime is '创建时间';
+comment on column daq_station_storage_detection_ultrasonic.modify_user_id is '修改人id';
+comment on column daq_station_storage_detection_ultrasonic.modify_user_name is '修改人名称';
+comment on column daq_station_storage_detection_ultrasonic.modify_datetime is '修改时间';
+comment on column daq_station_storage_detection_ultrasonic.active is '有效标志';
+create index index_daq_station_storage_detection_ultrasonic_oid_4 on daq_station_storage_detection_ultrasonic ( oid );
+create index index_daq_station_storage_detection_ultrasonic_storage_tank_oid_9 on daq_station_storage_detection_ultrasonic ( storage_tank_oid );
+create index index_daq_station_storage_detection_ultrasonic_detection_report_num_10 on daq_station_storage_detection_ultrasonic ( detection_report_num );
+
+create table daq_station_storage_tank_detection_infiltration (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	storage_tank_oid varchar (36),
+	detection_report_num varchar (60),
+	detection_object varchar (60),
+	detection_position varchar (60),
+	negative_num varchar (30),
+	detection_length numeric (9, 3),
+	detection_type varchar (50),
+	evaluation_grade varchar (50),
+	evaluation_result smallint,
+	weld_oid varchar (36),
+	defect_position varchar (60),
+	defect_properties varchar (50),
+	defect_length numeric (9, 3),
+	detection_deta timestamp (6),
+	detection_unit varchar (50),
+	detection_person varchar (25),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_storage_tank_detection_infiltration is '储罐渗透检测';
+comment on column daq_station_storage_tank_detection_infiltration.oid is '主键';
+comment on column daq_station_storage_tank_detection_infiltration.project_oid is '项目oid';
+comment on column daq_station_storage_tank_detection_infiltration.tenders_oid is '标段oid';
+comment on column daq_station_storage_tank_detection_infiltration.pipeline_oid is '管线oid';
+comment on column daq_station_storage_tank_detection_infiltration.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_storage_tank_detection_infiltration.storage_tank_oid is '储罐编号';
+comment on column daq_station_storage_tank_detection_infiltration.detection_report_num is '检测报告编号';
+comment on column daq_station_storage_tank_detection_infiltration.detection_object is '检测对象';
+comment on column daq_station_storage_tank_detection_infiltration.detection_position is '检测部位';
+comment on column daq_station_storage_tank_detection_infiltration.negative_num is '检测部位编号(底片)';
+comment on column daq_station_storage_tank_detection_infiltration.detection_length is '检测长度(mm)';
+comment on column daq_station_storage_tank_detection_infiltration.detection_type is '检测类型，域值：detection_type_domain';
+comment on column daq_station_storage_tank_detection_infiltration.evaluation_grade is '评定等级，域值：evaluation_grade_domain';
+comment on column daq_station_storage_tank_detection_infiltration.evaluation_result is '评定结果{0:不合格;1:合格}';
+comment on column daq_station_storage_tank_detection_infiltration.weld_oid is '焊口编号';
+comment on column daq_station_storage_tank_detection_infiltration.defect_position is '缺陷位置';
+comment on column daq_station_storage_tank_detection_infiltration.defect_properties is '缺陷性质，域值：defect_properties_domain';
+comment on column daq_station_storage_tank_detection_infiltration.defect_length is '缺陷长度(mm)';
+comment on column daq_station_storage_tank_detection_infiltration.detection_deta is '检测日期';
+comment on column daq_station_storage_tank_detection_infiltration.detection_unit is '检测单位';
+comment on column daq_station_storage_tank_detection_infiltration.detection_person is '检测人员';
+comment on column daq_station_storage_tank_detection_infiltration.supervision_unit is '监理单位';
+comment on column daq_station_storage_tank_detection_infiltration.supervision_engineer is '监理工程师';
+comment on column daq_station_storage_tank_detection_infiltration.collection_date is '采集日期';
+comment on column daq_station_storage_tank_detection_infiltration.approve_status is '审核状态';
+comment on column daq_station_storage_tank_detection_infiltration.remarks is '备注';
+comment on column daq_station_storage_tank_detection_infiltration.create_user_id is '创建人id';
+comment on column daq_station_storage_tank_detection_infiltration.create_user_name is '创建人名称';
+comment on column daq_station_storage_tank_detection_infiltration.create_datetime is '创建时间';
+comment on column daq_station_storage_tank_detection_infiltration.modify_user_id is '修改人id';
+comment on column daq_station_storage_tank_detection_infiltration.modify_user_name is '修改人名称';
+comment on column daq_station_storage_tank_detection_infiltration.modify_datetime is '修改时间';
+comment on column daq_station_storage_tank_detection_infiltration.active is '有效标志';
+create index index_daq_station_storage_tank_detection_infiltration_oid_4 on daq_station_storage_tank_detection_infiltration ( oid );
+create index index_daq_station_storage_tank_detection_infiltration_storage_tank_oid_9 on daq_station_storage_tank_detection_infiltration ( storage_tank_oid );
+create index index_daq_station_storage_tank_detection_infiltration_detection_report_num_10 on daq_station_storage_tank_detection_infiltration ( detection_report_num );
+
+create table daq_station_storage_tank_detection_magnetic_powder (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	storage_tank_oid varchar (36),
+	detection_report_num varchar (60),
+	weld_oid varchar (36),
+	detection_length numeric (9, 3),
+	defect_position varchar (60),
+	defect_properties varchar (50),
+	defect_length numeric (9, 3),
+	detection_deta timestamp (6),
+	detection_unit varchar (50),
+	detection_person varchar (25),
+	evaluation_result smallint,
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_storage_tank_detection_magnetic_powder is '储罐磁粉检测';
+comment on column daq_station_storage_tank_detection_magnetic_powder.oid is '主键';
+comment on column daq_station_storage_tank_detection_magnetic_powder.project_oid is '项目oid';
+comment on column daq_station_storage_tank_detection_magnetic_powder.tenders_oid is '标段oid';
+comment on column daq_station_storage_tank_detection_magnetic_powder.pipeline_oid is '管线oid';
+comment on column daq_station_storage_tank_detection_magnetic_powder.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_storage_tank_detection_magnetic_powder.storage_tank_oid is '储罐编号';
+comment on column daq_station_storage_tank_detection_magnetic_powder.detection_report_num is '检测报告编号';
+comment on column daq_station_storage_tank_detection_magnetic_powder.weld_oid is '焊口编号';
+comment on column daq_station_storage_tank_detection_magnetic_powder.detection_length is '检测长度(mm)';
+comment on column daq_station_storage_tank_detection_magnetic_powder.defect_position is '缺陷位置';
+comment on column daq_station_storage_tank_detection_magnetic_powder.defect_properties is '缺陷性质，域值：defect_properties_domain';
+comment on column daq_station_storage_tank_detection_magnetic_powder.defect_length is '缺陷长度(mm)';
+comment on column daq_station_storage_tank_detection_magnetic_powder.evaluation_result is '评定结果{0:不合格;1:合格}';
+comment on column daq_station_storage_tank_detection_magnetic_powder.detection_deta is '检测日期';
+comment on column daq_station_storage_tank_detection_magnetic_powder.detection_unit is '检测单位';
+comment on column daq_station_storage_tank_detection_magnetic_powder.detection_person is '检测人员';
+comment on column daq_station_storage_tank_detection_magnetic_powder.supervision_unit is '监理单位';
+comment on column daq_station_storage_tank_detection_magnetic_powder.supervision_engineer is '监理工程师';
+comment on column daq_station_storage_tank_detection_magnetic_powder.collection_date is '采集日期';
+comment on column daq_station_storage_tank_detection_magnetic_powder.approve_status is '审核状态';
+comment on column daq_station_storage_tank_detection_magnetic_powder.remarks is '备注';
+comment on column daq_station_storage_tank_detection_magnetic_powder.create_user_id is '创建人id';
+comment on column daq_station_storage_tank_detection_magnetic_powder.create_user_name is '创建人名称';
+comment on column daq_station_storage_tank_detection_magnetic_powder.create_datetime is '创建时间';
+comment on column daq_station_storage_tank_detection_magnetic_powder.modify_user_id is '修改人id';
+comment on column daq_station_storage_tank_detection_magnetic_powder.modify_user_name is '修改人名称';
+comment on column daq_station_storage_tank_detection_magnetic_powder.modify_datetime is '修改时间';
+comment on column daq_station_storage_tank_detection_magnetic_powder.active is '有效标志';
+create index index_daq_station_storage_tank_detection_magnetic_powder_oid_4 on daq_station_storage_tank_detection_magnetic_powder ( oid );
+create index index_daq_station_storage_tank_detection_magnetic_powder_storage_tank_oid_9 on daq_station_storage_tank_detection_magnetic_powder ( storage_tank_oid );
+create index index_daq_station_storage_tank_detection_magnetic_powder_detection_report_num_10 on daq_station_storage_tank_detection_magnetic_powder ( detection_report_num );
+
+create table daq_station_storage_tank_detection_vacuum_leak (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	storage_tank_oid varchar (36),
+	detection_report_num varchar (60),
+	detection_object varchar (60),
+	detection_position varchar (60),
+	negative_num varchar (30),
+	detection_length numeric (9, 3),
+	evaluation_result smallint,
+	detection_deta timestamp (6),
+	detection_unit varchar (50),
+	detection_person varchar (25),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_storage_tank_detection_vacuum_leak is '储罐真空试漏检测';
+comment on column daq_station_storage_tank_detection_vacuum_leak.oid is '主键';
+comment on column daq_station_storage_tank_detection_vacuum_leak.project_oid is '项目oid';
+comment on column daq_station_storage_tank_detection_vacuum_leak.tenders_oid is '标段oid';
+comment on column daq_station_storage_tank_detection_vacuum_leak.pipeline_oid is '管线oid';
+comment on column daq_station_storage_tank_detection_vacuum_leak.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_storage_tank_detection_vacuum_leak.storage_tank_oid is '储罐编号';
+comment on column daq_station_storage_tank_detection_vacuum_leak.detection_report_num is '检测报告编号';
+comment on column daq_station_storage_tank_detection_vacuum_leak.detection_object is '检测对象';
+comment on column daq_station_storage_tank_detection_vacuum_leak.detection_position is '检测部位';
+comment on column daq_station_storage_tank_detection_vacuum_leak.negative_num is '检测部位编号(底片)';
+comment on column daq_station_storage_tank_detection_vacuum_leak.detection_length is '检测长度(mm)';
+comment on column daq_station_storage_tank_detection_vacuum_leak.evaluation_result is '评定结果{0:不合格;1:合格}';
+comment on column daq_station_storage_tank_detection_vacuum_leak.detection_deta is '检测日期';
+comment on column daq_station_storage_tank_detection_vacuum_leak.detection_unit is '检测单位';
+comment on column daq_station_storage_tank_detection_vacuum_leak.detection_person is '检测人员';
+comment on column daq_station_storage_tank_detection_vacuum_leak.supervision_unit is '监理单位';
+comment on column daq_station_storage_tank_detection_vacuum_leak.supervision_engineer is '监理工程师';
+comment on column daq_station_storage_tank_detection_vacuum_leak.collection_date is '采集日期';
+comment on column daq_station_storage_tank_detection_vacuum_leak.approve_status is '审核状态';
+comment on column daq_station_storage_tank_detection_vacuum_leak.remarks is '备注';
+comment on column daq_station_storage_tank_detection_vacuum_leak.create_user_id is '创建人id';
+comment on column daq_station_storage_tank_detection_vacuum_leak.create_user_name is '创建人名称';
+comment on column daq_station_storage_tank_detection_vacuum_leak.create_datetime is '创建时间';
+comment on column daq_station_storage_tank_detection_vacuum_leak.modify_user_id is '修改人id';
+comment on column daq_station_storage_tank_detection_vacuum_leak.modify_user_name is '修改人名称';
+comment on column daq_station_storage_tank_detection_vacuum_leak.modify_datetime is '修改时间';
+comment on column daq_station_storage_tank_detection_vacuum_leak.active is '有效标志';
+create index index_daq_station_storage_tank_detection_vacuum_leak_oid_4 on daq_station_storage_tank_detection_vacuum_leak ( oid );
+create index index_daq_station_storage_tank_detection_vacuum_leak_storage_tank_oid_9 on daq_station_storage_tank_detection_vacuum_leak ( storage_tank_oid );
+create index index_daq_station_storage_tank_detection_vacuum_leak_detection_report_num_10 on daq_station_storage_tank_detection_vacuum_leak ( detection_report_num );
+
+create table daq_station_storage_tank_attachment (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	storage_tank_oid varchar (36),
+	attachment_name varchar (60),
+	attachment_num varchar (60),
+	manufacturing_unit varchar (70),
+	attachment_quantity numeric (6, 0),
+	test_result smallint,
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_storage_tank_attachment is '储罐附件';
+comment on column daq_station_storage_tank_attachment.oid is '主键';
+comment on column daq_station_storage_tank_attachment.project_oid is '项目oid';
+comment on column daq_station_storage_tank_attachment.tenders_oid is '标段oid';
+comment on column daq_station_storage_tank_attachment.pipeline_oid is '管线oid';
+comment on column daq_station_storage_tank_attachment.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_storage_tank_attachment.storage_tank_oid is '储罐编号';
+comment on column daq_station_storage_tank_attachment.attachment_name is '附件名称,域值:tank_attachment_name_domain';
+comment on column daq_station_storage_tank_attachment.attachment_num is '附件编号';
+comment on column daq_station_storage_tank_attachment.manufacturing_unit is '制造单位';
+comment on column daq_station_storage_tank_attachment.attachment_quantity is '数量';
+comment on column daq_station_storage_tank_attachment.test_result is '测试结果{0:不合格;1:合格}';
+comment on column daq_station_storage_tank_attachment.construct_date is '施工日期';
+comment on column daq_station_storage_tank_attachment.construct_unit is '施工单位';
+comment on column daq_station_storage_tank_attachment.supervision_unit is '监理单位';
+comment on column daq_station_storage_tank_attachment.supervision_engineer is '监理工程师';
+comment on column daq_station_storage_tank_attachment.collection_person is '采集人员';
+comment on column daq_station_storage_tank_attachment.collection_date is '采集日期';
+comment on column daq_station_storage_tank_attachment.approve_status is '审核状态';
+comment on column daq_station_storage_tank_attachment.remarks is '备注';
+comment on column daq_station_storage_tank_attachment.create_user_id is '创建人id';
+comment on column daq_station_storage_tank_attachment.create_user_name is '创建人名称';
+comment on column daq_station_storage_tank_attachment.create_datetime is '创建时间';
+comment on column daq_station_storage_tank_attachment.modify_user_id is '修改人id';
+comment on column daq_station_storage_tank_attachment.modify_user_name is '修改人名称';
+comment on column daq_station_storage_tank_attachment.modify_datetime is '修改时间';
+comment on column daq_station_storage_tank_attachment.active is '有效标志';
+create index index_daq_station_storage_tank_attachment_oid_4 on daq_station_storage_tank_attachment ( oid );
+create index index_daq_station_storage_tank_attachment_storage_tank_oid_9 on daq_station_storage_tank_attachment ( storage_tank_oid );
+create index index_daq_station_storage_tank_attachment_attachment_name_10 on daq_station_storage_tank_attachment ( attachment_name );
+
+create table daq_station_storage_tank_open_hole (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	storage_tank_oid varchar (36),
+	open_hole_code varchar (35),
+	open_hole_name varchar (40),
+	open_hole_location varchar (60),
+	nominal_diameter numeric (8, 3),
+	nominal_pressure numeric (8, 3),
+	pipe_orifice_shape varchar (30),
+	test_result varchar (1),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_storage_tank_open_hole is '储罐开口';
+comment on column daq_station_storage_tank_open_hole.oid is '主键';
+comment on column daq_station_storage_tank_open_hole.project_oid is '项目oid';
+comment on column daq_station_storage_tank_open_hole.tenders_oid is '标段oid';
+comment on column daq_station_storage_tank_open_hole.pipeline_oid is '管线oid';
+comment on column daq_station_storage_tank_open_hole.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_storage_tank_open_hole.storage_tank_oid is '储罐编号';
+comment on column daq_station_storage_tank_open_hole.open_hole_code is '开口编号';
+comment on column daq_station_storage_tank_open_hole.open_hole_name is '开口名称';
+comment on column daq_station_storage_tank_open_hole.open_hole_location is '开口位置';
+comment on column daq_station_storage_tank_open_hole.nominal_diameter is '公称直径(mm)';
+comment on column daq_station_storage_tank_open_hole.nominal_pressure is '公称压力(mpa)';
+comment on column daq_station_storage_tank_open_hole.pipe_orifice_shape is '管口形式';
+comment on column daq_station_storage_tank_open_hole.test_result is '检测结果{0:不合格;1:合格}';
+comment on column daq_station_storage_tank_open_hole.construct_date is '施工日期';
+comment on column daq_station_storage_tank_open_hole.construct_unit is '施工单位';
+comment on column daq_station_storage_tank_open_hole.supervision_unit is '监理单位';
+comment on column daq_station_storage_tank_open_hole.supervision_engineer is '监理工程师';
+comment on column daq_station_storage_tank_open_hole.collection_person is '采集人员';
+comment on column daq_station_storage_tank_open_hole.collection_date is '采集日期';
+comment on column daq_station_storage_tank_open_hole.approve_status is '审核状态';
+comment on column daq_station_storage_tank_open_hole.remarks is '备注';
+comment on column daq_station_storage_tank_open_hole.create_user_id is '创建人id';
+comment on column daq_station_storage_tank_open_hole.create_user_name is '创建人名称';
+comment on column daq_station_storage_tank_open_hole.create_datetime is '创建时间';
+comment on column daq_station_storage_tank_open_hole.modify_user_id is '修改人id';
+comment on column daq_station_storage_tank_open_hole.modify_user_name is '修改人名称';
+comment on column daq_station_storage_tank_open_hole.modify_datetime is '修改时间';
+comment on column daq_station_storage_tank_open_hole.active is '有效标志';
+create index index_daq_station_storage_tank_open_hole_oid_4 on daq_station_storage_tank_open_hole ( oid );
+create index index_daq_station_storage_tank_open_hole_storage_tank_oid_9 on daq_station_storage_tank_open_hole ( storage_tank_oid );
+create index index_daq_station_storage_tank_open_hole_open_hole_code_10 on daq_station_storage_tank_open_hole ( open_hole_code );
+
+create table daq_station_storage_tank_floating_roof (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	storage_tank_oid varchar (36),
+	floating_roof_diameter numeric (6, 2),
+	floating_cabin_height numeric (6, 2),
+	floating_cabin_quantity numeric (5, 0),
+	floating_cabin_material varchar (60),
+	air_tightness_test_result smallint,
+	vacuum_test_result smallint,
+	oil_penetration_test_result smallint,
+	lifting_test_result smallint,
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_storage_tank_floating_roof is '储罐浮顶';
+comment on column daq_station_storage_tank_floating_roof.oid is '主键';
+comment on column daq_station_storage_tank_floating_roof.project_oid is '项目oid';
+comment on column daq_station_storage_tank_floating_roof.tenders_oid is '标段oid';
+comment on column daq_station_storage_tank_floating_roof.pipeline_oid is '管线oid';
+comment on column daq_station_storage_tank_floating_roof.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_storage_tank_floating_roof.storage_tank_oid is '储罐编号';
+comment on column daq_station_storage_tank_floating_roof.floating_roof_diameter is '浮顶直径(m)';
+comment on column daq_station_storage_tank_floating_roof.floating_cabin_height is '浮舱高度(m)';
+comment on column daq_station_storage_tank_floating_roof.floating_cabin_quantity is '浮舱个数';
+comment on column daq_station_storage_tank_floating_roof.floating_cabin_material is '浮舱材质';
+comment on column daq_station_storage_tank_floating_roof.air_tightness_test_result is '气密性试验结果{0:不合格;1:合格}';
+comment on column daq_station_storage_tank_floating_roof.vacuum_test_result is '真空试验结果{0:不合格;1:合格}';
+comment on column daq_station_storage_tank_floating_roof.oil_penetration_test_result is '油渗透试验结果{0:不合格;1:合格}';
+comment on column daq_station_storage_tank_floating_roof.lifting_test_result is '升降试验结果{0:不合格;1:合格}';
+comment on column daq_station_storage_tank_floating_roof.construct_date is '施工日期';
+comment on column daq_station_storage_tank_floating_roof.construct_unit is '施工单位';
+comment on column daq_station_storage_tank_floating_roof.supervision_unit is '监理单位';
+comment on column daq_station_storage_tank_floating_roof.supervision_engineer is '监理工程师';
+comment on column daq_station_storage_tank_floating_roof.collection_person is '采集人员';
+comment on column daq_station_storage_tank_floating_roof.collection_date is '采集日期';
+comment on column daq_station_storage_tank_floating_roof.approve_status is '审核状态';
+comment on column daq_station_storage_tank_floating_roof.remarks is '备注';
+comment on column daq_station_storage_tank_floating_roof.create_user_id is '创建人id';
+comment on column daq_station_storage_tank_floating_roof.create_user_name is '创建人名称';
+comment on column daq_station_storage_tank_floating_roof.create_datetime is '创建时间';
+comment on column daq_station_storage_tank_floating_roof.modify_user_id is '修改人id';
+comment on column daq_station_storage_tank_floating_roof.modify_user_name is '修改人名称';
+comment on column daq_station_storage_tank_floating_roof.modify_datetime is '修改时间';
+comment on column daq_station_storage_tank_floating_roof.active is '有效标志';
+create index index_daq_station_storage_tank_floating_roof_oid_4 on daq_station_storage_tank_floating_roof ( oid );
+create index index_daq_station_storage_tank_floating_roof_storage_tank_oid_9 on daq_station_storage_tank_floating_roof ( storage_tank_oid );
+create index index_daq_station_storage_tank_floating_roof_floating_roof_diameter_10 on daq_station_storage_tank_floating_roof ( floating_roof_diameter );
+
+create table daq_station_storage_tank_vault (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	storage_tank_oid varchar (36),
+	vault_horizontal_radius numeric (8, 3),
+	vault_side_length_1 numeric (8, 3),
+	vault_side_length_2 numeric (8, 3),
+	vault_side_length_3 numeric (8, 3),
+	vault_side_length_4 numeric (8, 3),
+	test_result varchar (1),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_storage_tank_vault is '储罐拱顶';
+comment on column daq_station_storage_tank_vault.oid is '主键';
+comment on column daq_station_storage_tank_vault.project_oid is '项目oid';
+comment on column daq_station_storage_tank_vault.tenders_oid is '标段oid';
+comment on column daq_station_storage_tank_vault.pipeline_oid is '管线oid';
+comment on column daq_station_storage_tank_vault.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_storage_tank_vault.storage_tank_oid is '储罐编号';
+comment on column daq_station_storage_tank_vault.vault_horizontal_radius is '拱顶水平半径(m)';
+comment on column daq_station_storage_tank_vault.vault_side_length_1 is '拱顶块边长1(m)';
+comment on column daq_station_storage_tank_vault.vault_side_length_2 is '拱顶块边长2(m)';
+comment on column daq_station_storage_tank_vault.vault_side_length_3 is '拱顶块边长3(m)';
+comment on column daq_station_storage_tank_vault.vault_side_length_4 is '拱顶块边长4(m)';
+comment on column daq_station_storage_tank_vault.test_result is '检测结果{0:不合格;1:合格}';
+comment on column daq_station_storage_tank_vault.construct_date is '施工日期';
+comment on column daq_station_storage_tank_vault.construct_unit is '施工单位';
+comment on column daq_station_storage_tank_vault.supervision_unit is '监理单位';
+comment on column daq_station_storage_tank_vault.supervision_engineer is '监理工程师';
+comment on column daq_station_storage_tank_vault.collection_person is '采集人员';
+comment on column daq_station_storage_tank_vault.collection_date is '采集日期';
+comment on column daq_station_storage_tank_vault.approve_status is '审核状态';
+comment on column daq_station_storage_tank_vault.remarks is '备注';
+comment on column daq_station_storage_tank_vault.create_user_id is '创建人id';
+comment on column daq_station_storage_tank_vault.create_user_name is '创建人名称';
+comment on column daq_station_storage_tank_vault.create_datetime is '创建时间';
+comment on column daq_station_storage_tank_vault.modify_user_id is '修改人id';
+comment on column daq_station_storage_tank_vault.modify_user_name is '修改人名称';
+comment on column daq_station_storage_tank_vault.modify_datetime is '修改时间';
+comment on column daq_station_storage_tank_vault.active is '有效标志';
+create index index_daq_station_storage_tank_vault_oid_4 on daq_station_storage_tank_vault ( oid );
+create index index_daq_station_storage_tank_vault_storage_tank_oid_9 on daq_station_storage_tank_vault ( storage_tank_oid );
+create index index_daq_station_storage_tank_vault_vault_horizontal_radius_10 on daq_station_storage_tank_vault ( vault_horizontal_radius );
+
+create table daq_station_storage_tank_latticed_shell (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	storage_tank_oid varchar (36),
+	latticed_shell_model varchar (60),
+	latticed_shell_structure varchar (60),
+	test_result smallint,
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_storage_tank_latticed_shell is '储罐网壳';
+comment on column daq_station_storage_tank_latticed_shell.oid is '主键';
+comment on column daq_station_storage_tank_latticed_shell.project_oid is '项目oid';
+comment on column daq_station_storage_tank_latticed_shell.tenders_oid is '标段oid';
+comment on column daq_station_storage_tank_latticed_shell.pipeline_oid is '管线oid';
+comment on column daq_station_storage_tank_latticed_shell.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_storage_tank_latticed_shell.storage_tank_oid is '储罐编号';
+comment on column daq_station_storage_tank_latticed_shell.latticed_shell_model is '网壳型号';
+comment on column daq_station_storage_tank_latticed_shell.latticed_shell_structure is '网壳结构';
+comment on column daq_station_storage_tank_latticed_shell.test_result is '检测结果{0:不合格;1:合格}';
+comment on column daq_station_storage_tank_latticed_shell.construct_date is '施工日期';
+comment on column daq_station_storage_tank_latticed_shell.construct_unit is '施工单位';
+comment on column daq_station_storage_tank_latticed_shell.supervision_unit is '监理单位';
+comment on column daq_station_storage_tank_latticed_shell.supervision_engineer is '监理工程师';
+comment on column daq_station_storage_tank_latticed_shell.collection_person is '采集人员';
+comment on column daq_station_storage_tank_latticed_shell.collection_date is '采集日期';
+comment on column daq_station_storage_tank_latticed_shell.approve_status is '审核状态';
+comment on column daq_station_storage_tank_latticed_shell.remarks is '备注';
+comment on column daq_station_storage_tank_latticed_shell.create_user_id is '创建人id';
+comment on column daq_station_storage_tank_latticed_shell.create_user_name is '创建人名称';
+comment on column daq_station_storage_tank_latticed_shell.create_datetime is '创建时间';
+comment on column daq_station_storage_tank_latticed_shell.modify_user_id is '修改人id';
+comment on column daq_station_storage_tank_latticed_shell.modify_user_name is '修改人名称';
+comment on column daq_station_storage_tank_latticed_shell.modify_datetime is '修改时间';
+comment on column daq_station_storage_tank_latticed_shell.active is '有效标志';
+create index index_daq_station_storage_tank_latticed_shell_oid_4 on daq_station_storage_tank_latticed_shell ( oid );
+create index index_daq_station_storage_tank_latticed_shell_storage_tank_oid_9 on daq_station_storage_tank_latticed_shell ( storage_tank_oid );
+create index index_daq_station_storage_tank_latticed_shell_latticed_shell_model_10 on daq_station_storage_tank_latticed_shell ( latticed_shell_model );
+
+
+create table daq_station_storage_tank_insulating (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	storage_tank_oid varchar (36),
+	insulating_material varchar (60),
+	insulating_material_thickness numeric (8, 3),
+	outside_structure varchar (60),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_storage_tank_insulating is '储罐保温';
+comment on column daq_station_storage_tank_insulating.oid is '主键';
+comment on column daq_station_storage_tank_insulating.project_oid is '项目oid';
+comment on column daq_station_storage_tank_insulating.tenders_oid is '标段oid';
+comment on column daq_station_storage_tank_insulating.pipeline_oid is '管线oid';
+comment on column daq_station_storage_tank_insulating.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_storage_tank_insulating.storage_tank_oid is '储罐编号';
+comment on column daq_station_storage_tank_insulating.insulating_material is '保温材料材质';
+comment on column daq_station_storage_tank_insulating.insulating_material_thickness is '保温材料厚度(mm)';
+comment on column daq_station_storage_tank_insulating.outside_structure is '外包覆层结构';
+comment on column daq_station_storage_tank_insulating.construct_date is '施工日期';
+comment on column daq_station_storage_tank_insulating.construct_unit is '施工单位';
+comment on column daq_station_storage_tank_insulating.supervision_unit is '监理单位';
+comment on column daq_station_storage_tank_insulating.supervision_engineer is '监理工程师';
+comment on column daq_station_storage_tank_insulating.collection_person is '采集人员';
+comment on column daq_station_storage_tank_insulating.collection_date is '采集日期';
+comment on column daq_station_storage_tank_insulating.approve_status is '审核状态';
+comment on column daq_station_storage_tank_insulating.remarks is '备注';
+comment on column daq_station_storage_tank_insulating.create_user_id is '创建人id';
+comment on column daq_station_storage_tank_insulating.create_user_name is '创建人名称';
+comment on column daq_station_storage_tank_insulating.create_datetime is '创建时间';
+comment on column daq_station_storage_tank_insulating.modify_user_id is '修改人id';
+comment on column daq_station_storage_tank_insulating.modify_user_name is '修改人名称';
+comment on column daq_station_storage_tank_insulating.modify_datetime is '修改时间';
+comment on column daq_station_storage_tank_insulating.active is '有效标志';
+create index index_daq_station_storage_tank_insulating_oid_4 on daq_station_storage_tank_insulating ( oid );
+create index index_daq_station_storage_tank_insulating_storage_tank_oid_9 on daq_station_storage_tank_insulating ( storage_tank_oid );
+create index index_daq_station_storage_tank_insulating_insulating_material_10 on daq_station_storage_tank_insulating ( insulating_material );
+
+create table daq_station_storage_tank_anticorrosive (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	storage_tank_oid varchar (36),
+	anticorrosive_position varchar (60),
+	surface_treatment_grade varchar (30),
+	wall_anticorrosive_structure varchar (50),
+	exine_anticorrosive_structure varchar (50),
+	primer_material varchar (60),
+	primer_thickness numeric (8, 3),
+	primer_layer_number numeric (5, 0),
+	median_material varchar (60),
+	median_thickness numeric (8, 3),
+	median_layer_number numeric (5, 0),
+	outside_material varchar (60),
+	outside_thickness numeric (8, 3),
+	outside_layer_number numeric (5, 0),
+	thickness_check_result smallint,
+	cohesive_force_check_result smallint,
+	complete_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_storage_tank_anticorrosive is '储罐防腐';
+comment on column daq_station_storage_tank_anticorrosive.oid is '主键';
+comment on column daq_station_storage_tank_anticorrosive.project_oid is '项目oid';
+comment on column daq_station_storage_tank_anticorrosive.tenders_oid is '标段oid';
+comment on column daq_station_storage_tank_anticorrosive.pipeline_oid is '管线oid';
+comment on column daq_station_storage_tank_anticorrosive.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_storage_tank_anticorrosive.storage_tank_oid is '储罐编号';
+comment on column daq_station_storage_tank_anticorrosive.anticorrosive_position is '防腐部位';
+comment on column daq_station_storage_tank_anticorrosive.surface_treatment_grade is '表面处理等级';
+comment on column daq_station_storage_tank_anticorrosive.wall_anticorrosive_structure is '内壁防腐结构';
+comment on column daq_station_storage_tank_anticorrosive.exine_anticorrosive_structure is '外壁防腐结构';
+comment on column daq_station_storage_tank_anticorrosive.primer_material is '底漆材料';
+comment on column daq_station_storage_tank_anticorrosive.primer_thickness is '底漆干膜厚度(μm)';
+comment on column daq_station_storage_tank_anticorrosive.primer_layer_number is '底漆涂刷道数';
+comment on column daq_station_storage_tank_anticorrosive.median_material is '中间漆材料';
+comment on column daq_station_storage_tank_anticorrosive.median_thickness is '中间漆干膜厚度(μm)';
+comment on column daq_station_storage_tank_anticorrosive.median_layer_number is '中间漆涂刷道数';
+comment on column daq_station_storage_tank_anticorrosive.outside_material is '面漆材料';
+comment on column daq_station_storage_tank_anticorrosive.outside_thickness is '面漆干膜厚度(μm)';
+comment on column daq_station_storage_tank_anticorrosive.outside_layer_number is '面漆涂刷道数';
+comment on column daq_station_storage_tank_anticorrosive.thickness_check_result is '厚度检查结果{0:不合格;1:合格}';
+comment on column daq_station_storage_tank_anticorrosive.cohesive_force_check_result is '粘结力检查结果{0:不合格;1:合格}';
+comment on column daq_station_storage_tank_anticorrosive.complete_date is '完工时间';
+comment on column daq_station_storage_tank_anticorrosive.construct_unit is '施工单位';
+comment on column daq_station_storage_tank_anticorrosive.supervision_unit is '监理单位';
+comment on column daq_station_storage_tank_anticorrosive.supervision_engineer is '监理工程师';
+comment on column daq_station_storage_tank_anticorrosive.collection_person is '采集人员';
+comment on column daq_station_storage_tank_anticorrosive.collection_date is '采集日期';
+comment on column daq_station_storage_tank_anticorrosive.approve_status is '审核状态';
+comment on column daq_station_storage_tank_anticorrosive.remarks is '备注';
+comment on column daq_station_storage_tank_anticorrosive.create_user_id is '创建人id';
+comment on column daq_station_storage_tank_anticorrosive.create_user_name is '创建人名称';
+comment on column daq_station_storage_tank_anticorrosive.create_datetime is '创建时间';
+comment on column daq_station_storage_tank_anticorrosive.modify_user_id is '修改人id';
+comment on column daq_station_storage_tank_anticorrosive.modify_user_name is '修改人名称';
+comment on column daq_station_storage_tank_anticorrosive.modify_datetime is '修改时间';
+comment on column daq_station_storage_tank_anticorrosive.active is '有效标志';
+create index index_daq_station_storage_tank_anticorrosive_oid_4 on daq_station_storage_tank_anticorrosive ( oid );
+create index index_daq_station_storage_tank_anticorrosive_storage_tank_oid_9 on daq_station_storage_tank_anticorrosive ( storage_tank_oid );
+create index index_daq_station_storage_tank_anticorrosive_anticorrosive_position_10 on daq_station_storage_tank_anticorrosive ( anticorrosive_position );
+/**
+ * 站场设备安装-静设备储罐end
+ */
+
+
+/**
+ * 站场设备安装-自动控制设备start
+ */
+create table daq_station_scada_system (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	picture_number varchar (60),
+	server_install_location varchar (60),
+	client_install_location varchar (60),
+	scada_software varchar (30),
+	scada_version varchar (20),
+	antivirus_software varchar (50),
+	antivirus_software_version varchar (20),
+	station_quantity numeric (6, 0),
+	station_ip_address varchar (50),
+	router_ip_address varchar (50),
+	c_router_ip_address_quantity numeric (5, 0),
+	debug_content_and_results varchar (200),
+	debug_complete_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_scada_system is 'scada系统';
+comment on column daq_station_scada_system.oid is '主键';
+comment on column daq_station_scada_system.project_oid is '项目oid';
+comment on column daq_station_scada_system.tenders_oid is '标段oid';
+comment on column daq_station_scada_system.pipeline_oid is '管线oid';
+comment on column daq_station_scada_system.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_scada_system.device_code is '系统编号';
+comment on column daq_station_scada_system.device_name is '系统名称';
+comment on column daq_station_scada_system.manufacture_number is '出厂编号';
+comment on column daq_station_scada_system.picture_number is '照片编号';
+comment on column daq_station_scada_system.server_install_location is '服务器安装位置';
+comment on column daq_station_scada_system.client_install_location is '客户端安装位置';
+comment on column daq_station_scada_system.scada_software is 'scada软件';
+comment on column daq_station_scada_system.scada_version is 'scada软件版本';
+comment on column daq_station_scada_system.antivirus_software is '防病毒软件';
+comment on column daq_station_scada_system.antivirus_software_version is '防病毒软件版本';
+comment on column daq_station_scada_system.station_quantity is '站场/阀室数量';
+comment on column daq_station_scada_system.station_ip_address is '站场/阀室ip地址段';
+comment on column daq_station_scada_system.router_ip_address is '路由互连ip地址段';
+comment on column daq_station_scada_system.c_router_ip_address_quantity is 'c类ip地址段数量（个）';
+comment on column daq_station_scada_system.debug_content_and_results is '调试内容及结果';
+comment on column daq_station_scada_system.debug_complete_date is '调试完成日期';
+comment on column daq_station_scada_system.construct_unit is '施工单位';
+comment on column daq_station_scada_system.supervision_unit is '监理单位';
+comment on column daq_station_scada_system.supervision_engineer is '监理工程师';
+comment on column daq_station_scada_system.collection_person is '采集人员';
+comment on column daq_station_scada_system.collection_date is '采集日期';
+comment on column daq_station_scada_system.approve_status is '审核状态';
+comment on column daq_station_scada_system.remarks is '备注';
+comment on column daq_station_scada_system.create_user_id is '创建人id';
+comment on column daq_station_scada_system.create_user_name is '创建人名称';
+comment on column daq_station_scada_system.create_datetime is '创建时间';
+comment on column daq_station_scada_system.modify_user_id is '修改人id';
+comment on column daq_station_scada_system.modify_user_name is '修改人名称';
+comment on column daq_station_scada_system.modify_datetime is '修改时间';
+comment on column daq_station_scada_system.active is '有效标志';
+create index index_daq_station_scada_system_oid_4 on daq_station_scada_system ( oid );
+create index index_daq_station_scada_system_device_code_9 on daq_station_scada_system ( device_code );
+create index index_daq_station_scada_system_device_name_10 on daq_station_scada_system ( device_name );
+
+create table daq_station_scs_system (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	antivirus_software varchar (50),
+	antivirus_software_version varchar (20),
+	debug_content_and_results varchar (200),
+	debug_complete_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_scs_system is '站控系统(scs)';
+comment on column daq_station_scs_system.oid is '主键';
+comment on column daq_station_scs_system.project_oid is '项目oid';
+comment on column daq_station_scs_system.tenders_oid is '标段oid';
+comment on column daq_station_scs_system.pipeline_oid is '管线oid';
+comment on column daq_station_scs_system.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_scs_system.device_code is '系统编号';
+comment on column daq_station_scs_system.device_name is '系统名称';
+comment on column daq_station_scs_system.manufacture_number is '出厂编号';
+comment on column daq_station_scs_system.antivirus_software is '防病毒软件';
+comment on column daq_station_scs_system.antivirus_software_version is '防病毒软件版本';
+comment on column daq_station_scs_system.debug_content_and_results is '调试内容及结果';
+comment on column daq_station_scs_system.debug_complete_date is '调试完成日期';
+comment on column daq_station_scs_system.construct_unit is '施工单位';
+comment on column daq_station_scs_system.supervision_unit is '监理单位';
+comment on column daq_station_scs_system.supervision_engineer is '监理工程师';
+comment on column daq_station_scs_system.collection_person is '采集人员';
+comment on column daq_station_scs_system.collection_date is '采集日期';
+comment on column daq_station_scs_system.approve_status is '审核状态';
+comment on column daq_station_scs_system.remarks is '备注';
+comment on column daq_station_scs_system.create_user_id is '创建人id';
+comment on column daq_station_scs_system.create_user_name is '创建人名称';
+comment on column daq_station_scs_system.create_datetime is '创建时间';
+comment on column daq_station_scs_system.modify_user_id is '修改人id';
+comment on column daq_station_scs_system.modify_user_name is '修改人名称';
+comment on column daq_station_scs_system.modify_datetime is '修改时间';
+comment on column daq_station_scs_system.active is '有效标志';
+create index index_daq_station_scs_system_oid_4 on daq_station_scs_system ( oid );
+create index index_daq_station_scs_system_device_code_9 on daq_station_scs_system ( device_code );
+create index index_daq_station_scs_system_device_name_10 on daq_station_scs_system ( device_name );
+
+create table daq_station_monitoring_system (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	debug_content_and_results varchar (200),
+	debug_complete_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_monitoring_system is '阀室监控系统';
+comment on column daq_station_monitoring_system.oid is '主键';
+comment on column daq_station_monitoring_system.project_oid is '项目oid';
+comment on column daq_station_monitoring_system.tenders_oid is '标段oid';
+comment on column daq_station_monitoring_system.pipeline_oid is '管线oid';
+comment on column daq_station_monitoring_system.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_monitoring_system.device_code is '系统编号';
+comment on column daq_station_monitoring_system.device_name is '系统名称';
+comment on column daq_station_monitoring_system.debug_content_and_results is '调试内容及结果';
+comment on column daq_station_monitoring_system.debug_complete_date is '调试完成日期';
+comment on column daq_station_monitoring_system.construct_unit is '施工单位';
+comment on column daq_station_monitoring_system.supervision_unit is '监理单位';
+comment on column daq_station_monitoring_system.supervision_engineer is '监理工程师';
+comment on column daq_station_monitoring_system.collection_person is '采集人员';
+comment on column daq_station_monitoring_system.collection_date is '采集日期';
+comment on column daq_station_monitoring_system.approve_status is '审核状态';
+comment on column daq_station_monitoring_system.remarks is '备注';
+comment on column daq_station_monitoring_system.create_user_id is '创建人id';
+comment on column daq_station_monitoring_system.create_user_name is '创建人名称';
+comment on column daq_station_monitoring_system.create_datetime is '创建时间';
+comment on column daq_station_monitoring_system.modify_user_id is '修改人id';
+comment on column daq_station_monitoring_system.modify_user_name is '修改人名称';
+comment on column daq_station_monitoring_system.modify_datetime is '修改时间';
+comment on column daq_station_monitoring_system.active is '有效标志';
+create index index_daq_station_monitoring_system_oid_4 on daq_station_monitoring_system ( oid );
+create index index_daq_station_monitoring_system_device_code_9 on daq_station_monitoring_system ( device_code );
+create index index_daq_station_monitoring_system_device_name_10 on daq_station_monitoring_system ( device_name );
+
+create table daq_station_supervisory_system (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	debug_content_and_results varchar (200),
+	debug_complete_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_supervisory_system is '阀室监视系统';
+comment on column daq_station_supervisory_system.oid is '主键';
+comment on column daq_station_supervisory_system.project_oid is '项目oid';
+comment on column daq_station_supervisory_system.tenders_oid is '标段oid';
+comment on column daq_station_supervisory_system.pipeline_oid is '管线oid';
+comment on column daq_station_supervisory_system.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_supervisory_system.device_code is '系统编号';
+comment on column daq_station_supervisory_system.device_name is '系统名称';
+comment on column daq_station_supervisory_system.debug_content_and_results is '调试内容及结果';
+comment on column daq_station_supervisory_system.debug_complete_date is '调试完成日期';
+comment on column daq_station_supervisory_system.construct_unit is '施工单位';
+comment on column daq_station_supervisory_system.supervision_unit is '监理单位';
+comment on column daq_station_supervisory_system.supervision_engineer is '监理工程师';
+comment on column daq_station_supervisory_system.collection_person is '采集人员';
+comment on column daq_station_supervisory_system.collection_date is '采集日期';
+comment on column daq_station_supervisory_system.approve_status is '审核状态';
+comment on column daq_station_supervisory_system.remarks is '备注';
+comment on column daq_station_supervisory_system.create_user_id is '创建人id';
+comment on column daq_station_supervisory_system.create_user_name is '创建人名称';
+comment on column daq_station_supervisory_system.create_datetime is '创建时间';
+comment on column daq_station_supervisory_system.modify_user_id is '修改人id';
+comment on column daq_station_supervisory_system.modify_user_name is '修改人名称';
+comment on column daq_station_supervisory_system.modify_datetime is '修改时间';
+comment on column daq_station_supervisory_system.active is '有效标志';
+create index index_daq_station_supervisory_system_oid_4 on daq_station_supervisory_system ( oid );
+create index index_daq_station_supervisory_system_device_code_9 on daq_station_supervisory_system ( device_code );
+create index index_daq_station_supervisory_system_device_name_10 on daq_station_supervisory_system ( device_name );
+
+create table daq_station_server_and_station (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	device_brand varchar (60),
+	mac_address varchar (50),
+	ip_address varchar (30),
+	subnet_mask_address varchar (30),
+	getway_address varchar (30),
+	dns_address varchar (30),
+	spare_dns_address varchar (30),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_server_and_station is '服务器与工作站';
+comment on column daq_station_server_and_station.oid is '主键';
+comment on column daq_station_server_and_station.project_oid is '项目oid';
+comment on column daq_station_server_and_station.tenders_oid is '标段oid';
+comment on column daq_station_server_and_station.pipeline_oid is '管线oid';
+comment on column daq_station_server_and_station.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_server_and_station.device_code is '设备编号';
+comment on column daq_station_server_and_station.device_name is '设备名称';
+comment on column daq_station_server_and_station.manufacture_number is '出厂编号';
+comment on column daq_station_server_and_station.device_brand is '品牌';
+comment on column daq_station_server_and_station.mac_address is 'mac地址';
+comment on column daq_station_server_and_station.ip_address is 'ip地址';
+comment on column daq_station_server_and_station.subnet_mask_address is '子网掩码';
+comment on column daq_station_server_and_station.getway_address is '网关';
+comment on column daq_station_server_and_station.dns_address is '首选dns';
+comment on column daq_station_server_and_station.spare_dns_address is '备用dns';
+comment on column daq_station_server_and_station.construct_date is '施工日期';
+comment on column daq_station_server_and_station.construct_unit is '施工单位';
+comment on column daq_station_server_and_station.supervision_unit is '监理单位';
+comment on column daq_station_server_and_station.supervision_engineer is '监理工程师';
+comment on column daq_station_server_and_station.collection_person is '采集人员';
+comment on column daq_station_server_and_station.collection_date is '采集日期';
+comment on column daq_station_server_and_station.approve_status is '审核状态';
+comment on column daq_station_server_and_station.remarks is '备注';
+comment on column daq_station_server_and_station.create_user_id is '创建人id';
+comment on column daq_station_server_and_station.create_user_name is '创建人名称';
+comment on column daq_station_server_and_station.create_datetime is '创建时间';
+comment on column daq_station_server_and_station.modify_user_id is '修改人id';
+comment on column daq_station_server_and_station.modify_user_name is '修改人名称';
+comment on column daq_station_server_and_station.modify_datetime is '修改时间';
+comment on column daq_station_server_and_station.active is '有效标志';
+create index index_daq_station_server_and_station_oid_4 on daq_station_server_and_station ( oid );
+create index index_daq_station_server_and_station_device_code_9 on daq_station_server_and_station ( device_code );
+create index index_daq_station_server_and_station_device_name_10 on daq_station_server_and_station ( device_name );
+
+create table daq_station_switch (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_switch is '交换机';
+comment on column daq_station_switch.oid is '主键';
+comment on column daq_station_switch.project_oid is '项目oid';
+comment on column daq_station_switch.tenders_oid is '标段oid';
+comment on column daq_station_switch.pipeline_oid is '管线oid';
+comment on column daq_station_switch.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_switch.device_code is '设备编号';
+comment on column daq_station_switch.device_name is '设备名称';
+comment on column daq_station_switch.manufacture_number is '出厂编号';
+comment on column daq_station_switch.construct_date is '施工日期';
+comment on column daq_station_switch.construct_unit is '施工单位';
+comment on column daq_station_switch.supervision_unit is '监理单位';
+comment on column daq_station_switch.supervision_engineer is '监理工程师';
+comment on column daq_station_switch.collection_person is '采集人员';
+comment on column daq_station_switch.collection_date is '采集日期';
+comment on column daq_station_switch.approve_status is '审核状态';
+comment on column daq_station_switch.remarks is '备注';
+comment on column daq_station_switch.create_user_id is '创建人id';
+comment on column daq_station_switch.create_user_name is '创建人名称';
+comment on column daq_station_switch.create_datetime is '创建时间';
+comment on column daq_station_switch.modify_user_id is '修改人id';
+comment on column daq_station_switch.modify_user_name is '修改人名称';
+comment on column daq_station_switch.modify_datetime is '修改时间';
+comment on column daq_station_switch.active is '有效标志';
+create index index_daq_station_switch_oid_4 on daq_station_switch ( oid );
+create index index_daq_station_switch_device_code_9 on daq_station_switch ( device_code );
+create index index_daq_station_switch_device_name_10 on daq_station_switch ( device_name );
+
+create table daq_station_router (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_router is '路由器';
+comment on column daq_station_router.oid is '主键';
+comment on column daq_station_router.project_oid is '项目oid';
+comment on column daq_station_router.tenders_oid is '标段oid';
+comment on column daq_station_router.pipeline_oid is '管线oid';
+comment on column daq_station_router.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_router.device_code is '设备编号';
+comment on column daq_station_router.device_name is '设备名称';
+comment on column daq_station_router.manufacture_number is '出厂编号';
+comment on column daq_station_router.construct_date is '施工日期';
+comment on column daq_station_router.construct_unit is '施工单位';
+comment on column daq_station_router.supervision_unit is '监理单位';
+comment on column daq_station_router.supervision_engineer is '监理工程师';
+comment on column daq_station_router.collection_person is '采集人员';
+comment on column daq_station_router.collection_date is '采集日期';
+comment on column daq_station_router.approve_status is '审核状态';
+comment on column daq_station_router.remarks is '备注';
+comment on column daq_station_router.create_user_id is '创建人id';
+comment on column daq_station_router.create_user_name is '创建人名称';
+comment on column daq_station_router.create_datetime is '创建时间';
+comment on column daq_station_router.modify_user_id is '修改人id';
+comment on column daq_station_router.modify_user_name is '修改人名称';
+comment on column daq_station_router.modify_datetime is '修改时间';
+comment on column daq_station_router.active is '有效标志';
+create index index_daq_station_router_oid_4 on daq_station_router ( oid );
+create index index_daq_station_router_device_code_9 on daq_station_router ( device_code );
+create index index_daq_station_router_device_name_10 on daq_station_router ( device_name );
+
+create table daq_station_cabinets (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_cabinets is '机柜';
+comment on column daq_station_cabinets.oid is '主键';
+comment on column daq_station_cabinets.project_oid is '项目oid';
+comment on column daq_station_cabinets.tenders_oid is '标段oid';
+comment on column daq_station_cabinets.pipeline_oid is '管线oid';
+comment on column daq_station_cabinets.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_cabinets.device_code is '设备编号';
+comment on column daq_station_cabinets.device_name is '设备名称';
+comment on column daq_station_cabinets.manufacture_number is '出厂编号';
+comment on column daq_station_cabinets.construct_date is '施工日期';
+comment on column daq_station_cabinets.construct_unit is '施工单位';
+comment on column daq_station_cabinets.supervision_unit is '监理单位';
+comment on column daq_station_cabinets.supervision_engineer is '监理工程师';
+comment on column daq_station_cabinets.collection_person is '采集人员';
+comment on column daq_station_cabinets.collection_date is '采集日期';
+comment on column daq_station_cabinets.approve_status is '审核状态';
+comment on column daq_station_cabinets.remarks is '备注';
+comment on column daq_station_cabinets.create_user_id is '创建人id';
+comment on column daq_station_cabinets.create_user_name is '创建人名称';
+comment on column daq_station_cabinets.create_datetime is '创建时间';
+comment on column daq_station_cabinets.modify_user_id is '修改人id';
+comment on column daq_station_cabinets.modify_user_name is '修改人名称';
+comment on column daq_station_cabinets.modify_datetime is '修改时间';
+comment on column daq_station_cabinets.active is '有效标志';
+create index index_daq_station_cabinets_oid_4 on daq_station_cabinets ( oid );
+create index index_daq_station_cabinets_device_code_9 on daq_station_cabinets ( device_code );
+create index index_daq_station_cabinets_device_name_10 on daq_station_cabinets ( device_name );
+
+create table daq_station_plc_system (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	antivirus_software varchar (50),
+	antivirus_software_version varchar (20),
+	debug_content_and_results varchar (200),
+	debug_complete_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_plc_system is '站控系统(plc)';
+comment on column daq_station_plc_system.oid is '主键';
+comment on column daq_station_plc_system.project_oid is '项目oid';
+comment on column daq_station_plc_system.tenders_oid is '标段oid';
+comment on column daq_station_plc_system.pipeline_oid is '管线oid';
+comment on column daq_station_plc_system.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_plc_system.device_code is '系统编号';
+comment on column daq_station_plc_system.device_name is '系统名称';
+comment on column daq_station_plc_system.antivirus_software is '防病毒软件';
+comment on column daq_station_plc_system.antivirus_software_version is '防病毒软件版本';
+comment on column daq_station_plc_system.debug_content_and_results is '调试内容及结果';
+comment on column daq_station_plc_system.debug_complete_date is '调试完成日期';
+comment on column daq_station_plc_system.construct_unit is '施工单位';
+comment on column daq_station_plc_system.supervision_unit is '监理单位';
+comment on column daq_station_plc_system.supervision_engineer is '监理工程师';
+comment on column daq_station_plc_system.collection_person is '采集人员';
+comment on column daq_station_plc_system.collection_date is '采集日期';
+comment on column daq_station_plc_system.approve_status is '审核状态';
+comment on column daq_station_plc_system.remarks is '备注';
+comment on column daq_station_plc_system.create_user_id is '创建人id';
+comment on column daq_station_plc_system.create_user_name is '创建人名称';
+comment on column daq_station_plc_system.create_datetime is '创建时间';
+comment on column daq_station_plc_system.modify_user_id is '修改人id';
+comment on column daq_station_plc_system.modify_user_name is '修改人名称';
+comment on column daq_station_plc_system.modify_datetime is '修改时间';
+comment on column daq_station_plc_system.active is '有效标志';
+create index index_daq_station_plc_system_oid_4 on daq_station_plc_system ( oid );
+create index index_daq_station_plc_system_device_code_9 on daq_station_plc_system ( device_code );
+create index index_daq_station_plc_system_device_name_10 on daq_station_plc_system ( device_name );
+
+create table daq_station_remote_monitoring_system (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_remote_monitoring_system is '远程监控系统';
+comment on column daq_station_remote_monitoring_system.oid is '主键';
+comment on column daq_station_remote_monitoring_system.project_oid is '项目oid';
+comment on column daq_station_remote_monitoring_system.tenders_oid is '标段oid';
+comment on column daq_station_remote_monitoring_system.pipeline_oid is '管线oid';
+comment on column daq_station_remote_monitoring_system.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_remote_monitoring_system.device_code is '系统编号';
+comment on column daq_station_remote_monitoring_system.device_name is '系统名称';
+comment on column daq_station_remote_monitoring_system.manufacture_number is '出厂编号';
+comment on column daq_station_remote_monitoring_system.construct_date is '施工日期';
+comment on column daq_station_remote_monitoring_system.construct_unit is '施工单位';
+comment on column daq_station_remote_monitoring_system.supervision_unit is '监理单位';
+comment on column daq_station_remote_monitoring_system.supervision_engineer is '监理工程师';
+comment on column daq_station_remote_monitoring_system.collection_person is '采集人员';
+comment on column daq_station_remote_monitoring_system.collection_date is '采集日期';
+comment on column daq_station_remote_monitoring_system.approve_status is '审核状态';
+comment on column daq_station_remote_monitoring_system.remarks is '备注';
+comment on column daq_station_remote_monitoring_system.create_user_id is '创建人id';
+comment on column daq_station_remote_monitoring_system.create_user_name is '创建人名称';
+comment on column daq_station_remote_monitoring_system.create_datetime is '创建时间';
+comment on column daq_station_remote_monitoring_system.modify_user_id is '修改人id';
+comment on column daq_station_remote_monitoring_system.modify_user_name is '修改人名称';
+comment on column daq_station_remote_monitoring_system.modify_datetime is '修改时间';
+comment on column daq_station_remote_monitoring_system.active is '有效标志';
+create index index_daq_station_remote_monitoring_system_oid_4 on daq_station_remote_monitoring_system ( oid );
+create index index_daq_station_remote_monitoring_system_device_code_9 on daq_station_remote_monitoring_system ( device_code );
+create index index_daq_station_remote_monitoring_system_device_name_10 on daq_station_remote_monitoring_system ( device_name );
+
+create table daq_station_remote_supervisory_system (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_remote_supervisory_system is '远程监视系统';
+comment on column daq_station_remote_supervisory_system.oid is '主键';
+comment on column daq_station_remote_supervisory_system.project_oid is '项目oid';
+comment on column daq_station_remote_supervisory_system.tenders_oid is '标段oid';
+comment on column daq_station_remote_supervisory_system.pipeline_oid is '管线oid';
+comment on column daq_station_remote_supervisory_system.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_remote_supervisory_system.device_code is '系统编号';
+comment on column daq_station_remote_supervisory_system.device_name is '系统名称';
+comment on column daq_station_remote_supervisory_system.manufacture_number is '出厂编号';
+comment on column daq_station_remote_supervisory_system.construct_date is '施工日期';
+comment on column daq_station_remote_supervisory_system.construct_unit is '施工单位';
+comment on column daq_station_remote_supervisory_system.supervision_unit is '监理单位';
+comment on column daq_station_remote_supervisory_system.supervision_engineer is '监理工程师';
+comment on column daq_station_remote_supervisory_system.collection_person is '采集人员';
+comment on column daq_station_remote_supervisory_system.collection_date is '采集日期';
+comment on column daq_station_remote_supervisory_system.approve_status is '审核状态';
+comment on column daq_station_remote_supervisory_system.remarks is '备注';
+comment on column daq_station_remote_supervisory_system.create_user_id is '创建人id';
+comment on column daq_station_remote_supervisory_system.create_user_name is '创建人名称';
+comment on column daq_station_remote_supervisory_system.create_datetime is '创建时间';
+comment on column daq_station_remote_supervisory_system.modify_user_id is '修改人id';
+comment on column daq_station_remote_supervisory_system.modify_user_name is '修改人名称';
+comment on column daq_station_remote_supervisory_system.modify_datetime is '修改时间';
+comment on column daq_station_remote_supervisory_system.active is '有效标志';
+create index index_daq_station_remote_supervisory_system_oid_4 on daq_station_remote_supervisory_system ( oid );
+create index index_daq_station_remote_supervisory_system_device_code_9 on daq_station_remote_supervisory_system ( device_code );
+create index index_daq_station_remote_supervisory_system_device_name_10 on daq_station_remote_supervisory_system ( device_name );
+
+create table daq_station_pds_system (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_pds_system is '应变应力检测系统(lds)';
+comment on column daq_station_pds_system.oid is '主键';
+comment on column daq_station_pds_system.project_oid is '项目oid';
+comment on column daq_station_pds_system.tenders_oid is '标段oid';
+comment on column daq_station_pds_system.pipeline_oid is '管线oid';
+comment on column daq_station_pds_system.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_pds_system.device_code is '系统编号';
+comment on column daq_station_pds_system.device_name is '系统名称';
+comment on column daq_station_pds_system.manufacture_number is '出厂编号';
+comment on column daq_station_pds_system.construct_date is '施工日期';
+comment on column daq_station_pds_system.construct_unit is '施工单位';
+comment on column daq_station_pds_system.supervision_unit is '监理单位';
+comment on column daq_station_pds_system.supervision_engineer is '监理工程师';
+comment on column daq_station_pds_system.collection_person is '采集人员';
+comment on column daq_station_pds_system.collection_date is '采集日期';
+comment on column daq_station_pds_system.approve_status is '审核状态';
+comment on column daq_station_pds_system.remarks is '备注';
+comment on column daq_station_pds_system.create_user_id is '创建人id';
+comment on column daq_station_pds_system.create_user_name is '创建人名称';
+comment on column daq_station_pds_system.create_datetime is '创建时间';
+comment on column daq_station_pds_system.modify_user_id is '修改人id';
+comment on column daq_station_pds_system.modify_user_name is '修改人名称';
+comment on column daq_station_pds_system.modify_datetime is '修改时间';
+comment on column daq_station_pds_system.active is '有效标志';
+create index index_daq_station_pds_system_oid_4 on daq_station_pds_system ( oid );
+create index index_daq_station_pds_system_device_code_9 on daq_station_pds_system ( device_code );
+create index index_daq_station_pds_system_device_name_10 on daq_station_pds_system ( device_name );
+
+create table daq_station_leak_detection_system (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	debug_content_and_results varchar (200),
+	debug_complete_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_leak_detection_system is '泄漏检测控系统';
+comment on column daq_station_leak_detection_system.oid is '主键';
+comment on column daq_station_leak_detection_system.project_oid is '项目oid';
+comment on column daq_station_leak_detection_system.tenders_oid is '标段oid';
+comment on column daq_station_leak_detection_system.pipeline_oid is '管线oid';
+comment on column daq_station_leak_detection_system.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_leak_detection_system.device_code is '系统编号';
+comment on column daq_station_leak_detection_system.device_name is '系统名称';
+comment on column daq_station_leak_detection_system.debug_content_and_results is '调试内容及结果';
+comment on column daq_station_leak_detection_system.debug_complete_date is '调试完成日期';
+comment on column daq_station_leak_detection_system.construct_unit is '施工单位';
+comment on column daq_station_leak_detection_system.supervision_unit is '监理单位';
+comment on column daq_station_leak_detection_system.supervision_engineer is '监理工程师';
+comment on column daq_station_leak_detection_system.collection_person is '采集人员';
+comment on column daq_station_leak_detection_system.collection_date is '采集日期';
+comment on column daq_station_leak_detection_system.approve_status is '审核状态';
+comment on column daq_station_leak_detection_system.remarks is '备注';
+comment on column daq_station_leak_detection_system.create_user_id is '创建人id';
+comment on column daq_station_leak_detection_system.create_user_name is '创建人名称';
+comment on column daq_station_leak_detection_system.create_datetime is '创建时间';
+comment on column daq_station_leak_detection_system.modify_user_id is '修改人id';
+comment on column daq_station_leak_detection_system.modify_user_name is '修改人名称';
+comment on column daq_station_leak_detection_system.modify_datetime is '修改时间';
+comment on column daq_station_leak_detection_system.active is '有效标志';
+create index index_daq_station_leak_detection_system_oid_4 on daq_station_leak_detection_system ( oid );
+create index index_daq_station_leak_detection_system_device_code_9 on daq_station_leak_detection_system ( device_code );
+create index index_daq_station_leak_detection_system_device_name_10 on daq_station_leak_detection_system ( device_name );
+
+create table daq_station_diagnosis_and_maintenance (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	debug_content_and_results varchar (200),
+	debug_complete_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_diagnosis_and_maintenance is '远程诊断与维护系统';
+comment on column daq_station_diagnosis_and_maintenance.oid is '主键';
+comment on column daq_station_diagnosis_and_maintenance.project_oid is '项目oid';
+comment on column daq_station_diagnosis_and_maintenance.tenders_oid is '标段oid';
+comment on column daq_station_diagnosis_and_maintenance.pipeline_oid is '管线oid';
+comment on column daq_station_diagnosis_and_maintenance.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_diagnosis_and_maintenance.device_code is '系统编号';
+comment on column daq_station_diagnosis_and_maintenance.device_name is '系统名称';
+comment on column daq_station_diagnosis_and_maintenance.debug_content_and_results is '调试内容及结果';
+comment on column daq_station_diagnosis_and_maintenance.debug_complete_date is '调试完成日期';
+comment on column daq_station_diagnosis_and_maintenance.construct_unit is '施工单位';
+comment on column daq_station_diagnosis_and_maintenance.supervision_unit is '监理单位';
+comment on column daq_station_diagnosis_and_maintenance.supervision_engineer is '监理工程师';
+comment on column daq_station_diagnosis_and_maintenance.collection_person is '采集人员';
+comment on column daq_station_diagnosis_and_maintenance.collection_date is '采集日期';
+comment on column daq_station_diagnosis_and_maintenance.approve_status is '审核状态';
+comment on column daq_station_diagnosis_and_maintenance.remarks is '备注';
+comment on column daq_station_diagnosis_and_maintenance.create_user_id is '创建人id';
+comment on column daq_station_diagnosis_and_maintenance.create_user_name is '创建人名称';
+comment on column daq_station_diagnosis_and_maintenance.create_datetime is '创建时间';
+comment on column daq_station_diagnosis_and_maintenance.modify_user_id is '修改人id';
+comment on column daq_station_diagnosis_and_maintenance.modify_user_name is '修改人名称';
+comment on column daq_station_diagnosis_and_maintenance.modify_datetime is '修改时间';
+comment on column daq_station_diagnosis_and_maintenance.active is '有效标志';
+create index index_daq_station_diagnosis_and_maintenance_oid_4 on daq_station_diagnosis_and_maintenance ( oid );
+create index index_daq_station_diagnosis_and_maintenance_device_code_9 on daq_station_diagnosis_and_maintenance ( device_code );
+create index index_daq_station_diagnosis_and_maintenance_device_name_10 on daq_station_diagnosis_and_maintenance ( device_name );
+
+create table daq_station_metering_system (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	debug_content_and_results varchar (200),
+	debug_complete_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_metering_system is '计量系统';
+comment on column daq_station_metering_system.oid is '主键';
+comment on column daq_station_metering_system.project_oid is '项目oid';
+comment on column daq_station_metering_system.tenders_oid is '标段oid';
+comment on column daq_station_metering_system.pipeline_oid is '管线oid';
+comment on column daq_station_metering_system.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_metering_system.device_code is '系统编号';
+comment on column daq_station_metering_system.device_name is '系统名称';
+comment on column daq_station_metering_system.manufacture_number is '出厂编号';
+comment on column daq_station_metering_system.debug_content_and_results is '调试内容及结果';
+comment on column daq_station_metering_system.debug_complete_date is '调试完成日期';
+comment on column daq_station_metering_system.construct_unit is '施工单位';
+comment on column daq_station_metering_system.supervision_unit is '监理单位';
+comment on column daq_station_metering_system.supervision_engineer is '监理工程师';
+comment on column daq_station_metering_system.collection_person is '采集人员';
+comment on column daq_station_metering_system.collection_date is '采集日期';
+comment on column daq_station_metering_system.approve_status is '审核状态';
+comment on column daq_station_metering_system.remarks is '备注';
+comment on column daq_station_metering_system.create_user_id is '创建人id';
+comment on column daq_station_metering_system.create_user_name is '创建人名称';
+comment on column daq_station_metering_system.create_datetime is '创建时间';
+comment on column daq_station_metering_system.modify_user_id is '修改人id';
+comment on column daq_station_metering_system.modify_user_name is '修改人名称';
+comment on column daq_station_metering_system.modify_datetime is '修改时间';
+comment on column daq_station_metering_system.active is '有效标志';
+create index index_daq_station_metering_system_oid_4 on daq_station_metering_system ( oid );
+create index index_daq_station_metering_system_device_code_9 on daq_station_metering_system ( device_code );
+create index index_daq_station_metering_system_device_name_10 on daq_station_metering_system ( device_name );
+
+create table daq_station_pressure_control_system (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	debug_content_and_results varchar (200),
+	debug_complete_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_pressure_control_system is '调压系统';
+comment on column daq_station_pressure_control_system.oid is '主键';
+comment on column daq_station_pressure_control_system.project_oid is '项目oid';
+comment on column daq_station_pressure_control_system.tenders_oid is '标段oid';
+comment on column daq_station_pressure_control_system.pipeline_oid is '管线oid';
+comment on column daq_station_pressure_control_system.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_pressure_control_system.device_code is '系统编号';
+comment on column daq_station_pressure_control_system.device_name is '系统名称';
+comment on column daq_station_pressure_control_system.manufacture_number is '出厂编号';
+comment on column daq_station_pressure_control_system.debug_content_and_results is '调试内容及结果';
+comment on column daq_station_pressure_control_system.debug_complete_date is '调试完成日期';
+comment on column daq_station_pressure_control_system.construct_unit is '施工单位';
+comment on column daq_station_pressure_control_system.supervision_unit is '监理单位';
+comment on column daq_station_pressure_control_system.supervision_engineer is '监理工程师';
+comment on column daq_station_pressure_control_system.collection_person is '采集人员';
+comment on column daq_station_pressure_control_system.collection_date is '采集日期';
+comment on column daq_station_pressure_control_system.approve_status is '审核状态';
+comment on column daq_station_pressure_control_system.remarks is '备注';
+comment on column daq_station_pressure_control_system.create_user_id is '创建人id';
+comment on column daq_station_pressure_control_system.create_user_name is '创建人名称';
+comment on column daq_station_pressure_control_system.create_datetime is '创建时间';
+comment on column daq_station_pressure_control_system.modify_user_id is '修改人id';
+comment on column daq_station_pressure_control_system.modify_user_name is '修改人名称';
+comment on column daq_station_pressure_control_system.modify_datetime is '修改时间';
+comment on column daq_station_pressure_control_system.active is '有效标志';
+create index index_daq_station_pressure_control_system_oid_4 on daq_station_pressure_control_system ( oid );
+create index index_daq_station_pressure_control_system_device_code_9 on daq_station_pressure_control_system ( device_code );
+create index index_daq_station_pressure_control_system_device_name_10 on daq_station_pressure_control_system ( device_name );
+
+create table daq_station_analysis_system (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	debug_content_and_results varchar (200),
+	debug_complete_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_analysis_system is '分析系统';
+comment on column daq_station_analysis_system.oid is '主键';
+comment on column daq_station_analysis_system.project_oid is '项目oid';
+comment on column daq_station_analysis_system.tenders_oid is '标段oid';
+comment on column daq_station_analysis_system.pipeline_oid is '管线oid';
+comment on column daq_station_analysis_system.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_analysis_system.device_code is '系统编号';
+comment on column daq_station_analysis_system.device_name is '系统名称';
+comment on column daq_station_analysis_system.manufacture_number is '出厂编号';
+comment on column daq_station_analysis_system.debug_content_and_results is '调试内容及结果';
+comment on column daq_station_analysis_system.debug_complete_date is '调试完成日期';
+comment on column daq_station_analysis_system.construct_unit is '施工单位';
+comment on column daq_station_analysis_system.supervision_unit is '监理单位';
+comment on column daq_station_analysis_system.supervision_engineer is '监理工程师';
+comment on column daq_station_analysis_system.collection_person is '采集人员';
+comment on column daq_station_analysis_system.collection_date is '采集日期';
+comment on column daq_station_analysis_system.approve_status is '审核状态';
+comment on column daq_station_analysis_system.remarks is '备注';
+comment on column daq_station_analysis_system.create_user_id is '创建人id';
+comment on column daq_station_analysis_system.create_user_name is '创建人名称';
+comment on column daq_station_analysis_system.create_datetime is '创建时间';
+comment on column daq_station_analysis_system.modify_user_id is '修改人id';
+comment on column daq_station_analysis_system.modify_user_name is '修改人名称';
+comment on column daq_station_analysis_system.modify_datetime is '修改时间';
+comment on column daq_station_analysis_system.active is '有效标志';
+create index index_daq_station_analysis_system_oid_4 on daq_station_analysis_system ( oid );
+create index index_daq_station_analysis_system_device_code_9 on daq_station_analysis_system ( device_code );
+create index index_daq_station_analysis_system_device_name_10 on daq_station_analysis_system ( device_name );
+
+create table daq_station_prover_system (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location varchar (100),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_prover_system is '标定设备';
+comment on column daq_station_prover_system.oid is '主键';
+comment on column daq_station_prover_system.project_oid is '项目oid';
+comment on column daq_station_prover_system.tenders_oid is '标段oid';
+comment on column daq_station_prover_system.pipeline_oid is '管线oid';
+comment on column daq_station_prover_system.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_prover_system.device_code is '系统编号';
+comment on column daq_station_prover_system.device_name is '系统名称';
+comment on column daq_station_prover_system.manufacture_number is '出厂编号';
+comment on column daq_station_prover_system.install_location is '安装位置';
+comment on column daq_station_prover_system.construct_date is '施工日期';
+comment on column daq_station_prover_system.construct_unit is '施工单位';
+comment on column daq_station_prover_system.supervision_unit is '监理单位';
+comment on column daq_station_prover_system.supervision_engineer is '监理工程师';
+comment on column daq_station_prover_system.collection_person is '采集人员';
+comment on column daq_station_prover_system.collection_date is '采集日期';
+comment on column daq_station_prover_system.approve_status is '审核状态';
+comment on column daq_station_prover_system.remarks is '备注';
+comment on column daq_station_prover_system.create_user_id is '创建人id';
+comment on column daq_station_prover_system.create_user_name is '创建人名称';
+comment on column daq_station_prover_system.create_datetime is '创建时间';
+comment on column daq_station_prover_system.modify_user_id is '修改人id';
+comment on column daq_station_prover_system.modify_user_name is '修改人名称';
+comment on column daq_station_prover_system.modify_datetime is '修改时间';
+comment on column daq_station_prover_system.active is '有效标志';
+create index index_daq_station_prover_system_oid_4 on daq_station_prover_system ( oid );
+create index index_daq_station_prover_system_device_code_9 on daq_station_prover_system ( device_code );
+create index index_daq_station_prover_system_device_name_10 on daq_station_prover_system ( device_name );
+
+create table daq_station_sgs_system (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	debug_content_and_results varchar (200),
+	debug_complete_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_sgs_system is '自用气系统';
+comment on column daq_station_sgs_system.oid is '主键';
+comment on column daq_station_sgs_system.project_oid is '项目oid';
+comment on column daq_station_sgs_system.tenders_oid is '标段oid';
+comment on column daq_station_sgs_system.pipeline_oid is '管线oid';
+comment on column daq_station_sgs_system.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_sgs_system.device_code is '设备编号';
+comment on column daq_station_sgs_system.device_name is '设备名称';
+comment on column daq_station_sgs_system.manufacture_number is '出厂编号';
+comment on column daq_station_sgs_system.debug_content_and_results is '调试内容及结果';
+comment on column daq_station_sgs_system.debug_complete_date is '调试完成日期';
+comment on column daq_station_sgs_system.construct_unit is '施工单位';
+comment on column daq_station_sgs_system.supervision_unit is '监理单位';
+comment on column daq_station_sgs_system.supervision_engineer is '监理工程师';
+comment on column daq_station_sgs_system.collection_person is '采集人员';
+comment on column daq_station_sgs_system.collection_date is '采集日期';
+comment on column daq_station_sgs_system.approve_status is '审核状态';
+comment on column daq_station_sgs_system.remarks is '备注';
+comment on column daq_station_sgs_system.create_user_id is '创建人id';
+comment on column daq_station_sgs_system.create_user_name is '创建人名称';
+comment on column daq_station_sgs_system.create_datetime is '创建时间';
+comment on column daq_station_sgs_system.modify_user_id is '修改人id';
+comment on column daq_station_sgs_system.modify_user_name is '修改人名称';
+comment on column daq_station_sgs_system.modify_datetime is '修改时间';
+comment on column daq_station_sgs_system.active is '有效标志';
+create index index_daq_station_sgs_system_oid_4 on daq_station_sgs_system ( oid );
+create index index_daq_station_sgs_system_device_code_9 on daq_station_sgs_system ( device_code );
+create index index_daq_station_sgs_system_device_name_10 on daq_station_sgs_system ( device_name );
+
+create table daq_station_pressure_transmitter (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location varchar (100),
+	detection_unit varchar (60),
+	detection_date timestamp (6),
+	detection_result varchar (100),
+	connection_mode varchar (60),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_pressure_transmitter is '压力变送器';
+comment on column daq_station_pressure_transmitter.oid is '主键';
+comment on column daq_station_pressure_transmitter.project_oid is '项目oid';
+comment on column daq_station_pressure_transmitter.tenders_oid is '标段oid';
+comment on column daq_station_pressure_transmitter.pipeline_oid is '管线oid';
+comment on column daq_station_pressure_transmitter.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_pressure_transmitter.device_code is '设备编号';
+comment on column daq_station_pressure_transmitter.device_name is '设备名称';
+comment on column daq_station_pressure_transmitter.manufacture_number is '出厂编号';
+comment on column daq_station_pressure_transmitter.install_location is '安装位置';
+comment on column daq_station_pressure_transmitter.detection_unit is '检定单位';
+comment on column daq_station_pressure_transmitter.detection_date is '检定日期';
+comment on column daq_station_pressure_transmitter.detection_result is '检定结论';
+comment on column daq_station_pressure_transmitter.connection_mode is '连接方式,域值：pt_connection_mode_domain';
+comment on column daq_station_pressure_transmitter.construct_date is '施工日期';
+comment on column daq_station_pressure_transmitter.construct_unit is '施工单位';
+comment on column daq_station_pressure_transmitter.supervision_unit is '监理单位';
+comment on column daq_station_pressure_transmitter.supervision_engineer is '监理工程师';
+comment on column daq_station_pressure_transmitter.collection_person is '采集人员';
+comment on column daq_station_pressure_transmitter.collection_date is '采集日期';
+comment on column daq_station_pressure_transmitter.approve_status is '审核状态';
+comment on column daq_station_pressure_transmitter.remarks is '备注';
+comment on column daq_station_pressure_transmitter.create_user_id is '创建人id';
+comment on column daq_station_pressure_transmitter.create_user_name is '创建人名称';
+comment on column daq_station_pressure_transmitter.create_datetime is '创建时间';
+comment on column daq_station_pressure_transmitter.modify_user_id is '修改人id';
+comment on column daq_station_pressure_transmitter.modify_user_name is '修改人名称';
+comment on column daq_station_pressure_transmitter.modify_datetime is '修改时间';
+comment on column daq_station_pressure_transmitter.active is '有效标志';
+create index index_daq_station_pressure_transmitter_oid_4 on daq_station_pressure_transmitter ( oid );
+create index index_daq_station_pressure_transmitter_device_code_9 on daq_station_pressure_transmitter ( device_code );
+create index index_daq_station_pressure_transmitter_device_name_10 on daq_station_pressure_transmitter ( device_name );
+
+create table daq_station_pressure_gauge (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location varchar (100),
+	detection_unit varchar (60),
+	detection_date timestamp (6),
+	detection_result varchar (100),
+	connection_mode varchar (60),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_pressure_gauge is '压力表';
+comment on column daq_station_pressure_gauge.oid is '主键';
+comment on column daq_station_pressure_gauge.project_oid is '项目oid';
+comment on column daq_station_pressure_gauge.tenders_oid is '标段oid';
+comment on column daq_station_pressure_gauge.pipeline_oid is '管线oid';
+comment on column daq_station_pressure_gauge.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_pressure_gauge.device_code is '设备编号';
+comment on column daq_station_pressure_gauge.device_name is '设备名称';
+comment on column daq_station_pressure_gauge.manufacture_number is '出厂编号';
+comment on column daq_station_pressure_gauge.install_location is '安装位置';
+comment on column daq_station_pressure_gauge.detection_unit is '检定单位';
+comment on column daq_station_pressure_gauge.detection_date is '检定日期';
+comment on column daq_station_pressure_gauge.detection_result is '检定结论';
+comment on column daq_station_pressure_gauge.connection_mode is '连接方式,域值：pt_connection_mode_domain';
+comment on column daq_station_pressure_gauge.construct_date is '施工日期';
+comment on column daq_station_pressure_gauge.construct_unit is '施工单位';
+comment on column daq_station_pressure_gauge.supervision_unit is '监理单位';
+comment on column daq_station_pressure_gauge.supervision_engineer is '监理工程师';
+comment on column daq_station_pressure_gauge.collection_person is '采集人员';
+comment on column daq_station_pressure_gauge.collection_date is '采集日期';
+comment on column daq_station_pressure_gauge.approve_status is '审核状态';
+comment on column daq_station_pressure_gauge.remarks is '备注';
+comment on column daq_station_pressure_gauge.create_user_id is '创建人id';
+comment on column daq_station_pressure_gauge.create_user_name is '创建人名称';
+comment on column daq_station_pressure_gauge.create_datetime is '创建时间';
+comment on column daq_station_pressure_gauge.modify_user_id is '修改人id';
+comment on column daq_station_pressure_gauge.modify_user_name is '修改人名称';
+comment on column daq_station_pressure_gauge.modify_datetime is '修改时间';
+comment on column daq_station_pressure_gauge.active is '有效标志';
+create index index_daq_station_pressure_gauge_oid_4 on daq_station_pressure_gauge ( oid );
+create index index_daq_station_pressure_gauge_device_code_9 on daq_station_pressure_gauge ( device_code );
+create index index_daq_station_pressure_gauge_device_name_10 on daq_station_pressure_gauge ( device_name );
+
+
+create table daq_station_pressure_difference_transmitter (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location varchar (100),
+	detection_unit varchar (60),
+	detection_date timestamp (6),
+	detection_result varchar (100),
+	connection_mode varchar (60),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_pressure_difference_transmitter is '差压变送器';
+comment on column daq_station_pressure_difference_transmitter.oid is '主键';
+comment on column daq_station_pressure_difference_transmitter.project_oid is '项目oid';
+comment on column daq_station_pressure_difference_transmitter.tenders_oid is '标段oid';
+comment on column daq_station_pressure_difference_transmitter.pipeline_oid is '管线oid';
+comment on column daq_station_pressure_difference_transmitter.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_pressure_difference_transmitter.device_code is '设备编号';
+comment on column daq_station_pressure_difference_transmitter.device_name is '设备名称';
+comment on column daq_station_pressure_difference_transmitter.manufacture_number is '出厂编号';
+comment on column daq_station_pressure_difference_transmitter.install_location is '安装位置';
+comment on column daq_station_pressure_difference_transmitter.detection_unit is '检定单位';
+comment on column daq_station_pressure_difference_transmitter.detection_date is '检定日期';
+comment on column daq_station_pressure_difference_transmitter.detection_result is '检定结论';
+comment on column daq_station_pressure_difference_transmitter.connection_mode is '连接方式,域值：pt_connection_mode_domain';
+comment on column daq_station_pressure_difference_transmitter.construct_date is '施工日期';
+comment on column daq_station_pressure_difference_transmitter.construct_unit is '施工单位';
+comment on column daq_station_pressure_difference_transmitter.supervision_unit is '监理单位';
+comment on column daq_station_pressure_difference_transmitter.supervision_engineer is '监理工程师';
+comment on column daq_station_pressure_difference_transmitter.collection_person is '采集人员';
+comment on column daq_station_pressure_difference_transmitter.collection_date is '采集日期';
+comment on column daq_station_pressure_difference_transmitter.approve_status is '审核状态';
+comment on column daq_station_pressure_difference_transmitter.remarks is '备注';
+comment on column daq_station_pressure_difference_transmitter.create_user_id is '创建人id';
+comment on column daq_station_pressure_difference_transmitter.create_user_name is '创建人名称';
+comment on column daq_station_pressure_difference_transmitter.create_datetime is '创建时间';
+comment on column daq_station_pressure_difference_transmitter.modify_user_id is '修改人id';
+comment on column daq_station_pressure_difference_transmitter.modify_user_name is '修改人名称';
+comment on column daq_station_pressure_difference_transmitter.modify_datetime is '修改时间';
+comment on column daq_station_pressure_difference_transmitter.active is '有效标志';
+create index index_daq_station_pressure_difference_transmitter_oid_4 on daq_station_pressure_difference_transmitter ( oid );
+create index index_daq_station_pressure_difference_transmitter_device_code_9 on daq_station_pressure_difference_transmitter ( device_code );
+create index index_daq_station_pressure_difference_transmitter_device_name_10 on daq_station_pressure_difference_transmitter ( device_name );
+
+create table daq_station_pressure_difference_gauge (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location varchar (100),
+	detection_unit varchar (60),
+	detection_date timestamp (6),
+	detection_result varchar (100),
+	connection_mode varchar (60),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_pressure_difference_gauge is '差压表';
+comment on column daq_station_pressure_difference_gauge.oid is '主键';
+comment on column daq_station_pressure_difference_gauge.project_oid is '项目oid';
+comment on column daq_station_pressure_difference_gauge.tenders_oid is '标段oid';
+comment on column daq_station_pressure_difference_gauge.pipeline_oid is '管线oid';
+comment on column daq_station_pressure_difference_gauge.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_pressure_difference_gauge.device_code is '设备编号';
+comment on column daq_station_pressure_difference_gauge.device_name is '设备名称';
+comment on column daq_station_pressure_difference_gauge.manufacture_number is '出厂编号';
+comment on column daq_station_pressure_difference_gauge.install_location is '安装位置';
+comment on column daq_station_pressure_difference_gauge.detection_unit is '检定单位';
+comment on column daq_station_pressure_difference_gauge.detection_date is '检定日期';
+comment on column daq_station_pressure_difference_gauge.detection_result is '检定结论';
+comment on column daq_station_pressure_difference_gauge.connection_mode is '连接方式,域值：pt_connection_mode_domain';
+comment on column daq_station_pressure_difference_gauge.construct_date is '施工日期';
+comment on column daq_station_pressure_difference_gauge.construct_unit is '施工单位';
+comment on column daq_station_pressure_difference_gauge.supervision_unit is '监理单位';
+comment on column daq_station_pressure_difference_gauge.supervision_engineer is '监理工程师';
+comment on column daq_station_pressure_difference_gauge.collection_person is '采集人员';
+comment on column daq_station_pressure_difference_gauge.collection_date is '采集日期';
+comment on column daq_station_pressure_difference_gauge.approve_status is '审核状态';
+comment on column daq_station_pressure_difference_gauge.remarks is '备注';
+comment on column daq_station_pressure_difference_gauge.create_user_id is '创建人id';
+comment on column daq_station_pressure_difference_gauge.create_user_name is '创建人名称';
+comment on column daq_station_pressure_difference_gauge.create_datetime is '创建时间';
+comment on column daq_station_pressure_difference_gauge.modify_user_id is '修改人id';
+comment on column daq_station_pressure_difference_gauge.modify_user_name is '修改人名称';
+comment on column daq_station_pressure_difference_gauge.modify_datetime is '修改时间';
+comment on column daq_station_pressure_difference_gauge.active is '有效标志';
+create index index_daq_station_pressure_difference_gauge_oid_4 on daq_station_pressure_difference_gauge ( oid );
+create index index_daq_station_pressure_difference_gauge_device_code_9 on daq_station_pressure_difference_gauge ( device_code );
+create index index_daq_station_pressure_difference_gauge_device_name_10 on daq_station_pressure_difference_gauge ( device_name );
+
+create table daq_station_pressure_switch (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	set_value numeric (6, 1),
+	install_location varchar (100),
+	connection_mode varchar (60),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_pressure_switch is '压力开关';
+comment on column daq_station_pressure_switch.oid is '主键';
+comment on column daq_station_pressure_switch.project_oid is '项目oid';
+comment on column daq_station_pressure_switch.tenders_oid is '标段oid';
+comment on column daq_station_pressure_switch.pipeline_oid is '管线oid';
+comment on column daq_station_pressure_switch.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_pressure_switch.device_code is '设备编号';
+comment on column daq_station_pressure_switch.device_name is '设备名称';
+comment on column daq_station_pressure_switch.manufacture_number is '出厂编号';
+comment on column daq_station_pressure_switch.set_value is '设定值(mpa)';
+comment on column daq_station_pressure_switch.install_location is '安装位置';
+comment on column daq_station_pressure_switch.connection_mode is '连接方式,域值：pt_connection_mode_domain';
+comment on column daq_station_pressure_switch.construct_date is '施工日期';
+comment on column daq_station_pressure_switch.construct_unit is '施工单位';
+comment on column daq_station_pressure_switch.supervision_unit is '监理单位';
+comment on column daq_station_pressure_switch.supervision_engineer is '监理工程师';
+comment on column daq_station_pressure_switch.collection_person is '采集人员';
+comment on column daq_station_pressure_switch.collection_date is '采集日期';
+comment on column daq_station_pressure_switch.approve_status is '审核状态';
+comment on column daq_station_pressure_switch.remarks is '备注';
+comment on column daq_station_pressure_switch.create_user_id is '创建人id';
+comment on column daq_station_pressure_switch.create_user_name is '创建人名称';
+comment on column daq_station_pressure_switch.create_datetime is '创建时间';
+comment on column daq_station_pressure_switch.modify_user_id is '修改人id';
+comment on column daq_station_pressure_switch.modify_user_name is '修改人名称';
+comment on column daq_station_pressure_switch.modify_datetime is '修改时间';
+comment on column daq_station_pressure_switch.active is '有效标志';
+create index index_daq_station_pressure_switch_oid_4 on daq_station_pressure_switch ( oid );
+create index index_daq_station_pressure_switch_device_code_9 on daq_station_pressure_switch ( device_code );
+create index index_daq_station_pressure_switch_device_name_10 on daq_station_pressure_switch ( device_name );
+
+create table daq_station_temperature_transmitter (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location varchar (100),
+	detection_unit varchar (60),
+	detection_date timestamp (6),
+	detection_result varchar (100),
+	connection_mode varchar (60),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_temperature_transmitter is '温度变送器';
+comment on column daq_station_temperature_transmitter.oid is '主键';
+comment on column daq_station_temperature_transmitter.project_oid is '项目oid';
+comment on column daq_station_temperature_transmitter.tenders_oid is '标段oid';
+comment on column daq_station_temperature_transmitter.pipeline_oid is '管线oid';
+comment on column daq_station_temperature_transmitter.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_temperature_transmitter.device_code is '设备编号';
+comment on column daq_station_temperature_transmitter.device_name is '设备名称';
+comment on column daq_station_temperature_transmitter.manufacture_number is '出厂编号';
+comment on column daq_station_temperature_transmitter.install_location is '安装位置';
+comment on column daq_station_temperature_transmitter.detection_unit is '检定单位';
+comment on column daq_station_temperature_transmitter.detection_date is '检定日期';
+comment on column daq_station_temperature_transmitter.detection_result is '检定结论';
+comment on column daq_station_temperature_transmitter.connection_mode is '连接方式,域值：pt_connection_mode_domain';
+comment on column daq_station_temperature_transmitter.construct_date is '施工日期';
+comment on column daq_station_temperature_transmitter.construct_unit is '施工单位';
+comment on column daq_station_temperature_transmitter.supervision_unit is '监理单位';
+comment on column daq_station_temperature_transmitter.supervision_engineer is '监理工程师';
+comment on column daq_station_temperature_transmitter.collection_person is '采集人员';
+comment on column daq_station_temperature_transmitter.collection_date is '采集日期';
+comment on column daq_station_temperature_transmitter.approve_status is '审核状态';
+comment on column daq_station_temperature_transmitter.remarks is '备注';
+comment on column daq_station_temperature_transmitter.create_user_id is '创建人id';
+comment on column daq_station_temperature_transmitter.create_user_name is '创建人名称';
+comment on column daq_station_temperature_transmitter.create_datetime is '创建时间';
+comment on column daq_station_temperature_transmitter.modify_user_id is '修改人id';
+comment on column daq_station_temperature_transmitter.modify_user_name is '修改人名称';
+comment on column daq_station_temperature_transmitter.modify_datetime is '修改时间';
+comment on column daq_station_temperature_transmitter.active is '有效标志';
+create index index_daq_station_temperature_transmitter_oid_4 on daq_station_temperature_transmitter ( oid );
+create index index_daq_station_temperature_transmitter_device_code_9 on daq_station_temperature_transmitter ( device_code );
+create index index_daq_station_temperature_transmitter_device_name_10 on daq_station_temperature_transmitter ( device_name );
+
+create table daq_station_bimetallic_thermometer (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location varchar (100),
+	detection_unit varchar (60),
+	detection_date timestamp (6),
+	detection_result varchar (100),
+	connection_mode varchar (60),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_bimetallic_thermometer is '双金属温度计';
+comment on column daq_station_bimetallic_thermometer.oid is '主键';
+comment on column daq_station_bimetallic_thermometer.project_oid is '项目oid';
+comment on column daq_station_bimetallic_thermometer.tenders_oid is '标段oid';
+comment on column daq_station_bimetallic_thermometer.pipeline_oid is '管线oid';
+comment on column daq_station_bimetallic_thermometer.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_bimetallic_thermometer.device_code is '设备编号';
+comment on column daq_station_bimetallic_thermometer.device_name is '设备名称';
+comment on column daq_station_bimetallic_thermometer.manufacture_number is '出厂编号';
+comment on column daq_station_bimetallic_thermometer.install_location is '安装位置';
+comment on column daq_station_bimetallic_thermometer.detection_unit is '检定单位';
+comment on column daq_station_bimetallic_thermometer.detection_date is '检定日期';
+comment on column daq_station_bimetallic_thermometer.detection_result is '检定结论';
+comment on column daq_station_bimetallic_thermometer.connection_mode is '连接方式,域值：pt_connection_mode_domain';
+comment on column daq_station_bimetallic_thermometer.construct_date is '施工日期';
+comment on column daq_station_bimetallic_thermometer.construct_unit is '施工单位';
+comment on column daq_station_bimetallic_thermometer.supervision_unit is '监理单位';
+comment on column daq_station_bimetallic_thermometer.supervision_engineer is '监理工程师';
+comment on column daq_station_bimetallic_thermometer.collection_person is '采集人员';
+comment on column daq_station_bimetallic_thermometer.collection_date is '采集日期';
+comment on column daq_station_bimetallic_thermometer.approve_status is '审核状态';
+comment on column daq_station_bimetallic_thermometer.remarks is '备注';
+comment on column daq_station_bimetallic_thermometer.create_user_id is '创建人id';
+comment on column daq_station_bimetallic_thermometer.create_user_name is '创建人名称';
+comment on column daq_station_bimetallic_thermometer.create_datetime is '创建时间';
+comment on column daq_station_bimetallic_thermometer.modify_user_id is '修改人id';
+comment on column daq_station_bimetallic_thermometer.modify_user_name is '修改人名称';
+comment on column daq_station_bimetallic_thermometer.modify_datetime is '修改时间';
+comment on column daq_station_bimetallic_thermometer.active is '有效标志';
+create index index_daq_station_bimetallic_thermometer_oid_4 on daq_station_bimetallic_thermometer ( oid );
+create index index_daq_station_bimetallic_thermometer_device_code_9 on daq_station_bimetallic_thermometer ( device_code );
+create index index_daq_station_bimetallic_thermometer_device_name_10 on daq_station_bimetallic_thermometer ( device_name );
+
+create table daq_station_temperature_element (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location varchar (100),
+	detection_unit varchar (60),
+	detection_date timestamp (6),
+	detection_result varchar (100),
+	connection_mode varchar (60),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_temperature_element is '铂电阻';
+comment on column daq_station_temperature_element.oid is '主键';
+comment on column daq_station_temperature_element.project_oid is '项目oid';
+comment on column daq_station_temperature_element.tenders_oid is '标段oid';
+comment on column daq_station_temperature_element.pipeline_oid is '管线oid';
+comment on column daq_station_temperature_element.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_temperature_element.device_code is '设备编号';
+comment on column daq_station_temperature_element.device_name is '设备名称';
+comment on column daq_station_temperature_element.manufacture_number is '出厂编号';
+comment on column daq_station_temperature_element.install_location is '安装位置';
+comment on column daq_station_temperature_element.detection_unit is '检定单位';
+comment on column daq_station_temperature_element.detection_date is '检定日期';
+comment on column daq_station_temperature_element.detection_result is '检定结论';
+comment on column daq_station_temperature_element.connection_mode is '连接方式,域值：pt_connection_mode_domain';
+comment on column daq_station_temperature_element.construct_date is '施工日期';
+comment on column daq_station_temperature_element.construct_unit is '施工单位';
+comment on column daq_station_temperature_element.supervision_unit is '监理单位';
+comment on column daq_station_temperature_element.supervision_engineer is '监理工程师';
+comment on column daq_station_temperature_element.collection_person is '采集人员';
+comment on column daq_station_temperature_element.collection_date is '采集日期';
+comment on column daq_station_temperature_element.approve_status is '审核状态';
+comment on column daq_station_temperature_element.remarks is '备注';
+comment on column daq_station_temperature_element.create_user_id is '创建人id';
+comment on column daq_station_temperature_element.create_user_name is '创建人名称';
+comment on column daq_station_temperature_element.create_datetime is '创建时间';
+comment on column daq_station_temperature_element.modify_user_id is '修改人id';
+comment on column daq_station_temperature_element.modify_user_name is '修改人名称';
+comment on column daq_station_temperature_element.modify_datetime is '修改时间';
+comment on column daq_station_temperature_element.active is '有效标志';
+create index index_daq_station_temperature_element_oid_4 on daq_station_temperature_element ( oid );
+create index index_daq_station_temperature_element_device_code_9 on daq_station_temperature_element ( device_code );
+create index index_daq_station_temperature_element_device_name_10 on daq_station_temperature_element ( device_name );
+
+create table daq_station_temperature_switch (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	set_value numeric (6, 1),
+	install_location varchar (100),
+	connection_mode varchar (60),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_temperature_switch is '温度开关';
+comment on column daq_station_temperature_switch.oid is '主键';
+comment on column daq_station_temperature_switch.project_oid is '项目oid';
+comment on column daq_station_temperature_switch.tenders_oid is '标段oid';
+comment on column daq_station_temperature_switch.pipeline_oid is '管线oid';
+comment on column daq_station_temperature_switch.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_temperature_switch.device_code is '设备编号';
+comment on column daq_station_temperature_switch.device_name is '设备名称';
+comment on column daq_station_temperature_switch.manufacture_number is '出厂编号';
+comment on column daq_station_temperature_switch.set_value is '设定值(℃)';
+comment on column daq_station_temperature_switch.install_location is '安装位置';
+comment on column daq_station_temperature_switch.connection_mode is '连接方式,域值：pt_connection_mode_domain';
+comment on column daq_station_temperature_switch.construct_date is '施工日期';
+comment on column daq_station_temperature_switch.construct_unit is '施工单位';
+comment on column daq_station_temperature_switch.supervision_unit is '监理单位';
+comment on column daq_station_temperature_switch.supervision_engineer is '监理工程师';
+comment on column daq_station_temperature_switch.collection_person is '采集人员';
+comment on column daq_station_temperature_switch.collection_date is '采集日期';
+comment on column daq_station_temperature_switch.approve_status is '审核状态';
+comment on column daq_station_temperature_switch.remarks is '备注';
+comment on column daq_station_temperature_switch.create_user_id is '创建人id';
+comment on column daq_station_temperature_switch.create_user_name is '创建人名称';
+comment on column daq_station_temperature_switch.create_datetime is '创建时间';
+comment on column daq_station_temperature_switch.modify_user_id is '修改人id';
+comment on column daq_station_temperature_switch.modify_user_name is '修改人名称';
+comment on column daq_station_temperature_switch.modify_datetime is '修改时间';
+comment on column daq_station_temperature_switch.active is '有效标志';
+create index index_daq_station_temperature_switch_oid_4 on daq_station_temperature_switch ( oid );
+create index index_daq_station_temperature_switch_device_code_9 on daq_station_temperature_switch ( device_code );
+create index index_daq_station_temperature_switch_device_name_10 on daq_station_temperature_switch ( device_name );
+
+create table daq_station_age_temperature_transmitter (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	set_value numeric (6, 1),
+	install_location varchar (100),
+	connection_mode varchar (60),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_age_temperature_transmitter is '平均温度计';
+comment on column daq_station_age_temperature_transmitter.oid is '主键';
+comment on column daq_station_age_temperature_transmitter.project_oid is '项目oid';
+comment on column daq_station_age_temperature_transmitter.tenders_oid is '标段oid';
+comment on column daq_station_age_temperature_transmitter.pipeline_oid is '管线oid';
+comment on column daq_station_age_temperature_transmitter.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_age_temperature_transmitter.device_code is '设备编号';
+comment on column daq_station_age_temperature_transmitter.device_name is '设备名称';
+comment on column daq_station_age_temperature_transmitter.manufacture_number is '出厂编号';
+comment on column daq_station_age_temperature_transmitter.set_value is '设定值(mpa)';
+comment on column daq_station_age_temperature_transmitter.install_location is '安装位置';
+comment on column daq_station_age_temperature_transmitter.connection_mode is '连接方式,域值：pt_connection_mode_domain';
+comment on column daq_station_age_temperature_transmitter.construct_date is '施工日期';
+comment on column daq_station_age_temperature_transmitter.construct_unit is '施工单位';
+comment on column daq_station_age_temperature_transmitter.supervision_unit is '监理单位';
+comment on column daq_station_age_temperature_transmitter.supervision_engineer is '监理工程师';
+comment on column daq_station_age_temperature_transmitter.collection_person is '采集人员';
+comment on column daq_station_age_temperature_transmitter.collection_date is '采集日期';
+comment on column daq_station_age_temperature_transmitter.approve_status is '审核状态';
+comment on column daq_station_age_temperature_transmitter.remarks is '备注';
+comment on column daq_station_age_temperature_transmitter.create_user_id is '创建人id';
+comment on column daq_station_age_temperature_transmitter.create_user_name is '创建人名称';
+comment on column daq_station_age_temperature_transmitter.create_datetime is '创建时间';
+comment on column daq_station_age_temperature_transmitter.modify_user_id is '修改人id';
+comment on column daq_station_age_temperature_transmitter.modify_user_name is '修改人名称';
+comment on column daq_station_age_temperature_transmitter.modify_datetime is '修改时间';
+comment on column daq_station_age_temperature_transmitter.active is '有效标志';
+create index index_daq_station_age_temperature_transmitter_oid_4 on daq_station_age_temperature_transmitter ( oid );
+create index index_daq_station_age_temperature_transmitter_device_code_9 on daq_station_age_temperature_transmitter ( device_code );
+create index index_daq_station_age_temperature_transmitter_device_name_10 on daq_station_age_temperature_transmitter ( device_name );
+
+create table daq_station_lit_level_transmitter (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location varchar (100),
+	connection_mode varchar (60),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_lit_level_transmitter is '液位变送器';
+comment on column daq_station_lit_level_transmitter.oid is '主键';
+comment on column daq_station_lit_level_transmitter.project_oid is '项目oid';
+comment on column daq_station_lit_level_transmitter.tenders_oid is '标段oid';
+comment on column daq_station_lit_level_transmitter.pipeline_oid is '管线oid';
+comment on column daq_station_lit_level_transmitter.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_lit_level_transmitter.device_code is '设备编号';
+comment on column daq_station_lit_level_transmitter.device_name is '设备名称';
+comment on column daq_station_lit_level_transmitter.manufacture_number is '出厂编号';
+comment on column daq_station_lit_level_transmitter.install_location is '安装位置';
+comment on column daq_station_lit_level_transmitter.connection_mode is '连接方式,域值：pt_connection_mode_domain';
+comment on column daq_station_lit_level_transmitter.construct_date is '施工日期';
+comment on column daq_station_lit_level_transmitter.construct_unit is '施工单位';
+comment on column daq_station_lit_level_transmitter.supervision_unit is '监理单位';
+comment on column daq_station_lit_level_transmitter.supervision_engineer is '监理工程师';
+comment on column daq_station_lit_level_transmitter.collection_person is '采集人员';
+comment on column daq_station_lit_level_transmitter.collection_date is '采集日期';
+comment on column daq_station_lit_level_transmitter.approve_status is '审核状态';
+comment on column daq_station_lit_level_transmitter.remarks is '备注';
+comment on column daq_station_lit_level_transmitter.create_user_id is '创建人id';
+comment on column daq_station_lit_level_transmitter.create_user_name is '创建人名称';
+comment on column daq_station_lit_level_transmitter.create_datetime is '创建时间';
+comment on column daq_station_lit_level_transmitter.modify_user_id is '修改人id';
+comment on column daq_station_lit_level_transmitter.modify_user_name is '修改人名称';
+comment on column daq_station_lit_level_transmitter.modify_datetime is '修改时间';
+comment on column daq_station_lit_level_transmitter.active is '有效标志';
+create index index_daq_station_lit_level_transmitter_oid_4 on daq_station_lit_level_transmitter ( oid );
+create index index_daq_station_lit_level_transmitter_device_code_9 on daq_station_lit_level_transmitter ( device_code );
+create index index_daq_station_lit_level_transmitter_device_name_10 on daq_station_lit_level_transmitter ( device_name );
+
+create table daq_station_level_gauge (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location varchar (100),
+	connection_mode varchar (60),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_level_gauge is '液位计数';
+comment on column daq_station_level_gauge.oid is '主键';
+comment on column daq_station_level_gauge.project_oid is '项目oid';
+comment on column daq_station_level_gauge.tenders_oid is '标段oid';
+comment on column daq_station_level_gauge.pipeline_oid is '管线oid';
+comment on column daq_station_level_gauge.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_level_gauge.device_code is '设备编号';
+comment on column daq_station_level_gauge.device_name is '设备名称';
+comment on column daq_station_level_gauge.manufacture_number is '出厂编号';
+comment on column daq_station_level_gauge.install_location is '安装位置';
+comment on column daq_station_level_gauge.connection_mode is '连接方式,域值：pt_connection_mode_domain';
+comment on column daq_station_level_gauge.construct_date is '施工日期';
+comment on column daq_station_level_gauge.construct_unit is '施工单位';
+comment on column daq_station_level_gauge.supervision_unit is '监理单位';
+comment on column daq_station_level_gauge.supervision_engineer is '监理工程师';
+comment on column daq_station_level_gauge.collection_person is '采集人员';
+comment on column daq_station_level_gauge.collection_date is '采集日期';
+comment on column daq_station_level_gauge.approve_status is '审核状态';
+comment on column daq_station_level_gauge.remarks is '备注';
+comment on column daq_station_level_gauge.create_user_id is '创建人id';
+comment on column daq_station_level_gauge.create_user_name is '创建人名称';
+comment on column daq_station_level_gauge.create_datetime is '创建时间';
+comment on column daq_station_level_gauge.modify_user_id is '修改人id';
+comment on column daq_station_level_gauge.modify_user_name is '修改人名称';
+comment on column daq_station_level_gauge.modify_datetime is '修改时间';
+comment on column daq_station_level_gauge.active is '有效标志';
+create index index_daq_station_level_gauge_oid_4 on daq_station_level_gauge ( oid );
+create index index_daq_station_level_gauge_device_code_9 on daq_station_level_gauge ( device_code );
+create index index_daq_station_level_gauge_device_name_10 on daq_station_level_gauge ( device_name );
+
+create table daq_station_level_gauge_switch (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	set_value numeric (6, 1),
+	install_location varchar (100),
+	connection_mode varchar (60),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_level_gauge_switch is '液位开关';
+comment on column daq_station_level_gauge_switch.oid is '主键';
+comment on column daq_station_level_gauge_switch.project_oid is '项目oid';
+comment on column daq_station_level_gauge_switch.tenders_oid is '标段oid';
+comment on column daq_station_level_gauge_switch.pipeline_oid is '管线oid';
+comment on column daq_station_level_gauge_switch.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_level_gauge_switch.device_code is '设备编号';
+comment on column daq_station_level_gauge_switch.device_name is '设备名称';
+comment on column daq_station_level_gauge_switch.manufacture_number is '出厂编号';
+comment on column daq_station_level_gauge_switch.set_value is '设定值(mm)';
+comment on column daq_station_level_gauge_switch.install_location is '安装位置';
+comment on column daq_station_level_gauge_switch.connection_mode is '连接方式,域值：pt_connection_mode_domain';
+comment on column daq_station_level_gauge_switch.construct_date is '施工日期';
+comment on column daq_station_level_gauge_switch.construct_unit is '施工单位';
+comment on column daq_station_level_gauge_switch.supervision_unit is '监理单位';
+comment on column daq_station_level_gauge_switch.supervision_engineer is '监理工程师';
+comment on column daq_station_level_gauge_switch.collection_person is '采集人员';
+comment on column daq_station_level_gauge_switch.collection_date is '采集日期';
+comment on column daq_station_level_gauge_switch.approve_status is '审核状态';
+comment on column daq_station_level_gauge_switch.remarks is '备注';
+comment on column daq_station_level_gauge_switch.create_user_id is '创建人id';
+comment on column daq_station_level_gauge_switch.create_user_name is '创建人名称';
+comment on column daq_station_level_gauge_switch.create_datetime is '创建时间';
+comment on column daq_station_level_gauge_switch.modify_user_id is '修改人id';
+comment on column daq_station_level_gauge_switch.modify_user_name is '修改人名称';
+comment on column daq_station_level_gauge_switch.modify_datetime is '修改时间';
+comment on column daq_station_level_gauge_switch.active is '有效标志';
+create index index_daq_station_level_gauge_switch_oid_4 on daq_station_level_gauge_switch ( oid );
+create index index_daq_station_level_gauge_switch_device_code_9 on daq_station_level_gauge_switch ( device_code );
+create index index_daq_station_level_gauge_switch_device_name_10 on daq_station_level_gauge_switch ( device_name );
+
+create table daq_station_metering (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location varchar (100),
+	detection_unit varchar (60),
+	detection_date timestamp (6),
+	detection_result varchar (100),
+	connection_mode varchar (60),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_metering is '流量计';
+comment on column daq_station_metering.oid is '主键';
+comment on column daq_station_metering.project_oid is '项目oid';
+comment on column daq_station_metering.tenders_oid is '标段oid';
+comment on column daq_station_metering.pipeline_oid is '管线oid';
+comment on column daq_station_metering.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_metering.device_code is '设备编号';
+comment on column daq_station_metering.device_name is '设备名称';
+comment on column daq_station_metering.manufacture_number is '出厂编号';
+comment on column daq_station_metering.install_location is '安装位置';
+comment on column daq_station_metering.detection_unit is '检定单位';
+comment on column daq_station_metering.detection_date is '检定日期';
+comment on column daq_station_metering.detection_result is '检定结论';
+comment on column daq_station_metering.connection_mode is '连接方式,域值：pt_connection_mode_domain';
+comment on column daq_station_metering.construct_date is '施工日期';
+comment on column daq_station_metering.construct_unit is '施工单位';
+comment on column daq_station_metering.supervision_unit is '监理单位';
+comment on column daq_station_metering.supervision_engineer is '监理工程师';
+comment on column daq_station_metering.collection_person is '采集人员';
+comment on column daq_station_metering.collection_date is '采集日期';
+comment on column daq_station_metering.approve_status is '审核状态';
+comment on column daq_station_metering.remarks is '备注';
+comment on column daq_station_metering.create_user_id is '创建人id';
+comment on column daq_station_metering.create_user_name is '创建人名称';
+comment on column daq_station_metering.create_datetime is '创建时间';
+comment on column daq_station_metering.modify_user_id is '修改人id';
+comment on column daq_station_metering.modify_user_name is '修改人名称';
+comment on column daq_station_metering.modify_datetime is '修改时间';
+comment on column daq_station_metering.active is '有效标志';
+create index index_daq_station_metering_oid_4 on daq_station_metering ( oid );
+create index index_daq_station_metering_device_code_9 on daq_station_metering ( device_code );
+create index index_daq_station_metering_device_name_10 on daq_station_metering ( device_name );
+
+create table daq_station_analysis (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location varchar (100),
+	detection_unit varchar (60),
+	detection_date timestamp (6),
+	detection_result varchar (100),
+	connection_mode varchar (60),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_analysis is '分析设备';
+comment on column daq_station_analysis.oid is '主键';
+comment on column daq_station_analysis.project_oid is '项目oid';
+comment on column daq_station_analysis.tenders_oid is '标段oid';
+comment on column daq_station_analysis.pipeline_oid is '管线oid';
+comment on column daq_station_analysis.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_analysis.device_code is '设备编号';
+comment on column daq_station_analysis.device_name is '设备名称';
+comment on column daq_station_analysis.manufacture_number is '出厂编号';
+comment on column daq_station_analysis.install_location is '安装位置';
+comment on column daq_station_analysis.detection_unit is '检定单位';
+comment on column daq_station_analysis.detection_date is '检定日期';
+comment on column daq_station_analysis.detection_result is '检定结论';
+comment on column daq_station_analysis.connection_mode is '连接方式,域值：pt_connection_mode_domain';
+comment on column daq_station_analysis.construct_date is '施工日期';
+comment on column daq_station_analysis.construct_unit is '施工单位';
+comment on column daq_station_analysis.supervision_unit is '监理单位';
+comment on column daq_station_analysis.supervision_engineer is '监理工程师';
+comment on column daq_station_analysis.collection_person is '采集人员';
+comment on column daq_station_analysis.collection_date is '采集日期';
+comment on column daq_station_analysis.approve_status is '审核状态';
+comment on column daq_station_analysis.remarks is '备注';
+comment on column daq_station_analysis.create_user_id is '创建人id';
+comment on column daq_station_analysis.create_user_name is '创建人名称';
+comment on column daq_station_analysis.create_datetime is '创建时间';
+comment on column daq_station_analysis.modify_user_id is '修改人id';
+comment on column daq_station_analysis.modify_user_name is '修改人名称';
+comment on column daq_station_analysis.modify_datetime is '修改时间';
+comment on column daq_station_analysis.active is '有效标志';
+create index index_daq_station_analysis_oid_4 on daq_station_analysis ( oid );
+create index index_daq_station_analysis_device_code_9 on daq_station_analysis ( device_code );
+create index index_daq_station_analysis_device_name_10 on daq_station_analysis ( device_name );
+
+create table daq_station_control_valve (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	strength_test_medium varchar (45),
+	strength_test_pressure numeric (9, 3),
+	strength_test_drop_press numeric (9, 3),
+	film_head_test_medium numeric (9, 3),
+	film_head_test_pressure numeric (9, 3),
+	film_head_test_drop_press numeric (9, 3),
+	open_valve_stroke_time numeric (6, 0),
+	colse_valve_stroke_time numeric (6, 0),
+	install_location varchar (100),
+	connection_mode varchar (60),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_control_valve is '调节阀';
+comment on column daq_station_control_valve.oid is '主键';
+comment on column daq_station_control_valve.project_oid is '项目oid';
+comment on column daq_station_control_valve.tenders_oid is '标段oid';
+comment on column daq_station_control_valve.pipeline_oid is '管线oid';
+comment on column daq_station_control_valve.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_control_valve.device_code is '设备编号';
+comment on column daq_station_control_valve.device_name is '设备名称';
+comment on column daq_station_control_valve.manufacture_number is '出厂编号';
+comment on column daq_station_control_valve.strength_test_medium is '阀体强度试验介质';
+comment on column daq_station_control_valve.strength_test_pressure is '阀体强度试验压力(mpa)';
+comment on column daq_station_control_valve.strength_test_drop_press is '阀体强度试验5分钟压降(kpa)';
+comment on column daq_station_control_valve.film_head_test_medium is '膜头气密性试验介质';
+comment on column daq_station_control_valve.film_head_test_pressure is '膜头气密性试验压力(mpa)';
+comment on column daq_station_control_valve.film_head_test_drop_press is '膜头气密性试验5分钟压降(kpa)';
+comment on column daq_station_control_valve.open_valve_stroke_time is '开阀全行程时间(s)';
+comment on column daq_station_control_valve.colse_valve_stroke_time is '关阀全行程时间(s)';
+comment on column daq_station_control_valve.install_location is '安装位置';
+comment on column daq_station_control_valve.connection_mode is '连接方式,域值：pt_connection_mode_domain';
+comment on column daq_station_control_valve.construct_date is '施工日期';
+comment on column daq_station_control_valve.construct_unit is '施工单位';
+comment on column daq_station_control_valve.supervision_unit is '监理单位';
+comment on column daq_station_control_valve.supervision_engineer is '监理工程师';
+comment on column daq_station_control_valve.collection_person is '采集人员';
+comment on column daq_station_control_valve.collection_date is '采集日期';
+comment on column daq_station_control_valve.approve_status is '审核状态';
+comment on column daq_station_control_valve.remarks is '备注';
+comment on column daq_station_control_valve.create_user_id is '创建人id';
+comment on column daq_station_control_valve.create_user_name is '创建人名称';
+comment on column daq_station_control_valve.create_datetime is '创建时间';
+comment on column daq_station_control_valve.modify_user_id is '修改人id';
+comment on column daq_station_control_valve.modify_user_name is '修改人名称';
+comment on column daq_station_control_valve.modify_datetime is '修改时间';
+comment on column daq_station_control_valve.active is '有效标志';
+create index index_daq_station_control_valve_oid_4 on daq_station_control_valve ( oid );
+create index index_daq_station_control_valve_device_code_9 on daq_station_control_valve ( device_code );
+create index index_daq_station_control_valve_device_name_10 on daq_station_control_valve ( device_name );
+
+create table daq_station_executing_agency (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_executing_agency is '执行机构';
+comment on column daq_station_executing_agency.oid is '主键';
+comment on column daq_station_executing_agency.project_oid is '项目oid';
+comment on column daq_station_executing_agency.tenders_oid is '标段oid';
+comment on column daq_station_executing_agency.pipeline_oid is '管线oid';
+comment on column daq_station_executing_agency.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_executing_agency.device_code is '设备编号';
+comment on column daq_station_executing_agency.device_name is '设备名称';
+comment on column daq_station_executing_agency.manufacture_number is '出厂编号';
+comment on column daq_station_executing_agency.construct_date is '施工日期';
+comment on column daq_station_executing_agency.construct_unit is '施工单位';
+comment on column daq_station_executing_agency.supervision_unit is '监理单位';
+comment on column daq_station_executing_agency.supervision_engineer is '监理工程师';
+comment on column daq_station_executing_agency.collection_person is '采集人员';
+comment on column daq_station_executing_agency.collection_date is '采集日期';
+comment on column daq_station_executing_agency.approve_status is '审核状态';
+comment on column daq_station_executing_agency.remarks is '备注';
+comment on column daq_station_executing_agency.create_user_id is '创建人id';
+comment on column daq_station_executing_agency.create_user_name is '创建人名称';
+comment on column daq_station_executing_agency.create_datetime is '创建时间';
+comment on column daq_station_executing_agency.modify_user_id is '修改人id';
+comment on column daq_station_executing_agency.modify_user_name is '修改人名称';
+comment on column daq_station_executing_agency.modify_datetime is '修改时间';
+comment on column daq_station_executing_agency.active is '有效标志';
+create index index_daq_station_executing_agency_oid_4 on daq_station_executing_agency ( oid );
+create index index_daq_station_executing_agency_device_code_9 on daq_station_executing_agency ( device_code );
+create index index_daq_station_executing_agency_device_name_10 on daq_station_executing_agency ( device_name );
+
+create table daq_station_flammable_gas_detector (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location varchar (100),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_flammable_gas_detector is '可燃气体探测器';
+comment on column daq_station_flammable_gas_detector.oid is '主键';
+comment on column daq_station_flammable_gas_detector.project_oid is '项目oid';
+comment on column daq_station_flammable_gas_detector.tenders_oid is '标段oid';
+comment on column daq_station_flammable_gas_detector.pipeline_oid is '管线oid';
+comment on column daq_station_flammable_gas_detector.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_flammable_gas_detector.device_code is '设备编号';
+comment on column daq_station_flammable_gas_detector.device_name is '设备名称';
+comment on column daq_station_flammable_gas_detector.manufacture_number is '出厂编号';
+comment on column daq_station_flammable_gas_detector.install_location is '安装位置';
+comment on column daq_station_flammable_gas_detector.construct_date is '施工日期';
+comment on column daq_station_flammable_gas_detector.construct_unit is '施工单位';
+comment on column daq_station_flammable_gas_detector.supervision_unit is '监理单位';
+comment on column daq_station_flammable_gas_detector.supervision_engineer is '监理工程师';
+comment on column daq_station_flammable_gas_detector.collection_person is '采集人员';
+comment on column daq_station_flammable_gas_detector.collection_date is '采集日期';
+comment on column daq_station_flammable_gas_detector.approve_status is '审核状态';
+comment on column daq_station_flammable_gas_detector.remarks is '备注';
+comment on column daq_station_flammable_gas_detector.create_user_id is '创建人id';
+comment on column daq_station_flammable_gas_detector.create_user_name is '创建人名称';
+comment on column daq_station_flammable_gas_detector.create_datetime is '创建时间';
+comment on column daq_station_flammable_gas_detector.modify_user_id is '修改人id';
+comment on column daq_station_flammable_gas_detector.modify_user_name is '修改人名称';
+comment on column daq_station_flammable_gas_detector.modify_datetime is '修改时间';
+comment on column daq_station_flammable_gas_detector.active is '有效标志';
+create index index_daq_station_flammable_gas_detector_oid_4 on daq_station_flammable_gas_detector ( oid );
+create index index_daq_station_flammable_gas_detector_device_code_9 on daq_station_flammable_gas_detector ( device_code );
+create index index_daq_station_flammable_gas_detector_device_name_10 on daq_station_flammable_gas_detector ( device_name );
+
+create table daq_station_flame_detector (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location varchar (100),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_flame_detector is '火焰探测器';
+comment on column daq_station_flame_detector.oid is '主键';
+comment on column daq_station_flame_detector.project_oid is '项目oid';
+comment on column daq_station_flame_detector.tenders_oid is '标段oid';
+comment on column daq_station_flame_detector.pipeline_oid is '管线oid';
+comment on column daq_station_flame_detector.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_flame_detector.device_code is '设备编号';
+comment on column daq_station_flame_detector.device_name is '设备名称';
+comment on column daq_station_flame_detector.manufacture_number is '出厂编号';
+comment on column daq_station_flame_detector.install_location is '安装位置';
+comment on column daq_station_flame_detector.construct_date is '施工日期';
+comment on column daq_station_flame_detector.construct_unit is '施工单位';
+comment on column daq_station_flame_detector.supervision_unit is '监理单位';
+comment on column daq_station_flame_detector.supervision_engineer is '监理工程师';
+comment on column daq_station_flame_detector.collection_person is '采集人员';
+comment on column daq_station_flame_detector.collection_date is '采集日期';
+comment on column daq_station_flame_detector.approve_status is '审核状态';
+comment on column daq_station_flame_detector.remarks is '备注';
+comment on column daq_station_flame_detector.create_user_id is '创建人id';
+comment on column daq_station_flame_detector.create_user_name is '创建人名称';
+comment on column daq_station_flame_detector.create_datetime is '创建时间';
+comment on column daq_station_flame_detector.modify_user_id is '修改人id';
+comment on column daq_station_flame_detector.modify_user_name is '修改人名称';
+comment on column daq_station_flame_detector.modify_datetime is '修改时间';
+comment on column daq_station_flame_detector.active is '有效标志';
+create index index_daq_station_flame_detector_oid_4 on daq_station_flame_detector ( oid );
+create index index_daq_station_flame_detector_device_code_9 on daq_station_flame_detector ( device_code );
+create index index_daq_station_flame_detector_device_name_10 on daq_station_flame_detector ( device_name );
+
+create table daq_station_temperature_sensor (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location varchar (100),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_temperature_sensor is '感温探测器';
+comment on column daq_station_temperature_sensor.oid is '主键';
+comment on column daq_station_temperature_sensor.project_oid is '项目oid';
+comment on column daq_station_temperature_sensor.tenders_oid is '标段oid';
+comment on column daq_station_temperature_sensor.pipeline_oid is '管线oid';
+comment on column daq_station_temperature_sensor.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_temperature_sensor.device_code is '设备编号';
+comment on column daq_station_temperature_sensor.device_name is '设备名称';
+comment on column daq_station_temperature_sensor.manufacture_number is '出厂编号';
+comment on column daq_station_temperature_sensor.install_location is '安装位置';
+comment on column daq_station_temperature_sensor.construct_date is '施工日期';
+comment on column daq_station_temperature_sensor.construct_unit is '施工单位';
+comment on column daq_station_temperature_sensor.supervision_unit is '监理单位';
+comment on column daq_station_temperature_sensor.supervision_engineer is '监理工程师';
+comment on column daq_station_temperature_sensor.collection_person is '采集人员';
+comment on column daq_station_temperature_sensor.collection_date is '采集日期';
+comment on column daq_station_temperature_sensor.approve_status is '审核状态';
+comment on column daq_station_temperature_sensor.remarks is '备注';
+comment on column daq_station_temperature_sensor.create_user_id is '创建人id';
+comment on column daq_station_temperature_sensor.create_user_name is '创建人名称';
+comment on column daq_station_temperature_sensor.create_datetime is '创建时间';
+comment on column daq_station_temperature_sensor.modify_user_id is '修改人id';
+comment on column daq_station_temperature_sensor.modify_user_name is '修改人名称';
+comment on column daq_station_temperature_sensor.modify_datetime is '修改时间';
+comment on column daq_station_temperature_sensor.active is '有效标志';
+create index index_daq_station_temperature_sensor_oid_4 on daq_station_temperature_sensor ( oid );
+create index index_daq_station_temperature_sensor_device_code_9 on daq_station_temperature_sensor ( device_code );
+create index index_daq_station_temperature_sensor_device_name_10 on daq_station_temperature_sensor ( device_name );
+
+create table daq_station_smoke_detector (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location varchar (100),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_smoke_detector is '感烟探测器';
+comment on column daq_station_smoke_detector.oid is '主键';
+comment on column daq_station_smoke_detector.project_oid is '项目oid';
+comment on column daq_station_smoke_detector.tenders_oid is '标段oid';
+comment on column daq_station_smoke_detector.pipeline_oid is '管线oid';
+comment on column daq_station_smoke_detector.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_smoke_detector.device_code is '设备编号';
+comment on column daq_station_smoke_detector.device_name is '设备名称';
+comment on column daq_station_smoke_detector.manufacture_number is '出厂编号';
+comment on column daq_station_smoke_detector.install_location is '安装位置';
+comment on column daq_station_smoke_detector.construct_date is '施工日期';
+comment on column daq_station_smoke_detector.construct_unit is '施工单位';
+comment on column daq_station_smoke_detector.supervision_unit is '监理单位';
+comment on column daq_station_smoke_detector.supervision_engineer is '监理工程师';
+comment on column daq_station_smoke_detector.collection_person is '采集人员';
+comment on column daq_station_smoke_detector.collection_date is '采集日期';
+comment on column daq_station_smoke_detector.approve_status is '审核状态';
+comment on column daq_station_smoke_detector.remarks is '备注';
+comment on column daq_station_smoke_detector.create_user_id is '创建人id';
+comment on column daq_station_smoke_detector.create_user_name is '创建人名称';
+comment on column daq_station_smoke_detector.create_datetime is '创建时间';
+comment on column daq_station_smoke_detector.modify_user_id is '修改人id';
+comment on column daq_station_smoke_detector.modify_user_name is '修改人名称';
+comment on column daq_station_smoke_detector.modify_datetime is '修改时间';
+comment on column daq_station_smoke_detector.active is '有效标志';
+create index index_daq_station_smoke_detector_oid_4 on daq_station_smoke_detector ( oid );
+create index index_daq_station_smoke_detector_device_code_9 on daq_station_smoke_detector ( device_code );
+create index index_daq_station_smoke_detector_device_name_10 on daq_station_smoke_detector ( device_name );
+
+create table daq_station_manual_alarm_button (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location varchar (100),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_manual_alarm_button is '手动报警按钮';
+comment on column daq_station_manual_alarm_button.oid is '主键';
+comment on column daq_station_manual_alarm_button.project_oid is '项目oid';
+comment on column daq_station_manual_alarm_button.tenders_oid is '标段oid';
+comment on column daq_station_manual_alarm_button.pipeline_oid is '管线oid';
+comment on column daq_station_manual_alarm_button.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_manual_alarm_button.device_code is '设备编号';
+comment on column daq_station_manual_alarm_button.device_name is '设备名称';
+comment on column daq_station_manual_alarm_button.manufacture_number is '出厂编号';
+comment on column daq_station_manual_alarm_button.install_location is '安装位置';
+comment on column daq_station_manual_alarm_button.construct_date is '施工日期';
+comment on column daq_station_manual_alarm_button.construct_unit is '施工单位';
+comment on column daq_station_manual_alarm_button.supervision_unit is '监理单位';
+comment on column daq_station_manual_alarm_button.supervision_engineer is '监理工程师';
+comment on column daq_station_manual_alarm_button.collection_person is '采集人员';
+comment on column daq_station_manual_alarm_button.collection_date is '采集日期';
+comment on column daq_station_manual_alarm_button.approve_status is '审核状态';
+comment on column daq_station_manual_alarm_button.remarks is '备注';
+comment on column daq_station_manual_alarm_button.create_user_id is '创建人id';
+comment on column daq_station_manual_alarm_button.create_user_name is '创建人名称';
+comment on column daq_station_manual_alarm_button.create_datetime is '创建时间';
+comment on column daq_station_manual_alarm_button.modify_user_id is '修改人id';
+comment on column daq_station_manual_alarm_button.modify_user_name is '修改人名称';
+comment on column daq_station_manual_alarm_button.modify_datetime is '修改时间';
+comment on column daq_station_manual_alarm_button.active is '有效标志';
+create index index_daq_station_manual_alarm_button_oid_4 on daq_station_manual_alarm_button ( oid );
+create index index_daq_station_manual_alarm_button_device_code_9 on daq_station_manual_alarm_button ( device_code );
+create index index_daq_station_manual_alarm_button_device_name_10 on daq_station_manual_alarm_button ( device_name );
+
+create table daq_station_cable_heat_detector (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location varchar (100),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_cable_heat_detector is '光纤(电缆)感温火灾探测器';
+comment on column daq_station_cable_heat_detector.oid is '主键';
+comment on column daq_station_cable_heat_detector.project_oid is '项目oid';
+comment on column daq_station_cable_heat_detector.tenders_oid is '标段oid';
+comment on column daq_station_cable_heat_detector.pipeline_oid is '管线oid';
+comment on column daq_station_cable_heat_detector.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_cable_heat_detector.device_code is '设备编号';
+comment on column daq_station_cable_heat_detector.device_name is '设备名称';
+comment on column daq_station_cable_heat_detector.manufacture_number is '出厂编号';
+comment on column daq_station_cable_heat_detector.install_location is '安装位置';
+comment on column daq_station_cable_heat_detector.construct_date is '施工日期';
+comment on column daq_station_cable_heat_detector.construct_unit is '施工单位';
+comment on column daq_station_cable_heat_detector.supervision_unit is '监理单位';
+comment on column daq_station_cable_heat_detector.supervision_engineer is '监理工程师';
+comment on column daq_station_cable_heat_detector.collection_person is '采集人员';
+comment on column daq_station_cable_heat_detector.collection_date is '采集日期';
+comment on column daq_station_cable_heat_detector.approve_status is '审核状态';
+comment on column daq_station_cable_heat_detector.remarks is '备注';
+comment on column daq_station_cable_heat_detector.create_user_id is '创建人id';
+comment on column daq_station_cable_heat_detector.create_user_name is '创建人名称';
+comment on column daq_station_cable_heat_detector.create_datetime is '创建时间';
+comment on column daq_station_cable_heat_detector.modify_user_id is '修改人id';
+comment on column daq_station_cable_heat_detector.modify_user_name is '修改人名称';
+comment on column daq_station_cable_heat_detector.modify_datetime is '修改时间';
+comment on column daq_station_cable_heat_detector.active is '有效标志';
+create index index_daq_station_cable_heat_detector_oid_4 on daq_station_cable_heat_detector ( oid );
+create index index_daq_station_cable_heat_detector_device_code_9 on daq_station_cable_heat_detector ( device_code );
+create index index_daq_station_cable_heat_detector_device_name_10 on daq_station_cable_heat_detector ( device_name );
+
+create table daq_station_pigging_balls_indicator (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location varchar (100),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_pigging_balls_indicator is '清管球通过指示器';
+comment on column daq_station_pigging_balls_indicator.oid is '主键';
+comment on column daq_station_pigging_balls_indicator.project_oid is '项目oid';
+comment on column daq_station_pigging_balls_indicator.tenders_oid is '标段oid';
+comment on column daq_station_pigging_balls_indicator.pipeline_oid is '管线oid';
+comment on column daq_station_pigging_balls_indicator.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_pigging_balls_indicator.device_code is '设备编号';
+comment on column daq_station_pigging_balls_indicator.device_name is '设备名称';
+comment on column daq_station_pigging_balls_indicator.manufacture_number is '出厂编号';
+comment on column daq_station_pigging_balls_indicator.install_location is '安装位置';
+comment on column daq_station_pigging_balls_indicator.construct_date is '施工日期';
+comment on column daq_station_pigging_balls_indicator.construct_unit is '施工单位';
+comment on column daq_station_pigging_balls_indicator.supervision_unit is '监理单位';
+comment on column daq_station_pigging_balls_indicator.supervision_engineer is '监理工程师';
+comment on column daq_station_pigging_balls_indicator.collection_person is '采集人员';
+comment on column daq_station_pigging_balls_indicator.collection_date is '采集日期';
+comment on column daq_station_pigging_balls_indicator.approve_status is '审核状态';
+comment on column daq_station_pigging_balls_indicator.remarks is '备注';
+comment on column daq_station_pigging_balls_indicator.create_user_id is '创建人id';
+comment on column daq_station_pigging_balls_indicator.create_user_name is '创建人名称';
+comment on column daq_station_pigging_balls_indicator.create_datetime is '创建时间';
+comment on column daq_station_pigging_balls_indicator.modify_user_id is '修改人id';
+comment on column daq_station_pigging_balls_indicator.modify_user_name is '修改人名称';
+comment on column daq_station_pigging_balls_indicator.modify_datetime is '修改时间';
+comment on column daq_station_pigging_balls_indicator.active is '有效标志';
+create index index_daq_station_pigging_balls_indicator_oid_4 on daq_station_pigging_balls_indicator ( oid );
+create index index_daq_station_pigging_balls_indicator_device_code_9 on daq_station_pigging_balls_indicator ( device_code );
+create index index_daq_station_pigging_balls_indicator_device_name_10 on daq_station_pigging_balls_indicator ( device_name );
+
+create table daq_station_metering_switch (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	set_value numeric (6, 1),
+	install_location varchar (100),
+	connection_mode varchar (60),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_metering_switch is '流量开关';
+comment on column daq_station_metering_switch.oid is '主键';
+comment on column daq_station_metering_switch.project_oid is '项目oid';
+comment on column daq_station_metering_switch.tenders_oid is '标段oid';
+comment on column daq_station_metering_switch.pipeline_oid is '管线oid';
+comment on column daq_station_metering_switch.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_metering_switch.device_code is '设备编号';
+comment on column daq_station_metering_switch.device_name is '设备名称';
+comment on column daq_station_metering_switch.manufacture_number is '出厂编号';
+comment on column daq_station_metering_switch.set_value is '设定值(℃)';
+comment on column daq_station_metering_switch.install_location is '安装位置';
+comment on column daq_station_metering_switch.connection_mode is '连接方式,域值：pt_connection_mode_domain';
+comment on column daq_station_metering_switch.construct_date is '施工日期';
+comment on column daq_station_metering_switch.construct_unit is '施工单位';
+comment on column daq_station_metering_switch.supervision_unit is '监理单位';
+comment on column daq_station_metering_switch.supervision_engineer is '监理工程师';
+comment on column daq_station_metering_switch.collection_person is '采集人员';
+comment on column daq_station_metering_switch.collection_date is '采集日期';
+comment on column daq_station_metering_switch.approve_status is '审核状态';
+comment on column daq_station_metering_switch.remarks is '备注';
+comment on column daq_station_metering_switch.create_user_id is '创建人id';
+comment on column daq_station_metering_switch.create_user_name is '创建人名称';
+comment on column daq_station_metering_switch.create_datetime is '创建时间';
+comment on column daq_station_metering_switch.modify_user_id is '修改人id';
+comment on column daq_station_metering_switch.modify_user_name is '修改人名称';
+comment on column daq_station_metering_switch.modify_datetime is '修改时间';
+comment on column daq_station_metering_switch.active is '有效标志';
+create index index_daq_station_metering_switch_oid_4 on daq_station_metering_switch ( oid );
+create index index_daq_station_metering_switch_device_code_9 on daq_station_metering_switch ( device_code );
+create index index_daq_station_metering_switch_device_name_10 on daq_station_metering_switch ( device_name );
+
+create table daq_station_cable (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	front_connect_device_code varchar (40),
+	back_connect_device_code varchar (40),
+	control_cable_sum_length numeric (8, 0),
+	control_cable_icode varchar (36),
+	power_cable_sum_length numeric (8, 0),
+	power_cable_icode varchar (36),
+	cable_loction varchar (60),
+	cable_trend varchar (30),
+	buried_or_bridge_frame numeric (6, 1),
+	test_record varchar (60),
+	canle_interface varchar (40),
+	through_the_wall_info_des varchar (100),
+	road_info_des varchar (100),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_cable is '电缆';
+comment on column daq_station_cable.oid is '主键';
+comment on column daq_station_cable.project_oid is '项目oid';
+comment on column daq_station_cable.tenders_oid is '标段oid';
+comment on column daq_station_cable.pipeline_oid is '管线oid';
+comment on column daq_station_cable.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_cable.front_connect_device_code is '连接前端设备编号';
+comment on column daq_station_cable.back_connect_device_code is '连接后端设备编号';
+comment on column daq_station_cable.control_cable_sum_length is '控制电缆总长度(m)';
+comment on column daq_station_cable.control_cable_icode is '控制电缆标识码';
+comment on column daq_station_cable.power_cable_sum_length is '电力电缆总长度(m)';
+comment on column daq_station_cable.power_cable_icode is '电力电缆标识码';
+comment on column daq_station_cable.cable_loction is '位置';
+comment on column daq_station_cable.cable_trend is '走向';
+comment on column daq_station_cable.buried_or_bridge_frame is '埋深/桥架高度(m)';
+comment on column daq_station_cable.test_record is '检测记录';
+comment on column daq_station_cable.canle_interface is '接口';
+comment on column daq_station_cable.through_the_wall_info_des is '穿墙信息描述';
+comment on column daq_station_cable.road_info_des is '穿路信息描述';
+comment on column daq_station_cable.construct_date is '施工日期';
+comment on column daq_station_cable.construct_unit is '施工单位';
+comment on column daq_station_cable.supervision_unit is '监理单位';
+comment on column daq_station_cable.supervision_engineer is '监理工程师';
+comment on column daq_station_cable.collection_person is '采集人员';
+comment on column daq_station_cable.collection_date is '采集日期';
+comment on column daq_station_cable.approve_status is '审核状态';
+comment on column daq_station_cable.remarks is '备注';
+comment on column daq_station_cable.create_user_id is '创建人id';
+comment on column daq_station_cable.create_user_name is '创建人名称';
+comment on column daq_station_cable.create_datetime is '创建时间';
+comment on column daq_station_cable.modify_user_id is '修改人id';
+comment on column daq_station_cable.modify_user_name is '修改人名称';
+comment on column daq_station_cable.modify_datetime is '修改时间';
+comment on column daq_station_cable.active is '有效标志';
+create index index_daq_station_cable_oid_4 on daq_station_cable ( oid );
+create index index_daq_station_cable_front_connect_device_code_9 on daq_station_cable ( front_connect_device_code );
+create index index_daq_station_cable_back_connect_device_code_10 on daq_station_cable ( back_connect_device_code );
+/**
+ * 站场设备安装-自动控制设备end
+ */
+
+
+/**
+ * 站场设备安装-站场腐蚀与防护start
+ */
+create table daq_station_cp_system (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	protection_medthod smallint,
+	pipeline_pc_number numeric (6, 0),
+	station_pc_number numeric (6, 0),
+	potential_transmitter_number numeric (6, 0),
+	intelligent_optical_terminal_num numeric (6, 0),
+	complete_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_station_cp_system is '阴极保护系统';
+comment on column daq_station_cp_system.oid is '主键';
+comment on column daq_station_cp_system.project_oid is '项目oid';
+comment on column daq_station_cp_system.tenders_oid is '标段oid';
+comment on column daq_station_cp_system.pipeline_oid is '管线oid';
+comment on column daq_station_cp_system.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_cp_system.device_code is '系统编号';
+comment on column daq_station_cp_system.device_name is '系统名称';
+comment on column daq_station_cp_system.protection_medthod is '保护方式{1:牺牲阳极;2:强制电流}';
+comment on column daq_station_cp_system.pipeline_pc_number is '线路阴极保护站数量';
+comment on column daq_station_cp_system.station_pc_number is '站场区域阴极保护站数量';
+comment on column daq_station_cp_system.potential_transmitter_number is '电位传送器数量';
+comment on column daq_station_cp_system.intelligent_optical_terminal_num is '智能光端机数量';
+comment on column daq_station_cp_system.complete_date is '完工日期';
+comment on column daq_station_cp_system.construct_unit is '施工单位';
+comment on column daq_station_cp_system.supervision_unit is '监理单位';
+comment on column daq_station_cp_system.supervision_engineer is '监理工程师';
+comment on column daq_station_cp_system.collection_person is '采集人员';
+comment on column daq_station_cp_system.collection_date is '采集日期';
+comment on column daq_station_cp_system.approve_status is '审核状态';
+comment on column daq_station_cp_system.remarks is '备注';
+comment on column daq_station_cp_system.create_user_id is '创建人id';
+comment on column daq_station_cp_system.create_user_name is '创建人名称';
+comment on column daq_station_cp_system.create_datetime is '创建时间';
+comment on column daq_station_cp_system.modify_user_id is '修改人id';
+comment on column daq_station_cp_system.modify_user_name is '修改人名称';
+comment on column daq_station_cp_system.modify_datetime is '修改时间';
+comment on column daq_station_cp_system.active is '有效标志';
+create index index_daq_station_cp_system_oid_4 on daq_station_cp_system ( oid );
+create index index_daq_station_cp_system_device_code_9 on daq_station_cp_system ( device_code );
+create index index_daq_station_cp_system_device_name_10 on daq_station_cp_system ( device_name );
+
+create table daq_station_cp_monitoring_system (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	debug_content_and_results varchar (200),
+	debug_complete_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_cp_monitoring_system is '阴极保护在线监测系统';
+comment on column daq_station_cp_monitoring_system.oid is '主键';
+comment on column daq_station_cp_monitoring_system.project_oid is '项目oid';
+comment on column daq_station_cp_monitoring_system.tenders_oid is '标段oid';
+comment on column daq_station_cp_monitoring_system.pipeline_oid is '管线oid';
+comment on column daq_station_cp_monitoring_system.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_cp_monitoring_system.device_code is '系统编号';
+comment on column daq_station_cp_monitoring_system.device_name is '系统名称';
+comment on column daq_station_cp_monitoring_system.debug_content_and_results is '调试内容及结果';
+comment on column daq_station_cp_monitoring_system.debug_complete_date is '调试完成日期';
+comment on column daq_station_cp_monitoring_system.construct_unit is '施工单位';
+comment on column daq_station_cp_monitoring_system.supervision_unit is '监理单位';
+comment on column daq_station_cp_monitoring_system.supervision_engineer is '监理工程师';
+comment on column daq_station_cp_monitoring_system.collection_person is '采集人员';
+comment on column daq_station_cp_monitoring_system.collection_date is '采集日期';
+comment on column daq_station_cp_monitoring_system.approve_status is '审核状态';
+comment on column daq_station_cp_monitoring_system.remarks is '备注';
+comment on column daq_station_cp_monitoring_system.create_user_id is '创建人id';
+comment on column daq_station_cp_monitoring_system.create_user_name is '创建人名称';
+comment on column daq_station_cp_monitoring_system.create_datetime is '创建时间';
+comment on column daq_station_cp_monitoring_system.modify_user_id is '修改人id';
+comment on column daq_station_cp_monitoring_system.modify_user_name is '修改人名称';
+comment on column daq_station_cp_monitoring_system.modify_datetime is '修改时间';
+comment on column daq_station_cp_monitoring_system.active is '有效标志';
+create index index_daq_station_cp_monitoring_system_oid_4 on daq_station_cp_monitoring_system ( oid );
+create index index_daq_station_cp_monitoring_system_device_code_9 on daq_station_cp_monitoring_system ( device_code );
+create index index_daq_station_cp_monitoring_system_device_name_10 on daq_station_cp_monitoring_system ( device_name );
+
+create table daq_station_cp_potential_transmitter (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location_des varchar (100),
+	construct_date timestamp (1),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_cp_potential_transmitter is '阴极保护电位传送器';
+comment on column daq_station_cp_potential_transmitter.oid is '主键';
+comment on column daq_station_cp_potential_transmitter.project_oid is '项目oid';
+comment on column daq_station_cp_potential_transmitter.tenders_oid is '标段oid';
+comment on column daq_station_cp_potential_transmitter.pipeline_oid is '管线oid';
+comment on column daq_station_cp_potential_transmitter.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_cp_potential_transmitter.device_code is '设备编号';
+comment on column daq_station_cp_potential_transmitter.device_name is '设备名称';
+comment on column daq_station_cp_potential_transmitter.manufacture_number is '出厂编号';
+comment on column daq_station_cp_potential_transmitter.install_location_des is '安装位置';
+comment on column daq_station_cp_potential_transmitter.construct_date is '施工日期';
+comment on column daq_station_cp_potential_transmitter.construct_unit is '施工单位';
+comment on column daq_station_cp_potential_transmitter.supervision_unit is '监理单位';
+comment on column daq_station_cp_potential_transmitter.supervision_engineer is '监理工程师';
+comment on column daq_station_cp_potential_transmitter.collection_person is '采集人员';
+comment on column daq_station_cp_potential_transmitter.collection_date is '采集日期';
+comment on column daq_station_cp_potential_transmitter.approve_status is '审核状态';
+comment on column daq_station_cp_potential_transmitter.remarks is '备注';
+comment on column daq_station_cp_potential_transmitter.create_user_id is '创建人id';
+comment on column daq_station_cp_potential_transmitter.create_user_name is '创建人名称';
+comment on column daq_station_cp_potential_transmitter.create_datetime is '创建时间';
+comment on column daq_station_cp_potential_transmitter.modify_user_id is '修改人id';
+comment on column daq_station_cp_potential_transmitter.modify_user_name is '修改人名称';
+comment on column daq_station_cp_potential_transmitter.modify_datetime is '修改时间';
+comment on column daq_station_cp_potential_transmitter.active is '有效标志';
+create index index_daq_station_cp_potential_transmitter_oid_4 on daq_station_cp_potential_transmitter ( oid );
+create index index_daq_station_cp_potential_transmitter_device_code_9 on daq_station_cp_potential_transmitter ( device_code );
+create index index_daq_station_cp_potential_transmitter_device_name_10 on daq_station_cp_potential_transmitter ( device_name );
+
+create table daq_station_cp_intelligent_optical_terminal (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location_des varchar (100),
+	construct_date timestamp (1),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_cp_intelligent_optical_terminal is '阴极保护智能光端机';
+comment on column daq_station_cp_intelligent_optical_terminal.oid is '主键';
+comment on column daq_station_cp_intelligent_optical_terminal.project_oid is '项目oid';
+comment on column daq_station_cp_intelligent_optical_terminal.tenders_oid is '标段oid';
+comment on column daq_station_cp_intelligent_optical_terminal.pipeline_oid is '管线oid';
+comment on column daq_station_cp_intelligent_optical_terminal.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_cp_intelligent_optical_terminal.device_code is '设备编号';
+comment on column daq_station_cp_intelligent_optical_terminal.device_name is '设备名称';
+comment on column daq_station_cp_intelligent_optical_terminal.manufacture_number is '出厂编号';
+comment on column daq_station_cp_intelligent_optical_terminal.install_location_des is '安装位置';
+comment on column daq_station_cp_intelligent_optical_terminal.construct_date is '施工日期';
+comment on column daq_station_cp_intelligent_optical_terminal.construct_unit is '施工单位';
+comment on column daq_station_cp_intelligent_optical_terminal.supervision_unit is '监理单位';
+comment on column daq_station_cp_intelligent_optical_terminal.supervision_engineer is '监理工程师';
+comment on column daq_station_cp_intelligent_optical_terminal.collection_person is '采集人员';
+comment on column daq_station_cp_intelligent_optical_terminal.collection_date is '采集日期';
+comment on column daq_station_cp_intelligent_optical_terminal.approve_status is '审核状态';
+comment on column daq_station_cp_intelligent_optical_terminal.remarks is '备注';
+comment on column daq_station_cp_intelligent_optical_terminal.create_user_id is '创建人id';
+comment on column daq_station_cp_intelligent_optical_terminal.create_user_name is '创建人名称';
+comment on column daq_station_cp_intelligent_optical_terminal.create_datetime is '创建时间';
+comment on column daq_station_cp_intelligent_optical_terminal.modify_user_id is '修改人id';
+comment on column daq_station_cp_intelligent_optical_terminal.modify_user_name is '修改人名称';
+comment on column daq_station_cp_intelligent_optical_terminal.modify_datetime is '修改时间';
+comment on column daq_station_cp_intelligent_optical_terminal.active is '有效标志';
+create index index_daq_station_cp_intelligent_optical_terminal_oid_4 on daq_station_cp_intelligent_optical_terminal ( oid );
+create index index_daq_station_cp_intelligent_optical_terminal_device_code_9 on daq_station_cp_intelligent_optical_terminal ( device_code );
+create index index_daq_station_cp_intelligent_optical_terminal_device_name_10 on daq_station_cp_intelligent_optical_terminal ( device_name );
+
+create table daq_station_cp_junction_box (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location_des varchar (100),
+	construct_date timestamp (1),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_cp_junction_box is '阴极保护接线箱';
+comment on column daq_station_cp_junction_box.oid is '主键';
+comment on column daq_station_cp_junction_box.project_oid is '项目oid';
+comment on column daq_station_cp_junction_box.tenders_oid is '标段oid';
+comment on column daq_station_cp_junction_box.pipeline_oid is '管线oid';
+comment on column daq_station_cp_junction_box.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_cp_junction_box.device_code is '设备编号';
+comment on column daq_station_cp_junction_box.device_name is '设备名称';
+comment on column daq_station_cp_junction_box.manufacture_number is '出厂编号';
+comment on column daq_station_cp_junction_box.install_location_des is '安装位置';
+comment on column daq_station_cp_junction_box.construct_date is '施工日期';
+comment on column daq_station_cp_junction_box.construct_unit is '施工单位';
+comment on column daq_station_cp_junction_box.supervision_unit is '监理单位';
+comment on column daq_station_cp_junction_box.supervision_engineer is '监理工程师';
+comment on column daq_station_cp_junction_box.collection_person is '采集人员';
+comment on column daq_station_cp_junction_box.collection_date is '采集日期';
+comment on column daq_station_cp_junction_box.approve_status is '审核状态';
+comment on column daq_station_cp_junction_box.remarks is '备注';
+comment on column daq_station_cp_junction_box.create_user_id is '创建人id';
+comment on column daq_station_cp_junction_box.create_user_name is '创建人名称';
+comment on column daq_station_cp_junction_box.create_datetime is '创建时间';
+comment on column daq_station_cp_junction_box.modify_user_id is '修改人id';
+comment on column daq_station_cp_junction_box.modify_user_name is '修改人名称';
+comment on column daq_station_cp_junction_box.modify_datetime is '修改时间';
+comment on column daq_station_cp_junction_box.active is '有效标志';
+create index index_daq_station_cp_junction_box_oid_4 on daq_station_cp_junction_box ( oid );
+create index index_daq_station_cp_junction_box_device_code_9 on daq_station_cp_junction_box ( device_code );
+create index index_daq_station_cp_junction_box_device_name_10 on daq_station_cp_junction_box ( device_name );
+
+create table daq_station_cp_insulated_joint_protector (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location_des varchar (100),
+	construct_date timestamp (1),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_cp_insulated_joint_protector is '绝缘接头保护器';
+comment on column daq_station_cp_insulated_joint_protector.oid is '主键';
+comment on column daq_station_cp_insulated_joint_protector.project_oid is '项目oid';
+comment on column daq_station_cp_insulated_joint_protector.tenders_oid is '标段oid';
+comment on column daq_station_cp_insulated_joint_protector.pipeline_oid is '管线oid';
+comment on column daq_station_cp_insulated_joint_protector.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_cp_insulated_joint_protector.device_code is '设备编号';
+comment on column daq_station_cp_insulated_joint_protector.device_name is '设备名称';
+comment on column daq_station_cp_insulated_joint_protector.manufacture_number is '出厂编号';
+comment on column daq_station_cp_insulated_joint_protector.install_location_des is '安装地点';
+comment on column daq_station_cp_insulated_joint_protector.construct_date is '施工日期';
+comment on column daq_station_cp_insulated_joint_protector.construct_unit is '施工单位';
+comment on column daq_station_cp_insulated_joint_protector.supervision_unit is '监理单位';
+comment on column daq_station_cp_insulated_joint_protector.supervision_engineer is '监理工程师';
+comment on column daq_station_cp_insulated_joint_protector.collection_person is '采集人员';
+comment on column daq_station_cp_insulated_joint_protector.collection_date is '采集日期';
+comment on column daq_station_cp_insulated_joint_protector.approve_status is '审核状态';
+comment on column daq_station_cp_insulated_joint_protector.remarks is '备注';
+comment on column daq_station_cp_insulated_joint_protector.create_user_id is '创建人id';
+comment on column daq_station_cp_insulated_joint_protector.create_user_name is '创建人名称';
+comment on column daq_station_cp_insulated_joint_protector.create_datetime is '创建时间';
+comment on column daq_station_cp_insulated_joint_protector.modify_user_id is '修改人id';
+comment on column daq_station_cp_insulated_joint_protector.modify_user_name is '修改人名称';
+comment on column daq_station_cp_insulated_joint_protector.modify_datetime is '修改时间';
+comment on column daq_station_cp_insulated_joint_protector.active is '有效标志';
+create index index_daq_station_cp_insulated_joint_protector_oid_4 on daq_station_cp_insulated_joint_protector ( oid );
+create index index_daq_station_cp_insulated_joint_protector_device_code_9 on daq_station_cp_insulated_joint_protector ( device_code );
+create index index_daq_station_cp_insulated_joint_protector_device_name_10 on daq_station_cp_insulated_joint_protector ( device_name );
+/**
+ * 站场设备安装-站场腐蚀与防护end
+ */
+
+
+/**
+ * 站场设备安装-通信start
+ */
+create table daq_station_fo_communication_sys (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	debug_content_and_results varchar (200),
+	debug_complete_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_fo_communication_sys is '光纤通信系统';
+comment on column daq_station_fo_communication_sys.oid is '主键';
+comment on column daq_station_fo_communication_sys.project_oid is '项目oid';
+comment on column daq_station_fo_communication_sys.tenders_oid is '标段oid';
+comment on column daq_station_fo_communication_sys.pipeline_oid is '管线oid';
+comment on column daq_station_fo_communication_sys.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_fo_communication_sys.device_code is '系统编号';
+comment on column daq_station_fo_communication_sys.device_name is '系统名称';
+comment on column daq_station_fo_communication_sys.debug_content_and_results is '调试内容及结果';
+comment on column daq_station_fo_communication_sys.debug_complete_date is '调试完成日期';
+comment on column daq_station_fo_communication_sys.construct_unit is '施工单位';
+comment on column daq_station_fo_communication_sys.supervision_unit is '监理单位';
+comment on column daq_station_fo_communication_sys.supervision_engineer is '监理工程师';
+comment on column daq_station_fo_communication_sys.collection_person is '采集人员';
+comment on column daq_station_fo_communication_sys.collection_date is '采集日期';
+comment on column daq_station_fo_communication_sys.approve_status is '审核状态';
+comment on column daq_station_fo_communication_sys.remarks is '备注';
+comment on column daq_station_fo_communication_sys.create_user_id is '创建人id';
+comment on column daq_station_fo_communication_sys.create_user_name is '创建人名称';
+comment on column daq_station_fo_communication_sys.create_datetime is '创建时间';
+comment on column daq_station_fo_communication_sys.modify_user_id is '修改人id';
+comment on column daq_station_fo_communication_sys.modify_user_name is '修改人名称';
+comment on column daq_station_fo_communication_sys.modify_datetime is '修改时间';
+comment on column daq_station_fo_communication_sys.active is '有效标志';
+create index index_daq_station_fo_communication_sys_oid_4 on daq_station_fo_communication_sys ( oid );
+create index index_daq_station_fo_communication_sys_device_code_9 on daq_station_fo_communication_sys ( device_code );
+create index index_daq_station_fo_communication_sys_device_name_10 on daq_station_fo_communication_sys ( device_name );
+
+create table daq_station_fo_communication (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location_des varchar (100),
+	experimental_result smallint,
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_fo_communication is '光纤通信设备';
+comment on column daq_station_fo_communication.oid is '主键';
+comment on column daq_station_fo_communication.project_oid is '项目oid';
+comment on column daq_station_fo_communication.tenders_oid is '标段oid';
+comment on column daq_station_fo_communication.pipeline_oid is '管线oid';
+comment on column daq_station_fo_communication.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_fo_communication.device_code is '设备编号';
+comment on column daq_station_fo_communication.device_name is '设备名称';
+comment on column daq_station_fo_communication.manufacture_number is '出厂编号';
+comment on column daq_station_fo_communication.install_location_des is '安装位置';
+comment on column daq_station_fo_communication.experimental_result is '结果{0:不合格;1:合格}';
+comment on column daq_station_fo_communication.construct_date is '施工日期';
+comment on column daq_station_fo_communication.construct_unit is '施工单位';
+comment on column daq_station_fo_communication.supervision_unit is '监理单位';
+comment on column daq_station_fo_communication.supervision_engineer is '监理工程师';
+comment on column daq_station_fo_communication.collection_person is '采集人员';
+comment on column daq_station_fo_communication.collection_date is '采集日期';
+comment on column daq_station_fo_communication.approve_status is '审核状态';
+comment on column daq_station_fo_communication.remarks is '备注';
+comment on column daq_station_fo_communication.create_user_id is '创建人id';
+comment on column daq_station_fo_communication.create_user_name is '创建人名称';
+comment on column daq_station_fo_communication.create_datetime is '创建时间';
+comment on column daq_station_fo_communication.modify_user_id is '修改人id';
+comment on column daq_station_fo_communication.modify_user_name is '修改人名称';
+comment on column daq_station_fo_communication.modify_datetime is '修改时间';
+comment on column daq_station_fo_communication.active is '有效标志';
+create index index_daq_station_fo_communication_oid_4 on daq_station_fo_communication ( oid );
+create index index_daq_station_fo_communication_device_code_9 on daq_station_fo_communication ( device_code );
+create index index_daq_station_fo_communication_device_name_10 on daq_station_fo_communication ( device_name );
+
+create table daq_station_vsat_satellite_communication_sys (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	debug_content_and_results varchar (200),
+	debug_complete_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_vsat_satellite_communication_sys is 'vsat卫星通信系统';
+comment on column daq_station_vsat_satellite_communication_sys.oid is '主键';
+comment on column daq_station_vsat_satellite_communication_sys.project_oid is '项目oid';
+comment on column daq_station_vsat_satellite_communication_sys.tenders_oid is '标段oid';
+comment on column daq_station_vsat_satellite_communication_sys.pipeline_oid is '管线oid';
+comment on column daq_station_vsat_satellite_communication_sys.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_vsat_satellite_communication_sys.device_code is '系统编号';
+comment on column daq_station_vsat_satellite_communication_sys.device_name is '系统名称';
+comment on column daq_station_vsat_satellite_communication_sys.debug_content_and_results is '调试内容及结果';
+comment on column daq_station_vsat_satellite_communication_sys.debug_complete_date is '调试完成日期';
+comment on column daq_station_vsat_satellite_communication_sys.construct_unit is '施工单位';
+comment on column daq_station_vsat_satellite_communication_sys.supervision_unit is '监理单位';
+comment on column daq_station_vsat_satellite_communication_sys.supervision_engineer is '监理工程师';
+comment on column daq_station_vsat_satellite_communication_sys.collection_person is '采集人员';
+comment on column daq_station_vsat_satellite_communication_sys.collection_date is '采集日期';
+comment on column daq_station_vsat_satellite_communication_sys.approve_status is '审核状态';
+comment on column daq_station_vsat_satellite_communication_sys.remarks is '备注';
+comment on column daq_station_vsat_satellite_communication_sys.create_user_id is '创建人id';
+comment on column daq_station_vsat_satellite_communication_sys.create_user_name is '创建人名称';
+comment on column daq_station_vsat_satellite_communication_sys.create_datetime is '创建时间';
+comment on column daq_station_vsat_satellite_communication_sys.modify_user_id is '修改人id';
+comment on column daq_station_vsat_satellite_communication_sys.modify_user_name is '修改人名称';
+comment on column daq_station_vsat_satellite_communication_sys.modify_datetime is '修改时间';
+comment on column daq_station_vsat_satellite_communication_sys.active is '有效标志';
+create index index_daq_station_vsat_satellite_communication_sys_oid_4 on daq_station_vsat_satellite_communication_sys ( oid );
+create index index_daq_station_vsat_satellite_communication_sys_device_code_9 on daq_station_vsat_satellite_communication_sys ( device_code );
+create index index_daq_station_vsat_satellite_communication_sys_device_name_10 on daq_station_vsat_satellite_communication_sys ( device_name );
+
+create table daq_station_vsat_communication_indoor (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location_des varchar (100),
+	experimental_result smallint,
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_vsat_communication_indoor is 'vsat卫星通信室内设备';
+comment on column daq_station_vsat_communication_indoor.oid is '主键';
+comment on column daq_station_vsat_communication_indoor.project_oid is '项目oid';
+comment on column daq_station_vsat_communication_indoor.tenders_oid is '标段oid';
+comment on column daq_station_vsat_communication_indoor.pipeline_oid is '管线oid';
+comment on column daq_station_vsat_communication_indoor.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_vsat_communication_indoor.device_code is '设备编号';
+comment on column daq_station_vsat_communication_indoor.device_name is '设备名称';
+comment on column daq_station_vsat_communication_indoor.manufacture_number is '出厂编号';
+comment on column daq_station_vsat_communication_indoor.install_location_des is '安装位置';
+comment on column daq_station_vsat_communication_indoor.experimental_result is '结果{0:不合格;1:合格}';
+comment on column daq_station_vsat_communication_indoor.construct_date is '施工日期';
+comment on column daq_station_vsat_communication_indoor.construct_unit is '施工单位';
+comment on column daq_station_vsat_communication_indoor.supervision_unit is '监理单位';
+comment on column daq_station_vsat_communication_indoor.supervision_engineer is '监理工程师';
+comment on column daq_station_vsat_communication_indoor.collection_person is '采集人员';
+comment on column daq_station_vsat_communication_indoor.collection_date is '采集日期';
+comment on column daq_station_vsat_communication_indoor.approve_status is '审核状态';
+comment on column daq_station_vsat_communication_indoor.remarks is '备注';
+comment on column daq_station_vsat_communication_indoor.create_user_id is '创建人id';
+comment on column daq_station_vsat_communication_indoor.create_user_name is '创建人名称';
+comment on column daq_station_vsat_communication_indoor.create_datetime is '创建时间';
+comment on column daq_station_vsat_communication_indoor.modify_user_id is '修改人id';
+comment on column daq_station_vsat_communication_indoor.modify_user_name is '修改人名称';
+comment on column daq_station_vsat_communication_indoor.modify_datetime is '修改时间';
+comment on column daq_station_vsat_communication_indoor.active is '有效标志';
+create index index_daq_station_vsat_communication_indoor_oid_4 on daq_station_vsat_communication_indoor ( oid );
+create index index_daq_station_vsat_communication_indoor_device_code_9 on daq_station_vsat_communication_indoor ( device_code );
+create index index_daq_station_vsat_communication_indoor_device_name_10 on daq_station_vsat_communication_indoor ( device_name );
+
+create table daq_station_vsat_communication_outdoor (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location_des varchar (100),
+	experimental_result smallint,
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_vsat_communication_outdoor is 'vsat卫星通信室外设备';
+comment on column daq_station_vsat_communication_outdoor.oid is '主键';
+comment on column daq_station_vsat_communication_outdoor.project_oid is '项目oid';
+comment on column daq_station_vsat_communication_outdoor.tenders_oid is '标段oid';
+comment on column daq_station_vsat_communication_outdoor.pipeline_oid is '管线oid';
+comment on column daq_station_vsat_communication_outdoor.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_vsat_communication_outdoor.device_code is '设备编号';
+comment on column daq_station_vsat_communication_outdoor.device_name is '设备名称';
+comment on column daq_station_vsat_communication_outdoor.manufacture_number is '出厂编号';
+comment on column daq_station_vsat_communication_outdoor.install_location_des is '安装位置';
+comment on column daq_station_vsat_communication_outdoor.experimental_result is '结果{0:不合格;1:合格}';
+comment on column daq_station_vsat_communication_outdoor.construct_date is '施工日期';
+comment on column daq_station_vsat_communication_outdoor.construct_unit is '施工单位';
+comment on column daq_station_vsat_communication_outdoor.supervision_unit is '监理单位';
+comment on column daq_station_vsat_communication_outdoor.supervision_engineer is '监理工程师';
+comment on column daq_station_vsat_communication_outdoor.collection_person is '采集人员';
+comment on column daq_station_vsat_communication_outdoor.collection_date is '采集日期';
+comment on column daq_station_vsat_communication_outdoor.approve_status is '审核状态';
+comment on column daq_station_vsat_communication_outdoor.remarks is '备注';
+comment on column daq_station_vsat_communication_outdoor.create_user_id is '创建人id';
+comment on column daq_station_vsat_communication_outdoor.create_user_name is '创建人名称';
+comment on column daq_station_vsat_communication_outdoor.create_datetime is '创建时间';
+comment on column daq_station_vsat_communication_outdoor.modify_user_id is '修改人id';
+comment on column daq_station_vsat_communication_outdoor.modify_user_name is '修改人名称';
+comment on column daq_station_vsat_communication_outdoor.modify_datetime is '修改时间';
+comment on column daq_station_vsat_communication_outdoor.active is '有效标志';
+create index index_daq_station_vsat_communication_outdoor_oid_4 on daq_station_vsat_communication_outdoor ( oid );
+create index index_daq_station_vsat_communication_outdoor_device_code_9 on daq_station_vsat_communication_outdoor ( device_code );
+create index index_daq_station_vsat_communication_outdoor_device_name_10 on daq_station_vsat_communication_outdoor ( device_name );
+
+drop table if exists daq_station_public_network_digital_circuit;
+CREATE TABLE daq_station_public_network_digital_circuit (
+	oid VARCHAR (36) NOT NULL PRIMARY KEY,
+	project_oid VARCHAR (36),
+	tenders_oid VARCHAR (36),
+	pipeline_oid VARCHAR (36),
+	pipe_station_oid VARCHAR (36),
+	device_code VARCHAR (50),
+	device_name VARCHAR (50),
+	access_type SMALLINT,
+	circuit_bandwidth NUMERIC (5, 0),
+	circuit_num NUMERIC (6, 0),
+	opening_date TIMESTAMP (1),
+	construct_unit VARCHAR (36),
+	supervision_unit VARCHAR (38),
+	supervision_engineer VARCHAR (50),
+	collection_person VARCHAR (30),
+	collection_date TIMESTAMP (6),
+	approve_status SMALLINT,
+	remarks VARCHAR (200),
+	create_user_id VARCHAR (36),
+	create_user_name VARCHAR (50),
+	create_datetime TIMESTAMP (6),
+	modify_user_id VARCHAR (36),
+	modify_user_name VARCHAR (50),
+	modify_datetime TIMESTAMP (6),
+	active SMALLINT NOT NULL DEFAULT 1
+);
+comment on table daq_station_public_network_digital_circuit is '公网数字电路';
+comment on column daq_station_public_network_digital_circuit.oid is '主键';
+comment on column daq_station_public_network_digital_circuit.project_oid is '项目oid';
+comment on column daq_station_public_network_digital_circuit.tenders_oid is '标段oid';
+comment on column daq_station_public_network_digital_circuit.pipeline_oid is '管线oid';
+comment on column daq_station_public_network_digital_circuit.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_public_network_digital_circuit.device_code is '系统编号';
+comment on column daq_station_public_network_digital_circuit.device_name is '系统名称';
+comment on column daq_station_public_network_digital_circuit.access_type is '接入类型{1:DDN;2:数字电路;3:无线}';
+comment on column daq_station_public_network_digital_circuit.circuit_bandwidth is '公网数字电路带宽(kbps)';
+comment on column daq_station_public_network_digital_circuit.circuit_num is '数量(条)';
+comment on column daq_station_public_network_digital_circuit.opening_date is '开通日期';
+comment on column daq_station_public_network_digital_circuit.construct_unit is '施工单位';
+comment on column daq_station_public_network_digital_circuit.supervision_unit is '监理单位';
+comment on column daq_station_public_network_digital_circuit.supervision_engineer is '监理工程师';
+comment on column daq_station_public_network_digital_circuit.collection_person is '采集人员';
+comment on column daq_station_public_network_digital_circuit.collection_date is '采集日期';
+comment on column daq_station_public_network_digital_circuit.approve_status is '审核状态';
+comment on column daq_station_public_network_digital_circuit.remarks is '备注';
+comment on column daq_station_public_network_digital_circuit.create_user_id is '创建人id';
+comment on column daq_station_public_network_digital_circuit.create_user_name is '创建人名称';
+comment on column daq_station_public_network_digital_circuit.create_datetime is '创建时间';
+comment on column daq_station_public_network_digital_circuit.modify_user_id is '修改人id';
+comment on column daq_station_public_network_digital_circuit.modify_user_name is '修改人名称';
+comment on column daq_station_public_network_digital_circuit.modify_datetime is '修改时间';
+comment on column daq_station_public_network_digital_circuit.active is '有效标志';
+create index INDEX_DAQ_STATION_PUBLIC_NETWORK_DIGITAL_CIRCUIT_OID_4 ON daq_station_public_network_digital_circuit ( oid );
+create index INDEX_DAQ_STATION_PUBLIC_NETWORK_DIGITAL_CIRCUIT_DEVICE_CODE_9 ON daq_station_public_network_digital_circuit ( device_code );
+create index INDEX_DAQ_STATION_PUBLIC_NETWORK_DIGITAL_CIRCUIT_DEVICE_NAME_10 ON daq_station_public_network_digital_circuit ( device_name );
+
+
+create table daq_station_high_frequency_switch_power_sys (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	debug_content_and_results varchar (200),
+	debug_complete_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_high_frequency_switch_power_sys is '高频开关电源系统';
+comment on column daq_station_high_frequency_switch_power_sys.oid is '主键';
+comment on column daq_station_high_frequency_switch_power_sys.project_oid is '项目oid';
+comment on column daq_station_high_frequency_switch_power_sys.tenders_oid is '标段oid';
+comment on column daq_station_high_frequency_switch_power_sys.pipeline_oid is '管线oid';
+comment on column daq_station_high_frequency_switch_power_sys.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_high_frequency_switch_power_sys.device_code is '系统编号';
+comment on column daq_station_high_frequency_switch_power_sys.device_name is '系统名称';
+comment on column daq_station_high_frequency_switch_power_sys.debug_content_and_results is '调试内容及结果';
+comment on column daq_station_high_frequency_switch_power_sys.debug_complete_date is '调试完成日期';
+comment on column daq_station_high_frequency_switch_power_sys.construct_unit is '施工单位';
+comment on column daq_station_high_frequency_switch_power_sys.supervision_unit is '监理单位';
+comment on column daq_station_high_frequency_switch_power_sys.supervision_engineer is '监理工程师';
+comment on column daq_station_high_frequency_switch_power_sys.collection_person is '采集人员';
+comment on column daq_station_high_frequency_switch_power_sys.collection_date is '采集日期';
+comment on column daq_station_high_frequency_switch_power_sys.approve_status is '审核状态';
+comment on column daq_station_high_frequency_switch_power_sys.remarks is '备注';
+comment on column daq_station_high_frequency_switch_power_sys.create_user_id is '创建人id';
+comment on column daq_station_high_frequency_switch_power_sys.create_user_name is '创建人名称';
+comment on column daq_station_high_frequency_switch_power_sys.create_datetime is '创建时间';
+comment on column daq_station_high_frequency_switch_power_sys.modify_user_id is '修改人id';
+comment on column daq_station_high_frequency_switch_power_sys.modify_user_name is '修改人名称';
+comment on column daq_station_high_frequency_switch_power_sys.modify_datetime is '修改时间';
+comment on column daq_station_high_frequency_switch_power_sys.active is '有效标志';
+create index index_daq_station_high_frequency_switch_power_sys_oid_4 on daq_station_high_frequency_switch_power_sys ( oid );
+create index index_daq_station_high_frequency_switch_power_sys_device_code_9 on daq_station_high_frequency_switch_power_sys ( device_code );
+create index index_daq_station_high_frequency_switch_power_sys_device_name_10 on daq_station_high_frequency_switch_power_sys ( device_name );
+
+create table daq_station_high_frequency_switch_power (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location_des varchar (100),
+	experimental_result smallint,
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_high_frequency_switch_power is '高频开关电源设备';
+comment on column daq_station_high_frequency_switch_power.oid is '主键';
+comment on column daq_station_high_frequency_switch_power.project_oid is '项目oid';
+comment on column daq_station_high_frequency_switch_power.tenders_oid is '标段oid';
+comment on column daq_station_high_frequency_switch_power.pipeline_oid is '管线oid';
+comment on column daq_station_high_frequency_switch_power.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_high_frequency_switch_power.device_code is '设备编号';
+comment on column daq_station_high_frequency_switch_power.device_name is '设备名称';
+comment on column daq_station_high_frequency_switch_power.manufacture_number is '出厂编号';
+comment on column daq_station_high_frequency_switch_power.install_location_des is '安装位置';
+comment on column daq_station_high_frequency_switch_power.experimental_result is '结果{0:不合格;1:合格}';
+comment on column daq_station_high_frequency_switch_power.construct_date is '施工日期';
+comment on column daq_station_high_frequency_switch_power.construct_unit is '施工单位';
+comment on column daq_station_high_frequency_switch_power.supervision_unit is '监理单位';
+comment on column daq_station_high_frequency_switch_power.supervision_engineer is '监理工程师';
+comment on column daq_station_high_frequency_switch_power.collection_person is '采集人员';
+comment on column daq_station_high_frequency_switch_power.collection_date is '采集日期';
+comment on column daq_station_high_frequency_switch_power.approve_status is '审核状态';
+comment on column daq_station_high_frequency_switch_power.remarks is '备注';
+comment on column daq_station_high_frequency_switch_power.create_user_id is '创建人id';
+comment on column daq_station_high_frequency_switch_power.create_user_name is '创建人名称';
+comment on column daq_station_high_frequency_switch_power.create_datetime is '创建时间';
+comment on column daq_station_high_frequency_switch_power.modify_user_id is '修改人id';
+comment on column daq_station_high_frequency_switch_power.modify_user_name is '修改人名称';
+comment on column daq_station_high_frequency_switch_power.modify_datetime is '修改时间';
+comment on column daq_station_high_frequency_switch_power.active is '有效标志';
+create index index_daq_station_high_frequency_switch_power_oid_4 on daq_station_high_frequency_switch_power ( oid );
+create index index_daq_station_high_frequency_switch_power_device_code_9 on daq_station_high_frequency_switch_power ( device_code );
+create index index_daq_station_high_frequency_switch_power_device_name_10 on daq_station_high_frequency_switch_power ( device_name );
+
+create table daq_station_telephone_exchange_sys (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	debug_content_and_results varchar (200),
+	debug_complete_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_telephone_exchange_sys is '话音交换系统';
+comment on column daq_station_telephone_exchange_sys.oid is '主键';
+comment on column daq_station_telephone_exchange_sys.project_oid is '项目oid';
+comment on column daq_station_telephone_exchange_sys.tenders_oid is '标段oid';
+comment on column daq_station_telephone_exchange_sys.pipeline_oid is '管线oid';
+comment on column daq_station_telephone_exchange_sys.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_telephone_exchange_sys.device_code is '系统编号';
+comment on column daq_station_telephone_exchange_sys.device_name is '系统名称';
+comment on column daq_station_telephone_exchange_sys.debug_content_and_results is '调试内容及结果';
+comment on column daq_station_telephone_exchange_sys.debug_complete_date is '调试完成日期';
+comment on column daq_station_telephone_exchange_sys.construct_unit is '施工单位';
+comment on column daq_station_telephone_exchange_sys.supervision_unit is '监理单位';
+comment on column daq_station_telephone_exchange_sys.supervision_engineer is '监理工程师';
+comment on column daq_station_telephone_exchange_sys.collection_person is '采集人员';
+comment on column daq_station_telephone_exchange_sys.collection_date is '采集日期';
+comment on column daq_station_telephone_exchange_sys.approve_status is '审核状态';
+comment on column daq_station_telephone_exchange_sys.remarks is '备注';
+comment on column daq_station_telephone_exchange_sys.create_user_id is '创建人id';
+comment on column daq_station_telephone_exchange_sys.create_user_name is '创建人名称';
+comment on column daq_station_telephone_exchange_sys.create_datetime is '创建时间';
+comment on column daq_station_telephone_exchange_sys.modify_user_id is '修改人id';
+comment on column daq_station_telephone_exchange_sys.modify_user_name is '修改人名称';
+comment on column daq_station_telephone_exchange_sys.modify_datetime is '修改时间';
+comment on column daq_station_telephone_exchange_sys.active is '有效标志';
+create index index_daq_station_telephone_exchange_sys_oid_4 on daq_station_telephone_exchange_sys ( oid );
+create index index_daq_station_telephone_exchange_sys_device_code_9 on daq_station_telephone_exchange_sys ( device_code );
+create index index_daq_station_telephone_exchange_sys_device_name_10 on daq_station_telephone_exchange_sys ( device_name );
+
+create table daq_station_telephone_exchange (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location_des varchar (100),
+	experimental_result smallint,
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_telephone_exchange is '话音交换设备';
+comment on column daq_station_telephone_exchange.oid is '主键';
+comment on column daq_station_telephone_exchange.project_oid is '项目oid';
+comment on column daq_station_telephone_exchange.tenders_oid is '标段oid';
+comment on column daq_station_telephone_exchange.pipeline_oid is '管线oid';
+comment on column daq_station_telephone_exchange.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_telephone_exchange.device_code is '设备编号';
+comment on column daq_station_telephone_exchange.device_name is '设备名称';
+comment on column daq_station_telephone_exchange.manufacture_number is '出厂编号';
+comment on column daq_station_telephone_exchange.install_location_des is '安装位置';
+comment on column daq_station_telephone_exchange.experimental_result is '结果{0:不合格;1:合格}';
+comment on column daq_station_telephone_exchange.construct_date is '施工日期';
+comment on column daq_station_telephone_exchange.construct_unit is '施工单位';
+comment on column daq_station_telephone_exchange.supervision_unit is '监理单位';
+comment on column daq_station_telephone_exchange.supervision_engineer is '监理工程师';
+comment on column daq_station_telephone_exchange.collection_person is '采集人员';
+comment on column daq_station_telephone_exchange.collection_date is '采集日期';
+comment on column daq_station_telephone_exchange.approve_status is '审核状态';
+comment on column daq_station_telephone_exchange.remarks is '备注';
+comment on column daq_station_telephone_exchange.create_user_id is '创建人id';
+comment on column daq_station_telephone_exchange.create_user_name is '创建人名称';
+comment on column daq_station_telephone_exchange.create_datetime is '创建时间';
+comment on column daq_station_telephone_exchange.modify_user_id is '修改人id';
+comment on column daq_station_telephone_exchange.modify_user_name is '修改人名称';
+comment on column daq_station_telephone_exchange.modify_datetime is '修改时间';
+comment on column daq_station_telephone_exchange.active is '有效标志';
+create index index_daq_station_telephone_exchange_oid_4 on daq_station_telephone_exchange ( oid );
+create index index_daq_station_telephone_exchange_device_code_9 on daq_station_telephone_exchange ( device_code );
+create index index_daq_station_telephone_exchange_device_name_10 on daq_station_telephone_exchange ( device_name );
+
+create table daq_station_industrial_tv_monitoring_sys (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	debug_content_and_results varchar (200),
+	debug_complete_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_industrial_tv_monitoring_sys is '工业电视监控系统';
+comment on column daq_station_industrial_tv_monitoring_sys.oid is '主键';
+comment on column daq_station_industrial_tv_monitoring_sys.project_oid is '项目oid';
+comment on column daq_station_industrial_tv_monitoring_sys.tenders_oid is '标段oid';
+comment on column daq_station_industrial_tv_monitoring_sys.pipeline_oid is '管线oid';
+comment on column daq_station_industrial_tv_monitoring_sys.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_industrial_tv_monitoring_sys.device_code is '系统编号';
+comment on column daq_station_industrial_tv_monitoring_sys.device_name is '系统名称';
+comment on column daq_station_industrial_tv_monitoring_sys.debug_content_and_results is '调试内容及结果';
+comment on column daq_station_industrial_tv_monitoring_sys.debug_complete_date is '调试完成日期';
+comment on column daq_station_industrial_tv_monitoring_sys.construct_unit is '施工单位';
+comment on column daq_station_industrial_tv_monitoring_sys.supervision_unit is '监理单位';
+comment on column daq_station_industrial_tv_monitoring_sys.supervision_engineer is '监理工程师';
+comment on column daq_station_industrial_tv_monitoring_sys.collection_person is '采集人员';
+comment on column daq_station_industrial_tv_monitoring_sys.collection_date is '采集日期';
+comment on column daq_station_industrial_tv_monitoring_sys.approve_status is '审核状态';
+comment on column daq_station_industrial_tv_monitoring_sys.remarks is '备注';
+comment on column daq_station_industrial_tv_monitoring_sys.create_user_id is '创建人id';
+comment on column daq_station_industrial_tv_monitoring_sys.create_user_name is '创建人名称';
+comment on column daq_station_industrial_tv_monitoring_sys.create_datetime is '创建时间';
+comment on column daq_station_industrial_tv_monitoring_sys.modify_user_id is '修改人id';
+comment on column daq_station_industrial_tv_monitoring_sys.modify_user_name is '修改人名称';
+comment on column daq_station_industrial_tv_monitoring_sys.modify_datetime is '修改时间';
+comment on column daq_station_industrial_tv_monitoring_sys.active is '有效标志';
+create index index_daq_station_industrial_tv_monitoring_sys_oid_4 on daq_station_industrial_tv_monitoring_sys ( oid );
+create index index_daq_station_industrial_tv_monitoring_sys_device_code_9 on daq_station_industrial_tv_monitoring_sys ( device_code );
+create index index_daq_station_industrial_tv_monitoring_sys_device_name_10 on daq_station_industrial_tv_monitoring_sys ( device_name );
+
+create table daq_station_industrial_tv_monitoring_back (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location_des varchar (100),
+	experimental_result smallint,
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_industrial_tv_monitoring_back is '工业电视监控后端设备';
+comment on column daq_station_industrial_tv_monitoring_back.oid is '主键';
+comment on column daq_station_industrial_tv_monitoring_back.project_oid is '项目oid';
+comment on column daq_station_industrial_tv_monitoring_back.tenders_oid is '标段oid';
+comment on column daq_station_industrial_tv_monitoring_back.pipeline_oid is '管线oid';
+comment on column daq_station_industrial_tv_monitoring_back.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_industrial_tv_monitoring_back.device_code is '设备编号';
+comment on column daq_station_industrial_tv_monitoring_back.device_name is '设备名称';
+comment on column daq_station_industrial_tv_monitoring_back.manufacture_number is '出厂编号';
+comment on column daq_station_industrial_tv_monitoring_back.install_location_des is '安装位置';
+comment on column daq_station_industrial_tv_monitoring_back.experimental_result is '结果{0:不合格;1:合格}';
+comment on column daq_station_industrial_tv_monitoring_back.construct_date is '施工日期';
+comment on column daq_station_industrial_tv_monitoring_back.construct_unit is '施工单位';
+comment on column daq_station_industrial_tv_monitoring_back.supervision_unit is '监理单位';
+comment on column daq_station_industrial_tv_monitoring_back.supervision_engineer is '监理工程师';
+comment on column daq_station_industrial_tv_monitoring_back.collection_person is '采集人员';
+comment on column daq_station_industrial_tv_monitoring_back.collection_date is '采集日期';
+comment on column daq_station_industrial_tv_monitoring_back.approve_status is '审核状态';
+comment on column daq_station_industrial_tv_monitoring_back.remarks is '备注';
+comment on column daq_station_industrial_tv_monitoring_back.create_user_id is '创建人id';
+comment on column daq_station_industrial_tv_monitoring_back.create_user_name is '创建人名称';
+comment on column daq_station_industrial_tv_monitoring_back.create_datetime is '创建时间';
+comment on column daq_station_industrial_tv_monitoring_back.modify_user_id is '修改人id';
+comment on column daq_station_industrial_tv_monitoring_back.modify_user_name is '修改人名称';
+comment on column daq_station_industrial_tv_monitoring_back.modify_datetime is '修改时间';
+comment on column daq_station_industrial_tv_monitoring_back.active is '有效标志';
+create index index_daq_station_industrial_tv_monitoring_back_oid_4 on daq_station_industrial_tv_monitoring_back ( oid );
+create index index_daq_station_industrial_tv_monitoring_back_device_code_9 on daq_station_industrial_tv_monitoring_back ( device_code );
+create index index_daq_station_industrial_tv_monitoring_back_device_name_10 on daq_station_industrial_tv_monitoring_back ( device_name );
+
+create table daq_station_industrial_tv_monitoring_front (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location_des varchar (100),
+	experimental_result smallint,
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_industrial_tv_monitoring_front is '工业电视监控前端设备';
+comment on column daq_station_industrial_tv_monitoring_front.oid is '主键';
+comment on column daq_station_industrial_tv_monitoring_front.project_oid is '项目oid';
+comment on column daq_station_industrial_tv_monitoring_front.tenders_oid is '标段oid';
+comment on column daq_station_industrial_tv_monitoring_front.pipeline_oid is '管线oid';
+comment on column daq_station_industrial_tv_monitoring_front.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_industrial_tv_monitoring_front.device_code is '设备编号';
+comment on column daq_station_industrial_tv_monitoring_front.device_name is '设备名称';
+comment on column daq_station_industrial_tv_monitoring_front.manufacture_number is '出厂编号';
+comment on column daq_station_industrial_tv_monitoring_front.install_location_des is '安装位置';
+comment on column daq_station_industrial_tv_monitoring_front.experimental_result is '结果{0:不合格;1:合格}';
+comment on column daq_station_industrial_tv_monitoring_front.construct_date is '施工日期';
+comment on column daq_station_industrial_tv_monitoring_front.construct_unit is '施工单位';
+comment on column daq_station_industrial_tv_monitoring_front.supervision_unit is '监理单位';
+comment on column daq_station_industrial_tv_monitoring_front.supervision_engineer is '监理工程师';
+comment on column daq_station_industrial_tv_monitoring_front.collection_person is '采集人员';
+comment on column daq_station_industrial_tv_monitoring_front.collection_date is '采集日期';
+comment on column daq_station_industrial_tv_monitoring_front.approve_status is '审核状态';
+comment on column daq_station_industrial_tv_monitoring_front.remarks is '备注';
+comment on column daq_station_industrial_tv_monitoring_front.create_user_id is '创建人id';
+comment on column daq_station_industrial_tv_monitoring_front.create_user_name is '创建人名称';
+comment on column daq_station_industrial_tv_monitoring_front.create_datetime is '创建时间';
+comment on column daq_station_industrial_tv_monitoring_front.modify_user_id is '修改人id';
+comment on column daq_station_industrial_tv_monitoring_front.modify_user_name is '修改人名称';
+comment on column daq_station_industrial_tv_monitoring_front.modify_datetime is '修改时间';
+comment on column daq_station_industrial_tv_monitoring_front.active is '有效标志';
+create index index_daq_station_industrial_tv_monitoring_front_oid_4 on daq_station_industrial_tv_monitoring_front ( oid );
+create index index_daq_station_industrial_tv_monitoring_front_device_code_9 on daq_station_industrial_tv_monitoring_front ( device_code );
+create index index_daq_station_industrial_tv_monitoring_front_device_name_10 on daq_station_industrial_tv_monitoring_front ( device_name );
+
+create table daq_station_back_alarm (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location_des varchar (100),
+	experimental_result smallint,
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_back_alarm is '周界入侵报警后端设备';
+comment on column daq_station_back_alarm.oid is '主键';
+comment on column daq_station_back_alarm.project_oid is '项目oid';
+comment on column daq_station_back_alarm.tenders_oid is '标段oid';
+comment on column daq_station_back_alarm.pipeline_oid is '管线oid';
+comment on column daq_station_back_alarm.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_back_alarm.device_code is '设备编号';
+comment on column daq_station_back_alarm.device_name is '设备名称';
+comment on column daq_station_back_alarm.manufacture_number is '出厂编号';
+comment on column daq_station_back_alarm.install_location_des is '安装位置';
+comment on column daq_station_back_alarm.experimental_result is '结果{0:不合格;1:合格}';
+comment on column daq_station_back_alarm.construct_date is '施工日期';
+comment on column daq_station_back_alarm.construct_unit is '施工单位';
+comment on column daq_station_back_alarm.supervision_unit is '监理单位';
+comment on column daq_station_back_alarm.supervision_engineer is '监理工程师';
+comment on column daq_station_back_alarm.collection_person is '采集人员';
+comment on column daq_station_back_alarm.collection_date is '采集日期';
+comment on column daq_station_back_alarm.approve_status is '审核状态';
+comment on column daq_station_back_alarm.remarks is '备注';
+comment on column daq_station_back_alarm.create_user_id is '创建人id';
+comment on column daq_station_back_alarm.create_user_name is '创建人名称';
+comment on column daq_station_back_alarm.create_datetime is '创建时间';
+comment on column daq_station_back_alarm.modify_user_id is '修改人id';
+comment on column daq_station_back_alarm.modify_user_name is '修改人名称';
+comment on column daq_station_back_alarm.modify_datetime is '修改时间';
+comment on column daq_station_back_alarm.active is '有效标志';
+create index index_daq_station_back_alarm_oid_4 on daq_station_back_alarm ( oid );
+create index index_daq_station_back_alarm_device_code_9 on daq_station_back_alarm ( device_code );
+create index index_daq_station_back_alarm_device_name_10 on daq_station_back_alarm ( device_name );
+
+create table daq_station_front_alarm (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location_des varchar (100),
+	experimental_result smallint,
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_front_alarm is '周界入侵报警前端设备';
+comment on column daq_station_front_alarm.oid is '主键';
+comment on column daq_station_front_alarm.project_oid is '项目oid';
+comment on column daq_station_front_alarm.tenders_oid is '标段oid';
+comment on column daq_station_front_alarm.pipeline_oid is '管线oid';
+comment on column daq_station_front_alarm.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_front_alarm.device_code is '设备编号';
+comment on column daq_station_front_alarm.device_name is '设备名称';
+comment on column daq_station_front_alarm.manufacture_number is '出厂编号';
+comment on column daq_station_front_alarm.install_location_des is '安装位置';
+comment on column daq_station_front_alarm.experimental_result is '结果{0:不合格;1:合格}';
+comment on column daq_station_front_alarm.construct_date is '施工日期';
+comment on column daq_station_front_alarm.construct_unit is '施工单位';
+comment on column daq_station_front_alarm.supervision_unit is '监理单位';
+comment on column daq_station_front_alarm.supervision_engineer is '监理工程师';
+comment on column daq_station_front_alarm.collection_person is '采集人员';
+comment on column daq_station_front_alarm.collection_date is '采集日期';
+comment on column daq_station_front_alarm.approve_status is '审核状态';
+comment on column daq_station_front_alarm.remarks is '备注';
+comment on column daq_station_front_alarm.create_user_id is '创建人id';
+comment on column daq_station_front_alarm.create_user_name is '创建人名称';
+comment on column daq_station_front_alarm.create_datetime is '创建时间';
+comment on column daq_station_front_alarm.modify_user_id is '修改人id';
+comment on column daq_station_front_alarm.modify_user_name is '修改人名称';
+comment on column daq_station_front_alarm.modify_datetime is '修改时间';
+comment on column daq_station_front_alarm.active is '有效标志';
+create index index_daq_station_front_alarm_oid_4 on daq_station_front_alarm ( oid );
+create index index_daq_station_front_alarm_device_code_9 on daq_station_front_alarm ( device_code );
+create index index_daq_station_front_alarm_device_name_10 on daq_station_front_alarm ( device_name );
+
+create table daq_station_video_intercom_back (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location_des varchar (100),
+	experimental_result smallint,
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_video_intercom_back is '可视对讲后端设备';
+comment on column daq_station_video_intercom_back.oid is '主键';
+comment on column daq_station_video_intercom_back.project_oid is '项目oid';
+comment on column daq_station_video_intercom_back.tenders_oid is '标段oid';
+comment on column daq_station_video_intercom_back.pipeline_oid is '管线oid';
+comment on column daq_station_video_intercom_back.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_video_intercom_back.device_code is '设备编号';
+comment on column daq_station_video_intercom_back.device_name is '设备名称';
+comment on column daq_station_video_intercom_back.manufacture_number is '出厂编号';
+comment on column daq_station_video_intercom_back.install_location_des is '安装位置';
+comment on column daq_station_video_intercom_back.experimental_result is '结果{0:不合格;1:合格}';
+comment on column daq_station_video_intercom_back.construct_date is '施工日期';
+comment on column daq_station_video_intercom_back.construct_unit is '施工单位';
+comment on column daq_station_video_intercom_back.supervision_unit is '监理单位';
+comment on column daq_station_video_intercom_back.supervision_engineer is '监理工程师';
+comment on column daq_station_video_intercom_back.collection_person is '采集人员';
+comment on column daq_station_video_intercom_back.collection_date is '采集日期';
+comment on column daq_station_video_intercom_back.approve_status is '审核状态';
+comment on column daq_station_video_intercom_back.remarks is '备注';
+comment on column daq_station_video_intercom_back.create_user_id is '创建人id';
+comment on column daq_station_video_intercom_back.create_user_name is '创建人名称';
+comment on column daq_station_video_intercom_back.create_datetime is '创建时间';
+comment on column daq_station_video_intercom_back.modify_user_id is '修改人id';
+comment on column daq_station_video_intercom_back.modify_user_name is '修改人名称';
+comment on column daq_station_video_intercom_back.modify_datetime is '修改时间';
+comment on column daq_station_video_intercom_back.active is '有效标志';
+create index index_daq_station_video_intercom_back_oid_4 on daq_station_video_intercom_back ( oid );
+create index index_daq_station_video_intercom_back_device_code_9 on daq_station_video_intercom_back ( device_code );
+create index index_daq_station_video_intercom_back_device_name_10 on daq_station_video_intercom_back ( device_name );
+
+create table daq_station_video_intercom_front (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location_des varchar (100),
+	experimental_result smallint,
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_video_intercom_front is '可视对讲前端设备';
+comment on column daq_station_video_intercom_front.oid is '主键';
+comment on column daq_station_video_intercom_front.project_oid is '项目oid';
+comment on column daq_station_video_intercom_front.tenders_oid is '标段oid';
+comment on column daq_station_video_intercom_front.pipeline_oid is '管线oid';
+comment on column daq_station_video_intercom_front.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_video_intercom_front.device_code is '设备编号';
+comment on column daq_station_video_intercom_front.device_name is '设备名称';
+comment on column daq_station_video_intercom_front.manufacture_number is '出厂编号';
+comment on column daq_station_video_intercom_front.install_location_des is '安装位置';
+comment on column daq_station_video_intercom_front.experimental_result is '结果{0:不合格;1:合格}';
+comment on column daq_station_video_intercom_front.construct_date is '施工日期';
+comment on column daq_station_video_intercom_front.construct_unit is '施工单位';
+comment on column daq_station_video_intercom_front.supervision_unit is '监理单位';
+comment on column daq_station_video_intercom_front.supervision_engineer is '监理工程师';
+comment on column daq_station_video_intercom_front.collection_person is '采集人员';
+comment on column daq_station_video_intercom_front.collection_date is '采集日期';
+comment on column daq_station_video_intercom_front.approve_status is '审核状态';
+comment on column daq_station_video_intercom_front.remarks is '备注';
+comment on column daq_station_video_intercom_front.create_user_id is '创建人id';
+comment on column daq_station_video_intercom_front.create_user_name is '创建人名称';
+comment on column daq_station_video_intercom_front.create_datetime is '创建时间';
+comment on column daq_station_video_intercom_front.modify_user_id is '修改人id';
+comment on column daq_station_video_intercom_front.modify_user_name is '修改人名称';
+comment on column daq_station_video_intercom_front.modify_datetime is '修改时间';
+comment on column daq_station_video_intercom_front.active is '有效标志';
+create index index_daq_station_video_intercom_front_oid_4 on daq_station_video_intercom_front ( oid );
+create index index_daq_station_video_intercom_front_device_code_9 on daq_station_video_intercom_front ( device_code );
+create index index_daq_station_video_intercom_front_device_name_10 on daq_station_video_intercom_front ( device_name );
+
+create table daq_station_video_conference_sys (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	debug_content_and_results varchar (200),
+	debug_complete_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_video_conference_sys is '会议电视系统';
+comment on column daq_station_video_conference_sys.oid is '主键';
+comment on column daq_station_video_conference_sys.project_oid is '项目oid';
+comment on column daq_station_video_conference_sys.tenders_oid is '标段oid';
+comment on column daq_station_video_conference_sys.pipeline_oid is '管线oid';
+comment on column daq_station_video_conference_sys.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_video_conference_sys.device_code is '系统编号';
+comment on column daq_station_video_conference_sys.device_name is '系统名称';
+comment on column daq_station_video_conference_sys.debug_content_and_results is '调试内容及结果';
+comment on column daq_station_video_conference_sys.debug_complete_date is '调试完成日期';
+comment on column daq_station_video_conference_sys.construct_unit is '施工单位';
+comment on column daq_station_video_conference_sys.supervision_unit is '监理单位';
+comment on column daq_station_video_conference_sys.supervision_engineer is '监理工程师';
+comment on column daq_station_video_conference_sys.collection_person is '采集人员';
+comment on column daq_station_video_conference_sys.collection_date is '采集日期';
+comment on column daq_station_video_conference_sys.approve_status is '审核状态';
+comment on column daq_station_video_conference_sys.remarks is '备注';
+comment on column daq_station_video_conference_sys.create_user_id is '创建人id';
+comment on column daq_station_video_conference_sys.create_user_name is '创建人名称';
+comment on column daq_station_video_conference_sys.create_datetime is '创建时间';
+comment on column daq_station_video_conference_sys.modify_user_id is '修改人id';
+comment on column daq_station_video_conference_sys.modify_user_name is '修改人名称';
+comment on column daq_station_video_conference_sys.modify_datetime is '修改时间';
+comment on column daq_station_video_conference_sys.active is '有效标志';
+create index index_daq_station_video_conference_sys_oid_4 on daq_station_video_conference_sys ( oid );
+create index index_daq_station_video_conference_sys_device_code_9 on daq_station_video_conference_sys ( device_code );
+create index index_daq_station_video_conference_sys_device_name_10 on daq_station_video_conference_sys ( device_name );
+
+create table daq_station_video_conference (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location_des varchar (100),
+	experimental_result smallint,
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_video_conference is '会议电视设备';
+comment on column daq_station_video_conference.oid is '主键';
+comment on column daq_station_video_conference.project_oid is '项目oid';
+comment on column daq_station_video_conference.tenders_oid is '标段oid';
+comment on column daq_station_video_conference.pipeline_oid is '管线oid';
+comment on column daq_station_video_conference.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_video_conference.device_code is '设备编号';
+comment on column daq_station_video_conference.device_name is '设备名称';
+comment on column daq_station_video_conference.manufacture_number is '出厂编号';
+comment on column daq_station_video_conference.install_location_des is '安装位置';
+comment on column daq_station_video_conference.experimental_result is '结果{0:不合格;1:合格}';
+comment on column daq_station_video_conference.construct_date is '施工日期';
+comment on column daq_station_video_conference.construct_unit is '施工单位';
+comment on column daq_station_video_conference.supervision_unit is '监理单位';
+comment on column daq_station_video_conference.supervision_engineer is '监理工程师';
+comment on column daq_station_video_conference.collection_person is '采集人员';
+comment on column daq_station_video_conference.collection_date is '采集日期';
+comment on column daq_station_video_conference.approve_status is '审核状态';
+comment on column daq_station_video_conference.remarks is '备注';
+comment on column daq_station_video_conference.create_user_id is '创建人id';
+comment on column daq_station_video_conference.create_user_name is '创建人名称';
+comment on column daq_station_video_conference.create_datetime is '创建时间';
+comment on column daq_station_video_conference.modify_user_id is '修改人id';
+comment on column daq_station_video_conference.modify_user_name is '修改人名称';
+comment on column daq_station_video_conference.modify_datetime is '修改时间';
+comment on column daq_station_video_conference.active is '有效标志';
+create index index_daq_station_video_conference_oid_4 on daq_station_video_conference ( oid );
+create index index_daq_station_video_conference_device_code_9 on daq_station_video_conference ( device_code );
+create index index_daq_station_video_conference_device_name_10 on daq_station_video_conference ( device_name );
+
+create table daq_station_office_network_sys (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	debug_content_and_results varchar (200),
+	debug_complete_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_office_network_sys is '办公网络系统';
+comment on column daq_station_office_network_sys.oid is '主键';
+comment on column daq_station_office_network_sys.project_oid is '项目oid';
+comment on column daq_station_office_network_sys.tenders_oid is '标段oid';
+comment on column daq_station_office_network_sys.pipeline_oid is '管线oid';
+comment on column daq_station_office_network_sys.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_office_network_sys.device_code is '系统编号';
+comment on column daq_station_office_network_sys.device_name is '系统名称';
+comment on column daq_station_office_network_sys.debug_content_and_results is '调试内容及结果';
+comment on column daq_station_office_network_sys.debug_complete_date is '调试完成日期';
+comment on column daq_station_office_network_sys.construct_unit is '施工单位';
+comment on column daq_station_office_network_sys.supervision_unit is '监理单位';
+comment on column daq_station_office_network_sys.supervision_engineer is '监理工程师';
+comment on column daq_station_office_network_sys.collection_person is '采集人员';
+comment on column daq_station_office_network_sys.collection_date is '采集日期';
+comment on column daq_station_office_network_sys.approve_status is '审核状态';
+comment on column daq_station_office_network_sys.remarks is '备注';
+comment on column daq_station_office_network_sys.create_user_id is '创建人id';
+comment on column daq_station_office_network_sys.create_user_name is '创建人名称';
+comment on column daq_station_office_network_sys.create_datetime is '创建时间';
+comment on column daq_station_office_network_sys.modify_user_id is '修改人id';
+comment on column daq_station_office_network_sys.modify_user_name is '修改人名称';
+comment on column daq_station_office_network_sys.modify_datetime is '修改时间';
+comment on column daq_station_office_network_sys.active is '有效标志';
+create index index_daq_station_office_network_sys_oid_4 on daq_station_office_network_sys ( oid );
+create index index_daq_station_office_network_sys_device_code_9 on daq_station_office_network_sys ( device_code );
+create index index_daq_station_office_network_sys_device_name_10 on daq_station_office_network_sys ( device_name );
+
+create table daq_station_safe_router (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location_des varchar (100),
+	ip_address varchar (30),
+	subnet_mask varchar (30),
+	geteway varchar (30),
+	dns_address varchar (30),
+	spare_dns_address varchar (30),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_safe_router is '路由器';
+comment on column daq_station_safe_router.oid is '主键';
+comment on column daq_station_safe_router.project_oid is '项目oid';
+comment on column daq_station_safe_router.tenders_oid is '标段oid';
+comment on column daq_station_safe_router.pipeline_oid is '管线oid';
+comment on column daq_station_safe_router.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_safe_router.device_code is '设备编号';
+comment on column daq_station_safe_router.device_name is '设备名称';
+comment on column daq_station_safe_router.manufacture_number is '出厂编号';
+comment on column daq_station_safe_router.install_location_des is '安装位置';
+comment on column daq_station_safe_router.ip_address is 'ip地址';
+comment on column daq_station_safe_router.subnet_mask is '子网掩码';
+comment on column daq_station_safe_router.geteway is '网关';
+comment on column daq_station_safe_router.dns_address is '首选dns';
+comment on column daq_station_safe_router.spare_dns_address is '备用dns';
+comment on column daq_station_safe_router.construct_date is '施工日期';
+comment on column daq_station_safe_router.construct_unit is '施工单位';
+comment on column daq_station_safe_router.supervision_unit is '监理单位';
+comment on column daq_station_safe_router.supervision_engineer is '监理工程师';
+comment on column daq_station_safe_router.collection_person is '采集人员';
+comment on column daq_station_safe_router.collection_date is '采集日期';
+comment on column daq_station_safe_router.approve_status is '审核状态';
+comment on column daq_station_safe_router.remarks is '备注';
+comment on column daq_station_safe_router.create_user_id is '创建人id';
+comment on column daq_station_safe_router.create_user_name is '创建人名称';
+comment on column daq_station_safe_router.create_datetime is '创建时间';
+comment on column daq_station_safe_router.modify_user_id is '修改人id';
+comment on column daq_station_safe_router.modify_user_name is '修改人名称';
+comment on column daq_station_safe_router.modify_datetime is '修改时间';
+comment on column daq_station_safe_router.active is '有效标志';
+create index index_daq_station_safe_router_oid_4 on daq_station_safe_router ( oid );
+create index index_daq_station_safe_router_device_code_9 on daq_station_safe_router ( device_code );
+create index index_daq_station_safe_router_device_name_10 on daq_station_safe_router ( device_name );
+
+create table daq_station_safe_switch (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location_des varchar (100),
+	ip_address varchar (30),
+	subnet_mask varchar (30),
+	geteway varchar (30),
+	dns_address varchar (30),
+	spare_dns_address varchar (30),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_safe_switch is '交换机';
+comment on column daq_station_safe_switch.oid is '主键';
+comment on column daq_station_safe_switch.project_oid is '项目oid';
+comment on column daq_station_safe_switch.tenders_oid is '标段oid';
+comment on column daq_station_safe_switch.pipeline_oid is '管线oid';
+comment on column daq_station_safe_switch.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_safe_switch.device_code is '设备编号';
+comment on column daq_station_safe_switch.device_name is '设备名称';
+comment on column daq_station_safe_switch.manufacture_number is '出厂编号';
+comment on column daq_station_safe_switch.install_location_des is '安装位置';
+comment on column daq_station_safe_switch.ip_address is 'ip地址';
+comment on column daq_station_safe_switch.subnet_mask is '子网掩码';
+comment on column daq_station_safe_switch.geteway is '网关';
+comment on column daq_station_safe_switch.dns_address is '首选dns';
+comment on column daq_station_safe_switch.spare_dns_address is '备用dns';
+comment on column daq_station_safe_switch.construct_date is '施工日期';
+comment on column daq_station_safe_switch.construct_unit is '施工单位';
+comment on column daq_station_safe_switch.supervision_unit is '监理单位';
+comment on column daq_station_safe_switch.supervision_engineer is '监理工程师';
+comment on column daq_station_safe_switch.collection_person is '采集人员';
+comment on column daq_station_safe_switch.collection_date is '采集日期';
+comment on column daq_station_safe_switch.approve_status is '审核状态';
+comment on column daq_station_safe_switch.remarks is '备注';
+comment on column daq_station_safe_switch.create_user_id is '创建人id';
+comment on column daq_station_safe_switch.create_user_name is '创建人名称';
+comment on column daq_station_safe_switch.create_datetime is '创建时间';
+comment on column daq_station_safe_switch.modify_user_id is '修改人id';
+comment on column daq_station_safe_switch.modify_user_name is '修改人名称';
+comment on column daq_station_safe_switch.modify_datetime is '修改时间';
+comment on column daq_station_safe_switch.active is '有效标志';
+create index index_daq_station_safe_switch_oid_4 on daq_station_safe_switch ( oid );
+create index index_daq_station_safe_switch_device_code_9 on daq_station_safe_switch ( device_code );
+create index index_daq_station_safe_switch_device_name_10 on daq_station_safe_switch ( device_name );
+
+create table daq_station_fo_early_warning_sys (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	debug_content_and_results varchar (200),
+	debug_complete_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_fo_early_warning_sys is '光纤预警系统';
+comment on column daq_station_fo_early_warning_sys.oid is '主键';
+comment on column daq_station_fo_early_warning_sys.project_oid is '项目oid';
+comment on column daq_station_fo_early_warning_sys.tenders_oid is '标段oid';
+comment on column daq_station_fo_early_warning_sys.pipeline_oid is '管线oid';
+comment on column daq_station_fo_early_warning_sys.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_fo_early_warning_sys.device_code is '系统编号';
+comment on column daq_station_fo_early_warning_sys.device_name is '系统名称';
+comment on column daq_station_fo_early_warning_sys.debug_content_and_results is '调试内容及结果';
+comment on column daq_station_fo_early_warning_sys.debug_complete_date is '调试完成日期';
+comment on column daq_station_fo_early_warning_sys.construct_unit is '施工单位';
+comment on column daq_station_fo_early_warning_sys.supervision_unit is '监理单位';
+comment on column daq_station_fo_early_warning_sys.supervision_engineer is '监理工程师';
+comment on column daq_station_fo_early_warning_sys.collection_person is '采集人员';
+comment on column daq_station_fo_early_warning_sys.collection_date is '采集日期';
+comment on column daq_station_fo_early_warning_sys.approve_status is '审核状态';
+comment on column daq_station_fo_early_warning_sys.remarks is '备注';
+comment on column daq_station_fo_early_warning_sys.create_user_id is '创建人id';
+comment on column daq_station_fo_early_warning_sys.create_user_name is '创建人名称';
+comment on column daq_station_fo_early_warning_sys.create_datetime is '创建时间';
+comment on column daq_station_fo_early_warning_sys.modify_user_id is '修改人id';
+comment on column daq_station_fo_early_warning_sys.modify_user_name is '修改人名称';
+comment on column daq_station_fo_early_warning_sys.modify_datetime is '修改时间';
+comment on column daq_station_fo_early_warning_sys.active is '有效标志';
+create index index_daq_station_fo_early_warning_sys_oid_4 on daq_station_fo_early_warning_sys ( oid );
+create index index_daq_station_fo_early_warning_sys_device_code_9 on daq_station_fo_early_warning_sys ( device_code );
+create index index_daq_station_fo_early_warning_sys_device_name_10 on daq_station_fo_early_warning_sys ( device_name );
+
+create table daq_station_fo_early_warning (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location_des varchar (100),
+	experimental_result smallint,
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_fo_early_warning is '光纤预警设备';
+comment on column daq_station_fo_early_warning.oid is '主键';
+comment on column daq_station_fo_early_warning.project_oid is '项目oid';
+comment on column daq_station_fo_early_warning.tenders_oid is '标段oid';
+comment on column daq_station_fo_early_warning.pipeline_oid is '管线oid';
+comment on column daq_station_fo_early_warning.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_fo_early_warning.device_code is '设备编号';
+comment on column daq_station_fo_early_warning.device_name is '设备名称';
+comment on column daq_station_fo_early_warning.manufacture_number is '出厂编号';
+comment on column daq_station_fo_early_warning.install_location_des is '安装位置';
+comment on column daq_station_fo_early_warning.experimental_result is '结果{0:不合格;1:合格}';
+comment on column daq_station_fo_early_warning.construct_date is '施工日期';
+comment on column daq_station_fo_early_warning.construct_unit is '施工单位';
+comment on column daq_station_fo_early_warning.supervision_unit is '监理单位';
+comment on column daq_station_fo_early_warning.supervision_engineer is '监理工程师';
+comment on column daq_station_fo_early_warning.collection_person is '采集人员';
+comment on column daq_station_fo_early_warning.collection_date is '采集日期';
+comment on column daq_station_fo_early_warning.approve_status is '审核状态';
+comment on column daq_station_fo_early_warning.remarks is '备注';
+comment on column daq_station_fo_early_warning.create_user_id is '创建人id';
+comment on column daq_station_fo_early_warning.create_user_name is '创建人名称';
+comment on column daq_station_fo_early_warning.create_datetime is '创建时间';
+comment on column daq_station_fo_early_warning.modify_user_id is '修改人id';
+comment on column daq_station_fo_early_warning.modify_user_name is '修改人名称';
+comment on column daq_station_fo_early_warning.modify_datetime is '修改时间';
+comment on column daq_station_fo_early_warning.active is '有效标志';
+create index index_daq_station_fo_early_warning_oid_4 on daq_station_fo_early_warning ( oid );
+create index index_daq_station_fo_early_warning_device_code_9 on daq_station_fo_early_warning ( device_code );
+create index index_daq_station_fo_early_warning_device_name_10 on daq_station_fo_early_warning ( device_name );
+
+
+create table daq_station_wireless_talkback (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location_des varchar (100),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_wireless_talkback is '无线对讲设备';
+comment on column daq_station_wireless_talkback.oid is '主键';
+comment on column daq_station_wireless_talkback.project_oid is '项目oid';
+comment on column daq_station_wireless_talkback.tenders_oid is '标段oid';
+comment on column daq_station_wireless_talkback.pipeline_oid is '管线oid';
+comment on column daq_station_wireless_talkback.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_wireless_talkback.device_code is '设备编号';
+comment on column daq_station_wireless_talkback.device_name is '设备名称';
+comment on column daq_station_wireless_talkback.manufacture_number is '出厂编号';
+comment on column daq_station_wireless_talkback.install_location_des is '安装位置';
+comment on column daq_station_wireless_talkback.construct_date is '施工日期';
+comment on column daq_station_wireless_talkback.construct_unit is '施工单位';
+comment on column daq_station_wireless_talkback.supervision_unit is '监理单位';
+comment on column daq_station_wireless_talkback.supervision_engineer is '监理工程师';
+comment on column daq_station_wireless_talkback.collection_person is '采集人员';
+comment on column daq_station_wireless_talkback.collection_date is '采集日期';
+comment on column daq_station_wireless_talkback.approve_status is '审核状态';
+comment on column daq_station_wireless_talkback.remarks is '备注';
+comment on column daq_station_wireless_talkback.create_user_id is '创建人id';
+comment on column daq_station_wireless_talkback.create_user_name is '创建人名称';
+comment on column daq_station_wireless_talkback.create_datetime is '创建时间';
+comment on column daq_station_wireless_talkback.modify_user_id is '修改人id';
+comment on column daq_station_wireless_talkback.modify_user_name is '修改人名称';
+comment on column daq_station_wireless_talkback.modify_datetime is '修改时间';
+comment on column daq_station_wireless_talkback.active is '有效标志';
+create index index_daq_station_wireless_talkback_oid_4 on daq_station_wireless_talkback ( oid );
+create index index_daq_station_wireless_talkback_device_code_9 on daq_station_wireless_talkback ( device_code );
+create index index_daq_station_wireless_talkback_device_name_10 on daq_station_wireless_talkback ( device_name );
+
+create table daq_station_large_screen_display_sys (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	debug_content_and_results varchar (200),
+	debug_complete_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_large_screen_display_sys is '大屏幕显示系统-lss';
+comment on column daq_station_large_screen_display_sys.oid is '主键';
+comment on column daq_station_large_screen_display_sys.project_oid is '项目oid';
+comment on column daq_station_large_screen_display_sys.tenders_oid is '标段oid';
+comment on column daq_station_large_screen_display_sys.pipeline_oid is '管线oid';
+comment on column daq_station_large_screen_display_sys.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_large_screen_display_sys.device_code is '系统编号';
+comment on column daq_station_large_screen_display_sys.device_name is '系统名称';
+comment on column daq_station_large_screen_display_sys.debug_content_and_results is '调试内容及结果';
+comment on column daq_station_large_screen_display_sys.debug_complete_date is '调试完成日期';
+comment on column daq_station_large_screen_display_sys.construct_unit is '施工单位';
+comment on column daq_station_large_screen_display_sys.supervision_unit is '监理单位';
+comment on column daq_station_large_screen_display_sys.supervision_engineer is '监理工程师';
+comment on column daq_station_large_screen_display_sys.collection_person is '采集人员';
+comment on column daq_station_large_screen_display_sys.collection_date is '采集日期';
+comment on column daq_station_large_screen_display_sys.approve_status is '审核状态';
+comment on column daq_station_large_screen_display_sys.remarks is '备注';
+comment on column daq_station_large_screen_display_sys.create_user_id is '创建人id';
+comment on column daq_station_large_screen_display_sys.create_user_name is '创建人名称';
+comment on column daq_station_large_screen_display_sys.create_datetime is '创建时间';
+comment on column daq_station_large_screen_display_sys.modify_user_id is '修改人id';
+comment on column daq_station_large_screen_display_sys.modify_user_name is '修改人名称';
+comment on column daq_station_large_screen_display_sys.modify_datetime is '修改时间';
+comment on column daq_station_large_screen_display_sys.active is '有效标志';
+create index index_daq_station_large_screen_display_sys_oid_4 on daq_station_large_screen_display_sys ( oid );
+create index index_daq_station_large_screen_display_sys_device_code_9 on daq_station_large_screen_display_sys ( device_code );
+create index index_daq_station_large_screen_display_sys_device_name_10 on daq_station_large_screen_display_sys ( device_name );
+
+create table daq_station_pa_or_ga_broadcast_sys (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	debug_content_and_results varchar (200),
+	debug_complete_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_pa_or_ga_broadcast_sys is 'pa/ga广播系统';
+comment on column daq_station_pa_or_ga_broadcast_sys.oid is '主键';
+comment on column daq_station_pa_or_ga_broadcast_sys.project_oid is '项目oid';
+comment on column daq_station_pa_or_ga_broadcast_sys.tenders_oid is '标段oid';
+comment on column daq_station_pa_or_ga_broadcast_sys.pipeline_oid is '管线oid';
+comment on column daq_station_pa_or_ga_broadcast_sys.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_pa_or_ga_broadcast_sys.device_code is '系统编号';
+comment on column daq_station_pa_or_ga_broadcast_sys.device_name is '系统名称';
+comment on column daq_station_pa_or_ga_broadcast_sys.debug_content_and_results is '调试内容及结果';
+comment on column daq_station_pa_or_ga_broadcast_sys.debug_complete_date is '调试完成日期';
+comment on column daq_station_pa_or_ga_broadcast_sys.construct_unit is '施工单位';
+comment on column daq_station_pa_or_ga_broadcast_sys.supervision_unit is '监理单位';
+comment on column daq_station_pa_or_ga_broadcast_sys.supervision_engineer is '监理工程师';
+comment on column daq_station_pa_or_ga_broadcast_sys.collection_person is '采集人员';
+comment on column daq_station_pa_or_ga_broadcast_sys.collection_date is '采集日期';
+comment on column daq_station_pa_or_ga_broadcast_sys.approve_status is '审核状态';
+comment on column daq_station_pa_or_ga_broadcast_sys.remarks is '备注';
+comment on column daq_station_pa_or_ga_broadcast_sys.create_user_id is '创建人id';
+comment on column daq_station_pa_or_ga_broadcast_sys.create_user_name is '创建人名称';
+comment on column daq_station_pa_or_ga_broadcast_sys.create_datetime is '创建时间';
+comment on column daq_station_pa_or_ga_broadcast_sys.modify_user_id is '修改人id';
+comment on column daq_station_pa_or_ga_broadcast_sys.modify_user_name is '修改人名称';
+comment on column daq_station_pa_or_ga_broadcast_sys.modify_datetime is '修改时间';
+comment on column daq_station_pa_or_ga_broadcast_sys.active is '有效标志';
+create index index_daq_station_pa_or_ga_broadcast_sys_oid_4 on daq_station_pa_or_ga_broadcast_sys ( oid );
+create index index_daq_station_pa_or_ga_broadcast_sys_device_code_9 on daq_station_pa_or_ga_broadcast_sys ( device_code );
+create index index_daq_station_pa_or_ga_broadcast_sys_device_name_10 on daq_station_pa_or_ga_broadcast_sys ( device_name );
+
+create table daq_station_pa_or_ga_broadcast (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location_des varchar (100),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_pa_or_ga_broadcast is 'pa/ga广播设备';
+comment on column daq_station_pa_or_ga_broadcast.oid is '主键';
+comment on column daq_station_pa_or_ga_broadcast.project_oid is '项目oid';
+comment on column daq_station_pa_or_ga_broadcast.tenders_oid is '标段oid';
+comment on column daq_station_pa_or_ga_broadcast.pipeline_oid is '管线oid';
+comment on column daq_station_pa_or_ga_broadcast.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_pa_or_ga_broadcast.device_code is '设备编号';
+comment on column daq_station_pa_or_ga_broadcast.device_name is '设备名称';
+comment on column daq_station_pa_or_ga_broadcast.manufacture_number is '出厂编号';
+comment on column daq_station_pa_or_ga_broadcast.install_location_des is '安装位置';
+comment on column daq_station_pa_or_ga_broadcast.construct_date is '施工日期';
+comment on column daq_station_pa_or_ga_broadcast.construct_unit is '施工单位';
+comment on column daq_station_pa_or_ga_broadcast.supervision_unit is '监理单位';
+comment on column daq_station_pa_or_ga_broadcast.supervision_engineer is '监理工程师';
+comment on column daq_station_pa_or_ga_broadcast.collection_person is '采集人员';
+comment on column daq_station_pa_or_ga_broadcast.collection_date is '采集日期';
+comment on column daq_station_pa_or_ga_broadcast.approve_status is '审核状态';
+comment on column daq_station_pa_or_ga_broadcast.remarks is '备注';
+comment on column daq_station_pa_or_ga_broadcast.create_user_id is '创建人id';
+comment on column daq_station_pa_or_ga_broadcast.create_user_name is '创建人名称';
+comment on column daq_station_pa_or_ga_broadcast.create_datetime is '创建时间';
+comment on column daq_station_pa_or_ga_broadcast.modify_user_id is '修改人id';
+comment on column daq_station_pa_or_ga_broadcast.modify_user_name is '修改人名称';
+comment on column daq_station_pa_or_ga_broadcast.modify_datetime is '修改时间';
+comment on column daq_station_pa_or_ga_broadcast.active is '有效标志';
+create index index_daq_station_pa_or_ga_broadcast_oid_4 on daq_station_pa_or_ga_broadcast ( oid );
+create index index_daq_station_pa_or_ga_broadcast_device_code_9 on daq_station_pa_or_ga_broadcast ( device_code );
+create index index_daq_station_pa_or_ga_broadcast_device_name_10 on daq_station_pa_or_ga_broadcast ( device_name );
+
+create table daq_station_ethernet_communication_sys (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	debug_content_and_results varchar (200),
+	debug_complete_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_ethernet_communication_sys is '工业以太网通信系统';
+comment on column daq_station_ethernet_communication_sys.oid is '主键';
+comment on column daq_station_ethernet_communication_sys.project_oid is '项目oid';
+comment on column daq_station_ethernet_communication_sys.tenders_oid is '标段oid';
+comment on column daq_station_ethernet_communication_sys.pipeline_oid is '管线oid';
+comment on column daq_station_ethernet_communication_sys.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_ethernet_communication_sys.device_code is '系统编号';
+comment on column daq_station_ethernet_communication_sys.device_name is '系统名称';
+comment on column daq_station_ethernet_communication_sys.debug_content_and_results is '调试内容及结果';
+comment on column daq_station_ethernet_communication_sys.debug_complete_date is '调试完成日期';
+comment on column daq_station_ethernet_communication_sys.construct_unit is '施工单位';
+comment on column daq_station_ethernet_communication_sys.supervision_unit is '监理单位';
+comment on column daq_station_ethernet_communication_sys.supervision_engineer is '监理工程师';
+comment on column daq_station_ethernet_communication_sys.collection_person is '采集人员';
+comment on column daq_station_ethernet_communication_sys.collection_date is '采集日期';
+comment on column daq_station_ethernet_communication_sys.approve_status is '审核状态';
+comment on column daq_station_ethernet_communication_sys.remarks is '备注';
+comment on column daq_station_ethernet_communication_sys.create_user_id is '创建人id';
+comment on column daq_station_ethernet_communication_sys.create_user_name is '创建人名称';
+comment on column daq_station_ethernet_communication_sys.create_datetime is '创建时间';
+comment on column daq_station_ethernet_communication_sys.modify_user_id is '修改人id';
+comment on column daq_station_ethernet_communication_sys.modify_user_name is '修改人名称';
+comment on column daq_station_ethernet_communication_sys.modify_datetime is '修改时间';
+comment on column daq_station_ethernet_communication_sys.active is '有效标志';
+create index index_daq_station_ethernet_communication_sys_oid_4 on daq_station_ethernet_communication_sys ( oid );
+create index index_daq_station_ethernet_communication_sys_device_code_9 on daq_station_ethernet_communication_sys ( device_code );
+create index index_daq_station_ethernet_communication_sys_device_name_10 on daq_station_ethernet_communication_sys ( device_name );
+
+create table daq_station_ethernet_communication (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location_des varchar (100),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_ethernet_communication is '工业以太网设备';
+comment on column daq_station_ethernet_communication.oid is '主键';
+comment on column daq_station_ethernet_communication.project_oid is '项目oid';
+comment on column daq_station_ethernet_communication.tenders_oid is '标段oid';
+comment on column daq_station_ethernet_communication.pipeline_oid is '管线oid';
+comment on column daq_station_ethernet_communication.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_ethernet_communication.device_code is '设备编号';
+comment on column daq_station_ethernet_communication.device_name is '设备名称';
+comment on column daq_station_ethernet_communication.manufacture_number is '出厂编号';
+comment on column daq_station_ethernet_communication.install_location_des is '安装位置';
+comment on column daq_station_ethernet_communication.construct_date is '施工日期';
+comment on column daq_station_ethernet_communication.construct_unit is '施工单位';
+comment on column daq_station_ethernet_communication.supervision_unit is '监理单位';
+comment on column daq_station_ethernet_communication.supervision_engineer is '监理工程师';
+comment on column daq_station_ethernet_communication.collection_person is '采集人员';
+comment on column daq_station_ethernet_communication.collection_date is '采集日期';
+comment on column daq_station_ethernet_communication.approve_status is '审核状态';
+comment on column daq_station_ethernet_communication.remarks is '备注';
+comment on column daq_station_ethernet_communication.create_user_id is '创建人id';
+comment on column daq_station_ethernet_communication.create_user_name is '创建人名称';
+comment on column daq_station_ethernet_communication.create_datetime is '创建时间';
+comment on column daq_station_ethernet_communication.modify_user_id is '修改人id';
+comment on column daq_station_ethernet_communication.modify_user_name is '修改人名称';
+comment on column daq_station_ethernet_communication.modify_datetime is '修改时间';
+comment on column daq_station_ethernet_communication.active is '有效标志';
+create index index_daq_station_ethernet_communication_oid_4 on daq_station_ethernet_communication ( oid );
+create index index_daq_station_ethernet_communication_device_code_9 on daq_station_ethernet_communication ( device_code );
+create index index_daq_station_ethernet_communication_device_name_10 on daq_station_ethernet_communication ( device_name );
+
+create table daq_station_emergency_communication_sys (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	debug_content_and_results varchar (200),
+	debug_complete_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_emergency_communication_sys is '应急通信系统';
+comment on column daq_station_emergency_communication_sys.oid is '主键';
+comment on column daq_station_emergency_communication_sys.project_oid is '项目oid';
+comment on column daq_station_emergency_communication_sys.tenders_oid is '标段oid';
+comment on column daq_station_emergency_communication_sys.pipeline_oid is '管线oid';
+comment on column daq_station_emergency_communication_sys.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_emergency_communication_sys.device_code is '系统编号';
+comment on column daq_station_emergency_communication_sys.device_name is '系统名称';
+comment on column daq_station_emergency_communication_sys.debug_content_and_results is '调试内容及结果';
+comment on column daq_station_emergency_communication_sys.debug_complete_date is '调试完成日期';
+comment on column daq_station_emergency_communication_sys.construct_unit is '施工单位';
+comment on column daq_station_emergency_communication_sys.supervision_unit is '监理单位';
+comment on column daq_station_emergency_communication_sys.supervision_engineer is '监理工程师';
+comment on column daq_station_emergency_communication_sys.collection_person is '采集人员';
+comment on column daq_station_emergency_communication_sys.collection_date is '采集日期';
+comment on column daq_station_emergency_communication_sys.approve_status is '审核状态';
+comment on column daq_station_emergency_communication_sys.remarks is '备注';
+comment on column daq_station_emergency_communication_sys.create_user_id is '创建人id';
+comment on column daq_station_emergency_communication_sys.create_user_name is '创建人名称';
+comment on column daq_station_emergency_communication_sys.create_datetime is '创建时间';
+comment on column daq_station_emergency_communication_sys.modify_user_id is '修改人id';
+comment on column daq_station_emergency_communication_sys.modify_user_name is '修改人名称';
+comment on column daq_station_emergency_communication_sys.modify_datetime is '修改时间';
+comment on column daq_station_emergency_communication_sys.active is '有效标志';
+create index index_daq_station_emergency_communication_sys_oid_4 on daq_station_emergency_communication_sys ( oid );
+create index index_daq_station_emergency_communication_sys_device_code_9 on daq_station_emergency_communication_sys ( device_code );
+create index index_daq_station_emergency_communication_sys_device_name_10 on daq_station_emergency_communication_sys ( device_name );
+
+create table daq_station_emergency_communication (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location_des varchar (100),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_emergency_communication is '应急通信设备';
+comment on column daq_station_emergency_communication.oid is '主键';
+comment on column daq_station_emergency_communication.project_oid is '项目oid';
+comment on column daq_station_emergency_communication.tenders_oid is '标段oid';
+comment on column daq_station_emergency_communication.pipeline_oid is '管线oid';
+comment on column daq_station_emergency_communication.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_emergency_communication.device_code is '设备编号';
+comment on column daq_station_emergency_communication.device_name is '设备名称';
+comment on column daq_station_emergency_communication.manufacture_number is '出厂编号';
+comment on column daq_station_emergency_communication.install_location_des is '安装位置';
+comment on column daq_station_emergency_communication.construct_date is '施工日期';
+comment on column daq_station_emergency_communication.construct_unit is '施工单位';
+comment on column daq_station_emergency_communication.supervision_unit is '监理单位';
+comment on column daq_station_emergency_communication.supervision_engineer is '监理工程师';
+comment on column daq_station_emergency_communication.collection_person is '采集人员';
+comment on column daq_station_emergency_communication.collection_date is '采集日期';
+comment on column daq_station_emergency_communication.approve_status is '审核状态';
+comment on column daq_station_emergency_communication.remarks is '备注';
+comment on column daq_station_emergency_communication.create_user_id is '创建人id';
+comment on column daq_station_emergency_communication.create_user_name is '创建人名称';
+comment on column daq_station_emergency_communication.create_datetime is '创建时间';
+comment on column daq_station_emergency_communication.modify_user_id is '修改人id';
+comment on column daq_station_emergency_communication.modify_user_name is '修改人名称';
+comment on column daq_station_emergency_communication.modify_datetime is '修改时间';
+comment on column daq_station_emergency_communication.active is '有效标志';
+create index index_daq_station_emergency_communication_oid_4 on daq_station_emergency_communication ( oid );
+create index index_daq_station_emergency_communication_device_code_9 on daq_station_emergency_communication ( device_code );
+create index index_daq_station_emergency_communication_device_name_10 on daq_station_emergency_communication ( device_name );
+
+create table daq_station_guard_tour_sys (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	debug_content_and_results varchar (200),
+	debug_complete_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_guard_tour_sys is '电子巡查系统';
+comment on column daq_station_guard_tour_sys.oid is '主键';
+comment on column daq_station_guard_tour_sys.project_oid is '项目oid';
+comment on column daq_station_guard_tour_sys.tenders_oid is '标段oid';
+comment on column daq_station_guard_tour_sys.pipeline_oid is '管线oid';
+comment on column daq_station_guard_tour_sys.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_guard_tour_sys.device_code is '系统编号';
+comment on column daq_station_guard_tour_sys.device_name is '系统名称';
+comment on column daq_station_guard_tour_sys.debug_content_and_results is '调试内容及结果';
+comment on column daq_station_guard_tour_sys.debug_complete_date is '调试完成日期';
+comment on column daq_station_guard_tour_sys.construct_unit is '施工单位';
+comment on column daq_station_guard_tour_sys.supervision_unit is '监理单位';
+comment on column daq_station_guard_tour_sys.supervision_engineer is '监理工程师';
+comment on column daq_station_guard_tour_sys.collection_person is '采集人员';
+comment on column daq_station_guard_tour_sys.collection_date is '采集日期';
+comment on column daq_station_guard_tour_sys.approve_status is '审核状态';
+comment on column daq_station_guard_tour_sys.remarks is '备注';
+comment on column daq_station_guard_tour_sys.create_user_id is '创建人id';
+comment on column daq_station_guard_tour_sys.create_user_name is '创建人名称';
+comment on column daq_station_guard_tour_sys.create_datetime is '创建时间';
+comment on column daq_station_guard_tour_sys.modify_user_id is '修改人id';
+comment on column daq_station_guard_tour_sys.modify_user_name is '修改人名称';
+comment on column daq_station_guard_tour_sys.modify_datetime is '修改时间';
+comment on column daq_station_guard_tour_sys.active is '有效标志';
+create index index_daq_station_guard_tour_sys_oid_4 on daq_station_guard_tour_sys ( oid );
+create index index_daq_station_guard_tour_sys_device_code_9 on daq_station_guard_tour_sys ( device_code );
+create index index_daq_station_guard_tour_sys_device_name_10 on daq_station_guard_tour_sys ( device_name );
+
+create table daq_station_anti_intruding (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (50),
+	device_name varchar (50),
+	manufacture_number varchar (70),
+	install_location_des varchar (100),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_anti_intruding is '防闯入设备';
+comment on column daq_station_anti_intruding.oid is '主键';
+comment on column daq_station_anti_intruding.project_oid is '项目oid';
+comment on column daq_station_anti_intruding.tenders_oid is '标段oid';
+comment on column daq_station_anti_intruding.pipeline_oid is '管线oid';
+comment on column daq_station_anti_intruding.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_anti_intruding.device_code is '设备编号';
+comment on column daq_station_anti_intruding.device_name is '设备名称';
+comment on column daq_station_anti_intruding.manufacture_number is '出厂编号';
+comment on column daq_station_anti_intruding.install_location_des is '安装位置';
+comment on column daq_station_anti_intruding.construct_date is '施工日期';
+comment on column daq_station_anti_intruding.construct_unit is '施工单位';
+comment on column daq_station_anti_intruding.supervision_unit is '监理单位';
+comment on column daq_station_anti_intruding.supervision_engineer is '监理工程师';
+comment on column daq_station_anti_intruding.collection_person is '采集人员';
+comment on column daq_station_anti_intruding.collection_date is '采集日期';
+comment on column daq_station_anti_intruding.approve_status is '审核状态';
+comment on column daq_station_anti_intruding.remarks is '备注';
+comment on column daq_station_anti_intruding.create_user_id is '创建人id';
+comment on column daq_station_anti_intruding.create_user_name is '创建人名称';
+comment on column daq_station_anti_intruding.create_datetime is '创建时间';
+comment on column daq_station_anti_intruding.modify_user_id is '修改人id';
+comment on column daq_station_anti_intruding.modify_user_name is '修改人名称';
+comment on column daq_station_anti_intruding.modify_datetime is '修改时间';
+comment on column daq_station_anti_intruding.active is '有效标志';
+create index index_daq_station_anti_intruding_oid_4 on daq_station_anti_intruding ( oid );
+create index index_daq_station_anti_intruding_device_code_9 on daq_station_anti_intruding ( device_code );
+create index index_daq_station_anti_intruding_device_name_10 on daq_station_anti_intruding ( device_name );
+/**
+ * 站场设备安装-通信end
+ */
+
+
+/**
+ * 站场设备安装-空间表start
+ */
+create table daq_station_pipe_pressure_test (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	start_median_stake_oid varchar (36),
+	start_relative_mileage numeric (8, 2),
+	end_median_stake_oid varchar (36),
+	end_relative_mileage numeric (8, 2),
+	pressure_test_length numeric (8, 0),
+	pipe_specification varchar (60),
+	pressure_test_medium smallint,
+	design_pressure numeric (7, 1),
+	pressure_test_date timestamp (6),
+	process_description varchar (100),
+	pressure_test_result smallint,
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	geo_state varchar (10),
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_pipe_pressure_test is '管道试压';
+comment on column daq_station_pipe_pressure_test.oid is '主键';
+comment on column daq_station_pipe_pressure_test.project_oid is '项目oid';
+comment on column daq_station_pipe_pressure_test.tenders_oid is '标段oid';
+comment on column daq_station_pipe_pressure_test.pipeline_oid is '管线oid';
+comment on column daq_station_pipe_pressure_test.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_pipe_pressure_test.start_median_stake_oid is '试压起始桩号';
+comment on column daq_station_pipe_pressure_test.start_relative_mileage is '相对起始桩位置(m)';
+comment on column daq_station_pipe_pressure_test.end_median_stake_oid is '试压结束桩号';
+comment on column daq_station_pipe_pressure_test.end_relative_mileage is '相对结束桩位置(m)';
+comment on column daq_station_pipe_pressure_test.pressure_test_length is '试压段长度(m)';
+comment on column daq_station_pipe_pressure_test.pipe_specification is '管道规格';
+comment on column daq_station_pipe_pressure_test.pressure_test_medium is '试压介质{1:水;2:空气;3:氮气}';
+comment on column daq_station_pipe_pressure_test.design_pressure is '设计压力(mpa)';
+comment on column daq_station_pipe_pressure_test.pressure_test_date is '试压日期';
+comment on column daq_station_pipe_pressure_test.process_description is '试验过程描述';
+comment on column daq_station_pipe_pressure_test.pressure_test_result is '结论{0:管道强度、严密性试验经检查不合格;1:管道强度、严密性试验经检查合格}';
+comment on column daq_station_pipe_pressure_test.construct_unit is '施工单位';
+comment on column daq_station_pipe_pressure_test.supervision_unit is '监理单位';
+comment on column daq_station_pipe_pressure_test.supervision_engineer is '监理工程师';
+comment on column daq_station_pipe_pressure_test.collection_person is '采集人员';
+comment on column daq_station_pipe_pressure_test.collection_date is '采集日期';
+comment on column daq_station_pipe_pressure_test.approve_status is '审核状态';
+comment on column daq_station_pipe_pressure_test.geo_state is '空间数据状态';
+comment on column daq_station_pipe_pressure_test.remarks is '备注';
+comment on column daq_station_pipe_pressure_test.create_user_id is '创建人id';
+comment on column daq_station_pipe_pressure_test.create_user_name is '创建人名称';
+comment on column daq_station_pipe_pressure_test.create_datetime is '创建时间';
+comment on column daq_station_pipe_pressure_test.modify_user_id is '修改人id';
+comment on column daq_station_pipe_pressure_test.modify_user_name is '修改人名称';
+comment on column daq_station_pipe_pressure_test.modify_datetime is '修改时间';
+comment on column daq_station_pipe_pressure_test.active is '有效标志';
+create index index_daq_station_pipe_pressure_test_oid_4 on daq_station_pipe_pressure_test ( oid );
+create index index_daq_station_pipe_pressure_test_start_median_stake_oid_9 on daq_station_pipe_pressure_test ( start_median_stake_oid );
+create index index_daq_station_pipe_pressure_test_start_relative_mileage_10 on daq_station_pipe_pressure_test ( start_relative_mileage );
+
+select addgeometrycolumn('public', 'daq_station_pipe_pressure_test', 'geom', 4490, 'linestring', 4);
+create index daq_station_pipe_pressure_test_geom_idx on public.daq_station_pipe_pressure_test using gist (geom);
+
+create table daq_station_pipe_sweeping (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	start_median_stake_oid varchar (36),
+	start_relative_mileage numeric (8, 2),
+	end_median_stake_oid varchar (36),
+	end_relative_mileage numeric (8, 2),
+	pipe_length numeric (60),
+	pipe_specification varchar (60),
+	maximum_height_difference numeric (8, 3),
+	max_height_distance numeric (8, 3),
+	sweeping_medium smallint,
+	air_compressor_model varchar (60),
+	running_time numeric (6, 1),
+	process_description varchar (100),
+	pressure_test_result varchar (100),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	geo_state varchar (10),
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_pipe_sweeping is '管道扫水';
+comment on column daq_station_pipe_sweeping.oid is '主键';
+comment on column daq_station_pipe_sweeping.project_oid is '项目oid';
+comment on column daq_station_pipe_sweeping.tenders_oid is '标段oid';
+comment on column daq_station_pipe_sweeping.pipeline_oid is '管线oid';
+comment on column daq_station_pipe_sweeping.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_pipe_sweeping.start_median_stake_oid is '试压起始桩号';
+comment on column daq_station_pipe_sweeping.start_relative_mileage is '相对起始桩位置(m)';
+comment on column daq_station_pipe_sweeping.end_median_stake_oid is '试压结束桩号';
+comment on column daq_station_pipe_sweeping.end_relative_mileage is '相对结束桩位置(m)';
+comment on column daq_station_pipe_sweeping.pipe_length is '管道长度';
+comment on column daq_station_pipe_sweeping.pipe_specification is '管道规格';
+comment on column daq_station_pipe_sweeping.maximum_height_difference is '管段最大高差(m)';
+comment on column daq_station_pipe_sweeping.max_height_distance is '管段最高点距清管器发送端距离(km)';
+comment on column daq_station_pipe_sweeping.sweeping_medium is '吹扫介质{1:水;2:空气;3:氮气}';
+comment on column daq_station_pipe_sweeping.air_compressor_model is '空气压缩机型号及规格';
+comment on column daq_station_pipe_sweeping.running_time is '运行时间(h)';
+comment on column daq_station_pipe_sweeping.process_description is '扫水情况描述';
+comment on column daq_station_pipe_sweeping.pressure_test_result is '结论';
+comment on column daq_station_pipe_sweeping.construct_unit is '施工单位';
+comment on column daq_station_pipe_sweeping.supervision_unit is '监理单位';
+comment on column daq_station_pipe_sweeping.supervision_engineer is '监理工程师';
+comment on column daq_station_pipe_sweeping.collection_person is '采集人员';
+comment on column daq_station_pipe_sweeping.collection_date is '采集日期';
+comment on column daq_station_pipe_sweeping.approve_status is '审核状态';
+comment on column daq_station_pipe_sweeping.geo_state is '空间数据状态';
+comment on column daq_station_pipe_sweeping.remarks is '备注';
+comment on column daq_station_pipe_sweeping.create_user_id is '创建人id';
+comment on column daq_station_pipe_sweeping.create_user_name is '创建人名称';
+comment on column daq_station_pipe_sweeping.create_datetime is '创建时间';
+comment on column daq_station_pipe_sweeping.modify_user_id is '修改人id';
+comment on column daq_station_pipe_sweeping.modify_user_name is '修改人名称';
+comment on column daq_station_pipe_sweeping.modify_datetime is '修改时间';
+comment on column daq_station_pipe_sweeping.active is '有效标志';
+create index index_daq_station_pipe_sweeping_oid_4 on daq_station_pipe_sweeping ( oid );
+create index index_daq_station_pipe_sweeping_start_median_stake_oid_9 on daq_station_pipe_sweeping ( start_median_stake_oid );
+create index index_daq_station_pipe_sweeping_start_relative_mileage_10 on daq_station_pipe_sweeping ( start_relative_mileage );
+
+select addgeometrycolumn('public', 'daq_station_pipe_sweeping', 'geom', 4490, 'linestring', 4);
+create index daq_station_pipe_sweeping_geom_idx on public.daq_station_pipe_sweeping using gist (geom);
+
+create table daq_station_entrance_and_exit (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (40),
+	device_name varchar (45),
+	device_type smallint,
+	weld_oid varchar (36),
+	connection_pipeline_type varchar (60),
+	connection_pipeline_code varchar (60),
+	median_stake_oid varchar (36),
+	pointx numeric (9, 5),
+	pointy numeric (9, 5),
+	pointz numeric (6, 3),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	geo_state varchar (10),
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_entrance_and_exit is '进出站口';
+comment on column daq_station_entrance_and_exit.oid is '主键';
+comment on column daq_station_entrance_and_exit.project_oid is '项目oid';
+comment on column daq_station_entrance_and_exit.tenders_oid is '标段oid';
+comment on column daq_station_entrance_and_exit.pipeline_oid is '管线oid';
+comment on column daq_station_entrance_and_exit.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_entrance_and_exit.device_code is '编号';
+comment on column daq_station_entrance_and_exit.device_name is '名称';
+comment on column daq_station_entrance_and_exit.device_type is '类型{1:进站;2:出站;3:分输}';
+comment on column daq_station_entrance_and_exit.weld_oid is '焊口编号';
+comment on column daq_station_entrance_and_exit.connection_pipeline_type is '连接管线类型';
+comment on column daq_station_entrance_and_exit.connection_pipeline_code is '连接管线编码';
+comment on column daq_station_entrance_and_exit.median_stake_oid is '中线桩(点)号';
+comment on column daq_station_entrance_and_exit.pointx is '东坐标';
+comment on column daq_station_entrance_and_exit.pointy is '北坐标';
+comment on column daq_station_entrance_and_exit.pointz is '高程';
+comment on column daq_station_entrance_and_exit.construct_date is '施工日期';
+comment on column daq_station_entrance_and_exit.construct_unit is '施工单位';
+comment on column daq_station_entrance_and_exit.supervision_unit is '监理单位';
+comment on column daq_station_entrance_and_exit.supervision_engineer is '监理工程师';
+comment on column daq_station_entrance_and_exit.collection_person is '采集人员';
+comment on column daq_station_entrance_and_exit.collection_date is '采集日期';
+comment on column daq_station_entrance_and_exit.approve_status is '审核状态';
+comment on column daq_station_entrance_and_exit.geo_state is '空间数据状态';
+comment on column daq_station_entrance_and_exit.remarks is '备注';
+comment on column daq_station_entrance_and_exit.create_user_id is '创建人id';
+comment on column daq_station_entrance_and_exit.create_user_name is '创建人名称';
+comment on column daq_station_entrance_and_exit.create_datetime is '创建时间';
+comment on column daq_station_entrance_and_exit.modify_user_id is '修改人id';
+comment on column daq_station_entrance_and_exit.modify_user_name is '修改人名称';
+comment on column daq_station_entrance_and_exit.modify_datetime is '修改时间';
+comment on column daq_station_entrance_and_exit.active is '有效标志';
+create index index_daq_station_entrance_and_exit_oid_4 on daq_station_entrance_and_exit ( oid );
+create index index_daq_station_entrance_and_exit_device_code_9 on daq_station_entrance_and_exit ( device_code );
+create index index_daq_station_entrance_and_exit_device_name_10 on daq_station_entrance_and_exit ( device_name );
+
+select addgeometrycolumn('public', 'daq_station_entrance_and_exit', 'geom', 4490, 'point', 4);
+create index daq_station_entrance_and_exit_geom_idx on public.daq_station_entrance_and_exit using gist (geom);
+
+create table daq_station_condensing_tube (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (40),
+	device_name varchar (45),
+	emission_medium varchar (30),
+	condensing_tube_diameter numeric (6, 0),
+	condensing_tube_material smallint,
+	pressure_grade numeric (8, 2),
+	median_stake_oid varchar (36),
+	relative_mileage numeric (8, 2),
+	pointx numeric (9, 5),
+	pointy numeric (9, 5),
+	pointz numeric (6, 3),
+	executing_agency varchar (60),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	geo_state varchar (10),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_condensing_tube is '排凝管';
+comment on column daq_station_condensing_tube.oid is '主键';
+comment on column daq_station_condensing_tube.project_oid is '项目oid';
+comment on column daq_station_condensing_tube.tenders_oid is '标段oid';
+comment on column daq_station_condensing_tube.pipeline_oid is '管线oid';
+comment on column daq_station_condensing_tube.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_condensing_tube.device_code is '编号';
+comment on column daq_station_condensing_tube.device_name is '名称';
+comment on column daq_station_condensing_tube.emission_medium is '排放介质';
+comment on column daq_station_condensing_tube.condensing_tube_diameter is '排凝管管径（mm）';
+comment on column daq_station_condensing_tube.condensing_tube_material is '排凝管材质{1未知;2:钢材;3:塑料;4:其他}';
+comment on column daq_station_condensing_tube.pressure_grade is '压力等级（mpa)';
+comment on column daq_station_condensing_tube.median_stake_oid is '桩号';
+comment on column daq_station_condensing_tube.relative_mileage is '相对里程（m）';
+comment on column daq_station_condensing_tube.pointx is '东坐标';
+comment on column daq_station_condensing_tube.pointy is '北坐标';
+comment on column daq_station_condensing_tube.pointz is '高程';
+comment on column daq_station_condensing_tube.executing_agency is '执行机构';
+comment on column daq_station_condensing_tube.construct_unit is '施工单位';
+comment on column daq_station_condensing_tube.supervision_unit is '监理单位';
+comment on column daq_station_condensing_tube.supervision_engineer is '监理工程师';
+comment on column daq_station_condensing_tube.collection_person is '采集人员';
+comment on column daq_station_condensing_tube.collection_date is '采集日期';
+comment on column daq_station_condensing_tube.geo_state is '空间数据状态';
+comment on column daq_station_condensing_tube.approve_status is '审核状态';
+comment on column daq_station_condensing_tube.remarks is '备注';
+comment on column daq_station_condensing_tube.create_user_id is '创建人id';
+comment on column daq_station_condensing_tube.create_user_name is '创建人名称';
+comment on column daq_station_condensing_tube.create_datetime is '创建时间';
+comment on column daq_station_condensing_tube.modify_user_id is '修改人id';
+comment on column daq_station_condensing_tube.modify_user_name is '修改人名称';
+comment on column daq_station_condensing_tube.modify_datetime is '修改时间';
+comment on column daq_station_condensing_tube.active is '有效标志';
+create index index_daq_station_condensing_tube_oid_4 on daq_station_condensing_tube ( oid );
+create index index_daq_station_condensing_tube_device_code_9 on daq_station_condensing_tube ( device_code );
+create index index_daq_station_condensing_tube_device_name_10 on daq_station_condensing_tube ( device_name );
+
+select addgeometrycolumn('public', 'daq_station_condensing_tube', 'geom', 4490, 'point', 4);
+create index daq_station_condensing_tube_geom_idx on public.daq_station_condensing_tube using gist (geom);
+
+create table daq_station_reserved_interface (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (40),
+	device_name varchar (45),
+	pipe_diameter numeric (8, 2),
+	interface_material smallint,
+	wall_thickness numeric (7, 1),
+	sealing_type varchar (30),
+	pointx numeric (9, 5),
+	pointy numeric (9, 5),
+	pointz numeric (6, 3),
+	address varchar (100),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	geo_state varchar (10),
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_reserved_interface is '预留甩头';
+comment on column daq_station_reserved_interface.oid is '主键';
+comment on column daq_station_reserved_interface.project_oid is '项目oid';
+comment on column daq_station_reserved_interface.tenders_oid is '标段oid';
+comment on column daq_station_reserved_interface.pipeline_oid is '管线oid';
+comment on column daq_station_reserved_interface.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_reserved_interface.device_code is '编号';
+comment on column daq_station_reserved_interface.device_name is '名称';
+comment on column daq_station_reserved_interface.pipe_diameter is '甩头管径(mm）';
+comment on column daq_station_reserved_interface.interface_material is '甩头材质{1未知;2:钢材;3:塑料;4:其他}';
+comment on column daq_station_reserved_interface.wall_thickness is '甩头壁厚(mm)';
+comment on column daq_station_reserved_interface.sealing_type is '甩头封口形式';
+comment on column daq_station_reserved_interface.pointx is '东坐标';
+comment on column daq_station_reserved_interface.pointy is '北坐标';
+comment on column daq_station_reserved_interface.pointz is '高程';
+comment on column daq_station_reserved_interface.address is '地址';
+comment on column daq_station_reserved_interface.construct_date is '施工日期';
+comment on column daq_station_reserved_interface.construct_unit is '施工单位';
+comment on column daq_station_reserved_interface.supervision_unit is '监理单位';
+comment on column daq_station_reserved_interface.supervision_engineer is '监理工程师';
+comment on column daq_station_reserved_interface.collection_person is '采集人员';
+comment on column daq_station_reserved_interface.collection_date is '采集日期';
+comment on column daq_station_reserved_interface.approve_status is '审核状态';
+comment on column daq_station_reserved_interface.geo_state is '空间数据状态';
+comment on column daq_station_reserved_interface.remarks is '备注';
+comment on column daq_station_reserved_interface.create_user_id is '创建人id';
+comment on column daq_station_reserved_interface.create_user_name is '创建人名称';
+comment on column daq_station_reserved_interface.create_datetime is '创建时间';
+comment on column daq_station_reserved_interface.modify_user_id is '修改人id';
+comment on column daq_station_reserved_interface.modify_user_name is '修改人名称';
+comment on column daq_station_reserved_interface.modify_datetime is '修改时间';
+comment on column daq_station_reserved_interface.active is '有效标志';
+create index index_daq_station_reserved_interface_oid_4 on daq_station_reserved_interface ( oid );
+create index index_daq_station_reserved_interface_device_code_9 on daq_station_reserved_interface ( device_code );
+create index index_daq_station_reserved_interface_device_name_10 on daq_station_reserved_interface ( device_name );
+
+select addgeometrycolumn('public', 'daq_station_reserved_interface', 'geom', 4490, 'point', 4);
+create index daq_station_reserved_interface_geom_idx on public.daq_station_reserved_interface using gist (geom);
+
+create table daq_station_closure (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (40),
+	device_name varchar (45),
+	closure_size varchar (45),
+	closure_mold varchar (30),
+	closure_material smallint,
+	closure_connection_methods varchar (36),
+	pointx numeric (9, 5),
+	pointy numeric (9, 5),
+	pointz numeric (6, 3),
+	address varchar (60),
+	tube_making_methods varchar (30),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	geo_state varchar (10),
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_closure is '封堵物';
+comment on column daq_station_closure.oid is '主键';
+comment on column daq_station_closure.project_oid is '项目oid';
+comment on column daq_station_closure.tenders_oid is '标段oid';
+comment on column daq_station_closure.pipeline_oid is '管线oid';
+comment on column daq_station_closure.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_closure.device_code is '编号';
+comment on column daq_station_closure.device_name is '名称';
+comment on column daq_station_closure.closure_size is '封堵物尺寸';
+comment on column daq_station_closure.closure_mold is '封堵物类型，域值：closure_mold_domain';
+comment on column daq_station_closure.closure_material is '封堵物材料{1未知;2:钢材;3:塑料;4:其他}';
+comment on column daq_station_closure.closure_connection_methods is '连接方式,域值：closure_connection_methods_domain';
+comment on column daq_station_closure.pointx is '东坐标';
+comment on column daq_station_closure.pointy is '北坐标';
+comment on column daq_station_closure.pointz is '高程';
+comment on column daq_station_closure.address is '具体地址';
+comment on column daq_station_closure.tube_making_methods is '制管形式，域值：tube_making_methods_domain';
+comment on column daq_station_closure.construct_date is '施工日期';
+comment on column daq_station_closure.construct_unit is '施工单位';
+comment on column daq_station_closure.supervision_unit is '监理单位';
+comment on column daq_station_closure.supervision_engineer is '监理工程师';
+comment on column daq_station_closure.collection_person is '采集人员';
+comment on column daq_station_closure.collection_date is '采集日期';
+comment on column daq_station_closure.approve_status is '审核状态';
+comment on column daq_station_closure.geo_state is '空间数据状态';
+comment on column daq_station_closure.remarks is '备注';
+comment on column daq_station_closure.create_user_id is '创建人id';
+comment on column daq_station_closure.create_user_name is '创建人名称';
+comment on column daq_station_closure.create_datetime is '创建时间';
+comment on column daq_station_closure.modify_user_id is '修改人id';
+comment on column daq_station_closure.modify_user_name is '修改人名称';
+comment on column daq_station_closure.modify_datetime is '修改时间';
+comment on column daq_station_closure.active is '有效标志';
+create index index_daq_station_closure_oid_4 on daq_station_closure ( oid );
+create index index_daq_station_closure_device_code_9 on daq_station_closure ( device_code );
+create index index_daq_station_closure_device_name_10 on daq_station_closure ( device_name );
+
+select addgeometrycolumn('public', 'daq_station_closure', 'geom', 4490, 'point', 4);
+create index daq_station_closure_geom_idx on public.daq_station_closure using gist (geom);
+
+create table daq_station_vent_stack (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (40),
+	device_name varchar (45),
+	manufacture_number varchar (70),
+	pointx numeric (9, 5),
+	pointy numeric (9, 5),
+	position varchar (20),
+	distance numeric (9, 2),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	geo_state varchar (10),
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_vent_stack is '放空立管';
+comment on column daq_station_vent_stack.oid is '主键';
+comment on column daq_station_vent_stack.project_oid is '项目oid';
+comment on column daq_station_vent_stack.tenders_oid is '标段oid';
+comment on column daq_station_vent_stack.pipeline_oid is '管线oid';
+comment on column daq_station_vent_stack.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_vent_stack.device_code is '设备编号';
+comment on column daq_station_vent_stack.device_name is '设备名称';
+comment on column daq_station_vent_stack.manufacture_number is '出厂编号';
+comment on column daq_station_vent_stack.pointx is '东坐标';
+comment on column daq_station_vent_stack.pointy is '北坐标';
+comment on column daq_station_vent_stack.position is '方位，域值：position_domain';
+comment on column daq_station_vent_stack.distance is '距离(m)';
+comment on column daq_station_vent_stack.construct_date is '施工日期';
+comment on column daq_station_vent_stack.construct_unit is '施工单位';
+comment on column daq_station_vent_stack.supervision_unit is '监理单位';
+comment on column daq_station_vent_stack.supervision_engineer is '监理工程师';
+comment on column daq_station_vent_stack.collection_person is '采集人员';
+comment on column daq_station_vent_stack.collection_date is '采集日期';
+comment on column daq_station_vent_stack.approve_status is '审核状态';
+comment on column daq_station_vent_stack.geo_state is '空间数据状态';
+comment on column daq_station_vent_stack.remarks is '备注';
+comment on column daq_station_vent_stack.create_user_id is '创建人id';
+comment on column daq_station_vent_stack.create_user_name is '创建人名称';
+comment on column daq_station_vent_stack.create_datetime is '创建时间';
+comment on column daq_station_vent_stack.modify_user_id is '修改人id';
+comment on column daq_station_vent_stack.modify_user_name is '修改人名称';
+comment on column daq_station_vent_stack.modify_datetime is '修改时间';
+comment on column daq_station_vent_stack.active is '有效标志';
+create index index_daq_station_vent_stack_oid_4 on daq_station_vent_stack ( oid );
+create index index_daq_station_vent_stack_device_code_9 on daq_station_vent_stack ( device_code );
+create index index_daq_station_vent_stack_device_name_10 on daq_station_vent_stack ( device_name );
+
+select addgeometrycolumn('public', 'daq_station_vent_stack', 'geom', 4490, 'point', 4);
+create index daq_station_vent_stack_geom_idx on public.daq_station_vent_stack using gist (geom);
+
+create table daq_station_auxiliary_anode_bed (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (40),
+	median_stake_oid varchar (36),
+	relative_mileage numeric (8, 2),
+	install_location_des varchar (60),
+	burying_depth numeric (6, 2),
+	is_temporary smallint,
+	design_life numeric (5, 0),
+	backfill_material varchar (35),
+	auxiliary_anode_num numeric (6, 0),
+	burial_way varchar (25),
+	gross_weight numeric (9, 2),
+	pointx numeric (9, 5),
+	pointy numeric (9, 5),
+	pointz numeric (6, 3),
+	cable_length numeric (8, 2),
+	protect_length numeric (8, 2),
+	anode_material varchar (35),
+	anode_specification varchar (60),
+	anode_resistance numeric (6, 2),
+	has_water_flooding_sys smallint,
+	has_vent_hole smallint,
+	anode_bed_connection_power varchar (60),
+	embedment_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	geo_state varchar (10),
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_auxiliary_anode_bed is '辅助阳极地床';
+comment on column daq_station_auxiliary_anode_bed.oid is '主键';
+comment on column daq_station_auxiliary_anode_bed.project_oid is '项目oid';
+comment on column daq_station_auxiliary_anode_bed.tenders_oid is '标段oid';
+comment on column daq_station_auxiliary_anode_bed.pipeline_oid is '管线oid';
+comment on column daq_station_auxiliary_anode_bed.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_auxiliary_anode_bed.device_code is '地床编号';
+comment on column daq_station_auxiliary_anode_bed.median_stake_oid is '桩号';
+comment on column daq_station_auxiliary_anode_bed.relative_mileage is '相对里程（m）';
+comment on column daq_station_auxiliary_anode_bed.install_location_des is '安装位置描述';
+comment on column daq_station_auxiliary_anode_bed.burying_depth is '埋深(m)';
+comment on column daq_station_auxiliary_anode_bed.is_temporary is '是否临时{0:否;1:是}';
+comment on column daq_station_auxiliary_anode_bed.design_life is '设计寿命(年)';
+comment on column daq_station_auxiliary_anode_bed.backfill_material is '回填材料,域值：backfill_material_domain';
+comment on column daq_station_auxiliary_anode_bed.auxiliary_anode_num is '辅助阳极数量(个)';
+comment on column daq_station_auxiliary_anode_bed.burial_way is '埋设,域值：burial_way_domain';
+comment on column daq_station_auxiliary_anode_bed.gross_weight is '总重(kg)';
+comment on column daq_station_auxiliary_anode_bed.pointx is '东坐标(m)';
+comment on column daq_station_auxiliary_anode_bed.pointy is '北坐标(m)';
+comment on column daq_station_auxiliary_anode_bed.pointz is '高程(m)';
+comment on column daq_station_auxiliary_anode_bed.cable_length is '电缆长度(m)';
+comment on column daq_station_auxiliary_anode_bed.protect_length is '保护长度(m)';
+comment on column daq_station_auxiliary_anode_bed.anode_material is '阳极材料类型,域值：anode_specification_domain';
+comment on column daq_station_auxiliary_anode_bed.anode_specification is '阳极材料规格';
+comment on column daq_station_auxiliary_anode_bed.anode_resistance is '阳极电阻(ω)';
+comment on column daq_station_auxiliary_anode_bed.has_water_flooding_sys is '是否有注水系统{0:否;1:是}';
+comment on column daq_station_auxiliary_anode_bed.has_vent_hole is '是否有排气孔{0:否;1:是}';
+comment on column daq_station_auxiliary_anode_bed.anode_bed_connection_power is '地床连接阴保电源';
+comment on column daq_station_auxiliary_anode_bed.embedment_date is '埋设日期';
+comment on column daq_station_auxiliary_anode_bed.construct_unit is '施工单位';
+comment on column daq_station_auxiliary_anode_bed.supervision_unit is '监理单位';
+comment on column daq_station_auxiliary_anode_bed.supervision_engineer is '监理工程师';
+comment on column daq_station_auxiliary_anode_bed.collection_person is '采集人员';
+comment on column daq_station_auxiliary_anode_bed.collection_date is '采集日期';
+comment on column daq_station_auxiliary_anode_bed.approve_status is '审核状态';
+comment on column daq_station_auxiliary_anode_bed.geo_state is '空间数据状态';
+comment on column daq_station_auxiliary_anode_bed.remarks is '备注';
+comment on column daq_station_auxiliary_anode_bed.create_user_id is '创建人id';
+comment on column daq_station_auxiliary_anode_bed.create_user_name is '创建人名称';
+comment on column daq_station_auxiliary_anode_bed.create_datetime is '创建时间';
+comment on column daq_station_auxiliary_anode_bed.modify_user_id is '修改人id';
+comment on column daq_station_auxiliary_anode_bed.modify_user_name is '修改人名称';
+comment on column daq_station_auxiliary_anode_bed.modify_datetime is '修改时间';
+comment on column daq_station_auxiliary_anode_bed.active is '有效标志';
+create index index_daq_station_auxiliary_anode_bed_oid_4 on daq_station_auxiliary_anode_bed ( oid );
+create index index_daq_station_auxiliary_anode_bed_device_code_9 on daq_station_auxiliary_anode_bed ( device_code );
+create index index_daq_station_auxiliary_anode_bed_median_stake_oid_10 on daq_station_auxiliary_anode_bed ( median_stake_oid );
+select addgeometrycolumn('public', 'daq_station_auxiliary_anode_bed', 'geom', 4490, 'point', 4);
+create index daq_station_auxiliary_anode_bed_geom_idx on public.daq_station_auxiliary_anode_bed using gist (geom);
+
+
+create table daq_station_ic_detection_sys (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (40),
+	device_name varchar (45),
+	manufacture_number varchar (70),
+	start_median_stake_oid varchar (36),
+	start_relative_mileage numeric (8, 2),
+	end_median_stake_oid varchar (36),
+	end_relative_mileage numeric (8, 2),
+	system_type varchar (30),
+	system_principle varchar (40),
+	development_unit varchar (50),
+	put_into_date timestamp (6),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	geo_state varchar (10),
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_ic_detection_sys is '内腐蚀检测系统';
+comment on column daq_station_ic_detection_sys.oid is '主键';
+comment on column daq_station_ic_detection_sys.project_oid is '项目oid';
+comment on column daq_station_ic_detection_sys.tenders_oid is '标段oid';
+comment on column daq_station_ic_detection_sys.pipeline_oid is '管线oid';
+comment on column daq_station_ic_detection_sys.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_ic_detection_sys.device_code is '设备编号';
+comment on column daq_station_ic_detection_sys.device_name is '设备名称';
+comment on column daq_station_ic_detection_sys.manufacture_number is '出厂编号';
+comment on column daq_station_ic_detection_sys.start_median_stake_oid is '起始桩号';
+comment on column daq_station_ic_detection_sys.start_relative_mileage is '相对起始桩里程(m)';
+comment on column daq_station_ic_detection_sys.end_median_stake_oid is '结束桩号';
+comment on column daq_station_ic_detection_sys.end_relative_mileage is '相对结束桩里程(m)';
+comment on column daq_station_ic_detection_sys.system_type is '系统类型,域值：system_type_domain';
+comment on column daq_station_ic_detection_sys.system_principle is '系统原理，域值：system_principle_domain';
+comment on column daq_station_ic_detection_sys.development_unit is '研发单位';
+comment on column daq_station_ic_detection_sys.put_into_date is '投用日期';
+comment on column daq_station_ic_detection_sys.construct_date is '施工日期';
+comment on column daq_station_ic_detection_sys.construct_unit is '施工单位';
+comment on column daq_station_ic_detection_sys.supervision_unit is '监理单位';
+comment on column daq_station_ic_detection_sys.supervision_engineer is '监理工程师';
+comment on column daq_station_ic_detection_sys.collection_person is '采集人员';
+comment on column daq_station_ic_detection_sys.collection_date is '采集日期';
+comment on column daq_station_ic_detection_sys.approve_status is '审核状态';
+comment on column daq_station_ic_detection_sys.geo_state is '空间数据状态';
+comment on column daq_station_ic_detection_sys.remarks is '备注';
+comment on column daq_station_ic_detection_sys.create_user_id is '创建人id';
+comment on column daq_station_ic_detection_sys.create_user_name is '创建人名称';
+comment on column daq_station_ic_detection_sys.create_datetime is '创建时间';
+comment on column daq_station_ic_detection_sys.modify_user_id is '修改人id';
+comment on column daq_station_ic_detection_sys.modify_user_name is '修改人名称';
+comment on column daq_station_ic_detection_sys.modify_datetime is '修改时间';
+comment on column daq_station_ic_detection_sys.active is '有效标志';
+create index index_daq_station_ic_detection_sys_oid_4 on daq_station_ic_detection_sys ( oid );
+create index index_daq_station_ic_detection_sys_device_code_9 on daq_station_ic_detection_sys ( device_code );
+create index index_daq_station_ic_detection_sys_device_name_10 on daq_station_ic_detection_sys ( device_name );
+
+select addgeometrycolumn('public', 'daq_station_ic_detection_sys', 'geom', 4490, 'linestring', 4);
+create index daq_station_ic_detection_sys_geom_idx on public.daq_station_ic_detection_sys using gist (geom);
+
+create table daq_station_cp_power_supply (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	tenders_oid varchar (36),
+	pipeline_oid varchar (36),
+	pipe_station_oid varchar (36),
+	device_code varchar (40),
+	device_name varchar (45),
+	manufacture_number varchar (70),
+	protect_object varchar (30),
+	pointx numeric (9, 5),
+	pointy numeric (9, 5),
+	pointz numeric (6, 3),
+	rated_current numeric (7, 2),
+	rated_voltage numeric (7, 2),
+	output_current numeric (7, 2),
+	output_voltage numeric (7, 2),
+	bed_num numeric (6, 0),
+	anode_num numeric (6, 0),
+	power_supply_type varchar (30),
+	manufacturer_name varchar (60),
+	put_into_date timestamp (6),
+	design_life numeric (6, 0),
+	electrified_point varchar (60),
+	given_voltage numeric (7, 2),
+	reference_voltage numeric (7, 2),
+	construct_date timestamp (6),
+	construct_unit varchar (36),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	approve_status smallint default 0,
+	geo_state varchar (10),
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_station_cp_power_supply is '阴保电源';
+comment on column daq_station_cp_power_supply.oid is '主键';
+comment on column daq_station_cp_power_supply.project_oid is '项目oid';
+comment on column daq_station_cp_power_supply.tenders_oid is '标段oid';
+comment on column daq_station_cp_power_supply.pipeline_oid is '管线oid';
+comment on column daq_station_cp_power_supply.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_cp_power_supply.device_code is '设备编号';
+comment on column daq_station_cp_power_supply.device_name is '设备名称';
+comment on column daq_station_cp_power_supply.manufacture_number is '出厂编号';
+comment on column daq_station_cp_power_supply.protect_object is '保护对象,域值：protect_object_domain';
+comment on column daq_station_cp_power_supply.pointx is '东坐标';
+comment on column daq_station_cp_power_supply.pointy is '北坐标';
+comment on column daq_station_cp_power_supply.pointz is '高程';
+comment on column daq_station_cp_power_supply.rated_current is '额定电流(a)';
+comment on column daq_station_cp_power_supply.rated_voltage is '额定电压(v)';
+comment on column daq_station_cp_power_supply.output_current is '输出电流(a)';
+comment on column daq_station_cp_power_supply.output_voltage is '输出电压(v)';
+comment on column daq_station_cp_power_supply.bed_num is '地床数量';
+comment on column daq_station_cp_power_supply.anode_num is '阳极数量';
+comment on column daq_station_cp_power_supply.power_supply_type is '电源类型，域值：power_supply_type_domain';
+comment on column daq_station_cp_power_supply.manufacturer_name is '制造商';
+comment on column daq_station_cp_power_supply.put_into_date is '投用日期';
+comment on column daq_station_cp_power_supply.design_life is '设计寿命(年)';
+comment on column daq_station_cp_power_supply.electrified_point is '通电点描述';
+comment on column daq_station_cp_power_supply.given_voltage is '给定(预置)电位(v)';
+comment on column daq_station_cp_power_supply.reference_voltage is '参比电位(v)';
+comment on column daq_station_cp_power_supply.construct_date is '施工日期';
+comment on column daq_station_cp_power_supply.construct_unit is '施工单位';
+comment on column daq_station_cp_power_supply.supervision_unit is '监理单位';
+comment on column daq_station_cp_power_supply.supervision_engineer is '监理工程师';
+comment on column daq_station_cp_power_supply.collection_person is '采集人员';
+comment on column daq_station_cp_power_supply.collection_date is '采集日期';
+comment on column daq_station_cp_power_supply.approve_status is '审核状态';
+comment on column daq_station_cp_power_supply.geo_state is '空间数据状态';
+comment on column daq_station_cp_power_supply.remarks is '备注';
+comment on column daq_station_cp_power_supply.create_user_id is '创建人id';
+comment on column daq_station_cp_power_supply.create_user_name is '创建人名称';
+comment on column daq_station_cp_power_supply.create_datetime is '创建时间';
+comment on column daq_station_cp_power_supply.modify_user_id is '修改人id';
+comment on column daq_station_cp_power_supply.modify_user_name is '修改人名称';
+comment on column daq_station_cp_power_supply.modify_datetime is '修改时间';
+comment on column daq_station_cp_power_supply.active is '有效标志';
+create index index_daq_station_cp_power_supply_oid_4 on daq_station_cp_power_supply ( oid );
+create index index_daq_station_cp_power_supply_device_code_9 on daq_station_cp_power_supply ( device_code );
+create index index_daq_station_cp_power_supply_device_name_10 on daq_station_cp_power_supply ( device_name );
+
+select addgeometrycolumn('public', 'daq_station_cp_power_supply', 'geom', 4490, 'point', 4);
+create index daq_station_cp_power_supply_geom_idx on public.daq_station_cp_power_supply using gist (geom);
+/**
+ * 站场设备安装-空间表end
+ */
+
+
+/**
+ * 站场设备安装-工艺主子表start
+ */
+/*射线检测(站场)*/
+create table daq_station_detection_ray( 
+oid varchar(36) not null primary key,
+project_oid varchar(36)  ,
+tenders_oid varchar(36)  ,
+pipeline_oid varchar(36)  ,
+pipe_station_oid varchar(36)  ,
+weld_oid varchar(36)  ,
+detection_report_num varchar(60)  ,
+detection_date timestamp(6)  ,
+detection_type varchar(50)  ,
+evaluation_grade varchar(50)  ,
+evaluation_result smallint  ,
+negative_num varchar(30)  ,
+detection_unit varchar(50)  ,
+detection_person varchar(25)  ,
+supervision_unit varchar(38)  ,
+supervision_engineer varchar(50)  ,
+collection_date timestamp(6)  ,
+approve_status smallint default 0  ,
+remarks varchar(200)  ,
+create_user_id varchar(36)  ,
+create_user_name varchar(50)  ,
+create_datetime timestamp(6)  ,
+modify_user_id varchar(36)  ,
+modify_user_name varchar(50)  ,
+modify_datetime timestamp(6)  ,
+active smallint not null default 1  ); 
+comment on table daq_station_detection_ray is '射线检测(站场)';
+comment on column daq_station_detection_ray.oid is '主键';
+comment on column daq_station_detection_ray.project_oid is '项目oid';
+comment on column daq_station_detection_ray.tenders_oid is '标段oid';
+comment on column daq_station_detection_ray.pipeline_oid is '管线oid';
+comment on column daq_station_detection_ray.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_detection_ray.weld_oid is '焊口编号';
+comment on column daq_station_detection_ray.detection_report_num is '检测报告编号';
+comment on column daq_station_detection_ray.detection_date is '检测日期';
+comment on column daq_station_detection_ray.detection_type is '检测类型，域值：detection_type_domain';
+comment on column daq_station_detection_ray.evaluation_grade is '评定等级，域值：evaluation_grade_domain';
+comment on column daq_station_detection_ray.evaluation_result is '评定结果{0:不合格;1:合格}';
+comment on column daq_station_detection_ray.negative_num is '底片编号';
+comment on column daq_station_detection_ray.detection_unit is '检测单位';
+comment on column daq_station_detection_ray.detection_person is '检测人员';
+comment on column daq_station_detection_ray.supervision_unit is '监理单位';
+comment on column daq_station_detection_ray.supervision_engineer is '监理工程师';
+comment on column daq_station_detection_ray.collection_date is '采集日期';
+comment on column daq_station_detection_ray.approve_status is '审核状态';
+comment on column daq_station_detection_ray.remarks is '备注';
+comment on column daq_station_detection_ray.create_user_id is '创建人id';
+comment on column daq_station_detection_ray.create_user_name is '创建人名称';
+comment on column daq_station_detection_ray.create_datetime is '创建时间';
+comment on column daq_station_detection_ray.modify_user_id is '修改人id';
+comment on column daq_station_detection_ray.modify_user_name is '修改人名称';
+comment on column daq_station_detection_ray.modify_datetime is '修改时间';
+comment on column daq_station_detection_ray.active is '有效标志';
+create index INDEX_DAQ_STATION_DETECTION_RAY_OID_4 ON daq_station_detection_ray ( oid );
+create index INDEX_DAQ_STATION_DETECTION_RAY_WELD_OID_9 ON daq_station_detection_ray ( weld_oid );
+
+/*射线检测子表*/
+  create table daq_station_detection_ray_sub( 
+oid varchar(36) not null primary key,
+parent_oid varchar(36)  ,
+weld_oid varchar(36)  ,
+defect_position varchar(60)  ,
+defect_properties varchar(50)  ,
+defect_size numeric(9,3)  ,
+create_user_id varchar(36)  ,
+create_user_name varchar(50)  ,
+create_datetime timestamp(6)  ,
+modify_user_id varchar(36)  ,
+modify_user_name varchar(50)  ,
+modify_datetime timestamp(6)  ,
+active smallint not null default 1  ); 
+comment on table daq_station_detection_ray_sub is '射线检测子表';
+comment on column daq_station_detection_ray_sub.oid is '主键';
+comment on column daq_station_detection_ray_sub.parent_oid is '主表oid';
+comment on column daq_station_detection_ray_sub.weld_oid is '焊口编号';
+comment on column daq_station_detection_ray_sub.defect_position is '缺陷位置';
+comment on column daq_station_detection_ray_sub.defect_properties is '缺陷性质，域值：defect_properties_domain';
+comment on column daq_station_detection_ray_sub.defect_size is '缺陷尺寸(mm/mm²/点)';
+comment on column daq_station_detection_ray_sub.create_user_id is '创建人id';
+comment on column daq_station_detection_ray_sub.create_user_name is '创建人名称';
+comment on column daq_station_detection_ray_sub.create_datetime is '创建时间';
+comment on column daq_station_detection_ray_sub.modify_user_id is '修改人id';
+comment on column daq_station_detection_ray_sub.modify_user_name is '修改人名称';
+comment on column daq_station_detection_ray_sub.modify_datetime is '修改时间';
+comment on column daq_station_detection_ray_sub.active is '有效标志';
+create index INDEX_DAQ_STATION_DETECTION_RAY_SUB_OID_4 ON daq_station_detection_ray_sub ( oid );
+
+
+/*超声波检测(站场)*/
+  create table daq_station_detection_ultrasonic( 
+oid varchar(36) not null primary key,
+project_oid varchar(36)  ,
+tenders_oid varchar(36)  ,
+pipeline_oid varchar(36)  ,
+pipe_station_oid varchar(36)  ,
+weld_oid varchar(36)  ,
+detection_report_num varchar(60)  ,
+detection_date timestamp(6)  ,
+detection_type varchar(50)  ,
+evaluation_grade varchar(50)  ,
+evaluation_result smallint  ,
+detection_unit varchar(50)  ,
+detection_person varchar(25)  ,
+supervision_unit varchar(38)  ,
+supervision_engineer varchar(50)  ,
+collection_date timestamp(6)  ,
+approve_status smallint default 0  ,
+remarks varchar(200)  ,
+create_user_id varchar(36)  ,
+create_user_name varchar(50)  ,
+create_datetime timestamp(6)  ,
+modify_user_id varchar(36)  ,
+modify_user_name varchar(50)  ,
+modify_datetime timestamp(6)  ,
+active smallint not null default 1  ); 
+comment on table daq_station_detection_ultrasonic is '超声波检测(站场)';
+comment on column daq_station_detection_ultrasonic.oid is '主键';
+comment on column daq_station_detection_ultrasonic.project_oid is '项目oid';
+comment on column daq_station_detection_ultrasonic.tenders_oid is '标段oid';
+comment on column daq_station_detection_ultrasonic.pipeline_oid is '管线oid';
+comment on column daq_station_detection_ultrasonic.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_detection_ultrasonic.weld_oid is '焊口编号';
+comment on column daq_station_detection_ultrasonic.detection_report_num is '检测报告编号';
+comment on column daq_station_detection_ultrasonic.detection_date is '检测日期';
+comment on column daq_station_detection_ultrasonic.detection_type is '检测类型，域值：detection_type_domain';
+comment on column daq_station_detection_ultrasonic.evaluation_grade is '评定等级，域值：evaluation_grade_domain';
+comment on column daq_station_detection_ultrasonic.evaluation_result is '评定结果{0:不合格;1:合格}';
+comment on column daq_station_detection_ultrasonic.detection_unit is '检测单位';
+comment on column daq_station_detection_ultrasonic.detection_person is '检测人员';
+comment on column daq_station_detection_ultrasonic.supervision_unit is '监理单位';
+comment on column daq_station_detection_ultrasonic.supervision_engineer is '监理工程师';
+comment on column daq_station_detection_ultrasonic.collection_date is '采集日期';
+comment on column daq_station_detection_ultrasonic.approve_status is '审核状态';
+comment on column daq_station_detection_ultrasonic.remarks is '备注';
+comment on column daq_station_detection_ultrasonic.create_user_id is '创建人id';
+comment on column daq_station_detection_ultrasonic.create_user_name is '创建人名称';
+comment on column daq_station_detection_ultrasonic.create_datetime is '创建时间';
+comment on column daq_station_detection_ultrasonic.modify_user_id is '修改人id';
+comment on column daq_station_detection_ultrasonic.modify_user_name is '修改人名称';
+comment on column daq_station_detection_ultrasonic.modify_datetime is '修改时间';
+comment on column daq_station_detection_ultrasonic.active is '有效标志';
+create index INDEX_DAQ_STATION_DETECTION_ULTRASONIC_OID_4 ON daq_station_detection_ultrasonic ( oid );
+create index INDEX_DAQ_STATION_DETECTION_ULTRASONIC_WELD_OID_9 ON daq_station_detection_ultrasonic ( weld_oid );
+
+/*超声波检测子表(站场)*/
+  create table daq_station_detection_ultrasonic_sub( 
+oid varchar(36) not null primary key,
+parent_oid varchar(36)  ,
+weld_oid varchar(36)  ,
+defect_position varchar(60)  ,
+defect_properties varchar(50)  ,
+defect_length numeric(9,3)  ,
+defect_depth numeric(9,3)  ,
+create_user_id varchar(36)  ,
+create_user_name varchar(50)  ,
+create_datetime timestamp(6)  ,
+modify_user_id varchar(36)  ,
+modify_user_name varchar(50)  ,
+modify_datetime timestamp(6)  ,
+active smallint not null default 1  ); 
+comment on table daq_station_detection_ultrasonic_sub is '超声波检测子表(站场)';
+comment on column daq_station_detection_ultrasonic_sub.oid is '主键';
+comment on column daq_station_detection_ultrasonic_sub.parent_oid is '主表oid';
+comment on column daq_station_detection_ultrasonic_sub.weld_oid is '焊口编号';
+comment on column daq_station_detection_ultrasonic_sub.defect_position is '缺陷位置';
+comment on column daq_station_detection_ultrasonic_sub.defect_properties is '缺陷性质，域值：defect_properties_domain';
+comment on column daq_station_detection_ultrasonic_sub.defect_length is '缺陷长度(mm)';
+comment on column daq_station_detection_ultrasonic_sub.defect_depth is '缺陷深度(mm)';
+comment on column daq_station_detection_ultrasonic_sub.create_user_id is '创建人id';
+comment on column daq_station_detection_ultrasonic_sub.create_user_name is '创建人名称';
+comment on column daq_station_detection_ultrasonic_sub.create_datetime is '创建时间';
+comment on column daq_station_detection_ultrasonic_sub.modify_user_id is '修改人id';
+comment on column daq_station_detection_ultrasonic_sub.modify_user_name is '修改人名称';
+comment on column daq_station_detection_ultrasonic_sub.modify_datetime is '修改时间';
+comment on column daq_station_detection_ultrasonic_sub.active is '有效标志';
+create index INDEX_DAQ_STATION_DETECTION_ULTRASONIC_SUB_OID_4 ON daq_station_detection_ultrasonic_sub ( oid );
+
+/*渗透检测(站场)*/
+     create table daq_station_detection_infiltration( 
+oid varchar(36) not null primary key,
+project_oid varchar(36)  ,
+tenders_oid varchar(36)  ,
+pipeline_oid varchar(36)  ,
+pipe_station_oid varchar(36)  ,
+weld_oid varchar(36)  ,
+detection_report_num varchar(60)  ,
+detection_date timestamp(6)  ,
+detection_length numeric(9,3)  ,
+detection_type varchar(50)  ,
+evaluation_grade varchar(50)  ,
+evaluation_result smallint  ,
+detection_unit varchar(50)  ,
+detection_person varchar(25)  ,
+supervision_unit varchar(38)  ,
+supervision_engineer varchar(50)  ,
+collection_date timestamp(6)  ,
+approve_status smallint default 0  ,
+remarks varchar(200)  ,
+create_user_id varchar(36)  ,
+create_user_name varchar(50)  ,
+create_datetime timestamp(6)  ,
+modify_user_id varchar(36)  ,
+modify_user_name varchar(50)  ,
+modify_datetime timestamp(6)  ,
+active smallint not null default 1  ); 
+comment on table daq_station_detection_infiltration is '渗透检测(站场)';
+comment on column daq_station_detection_infiltration.oid is '主键';
+comment on column daq_station_detection_infiltration.project_oid is '项目oid';
+comment on column daq_station_detection_infiltration.tenders_oid is '标段oid';
+comment on column daq_station_detection_infiltration.pipeline_oid is '管线oid';
+comment on column daq_station_detection_infiltration.pipe_station_oid is '站场/阀室编号';
+comment on column daq_station_detection_infiltration.weld_oid is '焊口编号';
+comment on column daq_station_detection_infiltration.detection_report_num is '检测报告编号';
+comment on column daq_station_detection_infiltration.detection_date is '检测日期';
+comment on column daq_station_detection_infiltration.detection_length is '检测长度(mm)';
+comment on column daq_station_detection_infiltration.detection_type is '检测类型，域值：detection_type_domain';
+comment on column daq_station_detection_infiltration.evaluation_grade is '评定等级，域值：evaluation_grade_domain';
+comment on column daq_station_detection_infiltration.evaluation_result is '评定结果{0:不合格;1:合格}';
+comment on column daq_station_detection_infiltration.detection_unit is '检测单位';
+comment on column daq_station_detection_infiltration.detection_person is '检测人员';
+comment on column daq_station_detection_infiltration.supervision_unit is '监理单位';
+comment on column daq_station_detection_infiltration.supervision_engineer is '监理工程师';
+comment on column daq_station_detection_infiltration.collection_date is '采集日期';
+comment on column daq_station_detection_infiltration.approve_status is '审核状态';
+comment on column daq_station_detection_infiltration.remarks is '备注';
+comment on column daq_station_detection_infiltration.create_user_id is '创建人id';
+comment on column daq_station_detection_infiltration.create_user_name is '创建人名称';
+comment on column daq_station_detection_infiltration.create_datetime is '创建时间';
+comment on column daq_station_detection_infiltration.modify_user_id is '修改人id';
+comment on column daq_station_detection_infiltration.modify_user_name is '修改人名称';
+comment on column daq_station_detection_infiltration.modify_datetime is '修改时间';
+comment on column daq_station_detection_infiltration.active is '有效标志';
+create index INDEX_DAQ_STATION_DETECTION_INFILTRATION_OID_4 ON daq_station_detection_infiltration ( oid );
+create index INDEX_DAQ_STATION_DETECTION_INFILTRATION_WELD_OID_9 ON daq_station_detection_infiltration ( weld_oid );
+
+/*渗透检测子表(站场)*/
+  create table daq_station_detection_infiltration_sub( 
+oid varchar(36) not null primary key,
+parent_oid varchar(36)  ,
+weld_oid varchar(36)  ,
+defect_position varchar(60)  ,
+defect_properties varchar(50)  ,
+defect_length numeric(9,3)  ,
+create_user_id varchar(36)  ,
+create_user_name varchar(50)  ,
+create_datetime timestamp(6)  ,
+modify_user_id varchar(36)  ,
+modify_user_name varchar(50)  ,
+modify_datetime timestamp(6)  ,
+active smallint not null default 1  ); 
+comment on table daq_station_detection_infiltration_sub is '渗透检测子表(站场)';
+comment on column daq_station_detection_infiltration_sub.oid is '主键';
+comment on column daq_station_detection_infiltration_sub.parent_oid is '主表oid';
+comment on column daq_station_detection_infiltration_sub.weld_oid is '焊口编号';
+comment on column daq_station_detection_infiltration_sub.defect_position is '缺陷位置';
+comment on column daq_station_detection_infiltration_sub.defect_properties is '缺陷性质，域值：defect_properties_domain';
+comment on column daq_station_detection_infiltration_sub.defect_length is '缺陷长度(mm)';
+comment on column daq_station_detection_infiltration_sub.create_user_id is '创建人id';
+comment on column daq_station_detection_infiltration_sub.create_user_name is '创建人名称';
+comment on column daq_station_detection_infiltration_sub.create_datetime is '创建时间';
+comment on column daq_station_detection_infiltration_sub.modify_user_id is '修改人id';
+comment on column daq_station_detection_infiltration_sub.modify_user_name is '修改人名称';
+comment on column daq_station_detection_infiltration_sub.modify_datetime is '修改时间';
+comment on column daq_station_detection_infiltration_sub.active is '有效标志';
+create index INDEX_DAQ_STATION_DETECTION_INFILTRATION_SUB_OID_4 ON daq_station_detection_infiltration_sub ( oid );
+/**
+ * 站场设备安装-工艺主子表end
+ */
+
+
+
+/**
+ * 中低压start
+ */
+drop table if exists daq_mv_pipe_material;
+create table daq_mv_pipe_material (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	pipe_section_material varchar (50),
+	pipe_section_spec varchar (50),
+	outer_diameter numeric (9, 3),
+	wall_thickness numeric (9, 3),
+	design_life smallint,
+	construct_unit varchar (36),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+
+comment on table daq_mv_pipe_material is '管段材料';
+comment on column daq_mv_pipe_material.oid is '主键';
+comment on column daq_mv_pipe_material.project_oid is '工程oid';
+comment on column daq_mv_pipe_material.pipe_section_material is '材质';
+comment on column daq_mv_pipe_material.pipe_section_spec is '规格';
+comment on column daq_mv_pipe_material.outer_diameter is '外径(mm)';
+comment on column daq_mv_pipe_material.wall_thickness is '壁厚(mm)';
+comment on column daq_mv_pipe_material.design_life is '管道设计年限(年){30/50}';
+comment on column daq_mv_pipe_material.construct_unit is '采集单位';
+comment on column daq_mv_pipe_material.collection_person is '采集人员';
+comment on column daq_mv_pipe_material.collection_date is '采集日期';
+comment on column daq_mv_pipe_material.supervision_unit is '监理单位';
+comment on column daq_mv_pipe_material.supervision_engineer is '监理工程师';
+comment on column daq_mv_pipe_material.approve_status is '审核状态';
+comment on column daq_mv_pipe_material.remarks is '备注';
+comment on column daq_mv_pipe_material.create_user_id is '创建人id';
+comment on column daq_mv_pipe_material.create_user_name is '创建人名称';
+comment on column daq_mv_pipe_material.create_datetime is '创建时间';
+comment on column daq_mv_pipe_material.modify_user_id is '修改人id';
+comment on column daq_mv_pipe_material.modify_user_name is '修改人名称';
+comment on column daq_mv_pipe_material.modify_datetime is '修改时间';
+comment on column daq_mv_pipe_material.active is '有效标志';
+create index index_daq_mv_pipe_material_oid_4 on daq_mv_pipe_material ( oid );
+create index index_daq_mv_pipe_material_project_oid_5 on daq_mv_pipe_material ( project_oid );
+
+drop table if exists daq_mv_pipe_node;
+create table daq_mv_pipe_node (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	pipe_node_code varchar (50),
+	pipe_node_type varchar (50),
+	pipe_node_spec varchar (50),
+	manufacturer varchar (60),
+	factory_num varchar (60),
+	pointx numeric (10, 7),
+	pointy numeric (10, 7),
+	pointz numeric (5, 2),
+	buried_depth numeric (7, 2),
+	user_building varchar (60),
+	is_electronic_label smallint,
+	electronic_label_type varchar (50),
+	construct_unit varchar (36),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	geo_state varchar (10),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_mv_pipe_node is '节点信息';
+comment on column daq_mv_pipe_node.oid is '主键';
+comment on column daq_mv_pipe_node.project_oid is '工程oid';
+comment on column daq_mv_pipe_node.pipe_node_code is '节点编号';
+comment on column daq_mv_pipe_node.pipe_node_type is '点类型,域值：pipe_node_type_domain';
+comment on column daq_mv_pipe_node.pipe_node_spec is '规格';
+comment on column daq_mv_pipe_node.manufacturer is '生产厂家';
+comment on column daq_mv_pipe_node.factory_num is '出厂编号';
+comment on column daq_mv_pipe_node.pointx is 'x坐标';
+comment on column daq_mv_pipe_node.pointy is 'y坐标';
+comment on column daq_mv_pipe_node.pointz is '管顶高程(m)';
+comment on column daq_mv_pipe_node.buried_depth is '埋深(m)';
+comment on column daq_mv_pipe_node.user_building is '用户楼宇';
+comment on column daq_mv_pipe_node.is_electronic_label is '是否设置电子标签';
+comment on column daq_mv_pipe_node.electronic_label_type is '电子标签类型，域值：electronic_label_type_domain';
+comment on column daq_mv_pipe_node.construct_unit is '采集单位';
+comment on column daq_mv_pipe_node.collection_person is '采集人员';
+comment on column daq_mv_pipe_node.collection_date is '采集日期';
+comment on column daq_mv_pipe_node.supervision_unit is '监理单位';
+comment on column daq_mv_pipe_node.supervision_engineer is '监理工程师';
+comment on column daq_mv_pipe_node.geo_state is '空间数据状态';
+comment on column daq_mv_pipe_node.approve_status is '审核状态';
+comment on column daq_mv_pipe_node.remarks is '备注';
+comment on column daq_mv_pipe_node.create_user_id is '创建人id';
+comment on column daq_mv_pipe_node.create_user_name is '创建人名称';
+comment on column daq_mv_pipe_node.create_datetime is '创建时间';
+comment on column daq_mv_pipe_node.modify_user_id is '修改人id';
+comment on column daq_mv_pipe_node.modify_user_name is '修改人名称';
+comment on column daq_mv_pipe_node.modify_datetime is '修改时间';
+comment on column daq_mv_pipe_node.active is '有效标志';
+create index index_daq_mv_pipe_node_oid_4 on daq_mv_pipe_node ( oid );
+create index index_daq_mv_pipe_node_project_oid_5 on daq_mv_pipe_node ( project_oid );
+create index index_daq_mv_pipe_node_pipe_node_code_6 on daq_mv_pipe_node ( pipe_node_code );
+select addgeometrycolumn('public', 'daq_mv_pipe_node', 'geom', 4490, 'point', 4);
+create index daq_mv_pipe_node_geom_idx on public.daq_mv_pipe_node using gist (geom);
+
+drop table if exists daq_mv_pipe_section;
+create table daq_mv_pipe_section (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	pipe_section_code varchar (50),
+	start_pipe_node_oid varchar (36),
+	start_pointx numeric (10, 7),
+	start_pointy numeric (10, 7),
+	start_pointz numeric (5, 2),
+	end_pipe_node_oid varchar (50),
+	end_pointx numeric (10, 7),
+	end_pointy numeric (10, 7),
+	end_pointz numeric (5, 2),
+	pipe_section_length numeric (12, 3),
+	pipe_diameter numeric (9, 3),
+	wall_thickness numeric (9, 3),
+	pipe_section_material varchar (50),
+	pipe_section_spec varchar (50),
+	design_life smallint,
+	pipe_outer_anticorrosive smallint,
+	outer_anticorrosive_grade varchar (10),
+	cathodic_protection_method smallint,
+	burial_method smallint,
+	pipe_section_category smallint,
+	construct_unit varchar (36),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	geo_state varchar (10),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_mv_pipe_section is '管段信息表';
+comment on column daq_mv_pipe_section.oid is '主键';
+comment on column daq_mv_pipe_section.project_oid is '工程oid';
+comment on column daq_mv_pipe_section.pipe_section_code is '管段编号';
+comment on column daq_mv_pipe_section.start_pipe_node_oid is '起始节点oid';
+comment on column daq_mv_pipe_section.start_pointx is '起始点x坐标';
+comment on column daq_mv_pipe_section.start_pointy is '起始点y坐标';
+comment on column daq_mv_pipe_section.start_pointz is '起始点管顶高程(m)';
+comment on column daq_mv_pipe_section.end_pipe_node_oid is '终止节点oid';
+comment on column daq_mv_pipe_section.end_pointx is '终止点x坐标';
+comment on column daq_mv_pipe_section.end_pointy is '终止点y坐标';
+comment on column daq_mv_pipe_section.end_pointz is '终止点管顶高程(m)';
+comment on column daq_mv_pipe_section.pipe_section_length is '管段长度(m)';
+comment on column daq_mv_pipe_section.pipe_diameter is '管径(mm)';
+comment on column daq_mv_pipe_section.wall_thickness is '壁厚(mm)';
+comment on column daq_mv_pipe_section.pipe_section_material is '材质';
+comment on column daq_mv_pipe_section.pipe_section_spec is '规格';
+comment on column daq_mv_pipe_section.design_life is '管道设计年限(年){30/50}';
+comment on column daq_mv_pipe_section.pipe_outer_anticorrosive is '管道外防腐{1:3pe;2:环氧粉末}';
+comment on column daq_mv_pipe_section.outer_anticorrosive_grade is '防腐等级{1:普通级;2:加强级}';
+comment on column daq_mv_pipe_section.cathodic_protection_method is '阴极保护方式{1牺牲阳极;2:外加电流}';
+comment on column daq_mv_pipe_section.burial_method is '埋设方式{1:埋地管;2:明管}';
+comment on column daq_mv_pipe_section.pipe_section_category is '管段类别{1:市政管;2:庭院管}';
+comment on column daq_mv_pipe_section.construct_unit is '采集单位';
+comment on column daq_mv_pipe_section.collection_person is '采集人员';
+comment on column daq_mv_pipe_section.collection_date is '采集日期';
+comment on column daq_mv_pipe_section.supervision_unit is '监理单位';
+comment on column daq_mv_pipe_section.supervision_engineer is '监理工程师';
+comment on column daq_mv_pipe_section.geo_state is '空间数据状态';
+comment on column daq_mv_pipe_section.approve_status is '审核状态';
+comment on column daq_mv_pipe_section.remarks is '备注';
+comment on column daq_mv_pipe_section.create_user_id is '创建人id';
+comment on column daq_mv_pipe_section.create_user_name is '创建人名称';
+comment on column daq_mv_pipe_section.create_datetime is '创建时间';
+comment on column daq_mv_pipe_section.modify_user_id is '修改人id';
+comment on column daq_mv_pipe_section.modify_user_name is '修改人名称';
+comment on column daq_mv_pipe_section.modify_datetime is '修改时间';
+comment on column daq_mv_pipe_section.active is '有效标志';
+create index index_daq_mv_pipe_section_oid_4 on daq_mv_pipe_section ( oid );
+create index index_daq_mv_pipe_section_project_oid_5 on daq_mv_pipe_section ( project_oid );
+create index index_daq_mv_pipe_section_pipe_section_code_6 on daq_mv_pipe_section ( pipe_section_code );
+
+select addgeometrycolumn('public', 'daq_mv_pipe_section', 'geom', 4490, 'linestring', 4);
+create index daq_mv_pipe_section_geom_idx on public.daq_mv_pipe_section using gist (geom);
+
+drop table if exists daq_mv_across_info;
+create table daq_mv_across_info (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	pipe_section_code varchar (50),
+	start_pipe_node_oid varchar (36),
+	start_pointx numeric (10, 7),
+	start_pointy numeric (10, 7),
+	start_pointz numeric (5, 2),
+	end_pipe_node_oid varchar (36),
+	end_pointx numeric (10, 7),
+	end_pointy numeric (10, 7),
+	end_pointz numeric (5, 2),
+	pipe_section_length numeric (12, 3),
+	across_method varchar (50),
+	across_object varchar (50),
+	burial_method smallint,
+	pipe_section_category smallint,
+	pipe_section_material varchar (50),
+	pipe_section_spec varchar (50),
+	outer_diameter numeric (9, 3),
+	wall_thickness numeric (9, 3),
+	design_life smallint,
+	measure_unit varchar (50),
+	construct_unit varchar (36),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	geo_state varchar (10),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_mv_across_info is '穿越信息';
+comment on column daq_mv_across_info.oid is '主键';
+comment on column daq_mv_across_info.project_oid is '工程oid';
+comment on column daq_mv_across_info.pipe_section_code is '管段编号';
+comment on column daq_mv_across_info.start_pipe_node_oid is '起始节点oid';
+comment on column daq_mv_across_info.start_pointx is '起始点x坐标';
+comment on column daq_mv_across_info.start_pointy is '起始点y坐标';
+comment on column daq_mv_across_info.start_pointz is '起始点管顶高程(m)';
+comment on column daq_mv_across_info.end_pipe_node_oid is '终止节点oid';
+comment on column daq_mv_across_info.end_pointx is '终止点x坐标';
+comment on column daq_mv_across_info.end_pointy is '终止点y坐标';
+comment on column daq_mv_across_info.end_pointz is '终止点管顶高程(m)';
+comment on column daq_mv_across_info.pipe_section_length is '管段长度(m)';
+comment on column daq_mv_across_info.across_method is '穿越方式，域值:across_method_domain';
+comment on column daq_mv_across_info.across_object is '穿越对象类型，域值：across_object_domain';
+comment on column daq_mv_across_info.burial_method is '埋设方式{1:埋地管;2:明管}';
+comment on column daq_mv_across_info.pipe_section_category is '管段类别{1:市政管;2:庭院管}';
+comment on column daq_mv_across_info.pipe_section_material is '材质';
+comment on column daq_mv_across_info.pipe_section_spec is '规格';
+comment on column daq_mv_across_info.outer_diameter is '外径';
+comment on column daq_mv_across_info.wall_thickness is '壁厚';
+comment on column daq_mv_across_info.design_life is '管道设计年限{30/50}';
+comment on column daq_mv_across_info.measure_unit is '陀螺仪测量单位 ';
+comment on column daq_mv_across_info.construct_unit is '采集单位';
+comment on column daq_mv_across_info.collection_person is '采集人员';
+comment on column daq_mv_across_info.collection_date is '采集日期';
+comment on column daq_mv_across_info.supervision_unit is '监理单位';
+comment on column daq_mv_across_info.supervision_engineer is '监理工程师';
+comment on column daq_mv_across_info.geo_state is '空间数据状态';
+comment on column daq_mv_across_info.approve_status is '审核状态';
+comment on column daq_mv_across_info.remarks is '备注';
+comment on column daq_mv_across_info.create_user_id is '创建人id';
+comment on column daq_mv_across_info.create_user_name is '创建人名称';
+comment on column daq_mv_across_info.create_datetime is '创建时间';
+comment on column daq_mv_across_info.modify_user_id is '修改人id';
+comment on column daq_mv_across_info.modify_user_name is '修改人名称';
+comment on column daq_mv_across_info.modify_datetime is '修改时间';
+comment on column daq_mv_across_info.active is '有效标志';
+create index index_daq_mv_across_info_oid_4 on daq_mv_across_info ( oid );
+create index index_daq_mv_across_info_project_oid_5 on daq_mv_across_info ( project_oid );
+create index index_daq_mv_across_info_pipe_section_code_6 on daq_mv_across_info ( pipe_section_code );
+
+select addgeometrycolumn('public', 'daq_mv_across_info', 'geom', 4490, 'linestring', 4);
+create index daq_mv_across_info_geom_idx on public.daq_mv_across_info using gist (geom);
+
+drop table if exists daq_mv_stride_across_info;
+create table daq_mv_stride_across_info (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	pipe_section_code varchar (50),
+	start_pipe_node_oid varchar (36),
+	start_pointx numeric (10, 7),
+	start_pointy numeric (10, 7),
+	start_pointz numeric (5, 2),
+	end_pipe_node_oid varchar (36),
+	end_pointx numeric (10, 7),
+	end_pointy numeric (10, 7),
+	end_pointz numeric (5, 2),
+	pipe_section_length numeric (12, 3),
+	across_method varchar (50),
+	across_object varchar (50),
+	burial_method smallint,
+	pipe_section_category smallint,
+	pipe_section_material varchar (50),
+	pipe_section_spec varchar (50),
+	outer_diameter numeric (9, 3),
+	wall_thickness numeric (9, 3),
+	design_life smallint,
+	construct_unit varchar (36),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	geo_state varchar (10),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_mv_stride_across_info is '跨越信息';
+comment on column daq_mv_stride_across_info.oid is '主键';
+comment on column daq_mv_stride_across_info.project_oid is '工程oid';
+comment on column daq_mv_stride_across_info.pipe_section_code is '管段编号';
+comment on column daq_mv_stride_across_info.start_pipe_node_oid is '起始节点编号';
+comment on column daq_mv_stride_across_info.start_pointx is '起始点x坐标';
+comment on column daq_mv_stride_across_info.start_pointy is '起始点y坐标';
+comment on column daq_mv_stride_across_info.start_pointz is '起始点管顶高程(m)';
+comment on column daq_mv_stride_across_info.end_pipe_node_oid is '终止节点编号';
+comment on column daq_mv_stride_across_info.end_pointx is '终止点x坐标';
+comment on column daq_mv_stride_across_info.end_pointy is '终止点y坐标';
+comment on column daq_mv_stride_across_info.end_pointz is '终止点管顶高程(m)';
+comment on column daq_mv_stride_across_info.pipe_section_length is '管段长度(m)';
+comment on column daq_mv_stride_across_info.across_method is '穿越方式，域值:across_method_domain';
+comment on column daq_mv_stride_across_info.across_object is '穿越对象类型，域值：across_object_domain';
+comment on column daq_mv_stride_across_info.burial_method is '埋设方式{1:埋地管;2:明管}';
+comment on column daq_mv_stride_across_info.pipe_section_category is '管段类别{1:市政管;2:庭院管}';
+comment on column daq_mv_stride_across_info.pipe_section_material is '材质';
+comment on column daq_mv_stride_across_info.pipe_section_spec is '规格';
+comment on column daq_mv_stride_across_info.outer_diameter is '外径';
+comment on column daq_mv_stride_across_info.wall_thickness is '壁厚';
+comment on column daq_mv_stride_across_info.design_life is '管道设计年限{30/50}';
+comment on column daq_mv_stride_across_info.construct_unit is '采集单位';
+comment on column daq_mv_stride_across_info.collection_person is '采集人员';
+comment on column daq_mv_stride_across_info.collection_date is '采集日期';
+comment on column daq_mv_stride_across_info.supervision_unit is '监理单位';
+comment on column daq_mv_stride_across_info.supervision_engineer is '监理工程师';
+comment on column daq_mv_stride_across_info.geo_state is '空间数据状态';
+comment on column daq_mv_stride_across_info.approve_status is '审核状态';
+comment on column daq_mv_stride_across_info.remarks is '备注';
+comment on column daq_mv_stride_across_info.create_user_id is '创建人id';
+comment on column daq_mv_stride_across_info.create_user_name is '创建人名称';
+comment on column daq_mv_stride_across_info.create_datetime is '创建时间';
+comment on column daq_mv_stride_across_info.modify_user_id is '修改人id';
+comment on column daq_mv_stride_across_info.modify_user_name is '修改人名称';
+comment on column daq_mv_stride_across_info.modify_datetime is '修改时间';
+comment on column daq_mv_stride_across_info.active is '有效标志';
+create index index_daq_mv_stride_across_info_oid_4 on daq_mv_stride_across_info ( oid );
+create index index_daq_mv_stride_across_info_project_oid_5 on daq_mv_stride_across_info ( project_oid );
+create index index_daq_mv_stride_across_info_pipe_section_code_6 on daq_mv_stride_across_info ( pipe_section_code );
+select addgeometrycolumn('public', 'daq_mv_stride_across_info', 'geom', 4490, 'linestring', 4);
+create index daq_mv_stride_across_info_geom_idx on public.daq_mv_stride_across_info using gist (geom);
+
+drop table if exists daq_mv_bushing_info;
+create table daq_mv_bushing_info (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	bushing_material varchar (50),
+	bushing_spec varchar (40),
+	start_pointx numeric (10, 7),
+	start_pointy numeric (10, 7),
+	start_pointz numeric (5, 2),
+	start_buried_depth numeric (7, 2),
+	end_pointx numeric (10, 7),
+	end_pointy numeric (10, 7),
+	end_pointz numeric (5, 2),
+	end_buried_depth numeric (7, 2),
+	has_check_leak_device smallint,
+	construct_unit varchar (36),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	geo_state varchar (10),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_mv_bushing_info is '套管信息';
+comment on column daq_mv_bushing_info.oid is '主键';
+comment on column daq_mv_bushing_info.project_oid is '工程oid';
+comment on column daq_mv_bushing_info.bushing_material is '材质';
+comment on column daq_mv_bushing_info.bushing_spec is '规格';
+comment on column daq_mv_bushing_info.start_pointx is '起始点x坐标';
+comment on column daq_mv_bushing_info.start_pointy is '起始点y坐标';
+comment on column daq_mv_bushing_info.start_pointz is '起始点管顶高程(m)';
+comment on column daq_mv_bushing_info.start_buried_depth is '起始点埋深(m)';
+comment on column daq_mv_bushing_info.end_pointx is '终止点x坐标';
+comment on column daq_mv_bushing_info.end_pointy is '终止点y坐标';
+comment on column daq_mv_bushing_info.end_pointz is '终止点管顶高程(m)';
+comment on column daq_mv_bushing_info.end_buried_depth is '终止点埋深(m)';
+comment on column daq_mv_bushing_info.has_check_leak_device is '是否设置检漏装置{0:否;1:是}';
+comment on column daq_mv_bushing_info.construct_unit is '采集单位';
+comment on column daq_mv_bushing_info.collection_person is '采集人员';
+comment on column daq_mv_bushing_info.collection_date is '采集日期';
+comment on column daq_mv_bushing_info.supervision_unit is '监理单位';
+comment on column daq_mv_bushing_info.supervision_engineer is '监理工程师';
+comment on column daq_mv_bushing_info.geo_state is '空间数据状态';
+comment on column daq_mv_bushing_info.approve_status is '审核状态';
+comment on column daq_mv_bushing_info.remarks is '备注';
+comment on column daq_mv_bushing_info.create_user_id is '创建人id';
+comment on column daq_mv_bushing_info.create_user_name is '创建人名称';
+comment on column daq_mv_bushing_info.create_datetime is '创建时间';
+comment on column daq_mv_bushing_info.modify_user_id is '修改人id';
+comment on column daq_mv_bushing_info.modify_user_name is '修改人名称';
+comment on column daq_mv_bushing_info.modify_datetime is '修改时间';
+comment on column daq_mv_bushing_info.active is '有效标志';
+create index index_daq_mv_bushing_info_oid_4 on daq_mv_bushing_info ( oid );
+create index index_daq_mv_bushing_info_project_oid_5 on daq_mv_bushing_info ( project_oid );
+select addgeometrycolumn('public', 'daq_mv_bushing_info', 'geom', 4490, 'linestring', 4);
+create index daq_mv_bushing_info_geom_idx on public.daq_mv_bushing_info using gist (geom);
+
+drop table if exists daq_mv_valve_info;
+create table daq_mv_valve_info (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	pipe_node_oid varchar (50),
+	valve_code varchar (50),
+	manufacturer varchar (60),
+	valve_spec varchar (50),
+	valve_type varchar (50),
+	valve_material smallint,
+	burial_method smallint,
+	nominal_diameter numeric (9, 3),
+	nominal_pressure numeric (9, 3),
+	pointx numeric (10, 7),
+	pointy numeric (10, 7),
+	pointz numeric (5, 2),
+	buried_depth numeric (7, 2),
+	is_electronic_label smallint,
+	electronic_label_type varchar (50),
+	valve_connection_method varchar (50),
+	is_heavy_shaft_cover smallint,
+	well_cover_type smallint,
+	well_cover_material varchar (50),
+	discharge_pipe numeric (9, 3),
+	valve_discharge_pipe_info varchar (60),
+	construct_unit varchar (36),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	geo_state varchar (10),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_mv_valve_info is '阀门信息';
+comment on column daq_mv_valve_info.oid is '主键';
+comment on column daq_mv_valve_info.project_oid is '工程oid';
+comment on column daq_mv_valve_info.pipe_node_oid is '节点oid';
+comment on column daq_mv_valve_info.valve_code is '阀门编号';
+comment on column daq_mv_valve_info.manufacturer is '生产厂家';
+comment on column daq_mv_valve_info.valve_spec is '阀门规格';
+comment on column daq_mv_valve_info.valve_type is '阀门类型，域值：valve_type_domain';
+comment on column daq_mv_valve_info.valve_material is '阀门材质{1:刚;2:pe}';
+comment on column daq_mv_valve_info.burial_method is '埋设方式{1:直埋;2:阀门井}';
+comment on column daq_mv_valve_info.nominal_diameter is '阀门公称直径';
+comment on column daq_mv_valve_info.nominal_pressure is '阀门公称压力';
+comment on column daq_mv_valve_info.pointx is '坐标x';
+comment on column daq_mv_valve_info.pointy is '坐标y';
+comment on column daq_mv_valve_info.pointz is '管顶高程(m)';
+comment on column daq_mv_valve_info.buried_depth is '埋深(m)';
+comment on column daq_mv_valve_info.is_electronic_label is '是否设置电子标签{0:否;1:是}';
+comment on column daq_mv_valve_info.electronic_label_type is '电子标签类型,域值：electronic_label_type_domai';
+comment on column daq_mv_valve_info.valve_connection_method is '阀门连接方式,域值：valve_connection_method_domain';
+comment on column daq_mv_valve_info.is_heavy_shaft_cover is '阀门是否重型井盖{0:否;1:是}';
+comment on column daq_mv_valve_info.well_cover_type is '井盖类型{1:矩形;2:圆形}';
+comment on column daq_mv_valve_info.well_cover_material is '井盖材质,域值：well_cover_material_domain';
+comment on column daq_mv_valve_info.discharge_pipe is '放散管径';
+comment on column daq_mv_valve_info.valve_discharge_pipe_info is '阀门放散管信息';
+comment on column daq_mv_valve_info.construct_unit is '采集单位';
+comment on column daq_mv_valve_info.collection_person is '采集人员';
+comment on column daq_mv_valve_info.collection_date is '采集日期';
+comment on column daq_mv_valve_info.supervision_unit is '监理单位';
+comment on column daq_mv_valve_info.supervision_engineer is '监理工程师';
+comment on column daq_mv_valve_info.geo_state is '空间数据状态';
+comment on column daq_mv_valve_info.approve_status is '审核状态';
+comment on column daq_mv_valve_info.remarks is '备注';
+comment on column daq_mv_valve_info.create_user_id is '创建人id';
+comment on column daq_mv_valve_info.create_user_name is '创建人名称';
+comment on column daq_mv_valve_info.create_datetime is '创建时间';
+comment on column daq_mv_valve_info.modify_user_id is '修改人id';
+comment on column daq_mv_valve_info.modify_user_name is '修改人名称';
+comment on column daq_mv_valve_info.modify_datetime is '修改时间';
+comment on column daq_mv_valve_info.active is '有效标志';
+create index index_daq_mv_valve_info_oid_4 on daq_mv_valve_info ( oid );
+create index index_daq_mv_valve_info_project_oid_5 on daq_mv_valve_info ( project_oid );
+create index index_daq_mv_valve_info_valve_code_7 on daq_mv_valve_info ( valve_code );
+
+select addgeometrycolumn('public', 'daq_mv_valve_info', 'geom', 4490, 'point', 4);
+create index daq_mv_valve_info_geom_idx on public.daq_mv_valve_info using gist (geom);
+
+drop table if exists daq_mv_mark_stake;
+create table daq_mv_mark_stake (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	mark_stake_code varchar (50),
+	mark_stake_type varchar (50),
+	mark_stake_material varchar (50),
+	pointx numeric (10, 7),
+	pointy numeric (10, 7),
+	pointz numeric (5, 2),
+	burial_date timestamp (6),
+	construct_unit varchar (36),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	geo_state varchar (10),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_mv_mark_stake is '标志桩信息';
+comment on column daq_mv_mark_stake.oid is '主键';
+comment on column daq_mv_mark_stake.project_oid is '工程oid';
+comment on column daq_mv_mark_stake.mark_stake_code is '编号';
+comment on column daq_mv_mark_stake.mark_stake_type is '标志桩类型，域值:mark_stake_type_domain';
+comment on column daq_mv_mark_stake.mark_stake_material is '材质,域值:mark_stake_material_domain';
+comment on column daq_mv_mark_stake.pointx is '坐标x';
+comment on column daq_mv_mark_stake.pointy is '坐标y';
+comment on column daq_mv_mark_stake.pointz is '地面高程';
+comment on column daq_mv_mark_stake.burial_date is '埋设日期';
+comment on column daq_mv_mark_stake.construct_unit is '采集单位';
+comment on column daq_mv_mark_stake.collection_person is '采集人员';
+comment on column daq_mv_mark_stake.collection_date is '采集日期';
+comment on column daq_mv_mark_stake.supervision_unit is '监理单位';
+comment on column daq_mv_mark_stake.supervision_engineer is '监理工程师';
+comment on column daq_mv_mark_stake.geo_state is '空间数据状态';
+comment on column daq_mv_mark_stake.approve_status is '审核状态';
+comment on column daq_mv_mark_stake.remarks is '备注';
+comment on column daq_mv_mark_stake.create_user_id is '创建人id';
+comment on column daq_mv_mark_stake.create_user_name is '创建人名称';
+comment on column daq_mv_mark_stake.create_datetime is '创建时间';
+comment on column daq_mv_mark_stake.modify_user_id is '修改人id';
+comment on column daq_mv_mark_stake.modify_user_name is '修改人名称';
+comment on column daq_mv_mark_stake.modify_datetime is '修改时间';
+comment on column daq_mv_mark_stake.active is '有效标志';
+create index index_daq_mv_mark_stake_oid_4 on daq_mv_mark_stake ( oid );
+create index index_daq_mv_mark_stake_project_oid_5 on daq_mv_mark_stake ( project_oid );
+create index index_daq_mv_mark_stake_mark_stake_code_6 on daq_mv_mark_stake ( mark_stake_code );
+
+select addgeometrycolumn('public', 'daq_mv_mark_stake', 'geom', 4490, 'point', 4);
+create index daq_mv_mark_stake_geom_idx on public.daq_mv_mark_stake using gist (geom);
+
+drop table if exists daq_mv_electronic_label;
+create table daq_mv_electronic_label (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	electronic_label_type varchar (50),
+	electronic_label_features varchar (50),
+	pointx numeric (10, 7),
+	pointy numeric (10, 7),
+	pointz numeric (5, 2),
+	burial_depth numeric (9, 2),
+	construct_unit varchar (36),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	geo_state varchar (10),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_mv_electronic_label is '电子标签信息';
+comment on column daq_mv_electronic_label.oid is '主键';
+comment on column daq_mv_electronic_label.project_oid is '工程oid';
+comment on column daq_mv_electronic_label.electronic_label_type is '电子标签类型，域值：electronic_label_type_domain';
+comment on column daq_mv_electronic_label.electronic_label_features is '电子标签特征点类型';
+comment on column daq_mv_electronic_label.pointx is '坐标x';
+comment on column daq_mv_electronic_label.pointy is '坐标y';
+comment on column daq_mv_electronic_label.pointz is '管顶高程';
+comment on column daq_mv_electronic_label.burial_depth is '埋深(m)';
+comment on column daq_mv_electronic_label.construct_unit is '采集单位';
+comment on column daq_mv_electronic_label.collection_person is '采集人员';
+comment on column daq_mv_electronic_label.collection_date is '采集日期';
+comment on column daq_mv_electronic_label.supervision_unit is '监理单位';
+comment on column daq_mv_electronic_label.supervision_engineer is '监理工程师';
+comment on column daq_mv_electronic_label.geo_state is '空间数据状态';
+comment on column daq_mv_electronic_label.approve_status is '审核状态';
+comment on column daq_mv_electronic_label.remarks is '备注';
+comment on column daq_mv_electronic_label.create_user_id is '创建人id';
+comment on column daq_mv_electronic_label.create_user_name is '创建人名称';
+comment on column daq_mv_electronic_label.create_datetime is '创建时间';
+comment on column daq_mv_electronic_label.modify_user_id is '修改人id';
+comment on column daq_mv_electronic_label.modify_user_name is '修改人名称';
+comment on column daq_mv_electronic_label.modify_datetime is '修改时间';
+comment on column daq_mv_electronic_label.active is '有效标志';
+create index index_daq_mv_electronic_label_oid_4 on daq_mv_electronic_label ( oid );
+create index index_daq_mv_electronic_label_project_oid_5 on daq_mv_electronic_label ( project_oid );
+
+select addgeometrycolumn('public', 'daq_mv_electronic_label', 'geom', 4490, 'point', 4);
+create index daq_mv_electronic_label_geom_idx on public.daq_mv_electronic_label using gist (geom);
+
+drop table if exists daq_mv_monitor_well;
+create table daq_mv_monitor_well (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	monitor_well_code varchar (50),
+	monitor_well_purpose varchar (50),
+	pointx numeric (10, 7),
+	pointy numeric (10, 7),
+	pointz numeric (5, 2),
+	monitor_well_material varchar (50),
+	investment_date timestamp (6),
+	construct_unit varchar (36),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	geo_state varchar (10),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_mv_monitor_well is '监测井信息';
+comment on column daq_mv_monitor_well.oid is '主键';
+comment on column daq_mv_monitor_well.project_oid is '工程oid';
+comment on column daq_mv_monitor_well.monitor_well_code is '编号';
+comment on column daq_mv_monitor_well.monitor_well_purpose is '用途,域值：monitor_well_purpose_domain';
+comment on column daq_mv_monitor_well.pointx is '坐标x';
+comment on column daq_mv_monitor_well.pointy is '坐标y';
+comment on column daq_mv_monitor_well.pointz is '管顶高程';
+comment on column daq_mv_monitor_well.monitor_well_material is '阴保监测井材料,域值:monitor_well_material_domain';
+comment on column daq_mv_monitor_well.investment_date is '投用日期';
+comment on column daq_mv_monitor_well.construct_unit is '采集单位';
+comment on column daq_mv_monitor_well.collection_person is '采集人员';
+comment on column daq_mv_monitor_well.collection_date is '采集日期';
+comment on column daq_mv_monitor_well.supervision_unit is '监理单位';
+comment on column daq_mv_monitor_well.supervision_engineer is '监理工程师';
+comment on column daq_mv_monitor_well.geo_state is '空间数据状态';
+comment on column daq_mv_monitor_well.approve_status is '审核状态';
+comment on column daq_mv_monitor_well.remarks is '备注';
+comment on column daq_mv_monitor_well.create_user_id is '创建人id';
+comment on column daq_mv_monitor_well.create_user_name is '创建人名称';
+comment on column daq_mv_monitor_well.create_datetime is '创建时间';
+comment on column daq_mv_monitor_well.modify_user_id is '修改人id';
+comment on column daq_mv_monitor_well.modify_user_name is '修改人名称';
+comment on column daq_mv_monitor_well.modify_datetime is '修改时间';
+comment on column daq_mv_monitor_well.active is '有效标志';
+create index index_daq_mv_monitor_well_oid_4 on daq_mv_monitor_well ( oid );
+create index index_daq_mv_monitor_well_project_oid_5 on daq_mv_monitor_well ( project_oid );
+create index index_daq_mv_monitor_well_monitor_well_code_6 on daq_mv_monitor_well ( monitor_well_code );
+
+select addgeometrycolumn('public', 'daq_mv_monitor_well', 'geom', 4490, 'point', 4);
+create index daq_mv_monitor_well_geom_idx on public.daq_mv_monitor_well using gist (geom);
+
+drop table if exists daq_mv_pipe_trench_protect;
+create table daq_mv_pipe_trench_protect (
+	oid varchar (36) not null primary key,
+	project_oid varchar (36),
+	pipe_trench_length numeric (9, 2),
+	pipe_trench_width numeric (9, 3),
+	pipe_trench_height numeric (9, 4),
+	start_pointx numeric (10, 7),
+	start_pointy numeric (10, 7),
+	start_pointz numeric (5, 2),
+	end_pointx numeric (10, 7),
+	end_pointy numeric (10, 7),
+	end_pointz numeric (5, 2),
+	construct_unit varchar (36),
+	collection_person varchar (30),
+	collection_date timestamp (6),
+	supervision_unit varchar (38),
+	supervision_engineer varchar (50),
+	geo_state varchar (10),
+	approve_status smallint default 0,
+	remarks varchar (200),
+	create_user_id varchar (36),
+	create_user_name varchar (50),
+	create_datetime timestamp (6),
+	modify_user_id varchar (36),
+	modify_user_name varchar (50),
+	modify_datetime timestamp (6),
+	active smallint not null default 1
+);
+comment on table daq_mv_pipe_trench_protect is '管沟信息';
+comment on column daq_mv_pipe_trench_protect.oid is '主键';
+comment on column daq_mv_pipe_trench_protect.project_oid is '工程oid';
+comment on column daq_mv_pipe_trench_protect.pipe_trench_length is '管沟长度(m)';
+comment on column daq_mv_pipe_trench_protect.pipe_trench_width is '管沟宽度(m)';
+comment on column daq_mv_pipe_trench_protect.pipe_trench_height is '管沟高度(m)';
+comment on column daq_mv_pipe_trench_protect.start_pointx is '起始点x坐标';
+comment on column daq_mv_pipe_trench_protect.start_pointy is '起始点y坐标';
+comment on column daq_mv_pipe_trench_protect.start_pointz is '起始点管顶高程(m)';
+comment on column daq_mv_pipe_trench_protect.end_pointx is '终止点x坐标';
+comment on column daq_mv_pipe_trench_protect.end_pointy is '终止点y坐标';
+comment on column daq_mv_pipe_trench_protect.end_pointz is '终止点管顶高程(m)';
+comment on column daq_mv_pipe_trench_protect.construct_unit is '采集单位';
+comment on column daq_mv_pipe_trench_protect.collection_person is '采集人员';
+comment on column daq_mv_pipe_trench_protect.collection_date is '采集日期';
+comment on column daq_mv_pipe_trench_protect.supervision_unit is '监理单位';
+comment on column daq_mv_pipe_trench_protect.supervision_engineer is '监理工程师';
+comment on column daq_mv_pipe_trench_protect.geo_state is '空间数据状态';
+comment on column daq_mv_pipe_trench_protect.approve_status is '审核状态';
+comment on column daq_mv_pipe_trench_protect.remarks is '备注';
+comment on column daq_mv_pipe_trench_protect.create_user_id is '创建人id';
+comment on column daq_mv_pipe_trench_protect.create_user_name is '创建人名称';
+comment on column daq_mv_pipe_trench_protect.create_datetime is '创建时间';
+comment on column daq_mv_pipe_trench_protect.modify_user_id is '修改人id';
+comment on column daq_mv_pipe_trench_protect.modify_user_name is '修改人名称';
+comment on column daq_mv_pipe_trench_protect.modify_datetime is '修改时间';
+comment on column daq_mv_pipe_trench_protect.active is '有效标志';
+create index index_daq_mv_pipe_trench_protect_oid_4 on daq_mv_pipe_trench_protect ( oid );
+create index index_daq_mv_pipe_trench_protect_project_oid_5 on daq_mv_pipe_trench_protect ( project_oid );
+
+select addgeometrycolumn('public', 'daq_mv_pipe_trench_protect', 'geom', 4490, 'linestring', 4);
+create index daq_mv_pipe_trench_protect_geom_idx on public.daq_mv_pipe_trench_protect using gist (geom);
+/**
+ * 中低压end
+ */
+
+/***
+ * 名称：文档管理系统postgresql初始化脚本
+ * 创建人：雷凯
+ * 创建时间：2018-05-14 14:37
+ * 更新时间：
+ */
+/**下载申请-文档关联表**/
+create table jasdoc_apply_file_ref (
+	eventid varchar(38) not null primary key,
+	applyeventid varchar(38),
+	fileeventid varchar(38),
+	filetype numeric
+);
+comment on table jasdoc_apply_file_ref is '下载申请-文档关联表';
+comment on column jasdoc_apply_file_ref.eventid is 'uuid';
+comment on column jasdoc_apply_file_ref.applyeventid is '申请id';
+comment on column jasdoc_apply_file_ref.fileeventid is '文件或文件夹id';
+comment on column jasdoc_apply_file_ref.filetype is '类型，0表示文件，1表示文件夹';
+
+/**文档分类信息**/
+create table jasdoc_classify_folder (
+	id varchar(36) not null primary key,
+	parentid varchar(36) not null,
+	foldername varchar(200) not null,
+	folderlocation varchar(500),
+	createtime timestamp(6),
+	createuser varchar(36),
+	sort numeric(38),
+	hierarchy varchar(208),
+	deleteflag varchar(36),
+	deleteuser varchar(36),
+	updateuser varchar(36),
+	updatetime timestamp(6),
+	ext_field1 varchar(500),
+	ext_field2 varchar(500),
+	ext_field3 varchar(500),
+	ext_field4 varchar(500),
+	ext_field5 varchar(500),
+	description varchar(1000)
+);
+comment on table jasdoc_classify_folder is '文档分类信息';
+comment on column jasdoc_classify_folder.id is '节点id';
+comment on column jasdoc_classify_folder.parentid is '父类id';
+comment on column jasdoc_classify_folder.foldername is '节点名称';
+comment on column jasdoc_classify_folder.createtime is '创建时间';
+comment on column jasdoc_classify_folder.createuser is '添加数据用户';
+comment on column jasdoc_classify_folder.deleteflag is '删除标识';
+comment on column jasdoc_classify_folder.deleteuser is '删除该条数据用户id（没有删除则为空）';
+comment on column jasdoc_classify_folder.updateuser is '修改数据用户';
+comment on column jasdoc_classify_folder.updatetime is '创建时间';
+comment on column jasdoc_classify_folder.ext_field1 is '备用字段';
+comment on column jasdoc_classify_folder.ext_field2 is '备用字段';
+comment on column jasdoc_classify_folder.ext_field3 is '备用字段';
+comment on column jasdoc_classify_folder.ext_field4 is '备用字段';
+comment on column jasdoc_classify_folder.ext_field5 is '备用字段';
+comment on column jasdoc_classify_folder.description is '文件夹描述';
+
+create table jasdoc_deleteindex(
+doceventid varchar(38)
+);
+
+/**部门对文件夹授权**/
+create table jasdoc_dept_folder_ref (
+	id varchar(36) not null primary key,
+	deptid varchar(36),
+	folderid varchar(36),
+	folderprivilegetype numeric(3)
+);
+comment on table jasdoc_dept_folder_ref is '部门对文件夹授权';
+comment on column jasdoc_dept_folder_ref.id is 'uuid';
+comment on column jasdoc_dept_folder_ref.deptid is '部门id';
+comment on column jasdoc_dept_folder_ref.folderid is '资源树节点id';
+
+/**文档下载申请表**/
+create table jasdoc_download_apply (
+	eventid varchar(38) not null primary key,
+	createuser varchar(38),
+	createdate timestamp(6),
+	reason varchar(500),
+	approvestatus numeric,
+	remark varchar(500),
+	title varchar(100),
+	createusername varchar(50),
+	updatedate timestamp(6)
+);
+comment on table jasdoc_download_apply is '文档下载申请表';
+comment on column jasdoc_download_apply.eventid is 'uuid';
+comment on column jasdoc_download_apply.createuser is '申请人';
+comment on column jasdoc_download_apply.createdate is '申请时间';
+comment on column jasdoc_download_apply.reason is '申请理由';
+comment on column jasdoc_download_apply.approvestatus is '审核状态';
+comment on column jasdoc_download_apply.remark is '备注';
+comment on column jasdoc_download_apply.title is '标题';
+comment on column jasdoc_download_apply.createusername is '申请人姓名';
+comment on column jasdoc_download_apply.updatedate is '修改日期';
+
+/**我的收藏夹表信息**/
+create table jasdoc_favorite_folder (
+	id varchar(36) not null primary key,
+	parentid varchar(36) not null,
+	foldername varchar(200) not null,
+	folderlocation varchar(500),
+	createtime timestamp(6),
+	createuser varchar(36),
+	sort numeric(38),
+	hierarchy varchar(208),
+	deleteflag varchar(36),
+	deleteuser varchar(36),
+	updateuser varchar(36),
+	updatetime timestamp(6),
+	ext_field1 varchar(500),
+	ext_field2 varchar(500),
+	ext_field3 varchar(500),
+	ext_field4 varchar(500),
+	ext_field5 varchar(500),
+	description varchar(1000)
+);
+comment on table jasdoc_favorite_folder is '我的收藏夹表信息，文件夹的层次编号在所有文件夹中是唯一的，包括已放入回收站的文件夹。';
+comment on column jasdoc_favorite_folder.id is '节点id';
+comment on column jasdoc_favorite_folder.parentid is '父类id';
+comment on column jasdoc_favorite_folder.foldername is '节点名称';
+comment on column jasdoc_favorite_folder.createtime is '创建时间';
+comment on column jasdoc_favorite_folder.createuser is '添加数据用户';
+comment on column jasdoc_favorite_folder.deleteflag is '删除标识';
+comment on column jasdoc_favorite_folder.deleteuser is '删除该条数据用户id（没有删除则为空）';
+comment on column jasdoc_favorite_folder.updateuser is '修改数据用户';
+comment on column jasdoc_favorite_folder.updatetime is '创建时间';
+comment on column jasdoc_favorite_folder.ext_field1 is '备用字段';
+comment on column jasdoc_favorite_folder.ext_field2 is '备用字段';
+comment on column jasdoc_favorite_folder.ext_field3 is '备用字段';
+comment on column jasdoc_favorite_folder.ext_field4 is '备用字段';
+comment on column jasdoc_favorite_folder.ext_field5 is '备用字段';
+comment on column jasdoc_favorite_folder.description is '文件夹描述';
+
+/****/
+create table jasdoc_file (
+	eventid varchar(38) not null primary key,
+	folderid varchar(38),
+	fileno varchar(50),
+	filename varchar(200),
+	filetype varchar(50),
+	filelocation varchar(500),
+	author varchar(50),
+	keyword varchar(50),
+	summary varchar(4000),
+	fileobj bytea,
+	filesize numeric,
+	uploadtime timestamp(6),
+	createuser varchar(50),
+	createtime timestamp(6),
+	updateuser varchar(50),
+	updatetime timestamp(6),
+	remark varchar(4000),
+	deleteflag varchar(50) not null,
+	absolutepath varchar(500),
+	deleteuser varchar(50),
+	iscreateindex numeric(1),
+	createusername varchar(50),
+	versionnumber varchar(10),
+	versionid varchar(38),
+	versionreark varchar(300),
+	versionupdatetime timestamp(6),
+	auditstate numeric(1),
+	audituser varchar(50),
+	audittime timestamp(6),
+	ext_field1 varchar(500),
+	ext_field2 varchar(500),
+	ext_field3 varchar(500),
+	ext_field4 varchar(500),
+	ext_field5 varchar(500),
+	description varchar(500),
+	ispreviewconversion numeric(1),
+	isaddwatermark numeric(1),
+	updateusername varchar(50)
+);
+comment on table jasdoc_file is '文档信息';
+comment on column jasdoc_file.eventid is 'uuid';
+comment on column jasdoc_file.fileno is '编号';
+comment on column jasdoc_file.filename is '文件名';
+comment on column jasdoc_file.filetype is '文档的格如doc、xls。';
+comment on column jasdoc_file.filelocation is '文档存储在的文件夹';
+comment on column jasdoc_file.author is '创建者';
+comment on column jasdoc_file.keyword is '关键词';
+comment on column jasdoc_file.summary is '摘要';
+comment on column jasdoc_file.fileobj is '文件本身';
+comment on column jasdoc_file.filesize is '文件的大小';
+comment on column jasdoc_file.uploadtime is '附件上传时间';
+comment on column jasdoc_file.createuser is '创建者';
+comment on column jasdoc_file.createtime is '建档时间';
+comment on column jasdoc_file.updateuser is '创建者';
+comment on column jasdoc_file.updatetime is '最近一次修改的时间';
+comment on column jasdoc_file.remark is '备注';
+comment on column jasdoc_file.deleteflag is '文档删除标识（被删除后该字段为删除批次）(修改字段)';
+comment on column jasdoc_file.absolutepath is '文件存储在服务器的相对路径，相对应用程序的根目录';
+comment on column jasdoc_file.deleteuser is '删除者';
+comment on column jasdoc_file.iscreateindex is '是否添加索引';
+comment on column jasdoc_file.createusername is '创建者';
+comment on column jasdoc_file.versionnumber is '版本号';
+comment on column jasdoc_file.versionid is '历史版本id';
+comment on column jasdoc_file.versionreark is '版本描述';
+comment on column jasdoc_file.versionupdatetime is '版本更新时间';
+comment on column jasdoc_file.auditstate is '审核状态';
+comment on column jasdoc_file.audituser is '审核人';
+comment on column jasdoc_file.audittime is '审核时间';
+comment on column jasdoc_file.ext_field1 is '备用字段';
+comment on column jasdoc_file.ext_field2 is '备用字段';
+comment on column jasdoc_file.ext_field3 is '备用字段';
+comment on column jasdoc_file.ext_field4 is '备用字段';
+comment on column jasdoc_file.ext_field5 is '备用字段';
+comment on column jasdoc_file.description is '描述信息';
+comment on column jasdoc_file.ispreviewconversion is '是否已经进行预览转换';
+comment on column jasdoc_file.isaddwatermark is '是否已经添加水印';
+comment on column jasdoc_file.updateusername is '修改者名称';
+
+/**文件关联表**/
+create table jasdoc_file_associated (
+	eventid varchar(38) not null,
+	fileid varchar(38) not null,
+	description varchar(2000),
+	associateddate timestamp(6),
+	associateduserid varchar(38),
+	associatedprivilegetype numeric(3),
+	associatedfileid varchar(38)
+);
+comment on table jasdoc_file_associated is '文件关联表';
+comment on column jasdoc_file_associated.eventid is 'uuid';
+comment on column jasdoc_file_associated.fileid is '文件id';
+comment on column jasdoc_file_associated.description is '描述';
+comment on column jasdoc_file_associated.associateddate is '关联日期';
+comment on column jasdoc_file_associated.associateduserid is '关联人id';
+
+/****/
+create table jasdoc_file_backup_recovery (
+	eventid varchar(38) not null primary key,
+	filedescription varchar(2000),
+	createdby varchar(100),
+	createddate timestamp(6),
+	remarks varchar(2000),
+	backupdatabasepath varchar(200),
+	backupfilepath varchar(200),
+	backupindexpath varchar(200),
+	backuptaskdate timestamp(6),
+	isopenbackupfunction numeric(1),
+	executionfrequency numeric(2)
+);
+comment on column jasdoc_file_backup_recovery.eventid is 'uuid';
+comment on column jasdoc_file_backup_recovery.filedescription is '描述';
+comment on column jasdoc_file_backup_recovery.createdby is '创建人';
+comment on column jasdoc_file_backup_recovery.createddate is '创建时间';
+comment on column jasdoc_file_backup_recovery.backupdatabasepath is '备份路径';
+comment on column jasdoc_file_backup_recovery.backupfilepath is '文件路径';
+
+/**文档与文档分类关联信息**/
+create table jasdoc_file_classify_ref (
+	fileid varchar(41) not null primary key,
+	folderid varchar(36) not null,
+	eventid varchar(38) not null
+);
+comment on table jasdoc_file_classify_ref is '文档与文档分类关联信息';
+comment on column jasdoc_file_classify_ref.fileid is '文件id';
+comment on column jasdoc_file_classify_ref.folderid is '父类id';
+comment on column jasdoc_file_classify_ref.eventid is '主键id';
+
+/**文档与收藏夹关联信息**/
+create table jasdoc_file_favorite_ref (
+	fileid varchar(41) not null,
+	folderid varchar(36) not null,
+	eventid varchar(38) not null primary key
+);
+comment on table jasdoc_file_favorite_ref is '文档与收藏夹关联信息；';
+comment on column jasdoc_file_favorite_ref.fileid is '文件id';
+comment on column jasdoc_file_favorite_ref.folderid is '父类id';
+comment on column jasdoc_file_favorite_ref.eventid is '主键id';
+
+/***1.文档与文档分类关联信息； 2.文档与我的收藏夹关联信息。***/
+create table jasdoc_file_folder_ref (
+	fileid varchar(41) not null,
+	folderid varchar(36)  not null
+);
+comment on table jasdoc_file_folder_ref is '1.文档与文档分类关联信息； 2.文档与我的收藏夹关联信息。';
+comment on column jasdoc_file_folder_ref.folderid is '节点id';
+
+/**文档历史**/
+create table jasdoc_file_history (
+	sid numeric(27),
+	eventid varchar(36) not null primary key,
+	folderid varchar(36),
+	fileno varchar(50),
+	filename varchar(80),
+	filetype varchar(20),
+	filelocation varchar(500),
+	author varchar(50),
+	keyword varchar(50),
+	summary varchar(4000),
+	fileobj bytea,
+	filesize numeric,
+	uploadtime timestamp(6),
+	createuser varchar(50),
+	createtime timestamp(6),
+	updateuser varchar(50),
+	updatetime timestamp(6),
+	remark varchar(4000),
+	deleteflag varchar(50) not null,
+	absolutepath varchar(300),
+	deleteuser varchar(50),
+	iscreateindex numeric(1),
+	createusername varchar(50),
+	versionnumber varchar(10),
+	versionid varchar(36) not null,
+	versionreark varchar(300),
+	versionupdatetime timestamp(6)
+);
+comment on table jasdoc_file_history is '文档历史';
+comment on column jasdoc_file_history.eventid is 'uuid';
+comment on column jasdoc_file_history.fileno is '编号';
+comment on column jasdoc_file_history.filename is '文件名';
+comment on column jasdoc_file_history.filetype is '文档的格式,如doc、xls。';
+comment on column jasdoc_file_history.filelocation is '文件的相对父节点位置';
+comment on column jasdoc_file_history.author is '创建者';
+comment on column jasdoc_file_history.keyword is '关键词';
+comment on column jasdoc_file_history.summary is '摘要';
+comment on column jasdoc_file_history.fileobj is '文件本身';
+comment on column jasdoc_file_history.filesize is '文件的大小';
+comment on column jasdoc_file_history.uploadtime is '附件上传时间';
+comment on column jasdoc_file_history.createuser is '创建者';
+comment on column jasdoc_file_history.createtime is '建档时间';
+comment on column jasdoc_file_history.updateuser is '创建者';
+comment on column jasdoc_file_history.updatetime is '最近一次修改的时间';
+comment on column jasdoc_file_history.remark is '备注';
+comment on column jasdoc_file_history.deleteflag is '文档删除标识（被删除后该字段为删除批次）(修改字段)';
+comment on column jasdoc_file_history.absolutepath is '文件的存储绝对路径（新加字段）';
+comment on column jasdoc_file_history.deleteuser is '删除记录人（新加字段）';
+comment on column jasdoc_file_history.iscreateindex is '是否添加索引';
+comment on column jasdoc_file_history.createusername is '上传用户名称';
+comment on column jasdoc_file_history.versionnumber is '版本号';
+comment on column jasdoc_file_history.versionid is '历史版本id';
+comment on column jasdoc_file_history.versionreark is '版本描述';
+comment on column jasdoc_file_history.versionupdatetime is '版本更新时间';
+
+/**文档共享**/
+create table jasdoc_file_share (
+	id varchar(36) not null primary key,
+	fileid varchar(36),
+	shareuserid varchar(36),
+	remark varchar(500),
+	sharedate timestamp(6),
+	overdate timestamp(6),
+	shareprivilegetype numeric(3)
+);
+comment on table jasdoc_file_share is '文档共享';
+comment on column jasdoc_file_share.fileid is '文档id';
+comment on column jasdoc_file_share.shareuserid is '共享人id';
+comment on column jasdoc_file_share.remark is '共享说明';
+comment on column jasdoc_file_share.sharedate is '共享时间';
+comment on column jasdoc_file_share.overdate is '共享过期时间';
+comment on column jasdoc_file_share.shareprivilegetype is '共享权限类型';
+
+/**共享文档与用户关联表**/
+create table jasdoc_file_share_user_ref (
+	id varchar(36) not null primary key,
+	jasdoc_file_shear_id varchar(36),
+	sharedid varchar(36),
+	sharedtype numeric(3)
+);
+comment on table jasdoc_file_share_user_ref is '共享文档与用户关联表';
+comment on column jasdoc_file_share_user_ref.jasdoc_file_shear_id is '文档共享id';
+comment on column jasdoc_file_share_user_ref.sharedid is '共享对象id';
+comment on column jasdoc_file_share_user_ref.sharedtype is '共享对象类型';
+
+/**文档中心**/
+create table jasdoc_folder (
+	id varchar(36) not null primary key,
+	parentid varchar(36) not null,
+	foldername varchar(200) not null,
+	foldertype numeric(2),
+	folderlocation varchar(500),
+	createtime timestamp(6),
+	createuser varchar(36),
+	sort numeric,
+	hierarchy varchar(208),
+	deleteflag varchar(36),
+	isdefaultfavorite numeric(1),
+	deleteuser varchar(36),
+	updateuser varchar(36),
+	updatetime timestamp(6),
+	ext_field1 varchar(500),
+	ext_field2 varchar(500),
+	ext_field3 varchar(500),
+	ext_field4 varchar(500),
+	ext_field5 varchar(500),
+	description varchar(1000),
+	createusername varchar(50),
+	updateusername varchar(50)
+);
+comment on table jasdoc_folder is '文档中心';
+comment on column jasdoc_folder.id is '节点id';
+comment on column jasdoc_folder.parentid is '父类id';
+comment on column jasdoc_folder.foldername is '节点名称';
+comment on column jasdoc_folder.foldertype is '1标识文档中心下的文件夹，2标识附件管理下的文件夹';
+comment on column jasdoc_folder.createtime is '创建时间';
+comment on column jasdoc_folder.createuser is '添加数据用户（更改字段）';
+comment on column jasdoc_folder.deleteflag is '该字段仅对文档中心里的文件夹有效。记录删除批次';
+comment on column jasdoc_folder.isdefaultfavorite is '该字段仅对我的收藏夹里的文件夹有效。';
+comment on column jasdoc_folder.deleteuser is '删除该条数据用户id（没有删除则为空）';
+comment on column jasdoc_folder.updateuser is '修改数据用户（新加字段）';
+comment on column jasdoc_folder.updatetime is '创建时间';
+comment on column jasdoc_folder.ext_field1 is '备用字段';
+comment on column jasdoc_folder.ext_field2 is '备用字段';
+comment on column jasdoc_folder.ext_field3 is '备用字段';
+comment on column jasdoc_folder.ext_field4 is '备用字段';
+comment on column jasdoc_folder.ext_field5 is '备用字段';
+comment on column jasdoc_folder.description is '文件夹描述';
+comment on column jasdoc_folder.createusername is '创建者名称';
+comment on column jasdoc_folder.updateusername is '修改者名称';
+
+/**文件夹共享表**/
+create table jasdoc_folder_share (
+	id varchar(36) not null primary key,
+	folderdid varchar(36),
+	shareuserid varchar(36),
+	remark varchar(500),
+	sharedate timestamp(6),
+	overdate timestamp(6),
+	shareprivilegetype numeric(3)
+);
+comment on table jasdoc_folder_share is '文件夹共享表';
+comment on column jasdoc_folder_share.folderdid is '文件夹id';
+comment on column jasdoc_folder_share.shareuserid is '共享人id';
+comment on column jasdoc_folder_share.remark is '共享说明';
+comment on column jasdoc_folder_share.sharedate is '共享时间';
+comment on column jasdoc_folder_share.overdate is '共享过期时间';
+comment on column jasdoc_folder_share.shareprivilegetype is '共享权限类型';
+
+/**文件夹共享与用户关联表**/
+create table jasdoc_folder_share_user_ref (
+	id varchar(36) not null primary key,
+	jasdoc_folder_shear_id varchar(36),
+	sharedid varchar(36),
+	sharedtype numeric(3)
+);
+comment on table jasdoc_folder_share_user_ref is '文件夹共享与用户关联表';
+comment on column jasdoc_folder_share_user_ref.jasdoc_folder_shear_id is '文件夹共享id';
+comment on column jasdoc_folder_share_user_ref.sharedid is '共享对象id';
+comment on column jasdoc_folder_share_user_ref.sharedtype is '共享对象类型';
+
+/**回收站信息**/
+create table jasdoc_recyclebin (
+	id varchar(36) not null primary key,
+	recycleobjid varchar(36) not null,
+	recycleobjtype numeric(1),
+	recycletime timestamp(6),
+	userid varchar(36),
+	location varchar(500)
+);
+comment on table jasdoc_recyclebin is '回收站信息';
+
+/**角色对文件夹授权**/
+create table jasdoc_role_folder_ref (
+	id varchar(40) not null primary key,
+	roleid varchar(40) not null,
+	folderid varchar(40) not null,
+	folderprivilegetype numeric(3)
+);
+comment on table jasdoc_role_folder_ref is '角色对文件夹授权';
+comment on column jasdoc_role_folder_ref.id is 'uuid';
+comment on column jasdoc_role_folder_ref.roleid is '对象id';
+comment on column jasdoc_role_folder_ref.folderid is '节点id';
+
+/**用户对文件夹授权**/
+create table jasdoc_user_folder_ref (
+	id varchar(40) not null primary key,
+	userid varchar(40) not null,
+	folderid varchar(40) not null,
+	folderprivilegetype numeric(3)
+);
+comment on table jasdoc_user_folder_ref is '用户对文件夹授权';
+comment on column jasdoc_user_folder_ref.id is 'uuid';
+comment on column jasdoc_user_folder_ref.userid is '用户id';
+comment on column jasdoc_user_folder_ref.folderid is '文件夹id';

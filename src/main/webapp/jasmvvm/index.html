@@ -52,7 +52,13 @@
 							</a>
 						</li>
 						<li class="border"></li>
-							<li class="items fullscreen">
+						<li class="items fullscreen">
+							<a href="#" @click="_goMap" style="display:block;padding:0px 10px">
+								<i class="fa fa-map-marker"></i> 地图
+							</a>
+						</li>
+						<li class="border"></li>
+						<li class="items fullscreen">
 							<a href="#" @click="_goPage" style="display:block;padding:0px 10px">
 								<i class="fa fa-bar-chart"></i> 可视化
 							</a>
@@ -62,12 +68,12 @@
 							<a href="#" style="display:block">
 								<el-dropdown class="dropdown-wrapper" trigger="click" @command="handleCommand">
 									<span class="el-dropdown-link">
-								<img class="user-logo" :src="userImg">
-								<div class="userInfo">
-	                                <div class="username">{{username}}</div>
-									<div class="userunit">{{userunit}}</div>
-								</div>
-							</span>
+										<img class="user-logo" :src="userImg">
+										<div class="userInfo">
+											<div class="username">{{username}}</div>
+											<div class="userunit">{{userunit}}</div>
+										</div>
+									</span>
 									<el-dropdown-menu slot="dropdown">
 										<!--<el-dropdown-item command="fullscreen">切换全屏</el-dropdown-item>-->
 										<el-dropdown-item command="resetPassword">修改密码</el-dropdown-item>
@@ -97,14 +103,26 @@
 									<el-submenu v-if="item.subs" :index="item.index">
 										<template slot="title">
 											<i :class="item.icon||'fa fa-folder' "></i>
-											<span slot="title">{{ item.title }}</span>
+											<el-badge v-if="item.value" :value="item.value">
+											   <span>
+											     {{ item.title }}
+											   </span>
+											</el-badge>
+											<span  v-else>
+												{{ item.title }}
+											</span>
 										</template>
 										<!-- 第二层菜单开始 -->
 										<template v-for="subitem in item.subs">
 											<el-submenu v-if="subitem.subs" :index="subitem.index">
 												<template slot="title">
 													<i :class=" subitem.icon || 'fa fa-bars' "></i>
-													<span slot="title">{{ subitem.title }}</span>
+													<el-badge v-if="subitem.value" :value="subitem.value">
+														 <span>{{ subitem.title }}</span>
+													</el-badge>
+													<span  v-else>
+														  {{ subitem.title }}
+													</span>
 												</template>
 
 												<!-- 第三层菜单开始 -->
@@ -112,14 +130,26 @@
 													<el-submenu v-if="thirditem.subs" :index="thirditem.index">
 														<template slot="title">
 															<i :class="thirditem.icon"></i>
-															<span slot="title">{{ thirditem.title }}</span>
+												<el-badge v-if="thirditem.value" :value="thirditem.value">
+												   <span>
+												     {{ thirditem.title }}
+												   </span>
+												 </el-badge>								
+												<span  v-else>
+												{{ thirditem.title }}
+											   </span>
 														</template>
 														<!-- 第四层菜单开始 -->
 														<template v-for="fourthitem in thirditem.subs">
 															<el-submenu v-if="fourthitem.subs" :index="fourthitem.index">
 																<template slot="title">
 																	<i :class="fourthitem.icon"></i>
-																	<span slot="title">{{ fourthitem.title }}</span>
+																		<el-badge v-if="fourthitem.value" :value="fourthitem.value">
+																		  <span>{{ fourthitem.title }}</span>
+																		</el-badge>
+																	    <span  v-else>
+																		   {{ fourthitem.title }}
+																	    </span>
 																</template>
 
 																<!-- 第五层菜单开始 -->
@@ -127,28 +157,45 @@
 																	<el-submenu v-if="fifthitem.subs" :index="fifthitem.index">
 																		<template slot="title">
 																			<i :class="fifthitem.icon"></i>
-																			<span slot="title">{{ fifthitem.title }}</span>
+																				<el-badge v-if="fifthitem.value" :value="fifthitem.value">
+																				  <span>{{ fifthitem.title }}</span>
+																				</el-badge>
+																			
+																				<span  v-else>{{ fifthitem.title }}</span>
 																		</template>
 
 																	</el-submenu>
 																	<el-menu-item :index="fifthitem.index" v-else>
 																		<i :class="fifthitem.icon"></i>
-																		<span slot="title">{{ fifthitem.title }}</span>
+																		<el-badge v-if="fifthitem.value" :value="fifthitem.value">
+																				  <span>{{ fifthitem.title }}</span>
+																				</el-badge>
+																			
+																				<span  v-else>{{ fifthitem.title }}</span>
 																	</el-menu-item>
 																</template>
 																<!-- 第五层菜单结束 -->
 
 															</el-submenu>
 															<el-menu-item :index="fourthitem.index" v-else>
-																<i :class="fourthitem.icon"></i>
-																<span slot="title">{{ fourthitem.title }}</span>
+																<i :class="fourthitem.icon"></i>	
+																<el-badge v-if="fourthitem.value" :value="fourthitem.value">
+																   <span>{{ fourthitem.title }}</span>
+																 </el-badge>
+																<span v-else>{{ fourthitem.title }}</span>
 															</el-menu-item>
 														</template>
 														<!-- 第四层菜单结束 -->
 													</el-submenu>
 													<el-menu-item :index="thirditem.index" v-else>
 														<i :class="thirditem.icon"></i>
-														<span slot="title">{{ thirditem.title }}</span>
+														
+												<el-badge v-if="thirditem.value" :value="thirditem.value">
+												  <span>{{ thirditem.title }}</span>
+												</el-badge>
+											   <span  v-else>
+												{{ thirditem.title }}
+											  </span>
 													</el-menu-item>
 												</template>
 												<!-- 第三层菜单结束 -->
@@ -157,7 +204,12 @@
 											</el-submenu>
 											<el-menu-item :index="subitem.index" v-else>
 												<i :class="subitem.icon||'fa fa-bars' "></i>
-												<span slot="title">{{ subitem.title }}</span>
+												<el-badge v-if="subitem.value" :value="subitem.value">
+												  <span>{{ subitem.title }}</span>
+												</el-badge>
+												<span v-else>
+												  {{ subitem.title }}
+											    </span>
 											</el-menu-item>
 										</template>
 										<!-- 第二层菜单结束 -->
@@ -165,7 +217,12 @@
 									</el-submenu>
 									<el-menu-item :index="item.index" v-else>
 										<i :class=" item.icon||'fa fa-folder' "></i>
-										<span slot="title">{{ item.title }}</span>
+                                        <el-badge v-if="item.value":value="item.value">
+											<span>{{ item.title }}</span>
+										 </el-badge>
+										<span  v-else>
+											{{ item.title }}
+										</span>
 									</el-menu-item>
 								</template>
 								<!-- 第一层菜单结束 -->
@@ -187,11 +244,12 @@
 
 							<jas-two-panel-resizer :showed="panelShowed" ref="resizer" layout="horizontal" length="40%" @paneresize="paneresize" @statuschanged="statuschanged">
 								<div slot="closePanel" id="jasMap" class="jasmap" style="height:100%;background-color: #ececec;"> </div>
-								<el-tabs id="tabs"style="position:relative"slot="mainPanel" class="tabswrapper jas-flex-box" v-model="currentTap" type="card" @tab-remove="removeTab">
+								<el-tabs id="tabs" style="position:relative" slot="mainPanel" class="tabswrapper jas-flex-box" v-model="currentTap" type="card"
+								 @tab-remove="removeTab">
 									<el-tab-pane v-for="(item, index) in tabs" :key="item.link" :name="item.name" :closable="item.closable">
 										<span slot="label">
 											<i :class="item.icon||'el-icon-date'"></i> {{item.title}}
-								       </span>
+										</span>
 										<div class="iframewrapper">
 											<div class="iframesubwrapper">
 												<iframe class="iframe" :src="item.link" frameborder="0" height="100%"></iframe>
@@ -203,9 +261,9 @@
 
 							</jas-two-panel-resizer>
 						</el-main>
-						 <el-footer style="height:25px;">
+						<el-footer style="height:25px;">
 							<div style="text-align: center;height:25px;">@Copyright北京中盈安信技术服务股份有限公司</div>
-						</el-footer> 
+						</el-footer>
 					</el-container>
 				</el-main>
 			</el-container>

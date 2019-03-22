@@ -72,17 +72,17 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="生产厂家" prop="manufacturer">
-								<el-input v-model="formData.manufacturer" clearable placeholder="请输入生产厂家" size="small"></el-input>
+								<el-input v-model.trim="formData.manufacturer" clearable placeholder="请输入生产厂家" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="合格证编号" prop="certificationNum">
-								<el-input v-model="formData.certificationNum" clearable placeholder="请输入合格证编号" size="small"></el-input>
+								<el-input v-model.trim="formData.certificationNum" clearable placeholder="请输入合格证编号" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="公称直径(mm)">
-								<el-input-number :precision="3" :step="1" :max="100000" controls-position="right" v-model="formData.diameter" clearable placeholder="请输入公称直径(mm)"
+								<el-input-number :precision="3" :step="1" :max="999999.999" controls-position="right" v-model="formData.diameter" clearable placeholder="请输入公称直径(mm)"
 								  size="small"></el-input-number>
 
 								<!-- 	<el-input v-model="formData.diameter" clearable placeholder="请输入公称直径(mm)" size="small"></el-input> -->
@@ -90,30 +90,30 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="公称压力(mpa)">
-								<el-input-number :precision="3" :step="1" :max="100000" controls-position="right" v-model="formData.pressure" clearable placeholder="请输入公称压力(mpa)"
+								<el-input-number :precision="3" :step="1" :max="999999.999" controls-position="right" v-model="formData.pressure" clearable placeholder="请输入公称压力(mpa)"
 								  size="small"></el-input-number>
 
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="测试仪器" prop="testEquipment">
-								<el-input v-model="formData.testEquipment" clearable placeholder="请输入测试仪器" size="small"></el-input>
+								<el-input v-model.trim="formData.testEquipment" clearable placeholder="请输入测试仪器" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="仪器规格型号" prop="specandModel">
-								<el-input v-model="formData.specandModel" clearable placeholder="请输入仪器规格型号" size="small"></el-input>
+								<el-input v-model.trim="formData.specandModel" clearable placeholder="请输入仪器规格型号" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="实用绝缘电阻值(MΩ)"  prop="resistanceVal">
-								<el-input v-model="formData.resistanceVal" clearable placeholder="请输入实用绝缘电阻值(MΩ)" size="small"></el-input>
+								<el-input v-model.trim="formData.resistanceVal" clearable placeholder="请输入实用绝缘电阻值(MΩ)" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="验收结论" prop="checkResults">
-								<el-input v-model="formData.checkResults" clearable placeholder="请输入验收结论" size="small"></el-input>
+								<el-input v-model.trim="formData.checkResults" clearable placeholder="请输入验收结论" size="small"></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -135,6 +135,7 @@
 					<!--<jas-base-group-title name="附件信息"></jas-base-group-title>
 
 				<jas-file-upload ref="upload" @success="uploadSuccess"></jas-file-upload>-->
+				<jas-file-upload :project-oid="formData.projectOid" ref="upload" @success="uploadSuccess"></jas-file-upload>
 				</el-form>
 
 
@@ -144,7 +145,7 @@
 			</div>
 			<div slot="footer" class="dialog-footer" style="text-align: center">
 				<el-button size="small" @click="cancel()">取 消</el-button>
-				<el-button size="small" type="primary" @click="submit('formData')">确 定 </el-button>
+				<el-button size="small" :disabled="but_disabled" type="primary" @click="submit('formData')">确 定 </el-button>
 			</div>
 		</jas-dialog-wrapper>
 	</div>
@@ -161,6 +162,7 @@
 		data: function () {
 			var that = this;
 			return {
+				but_disabled:false,
 				domain: {
 					constructUnitArr: [],
 					project: [], //项目
@@ -361,12 +363,17 @@
 						"/jdbc/commonData/checkInsulatedJoint/update.do";
 				}
 
+				that.but_disabled = true;
 				jasTools.ajax.post(url, that.formData, function (data) {
 					top.Vue.prototype.$message({
 						type: 'success',
 						message: !this.isEdit ? '保存成功' : '修改成功'
 					});
 					that.cancel(1);
+				},function(data){
+					if(data.status==-1){
+						that.but_disabled = false;
+					}
 				});
 
 			},

@@ -270,7 +270,13 @@ public class ConstructionWeldBo extends CommonBaseBo {
 	 * 备注
 	 */
 	private String remarks;
-	
+
+	// add by cuixianing 2019-2-20
+	/**
+	 *是否检测
+	 */
+	private Integer isDetection;
+
 	private String fOid;
 	private String fWeldCode;
 	private String fFrontPipeOid;
@@ -288,9 +294,264 @@ public class ConstructionWeldBo extends CommonBaseBo {
 	
 	private String fFrontPipeLength;
 	private String bBackPipeLength;
-	
-	
-	public String getOid() {
+
+	/**
+	 * 是否割口
+	 */
+	private Integer isCut;
+
+	/**
+	 * 是否射线检测
+	 */
+	private Integer isRay;
+
+	/**
+	 * 是否超声波检查
+	 */
+	private Integer isUltrasonic;
+
+	/**
+	 * 是否渗透检测
+	 */
+	private Integer isInfiltration;
+
+	/**
+	 * 是否磁粉检测
+	 */
+	private Integer isMagneticPowder;
+
+	/**
+	 * 是否全自动检测
+	 */
+	private Integer isFaUltrasonic;
+
+	/**
+	 * 相控阵超声波检测
+	 */
+	private Integer isPaUltrasonic;
+
+	/**
+	 * 是否补扣
+	 */
+	private Integer isAnticorrosionCheck;
+
+	/**
+	 * 是否返修
+	 */
+	private Integer isRework;
+
+	/**
+	 * 是否测量
+	 */
+	private Integer isMeasure;
+
+	/**
+	 * 是否回填
+	 */
+	private Integer isBackfill;
+
+	/**
+	 * 是否地貌恢复
+	 */
+	private Integer isLandRestoration;
+
+	/**
+	 * 是否存在切管
+	 */
+	private Integer hasCutPipe;
+
+	/**
+	 * 是否变径
+	 */
+	private Integer hasReducer;
+
+	/**
+	 * 是否有弯管
+	 */
+	private Integer hasBendPipe;
+
+	// add by cuixianing 2019-3-5
+	/**
+	 * 气流方向
+	 */
+	private Integer airflowDirection;
+
+    /**
+     * 气流方向名称
+     */
+    private String airflowDirectionName;
+
+	/**
+	 * 焊口顺序号1
+	 */
+	private Double sequenceNumberFirst;
+
+	/**
+	 * 焊口顺序号2
+	 */
+	private Double sequenceNumberSecond;
+
+    public String getAirflowDirectionName() {
+        return airflowDirectionName;
+    }
+
+    public void setAirflowDirectionName(String airflowDirectionName) {
+        this.airflowDirectionName = airflowDirectionName;
+    }
+
+    public Integer getAirflowDirection() {
+        return airflowDirection;
+    }
+
+    public void setAirflowDirection(Integer airflowDirection) {
+        this.airflowDirection = airflowDirection;
+    }
+
+    public Double getSequenceNumberFirst() {
+        return sequenceNumberFirst;
+    }
+
+    public void setSequenceNumberFirst(Double sequenceNumberFirst) {
+        this.sequenceNumberFirst = sequenceNumberFirst;
+    }
+
+    public Double getSequenceNumberSecond() {
+        return sequenceNumberSecond;
+    }
+
+    public void setSequenceNumberSecond(Double sequenceNumberSecond) {
+        this.sequenceNumberSecond = sequenceNumberSecond;
+    }
+
+    public Integer getIsCut() {
+        return isCut;
+    }
+
+    public void setIsCut(Integer isCut) {
+        this.isCut = isCut;
+    }
+
+    public Integer getIsRay() {
+        return isRay;
+    }
+
+    public void setIsRay(Integer isRay) {
+        this.isRay = isRay;
+    }
+
+    public Integer getIsUltrasonic() {
+        return isUltrasonic;
+    }
+
+    public void setIsUltrasonic(Integer isUltrasonic) {
+        this.isUltrasonic = isUltrasonic;
+    }
+
+    public Integer getIsInfiltration() {
+        return isInfiltration;
+    }
+
+    public void setIsInfiltration(Integer isInfiltration) {
+        this.isInfiltration = isInfiltration;
+    }
+
+    public Integer getIsMagneticPowder() {
+        return isMagneticPowder;
+    }
+
+    public void setIsMagneticPowder(Integer isMagneticPowder) {
+        this.isMagneticPowder = isMagneticPowder;
+    }
+
+    public Integer getIsFaUltrasonic() {
+        return isFaUltrasonic;
+    }
+
+    public void setIsFaUltrasonic(Integer isFaUltrasonic) {
+        this.isFaUltrasonic = isFaUltrasonic;
+    }
+
+    public Integer getIsPaUltrasonic() {
+        return isPaUltrasonic;
+    }
+
+    public void setIsPaUltrasonic(Integer isPaUltrasonic) {
+        this.isPaUltrasonic = isPaUltrasonic;
+    }
+
+    public Integer getIsAnticorrosionCheck() {
+        return isAnticorrosionCheck;
+    }
+
+    public void setIsAnticorrosionCheck(Integer isAnticorrosionCheck) {
+        this.isAnticorrosionCheck = isAnticorrosionCheck;
+    }
+
+    public Integer getIsRework() {
+        return isRework;
+    }
+
+    public void setIsRework(Integer isRework) {
+        this.isRework = isRework;
+    }
+
+    public Integer getIsMeasure() {
+        return isMeasure;
+    }
+
+    public void setIsMeasure(Integer isMeasure) {
+        this.isMeasure = isMeasure;
+    }
+
+    public Integer getIsBackfill() {
+        return isBackfill;
+    }
+
+    public void setIsBackfill(Integer isBackfill) {
+        this.isBackfill = isBackfill;
+    }
+
+    public Integer getIsLandRestoration() {
+        return isLandRestoration;
+    }
+
+    public void setIsLandRestoration(Integer isLandRestoration) {
+        this.isLandRestoration = isLandRestoration;
+    }
+
+    public Integer getHasCutPipe() {
+        return hasCutPipe;
+    }
+
+    public void setHasCutPipe(Integer hasCutPipe) {
+        this.hasCutPipe = hasCutPipe;
+    }
+
+    public Integer getHasReducer() {
+        return hasReducer;
+    }
+
+    public void setHasReducer(Integer hasReducer) {
+        this.hasReducer = hasReducer;
+    }
+
+    public Integer getHasBendPipe() {
+        return hasBendPipe;
+    }
+
+    public void setHasBendPipe(Integer hasBendPipe) {
+        this.hasBendPipe = hasBendPipe;
+    }
+
+    public Integer getIsDetection() {
+        return isDetection;
+    }
+
+    public void setIsDetection(Integer isDetection) {
+        this.isDetection = isDetection;
+    }
+
+    public String getOid() {
 		return oid;
 	}
 

@@ -3,6 +3,7 @@ package cn.jasgroup.jasframework.acquisitiondata.basedata.workunit.dao;
 import java.util.List;
 import java.util.Map;
 
+import cn.jasgroup.jasframework.acquisitiondata.utils.VariateInjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -27,7 +28,8 @@ public class WorkUnitDao {
 	 */
 	public List<Map<String, Object>> getListByCondition(String projectOid, String types) {
 		String constructUnit= ThreadLocalHolder.getCurrentUnitId();
-		String sql = "select oid as key, work_unit_code as value from daq_work_unit where active=1 and project_oid='"+projectOid+"' and work_unit_type in ("+types+") and construct_unit='"+constructUnit+"';";
+		String sql = "select oid as key, work_unit_code as value from daq_work_unit where active=1 and @privilege_strategy_sql and project_oid='"+projectOid+"' and work_unit_type in ("+types+") and construct_unit='"+constructUnit+"';";
+		sql = VariateInjectUtils.invoke(sql);
 		return baseJdbcDao.queryForList(sql, null);
 	}
 	/***

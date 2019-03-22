@@ -43,13 +43,13 @@ public class DaqDetectionPaUltrasonicQuery extends BaseJavaQuery {
 	@Override
 	public String getQuerySql() {
 		String sql =  "select t.*,"
-				+ " d1.code_name as detectionTypeName,"
+				+ " d1.code_name as detection_type_name,"
 				+ "	p.project_name,"
 				+ "	l.pipeline_name,"
 				+ "	dt.tenders_name,"
-				+ "	v.name as pipeSegmentOrCrossName,"
-				+ "	u1.unit_name as detectionUnitName,"
-				+ "	u2.unit_name as supervisionUnitName,"
+				+ "	v.name as pipe_segment_or_cross_name,"
+				+ "	u1.unit_name as detection_unit_name,"
+				+ "	u2.unit_name as supervision_Unit_name,"
 				+ " vdwi.weld_code "				
 				+ " from (select *,detection_unit as construct_unit from daq_detection_pa_ultrasonic) t "
 				+ " left join (select code_id,code_name from sys_domain) d1 on d1.code_id = t.detection_type"				

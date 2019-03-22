@@ -5,6 +5,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import cn.jasgroup.jasframework.acquisitiondata.utils.TempMapQuery;
 import cn.jasgroup.jasframework.base.data.BaseData;
 import cn.jasgroup.jasframework.base.data.BaseJavaQuery;
 import cn.jasgroup.jasframework.base.data.MapQuery;
@@ -51,10 +52,10 @@ public class DaqInjectService {
 			strategySql = " and create_user_id='"+ThreadLocalHolder.getCurrentUserId()+"'";
 		}
 		String sqlTemp = sql.substring(0,sql.lastIndexOf("@privilege_strategy_sql")).trim();
-		if(sqlTemp.endsWith("and")){
+		if(sqlTemp.endsWith("and") || sqlTemp.endsWith("where")){
 			strategySql = strategySql.replaceFirst(" and", "");
 		}
-		sql = sql.replace("@privilege_strategy_sql", strategySql);
+		sql = sql.replaceAll("@privilege_strategy_sql", strategySql);
 		mapQuery.setSql(sql);
 		
 	}
@@ -91,6 +92,37 @@ public class DaqInjectService {
 			dataAuthoritySql = " and create_user_id='"+ThreadLocalHolder.getCurrentUserId()+"'";
 		}
 		query.setDataAuthoritySql(dataAuthoritySql);
+	}
+	
+	public void selectPrivilegeStrategySql(TempMapQuery mapQuery){
+		String sql  = mapQuery.getSql();
+		if(!sql.contains("@privilege_strategy_sql")){
+			return;
+		}
+		String unitOid = ThreadLocalHolder.getCurrentUser().getUnitId();
+		PriUnit unitEntity = (PriUnit)unitService.get(PriUnit.class,unitOid);
+		if(unitEntity==null){
+			return;
+		}
+		String strategySql = "";
+		String hierarchy = unitEntity.getHierarchy();
+		if(hierarchy.startsWith(UnitHierarchyEnum.construct_unit.getHierarchy())){//施工单位
+			strategySql = " and construct_unit in (select uu.oid from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid='"+unitOid+"')";
+		}else if(hierarchy.startsWith(UnitHierarchyEnum.project_unit.getHierarchy())){//建设单位
+			strategySql = " and project_oid in (select distinct t.project_oid from daq_implement_scope_ref t inner join(select oid from pri_unit p inner join "
+					+ "(select hierarchy from pri_unit where oid='"+unitOid+"') pp on p.hierarchy like pp.hierarchy||'%' where p.active=1) pu on pu.oid = t.unit_oid)";
+		}else if(hierarchy.startsWith(UnitHierarchyEnum.supplier.getHierarchy())){//厂商
+			strategySql = " and construct_unit in (select uu.oid from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid='"+unitOid+"')";
+		}else{
+			strategySql = " and create_user_id='"+ThreadLocalHolder.getCurrentUserId()+"'";
+		}
+		String sqlTemp = sql.substring(0,sql.lastIndexOf("@privilege_strategy_sql")).trim();
+		if(sqlTemp.endsWith("and") || sqlTemp.endsWith("where")){
+			strategySql = strategySql.replaceFirst(" and", "");
+		}
+		sql = sql.replaceAll("@privilege_strategy_sql", strategySql);
+		mapQuery.setSql(sql);
+		
 	}
 	
 }

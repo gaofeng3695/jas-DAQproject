@@ -5,6 +5,7 @@ JasMap.require(function () {
 	var mapStyleTemplates = {}; //声明样式模版对象
 	var getBasePath = jasMap.commonUtil.getApiRootPath; //工具方法
 
+
 	//-------------------自定义样式开始---------------->>>
 	// /**
 	//  * 定义线路段渲染样式pipesegment_renderer_by_pipename，名称不能和其他模版里的样式名称重复
@@ -32,6 +33,76 @@ JasMap.require(function () {
 	//      }
 	//      return styleManager.pipesegment_renderer_by_pipename_style[name]
 	//  };
+	//中低压数据采集--节点信息
+	mapStyleTemplates.mvPipeNode = new ol.style.Style({
+		image: new ol.style.RegularShape(({
+			fill: new ol.style.Fill({
+				color: '#82ff46'
+			}),
+			stroke: new ol.style.Stroke({
+				color: '#409EFF',
+				width: 1
+			}),
+			radius: 5,
+			points:6,
+		}))
+	});
+	//中低压---阀门信息
+	mapStyleTemplates.mvValveInfo = new ol.style.Style({
+		image: new ol.style.RegularShape(({
+			fill: new ol.style.Fill({
+				color: '#003e3e'
+			}),
+			stroke: new ol.style.Stroke({
+				color: '#409EFF',
+				width: 1
+			}),
+			radius: 5,
+			points:6,
+		}))
+	});
+	//中低压--标注桩信息
+	mapStyleTemplates.mvMarkStake = new ol.style.Style({
+		image: new ol.style.RegularShape(({
+			fill: new ol.style.Fill({
+				color: '#AAAAFF'
+			}),
+			stroke: new ol.style.Stroke({
+				color: '#409EFF',
+				width: 1
+			}),
+			radius: 5,
+			points:6,
+		}))
+	});
+	//中低压--电子标签信息
+	mapStyleTemplates.mvElectronicLabel = new ol.style.Style({
+		image: new ol.style.RegularShape(({
+			fill: new ol.style.Fill({
+				color: '#FF00FF'
+			}),
+			stroke: new ol.style.Stroke({
+				color: '#409EFF',
+				width: 1
+			}),
+			radius: 5,
+			points:6,
+		}))
+	});
+	//中低压--监测井信息
+	mapStyleTemplates.mvMonitorWell = new ol.style.Style({
+		image: new ol.style.RegularShape(({
+			fill: new ol.style.Fill({
+				color: '#409EFF'
+			}),
+			stroke: new ol.style.Stroke({
+				color: '#409EFF',
+				width: 1
+			}),
+			radius: 5,
+			points:6,
+		}))
+	});
 	//管道试压
 	mapStyleTemplates.pipePressureTest = new ol.style.Style({
 		stroke: new ol.style.Stroke({
@@ -114,7 +185,7 @@ JasMap.require(function () {
 			color: '#008000',
 			width: 5
 		})
-	}); 
+	});
 	//放空立管
 	mapStyleTemplates.ventStack = new ol.style.Style({
 		image: new ol.style.Circle({
@@ -138,35 +209,35 @@ JasMap.require(function () {
 			radius: 5,
 		})
 	});
-	//开挖穿越
+	//开挖穿越   ---管段信息
 	mapStyleTemplates.crossExcavation = new ol.style.Style({
 		stroke: new ol.style.Stroke({
 			color: '#1100b7',
 			width: 5
 		})
 	});
-	//穿跨越
+	//穿跨越---穿越信息
 	mapStyleTemplates.crossAcross = new ol.style.Style({
 		stroke: new ol.style.Stroke({
 			color: '#fec880',
 			width: 5
 		})
 	});
-	//钻爆隧道穿越
+	//钻爆隧道穿越---跨越信息
 	mapStyleTemplates.crossDrillingBlasting = style = new ol.style.Style({
 		stroke: new ol.style.Stroke({
 			color: '#f9ff00',
 			width: 5
 		})
 	});
-	//盾构隧道穿越
+	//盾构隧道穿越---管沟信息
 	mapStyleTemplates.crossShield = new ol.style.Style({
 		stroke: new ol.style.Stroke({
 			color: '#ccf068',
 			width: 5
 		})
 	});
-	//定向钻穿越
+	//定向钻穿越---套管信息
 	mapStyleTemplates.crossDrilling = new ol.style.Style({
 		stroke: new ol.style.Stroke({
 			color: '#00e0fc',
@@ -220,11 +291,41 @@ JasMap.require(function () {
 			angle: Math.PI / 4
 		})
 	});
-	//管道焊接补口
+	//中线测量  焊口数据
 	mapStyleTemplates.weldmeasured = new ol.style.Style({
 		image: new ol.style.RegularShape({
 			fill: new ol.style.Fill({
 				color: '#82ff46'
+			}),
+			stroke: new ol.style.Stroke({
+				color: '#409EFF',
+				width: 1
+			}),
+			points: 4,
+			radius: 5,
+			angle: Math.PI / 4
+		})
+	});
+	//中线测量  转角点数据
+	mapStyleTemplates.weldmeasured01 = new ol.style.Style({
+		image: new ol.style.RegularShape({
+			fill: new ol.style.Fill({
+				color: '#f56c6c'
+			}),
+			stroke: new ol.style.Stroke({
+				color: '#409EFF',
+				width: 1
+			}),
+			points: 4,
+			radius: 5,
+			angle: Math.PI / 4
+		})
+	});
+	//中线测量  穿越点数据
+	mapStyleTemplates.weldmeasured02 = new ol.style.Style({
+		image: new ol.style.RegularShape({
+			fill: new ol.style.Fill({
+				color: '#9f6cf5'
 			}),
 			stroke: new ol.style.Stroke({
 				color: '#409EFF',
@@ -392,7 +493,7 @@ JasMap.require(function () {
 			}),
 			radius1: 8,
 			radius2: 4,
-			points: 3,
+			points: 5,
 		})
 	});
 	//管沟开挖

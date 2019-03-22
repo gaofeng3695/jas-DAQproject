@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<link rel="stylesheet" href="./../../../lib/font-awesome-4.7.0/css/font-awesome.css">
+	<link rel="stylesheet" href="./../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../src/css/main.css">
+	<style>
+	
+	</style>
+</head>
+
+<body>
+	<div id="app" v-cloak>
+		<jas-approve-dialog>
+			<div>
+				<jas-base-group-title name="基础数据"></jas-base-group-title>
+				<jas-detail-table :titles="baseArr" :detail="detail"></jas-detail-table>
+				
+			</div>
+		</jas-approve-dialog>
+	</div>
+</body>
+<script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../lib/vue/vue.js"></script>
+<script src="./../../../lib/element-ui/v2.4.1/index.min.js"></script>
+<script src="./../../../common/components/jas-components.js "></script>
+<script src="./../../../common/js/jas-tools.js"></script>
+<script>
+	var app = new Vue({
+		el: "#app",
+		data: function () {
+			var that = this;
+			return {
+				baseArr: [ //
+					{
+						name: '项目名称',
+						field: 'projectName'
+					}, {
+						field:"weldCodeRegularName",
+						name:"编码规则"
+					}, 
+				],
+				detail: {},
+				
+				columnNum: 2,
+				oid: '',
+			}
+		},
+		created: function () {
+			var that = this;
+			var param = window.jasTools.base.getParamsInUrl(location.href);
+			if (param.oid) {
+				this.oid = param.oid;
+				this.params = param;
+				this.getDetailByOid();
+			};
+
+		},
+		methods: {
+			getDetailByOid: function () {
+				var that = this;
+				var url =jasTools.base.rootPath + "/jdbc/commonData/weldCodeRegular/getPage.do";
+				jasTools.ajax.post(url, {
+					oid: that.oid
+				}, function (data) {
+					that.detail = data.rows[0];
+					
+				});
+			},
+			
+		},
+	});
+
+</script>
+
+</html>

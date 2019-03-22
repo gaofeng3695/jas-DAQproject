@@ -81,11 +81,11 @@ public class ConstructionWeldAppBo extends BaseBo {
 	 */
 	private Double mileage;
 	/**
-	 *	是否返修 
+	 *	是否补扣
 	 */
 	private int isAnticorrosionCheck;
 	/**
-	 * 是否补扣
+	 * 是否返修
 	 */
 	private int isRework;
 	
@@ -108,10 +108,82 @@ public class ConstructionWeldAppBo extends BaseBo {
 	 * 监理单位名称
 	 */
 	private String supervisionUnitName;
+
+	/***
+	 * 是否测量
+	 */
+	private Integer isMeasure;
+	
+	/**
+	 * 是否割口
+	 */
+	private Integer isCut;
+	
+	/***
+	 * 审核状态
+	 */
+	private Integer approveStatus;
+	
+	private String medianStakeOid;
+	
+	private String relativeMileage;
 	
 	private String userId = ThreadLocalHolder.getCurrentUserId();
-	
-	public String getProjectOid() {
+
+	// add by cuixianing 2019-3-5
+	/**
+	 * 气流方向
+	 */
+	private Integer airflowDirection;
+
+    /**
+     * 气流方向名称
+     */
+    private String airflowDirectionName;
+
+	/**
+	 * 焊口顺序号1
+	 */
+	private Double sequenceNumberFirst;
+
+	/**
+	 * 焊口顺序号2
+	 */
+	private Double sequenceNumberSecond;
+
+    public String getAirflowDirectionName() {
+        return airflowDirectionName;
+    }
+
+    public void setAirflowDirectionName(String airflowDirectionName) {
+        this.airflowDirectionName = airflowDirectionName;
+    }
+
+    public Integer getAirflowDirection() {
+        return airflowDirection;
+    }
+
+    public void setAirflowDirection(Integer airflowDirection) {
+        this.airflowDirection = airflowDirection;
+    }
+
+    public Double getSequenceNumberFirst() {
+        return sequenceNumberFirst;
+    }
+
+    public void setSequenceNumberFirst(Double sequenceNumberFirst) {
+        this.sequenceNumberFirst = sequenceNumberFirst;
+    }
+
+    public Double getSequenceNumberSecond() {
+        return sequenceNumberSecond;
+    }
+
+    public void setSequenceNumberSecond(Double sequenceNumberSecond) {
+        this.sequenceNumberSecond = sequenceNumberSecond;
+    }
+
+    public String getProjectOid() {
 		return projectOid;
 	}
 	public void setProjectOid(String projectOid) {
@@ -238,6 +310,41 @@ public class ConstructionWeldAppBo extends BaseBo {
 	}
 	public void setOid(String oid) {
 		this.oid = oid;
+	}
+
+	public Integer getIsMeasure() {
+		return isMeasure;
+	}
+
+	public void setIsMeasure(Integer isMeasure) {
+		this.isMeasure = isMeasure;
+	}
+
+	public Integer getIsCut() {
+		return isCut;
+	}
+	public void setIsCut(Integer isCut) {
+		this.isCut = isCut;
+	}
+	public Integer getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(Integer approveStatus) {
+		this.approveStatus = approveStatus;
+	}
+	public String getMedianStakeOid() {
+		return medianStakeOid;
+	}
+	public void setMedianStakeOid(String medianStakeOid) {
+		this.medianStakeOid = medianStakeOid;
+	}
+	public String getRelativeMileage() {
+		return relativeMileage;
+	}
+	public void setRelativeMileage(String relativeMileage) {
+		this.relativeMileage = relativeMileage;
 	} 
+	
 	
 }

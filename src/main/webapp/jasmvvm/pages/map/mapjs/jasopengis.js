@@ -1293,7 +1293,7 @@ var JasMap = null ,M = null;
         _this.showInfoWindow = function(x, y ,content ,title ,options){
             var defaults = {
                 width : 250,
-                height:150
+                height:175
             };
             var params = commonUtil.extend(defaults,options);
             mapManager.showInfoWindow.call(this,x, y ,content ,title ,params);

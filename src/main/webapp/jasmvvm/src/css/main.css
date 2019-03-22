@@ -426,11 +426,24 @@ input:-webkit-autofill {
 }
 
 
-	.el-tag--medium{
-		    display:inline-block;
-		    text-align:center;
-		    width:60px;
-		}
-		.el-tag{
-		    padding:0 !important
-		}
+.el-tag--medium{
+    display:inline-block;
+    text-align:center;
+    width:60px;
+}
+.el-tag{
+    padding:0 !important
+}
+.el-dropdown-menu{
+	padding:5px 0;
+}
+.el-dropdown-menu__item {
+	padding:0 5px;
+}
+.el-dropdown-menu__item:focus,.el-dropdown-menu__item:not(.is-disabled):hover{
+	background-color:rgba(0,0,0,0.0);
+}
+.el-dropdown{
+	margin: 0 10px;
+}
+	

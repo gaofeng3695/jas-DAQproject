@@ -59,7 +59,7 @@ public class ClosureQuery extends BaseJavaQuery {
 
 	@Override
 	public String getQuerySql() {
-		String sql = "SELECT mc.oid, mc.closure_code, mc.closure_type, mc.material, mc.steel_grade,d.code_name as steel_grade_name, mc.outside_diameter, "
+		String sql = "SELECT mc.commit_status, mc.oid, mc.closure_code, mc.closure_type, mc.material, mc.steel_grade,d.code_name as steel_grade_name, mc.outside_diameter, "
 						+ "mc.wall_thickness, mc.connection_methods,dm.code_name as connection_methods_name, mc.coating_methods,dom.code_name as coating_methods_name, "
 						+ "mc.manufacturer, mc.manufacturer_date, mc.project_oid, pro.project_name, mc.pipeline_oid, pi.pipeline_name, mc.tenders_oid, te.tenders_name, "
 						+ "mc.is_use, mc.remarks, "

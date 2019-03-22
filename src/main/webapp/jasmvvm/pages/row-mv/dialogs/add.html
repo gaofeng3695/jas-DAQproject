@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<link rel="stylesheet" href="./../../../lib/font-awesome-4.7.0/css/font-awesome.css">
+	<link rel="stylesheet" href="./../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../src/css/main.css">
+
+</head>
+
+<body>
+	<div id="app" v-cloak>
+
+		<jas-dialog-wrapper>
+			<el-form ref="formData" :model="form" label-width="150px">
+
+				<jas-form-items-group ref="mainForm" :form="form" :fields-config="fieldsConfig" :names-group="nameGroups" :fields-group="[fields0,fields1,fields2,fields3]"></jas-form-items-group>
+
+
+				<jas-base-group-title name="其他信息"></jas-base-group-title>
+				<el-row>
+					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+						<jas-remarks :remarks="form.remarks" @changevalue="changevalue"></jas-remarks>
+					</el-col>
+				</el-row>
+				<jas-base-group-title name="附件信息"></jas-base-group-title>
+				<jas-file-upload :project-oid="form.projectOid" ref="upload" @success="uploadSuccess"></jas-file-upload>
+			</el-form>
+			<div slot="footer">
+				<el-button size="small" @click="cancel()">取 消</el-button>
+				<el-button size="small" :disabled="but_disabled" type="primary" @click="submit('formData')">确 定</el-button>
+			</div>
+		</jas-dialog-wrapper>
+
+	</div>
+</body>
+<script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../lib/vue/vue.js"></script>
+<script src="./../../../lib/element-ui/v2.4.1/index.min.js"></script>
+<script src="./../../../common/components/jas-components.js "></script>
+<script src="./../../../common/js/jas-tools.js"></script>
+<script src="./../mv-config.js"></script>
+<script>
+	var app = new Vue({
+		el: "#app",
+		data: function () {
+			var that = this;
+			return {
+				but_disabled:false,
+				fields0: [],
+				fields1: [],
+				fields2: [],
+				fields3: [],
+				fieldsConfig: [],
+				nameGroups: [],
+				fieldsGroup: [],
+				form: {},
+				addUrl:"",
+				updateUrl:"",
+				detailUrl:""
+			}
+		},
+		created: function () {
+			var that = this;
+			var param = window.jasTools.base.getParamsInUrl(location.href);
+			that.pageCode = param.pageCode;
+			that.fieldsConfig = mvConfig[that.pageCode].fieldsConfig;
+			that.nameGroups = mvConfig[that.pageCode].addNames;
+			that.fieldsGroup=[];
+			var fields=[];
+			that.nameGroups.forEach(function (item, index) {
+				var field = mvConfig[that.pageCode]["addFields"+index];
+				that["fields" + index]=mvConfig.methods.formatFields(field, mvConfig[that.pageCode].fieldsConfig, that.pageCode);
+				fields=fields.concat(field);
+				that.fieldsGroup.push("fields"+index);
+			});
+			that.addUrl=mvConfig[that.pageCode].addUrl;
+			that.updateUrl=mvConfig[that.pageCode].updateUrl;
+			that.detailUrl=mvConfig[that.pageCode].detailUrl;
+			that.form=mvConfig.methods.formatForm(fields);
+		},
+		mounted: function () {
+			var that = this;
+			var param = window.jasTools.base.getParamsInUrl(location.href);
+			var userBo = JSON.parse(localStorage.getItem("user"));
+			that.form.constructUnit = userBo.unitId;
+			if (param.oid) {
+				this.oid = param.oid;
+				this.form.oid = this.oid;
+				this.isEdit = true;
+				this.getDetailByObjectId();
+				this.$refs.upload.requestFile(this.oid);
+			};
+		},
+		methods: {
+			changevalue: function (msg) {
+				this.form.remarks = msg;
+			},
+			cancel: function (param) {
+				window.parent.jasTools.dialog.close(param);
+			},
+			submit: function (formName) {
+				var that = this;
+				this.$refs[formName].validate(function (valid) {
+					if (valid) {
+						that.save();
+					}
+				});
+			},
+			save: function () {
+				var that = this;
+				var msg = "";
+				if (!this.isEdit) {
+					msg = "增加成功";
+					url = jasTools.base.rootPath + that.addUrl;
+				} else {
+					msg = "修改成功";
+					url = jasTools.base.rootPath + that.updateUrl;
+				}
+
+				that.but_disabled = true;
+				jasTools.ajax.post(url, that.form, function (data) {
+					that.$refs.upload.uploadFile(data.data || that.oid);
+				},function(data){
+					if(data.status==-1){
+						that.but_disabled = false;
+					}
+				});
+
+			},
+			uploadSuccess: function () {
+				top.Vue.prototype.$message({
+					type: 'success',
+					message: !this.isEdit ? '保存成功' : '修改成功'
+				});
+				this.cancel(1);
+			},
+			getDetailByObjectId: function () {
+				var that = this;
+				var url = jasTools.base.rootPath + that.detailUrl;
+				jasTools.ajax.post(url, {
+					oid: that.oid
+				}, function (data) {
+					that.form = data.rows[0];
+					that.$refs['mainForm'].triggerFatherSelectsChange();
+				});
+			}
+		},
+	});
+</script>
+
+</html>

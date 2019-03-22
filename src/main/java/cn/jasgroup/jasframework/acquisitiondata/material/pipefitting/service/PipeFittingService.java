@@ -107,4 +107,17 @@ public class PipeFittingService extends CommonDataHibernateService{
 			this.pipeFittingDao.updateBackPipeFitting("", "", oldBackPipeOid, oldBackPipeTypeCode,0);
 		}
 	}
+
+	/**
+	 * <p>功能描述：根据项目查询未使用且未进行中线测量的弯管列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年2月20日 下午3:20:31。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String, Object>> getBendingList(String projectOid) {
+		return pipeFittingDao.getBendingList(projectOid);
+	}
 }

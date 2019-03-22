@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<link rel="stylesheet" href="./../../../lib/element-ui/v2.4.1/theme-chalk/index.min.css">
+	<link rel="stylesheet" href="./../../../lib/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="./../../../lib/codemirror/codemirror.css">
+	<link rel="stylesheet" href="./../../../src/css/main.css">
+	<link rel="stylesheet" href="./rule.css">
+
+</head>
+<style>
+.el-form-item{
+margin-bottom:0px;
+padding-top:10px;
+}
+</style>
+<body>
+	<div id="app" v-cloak>
+		<div class="jas-flex-box is-vertical ">
+			<div class="search-wrap">
+				<el-form :model="topSearch" label-width="100px">
+					<el-row>
+						<el-col :xs="23" :sm="12" :md="12" :lg="6" :xl="6">
+							<el-form-item label="项目名称" prop="name" >
+								<el-select v-model="projectOid" placeholder="请选择" size="small">
+									<el-option v-for="item in options" :key="item.key" :label="item.value" :value="item.key">
+
+									</el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+					</el-row>
+				</el-form>
+			</div>
+			<div class="is-grown">
+				<div class="jas-flex-box is-vertical ">
+					<div class="is-grown">
+						<div class="sub-wrap jas-flex-box">
+							<div class="is-grown content-wrap" style="padding:10px">
+								<div class="content-wrap">
+									<div class="sort-wrap unsortbox jas-flex-box is-vertical">
+										<div class="box-title">
+											<span>制定规则字段</span>
+										</div>
+										<draggable element="ul" class="list-group is-grown sort-box unsortList" v-model="unsortList" :options="{group:'article'}"
+										>
+										 <template v-for="element,index in unsortList">
+										 	<li class="list-group-item" v-if="element.type">
+												<el-input size="mini"></el-input>
+												<span>{{ index+1}}</span>
+											</li>
+												<li class="list-group-item" v-else>
+												{{element.fieldNameCn}}
+												<span>{{ index+1}}</span>
+											</li>
+										 </template>
+
+										</draggable>
+									</div>
+									<div class="allsortbox">
+										<div class="sort-wrap">
+											<div class="box-title">
+												<span>规则</span>
+											</div>
+											<div class="sort-box ">
+												<draggable class="list-group rulelist" element="ul" v-model="rulelist" :options="{group:'article'}">
+													<template v-for="element,index in rulelist">
+														<li class="list-group-item" v-if="element.type">
+														    <el-input size="mini" v-model="form[index]"></el-input>
+														   	<span>{{ index+1}}</span>
+														</li>
+														<li class="list-group-item" v-else>
+																{{element.fieldNameCn}}
+														   	<span>{{ index+1}}</span>
+														</li>
+													</template>
+												</draggable>
+											</div>
+										</div>
+										<div class="example">
+											规则:<span>{{setRule}}</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="btn-wrap">
+								<el-button size="small" @click="cancel()">取消</el-button>
+								<el-button size="small" :disabled="but_disabled" type="primary" @click="save">完成</el-button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<!-- import Vue before Element -->
+<script src="./../../../lib/jquery/jquery-1.12.4.min.js"></script>
+<script src="./../../../lib/vue/vue.js"></script>
+<script src="./../../../lib/element-ui/v2.4.1/index.min.js"></script>
+<script src="./../../../lib/vue-draggable/index.min.js"></script>
+<script src="./../../../common/js/jas-tools.js"></script>
+<script>
+	var vue = new Vue({
+		el: "#app",
+		data: function () {
+			return {
+				but_disabled:false,
+				unsortList: [{
+					fieldNameCn: "项目编号",
+					fieldName: "projectOid"
+				},
+				{
+					fieldNameCn: "施工单位编号",
+					fieldName: "constructUnit"
+				},
+				{
+					fieldNameCn: "机组编号",
+					fieldName: "workUnitOid"
+				},
+				{
+					fieldNameCn: "焊接方式",
+					fieldName: "weldMethod"
+				},
+				{
+					fieldNameCn: "桩号",
+					fieldName: "medianStakeOid"
+				},
+				{
+					fieldNameCn: "焊口类型",
+					fieldName: "weldType"
+				},
+				{
+					fieldNameCn: "焊口顺序号",
+					fieldName: "sequenceNumberFirst"
+				}
+				],
+				rulelist: [],
+				form: {
+
+				},
+				topSearch:{
+
+				},
+				setRule: "",//设置规则名字
+				setRuleCode:"",//规则code
+				projectOid: "",
+				options: [],
+				isEdit:false,
+				oid:"",
+			}
+		},
+		watch: {
+			rulelist: function () {
+				var that = this;
+				that.setRule = "";
+				that.setRuleCode="";
+				that.rulelist.forEach(function (item, index) {
+					if(index==that.rulelist.length-1){
+					  that.setRule += item.fieldNameCn ;
+						that.setRuleCode+=item.fieldName;
+					}else{
+					  that.setRule += item.fieldNameCn + "-";
+						that.setRuleCode+=item.fieldName+"-";
+					}
+				});
+			}
+		},
+		mounted: function () {
+			var that = this;
+			var param = window.jasTools.base.getParamsInUrl(location.href);
+			if(param.oid){
+			  that.isEdit=true;
+			  that.getDetailByoid(param.oid);
+			}
+			that.requestProject();
+		},
+		methods: {
+			requestProject: function () {
+				var that = this;
+				var url=jasTools.base.rootPath + "/daq/privilege/getProjectList.do";
+				jasTools.ajax.post(url, {}, function (data) {
+                   that.options=data.rows;
+				});
+			},
+			save: function () {
+				var that = this;
+				var rule="";
+				if(!that.projectOid){
+					top.Vue.prototype.$message('请选择项目名称');
+					return;
+				}
+				if(that.rulelist.length==0){
+					top.Vue.prototype.$message('请选择制定相应的编码规则');
+					return;
+				}
+				that.saveToServer();
+			},
+			saveToServer:function(rule){
+				var that=this;
+				var obj={
+					projectOid:that.projectOid,
+					weldCodeRegularName:that.setRule,
+					weldCodeRegular:that.setRuleCode  
+				};
+				var url=jasTools.base.rootPath + "/jdbc/commonData/weldCodeRegular/save.do";
+				if(that.isEdit){
+					obj.oid=that.oid;
+					url=jasTools.base.rootPath + "/jdbc/commonData/weldCodeRegular/update.do";
+				}
+				that.but_disabled = true;
+				jasTools.ajax.post(url, obj, function (data) {
+					top.Vue.prototype.$message({
+						type: 'success',
+						message: !that.isEdit ? '保存成功' : '修改成功'
+					});
+					that.cancel(1);
+				},function(data){
+					if(data.status==-1){
+						that.but_disabled = false;
+					}
+				});
+			},
+			cancel: function (param) {
+				window.parent.jasTools.dialog.close(param);
+			},
+			getDetailByoid:function(oid){
+				var that=this;
+				var url = jasTools.base.rootPath + "/jdbc/commonData/weldCodeRegular/getPage.do";
+				jasTools.ajax.post(url, {
+					oid: oid
+				}, function (data) {
+					that.projectOid=data.rows[0].projectOid;
+					that.oid=data.rows[0].oid;
+					data.rows[0].weldCodeRegular.split("-").forEach(function(item){
+						that.changeUnsortList(item);//针对未分组的进行删除，分组的进行增加
+					});
+				});
+			},
+			changeUnsortList:function(name){
+				var that=this;
+				for(var i=0;i<that.unsortList.length;i++){
+					if(that.unsortList[i].fieldName==name){
+						that.rulelist.push(that.unsortList[i]);
+						that.unsortList.splice(i,1);
+						break;
+					}
+				}
+			}
+		}
+	});
+
+</script>
+
+</html>

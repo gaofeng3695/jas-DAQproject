@@ -79,6 +79,7 @@
 					foldername: '',
 					description: '',
 				},
+				folderType:'1',
 			}
 		},
 		created: function () {
@@ -88,9 +89,17 @@
 				this.oid = param.oid;
 				this.getDetailByObjectId(param.oid);
 			};
+			if(param.folderType){
+				this.folderType = param.folderType
+			}
 			if (param.parentid) {
-				this.parentid = param.parentid;
-			};
+				if(this.folderType==2){
+					this.parentid = param.parentid.split(",")[0];
+					
+				}else{
+					this.parentid = param.parentid;
+				}
+			}
 		},
 		methods: {
 			cancel: function (param) {
@@ -131,7 +140,7 @@
 					parentid: this.parentid,
 					foldername: this.form.foldername,
 					description: this.form.description,
-					foldertype: 1
+					foldertype: this.folderType
 
 				}, function (data) {
 					top.Vue.prototype.$message({

@@ -19,8 +19,8 @@
 			<div>
 				<jas-base-group-title name="基础数据"></jas-base-group-title>
 				<jas-detail-table :titles="baseArr" :detail="detail"></jas-detail-table>
-				<jas-base-group-title name="位置数据"></jas-base-group-title>
-				<jas-detail-table :titles="addressArr" :detail="detail"></jas-detail-table>
+				<!-- <jas-base-group-title name="位置数据"></jas-base-group-title>
+				<jas-detail-table :titles="addressArr" :detail="detail"></jas-detail-table> -->
 				<jas-base-group-title name="中线成果数据"></jas-base-group-title>
 				<jas-detail-table :titles="busArr" :detail="detail"></jas-detail-table>
 				<jas-base-group-title name="其他信息"></jas-base-group-title>
@@ -57,14 +57,8 @@
 						name: "线路段名称",
 						field: "pipeSegmentOrCrossName"
 					}, {
-						name: "焊口编号",
-						field: "weldCode"
-					}, {
 						name: '施工单位',
 						field: 'constructUnitName'
-					}, {
-						name: '施工机组代号',
-						field: 'workUnitCode'
 					},
 					{
 						name: '监理单位',
@@ -102,7 +96,31 @@
 					name: '坐标Y',
 					field: 'pointy'
 				}],
-				busArr: [{
+				busArr: [ {
+					name: '测量控制点类型',
+					field: 'measureControlPointTypeName'
+				}, {
+					name: '焊口编号',
+					field: 'weldCode'
+				}, {
+					name: '测量控制点编号',
+					field: 'measureControlPointCode'
+				}, {
+					name: '弯管编号',
+					field: 'bendingCode'
+				},{
+					name: '桩号',
+					field: 'medianStakeCode'
+				}, {
+					name: '相对桩位置',
+					field: 'relativeMileage'
+				}, {
+					name: '坐标X',
+					field: 'pointx'
+				}, {
+					name: '坐标Y',
+					field: 'pointy'
+				},{
 					name: '地表高程',
 					field: 'surfaceeLevation'
 				}, {

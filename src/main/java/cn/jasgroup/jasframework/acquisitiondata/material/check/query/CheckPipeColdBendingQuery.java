@@ -52,7 +52,7 @@ public class CheckPipeColdBendingQuery extends BaseJavaQuery {
 	
 	@Override
 	public String getQuerySql() {
-		String sql ="select cpcb.oid, cpcb.project_oid, cpcb.tenders_oid, cpcb.construct_unit, cpcb.pipe_cold_bending_oid, cpcb.certificate_num, "
+		String sql ="select cpcb.commit_status, cpcb.oid, cpcb.project_oid, cpcb.tenders_oid, cpcb.construct_unit, cpcb.pipe_cold_bending_oid, cpcb.certificate_num, "
 				+ "cpcb.pipe_length, cpcb.pipe_diameter, cpcb.wall_thickness, cpcb.production_unit, cpcb.bend_angle, "
 				+ "case when cpcb.weld_position=1 then '合格' when cpcb.weld_position=0 then '不合格' end as weld_position_name,cpcb.weld_position, "
 				+ "case when cpcb.ovality=1 then '合格' when cpcb.ovality=0 then '不合格' end as ovality_name,cpcb.ovality, "

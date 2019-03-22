@@ -53,4 +53,29 @@ public class PipeFittingController extends BaseController{
 		}
 		return result;
 	}
+	
+	/**
+	 * <p>功能描述：根据项目查询未使用且未进行中线测量的弯管列表。</p>
+	  * <p> 葛建。</p>	
+	  * @param request
+	  * @param param
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年2月20日 下午3:19:36。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	@RequestMapping(value="getBendingList", method = RequestMethod.POST)
+	@ResponseBody
+	public Object getBendingList(HttpServletRequest request, @RequestBody Map<String,String> param){
+		ListResult<Map<String,Object>> result = null;
+		try {
+			String projectOid = param.get("projectOid");
+			List<Map<String, Object>> rows = this.pipeFittingService.getBendingList(projectOid);
+			result = new ListResult<>(1, "200", "ok", rows);
+		} catch (Exception e) {
+			result = new ListResult<>(-1, "400", "error");
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

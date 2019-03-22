@@ -17,7 +17,8 @@ public class ReworkWeldListQuery extends BaseJavaQuery {
 	public String getQuerySql() {
 		String sql = "select t.oid,t.project_oid,t.tenders_oid,t.pipeline_oid,t.pipe_segment_or_cross_oid,t.rework_weld_code,"
 				+ "p.project_name,dt.tenders_name,dp.pipeline_name,vc.name as pipeSegmentOrCrossName,t.weld_oid,"
-				+ "u.unit_name as construct_unit_name,pu.unit_name as supervision_unit_name,t.collection_date,t.weld_date,wu.work_unit_code "
+				+ "u.unit_name as construct_unit_name,pu.unit_name as supervision_unit_name,t.collection_date,t.weld_date,wu.work_unit_code,"
+				+ "t.approve_status,t.is_measure,t.is_cut "
 				+ "from daq_weld_rework_weld t "
 				+ "left join(select oid,project_name from daq_project where active=1) p on p.oid=t.project_oid "
 				+ "left join(select oid,tenders_name from daq_tenders where active=1) dt on dt.oid = t.tenders_oid "
@@ -26,7 +27,7 @@ public class ReworkWeldListQuery extends BaseJavaQuery {
 				+ "left join (select oid, unit_name, active from pri_unit where active=1) pu on pu.oid = t.supervision_unit "
 				+ "left join (select oid, unit_name, active from pri_unit where active=1) u on u.oid = t.construct_unit "
 				+ "left join (select oid, work_unit_code, active from daq_work_unit where active=1) wu ON wu.oid = t.work_unit_oid "
-				+ "where t.active=1 and t.approve_status=2";
+				+ "where t.active=1 and t.approve_status in (1,2)";
 		sql += this.dataAuthoritySql;
 		return sql;
 	}

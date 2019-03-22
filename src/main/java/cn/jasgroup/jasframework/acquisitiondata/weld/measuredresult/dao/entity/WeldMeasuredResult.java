@@ -23,39 +23,50 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 /**
  * 
   *<p>类描述：焊口测量成果信息实体类。</p>
+  * {@link cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.service.WeldService #changeMeasuredFieldAfterSave()}
+  * {@link cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.service.WeldService #changeMeasuredFieldBeforeUpdate()}
+  * {@link cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.service.WeldService #changeMeasuredFieldAfterUpdate()}
+  * {@link cn.jasgroup.jasframework.acquisitiondata.weld.weldinfo.service.WeldService #changeMeasuredFieldAfterDelete()}
   * @author 葛建 。
   * @version v1.0.0.1。
   * @since JDK1.8。
   *<p>创建日期：2018年7月11日 下午3:28:20。</p>
  */
 @CommonSaveConfig(
-		scene = "/weldMeasuredResult/save"
+	scene = "/weldMeasuredResult/save",
+	afterAdvice={
+		@Process(service = "weldService", method = "changeMeasuredFieldAfterSave()")
+	}
 )
 @CommonUpdateConfig(
-	scene = "/weldMeasuredResult/update"
+	scene = "/weldMeasuredResult/update",
+	beforeAdvice={
+		@Process(service = "weldService", method = "changeMeasuredFieldBeforeUpdate()")
+	},
+	afterAdvice={
+		@Process(service = "weldService", method = "changeMeasuredFieldAfterUpdate()")
+	}
 )
 @CommonDeleteConfig(
-	scene = "/weldMeasuredResult/delete"
+	scene = "/weldMeasuredResult/delete",
+	afterAdvice={
+		@Process(service = "weldService", method = "changeMeasuredFieldAfterDelete()")
+	}
 )
 @CommonDeleteBatchConfig(
-		scene = "/weldMeasuredResult/deleteBatch"
-		)
+	scene = "/weldMeasuredResult/deleteBatch"
+)
 @Point(
-	x="pointx",
-	y="pointy" ,
-	scopeFieldName="pipelineOid",
-	scopeType=ScopeType.CURRENT,
-	geometryColumnName="geom",
-	calculateType=CalculateType.SingleAnchorAndDeviation,
-	anchorClass=MedianStake.class,
-	anchorOid="medianStakeOid",
-	deviation="relativeMileage"
+		x = "pointx",
+		y = "pointy",
+		z = "surfaceeLevation",
+		geometryColumnName = "geom",
+		calculateType = CalculateType.Coordinates
 )
 @UniqueConstraints(
 		strategys ={
-			@UniqueConstraintStrategy(columnNames={"pipeSegmentOrCrossOid","weldOid"},name="同一线路段/穿跨越下焊口编号")
-		},
-		formatter = @Process(service = "weldService" , method = "formatting()")
+			@UniqueConstraintStrategy(columnNames={"pipeSegmentOrCrossOid","measureControlPointCode"},name="同一线路段/穿跨越下测量控制点编号不能重复")
+		}
 	)
 @JdbcEntity(name="daq_weld_measured_result")
 public class WeldMeasuredResult extends CommonJdbcEntity {
@@ -81,14 +92,29 @@ public class WeldMeasuredResult extends CommonJdbcEntity {
 	private String pipeSegmentOrCrossOid; 
 
 	/**
+	 * 测量控制点类型 
+	 */
+	private String measureControlPointType; 
+
+	/**
+	 * 测量控制点编号 
+	 */
+	private String measureControlPointCode; 
+	
+	/**
 	 * 焊口编号 
 	 */
 	private String weldOid; 
 
 	/**
+	 * 弯管编号 
+	 */
+	private String bendingOid; 
+
+	/**
 	 * 桩号 
 	 */
-	private String medianStakeOid; 
+	private String medianStakeCode; 
 
 	/**
 	 * 相对桩位置(m) 
@@ -129,11 +155,6 @@ public class WeldMeasuredResult extends CommonJdbcEntity {
 	 * 测量日期 
 	 */
 	private Date surveyDate; 
-	
-	/**
-	 * 施工机组代号
-	 */
-	private String workUnitOid;
 	
 	/**
 	 * 施工单位 
@@ -211,6 +232,24 @@ public class WeldMeasuredResult extends CommonJdbcEntity {
 		super.setField("pipeSegmentOrCrossOid");
 	}
 
+	public String getMeasureControlPointType() {
+		return measureControlPointType; 
+	}
+
+	public void setMeasureControlPointType(String measureControlPointType) {
+		this.measureControlPointType = measureControlPointType; 
+		super.setField("measureControlPointType");
+	}
+
+	public String getMeasureControlPointCode() {
+		return measureControlPointCode; 
+	}
+
+	public void setMeasureControlPointCode(String measureControlPointCode) {
+		this.measureControlPointCode = measureControlPointCode; 
+		super.setField("measureControlPointCode");
+	}
+
 	public String getWeldOid() {
 		return weldOid; 
 	}
@@ -220,13 +259,22 @@ public class WeldMeasuredResult extends CommonJdbcEntity {
 		super.setField("weldOid");
 	}
 
-	public String getMedianStakeOid() {
-		return medianStakeOid; 
+	public String getBendingOid() {
+		return bendingOid; 
 	}
 
-	public void setMedianStakeOid(String medianStakeOid) {
-		this.medianStakeOid = medianStakeOid; 
-		super.setField("medianStakeOid");
+	public void setBendingOid(String bendingOid) {
+		this.bendingOid = bendingOid; 
+		super.setField("bendingOid");
+	}
+
+	public String getMedianStakeCode() {
+		return medianStakeCode;
+	}
+
+	public void setMedianStakeCode(String medianStakeCode) {
+		this.medianStakeCode = medianStakeCode;
+		super.setField("medianStakeCode");
 	}
 
 	public Double getRelativeMileage() {
@@ -296,14 +344,6 @@ public class WeldMeasuredResult extends CommonJdbcEntity {
 	@Temporal(TemporalType.TIMESTAMP)
 	public Date getSurveyDate() {
 		return surveyDate; 
-	}
-
-	public String getWorkUnitOid() {
-		return workUnitOid;
-	}
-
-	public void setWorkUnitOid(String workUnitOid) {
-		this.workUnitOid = workUnitOid;
 	}
 
 	public void setSurveyDate(Date surveyDate) {

@@ -148,9 +148,9 @@ public class ProgressStatsService {
 		List<ProgressStatsQueryBo> detectionRayList = progressStatsDao.getDetectionRayCountStatsByProject(projectOids,date);
 		//封装射线检测工序的返回值
 		setListItemsForProject(list,detectionRayList,"detection_ray",projectList);
-		//射线检测
+		//中线测量
 		List<ProgressStatsQueryBo> measuredResultList = progressStatsDao.getMeasuredResultCountStatsByProject(projectOids,date);
-		//封装射线检测工序的返回值
+		//封装中线测量工序的返回值
 		setListItemsForProject(list,measuredResultList,"measured_result",projectList);
 		return list;
 	}
@@ -359,9 +359,9 @@ public class ProgressStatsService {
 		List<ProgressStatsQueryBo> detectionRayList = progressStatsDao.getDetectionRayCountStatsByTenders(projectOid,date);
 		//封装射线检测工序的返回值
 		setListItemsForTenders(list,detectionRayList,"detection_ray",tendersList);
-		//射线检测
+		//中线测量
 		List<ProgressStatsQueryBo> measuredResultList = progressStatsDao.getMeasuredResultCountStatsByTenders(projectOid,date);
-		//封装射线检测工序的返回值
+		//封装中线测量工序的返回值
 		setListItemsForTenders(list,measuredResultList,"measured_result",tendersList);
 		return list;
 	}

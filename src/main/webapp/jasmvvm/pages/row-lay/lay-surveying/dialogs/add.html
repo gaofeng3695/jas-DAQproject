@@ -36,7 +36,7 @@
 					</el-col>
 				</el-row>
 				<jas-base-group-title name="附件信息"></jas-base-group-title>
-				<jas-file-upload ref="upload" @success="uploadSuccess"></jas-file-upload>
+				<jas-file-upload :project-oid="form.projectOid" ref="upload" @success="uploadSuccess"></jas-file-upload>
 			</el-form>
 			<div slot="footer">
 				<el-button size="small" @click="cancel()">取 消</el-button>
@@ -57,11 +57,8 @@
 		data: function () {
 			var that = this;
 			return {
+				but_disabled:false,
 				subFields: [{
-						field: "relativeMileage",
-						name: "里程"
-					}, //
-					{
 						field: "measuredAngle",
 						name: '实测转角(°)'
 					}, {
@@ -111,7 +108,10 @@
 				locationFields: [{
 					name: "桩号",
 					field: "medianStakeOid"
-				}],
+				},{
+                    field: "relativeMileage",
+                    name: "里程"
+                }],
 				sonFormDefault: {
 					relativeMileage: '',
 					measuredAngle: '', // 实测转角(°)
@@ -123,28 +123,28 @@
 
 					relativeMileage: {
 						type: 'number',
-						max: 999999,
+						max: 999999.999,
 						precision: 3,
 						isRequired: true
 					},
 					measuredAngle: {
 						type: 'number',
-						max: 999999,
+						max: 999999.999,
 						precision: 3,
 					},
 					drawingAngle: {
 						type: 'number',
-						max: 999999,
+						max: 999999.999,
 						precision: 3,
 					},
 					leftWidth: {
 						type: 'number',
-						max: 99999,
+						max: 99999.999,
 						precision: 3,
 					},
 					rightWidth: {
 						type: 'number',
-						max: 99999,
+						max: 99999.999,
 						precision: 3,
 					},
 					projectOid: {
@@ -294,9 +294,14 @@
 					url = jasTools.base.rootPath + "/jdbc/commonData/laySurveying/update.do";
 				}
 
+				that.but_disabled = true;
 				jasTools.ajax.post(url, that.form, function (data) {
 					that.$refs.upload.uploadFile(data.data || that.oid);
 
+				},function(data){
+					if(data.status==-1){
+						that.but_disabled = false;
+					}
 				});
 			},
 			uploadSuccess: function () {

@@ -99,6 +99,21 @@ public class ReworkWeldAppBo extends BaseBo {
 	 *  焊接日期
 	 */
 	private Date weldDate; 
+	
+	
+	/***
+     * 是否测量
+     */
+    private Integer isMeasure;
+    /***
+     * 审核状态
+     */
+    private Integer approveStatus;
+    
+    /***
+     * 是否割口
+     */
+    private Integer isCut;
 
 	
 	public String getOid() {
@@ -239,6 +254,31 @@ public class ReworkWeldAppBo extends BaseBo {
 
 	public void setWeldDate(Date weldDate) {
 		this.weldDate = weldDate;
+	}
+
+	public Integer getIsMeasure() {
+		return isMeasure;
+	}
+
+	public void setIsMeasure(Integer isMeasure) {
+		this.isMeasure = isMeasure;
+	}
+
+	public Integer getApproveStatus() {
+		return approveStatus;
+	}
+
+	public void setApproveStatus(Integer approveStatus) {
+		this.approveStatus = approveStatus;
+	}
+
+	public Integer getIsCut() {
+		return isCut;
+	}
+
+	public void setIsCut(Integer isCut) {
+		this.isCut = isCut;
 	} 
+	
 	
 }

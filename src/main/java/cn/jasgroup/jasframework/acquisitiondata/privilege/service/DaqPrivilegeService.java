@@ -1,6 +1,7 @@
 package cn.jasgroup.jasframework.acquisitiondata.privilege.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -40,7 +41,9 @@ public class DaqPrivilegeService extends BaseService{
 	 */
 	public List<Map<String,Object>>getProject(String pipeNetworkTypeCode){
 		String unitOid = ThreadLocalHolder.getCurrentUser().getUnitId();
-		return this.daqPrivilegeDao.getProjectList(unitOid,pipeNetworkTypeCode);
+		String[] pipeNetworkTypeCodes = pipeNetworkTypeCode.split(",");
+		List<String> pipeNetworkTypeCodeList = Arrays.asList(pipeNetworkTypeCodes);
+		return this.daqPrivilegeDao.getProjectList(unitOid,pipeNetworkTypeCodeList);
 	}
 
 
@@ -291,9 +294,9 @@ public class DaqPrivilegeService extends BaseService{
 		String hierarchy = unitEntity.getHierarchy();
 		String sql=null;
 		if(hierarchy.startsWith(UnitHierarchyEnum.project_unit.getHierarchy())){
-			sql = "select t.oid as key,t.unit_name as value from pri_unit t where t.active=1";
+			sql = "select t.oid as key,t.unit_name as value,t.unit_code from pri_unit t where t.active=1";
 		}else{
-			sql = "select uu.oid as key,uu.unit_name as value from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid='"+unitOid+"' and uu.active=1";
+			sql = "select uu.oid as key,uu.unit_name as value,uu.unit_code from pri_unit u left join pri_unit uu on uu.hierarchy like u.hierarchy||'%' where u.oid='"+unitOid+"' and uu.active=1";
 		}
 		return this.daqPrivilegeDao.getCurrentUnitId(sql);
 	}
@@ -310,5 +313,45 @@ public class DaqPrivilegeService extends BaseService{
 	 */
 	public List<Map<String, Object>> getConstructUnitList(List<String> projectOids) {
 		return daqPrivilegeDao.getConstructUnitList(projectOids);
+	}
+	
+	/***
+	  * <p>功能描述：根据项目oid获取监理单位。</p>
+	  * <p> 雷凯。</p>	
+	  * @param projectOid
+	  * @return
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年1月24日 下午2:47:26。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public List<Map<String,Object>>getSupervisionUnitByProjectOid(String projectOid){
+		return this.daqPrivilegeDao.getSupervisionUnitByProjectOid(projectOid);
+	}
+	
+	/**
+	  * <p>功能描述：保存附件与项目的关联关系。</p>
+	  * <p> 雷凯。</p>	
+	  * @param projectOid
+	  * @param docFileOid
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年3月18日 下午5:08:29。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public void saveProjectAndFileRef(String projectOid,List<String> docFileOidList){
+		daqPrivilegeDao.saveProjectAndFileRef(projectOid,docFileOidList);
+	}
+	/***
+	  * <p>功能描述：删除附件与项目的关联关系。</p>
+	  * <p> 雷凯。</p>	
+	  * @param fileOids
+	  * @param isShiftDelFile
+	  * @since JDK1.8。
+	  * <p>创建日期:2019年3月19日 下午5:58:33。</p>
+	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
+	 */
+	public void deleteAttachementById(String fileOids,boolean isShiftDelFile){
+		String[] fileOid = fileOids.split(",");
+		List<String> fileOidList = Arrays.asList(fileOid);
+		daqPrivilegeDao.deleteAttachementById(fileOidList, isShiftDelFile);
 	}
 }

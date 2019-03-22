@@ -44,7 +44,7 @@
         remarks: '',
         className: '',
         menuCode: "",
-
+        privilegeCode: ""
       }
     },
     created: function () { //先请求要展示的字段，再请求字段的详情，最后请求附件
@@ -53,6 +53,7 @@
       this.menuCode = param.menuCode;
       this.className = param.className;
       this.oids = param.oids.split(',');
+      this.privilegeCode = param.privilegeCode;
     },
     methods: {
       requestApprove: function (status) {
@@ -72,6 +73,7 @@
           approveStatus: status, //status 2 通过 -1 驳回
           className: this.className,
           functionCode: this.menuCode,
+          privilegeCode: this.privilegeCode,
         }, function (data) {
           top.Vue.prototype.$message({
             type: 'success',
@@ -85,6 +87,7 @@
       },
     },
   });
+
 </script>
 
 </html>

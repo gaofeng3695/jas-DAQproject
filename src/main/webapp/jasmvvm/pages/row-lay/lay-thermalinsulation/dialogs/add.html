@@ -36,11 +36,11 @@
 					</el-col>
 				</el-row>
 				<jas-base-group-title name="附件信息"></jas-base-group-title>
-				<jas-file-upload ref="upload" @success="uploadSuccess"></jas-file-upload>
+				<jas-file-upload :project-oid="form.projectOid" ref="upload" @success="uploadSuccess"></jas-file-upload>
 			</el-form>
 			<div slot="footer">
 				<el-button size="small" @click="cancel()">取 消</el-button>
-				<el-button size="small" type="primary" @click="submit('formData')">确 定</el-button>
+				<el-button size="small" :disabled="but_disabled" type="primary" @click="submit('formData')">确 定</el-button>
 			</div>
 		</jas-dialog-wrapper>
 
@@ -57,6 +57,7 @@
 		data: function () {
 			var that = this;
 			return {
+				but_disabled:false,
 				fields: [{
 					name: '保温材料',
 					field: 'insulationMaterial'
@@ -129,7 +130,7 @@
 					},
 					insulationThickness: {
 						type: 'number',
-						max: 999999,
+						max: 999999.999,
 						precision: 3,
 					},
 					protectiveTape: {
@@ -138,7 +139,7 @@
 					},
 					protectiveThickness: {
 						type: 'number',
-						max: 99999,
+						max: 99999.999,
 						precision: 3,
 					},
 					manufacturer: {
@@ -247,14 +248,14 @@
 					startRelativeMileage: {
 						type: 'number',
 						name: '相对起始桩里程(m)',
-						max: 999999,
+						max: 999999.999,
 						precision: 3,
 						isRequired: true
 					},
 					endRelativeMileage: {
 						type: 'number',
 						name: '相对结束桩里程(m)',
-						max: 999999,
+						max: 999999.999,
 						precision: 3,
 						isRequired: true
 					}
@@ -323,8 +324,13 @@
 					url = jasTools.base.rootPath + "/jdbc/commonData/layThermalInsulation/update.do";
 				}
 
+				that.but_disabled = true;
 				jasTools.ajax.post(url, that.form, function (data) {
 					that.$refs.upload.uploadFile(data.data || that.oid);
+				},function(data){
+					if(data.status==-1){
+						that.but_disabled = false;
+					}
 				});
 
 			},
