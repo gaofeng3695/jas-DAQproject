@@ -1048,7 +1048,7 @@
 					if (key == "sequenceNumberFirst" && that.formData.sequenceNumberFirst) {
 						var direction = that.formData.airflowDirection ? "+" : "-";
 						value = direction + "" + that.formData.sequenceNumberFirst;
-						if (that.formData.sequenceNumberSecond||that.formData.sequenceNumberSecond==0) {
+						if (that.formData.sequenceNumberSecond && (that.formData.sequenceNumberSecond != null && that.formData.sequenceNumberSecond != '')) {
 							value += "+" + that.formData.sequenceNumberSecond
 						}
 					} else {
