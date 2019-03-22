@@ -251,7 +251,7 @@
 
 				this.isEdit = true;
 				this.getDetailByObjectId();
-				// this.$refs.upload.requestFile(this.oid);
+				this.$refs.upload.requestFile(this.oid);
 			};
 			this.requestDomainFromBizTable(
 				'/daq/privilege/getProjectList.do', {},
@@ -365,17 +365,20 @@
 
 				that.but_disabled = true;
 				jasTools.ajax.post(url, that.formData, function (data) {
-					top.Vue.prototype.$message({
-						type: 'success',
-						message: !this.isEdit ? '保存成功' : '修改成功'
-					});
-					that.cancel(1);
+					that.$refs.upload.uploadFile(data.data || that.oid);
 				},function(data){
 					if(data.status==-1){
 						that.but_disabled = false;
 					}
 				});
 
+			},
+			uploadSuccess: function () {
+				top.Vue.prototype.$message({
+					type: 'success',
+					message: !this.isEdit ? '保存成功' : '修改成功'
+				});
+				this.cancel(1);
 			},
 			getDetailByObjectId: function () {
 				var that = this;
