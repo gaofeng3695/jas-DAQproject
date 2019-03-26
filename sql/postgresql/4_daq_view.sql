@@ -101,6 +101,181 @@ create or replace view v_daq_approve_tip as
 	select p.oid,p.parent_id,p.privilege_code,p.privilege_name,p.hierarchy,t.project_oid,t.supervision_unit from pri_func_privilege p 
 	inner join(select project_oid,supervision_unit,privilege_code from daq_approve_tip where active=1 ) t
 	on t.privilege_code=p.privilege_code where p.active=1;
+
+	
+/**************开挖穿越*****************/
+CREATE OR REPLACE VIEW v_daq_cross_excavation AS 
+ SELECT t.oid,
+    t1.cross_name,
+    t2.unit_name,
+    t3.unit_name AS supervision_unit_name,
+    to_char(t.completion_date, 'yyyy-MM-dd'::text) AS completion_date,
+    t.geom
+   FROM (((daq_cross_excavation t
+     LEFT JOIN ( SELECT daq_cross.oid,
+            daq_cross.cross_name
+           FROM daq_cross
+          WHERE (daq_cross.active = 1)) t1 ON (((t.cross_oid)::text = (t1.oid)::text)))
+     LEFT JOIN ( SELECT pri_unit.oid,
+            pri_unit.unit_name
+           FROM pri_unit
+          WHERE (pri_unit.active = 1)) t2 ON (((t2.oid)::text = (t.construct_unit)::text)))
+     LEFT JOIN ( SELECT pri_unit.oid,
+            pri_unit.unit_name
+           FROM pri_unit
+          WHERE (pri_unit.active = 1)) t3 ON (((t3.oid)::text = (t.supervision_unit)::text)))
+  WHERE (t.active = 1);
+
+  
+/**************顶管穿越*****************/
+CREATE OR REPLACE VIEW v_daq_cross_pipe_jacking AS 
+ SELECT t.oid,
+    t1.cross_name,
+    t2.unit_name,
+    t3.unit_name AS supervision_unit_name,
+    to_char(t.completion_date, 'yyyy-MM-dd'::text) AS completion_date,
+    t.geom
+   FROM (((daq_cross_pipe_jacking t
+     LEFT JOIN ( SELECT daq_cross.oid,
+            daq_cross.cross_name
+           FROM daq_cross
+          WHERE (daq_cross.active = 1)) t1 ON (((t.cross_oid)::text = (t1.oid)::text)))
+     LEFT JOIN ( SELECT pri_unit.oid,
+            pri_unit.unit_name
+           FROM pri_unit
+          WHERE (pri_unit.active = 1)) t2 ON (((t2.oid)::text = (t.construct_unit)::text)))
+     LEFT JOIN ( SELECT pri_unit.oid,
+            pri_unit.unit_name
+           FROM pri_unit
+          WHERE (pri_unit.active = 1)) t3 ON (((t3.oid)::text = (t.supervision_unit)::text)))
+  WHERE (t.active = 1);
+  
+  
+/**************箱涵穿越*****************/
+CREATE OR REPLACE VIEW v_daq_cross_box_culvert AS 
+ SELECT t.oid,
+    t1.cross_name,
+    t2.unit_name,
+    t3.unit_name AS supervision_unit_name,
+    to_char(t.completion_date, 'yyyy-MM-dd'::text) AS completion_date,
+    t.geom
+   FROM (((daq_cross_box_culvert t
+     LEFT JOIN ( SELECT daq_cross.oid,
+            daq_cross.cross_name
+           FROM daq_cross
+          WHERE (daq_cross.active = 1)) t1 ON (((t.cross_oid)::text = (t1.oid)::text)))
+     LEFT JOIN ( SELECT pri_unit.oid,
+            pri_unit.unit_name
+           FROM pri_unit
+          WHERE (pri_unit.active = 1)) t2 ON (((t2.oid)::text = (t.construct_unit)::text)))
+     LEFT JOIN ( SELECT pri_unit.oid,
+            pri_unit.unit_name
+           FROM pri_unit
+          WHERE (pri_unit.active = 1)) t3 ON (((t3.oid)::text = (t.supervision_unit)::text)))
+  WHERE (t.active = 1);
+  
+  
+  
+/**************定向钻穿越*****************/
+CREATE OR REPLACE VIEW v_daq_cross_drilling AS 
+ SELECT t.oid,
+    t1.cross_name,
+    t2.unit_name,
+    t3.unit_name AS supervision_unit_name,
+    to_char(t.completion_date, 'yyyy-MM-dd'::text) AS completion_date,
+    t.geom
+   FROM (((daq_cross_drilling t
+     LEFT JOIN ( SELECT daq_cross.oid,
+            daq_cross.cross_name
+           FROM daq_cross
+          WHERE (daq_cross.active = 1)) t1 ON (((t.cross_oid)::text = (t1.oid)::text)))
+     LEFT JOIN ( SELECT pri_unit.oid,
+            pri_unit.unit_name
+           FROM pri_unit
+          WHERE (pri_unit.active = 1)) t2 ON (((t2.oid)::text = (t.construct_unit)::text)))
+     LEFT JOIN ( SELECT pri_unit.oid,
+            pri_unit.unit_name
+           FROM pri_unit
+          WHERE (pri_unit.active = 1)) t3 ON (((t3.oid)::text = (t.supervision_unit)::text)))
+  WHERE (t.active = 1);
+  
+  
+  
+/**************盾构隧道穿越*****************/
+CREATE OR REPLACE VIEW v_daq_cross_shield AS 
+ SELECT t.oid,
+    t1.cross_name,
+    t2.unit_name,
+    t3.unit_name AS supervision_unit_name,
+    to_char(t.completion_date, 'yyyy-MM-dd'::text) AS completion_date,
+    t.geom
+   FROM (((daq_cross_shield t
+     LEFT JOIN ( SELECT daq_cross.oid,
+            daq_cross.cross_name
+           FROM daq_cross
+          WHERE (daq_cross.active = 1)) t1 ON (((t.cross_oid)::text = (t1.oid)::text)))
+     LEFT JOIN ( SELECT pri_unit.oid,
+            pri_unit.unit_name
+           FROM pri_unit
+          WHERE (pri_unit.active = 1)) t2 ON (((t2.oid)::text = (t.construct_unit)::text)))
+     LEFT JOIN ( SELECT pri_unit.oid,
+            pri_unit.unit_name
+           FROM pri_unit
+          WHERE (pri_unit.active = 1)) t3 ON (((t3.oid)::text = (t.supervision_unit)::text)))
+  WHERE (t.active = 1);
+  
+  
+  
+/**************钻爆隧道穿越*****************/
+CREATE OR REPLACE VIEW v_daq_cross_drilling_blasting AS 
+ SELECT t.oid,
+    t1.cross_name,
+    t2.unit_name,
+    t3.unit_name AS supervision_unit_name,
+    to_char(t.completion_date, 'yyyy-MM-dd'::text) AS completion_date,
+    t.geom
+   FROM (((daq_cross_drilling_blasting t
+     LEFT JOIN ( SELECT daq_cross.oid,
+            daq_cross.cross_name
+           FROM daq_cross
+          WHERE (daq_cross.active = 1)) t1 ON (((t.cross_oid)::text = (t1.oid)::text)))
+     LEFT JOIN ( SELECT pri_unit.oid,
+            pri_unit.unit_name
+           FROM pri_unit
+          WHERE (pri_unit.active = 1)) t2 ON (((t2.oid)::text = (t.construct_unit)::text)))
+     LEFT JOIN ( SELECT pri_unit.oid,
+            pri_unit.unit_name
+           FROM pri_unit
+          WHERE (pri_unit.active = 1)) t3 ON (((t3.oid)::text = (t.supervision_unit)::text)))
+  WHERE (t.active = 1);
+
+
+
+/**************穿越*****************/
+CREATE OR REPLACE VIEW v_daq_cross_across AS 
+ SELECT t.oid,
+    t1.cross_name,
+    t2.unit_name,
+    t3.unit_name AS supervision_unit_name,
+    to_char(t.completion_date, 'yyyy-MM-dd'::text) AS completion_date,
+    t.geom
+   FROM (((daq_cross_across t
+     LEFT JOIN ( SELECT daq_cross.oid,
+            daq_cross.cross_name
+           FROM daq_cross
+          WHERE (daq_cross.active = 1)) t1 ON (((t.cross_oid)::text = (t1.oid)::text)))
+     LEFT JOIN ( SELECT pri_unit.oid,
+            pri_unit.unit_name
+           FROM pri_unit
+          WHERE (pri_unit.active = 1)) t2 ON (((t2.oid)::text = (t.construct_unit)::text)))
+     LEFT JOIN ( SELECT pri_unit.oid,
+            pri_unit.unit_name
+           FROM pri_unit
+          WHERE (pri_unit.active = 1)) t3 ON (((t3.oid)::text = (t.supervision_unit)::text)))
+  WHERE (t.active = 1);
+	
+	
+	
 	
 /**
  * 创建弯管物资视图
