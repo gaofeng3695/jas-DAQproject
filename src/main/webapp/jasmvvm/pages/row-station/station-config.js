@@ -2383,8 +2383,10 @@ var stationConfig = {
           value: "是"
         }],
         formatter: function (a, b, value, c) {
+          console.log("哈哈哈哈哈"+value)
           if (value == 1) return '是';
-          return '否';
+          if (value == 0) return '否';
+          return '';
         }
       },
       designLife: {
@@ -2468,7 +2470,8 @@ var stationConfig = {
         }],
         formatter: function (a, b, value, c) {
           if (value == 1) return '是';
-          return '否';
+          if (value == 0) return '否';
+          return '';
         }
       },
       hasVentHole: {
@@ -2483,7 +2486,8 @@ var stationConfig = {
         }],
         formatter: function (a, b, value, c) {
           if (value == 1) return '是';
-          return '否';
+          if (value == 0) return '否';
+          return '';
         }
       },
       anodeBedConnectionPower: {
