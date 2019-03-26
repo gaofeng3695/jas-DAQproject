@@ -46,7 +46,7 @@ public class DaqDetectionInfiltrationQuery extends BaseJavaQuery{
 				+ "	p.project_name,"
 				+ "	l.pipeline_name,"
 				+ "	dt.tenders_name,"
-				+ "	v.name as pipe_segment_or_crossName,"
+				+ "	v.name as pipe_segment_or_cross_name,"
 				+ "	u1.unit_name as detection_unit_name,"
 				+ "	u2.unit_name as supervision_unit_name,"
 				+ " vdwi.weld_code "					
