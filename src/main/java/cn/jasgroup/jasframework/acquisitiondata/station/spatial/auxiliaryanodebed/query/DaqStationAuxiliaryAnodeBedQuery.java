@@ -61,11 +61,11 @@ public class DaqStationAuxiliaryAnodeBedQuery extends BaseJavaQuery {
     public String getQuerySql() {
         String sql = "SELECT dsaab.oid, dsaab.project_oid, pro.project_name, dsaab.tenders_oid, te.tenders_name, dsaab.pipeline_oid, pi.pipeline_name, dsaab.pipe_station_oid, ps.pipe_station_name, " +
                 "dsaab.device_code, dsaab.median_stake_oid, me.median_stake_code, dsaab.relative_mileage, dsaab.install_location_des, dsaab.burying_depth, " +
-                "dsaab.is_temporary, case when dsaab.is_temporary=1 then '是' when dsaab.is_temporary=0 then '否' end as is_temporary_name, " +
+                "dsaab.is_temporary, case when dsaab.is_temporary=1 then '是' when dsaab.is_temporary=0 then '否'  else '' end as is_temporary_name, " +
                 "dsaab.design_life, dsaab.backfill_material, doma.code_name as backfill_material_name, dsaab.auxiliary_anode_num, dsaab.burial_way, doma1.code_name as burial_way_name, dsaab.gross_weight, " +
                 "dsaab.pointx, dsaab.pointy, dsaab.pointz, dsaab.cable_length, dsaab.protect_length, dsaab.anode_material, doma2.code_name as anode_material_name, dsaab.anode_specification, dsaab.anode_resistance, " +
-                "dsaab.has_water_flooding_sys, case when dsaab.has_water_flooding_sys=1 then '是' when dsaab.has_water_flooding_sys=0 then '否' end as has_water_flooding_sys_name, " +
-                "dsaab.has_vent_hole,  case when dsaab.has_vent_hole=1 then '是' when dsaab.has_vent_hole=0 then '否' end as has_vent_hole_name, " +
+                "dsaab.has_water_flooding_sys, case when dsaab.has_water_flooding_sys=1 then '是' when dsaab.has_water_flooding_sys=0 then '否' else '' end as has_water_flooding_sys_name, " +
+                "dsaab.has_vent_hole,  case when dsaab.has_vent_hole=1 then '是' when dsaab.has_vent_hole=0 then '否'  else '' end as has_vent_hole_name, " +
                 "dsaab.anode_bed_connection_power, to_char(dsaab.embedment_date, 'YYYY-MM-DD') as embedment_date, to_char(dsaab.construct_date, 'YYYY-MM-DD') as construct_date, " +
                 "dsaab.construct_unit, u.unit_name as construct_unit_name, dsaab.supervision_unit, pu.unit_name as supervision_unit_name, dsaab.supervision_engineer, dsaab.collection_person, " +
                 "to_char(dsaab.collection_date, 'YYYY-MM-DD') as collection_date, dsaab.geom, dsaab.geo_state, dsaab.approve_status, " +
