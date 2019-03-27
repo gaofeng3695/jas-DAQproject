@@ -218,18 +218,18 @@
 	<!-- gis  -->
 	<bean id="geodataProcessService" class="cn.jasgroup.gis.dataprocess.opengis.GeodataProcessService">
 	    <property name="geometryService" ref="geometryService" ></property>
-	    <property name="jdbcTemplate" ref="namedParameterJdbcTemplate" ></property>
+	    <property name="namedParameterJdbcTemplate" ref="namedParameterJdbcTemplate" ></property>
 	</bean>
 	<bean id="geodataPersistenceService" class="cn.jasgroup.gis.data.opengis.GeodataPersistenceService" >
 	    <property name="geodataAccessService" ref="geodataAccessService" ></property>
 	    <property name="geodataProcessService" ref="geodataProcessService" ></property>
-	    <property name="jdbcTemplate" ref="namedParameterJdbcTemplate" ></property>
+	    <property name="namedParameterJdbcTemplate" ref="namedParameterJdbcTemplate" ></property>
 	</bean>
 	<bean id="geometryService" class="cn.jasgroup.gis.geometryservice.opengis.GeometryService">
-	    <property name="jdbcTemplate" ref="namedParameterJdbcTemplate" ></property>
+	    <property name="namedParameterJdbcTemplate" ref="namedParameterJdbcTemplate" ></property>
 	</bean>
 	<bean id="geodataAccessService" class="cn.jasgroup.gis.dataaccess.opengis.GeodataAccessService" init-method="init">
-	    <property name="jdbcTemplate" ref="namedParameterJdbcTemplate" ></property>
+	    <property name="namedParameterJdbcTemplate" ref="namedParameterJdbcTemplate" ></property>
 	</bean>
 
 
