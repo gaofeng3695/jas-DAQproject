@@ -365,3 +365,30 @@ ALTER TABLE daq_appendages_casing_pipe alter COLUMN end_pointy type NUMERIC(12,9
 /******/
 alter table sys_attachment add column pdf_save_path  varchar(500);
 comment on column sys_attachment.pdf_save_path is 'pdf文件保存路径';
+
+
+alter table daq_material_valve add commit_status int2;
+
+alter table daq_s_material_compressor add commit_status int2;
+alter table daq_s_material_compressor_motor add commit_status int2;
+alter table daq_s_material_compressor_gas_engine add commit_status int2;
+alter table daq_s_material_air_cooler add commit_status int2;
+alter table daq_s_material_instrument_compressor add commit_status int2;
+alter table daq_s_material_electric_heater add commit_status int2;
+alter table daq_s_material_air_eliminater add commit_status int2;
+
+alter table daq_s_material_flare add commit_status int2;
+alter table daq_s_material_pig_receiver_launcher add commit_status int2;
+alter table daq_s_material_filter add commit_status int2;
+alter table daq_s_material_vent_stack add commit_status int2;
+alter table daq_s_material_heater add commit_status int2;
+alter table daq_s_material_exchanger add commit_status int2;
+
+alter table daq_s_material_scada_system add commit_status int2;
+alter table daq_s_material_scs_system add commit_status int2;
+alter table daq_s_material_metering_system add commit_status int2;
+
+ALTER TABLE daq_s_material_control_valve RENAME valve_body_seal_type_ TO valve_body_seal_type;
+alter table daq_station_entrance_and_exit add relative_mileage numeric(9,2);
+alter table daq_station_condensing_tube add construct_date timestamp(6);
+alter table daq_station_auxiliary_anode_bed add construct_date timestamp(6);

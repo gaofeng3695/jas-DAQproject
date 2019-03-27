@@ -190,7 +190,8 @@
 				limitNum: 2,
 				autoUpload: false,
 				actionURL: jasTools.base.rootPath + "/attachment/upload.do?token=" + localStorage.getItem("token"),
-				fieldRuleObj: {}
+				fieldRuleObj: {},
+				_fieldsGrouped:{},
 			}
 		},
 		mounted: function () {
@@ -221,6 +222,7 @@
 			}, function (data) {
 				that.isLoading = false;
 				that.ifAttachment = !!(data.data.ifAttachment == 1); //是否存在附件
+				that._fieldsGrouped = data.data.functionFieldsBoList;
 				var fieldsGrouped = that._formatFieldsByGroup(data.data.functionFieldsBoList);
 				if (data.data.functionFieldsBoList && data.data.functionFieldsBoList.length > 0) {
 					if (that.isAddPage) {
@@ -713,6 +715,36 @@
 						};
 						obj[key] = value;
 						jasTools.ajax.post(jasTools.base.rootPath + "/" + requestUrl, obj, function (data) {
+							if(!that.isAddPage){
+								var isExistsItem = false;
+								for(var k in data.rows){
+									if(data.rows[k].key==that.formData[childField]){
+										isExistsItem = true;
+										break;
+									}
+								}
+								if(!isExistsItem){
+									var fieldNameCn;
+									var fieldName;
+									for(var i in that._fieldsGrouped){
+										if(childField==that._fieldsGrouped[i].fieldName){
+											fieldNameCn = that._fieldsGrouped[i].fieldNameCn;
+											break;
+										}
+									}
+									for(var j in that._fieldsGrouped){
+										if(fieldNameCn==that._fieldsGrouped[j].fieldNameCn && childField!=that._fieldsGrouped[j].fieldName ){
+											fieldName = that._fieldsGrouped[j].fieldName;
+											break;
+										}
+									}
+									var item = {
+											"value":that.formData[fieldName],
+											"key":that.formData[childField]
+									};
+									data.rows.push(item);
+								}
+							}
 							setChildOptionsAndValue(childField, data.rows)
 						});
 					} else {

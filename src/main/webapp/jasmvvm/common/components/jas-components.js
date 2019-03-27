@@ -1165,18 +1165,18 @@ Vue.component('jas-table-for-list', {
 			if (scope.row.approveStatus == '0') {
 				scope.row.approveStatusName = "未上报"
 				return 'info';
-			}
-			if (scope.row.approveStatus == '1') {
+			}else if (scope.row.approveStatus == '1') {
 				scope.row.approveStatusName = "待审核"
 				return 'warning';
-			}
-			if (scope.row.approveStatus == '2') {
+			}else if (scope.row.approveStatus == '2') {
 				scope.row.approveStatusName = "审核通过"
 				return 'success';
-			}
-			if (scope.row.approveStatus == '-1') {
+			}else if (scope.row.approveStatus == '-1') {
 				scope.row.approveStatusName = "驳回"
 				return 'danger';
+			}else{
+				scope.row.approveStatusName = "未上报"
+				return 'info';
 			}
 		},
 		handleSizeChange: function (val) {
