@@ -363,11 +363,13 @@ var JasMap = null ,M = null;
                 return result ;
             }
             if(typeof featureId === "string"){
-                var target = source.getFeatureById(featureId);
+                var fid = layerId + '.' + featureId;
+                var target = source.getFeatureById(fid);
                 target && result.push(target);
             }else if(featureId instanceof  Array){
                 for(var key in featureId){
-                    var t = source.getFeatureById(featureId[key]);
+                    var fid = layerId + '.' + featureId[key];
+                    var t = source.getFeatureById(fid);
                     t && result.push(t);
                 }
             }
