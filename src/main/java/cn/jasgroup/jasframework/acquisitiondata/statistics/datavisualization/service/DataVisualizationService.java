@@ -43,7 +43,16 @@ public class DataVisualizationService {
     public List<Map<String, Object>> getProjectInfoByUserId() {
         // id, name, pipe_network_type_code
         List<Map<String, Object>> projectLists = this.daqPrivilegeService.getProject();
-
+        
+        // 过滤项目，只查询“管网类型”为“高压管网”的项目	add by gejian at 2019-03-28 14:16:30
+        projectLists = projectLists.stream().filter((Map<String, Object> map) -> {
+            if("pipe_network_code_001".equals(map.get("pipe_network_type_code")))
+            {
+                return true;
+            }
+            return false;
+        }).collect(Collectors.toList());
+        
         List<String> projectIds = projectLists.stream().map(map -> String.valueOf(map.get("oid"))).collect(Collectors.toList());
 
         List<StatsResultBo> resultBos = this.dataVisualizationDao.sumPipelineLengthGroupByProjectId(projectIds);
