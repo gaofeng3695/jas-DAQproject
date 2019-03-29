@@ -70,7 +70,7 @@ public class ColdBendingPipeQuery extends BaseJavaQuery{
 	
 	@Override
 	public String getQuerySql() {
-		String sql = "select t.oid,p.project_name,l.pipeline_name,s.tenders_name,t.oid,t.project_oid,t.tenders_oid,t.pipeline_oid,t.pipe_segment_or_cross_oid,t.pipe_oid,t.certificate_num,t.pipe_cold_bending_code,t.pipe_bending_standards,t.bending_radius,t.bending_angle,t.curve_length,t.straight_pipe_length,t.pipe_length,t.ellipticity,t.wall_thickness_redurate,t.pipe_diameter,t.wall_thickness,t.produce_date,t.construct_unit,t.supervision_unit,t.supervision_engineer,t.collection_person,t.collection_date,t.remarks,case when t.is_use=1 then '是' else '否' end as is_use,v.name as pipe_segment_or_cross_name"
+		String sql = "select t.oid,p.project_name,l.pipeline_name,s.tenders_name,t.project_oid,t.tenders_oid,t.pipeline_oid,t.pipe_segment_or_cross_oid,t.pipe_oid,t.certificate_num,t.pipe_cold_bending_code,t.pipe_bending_standards,t.bending_radius,t.bending_angle,t.curve_length,t.straight_pipe_length,t.pipe_length,t.ellipticity,t.wall_thickness_redurate,t.pipe_diameter,t.wall_thickness,t.produce_date,t.construct_unit,t.supervision_unit,t.supervision_engineer,t.collection_person,t.collection_date,t.remarks,case when t.is_use=1 then '是' else '否' end as is_use,v.name as pipe_segment_or_cross_name"
 				+ ",t.create_user_id,t.create_user_name,t.create_datetime,t.modify_user_id,t.modify_user_name,t.modify_datetime,t.approve_status,u.unit_name as construct_unit_name,uu.unit_name as supervision_unit_name,pp.pipe_code "
 				+ "from daq_material_pipe_cold_bending t "
 				+ "left join (select oid,project_name from daq_project) p on p.oid=t.project_oid "
