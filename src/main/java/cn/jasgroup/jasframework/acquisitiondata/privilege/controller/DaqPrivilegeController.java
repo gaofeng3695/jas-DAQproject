@@ -671,6 +671,13 @@ public class DaqPrivilegeController extends BaseController{
 			redisService.putValue(token+"_threadRedisParamMap", threadRedisParamMap);
 			redisService.expirse(token+"_threadRedisParamMap", expireTime, expireTimeUnit);
 
+
+			// 查询焊口规则列表
+			List<Map<String,Object>> daqWeldCodeRegularList =
+					daqWeldCodeRegularService.getDaqWeldCodeRegularList("");
+			result.put("daqWeldCodeRegularList",daqWeldCodeRegularList);
+			
+
 			//7.构造返回结果
 			userMap.put("password", null);
 			userMap.remove("base64Image");
