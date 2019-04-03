@@ -4,7 +4,6 @@ import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.ApproveSt
 import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.EntryStatisticsBlock;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.comm.StatsProcessForAppEnum;
 import cn.jasgroup.jasframework.acquisitiondata.statistics.normal.service.bo.*;
-import cn.jasgroup.jasframework.acquisitiondata.utils.VariateInjectUtils;
 import cn.jasgroup.jasframework.acquisitiondata.variate.UnitHierarchyEnum;
 import cn.jasgroup.jasframework.engine.jdbc.dao.CommonDataJdbcDao;
 import cn.jasgroup.jasframework.support.ThreadLocalHolder;
@@ -57,10 +56,10 @@ public class AppStatisticsDao {
 
             if (pipeCheckedBlock.containsKey(statType)) {
                 String tableName = pipeCheckedBlock.get(statType);
-                sql.append(String.format(" select '%s' as stats_type, count(*) as stats_result from %s where active = 1 and @privilege_strategy_sql ", statType, tableName));
+                sql.append(String.format(" select '%s' as stats_type, count(*) as stats_result from %s where active = 1 and create_user_id =:createUserId ", statType, tableName));
             } else if (weldApproveBlock.containsKey(statType)) {
                 String tableName = weldApproveBlock.get(statType);
-                sql.append(String.format(" select '%s' as stats_type, approve_status as stats_result from %s where active = 1  and @privilege_strategy_sql ", statType, tableName));
+                sql.append(String.format(" select '%s' as stats_type, approve_status as stats_result from %s where active = 1  and create_user_id =:createUserId ", statType, tableName));
             }
 
             if (!StringUtils.isEmpty(projectOid)) {
@@ -70,9 +69,8 @@ public class AppStatisticsDao {
 
             sql.append(i<(statsTypeList.size()-1) ? " UNION ALL ":"");
         }
-        
-        String sql1 = VariateInjectUtils.invoke(sql.toString());
-        return commonDataJdbcDao.queryForList(sql1, variables, StatsResultBo.class);
+
+        return commonDataJdbcDao.queryForList(sql.toString(), variables, StatsResultBo.class);
     }
 
 
