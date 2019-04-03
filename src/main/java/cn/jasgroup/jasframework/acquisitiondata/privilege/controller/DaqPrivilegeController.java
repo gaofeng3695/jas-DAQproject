@@ -830,7 +830,7 @@ public class DaqPrivilegeController extends BaseController{
 	  * <p>创建日期:2019年3月19日 下午6:02:42。</p>
 	  * <p>更新日期:[日期YYYY-MM-DD][更改人姓名][变更描述]。</p>
 	 */
-	@RequestMapping(value = "/deleteProjectAndFileRef")
+	@RequestMapping(value = "/deleteProjectAndFileRef",method=RequestMethod.GET)
 	@ResponseBody
 	public Object deleteProjectAndFileRef(@RequestParam("oids") String oids,
 			@RequestParam(value = "isShiftDelFile", defaultValue = "false") String isShiftDelFile){
