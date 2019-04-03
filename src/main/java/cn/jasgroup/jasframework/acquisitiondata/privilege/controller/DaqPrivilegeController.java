@@ -649,6 +649,7 @@ public class DaqPrivilegeController extends BaseController{
 				}
 				authUser.setUnitName(userUnitList.get(0));
 			}
+			
 			userUnitInfo += userUnitList.get(0);
 			userMap.put("unitName", userUnitInfo);
 			authUser.setUnitNameFullpath(userUnitInfo);
@@ -670,7 +671,6 @@ public class DaqPrivilegeController extends BaseController{
 			threadRedisParamMap.put("IP", request.getServerName());
 			redisService.putValue(token+"_threadRedisParamMap", threadRedisParamMap);
 			redisService.expirse(token+"_threadRedisParamMap", expireTime, expireTimeUnit);
-
 
 			// 查询焊口规则列表
 			List<Map<String,Object>> daqWeldCodeRegularList =
@@ -712,6 +712,7 @@ public class DaqPrivilegeController extends BaseController{
 				result.put("unitType", -1);
 				return result;
 			}
+			result.put("unitCode",unitEntity.getUnitCode());
 			String hierarchy = unitEntity.getHierarchy();
 			if(hierarchy.startsWith(UnitHierarchyEnum.construct_unit.getHierarchy())){//施工单位
 				result.put("unitType", 1);
