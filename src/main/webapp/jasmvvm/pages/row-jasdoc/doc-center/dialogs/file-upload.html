@@ -135,7 +135,6 @@
 						type: 'success',
 						message: '上传成功'
 					});
-					this.cancel(1);
 					that.saveProjectAndFileRef();
 				}
 			},
@@ -147,12 +146,13 @@
 				// this.cancel(1);
 			},
 			saveProjectAndFileRef:function(){//附件目录下，文件上传成功后保存文件与项目的关系
+				var that = this;
 				if(!this.projectOid){
+					that.cancel(1);
 					return;
 				}
-				var that = this;
 				var url = jasTools.base.rootPath + "/daq/privilege/saveProjectAndFileRef.do";
-				jasTools.ajax.postForm(url, {
+				jasTools.ajax.post(url, {
 					projectOid: this.projectOid,
 					docFileOidList:this.fileOidList
 				}, function (data) {
