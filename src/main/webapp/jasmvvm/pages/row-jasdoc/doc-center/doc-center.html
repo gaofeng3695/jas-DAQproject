@@ -175,7 +175,7 @@
 									<el-button size="small" plain type="primary" icon="fa fa-download" :disabled="selectedRowOids.length==0" @click="downloadFile">下载</el-button>
 									<el-button size="small" plain type="primary" icon="fa fa-hand-o-up" :disabled="selectedFiles.length==0" @click="moveFiles">移动</el-button>
 									<el-button size="small" plain type="primary" icon="fa fa-star" :disabled="selectedFiles.length==0" @click="collectFiles">收藏</el-button>
-									<el-button size="small" plain type="warning" icon="fa fa-trash-o" :disabled="selectedRowOids.length==0" @click="deleteFile">删除</el-button>
+									<el-button size="small" plain type="warning" icon="fa fa-trash-o" :disabled="selectedRowOidsForDelete.length==0" @click="deleteFile">删除</el-button>
 									<!-- <el-button size="small" plain type="warning" icon="fa fa-trash" :disabled="selectedRowOids.length==0" @click="deleteFileTrue">彻底删除</el-button> -->
 									<span class="fr">
 										<el-checkbox :disabled="isSearchMode" v-model="isALLFile" style="margin-right: 10px;">显示所有文件</el-checkbox>
@@ -284,6 +284,7 @@
 				isSearchMode: false,
 				selectedRows: [],
 				selectedRowOids: [],
+				selectedRowOidsForDelete: [],
 				selectedFiles: [],
 				selectedFileNames: [],
 				selectedFolders: [],
@@ -365,7 +366,10 @@
 					all.push(item.eventid);
 				});
 				this.selectedRowOids = all;
-				this.selectedFiles = files;
+				if(this.folderType==1){
+					this.selectedFiles = files;
+					this.selectedRowOidsForDelete = all;
+				}
 				this.selectedFileNames = selectedFileNames;
 
 				this.selectedFolders = folders;
@@ -592,7 +596,7 @@
 					type: 'warning',
 					callback: function (action) {
 						if (action === 'confirm') {
-							if (that.selectedRowOids.length > 1) {
+							if (that.selectedRowOidsForDelete.length > 1) {
 								var url = jasTools.base.rootPath + "/jasdoc/folder/doccenter/shiftDeleteFolderAndFile.do";
 								jasTools.ajax.postForm(url, {
 									folderIds: that.selectedFolders.join(','),
@@ -637,7 +641,7 @@
 					type: 'warning',
 					callback: function (action) {
 						if (action === 'confirm') {
-							if (that.selectedRowOids.length > 1) {
+							if (that.selectedRowOidsForDelete.length > 1) {
 								var url = jasTools.base.rootPath + "/jasdoc/folder/doccenter/deleteFolderAndFile.do";
 								jasTools.ajax.postForm(url, {
 									folderIds: that.selectedFolders.join(','),
@@ -934,6 +938,10 @@
 				}
 				if(node.data){
 					this.folderType = node.data.folderType;
+					if(this.folderType==2){
+						this.selectedFiles = [];
+						this.selectedRowOidsForDelete = [];
+					}
 				}
 				if (node.level > 0 && !node.isLeaf) {
 					var url = jasTools.base.rootPath + "/jasdoc/folder/doccenter/getChildren.do";
@@ -951,10 +959,18 @@
 			clicknode: function (node, b, c) {
 				this.currentNodeId = node.id;
 				this.folderType = node.folderType;
+				if(this.folderType==2){
+					this.selectedFiles = [];
+					this.selectedRowOidsForDelete = [];
+				}
 			},
 			nodeExpand: function (node, b, c) {
 				this.currentNodeId = node.id;
 				this.folderType = node.folderType;
+				if(this.folderType==2){
+					this.selectedFiles = [];
+					this.selectedRowOidsForDelete = [];
+				}
 			},
 		},
 	});
