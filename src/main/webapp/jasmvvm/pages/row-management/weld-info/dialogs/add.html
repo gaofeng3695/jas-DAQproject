@@ -180,7 +180,7 @@
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="8">
 							<el-form-item label="焊口顺序号" prop="sequenceNumberFirst" :required="sequenceRequired">
 								<el-input style="width:45%" clearable v-model.trim="formData.sequenceNumberFirst" placeholder="请输入焊口顺序号" size="small"></el-input>+
-								<el-input-number style="width:45%" controls-position="right" clearable :step="1" :precision="0" v-model.trim="formData.sequenceNumberSecond"
+								<el-input-number style="width:45%" controls-position="right" clearable :step="1" max="99999999" :precision="0" v-model.trim="formData.sequenceNumberSecond"
 								 placeholder="请输入焊口顺序号2" size="small"></el-input-number>
 							</el-form-item>
 						</el-col>
