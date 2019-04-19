@@ -92,7 +92,7 @@
 			<el-container style="height: 0%;">
 				<loading-bar :on-error-done="errorDone" :on-progress-done="progressDone" :progress="progress" :direction="direction" :error="error">
 				</loading-bar>
-				<el-aside id="aside" style="background-color: #fff;width:auto;" class="jas-flex-box is-vertical menuwrapper">
+				<el-aside id="aside" style="background-color: #344052;width:auto;" class="jas-flex-box is-vertical menuwrapper">
 					<!-- sider 结束 -->
 					<div class="is-grown menusubwrap" :style="menuStyle" ref="menubar" v-bar>
 						<div>
@@ -134,7 +134,7 @@
 												   <span>
 												     {{ thirditem.title }}
 												   </span>
-												 </el-badge>								
+												 </el-badge>
 												<span  v-else>
 												{{ thirditem.title }}
 											   </span>
@@ -160,7 +160,7 @@
 																				<el-badge v-if="fifthitem.value" :value="fifthitem.value">
 																				  <span>{{ fifthitem.title }}</span>
 																				</el-badge>
-																			
+
 																				<span  v-else>{{ fifthitem.title }}</span>
 																		</template>
 
@@ -170,7 +170,7 @@
 																		<el-badge v-if="fifthitem.value" :value="fifthitem.value">
 																				  <span>{{ fifthitem.title }}</span>
 																				</el-badge>
-																			
+
 																				<span  v-else>{{ fifthitem.title }}</span>
 																	</el-menu-item>
 																</template>
@@ -178,7 +178,7 @@
 
 															</el-submenu>
 															<el-menu-item :index="fourthitem.index" v-else>
-																<i :class="fourthitem.icon"></i>	
+																<i :class="fourthitem.icon"></i>
 																<el-badge v-if="fourthitem.value" :value="fourthitem.value">
 																   <span>{{ fourthitem.title }}</span>
 																 </el-badge>
@@ -189,7 +189,7 @@
 													</el-submenu>
 													<el-menu-item :index="thirditem.index" v-else>
 														<i :class="thirditem.icon"></i>
-														
+
 												<el-badge v-if="thirditem.value" :value="thirditem.value">
 												  <span>{{ thirditem.title }}</span>
 												</el-badge>
@@ -231,11 +231,16 @@
 
 						</div>
 					</div>
-					<div class="switchwrapper">
+					<!-- <div class="switchwrapper">
 						<el-switch v-model="isExpend">
 						</el-switch>
-					</div>
+					</div> -->
+					<div class="switchwrapper" @click="isExpend=!isExpend">
 
+						<i v-show="isExpend" class="fa fa-angle-left" aria-hidden="true"></i>
+						<i v-show="!isExpend" class="fa fa-angle-right" aria-hidden="true"></i>
+
+					</div>
 					<!-- sider 结束 -->
 				</el-aside>
 				<el-main>
