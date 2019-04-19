@@ -392,3 +392,9 @@ ALTER TABLE daq_s_material_control_valve RENAME valve_body_seal_type_ TO valve_b
 alter table daq_station_entrance_and_exit add relative_mileage numeric(9,2);
 alter table daq_station_condensing_tube add construct_date timestamp(6);
 alter table daq_station_auxiliary_anode_bed add construct_date timestamp(6);
+
+/**
+ * 焊口规则生成焊口编号长度变化
+ */
+ALTER TABLE daq_construction_weld alter COLUMN weld_code type character varying(350);
+ALTER TABLE daq_weld_measured_result alter COLUMN measure_control_point_code type character varying(350);
