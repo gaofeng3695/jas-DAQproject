@@ -53,7 +53,7 @@ import cn.jasgroup.jasframework.engine.jdbc.entity.CommonJdbcEntity;
 	anchorClass=MedianStake.class,
 	scopeType=ScopeType.CURRENT,
 	geometryState="geoState",
-	calculateType = CalculateType.DoubleAnchor
+	calculateType = CalculateType.DoubleAnchorAndDeviation
 )
 @JdbcEntity(name="daq_appendages_hydraulic_protection")
 public class DaqAppendagesHydraulicProtection extends CommonJdbcEntity {
