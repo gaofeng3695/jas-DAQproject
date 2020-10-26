@@ -48,6 +48,9 @@ public class ElasticsearchConfig {
 
     @Bean
     public TransportClient transportClient() throws UnknownHostException {
+    	if(clusterNodes==null || clusterNodes.equals("")){
+    		return null;
+    	}
         TransportAddress node = new TransportAddress(InetAddress.getByName(clusterNodes), clusterPort);
 
         Settings settings = Settings.builder()

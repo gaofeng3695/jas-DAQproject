@@ -1,22 +1,19 @@
 package cn.jasgroup.jasframework.acquisitiondata;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
@@ -31,9 +28,15 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.STLineSpacingRule;
 import org.w3c.dom.Node;
 
 import com.alibaba.druid.sql.SQLUtils;
+import com.alibaba.druid.sql.ast.SQLObject;
 import com.alibaba.druid.sql.ast.SQLStatement;
-import com.alibaba.druid.sql.visitor.SchemaStatVisitor;
+import com.alibaba.druid.sql.dialect.postgresql.parser.PGExprParser;
+import com.alibaba.druid.sql.dialect.postgresql.visitor.PGExportParameterVisitor;
+import com.alibaba.druid.sql.dialect.postgresql.visitor.PGSchemaStatVisitor;
 import com.alibaba.druid.stat.TableStat;
+import com.alibaba.druid.stat.TableStat.Column;
+import com.alibaba.druid.stat.TableStat.Name;
+import com.alibaba.druid.util.JdbcConstants;
 import com.deepoove.poi.XWPFTemplate;
 import com.deepoove.poi.data.DocxRenderData;
 import com.deepoove.poi.data.PictureRenderData;
@@ -45,8 +48,6 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.microsoft.schemas.vml.CTGroup;
 import com.microsoft.schemas.vml.CTShape;
-
-import cn.jasgroup.jasframework.utils.DateTimeUtil;
 
 
 public class ScannerTest {
@@ -312,15 +313,18 @@ public class ScannerTest {
 			e.printStackTrace();
 		} 
 	}
-//	@Test
-	public void sqlParser(){
-		DecimalFormat df = new DecimalFormat("#.000");
-		NumberFormat nf = NumberFormat.getNumberInstance();
-        nf.setMaximumFractionDigits(3);
-        System.out.println(nf.format(0.001001));
-		System.err.println(df.format(0.001001));
-	}
 	@Test
+	public void sqlParser(){
+//		DecimalFormat df = new DecimalFormat("#.000");
+//		NumberFormat nf = NumberFormat.getNumberInstance();
+//        nf.setMaximumFractionDigits(3);
+//        System.out.println(nf.format(0.001001));
+//		System.err.println(df.format(0.001001));
+		BigDecimal bd = new BigDecimal("-111112222");
+		System.err.println(bd.precision());;
+		System.err.println(bd.scale());;
+	}
+//	@Test
 	public void testShareFile(){
 //		try{
 //			String sFilePath = "D:/test.png";
@@ -345,11 +349,45 @@ public class ScannerTest {
 //		}catch(Exception e){
 //			e.printStackTrace();
 //		}
-		boolean flag = false;
-		String folderPath = "E:/test1234";
-		if(!new File(folderPath).exists()){
-			flag = new File(folderPath).mkdirs();
+//		boolean flag = false;
+//		String folderPath = "E:/test1234";
+//		if(!new File(folderPath).exists()){
+//			flag = new File(folderPath).mkdirs();
+//		}
+//		System.err.println(flag);
+		String sql = "select *,angle_bending1 from daq_test t where 1=1 "
+				+ "and t.project_oid = :projectOid "
+				+ "and t.hot_bends_code like :hotBendsCode "
+				+ "and t.pipe_grade = :pipeGrade "
+				+ "and t.angle_bending between (select ((select array [:angle_bending ])[1])) "
+				+ "and (select ((select array [:angle_bending ])[2])) "
+				+ "and t.technology = :technology "
+				+ "and t.external_coating_type = :externalCoatingType "
+				+ "and t.oid in (:oids) "
+				+ "order by t.create_datetime desc";
+		try {
+//			CCJSqlParserManager parserManager = new CCJSqlParserManager();
+//			Select select = (Select) parserManager.parse(new StringReader(sql));
+//			PlainSelect plain = (PlainSelect) select.getSelectBody();
+//			Expression where_expression = plain.getWhere();
+//			String str = where_expression.toString();
+			sql = "select * from test_temp  where 1=1 and t.pipe_diameter between (select ((select array [:pipe_diameter ])[1])) and (select ((select array [:pipe_diameter ])[2]))";
+			String dbType = JdbcConstants.POSTGRESQL;
+			List<SQLStatement> stmtList = SQLUtils.parseStatements(sql, dbType);
+			PGSchemaStatVisitor visitor = new PGSchemaStatVisitor();
+			PGExportParameterVisitor visitor1 = new PGExportParameterVisitor();
+			for(SQLStatement stmt:stmtList){
+				stmt.accept(visitor);
+				stmt.accept(visitor1);
+				Map<Name, TableStat> tables = visitor.getTables();
+				Column column = visitor.getColumn("test_temp", "t.pipe_diameter");
+				if(column!=null){
+					System.err.println(column.isWhere());
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		System.err.println(flag);
 	}
 }
