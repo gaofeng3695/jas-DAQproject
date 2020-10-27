@@ -262,15 +262,15 @@
 	<!-- restTemplate 配置结束 -->
 
 	<!--注入移动端文件上传自定义类覆盖MultipartResolver -->
-	<bean id="multipartResolver"
+	<!-- <bean id="multipartResolver"
 		class="cn.jasgroup.jasframework.attachment.util.CustomMultipartResolver">
 		<property name="defaultEncoding" value="UTF-8" />
-		<!--排除使用ServletFileUpload方式的请求, 逗号分隔可配置多个 -->
+		排除使用ServletFileUpload方式的请求, 逗号分隔可配置多个
 		<property name="excludeUrls"
 			value="doccenter/uploadDoc.do,attachment/upload.do,importExcelController/importExcelData.do,jasframework/excelTemplate/upload.do,daq/weldcut/importExcelDataByName.do,daq/weldcut/importExcelDataByCode.do" />
-		<!-- 上传文件总大小 -->
-		<!-- <property name="maxUploadSize" value="200000"/> -->
-	</bean>
+		上传文件总大小
+		<property name="maxUploadSize" value="200000"/>
+	</bean> -->
 
 	<!-- <bean id="businessLogTemplate" class="cn.jasgroup.jasframework.log.client.businesslog.BaseBusinessLogTemplate"/> -->
 	<!-- 将日志保存到数据库 -->

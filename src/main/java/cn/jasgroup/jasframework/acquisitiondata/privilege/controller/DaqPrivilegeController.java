@@ -598,18 +598,35 @@ public class DaqPrivilegeController extends BaseController{
 				i18n = "zh_CN";
 			}
 			Map<String,Object> userMap = this.daqPrivilegeService.getFaceInfoByLoginName(loginName);
+			Map<String,Object> errorMap = new HashMap<>();
 			if(userMap==null){
-				return new BaseResult(-1, "PU03012", m_I18nService.getI18NByModuleid(Constants.I18N_USER_PROPERTIES, "user.usernamenotexist", i18n));
+				errorMap.put("status", -1);
+				errorMap.put("code", "PU03012");
+				errorMap.put("msg", m_I18nService.getI18NByModuleid(Constants.I18N_USER_PROPERTIES, "user.usernamenotexist", i18n));
+				return errorMap;
+//				return new BaseResult(-1, "PU03012", m_I18nService.getI18NByModuleid(Constants.I18N_USER_PROPERTIES, "user.usernamenotexist", i18n));
 			}
 
 			if(!userMap.containsKey("base64Image") || userMap.get("base64Image")==null){
-				return new BaseResult(-1,"PU06000","用户未设置人脸识别");
+				errorMap.put("status", -1);
+				errorMap.put("code", "PU06000");
+				errorMap.put("msg", "用户未设置人脸识别");
+				return errorMap;
+//				return new BaseResult(-1,"PU06000","用户未设置人脸识别");
 			}
 			if(StringUtils.isBlank(base64Image)){
-				return new BaseResult(-1,"PU06000","用户未设置人脸识别");
+				errorMap.put("status", -1);
+				errorMap.put("code", "PU06000");
+				errorMap.put("msg", "用户未设置人脸识别");
+				return errorMap;
+//				return new BaseResult(-1,"PU06000","用户未设置人脸识别");
 			}
 			if(!userMap.get("base64Image").toString().equals(base64Image)){
-				return new BaseResult(-1,"PU06001","服务器人脸识别失败");
+				errorMap.put("status", -1);
+				errorMap.put("code", "PU06001");
+				errorMap.put("msg", "服务器人脸识别失败");
+				return errorMap;
+//				return new BaseResult(-1,"PU06001","服务器人脸识别失败");
 			}
 			Map<String,Object> attributes =new HashMap<String, Object>();
 			attributes.put("superadmin", false);  //是否超级管理员
